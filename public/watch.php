@@ -4,12 +4,17 @@ namespace openSB;
 
 // fixme: change video-related variables to more generic variables
 
-use Exception;
-
 require_once dirname(__DIR__) . '/private/class/common.php';
 
 $id = ($_GET['v'] ?? null);
-$ip = ($_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']));
+$ip = getUserIpAddr();
+
+// Takedowns have been backported from BettySB.
+$takedown = $sql->fetch("SELECT * FROM takedowns t WHERE t.submission = ?", [$id]);
+
+if ($takedown) {
+    error('403', "This submission has been taken down. Reason: " . $takedown["reason"]);
+}
 
 $videoData = Videos::getVideoData($userfields, $id);
 
@@ -21,7 +26,7 @@ $query = '';
 $count = 0;
 $commentData = $sql->query("SELECT $userfields c.comment_id, c.id, c.comment, c.author, c.date, c.deleted, (SELECT COUNT(reply_to) FROM comments WHERE reply_to = c.comment_id) AS replycount FROM comments c JOIN users u ON c.author = u.id WHERE c.id = ? ORDER BY c.date DESC", [$id]);
 
-$relatedVideosData = $sql->query("SELECT $userfields $videofields FROM videos v JOIN users u ON v.author = u.id WHERE NOT v.video_id = ? ORDER BY RAND() LIMIT 6", [$id]);
+$relatedVideosData = $sql->query("SELECT $userfields $videofields FROM videos v JOIN users u ON v.author = u.id WHERE NOT v.video_id = ? AND v.video_id NOT IN (SELECT submission FROM takedowns) ORDER BY RAND() LIMIT 6", [$id]);
 
 // move this to getVideoData
 $totalLikes = $sql->result("SELECT COUNT(rating) FROM rating WHERE video=? AND rating=1", [$videoData['id']]);

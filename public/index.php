@@ -4,12 +4,12 @@ namespace openSB;
 require_once dirname(__DIR__) . '/private/class/common.php';
 
 // currently selects all uploaded videos, should turn it into all featured only
-$videoData = $sql->query("SELECT $userfields $videofields, v.category_id FROM videos v JOIN users u ON v.author = u.id ORDER BY RAND() LIMIT 16");
+$videoData = $sql->query("SELECT $userfields $videofields, v.category_id FROM videos v JOIN users u ON v.author = u.id WHERE v.video_id NOT IN (SELECT submission FROM takedowns) ORDER BY RAND() LIMIT 16");
 // moved total subscribers to layout.php
 if ($log) {
     $query = implode(', ', array_column($sql->fetchArray($sql->query("SELECT user FROM subscriptions WHERE id = ?", [$userdata['id']])), 'user'));
     if ($query != null) {
-        $subscriptionVideos = $sql->query("SELECT $userfields $videofields FROM videos v JOIN users u ON v.author = u.id WHERE v.author IN($query) ORDER BY v.id DESC LIMIT 16");
+        $subscriptionVideos = $sql->query("SELECT $userfields $videofields FROM videos v JOIN users u ON v.author = u.id WHERE v.author IN($query) WHERE v.video_id NOT IN (SELECT submission FROM takedowns) ORDER BY v.id DESC LIMIT 16");
     } else {
         $subscriptionVideos = null;
     }

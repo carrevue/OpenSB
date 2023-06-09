@@ -185,6 +185,7 @@ class Videos
     public static function getVideoData($userfields, $id)
     {
         global $sql, $isQoboTV, $bunnySettings;
+
         $videoData = $sql->fetch("SELECT $userfields v.* FROM videos v JOIN users u ON v.author = u.id WHERE v.video_id = ?", [$id]);
         if (!$videoData) {
             return false;

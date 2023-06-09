@@ -24,7 +24,7 @@ $page = (isset($_GET['p']) && is_numeric($_GET['p']) && $_GET['p'] > 0 ? $_GET['
 $forceuser = isset($_GET['forceuser']);
 
 $limit = sprintf("LIMIT %s,%s", (($page - 1) * $paginationLimit), $paginationLimit);
-$latestVideoData = $sql->query("SELECT $userfields $videofields FROM videos v JOIN users u ON v.author = u.id WHERE v.author = ? ORDER BY v.id DESC $limit", [$userpagedata['id']]);
+$latestVideoData = $sql->query("SELECT $userfields $videofields FROM videos v JOIN users u ON v.author = u.id WHERE v.author = ? AND v.video_id NOT IN (SELECT submission FROM takedowns) ORDER BY v.id DESC $limit", [$userpagedata['id']]);
 $latestVideo = $sql->fetch("SELECT $userfields $videofields FROM videos v JOIN users u ON v.author = u.id WHERE v.author = ? ORDER BY v.id DESC", [$userpagedata['id']]);
 $countVideos = $sql->result("SELECT COUNT(*) FROM videos l WHERE l.author = ? AND `post_type` = 0 OR `post_type` = 1 ", [$userpagedata['id']]);
 $countArt = $sql->result("SELECT COUNT(*) FROM videos l WHERE l.author = ? AND `post_type` = 2 ", [$userpagedata['id']]);
