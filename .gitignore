@@ -18,6 +18,7 @@ dynamic/art_thumbnails
 ## Composer
 vendor/
 composer.lock
+composer.phar
 bootstrap/css/bootstrap.css
 bootstrap/css/bootstrap-theme.css
 
@@ -75,3 +76,5 @@ public/assets/tailwind.css
 
 # mariadb stuff from docker
 mariadb-data
+
+finalium/dist/
