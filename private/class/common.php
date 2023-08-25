@@ -5,7 +5,7 @@ namespace openSB;
 // we need this at the top, or else version numbers won't work.
 require_once(dirname(__DIR__) . "/class/version.php");
 
-$gitBranch = trim(shell_exec("git rev-parse --abbrev-ref HEAD"));
+$gitBranch = "opensb-legacy"; // hardcoded because otherwise in some cases we get a warning
 $versionNumber = $buildNumber . "-" . $gitBranch;
 
 if (!file_exists(dirname(__DIR__) . '/conf/config.php')) {
