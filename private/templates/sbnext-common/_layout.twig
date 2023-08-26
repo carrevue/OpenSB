@@ -43,6 +43,11 @@
 			{# do we really need ban durations? #}
 		</div>
 	{% endif %}
+	{% if bunnyEnabled %}
+		<div class="alert alert-info">
+			We're working on a brand-new version of Qobo. You should <a href="https://beta.qobo.tv/">check it out</a>!
+		</div>
+	{% endif %}
 	{% block content %}{% endblock %}
 </div>
 <footer>
