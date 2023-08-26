@@ -1,9 +1,6 @@
 {% extends "_layout.twig" %}
 
 {% block title %}{{ __("Statistics") }}{% endblock %}
-{% block script %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>{% endblock %}
 
 	{% block content %}
         <div class="panel panel-default">
@@ -46,89 +43,6 @@
                         </div>
                     </div>
                 </div>
-
-                {% if browser_info.legacy_disable_graph == false %}
-                    <h2>{{ __("Graph") }}</h2>
-                    <canvas id="myChart"></canvas>
-                {% endif %}
-
             </div>
         </div>
-
-        {% if browser_info.legacy_disable_graph == false %}
-            <script>
-                const ctx = document.getElementById('myChart').getContext('2d');
-                const myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: [{
-                            label: 'Submissions',
-                            data: [
-                                {% for graph in video_graph_data %}
-                                {
-                                    x: "{{ graph.time }}",
-                                    y: {{ graph.runningTotal }},
-                                },
-                                {% endfor %}
-                            ],
-                            backgroundColor: [
-                                'rgba(190, 77, 37, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(190, 77, 37, 1)',
-                            ],
-                            borderWidth: 1
-                        },
-                            {
-                                label: 'Users',
-                                data: [
-                                    {% for graph in user_graph_data %}
-                                    {
-                                        x: "{{ graph.joined }}",
-                                        y: {{ graph.runningTotal }},
-                                    },
-                                    {% endfor %}
-                                ],
-                                backgroundColor: [
-                                    'rgba(37, 150, 190, 0.2)',
-                                ],
-                                borderColor: [
-                                    'rgba(37, 150, 190, 1.0)',
-                                ],
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Comments',
-                                data: [
-                                    {% for graph in comment_graph_data %}
-                                    {
-                                        x: "{{ graph.date }}",
-                                        y: {{ graph.runningTotal }},
-                                    },
-                                    {% endfor %}
-                                ],
-                                backgroundColor: [
-                                    'rgba(37, 190, 135, 0.2)',
-                                ],
-                                borderColor: [
-                                    'rgba(37, 190, 135, 1.0)',
-                                ],
-                                borderWidth: 1
-                            },
-                        ]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            },
-                            x: {
-                                type: 'time',
-                                min: '2021-01-30 00:00:00',
-                            }
-                        }
-                    }
-                });
-            </script>
-        {% endif %}
     {% endblock %}
