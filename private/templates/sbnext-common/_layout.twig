@@ -57,6 +57,9 @@
 			<p><strong>{{ __("© openSB contributors") }}</strong> · 2021-{{ 'now' | date('Y') }}
 				| <strong><a href="/statistics">{{ __("Statistics") }}</a></strong>
 				| <strong><a href="/privacy">{{ __("Privacy Policy") }}</a></strong>
+				{% if bunnyEnabled %}
+				| <strong><a href="https://discord.gg/xjwFANKT67">Discord</a></strong>
+				{% endif %}
 			</p>
 			<h5>{{ __("Running build %s (Git commit %s)", [version, git_commit()]) }}</h5>
 			{% if isDebug %}
