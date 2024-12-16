@@ -1,5 +1,4 @@
 # OpenSB
-![Screen Shot 2024-10-25 at 18 18 35](https://github.com/user-attachments/assets/c1cde928-02b6-4b64-b551-5bac85ecee52)
 
 ## Our official instance
 
