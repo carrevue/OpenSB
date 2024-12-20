@@ -10,7 +10,7 @@ Alternative domains: [squarebracket.bluffingo.net](https://squarebracket.bluffin
 
 I wouldn't recommend using this code unless if you ***really*** know what you're doing.
 
-1. Get a webserver (Apache or NGINX) with PHP and MariaDB (MySQL may work but it is untested) up and running, including Composer and the PHP GD library extension. We recommend Apache, as you will experience issues with NGINX.
+1. Get a webserver (Apache or NGINX) with PHP and MariaDB or MySQL up and running, including Composer and the PHP GD library extension. We recommend Apache, as you will experience issues with NGINX.
 1. Configure your webserver. Look below the steps for an example.
 1. Run `composer update` from the terminal.
 1. Copy `config.sample.php` in `private/config`, rename it to `config.php` and fill in your database credentials.
