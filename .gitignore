@@ -27,7 +27,7 @@ composer.phar
 composer.lock
 
 ## Admin features
-adminer-*.php
+adminer*.php
 /latest-*-*.php
 pma
 phpmyadmin

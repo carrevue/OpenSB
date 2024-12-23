@@ -70,9 +70,11 @@ function countViews($database): array
     ));
 }
 
+
 // squarebracket's production db has random references to dates prior to january 31st 2021, but the site
 // did launch back there, so just hardcode $date to that date. -chaziz 6/4/2024 (replaces rambling)
 if ($isChazizSB) {
+    // TODO: remove this before cheeserox relaunch (unless if quadium migration plans fall apart) -chaziz 12/22/2024
     $date = mktime(0, 0, 0, 1, 31, 2021);
 } else {
     $date = $database->fetch("SELECT u.joined FROM users u ORDER BY u.joined ASC")["joined"];
@@ -114,10 +116,37 @@ foreach ($inviteKeys as $inviteKey) {
     $inviteKeyData[] = $inviteKey;
 }
 
+$is_windows = str_starts_with(php_uname(), "Windows") ?? false;
+
+// get distro info if on a unix-based system that supports os-release
+// this is better than using lsb-release because lsb is some dead linux-only standard while os-release will work on
+// anything that uses systemd, including freebsd from what ive seen online. openrc may support this but im not sure.
+// -chaziz 12/22/2024
+if (file_exists('/etc/os-release')) {
+    $os_release = file('/etc/os-release', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    $os_data = [];
+    foreach ($os_release as $line) {
+        list($key, $value) = explode("=", $line, 2);
+        $os_data[$key] = trim($value, '"');
+    }
+
+    if (isset($os_data['PRETTY_NAME'])) {
+        $os_name = $os_data['PRETTY_NAME'];
+    } else {
+        $os_name = null;
+    }
+} else {
+    $os_name = null;
+}
+
+
 $data = [
     "numbers" => $numbersOfThingsArray,
     "system" => [
         "uname" => php_uname(),
+        "os_name" => $os_name,
+        "is_windows" => $is_windows,
     ],
     "graph_data" => [
         "users" => makeRunningTotalGraph($database, 'users', 'joined'),

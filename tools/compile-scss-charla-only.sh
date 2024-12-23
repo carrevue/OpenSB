@@ -29,7 +29,16 @@ if [ "$machine" == "Windows" ]; then
     sass_executable="sass"
   fi
 else
-  sass_executable="sass"
+  if ! sass --version &> /dev/null; then
+    if command -v dart-sass &> /dev/null; then
+      sass_executable="dart-sass"
+    else
+      echo "Please install Dart-Sass."
+      exit 1
+    fi
+  else
+    sass_executable="sass"
+  fi
 fi
 
 if [ ! -d "public/assets/css" ]; then
