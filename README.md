@@ -1,11 +1,5 @@
 # OpenSB
 
-## Our official instance
-
-[SquareBracket.pw](https://squarebracket.pw/)
-
-Alternative domains: [squarebracket.bluffingo.net](https://squarebracket.bluffingo.net/), [FulpTube.rocks](https://fulptube.rocks)
-
 ## How to setup an OpenSB instance.
 
 I wouldn't recommend using this code unless if you ***really*** know what you're doing.
@@ -34,11 +28,11 @@ You will have to modify the directories to match your instance's location.
 ```
 <VirtualHost *> 
     ServerName localhost
-    DocumentRoot "C:/xampp/openSB/public"
+    DocumentRoot "/var/www/opensb/public"
 
-    Alias /dynamic "C:/xampp/openSB/dynamic"
+    Alias /dynamic "/var/www/opensb/dynamic"
 
-    <Directory "C:/xampp/openSB">
+    <Directory "/var/www/opensb/">
         Options Indexes FollowSymLinks
         Require all granted
         AllowOverride All
@@ -52,17 +46,15 @@ You will have to modify the directories to match your instance's location.
 ```
 server {
     listen       80;
-    server_name  www.squarebracket.pw
-    server_name  squarebracket.pw;
-
-    root   /var/www/squarebracket/public/;
+    server_name  localhost;
+    root   /var/www/opensb/public/;
 
     location / {
         try_files $uri /index.php$is_args$args;
     }
 
     location /dynamic/ {
-        root /var/www/squarebracket/dynamic/;
+        root /var/www/opensb/dynamic/;
         try_files $uri $uri/ =404;
     }
 
