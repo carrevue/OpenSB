@@ -100,6 +100,12 @@ if ($config["maintenance"]) {
     $isMaintenance = false;
 }
 
+if ($config["invite_keys"]) {
+    $enableInviteKeys = true;
+} else {
+    $enableInviteKeys = false;
+}
+
 // Branding settings
 $branding = [
     "name" => $config["branding"]["name"],
@@ -110,7 +116,6 @@ $branding = [
 $disableRegistration = false;
 $disableUploading = false;
 $disableWritingJournals = false;
-$enableInviteKeys = false;
 
 // now initialize the orange classes
 $orange = new SquareBracket($host, $user, $pass, $db);

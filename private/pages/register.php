@@ -50,7 +50,7 @@ if (isset($_POST['registersubmit'])) {
     if ($database->result("SELECT COUNT(*) FROM users WHERE email = ?", [$mail]) > 0) $error .= "This email address is used by another account. ";
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
     if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
-    if ((Utilities::getIpAddress() != "127.0.0.1") && (Utilities::getIpAddress() != "::1")) {
+    if (Utilities::getIpAddress() != "localhost") {
         if ($database->result("SELECT COUNT(*) FROM users WHERE ip = ?", [Utilities::getIpAddress()]) >= 2)
             $error .= "Your IP address has too many accounts associated with it. ";
     }

@@ -388,6 +388,8 @@ class Utilities
 
         $ip = $_SERVER['REMOTE_ADDR'];
 
+        if ($ip == "127.0.0.1" | $ip == "::1") return "localhost";
+
         return crypt($ip, $ip);
     }
 

@@ -167,10 +167,17 @@ class Templating
             $uri = explode('?', $_SERVER["REQUEST_URI"])[0];
 
             $uriParts = explode('/', trim($uri, '/'));
-            $pageName = $uriParts[0] ?? 'index';
+
+            // fix for admin panel tabs
+            if (!empty($uriParts) && $uriParts[0] === 'admin') {
+                $pageName = $uriParts[1] ?? 'overview';
+            } else {
+                $pageName = $uriParts[0] ?? 'index';
+            }
 
             $this->twig->addGlobal('page_name', $pageName);
         }
+
 
         if (isset($_SERVER['HTTP_HOST'])) {
             $this->twig->addGlobal("page_url", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");

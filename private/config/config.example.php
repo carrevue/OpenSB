@@ -18,6 +18,7 @@ return [
     "site" => "squarebracket",
     "maintenance" => false,
     "cache" => false,
+    "invite_keys" => false,
     "branding" => [
         "name" => "OpenSB Instance",
         "slogan" => "Insert slogan here",
