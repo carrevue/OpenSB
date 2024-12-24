@@ -102,10 +102,6 @@ if (isset($path[1]) && $path[1] != '') {
         'browse' => require(SB_PRIVATE_PATH . '/pages/browse.php'),
         'delete' => require(SB_PRIVATE_PATH . '/pages/delete.php'),
         'design_test' => require(SB_PRIVATE_PATH . '/pages/design_test.php'),
-        'dev' => match ($path[2] ?? null) {
-            'upload' => require(SB_PRIVATE_PATH . '/pages/dev/upload.php'),
-            default => die(),
-        },
         'edit' => require(SB_PRIVATE_PATH . '/pages/edit.php'),
         'feature' => require(SB_PRIVATE_PATH . '/pages/feature.php'),
         'githistory' => Utilities::redirect('https://github.com/bluffingo/OpenSB/commits/main/'),

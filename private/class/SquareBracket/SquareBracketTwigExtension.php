@@ -407,13 +407,6 @@ HTML;
                 ];
             }
 
-            if ($isDebug) {
-                $array["zUpload"] = [
-                    "name" => "zUpload",
-                    "url" => "/dev/upload",
-                ];
-            }
-
             // remove upload link on finalium 1 and bootstrap
             if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions()["skin"] == "bootstrap") {
                 unset($array["upload"]);
