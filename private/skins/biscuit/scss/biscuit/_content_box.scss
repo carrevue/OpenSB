@@ -25,7 +25,9 @@
     }
 
     &.login {
-        background: linear-gradient(180deg, rgb(253, 253, 253) 0%, rgb(225, 225, 225) 100%);
+        @if $theme == "soretro" {
+            background: linear-gradient(180deg, rgb(253, 253, 253) 0%, rgb(225, 225, 225) 100%);
+        }
     }
 
     // used for staff notes. i think it just looks cool honestly

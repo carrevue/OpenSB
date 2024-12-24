@@ -271,14 +271,16 @@ td.h
   @if $theme != "biscuit" {
     background: #2A2A2A;
     border: none;
+    box-shadow: 0 1px 2px rgba(black, 0.6);
   }
   min-width: 165px;
   top: $header-height;
   border-radius: 0 0 5px 5px;
-  box-shadow: 0 1px 2px rgba(black, 0.6);
 
   hr {
-    border-color: #777;
+    @if $theme != "biscuit" {
+      border-color: #777;
+    }
     margin: 4px 0;
   }
 
@@ -292,7 +294,11 @@ td.h
     }
 
     &:hover {
-      background: rgba(white, 0.1);
+      @if $theme != "biscuit" {
+        background: rgba(white, 0.1);
+      } @else {
+        background: rgba(black, 0.1);
+      }
       text-decoration: none;
     }
   }

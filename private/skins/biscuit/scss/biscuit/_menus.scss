@@ -8,6 +8,10 @@
   min-width: 100px;
   z-index: 5259;
 
+  hr {
+    border-color: $content-box-border-color;
+  }
+
   .menu-item-button {
     direction: ltr;
     display: flex;

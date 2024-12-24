@@ -71,14 +71,7 @@ function countViews($database): array
 }
 
 
-// squarebracket's production db has random references to dates prior to january 31st 2021, but the site
-// did launch back there, so just hardcode $date to that date. -chaziz 6/4/2024 (replaces rambling)
-if ($isChazizSB) {
-    // TODO: remove this before cheeserox relaunch (unless if quadium migration plans fall apart) -chaziz 12/22/2024
-    $date = mktime(0, 0, 0, 1, 31, 2021);
-} else {
-    $date = $database->fetch("SELECT u.joined FROM users u ORDER BY u.joined ASC")["joined"];
-}
+$date = $database->fetch("SELECT u.joined FROM users u ORDER BY u.joined ASC")["joined"];
 
 // Admin actions
 if(isset($_POST["action"])) {
