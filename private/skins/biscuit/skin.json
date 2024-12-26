@@ -9,25 +9,13 @@
       {
         "id": "default",
         "name": "Default",
-        "description": "The default SquareBracket user experience.",
+        "description": "The default OpenSB user experience.",
         "author": "OpenSB developers"
       },
       {
         "id": "soretro",
         "name": "So Retro",
         "description": "The July-August 2024 version of Biscuit.",
-        "author": "OpenSB developers"
-      },
-      {
-        "id": "classic",
-        "name": "Classic",
-        "description": "Simulates the April 2021 version of SquareBracket.",
-        "author": "OpenSB developers"
-      },
-      {
-        "id": "cubicle",
-        "name": "Cubicle",
-        "description": "Cubicle",
         "author": "OpenSB developers"
       }
     ]
