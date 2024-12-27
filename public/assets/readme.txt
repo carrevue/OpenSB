@@ -13,9 +13,7 @@ css: compiled css
 
 ATTRIBUTION:
 
-charla dark theme generic banner background by Matt Bango on StockSnap: https://stocksnap.io/photo/cloud-cloudscape-W9JMAUN9DM
-
-biscuit login page background by Quino Al on Unsplash: https://unsplash.com/photos/body-of-water-and-seashore-JFeOy62yjXk
+biscuit/charla login page background by Quino Al on Unsplash: https://unsplash.com/photos/body-of-water-and-seashore-JFeOy62yjXk
 
 finalium "leaf droplet" login background by Min An on Pexels: https://www.pexels.com/photo/macro-shot-of-water-drop-on-green-textile-689326/
 
