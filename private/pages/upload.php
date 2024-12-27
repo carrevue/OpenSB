@@ -61,7 +61,7 @@ function parse_tags($tags, $submission_id, $database) {
         $tagsID[] = $tagId;
     }
 
-    $submission_integer_id = $database->result("SELECT id from videos WHERE video_id = ?", [$submission_id]);
+    $submission_integer_id = $database->result("SELECT id from uploads WHERE video_id = ?", [$submission_id]);
 
     // link tags to the submission
     foreach ($tagsID as $tagID) {
@@ -101,7 +101,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             $target_file = SB_DYNAMIC_PATH . '/videos/' . $new . '.' . $ext;
         }
         if (move_uploaded_file($temp_name, $target_file)) {
-            $database->query("INSERT INTO videos (video_id, title, description, author, time, tags, videofile, flags, rating) VALUES (?,?,?,?,?,?,?,?,?)",
+            $database->query("INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, rating) VALUES (?,?,?,?,?,?,?,?,?)",
                 [$new, $title, $description, $uploader, time(), json_encode($tags2), 'dynamic/videos/' . $new, $status, $rating]);
 
             if (!isset($noProcess)) {
@@ -117,7 +117,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) {
         $storage->processImage($temp_name, $new);
         $status = 0x0;
-        $database->query("INSERT INTO videos (video_id, title, description, author, time, tags, videofile, flags, post_type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        $database->query("INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, post_type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
             [$new, $title, $description, $uploader, time(), json_encode(explode(', ', $_POST['tags'])), '/dynamic/art/' . $new . '.png', $status, 2, $rating]);
 
         parse_tags($tags2, $new, $database);
