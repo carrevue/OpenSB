@@ -44,5 +44,5 @@ mariadb-data
 *.sfk
 Ocean_Sound_Theme_OpenSB.wav
 
-# chat server config
-chat_server/config.py
+# weird ass file that shows up only on wsl
+*:Zone.Identifier
