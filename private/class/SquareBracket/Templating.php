@@ -193,12 +193,10 @@ class Templating
      */
     public function getAllSkins(): array
     {
-        global $externalSkins;
-
         $skins = [];
         $unfiltered_skins = glob('skins/*', GLOB_ONLYDIR);
 
-        // include skins bundled with opensb, except "common" since thats not a skin.
+        // include currently installed skins, except "common" since thats not a skin.
         foreach($unfiltered_skins as $skin) {
             if ($skin != "skins/common" && $skin != "skins/cache" && $skin != "skins/error") {
                 $skins[] = $skin;

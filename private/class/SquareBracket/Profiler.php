@@ -17,8 +17,7 @@ class Profiler
     {
         global $auth;
         if ($auth->isUserLoggedIn()) {
-            return "Currently logged in as " . htmlspecialchars($auth->getUserData()["name"]) .
-                " (ID " . $auth->getUserData()["id"] . ").";
+            return "Currently logged in as " . htmlspecialchars($auth->getUserData()["name"]);
         } else {
             return "Logged out.";
         }

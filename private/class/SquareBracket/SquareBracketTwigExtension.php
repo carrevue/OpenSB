@@ -407,9 +407,16 @@ HTML;
                 ];
             }
 
-            // remove upload link on finalium 1 and bootstrap
-            if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions()["skin"] == "bootstrap") {
+            // remove upload link on finalium 1, bootstrap and charla
+            if ($orange->getLocalOptions()["skin"] == "finalium"
+                || $orange->getLocalOptions()["skin"] == "bootstrap"
+            || $orange->getLocalOptions()["skin"] == "charla") {
                 unset($array["upload"]);
+            }
+
+            // remove write link on charla
+            if ($orange->getLocalOptions()["skin"] == "charla") {
+                unset($array["write"]);
             }
         } else {
             $array = [

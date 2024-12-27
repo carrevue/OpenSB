@@ -45,7 +45,7 @@ if (!$auth->isUserAdmin()) {
     }
 }
 
-function parse_tags($tags, $submission_id, $database) {
+function parse_tags($tags, $upload_id, $database) {
     // parse tags from input
     $tagsID = [];
     foreach ($tags as $tag) {
@@ -61,12 +61,12 @@ function parse_tags($tags, $submission_id, $database) {
         $tagsID[] = $tagId;
     }
 
-    $submission_integer_id = $database->result("SELECT id from uploads WHERE video_id = ?", [$submission_id]);
+    $upload_integer_id = $database->result("SELECT id from uploads WHERE video_id = ?", [$upload_id]);
 
-    // link tags to the submission
+    // link tags to the upload
     foreach ($tagsID as $tagID) {
-        if (!$database->result("SELECT tag_id FROM upload_tag_index WHERE tag_id = ? AND video_id = ?", [$tagID, $submission_integer_id])) {
-            $database->query("INSERT INTO upload_tag_index (video_id, tag_id) VALUES (?,?)", [$submission_integer_id, $tagID]);
+        if (!$database->result("SELECT tag_id FROM upload_tag_index WHERE tag_id = ? AND video_id = ?", [$tagID, $upload_integer_id])) {
+            $database->query("INSERT INTO upload_tag_index (video_id, tag_id) VALUES (?,?)", [$upload_integer_id, $tagID]);
         }
     }
 }

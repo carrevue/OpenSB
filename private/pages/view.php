@@ -178,10 +178,10 @@ LIMIT 24";
 $uploads_by_author = $submission_query->query("RAND()", 24, "v.author = ? AND v.video_id != ?", [$data["author"], $data["video_id"]]);
 
 if ($tags === []) {
-    // if there are no tags, list the author's other submissions
+    // if there are no tags, list the author's other uploads
     $recommended = false;
 } else {
-    // if there are tags, use jaccard stuff ported from poktwo to list submissions that may be relevant enough.
+    // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
     // this isn't ported to UploadQuery for now since this query uses a slightly different syntax.
 
     $query = "SELECT v.* 
@@ -205,7 +205,7 @@ if ($tags === []) {
 
     $recommended = $database->fetchArray($database->query($query, [$data["id"]]));
 
-    // if no other submissions match, then fallback to listing the author's other submissions
+    // if no other uploads match, then fallback to listing the author's other uploads
     if (empty($recommended)) {
         $recommended = false;
     }

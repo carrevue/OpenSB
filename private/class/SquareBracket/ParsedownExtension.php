@@ -7,14 +7,8 @@ use Parsedown;
 class ParsedownExtension extends Parsedown
 {
 
-    // We don't need headers within user-written stuff.
-    protected function blockHeader($Line): void
-    {
-        return;
-    }
+    // We don't need headers within comments
+    protected function blockHeader($Line): void {}
 
-    protected function blockSetextHeader($Line, array $Block = null): void
-    {
-        return;
-    }
+    protected function blockSetextHeader($Line, array|null $Block = []): void {}
 }
