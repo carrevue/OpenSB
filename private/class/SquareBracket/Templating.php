@@ -119,6 +119,8 @@ class Templating
             }
         }
 
+        // fucking stupid
+        /*
         $warningBannerTextIfOnChazizOwnedDomain = "Warning banner text";
 
         if ($isChazizSB) {
@@ -128,6 +130,10 @@ class Templating
             $showWarningBanner = false;
             $warningBannerText = null;
         }
+        */
+
+        $showWarningBanner = false;
+        $warningBannerText = null;
 
         $versionNumber = new VersionNumber;
 
@@ -153,6 +159,7 @@ class Templating
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('is_opensb_v2', false);
         $this->twig->addGlobal('is_opensb_v1_3', true);
+        $this->twig->addGlobal('options', $options);
 
         /*
         if ($this->skin == "finalium" && $this->theme == "beta")

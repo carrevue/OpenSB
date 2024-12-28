@@ -395,7 +395,15 @@ class Utilities
 
     public static function isFulpTube()
     {
-        global $isChazizSB;
+        global $isChazizSB, $orange, $isDebug;
+
+        $debugFulpTube = $orange->getLocalOptions()["debug_fulptube_branding"] ?? false;
+
+        // bypass logic completely if we're debugging fulptube branding.
+        if ($debugFulpTube && $isDebug) {
+            return true;
+        }
+
         return ($isChazizSB) && isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'fulptube.rocks');
     }
 

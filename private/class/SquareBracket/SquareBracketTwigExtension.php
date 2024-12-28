@@ -44,6 +44,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('submission_box', [$this, 'submissionBox'], ['is_safe' => ['html']]),
             new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
             new TwigFunction('localize', [$this, 'localize']),
+            new TwigFunction('truncate_number', [$this, 'truncateNumber']),
         ];
     }
 
@@ -135,6 +136,23 @@ class SquareBracketTwigExtension extends AbstractExtension
                 return $markdown->text($text);
             }, ['is_safe' => ['html']]),
         ];
+    }
+
+    function truncateNumber($number)
+    {
+        if ($number < 1000) {
+            return (string)$number;
+        }
+
+        $suffixes = ['', 'k', 'm', 'b', 't'];
+        $suffixIndex = 0;
+
+        while ($number >= 1000 && $suffixIndex < count($suffixes) - 1) {
+            $number /= 1000;
+            $suffixIndex++;
+        }
+
+        return number_format($number, ($number >= 100 && $number < 1000) ? 0 : 2) . $suffixes[$suffixIndex];
     }
 
     /**
@@ -262,10 +280,10 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $data;
     }
 
-    // new userlink used on biscuit
+    // new userlink used on biscuit and charla
     public function UserLink($user): string
     {
-        // Extract and sanitize user information
+        // get user info
         $username = htmlspecialchars($user["info"]["username"]);
         $displayName = htmlspecialchars($user["info"]["displayname"]);
         $customColor = htmlspecialchars($user["info"]["customcolor"]);
@@ -275,10 +293,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         $class = "userlink userlink-" . $username;
         $style = "color:" . $customColor;
 
-        // Determine the display text
-        if ($username === $displayName) {
+        if (mb_strtolower($username) === mb_strtolower($displayName)) {
+            // if username matches display name
             $displayText = sprintf('<span style="%s">@%s</span>', $style, $username);
         } else {
+            // if theyre different
             $displayText = sprintf(
                 '%s <a class="userlink-handle" style="text-decoration: none;" href="%s">@%s</a>',
                 $displayName,
@@ -287,7 +306,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             );
         }
 
-        // Return the formatted link
+        // return link
         return sprintf('<a class="%s" style="%s" href="%s">%s</a>', $class, $style, $href, $displayText);
     }
 
@@ -305,43 +324,43 @@ HTML;
         unset($_SESSION["notif_color"]);
     }
 
-    public function showRatings($ratings): void
+    public function showRatings(array $ratings): void
     {
-        $full = "biscuit-icon star-full";
-        $half = "biscuit-icon star-half";
-        $empty = "biscuit-icon star-empty";
+        $icons = [
+            'full' => "biscuit-icon star-full",
+            'half' => "biscuit-icon star-half",
+            'empty' => "biscuit-icon star-empty"
+        ];
 
-        $full_stars = substr($ratings["average"], 0, 1);
-        $half_stars = substr($ratings["average"], 2, 1);
-
-        $number = 0;
-
-        for ($x = 0; $x < $full_stars; $x++) {
-            $number++;
-            echo "<i class='$full'></i>";
+        if (!isset($ratings['average']) || !is_numeric($ratings['average'])) {
+            echo str_repeat("<i class='{$icons['empty']}'></i>", 5);
+            return;
         }
 
-        if ($half_stars) {
-            $number++;
-            if ($full_stars != 4) {
-                echo "<i class='$half'></i>";
-            } else {
-                echo "<i class='$full'></i>";
-            }
+        $average = (string)$ratings['average'];
+        $fullStars = (int)$average[0];
+        $halfStar = isset($average[2]) && $average[2] !== '0';
+        $totalStars = 0;
+
+        for ($i = 0; $i < $fullStars; $i++) {
+            echo "<i class='{$icons['full']}'></i>";
+            $totalStars++;
         }
 
-        while ($number != 5) {
-            $number++;
-            echo "<i class='$empty'></i>";
+        if ($halfStar) {
+            echo "<i class='{$icons['half']}'></i>";
+            $totalStars++;
         }
 
+        while ($totalStars < 5) {
+            echo "<i class='{$icons['empty']}'></i>";
+            $totalStars++;
+        }
     }
 
     public function notificationIcon($type)
     {
-        $icon = "biscuit-icon b-$type";
-
-        return $icon;
+        return "biscuit-icon b-$type";
     }
 
     public function pagination($levels, $lpp, $url, $current)
@@ -368,7 +387,10 @@ HTML;
 
     public function headerUserLinks()
     {
-        global $auth, $orange, $isDebug;
+        global $auth, $orange;
+
+        $options = $orange->getLocalOptions();
+        $charla_2025_enabled = $orange->getLocalOptions()["charla_2025_ui"] ?? false;
 
         if ($auth->isUserLoggedIn()) {
             $username = $auth->getUserData()["name"];
@@ -408,14 +430,12 @@ HTML;
             }
 
             // remove upload link on finalium 1, bootstrap and charla
-            if ($orange->getLocalOptions()["skin"] == "finalium"
-                || $orange->getLocalOptions()["skin"] == "bootstrap"
-            || $orange->getLocalOptions()["skin"] == "charla") {
+            if ($options == "finalium" || $options == "bootstrap" || ($options == "charla" && $charla_2025_enabled)) {
                 unset($array["upload"]);
             }
 
             // remove write link on charla
-            if ($orange->getLocalOptions()["skin"] == "charla") {
+            if ($options["skin"] == "charla" && $charla_2025_enabled) {
                 unset($array["write"]);
             }
         } else {
@@ -458,7 +478,6 @@ HTML;
 
         $userid = $auth->getUserID();
 
-        //$allUsers = query("SELECT $userfields s.* FROM user_follows s JOIN users u ON s.user = u.id WHERE s.id = ?", [$userdata['id']]);
         $users = $database->fetchArray(
             $database->query("SELECT s.* FROM user_follows s JOIN users u ON s.user = u.id WHERE s.user = ?", [$userid])
         );

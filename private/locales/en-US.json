@@ -13,6 +13,12 @@
   "recent_uploads": "Recent",
   "recent_uploads_desc": "Most recent uploads",
 
+  "following_uploads": "Following",
+  "following_uploads_desc": "Following uploads description",
+
+  "recent_members": "Members",
+  "recent_members_desc": "Last 5 members online",
+
   "site_news": "News",
   "site_news_desc": "Site announcements",
 

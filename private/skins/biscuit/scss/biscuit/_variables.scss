@@ -33,15 +33,14 @@ $color-map: (
         "warning": $yellow,
 );
 
-// colors used for the users section in the admin panel, taken from the ones on bitview.
 $color-map-admin: (
-        "banned-other-unbanned": #ff9696,
-        "unbanned-other-banned": #ffc848,
-        "banned": #ffcccc,
-        "shadow-banned": #ffe2cc, // "Reuploader" on bitview
-        "unbanned-other-unbanned": #fffdcc,
-        "partner": #e2ffcc,
-        "staff": #e2f0ff,
+        "banned-other-unbanned": #ff6b6b,
+        "unbanned-other-banned": #ffa726,
+        "banned": #ff8a80,
+        "shadow-banned": #ffccbc,
+        "unbanned-other-unbanned": #fff59d,
+        "partner": #a5d6a7,
+        "staff": #90caf9,
 );
 
 // fonts
