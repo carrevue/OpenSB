@@ -4,6 +4,8 @@ namespace OpenSB;
 
 global $ffmpegPath, $ffprobePath, $database, $orange;
 
+use SquareBracket\VersionNumber;
+
 use FFMpeg\Coordinate;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
@@ -17,10 +19,34 @@ define("SB_GIT_PATH", dirname(__DIR__, 2) . '/.git'); // ONLY FOR makeVersionStr
 
 require_once SB_PRIVATE_PATH . '/class/common.php';
 
-echo (new \SquareBracket\VersionNumber)->printVersionForOutput();
+function log(string $message): void
+{
+    $microtime = microtime(true);
+    $timestamp = date('Y-m-d H:i:s', (int)$microtime) .
+        sprintf('.%06d', ($microtime - floor($microtime)) * 1000000);
+    echo $timestamp . ": " . $message . PHP_EOL;
+}
+
+function downscaleVideoForThumbnail($videoWidth, $videoHeight)
+{
+    $targetWidth = 512;
+
+    // if video width smaller than 512, dont bother with downscaling.
+    if ($videoWidth <= $targetWidth) {
+        return ['width' => $videoWidth, 'height' => $videoHeight];
+    }
+
+    // otherwise, downscale.
+    $scaleFactor = $targetWidth / $videoWidth;
+    $newHeight = round($videoHeight * $scaleFactor);
+
+    return ['width' => $targetWidth, 'height' => $newHeight];
+}
+
+echo (new VersionNumber)->printVersionForOutput();
 
 $config = [
-    'timeout' => 3600, // The timeout for the underlying process (1 hour?)
+    'timeout' => 3600, // The timeout for the underlying process (1 hour)
     'ffmpeg.threads' => 12,   // The number of threads that FFmpeg should use
     'ffmpeg.binaries' => ($ffmpegPath ? $ffmpegPath : 'ffmpeg'),
     'ffprobe.binaries' => ($ffprobePath ? $ffprobePath : 'ffprobe'),
@@ -46,14 +72,36 @@ try {
 
     $video = $ffmpeg->open($target_file);
 
-    echo time() . ": Getting video data..." . PHP_EOL;
-    //get frame count
-    $duration = $ffprobe
-        ->streams($target_file)    // extracts file information
-        ->videos()              // filters video streams
-        ->first()               // returns the first video stream
-        //->get('nb_frames');    // returns the duration property
-        ->get('nb_read_frames');    // i think this might be slower?
+    log("Getting video data...");
+
+    // STUPID FUCKING HACK THAT WILL MAKE THE SCRIPT PRONE TO BREAKAGE, which you can blame the php-ffmpeg devs for not
+    // including any *proper* functionality to enable "count_frames" for ffprobe! we have to do this for every video in
+    // case someone uploads one of those fuckass "1000000 hours" discord shitpost videos. -chaziz 12/28/2024
+    $command = $config["ffprobe.binaries"] . " -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 " . $target_file;
+
+    log("Command: " . $command);
+    $duration_command = shell_exec($command);
+
+    $duration = trim($duration_command);
+    $fucked = false;
+
+    if (is_numeric($duration)) {
+        log("Frame count: " . $duration);
+    } else {
+        log("Unable to determine frame count.");
+        $fucked = true;
+    }
+
+    if ($fucked) {
+        log("Falling back to nb_frames");
+
+        // get frame count the bad way.
+        $duration = $ffprobe
+            ->streams($target_file)    // extracts file information
+            ->videos()              // filters video streams
+            ->first()               // returns the first video stream
+            ->get('nb_frames');    // returns the duration property
+    }
 
     //get fractional framerate
     $fracFramerate = $ffprobe
@@ -79,24 +127,36 @@ try {
     //get the actual framerate
     $framerate = explode("/", $fracFramerate)[0] / explode("/", $fracFramerate)[1];
 
-    echo time() . ": Video width: " . $videoWidth . PHP_EOL;
-    echo time() . ": Video height: " . $videoHeight . PHP_EOL;
+    log("Resolution: " . $videoWidth . "x" . $videoHeight);
+    log("Creating thumbnail...");
 
-    echo time() . ": Creating thumbnail..." . PHP_EOL;
     // Thumbnail
-    //this doesn't scale too well with short videos.
-    $seccount = round($duration / 4);
-    $seccount2 = $seccount * 1.5;
-    $frame = $video->frame(Coordinate\TimeCode::fromSeconds($seccount2 / $framerate));
-    $frame->filters()->custom('scale=512x288');
+
+    // if we cant actually get the total framecount, fallback to the 1st (or 2nd???) frame of the video.
+    if ($fucked) {
+        $thumbnailTime = 1;
+    } else {
+        $thumbnailTime = $duration * 0.33;
+    }
+
+    // calculate thumbnail resolution in a way that wont fuck up the aspect ratio
+    $resolution = downscaleVideoForThumbnail($videoWidth, $videoHeight);
+
+    log("Downscaled resolution: " . $resolution["width"] . "x" . $resolution["height"]);
+
+    log("Taking thumbnail from frame " . $thumbnailTime);
+    $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
+    $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
+    log("Saving thumbnail");
     $frame->save(SB_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
+    log("Thumbnail saved!");
 
     // Video
-
-    $video->filters()->resize(new Coordinate\Dimension(1280, 720), Filters\Video\ResizeFilter::RESIZEMODE_INSET, true)
+    $video->filters()->resize(
+            new Coordinate\Dimension(1280, 720), Filters\Video\ResizeFilter::RESIZEMODE_INSET, true)
         ->custom('format=yuv420p');
 
-    echo time() . ": Converting video..." . PHP_EOL;
+  log("Converting video");
     $video->save($h264, SB_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
 
     debug_print_backtrace();
@@ -104,20 +164,20 @@ try {
     //delete_directory($preload_folder);
 
     if ($for_website) {
-        echo time() . ": Updating database flags..." . PHP_EOL;
+        log("Updating database flags...");
         $videoData = $database->fetch("SELECT v.* FROM uploads v WHERE v.video_id = ?", [$new]);
 
         $database->query("UPDATE uploads SET videolength = ?, flags = ? WHERE video_id = ?",
             [round($duration / $framerate), $videoData['flags'] ^ 0x2, $new]);
     } else {
-        echo time() . ": Not a website video, skipping." . PHP_EOL;
+        log("Not a website video, skipping.");
     }
 } catch (\Exception $e) {
-    echo time() . " OpenSB Video Processing Worker Failure: " . $e->getMessage() . PHP_EOL;
+    log("OpenSB Video Processing Worker Failure: " . $e->getMessage());
     clearstatcache();
     die();
 }
 
-echo time() . " OpenSB Video Processing Worker Success!" . PHP_EOL;
+log("OpenSB Video Processing Worker Success!");
 
 clearstatcache();

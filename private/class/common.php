@@ -36,24 +36,32 @@ if (php_sapi_name() == "cli-server") {
     define("SB_PHP_BUILTINSERVER", false);
 }
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_name("sb_session");
+if (php_sapi_name() == "cli") {
+    define("SB_CLI", true);
+} else {
+    define("SB_CLI", false);
+}
 
-    $is_secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-    
-    session_set_cookie_params([
-        'lifetime' => 0,
-        'path' => '/',
-        'domain' => $_SERVER['HTTP_HOST'],
-        'secure' => $is_secure,
-        'httponly' => true,
-        'samesite' => 'Strict'
-    ]);
+if (!SB_CLI) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_name("sb_session");
 
-    session_start([
-        "cookie_lifetime" => 1209600,
-        "gc_maxlifetime" => 1209600,
-    ]);
+        $is_secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+        session_set_cookie_params([
+            'lifetime' => 0,
+            'path' => '/',
+            'domain' => $_SERVER['HTTP_HOST'],
+            'secure' => $is_secure,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]);
+
+        session_start([
+            "cookie_lifetime" => 1209600,
+            "gc_maxlifetime" => 1209600,
+        ]);
+    }
 }
 
 spl_autoload_register(function ($class_name) {
@@ -120,12 +128,14 @@ $disableWritingJournals = false;
 // now initialize the orange classes
 $orange = new SquareBracket($host, $user, $pass, $db);
 $database = $orange->getDatabase();
-$auth = new Authentication($database);
-$profiler = new Profiler();
 
 $localization_setting = $orange->getLocalOptions()["localization"] ?? "en-US";
 
-$localization = new Localization($localization_setting);
+if (!SB_CLI) {
+    $auth = new Authentication($database);
+    $profiler = new Profiler();
+    $localization = new Localization($localization_setting);
+}
 
 // automatic stuff
 // this should probably have a cooldown or something i don't fucking know
@@ -144,21 +154,23 @@ foreach ($ipBannedUsers as $ipBannedUser) {
 
 $storage = new Storage($orange->getDatabase());
 
-$twig = new Templating($orange);
-$twig_error = new ErrorTemplating($orange);
+if (!SB_CLI) {
+    $twig = new Templating($orange);
+    $twig_error = new ErrorTemplating($orange);
 
-if ($ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()])) {
-    $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]));
+    if ($ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()])) {
+        $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]));
 
-    echo $twig_error->render("ip_banned.twig", [
-        "page" => "ip-banned",
-        "data" => $ipban,
-        "users" => $usersAssociatedWithIP,
-    ]);
-    die();
-}
+        echo $twig_error->render("ip_banned.twig", [
+            "page" => "ip-banned",
+            "data" => $ipban,
+            "users" => $usersAssociatedWithIP,
+        ]);
+        die();
+    }
 
-if ($isMaintenance && !SB_PHP_BUILTINSERVER) {
-    echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
-    die();
+    if ($isMaintenance && !SB_PHP_BUILTINSERVER) {
+        echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
+        die();
+    }
 }

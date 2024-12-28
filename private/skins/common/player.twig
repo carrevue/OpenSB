@@ -2,10 +2,16 @@
 <script src="https://unpkg.com/plyr@3.7.8/dist/plyr.min.js"></script>
 {% set video = "/dynamic/videos/" ~ submission.id ~ ".converted.mp4" %}
 
+{% if current_skin == "charla" %}
+    {% set color = 'var(--link-color)' %}
+{% else %}
+   {% set color = '#1d89dc' %}
+{% endif %}
+
 <style>
     .plyr--video {
         aspect-ratio: 16 / 9;
-        --plyr-color-main: {{ is_user_logged_in ? user_data.customcolor : '#1d89dc' }};
+        --plyr-color-main: {{ color }};
         --plyr-control-spacing: 10px;
     }
     .plyr--video .plyr__controls {

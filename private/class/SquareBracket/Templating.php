@@ -155,7 +155,8 @@ class Templating
         $this->twig->addGlobal('invite_keys_enabled', $enableInviteKeys);
         $this->twig->addGlobal('items_per_page', 20);
         // shit
-        $this->twig->addGlobal('current_skin_and_theme', $this->skin . ',' . $this->theme);
+        $this->twig->addGlobal('current_skin_and_theme', $this->skin . ',' . $this->theme); // move this shit
+        $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('is_opensb_v2', false);
