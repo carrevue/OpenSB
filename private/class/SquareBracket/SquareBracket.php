@@ -15,11 +15,18 @@ class SquareBracket {
      *
      */
     public function __construct($host, $user, $pass, $db) {
+        global $isChazizSB;
+
         if (isset($_COOKIE["SBOPTIONS"])) {
             $this->options = json_decode(base64_decode($_COOKIE["SBOPTIONS"]), true);
         } else {
+            $defaultSkin = "biscuit";
+            if ($isChazizSB) {
+                $defaultSkin = "charla";
+            }
+
             $this->options = [
-                "skin" => "biscuit",
+                "skin" => $defaultSkin,
                 "theme" => "default",
                 "sounds" => false,
             ];

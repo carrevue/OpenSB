@@ -12,7 +12,7 @@ class Authentication
     private int $user_id;
     private array $user_data;
     private $user_ban_data;
-    private $user_notice_count; // this shouldn't be here but whatever
+    private $user_stat_data;
     // TODO: make this default blacklist configurable per instance
     private $default_tags_blacklist = [];
     private $has_authenticated_as_an_admin = false;
@@ -22,12 +22,24 @@ class Authentication
         $accountfields = "id, ip, name, title, email, title, about, powerlevel, joined, lastview, birthdate, comfortable_rating, customcolor, blacklisted_tags, token";
         $this->database = $database;
         $token = $_SESSION["SBTOKEN"] ?? null;
+
         if (isset($token)) {
             if($this->user_id = $this->database->result("SELECT id FROM users WHERE token = ?", [$token])) {
                 $this->is_logged_in = true;
                 $this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE id = ?", [$this->user_id]);
-                $this->user_notice_count = $this->database->result("SELECT COUNT(*) FROM user_notifications WHERE recipient = ?", [$this->user_id]);
                 $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$this->user_id]);
+
+                // moved from homepage
+                $followers = $this->database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$this->user_id]);
+                $views = $this->database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$this->user_id]);
+                $notifications = $this->database->result("SELECT COUNT(*) FROM user_notifications WHERE recipient = ?", [$this->user_id]);
+
+                $this->user_stat_data = [
+                    "followers" => $followers,
+                    "views" => $views,
+                    "notifications" => $notifications,
+                ];
+                // -------------------
 
                 if (!isset($this->user_data['blacklisted_tags'])) {
                     $this->user_data['blacklisted_tags'] = $this->default_tags_blacklist;
@@ -100,12 +112,12 @@ class Authentication
         }
     }
 
-    public function getUserNoticesCount(): ?int
+    public function getUserStatData(): array
     {
         if ($this->is_logged_in) {
-            return $this->user_notice_count;
+            return $this->user_stat_data;
         } else {
-            return 0;
+            return [];
         }
     }
 

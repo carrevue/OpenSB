@@ -42,16 +42,6 @@ $data = [
     //"users_recent" => $users_recent, // TODO: makeUsersArray
 ];
 
-if ($auth->isUserLoggedIn()) {
-    $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$auth->getUserID()]);
-    $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$auth->getUserID()]);
-
-    $data["totals"] = [
-        "followers" => $followers,
-        "views" => $views,
-    ];
-}
-
 echo $twig->render('index.twig', [
     'data' => $data,
     'type' => $type,

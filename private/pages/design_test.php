@@ -46,6 +46,8 @@ $data["icons"] = [
     "caret-open",
     "caret-closed-header",
     "caret-open-header",
+    "mail",
+    "bell",
     "homepage-list",
     "homepage-grid",
     "placeholder",

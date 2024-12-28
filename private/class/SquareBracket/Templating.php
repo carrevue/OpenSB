@@ -143,7 +143,8 @@ class Templating
         $this->twig->addGlobal('is_user_logged_in', $auth->isUserLoggedIn());
         $this->twig->addGlobal('user_data', $auth->getUserData());
         $this->twig->addGlobal('user_ban_data', $auth->getUserBanData());
-        $this->twig->addGlobal('user_notice_data', $auth->getUserNoticesCount());
+        $this->twig->addGlobal('user_notice_data', "DEPRECATED"); // DEPRECATED
+        $this->twig->addGlobal('user_stat_data', $auth->getUserStatData());
         $this->twig->addGlobal('user_is_admin', $auth->isUserAdmin());
         $this->twig->addGlobal('user_is_authenticated_admin', $auth->hasUserAuthenticatedAsAnAdmin());
         $this->twig->addGlobal('skins', $this->getAllSkinsMetadata());
