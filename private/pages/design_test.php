@@ -15,7 +15,7 @@ $data["color_types"] = [
     "success",
     "danger",
     "warning",
-    "dark",
+    "neutral",
 ];
 
 $data["color_types_admin"] = [
@@ -39,7 +39,7 @@ $data["icons"] = [
     "b-secondary",
     "b-success",
     "b-warning",
-    "b-dark",
+    "b-neutral",
     "search",
     "hamburger",
     "caret-closed",
@@ -48,6 +48,7 @@ $data["icons"] = [
     "caret-open-header",
     "mail",
     "bell",
+    "plus",
     "homepage-list",
     "homepage-grid",
     "placeholder",

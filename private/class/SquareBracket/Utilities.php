@@ -86,6 +86,7 @@ class Utilities
                     "content_rating" => $upload["rating"],
                     "views" => $upload["views"],
                     "flags" => $bools,
+                    "length" => $upload["videolength"],
                     "author" => [
                         "id" => $upload["author"],
                         "info" => $userData->getUserArray(),

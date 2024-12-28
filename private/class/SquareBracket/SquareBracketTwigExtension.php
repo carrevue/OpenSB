@@ -45,6 +45,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
             new TwigFunction('localize', [$this, 'localize']),
             new TwigFunction('truncate_number', [$this, 'truncateNumber']),
+            new TwigFunction('convert_time', [$this, 'convertTime']),
         ];
     }
 
@@ -136,6 +137,20 @@ class SquareBracketTwigExtension extends AbstractExtension
                 return $markdown->text($text);
             }, ['is_safe' => ['html']]),
         ];
+    }
+
+    public function convertTime($seconds)
+    {
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $seconds = $seconds % 60;
+
+        // format the time
+        if ($hours > 0) {
+            return sprintf("%d:%02d:%02d", $hours, $minutes, $seconds);
+        } else {
+            return sprintf("%d:%02d", $minutes, $seconds);
+        }
     }
 
     function truncateNumber($number)
