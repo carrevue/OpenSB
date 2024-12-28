@@ -97,7 +97,9 @@ if ($auth->isUserLoggedIn()) {
 // stupid fucking check
 function domainCheck()
 {
-    global $isChazizSB;
+    global $isDebug, $isChazizSB;
+
+    if ($isDebug) { return true; }
 
     $allowedChazizSbDomains = ['squarebracket.pw', 'fulptube.rocks', 'squarebracket.bluffingo.net'];
     $currentDomain = $_SERVER['HTTP_HOST'];
@@ -115,8 +117,8 @@ function domainCheck()
 
 // probably shit
 if (!$CrawlerDetect->isCrawler() && domainCheck()) {
-    if ($database->fetch("SELECT COUNT(video_id) FROM views WHERE video_id=? AND user=?", [$id, $ip])['COUNT(video_id)'] < 1) {
-        $database->query("INSERT INTO views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
+    if ($database->fetch("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip])['COUNT(video_id)'] < 1) {
+        $database->query("INSERT INTO upload_views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
             [$id, $ip, time(), $type]);
 
         // increment the indexed view count. this might go out of sync eventually, but this can be fixed with a

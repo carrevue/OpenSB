@@ -15,27 +15,6 @@ if (sbOptions) {
     }
 }
 
-function updateConfig(key, value) {
-    // fetch sboptions cookie
-    let sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
-    let options = {};
-
-    if (sbOptions) {
-        const encodedOptions = sbOptions.split('=')[1];
-        const decodedOptions = decodeURIComponent(encodedOptions);
-        options = JSON.parse(atob(decodedOptions));
-    }
-
-    options[key] = value;
-
-    // turn into json, encoded into base64 and then Idfk
-    const updatedOptions = btoa(JSON.stringify(options));
-    const encodedUpdatedOptions = encodeURIComponent(updatedOptions);
-
-    // set the cookie
-    document.cookie = `SBOPTIONS=${encodedUpdatedOptions}; path=/; SameSite=Lax`;
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     let hamburgerButton = (document.getElementById('button-hamburger')); // TEMPORARY
     let hamburgerMenu = (document.getElementById('hamburger')); // TEMPORARY
