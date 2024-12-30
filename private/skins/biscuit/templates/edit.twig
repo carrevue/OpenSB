@@ -1,11 +1,11 @@
 {% extends "_layout.twig" %}
 
-{% set title = "Modify submission" %}
+{% set title = "Modify upload" %}
 
 	{% block content %}
         <div class="section">
             <div class="section-title">
-                <h1>Modify submission</h1>
+                <h1>Modify upload</h1>
             </div>
             <div class="content-box">
                 <form name="uploadForm" id="uploadForm" method="post" action="edit" enctype="multipart/form-data">
@@ -39,12 +39,12 @@
 
                         <div class="form-input">
                             <input type="checkbox" id="block_guests" name="block_guests" value="yes">
-                            <label for="block_guests"> Block guests from viewing this submission</label><br>
+                            <label for="block_guests"> Block guests from viewing this upload</label><br>
                         </div>
 
                         <div class="form-input">
                             <input type="checkbox" id="block_comments" name="block_comments" value="yes">
-                            <label for="block_comments"> Block users from commenting in this submission</label><br>
+                            <label for="block_comments"> Block users from commenting on this upload</label><br>
                         </div>
                     {% endif %}
 
