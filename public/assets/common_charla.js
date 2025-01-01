@@ -282,11 +282,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function play(sound) {
     if (JSON.parse(uiSounds) === true) {
-        let audio = new Audio('/assets/sounds/' + sound + '.ogg');
-        audio.play();
-
-        audio.addEventListener('ended', function() {
-            audio = null;
-        });
+        console.warn("play() is deprecated and should be removed before OpenSB 1.3 final release! -Chaziz 12/31/2024")
     }
 }

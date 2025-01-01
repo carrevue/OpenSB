@@ -91,10 +91,24 @@
                             <h2>Filtering</h2>
                         </div>
 
-                        <div class="form-submit">
-                            <input type="checkbox" name="rating" id="rating" value="true" {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
-                            <label for="rating"> Enable sensitive content</label><br>
-                        </div>
+                        {% if isUserOver18 %}
+                            <div class="form-submit">
+                                <input type="checkbox" name="rating" id="rating" value="true"
+                                       {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
+                                <label for="rating"> {% if is_opensb_v1_3 %}Enable adult content{% else %}Enable sensitive content{% endif %}</label><br>
+                            </div>
+
+                            <div class="form-submit">
+                                <input type="checkbox" name="rating" id="rating" value="true">
+                                <label for="rating"> Block profile/upload access from people under 18</label><br>
+                            </div>
+                        {% else %}
+                            <div>
+                                Based on your account's birthdate, access to mature-rated content is restricted.
+                                If you entered an incorrect birthdate, please contact {{ website_branding.name }}
+                                administration.
+                            </div>
+                        {% endif %}
 
                         <br>
 

@@ -1,6 +1,6 @@
 {
-    "name": "OpenSB Instance",
-    "short_name": "OpenSB Instance",
+    "name": "OpenSB",
+    "short_name": "OpenSB",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#1B81CB",
-    "background_color": "#F4F4F4",
+    "theme_color": "#0069B4",
+    "background_color": "#F2F2F2",
     "display": "standalone"
 }

@@ -1,6 +1,6 @@
 {
-    "name": "CheeseRox",
-    "short_name": "CheeseRox",
+    "name": "SquareBracket",
+    "short_name": "SquareBracket",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#FFBB00",
+    "theme_color": "#0069B4",
     "background_color": "#F2F2F2",
     "display": "standalone"
 }

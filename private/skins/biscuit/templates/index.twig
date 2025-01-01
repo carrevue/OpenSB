@@ -2,8 +2,8 @@
 
 {# hack to prevent twig from outputing the number 1 #}
 {% if is_user_logged_in %}
-    {% set followers = data.totals.followers ?? "no" %}
-    {% set views = data.totals.views ?? "no" %}
+    {% set followers = user_stat_data.followers ?? "no" %}
+    {% set views = user_stat_data.views ?? "no" %}
     {% set followersText = followers == 0 ? "no" : followers %}
     {% set viewsText = views == 0 ? "no" : views %}
 

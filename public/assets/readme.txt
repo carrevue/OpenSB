@@ -13,7 +13,7 @@ css: compiled css
 
 ATTRIBUTION:
 
-biscuit/charla login page background by Quino Al on Unsplash: https://unsplash.com/photos/body-of-water-and-seashore-JFeOy62yjXk
+biscuit/charla login page background by Jeremy Bishop on Unsplash: https://unsplash.com/photos/body-of-water-under-blue-sky-dUvBgzQEIag
 
 finalium "leaf droplet" login background by Min An on Pexels: https://www.pexels.com/photo/macro-shot-of-water-drop-on-green-textile-689326/
 
