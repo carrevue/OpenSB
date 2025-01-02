@@ -18,8 +18,7 @@ class UploadData
     // 00000001: featured upload flag that was used in mid-2021.
     public const FLAG_FEATURED = 1;
 
-    // 00000010: Unprocessed VIDEO upload, which is now unused but a few image uploads on cheeserox still have
-    // this flag enabled.
+    // 00000010: Unprocessed VIDEO upload.
     public const FLAG_UNPROCESSED = 2;
 
     // 00000100: "Block guests from viewing this upload"

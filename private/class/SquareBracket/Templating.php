@@ -42,10 +42,10 @@ class Templating
 
         $skinPath = 'skins/' . $this->skin;
 
-        // get metadata so that we can check if the skin is actually intended for cheeserox
+        // get metadata so that we can check if the skin is actually intended for squarebracket
         $metadata = $this->getSkinMetadata($skinPath);
 
-        // if this skin is not meant for cheeserox, don't load.
+        // if this skin is not meant for squarebracket, don't load.
         if ($metadata["metadata"]["site"] != "squarebracket") {
             trigger_error("Currently selected skin is invalid", E_USER_WARNING);
             $this->skin = "biscuit";
@@ -100,9 +100,9 @@ class Templating
             }));
         }
 
-        // override cheeserox branding with fulptube branding if accessed via fulptube.rocks.
-        // this fulptube branding is meant to look like the cheeserox branding on purpose, since
-        // both cheeserox.com and fulptube.rocks lead to the same site.
+        // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
+        // this fulptube branding is meant to look like the squarebracket branding on purpose, since
+        // both squarebracket.pw and fulptube.rocks lead to the same site.
         if (Utilities::isFulpTube()) {
             $isFulpTube = true;
             $branding = [
@@ -113,8 +113,10 @@ class Templating
             $isFulpTube = false;
             // custom branding for themes. for that Extra Accuracy™.
             if ($isChazizSB) {
-                if ($this->skin == "finalium" || $this->skin == "bootstrap") {
+                if ($this->skin == "finalium" && $this->theme == "beta") {
                     $branding["name"] = "cheeseRox";
+                } elseif ($this->skin == "finalium" || $this->skin == "bootstrap") {
+                    $branding["name"] = "squareBracket";
                 }
             }
         }

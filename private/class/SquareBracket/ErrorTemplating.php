@@ -47,9 +47,9 @@ class ErrorTemplating
             }));
         }
 
-        // override cheeserox branding with fulptube branding if accessed via fulptube.rocks.
-        // this fulptube branding is meant to look like the cheeserox branding on purpose, since
-        // both cheeserox.com and fulptube.rocks lead to the same site.
+        // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
+        // this fulptube branding is meant to look like the squarebracket branding on purpose, since
+        // both squarebracket.pw and fulptube.rocks lead to the same site.
         if (Utilities::isFulpTube()) {
             $isFulpTube = true;
             $branding = [
