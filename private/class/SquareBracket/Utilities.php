@@ -60,6 +60,8 @@ class Utilities
 
     public static function makeUploadArray($database, $uploads): array
     {
+        if (!$uploads) return [];
+
         $submissionsData = [];
         foreach ($uploads as $upload) {
 

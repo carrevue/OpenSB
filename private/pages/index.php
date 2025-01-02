@@ -29,7 +29,13 @@ if ($options["skin"] == "biscuit" || $options["skin"] == "charla") {
     $submissions_recent_query_limit = 12;
 }
 
-$submissions_random = $submission_query->query("RAND()", $submissions_random_query_limit);
+// bootstrap frontend did not list random uploads.
+if ($options["skin"] != "bootstrap") {
+    $submissions_random = $submission_query->query("RAND()", $submissions_random_query_limit);
+} else {
+    $submissions_random = [];
+}
+
 $submissions_recent = $submission_query->query("v.time DESC", $submissions_recent_query_limit);
 
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC LIMIT 5"));
