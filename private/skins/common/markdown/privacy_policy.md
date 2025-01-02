@@ -1,21 +1,23 @@
 # Privacy Policy
 
+Last updated by Chaziz on January 2nd 2025.
+
 This is the privacy policy for this site, SquareBracket (alternatively known as FulpTube).
 
-The only person who currently has full server and database access is Chaziz, who is the server administrator. Moderators do not have full server or database access and can only use moderation tools provided by Chaziz.
+The only person who currently has full server and database access is Chaziz, who is the server operator. Administrators do not have full server or database access and can only use moderation tools provided by Chaziz.
 
 Currently, SquareBracket is hosted on a server provided by Endless Hosting in the United States. Backups are stored by Chaziz in Canada.
 
-Whenever a request is sent, it is logged in the server's access logs. This will include your IP, user agent and HTTP referer. These access logs are only accessible to the server administrators. They will be used for temporary statistics and for logging potential errors that occur. In the case of illegal activity (e.g. a DDoS attack) the offending parts of an access log may be saved for further analysis.
+Whenever a request is sent, it is logged in the server's access logs. This will include your IP, user agent and HTTP referer. These access logs are only accessible to the server operators. They will be used for temporary statistics and for logging potential errors that occur. In the case of illegal activity (e.g. a DDoS attack) the offending parts of an access log may be saved for further analysis.
 
 This site consists mainly of user generated content, and whenever you e.g. upload a submission or write a comment you should be aware that this content will be publicly available and searchable on the Internet.
 
 ## User information
 When you register an account, you provide a username, email and password. The username is visible and should not be your real name, but a pseudonym you are comfortable with others seeing.
 
-The password you register with is one-way hashed with bcrypt and the hash is only visible to the server admin, who cannot convert this back into the original password.
+The password you register with is one-way hashed with bcrypt and the hash is only visible to the server operator, who cannot convert this back into the original password.
 
-Whenever you are logged in, your latest IP address is stored in the database (independent of access logs). This is only visible to the server administrator and is kept strictly private unless abuse occurs.
+Whenever you are logged in, your latest IP address is stored in the database (independent of access logs). This is only visible to the server operators and is kept strictly private unless abuse occurs.
 
 Any additional user information you add to your profile (Profile description, etc.) is strictly optional and will be displayed publicly on your user page, do not put private or otherwise personal information you do not want accessible on the internet.
 

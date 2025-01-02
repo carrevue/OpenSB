@@ -1,27 +1,37 @@
 # SquareBracket Community Guidelines 
-Last updated by Chaziz on November 9th 2024.
+Last updated by Chaziz on January 2nd 2025.
+
+(DRAFT, must be finished before 1/31/25 relaunch)
 
 ## General rules
-* You must be 13 or older to register in order to make an account.
-* Do not do drama for the sake of doing drama.
-* Do not be a bigot.
+This has been moved to the [Terms of Service](/tos).
 
-We monitor off-site behavior, if we find anything from another profile of yours, and we then find you unsuitable,
-you will be banned from SquareBracket.
+## Content
 
-## What we don't allow to be uploaded
+### What we don't allow to be uploaded
 
 **If you upload any of these, you will have your upload taken down and in some cases your account will be banned**
 
-* Content intended for children
-* Illegal content (**CSAM/CSEM content**, **bestiality content**, doxxing)
-* Adult content (pornography, erotic fetish content)
+* Content intended for children (primarily preschool/educational cartoons)
+* Illegal content (**CSAM/CSEM/"CP" content**, **bestiality content**, doxxing)
+* Adult content (pornographic or otherwise erotic content)
 * Shock content (gore)
 * Offensive content (Racism, fascism, homophobia, transphobia)
 * Content promoting misleading information
-* **Reuploads of pre-existing copyrighted content that do not fall into fair use** (You must provide some sort of commentary. If you reupload something and claim it is under fair use we will take it down regardless.)
+* **Reuploads of pre-existing copyrighted content that do not fall into fair use** (You must provide some sort of
+  commentary. If you reupload something and claim it is under fair use we will take it down regardless. This does not
+  affect legacy content from before April 2023 [do we keep the old data or not???])
+* Content that breaks the [terms of service](https://portal.theendlessweb.com/plugin/support_manager/knowledgebase/view/2/terms-of-service/) of our hosting provider, Endless Hosting.
 
-## Sensitive content
+### Age ratings
 
-* General: All users can see general content. This type of content is suitable for all audiences and contains no references to inappropriate material.
-* Sensitive: Users who enable this setting can view content that may not be suitable for all audiences.
+#### General
+
+All users by default can only view "general" content. This type of content is suitable for all audiences and contains no references to
+inappropriate material.
+
+#### Sensitive
+
+Users who enable this setting can view "sensitive" content that may not be suitable for all audiences. Users must be over the age of 18 to access sensitive-rated uploads.
+
+Please note that pornographic/erotic content is currently forbidden from being uploaded on SquareBracket due to Endless Hosting's terms of service.
