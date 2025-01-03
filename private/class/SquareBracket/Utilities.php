@@ -362,26 +362,42 @@ class Utilities
     public static function convertBytes($value, $decimals = 0)
     {
         if (is_numeric($value)) {
-            return $value;
+            $bytes = $value;
         } else {
             $value_length = strlen($value);
             $qty = substr($value, 0, $value_length - 1);
             $unit = strtolower(substr($value, $value_length - 1));
+
             switch ($unit) {
                 case 'k':
-                    $qty *= 1024;
+                    $bytes = $qty * 1024;
                     break;
                 case 'm':
-                    $qty *= 1048576;
+                    $bytes = $qty * 1048576; // 1024^2
                     break;
                 case 'g':
-                    $qty *= 1073741824;
+                    $bytes = $qty * 1073741824; // 1024^3
+                    break;
+                case 't':
+                    $bytes = $qty * 1099511627776; // 1024^4
+                    break;
+                case 'p':
+                    $bytes = $qty * 1125899906842624; // 1024^5
+                    break;
+                default:
+                    $bytes = $value;
                     break;
             }
         }
-        $sz = 'BKMGTP';
-        $factor = floor((strlen($qty) - 1) / 3);
-        return sprintf("%.{$decimals}f", $qty / pow(1024, $factor)) . @$sz[$factor];
+
+        $sz = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
+        $factor = floor((strlen($bytes) > 1 ? log($bytes, 1024) : 0));
+        $factor = min($factor, count($sz) - 1);
+
+        $converted = $bytes / pow(1024, $factor);
+
+        return sprintf("%.{$decimals}f %s", $converted, $sz[$factor]);
     }
 
     // if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
