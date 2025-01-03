@@ -9,7 +9,7 @@
             </div>
             <div class="content-box">
                 <form name="uploadForm" id="uploadForm" method="post" action="edit" enctype="multipart/form-data">
-                    <img src="{{ thumbnail(data.id, data.type, data.bools.custom_thumbnail) }}"
+                    <img src="{{ thumbnail(data.id, data.type, data.flags.custom_thumbnail) }}"
                          alt="{{ data.title }}" class="form-image edit-page">
                     <input type="hidden" name="vid_id" value="{{ data.id }}">
 

@@ -72,9 +72,9 @@ $ratings = [
 ];
 $favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
 
-$bools = $submission->bitmaskToArray();
+$flags = $submission->bitmaskToArray();
 
-if ($bools["block_guests"] && !$auth->isUserLoggedIn())
+if ($flags["block_guests"] && !$auth->isUserLoggedIn())
 {
     Utilities::bannerNotification("The author of this upload has blocked guest access.", "/login");
 }
@@ -266,7 +266,7 @@ $page_data = [
         "comments" => $comment_count,
     ],
     "comments" => $comment_data,
-    "bools" => $bools,
+    "flags" => $flags,
     "rating" => $data["rating"],
     "recommended" => $recommended_upload_array,
     "other_by_author" => $uploads_by_author_array,

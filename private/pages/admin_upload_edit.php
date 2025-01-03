@@ -31,7 +31,7 @@ if (!$data)
     Utilities::bannerNotification("This upload does not exist.", "/admin/");
 }
 
-$bools = $upload->bitmaskToArray();
+$flags = $upload->bitmaskToArray();
 
 // Update flags
 if (isset($_POST['flagsubmit'])) {
@@ -89,7 +89,7 @@ $page_data = [
         //"comments" => $comment_count,
     ],
     //"comments" => $comment_data,
-    "bools" => $bools,
+    "flags" => $flags,
     "rating" => $data["rating"],
     //"recommended" => $recommended_upload_array,
     //"other_by_author" => $uploads_by_author_array,

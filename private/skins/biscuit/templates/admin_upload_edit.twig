@@ -33,31 +33,31 @@
                         <form method="post" name="booleanForm" id="booleanForm" action="/admin/uploads/{{ upload.id }}">
                             <div class="form-input">
                                 <input type="checkbox" id="flag_featured" name="flag_featured"
-                                       {% if upload.bools.featured %}checked{% endif %}>
+                                       {% if upload.flags.featured %}checked{% endif %}>
                                 <label for="flag_featured"> Featured</label>
                             </div>
 
                             <div class="form-input">
                                 <input type="checkbox" id="flag_unprocessed" name="flag_unprocessed"
-                                       {% if upload.bools.unprocessed %}checked{% endif %}>
+                                       {% if upload.flags.unprocessed %}checked{% endif %}>
                                 <label for="flag_unprocessed"> Unprocessed</label>
                             </div>
 
                             <div class="form-input">
                                 <input type="checkbox" id="flag_block_guests" name="flag_block_guests"
-                                       {% if upload.bools.block_guests %}checked{% endif %}>
+                                       {% if upload.flags.block_guests %}checked{% endif %}>
                                 <label for="flag_block_guests"> Block guests</label>
                             </div>
 
                             <div class="form-input">
                                 <input type="checkbox" id="flag_block_comments" name="flag_block_comments"
-                                       {% if upload.bools.block_comments %}checked{% endif %}>
+                                       {% if upload.flags.block_comments %}checked{% endif %}>
                                 <label for="flag_block_comments"> Block comments</label>
                             </div>
 
                             <div class="form-input">
                                 <input type="checkbox" id="flag_custom_thumbnail" name="flag_custom_thumbnail"
-                                       {% if upload.bools.custom_thumbnail %}checked{% endif %}>
+                                       {% if upload.flags.custom_thumbnail %}checked{% endif %}>
                                 <label for="flag_custom_thumbnail"> Custom thumbnail</label>
                             </div>
 
