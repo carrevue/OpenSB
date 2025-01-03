@@ -12,6 +12,8 @@ use SquareBracket\UploadQuery;
 
 $submission_query = new UploadQuery($database);
 
+$options = $orange->getLocalOptions();
+
 $username = $path[2] ?? null;
 
 if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name']);
@@ -39,7 +41,13 @@ if ($database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]]))
     Utilities::bannerNotification("This user is banned.", "/");
 }
 
-$user_submissions = $submission_query->query("v.time desc", 12, "v.author = ?", [$data["id"]]);
+$user_submissions_query_limit = 12;
+
+if ($options["skin"] == "bootstrap" && $options["theme"] == "alpha2") {
+    $user_submissions_query_limit = 1;
+}
+
+$user_submissions = $submission_query->query("v.time desc", $user_submissions_query_limit, "v.author = ?", [$data["id"]]);
 
 $user_journals =
     $database->fetchArray(
