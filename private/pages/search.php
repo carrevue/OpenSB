@@ -4,59 +4,31 @@ namespace OpenSB;
 
 global $twig, $database;
 
+use SquareBracket\UploadQuery;
 use SquareBracket\Utilities;
 
-function getOrderFromType($type): string
-{
-    switch ($type) {
-        case 'recent':
-            $order = "v.time";
-            break;
-        case 'popular':
-            $order = "views";
-            break;
-        case 'discussed':
-            $order = "comments";
-            break;
-        case 'favorited':
-            $order = "favorites";
-            break;
-        case 'random':
-            $order = "RAND()";
-            break;
-        default:
-            $order = "v.time";
-            break;
-    }
-    return $order;
-}
+$submission_query = new UploadQuery($database);
 
 $query = $_GET['query'] ?? null;
-$type = ($_GET['type'] ?? 'recent');
 $page_number = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-$order = getOrderFromType($type);
-$limit = sprintf("LIMIT %s,%s", (($page_number - 1) * 20), 20);
+$limit = sprintf("%s,%s", (($page_number - 1) * 20), 20);
 
-$whereRatings = Utilities::whereRatings();
-
-// TODO: port this to UploadQuery
-$submissions = $database->fetchArray(
-    $database->query(
-        "SELECT v.* FROM uploads v WHERE (v.tags LIKE CONCAT('%', ?, '%')
-                                  OR v.title LIKE CONCAT('%', ?, '%') 
-                                  OR v.description LIKE CONCAT('%', ?, '%')) 
-                                  AND $whereRatings 
-                                  AND v.video_id NOT IN (SELECT submission FROM upload_takedowns) 
-                                  AND v.author NOT IN (SELECT userid FROM user_bans)
-                                  ORDER BY $order DESC $limit",
-        [$query, $query, $query]));
+$submissions = $submission_query->query("v.time DESC", $limit,
+    "(v.tags LIKE CONCAT('%', ?, '%') 
+    OR v.title LIKE CONCAT('%', ?, '%') 
+    OR v.description LIKE CONCAT('%', ?, '%'))", [$query, $query, $query]);
+$submission_count = $submission_query->count("(v.tags LIKE CONCAT('%', ?, '%') 
+    OR v.title LIKE CONCAT('%', ?, '%') 
+    OR v.description LIKE CONCAT('%', ?, '%'))", [$query, $query, $query]);
 
 $data = [
     "submissions" => Utilities::makeUploadArray($database, $submissions),
+    "count" => $submission_count,
+    "query" => $query,
 ];
 
-echo $twig->render('browse.twig', [
+echo $twig->render('search.twig', [
     'data' => $data,
     'page' => $page_number,
 ]);
