@@ -27,7 +27,7 @@ class UploadData
     // 00001000: "Block users from commenting in this upload"
     public const FLAG_BLOCK_COMMENTS = 8;
 
-    // 00010000: "upload has custom thumbnail"
+    // 00010000: "upload has custom thumbnail" (apparently unused???)
     public const FLAG_CUSTOM_THUMBNAIL = 16;
 
     public function __construct(\SquareBracket\Database $database, $id)

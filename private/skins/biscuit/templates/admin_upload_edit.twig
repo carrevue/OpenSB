@@ -1,0 +1,94 @@
+{% extends "_layout_admin.twig" %}
+
+{% set title = "Checking " ~ upload.id %}
+
+	{% block admincontent %}
+        <div class="grid">
+            <div class="col-6">
+                <div class="content-box">
+                    <div class="section">
+                        <div class="section-title">
+                            <h2>Information</h2>
+                        </div>
+                        <table class="c1">
+                            <tbody>
+                            <tr>
+                                <td>Title</td>
+                                <td>{{ upload.title }}</td>
+                            </tr>
+                            <tr>
+                                <td>Published</td>
+                                <td>{{ upload.published | date("F j Y, h:i:s A") }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="content-box">
+                    <div class="section">
+                        <div class="section-title">
+                            <h2>Boolean flags</h2>
+                        </div>
+                        <form method="post" name="booleanForm" id="booleanForm" action="/admin/uploads/{{ upload.id }}">
+                            <div class="form-input">
+                                <input type="checkbox" id="flag_featured" name="flag_featured"
+                                       {% if upload.bools.featured %}checked{% endif %}>
+                                <label for="flag_featured"> Featured</label>
+                            </div>
+
+                            <div class="form-input">
+                                <input type="checkbox" id="flag_unprocessed" name="flag_unprocessed"
+                                       {% if upload.bools.unprocessed %}checked{% endif %}>
+                                <label for="flag_unprocessed"> Unprocessed</label>
+                            </div>
+
+                            <div class="form-input">
+                                <input type="checkbox" id="flag_block_guests" name="flag_block_guests"
+                                       {% if upload.bools.block_guests %}checked{% endif %}>
+                                <label for="flag_block_guests"> Block guests</label>
+                            </div>
+
+                            <div class="form-input">
+                                <input type="checkbox" id="flag_block_comments" name="flag_block_comments"
+                                       {% if upload.bools.block_comments %}checked{% endif %}>
+                                <label for="flag_block_comments"> Block comments</label>
+                            </div>
+
+                            <div class="form-input">
+                                <input type="checkbox" id="flag_custom_thumbnail" name="flag_custom_thumbnail"
+                                       {% if upload.bools.custom_thumbnail %}checked{% endif %}>
+                                <label for="flag_custom_thumbnail"> Custom thumbnail</label>
+                            </div>
+
+                            <div class="form-button-container">
+                                <input type="submit" class="button button-primary" value="Update flags" name="flagsubmit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="content-box">
+                    {{ submission_view(upload) }}
+                </div>
+                <br>
+                <div>
+                    <div class="content-box">
+                        <div class="section">
+                            <div class="section-title">
+                                <h2>Upload processor log</h2>
+                            </div>
+                            {% if upload.log %}
+                                <pre>
+                                {{- upload.log -}}
+                            </pre>
+                            {% else %}
+                                No logs could be found.
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

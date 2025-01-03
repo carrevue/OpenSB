@@ -1,0 +1,62 @@
+{% extends "_layout_admin.twig" %}
+
+{% if search %}
+    {% set le_url = '?page=%s&amount=' ~ amount  ~ "&search=" ~ search %}
+{% else %}
+    {% set le_url = '?page=%s&amount=' ~ amount %}
+{% endif %}
+
+{% set title = "Users" %}
+
+	{% block admincontent %}
+        {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
+        {% set current_page = page %}
+
+        <div class="form-flex">
+            <form action="/admin/uploads/" method="GET" id="num_change">
+                <select name="amount" onchange="document.getElementById('num_change').submit()" style="height:30px;">
+                    <option value="8"{% if amount is defined and amount == 8 %} selected{% endif %}>8</option>
+                    <option value="16"{% if amount is defined and amount == 16 %} selected{% endif %}>16</option>
+                    <option value="32"{% if amount is defined and amount == 32 %} selected{% endif %}>32</option>
+                    <option value="64"{% if amount is defined and amount == 64 %} selected{% endif %}>64</option>
+                    <option value="128"{% if amount is defined and amount == 128 %} selected{% endif %}>128</option>
+                    <option value="256"{% if amount is defined and amount == 256 %} selected{% endif %}>256</option>
+                </select>
+            </form>
+            <form action="/admin/uploads/" method="GET" style="margin-left: auto;">
+                <input type="hidden" name="amount" value="{{ amount }}">
+                <input type="text" name="search" value="{{ search }}" style="width:170px;">
+                <input class="button button-secondary" type="submit" value="Search">
+            </form>
+        </div>
+        <hr>
+        <table class="c1">
+            <tr class="h">
+                <th>Thumbnail</th>
+                <th>Default thumbnail</th>
+                <th>Title</th>
+                <th style="width: 160px;">Actions</th>
+            </tr>
+            {% for upload in uploads %}
+                <tr class="{% if user.class %}{{ user.class }}{% endif %}">
+                    <td class="a">
+                        <img src="{{ thumbnail(upload.id, upload.type, true) }}"
+                             width="90" alt="{{ upload.title }}" class="content-image thumbnail">
+                    </td>
+                    <td class="a">
+                        <img src="{{ thumbnail(upload.id, upload.type, false) }}"
+                             width="90" alt="{{ upload.title }}" class="content-image thumbnail">
+                    </td>
+                    <td class="a">
+                        {{ upload.title }}
+                    </td>
+                    <td class="a fade-into-bg">
+                        <a class="button button-secondary" href="/admin/uploads/{{ upload.id }}">
+                            Check
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {{ pagination(count, amount, le_url, current_page) }}
+    {% endblock %}

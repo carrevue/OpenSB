@@ -65,7 +65,7 @@ class Utilities
         $submissionsData = [];
         foreach ($uploads as $upload) {
 
-            $bools = Utilities::submissionBitmaskToArray($upload["flags"]);
+            $flags = Utilities::submissionBitmaskToArray($upload["flags"]);
 
             $ratingData = [
                 "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$upload["id"]]),
@@ -87,7 +87,7 @@ class Utilities
                     "type" => $upload["post_type"],
                     "content_rating" => $upload["rating"],
                     "views" => $upload["views"],
-                    "flags" => $bools,
+                    "flags" => $flags,
                     "length" => $upload["videolength"],
                     "author" => [
                         "id" => $upload["author"],

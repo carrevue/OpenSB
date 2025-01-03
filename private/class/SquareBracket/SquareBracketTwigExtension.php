@@ -212,7 +212,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             echo $twig->render("image.twig", ['submission' => $submission_data]);
         }
 
-        // fyi: opensb still doesn't fully support music submissions.
+        // fyi: opensb still doesn't fully support music uploads.
         if ($submission_data["type"] == 3) {
             echo $twig->render("music.twig", ['submission' => $submission_data]);
         }
@@ -222,21 +222,13 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         global $storage;
 
-        $custom_location = '/dynamic/custom_thumbnails/' . $id . '.jpg';
-
         $data = null;
 
-        if ($custom) {
-            if ($storage->fileExists('..' . $custom_location)) {
-                $data = $custom_location;
-            }
-        } else {
-            if ($type == 0) {
-                $data = $storage->getVideoThumbnail($id);
-            }
-            if ($type == 2) {
-                $data = $storage->getImageThumbnail($id);
-            }
+        if ($type == 0) {
+            $data = $storage->getVideoThumbnail($id, $custom);
+        }
+        if ($type == 2) {
+            $data = $storage->getImageThumbnail($id, $custom);
         }
 
         return $data;

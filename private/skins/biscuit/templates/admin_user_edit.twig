@@ -21,10 +21,6 @@
                                 <td>{{ user.name }}</td>
                             </tr>
                             <tr>
-                                <td>Email</td>
-                                <td>{{ user.email }}</td>
-                            </tr>
-                            <tr>
                                 <td>Age/Birthday</td>
                                 <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | date("F j Y") }}</td>
                             </tr>

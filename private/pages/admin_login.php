@@ -29,16 +29,9 @@ if (!isset($logindata["admin_password"])) {
 if (isset($_POST["loginsubmit"])) {
     $error = false;
 
-    $username = ($_POST['username'] ?? null);
     $password = ($_POST['password'] ?? null);
 
-    if (!$username) $error = true;
     if (!$password) $error = true;
-
-    if ($username != $auth->getUserData()["name"]) {
-        Utilities::bannerNotification("You must log into the admin panel with your current username.",
-            "/admin/login");
-    }
 
     if (!$error) {
         if ($logindata && password_verify($password, $logindata['admin_password'])) {

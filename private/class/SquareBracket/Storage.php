@@ -20,11 +20,11 @@ class Storage
         }
     }
 
-    public function getVideoThumbnail($id): string
+    public function getVideoThumbnail($id, $custom): string
     {
         global $branding;
 
-        if (file_exists(SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg')) {
+        if ($custom && file_exists(SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg')) {
             return '/dynamic/custom_thumbnails/' . $id . '.jpg';
         } elseif (file_exists(SB_DYNAMIC_PATH . '/thumbnails/' . $id . '.png')) {
             return '/dynamic/thumbnails/' . $id . '.png';
@@ -33,11 +33,11 @@ class Storage
         }
     }
 
-    public function getImageThumbnail($id): string
+    public function getImageThumbnail($id, $custom): string
     {
         global $branding;
 
-        if (file_exists(SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg')) {
+        if ($custom && file_exists(SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg')) {
             return '/dynamic/custom_thumbnails/' . $id . '.jpg';
         }
         elseif (file_exists(SB_DYNAMIC_PATH . '/art_thumbnails/' . $id . '.jpg')) {
@@ -47,6 +47,7 @@ class Storage
         }
     }
 
+    // this is a leftover of when opensb used to support bunnycdn in 2023-2024.
     public function fileExists($file): bool
     {
         return file_exists($file);

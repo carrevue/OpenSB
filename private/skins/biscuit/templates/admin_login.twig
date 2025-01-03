@@ -6,15 +6,13 @@
         <div class="section">
             <div class="section-title">
                 <h1>Admin login</h1>
+                <div>
+                    Currently logged in as {{ user_data.name }}.
+                </div>
             </div>
             <div class="content-box rounded login">
                 <div class="panel-body">
                     <form method="post" name="loginForm" id="loginForm" action="/admin/login" class="form-signin">
-                        <div class="form-input">
-                            <label for="username">Username:</label>
-                            <input type="text" name="username" class="form-submit" placeholder="Username" value="{{ user_data.name }}">
-                        </div>
-
                         <div class="form-input">
                             <label for="password">Password:</label>
                             <input type="password" name="password" class="form-submit" placeholder="Password">

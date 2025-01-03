@@ -67,7 +67,12 @@ if (isset($path[1]) && $path[1] != '') {
                 default => require(SB_PRIVATE_PATH . '/pages/admin_users.php'),
             },
             'overview' => require(SB_PRIVATE_PATH . '/pages/admin_overview.php'),
-            'uploads' => require(SB_PRIVATE_PATH . '/pages/admin_uploads.php'),
+            'uploads' => match ($path[3] ?? null) {
+                    $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
+                    ? require(SB_PRIVATE_PATH . '/pages/admin_upload_edit.php')
+                    : require(SB_PRIVATE_PATH . '/pages/admin_uploads.php'),
+                default => require(SB_PRIVATE_PATH . '/pages/admin_uploads.php'),
+            },
             'interactions' => require(SB_PRIVATE_PATH . '/pages/admin_interactions.php'),
             'invitekeys' => require(SB_PRIVATE_PATH . '/pages/admin_invitekeys.php'),
             default => Utilities::redirect('/admin/overview/'),

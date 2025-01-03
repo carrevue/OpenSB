@@ -40,6 +40,7 @@ $limit = sprintf("LIMIT %s,%s", (($page_number - 1) * 20), 20);
 
 $whereRatings = Utilities::whereRatings();
 
+// TODO: port this to UploadQuery
 $submissions = $database->fetchArray(
     $database->query(
         "SELECT v.* FROM uploads v WHERE (v.tags LIKE CONCAT('%', ?, '%')

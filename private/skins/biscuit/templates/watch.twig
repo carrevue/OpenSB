@@ -8,7 +8,7 @@
     {% set opengraph_description = "No description." %}
 {% endif %}
 
-{% set opengraph_image = thumbnail(submission.id, submission.type, submission.bools.custom_thumbnail) %}
+{% set opengraph_image = thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) %}
 
 {% set opengraph_type = "article" %}
 {% set opengraph_published = submission.published | date("c") %}
