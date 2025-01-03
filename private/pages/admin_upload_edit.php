@@ -6,7 +6,6 @@ global $auth, $twig, $database, $orange, $path, $storage;
 
 use SquareBracket\UploadData;
 use SquareBracket\Utilities;
-use SquareBracket\UserData;
 
 if (!$auth->isUserAdmin()) {
     Utilities::bannerNotification("You do not have permission to access this page.", "/");

@@ -2,8 +2,9 @@
 
 namespace OpenSB;
 
-global $twig, $database, $orange, $auth;
+global $twig, $database, $orange;
 
+use SquareBracket\UploadData;
 use SquareBracket\Utilities;
 use SquareBracket\UploadQuery;
 
@@ -29,6 +30,8 @@ if ($options["skin"] == "biscuit" || $options["skin"] == "charla") {
     $submissions_recent_query_limit = 12;
 }
 
+$submissions_featured_query_limit = 3;
+
 if ($options["skin"] == "bootstrap") {
     // bootstrap frontend did not list random uploads.
     $submissions_random = [];
@@ -40,12 +43,17 @@ if ($options["skin"] == "bootstrap") {
 
 $submissions_recent = $submission_query->query("v.time DESC", $submissions_recent_query_limit);
 
+$featured_flag_bullshit = UploadData::FLAG_FEATURED; // looks like shit -chaziz 1/3/2025
+$submissions_featured = $submission_query->query("v.time DESC", $submissions_featured_query_limit,
+    "v.flags & $featured_flag_bullshit = $featured_flag_bullshit");
+
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC LIMIT $news_recent_query_limit"));
 //$users_recent = $database->fetchArray($database->query("SELECT u.id, u.about, u.title, (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num FROM users u ORDER BY u.lastview DESC LIMIT 8"));
 
 $data = [
     "submissions" => Utilities::makeUploadArray($database, $submissions_random),
     "submissions_new" => Utilities::makeUploadArray($database, $submissions_recent),
+    "submissions_featured" => Utilities::makeUploadArray($database, $submissions_featured),
     "news_recent" => Utilities::makeJournalArray($database, $news_recent),
     //"users_recent" => $users_recent, // TODO: makeUsersArray
 ];

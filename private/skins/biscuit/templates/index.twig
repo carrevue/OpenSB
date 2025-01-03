@@ -40,7 +40,7 @@
 {% endblock %}
 
 {% block precontent %}
-    {% if current_theme in ["default", "pink", "classic", "soretro"] %}
+    {% if current_theme in ["default", "soretro"] %}
         <div class="jumbotron page-banner">
             <div class="jumbotron-container">
                 <div class="jumbotron-welcome">
@@ -104,6 +104,17 @@
             </div>
         </div>
         <div class="col-4">
+            <div class="section">
+                <div class="section-title">
+                    <h2>{{ localize('featured_uploads') }}</h2>
+                    <a href="/browse">{{ localize('more') }}</a>
+                </div>
+                <div class="content-box">
+                    {% for submission in data.submissions_featured %}
+                        {{ include('/components/_small_submission.twig') }}
+                    {% endfor %}
+                </div>
+            </div>
             <div class="section">
                 <div class="section-title">
                     <h2>{{ localize('site_news') }}</h2>
