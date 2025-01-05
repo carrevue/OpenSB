@@ -8,15 +8,15 @@ use SquareBracket\Utilities;
 use SquareBracket\UserData;
 
 if (!$auth->isUserAdmin()) {
-    Utilities::bannerNotification("You do not have permission to access this page.", "/");
+    Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsAnAdmin()) {
-    Utilities::bannerNotification("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "charla") {
-    Utilities::bannerNotification("Please change your skin to Biscuit.", "/theme");
+    Utilities::notifyBanner("Please change your skin to Biscuit.", "/theme");
 }
 
 $username = $path[3] ?? null;
@@ -35,28 +35,28 @@ if (!$user)
         header("Location: /admin/users/$new_username");
         exit();
     } else {
-        Utilities::bannerNotification("This user does not exist.", "/admin/");
+        Utilities::notifyBanner("This user does not exist.", "/admin/");
     }
 }
 
 if (isset($_POST['ban_user'])) {
     // Don't ban non-existent users.
     if (!$database->fetch("SELECT u.name FROM users u WHERE u.name = ?", [$_POST["ban_user"]])) {
-        Utilities::bannerNotification("This user does not exist.", "/admin/users/");
+        Utilities::notifyBanner("This user does not exist.", "/admin/users/");
     }
     // Don't ban mods/admins.
     if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["powerlevel"] != 1) {
-        Utilities::bannerNotification("This user cannot be banned.", "/admin/users/");
+        Utilities::notifyBanner("This user cannot be banned.", "/admin/users/");
     }
     // Check if user is already banned, if not, then ban. Otherwise, unban.
     $id = $database->fetch("SELECT u.id FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["id"];
     if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$id])) {
         $database->query("DELETE FROM user_bans WHERE userid = ?", [$id]);
-        Utilities::bannerNotification("Unbanned " . $_POST["ban_user"] . '.' , "/admin/users", "success");
+        Utilities::notifyBanner("Unbanned " . $_POST["ban_user"] . '.' , "/admin/users", "success");
     } else {
         $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
             [$id, "Banned by " . $auth->getUserData()["name"], time()]);
-        Utilities::bannerNotification("Banned " . $_POST["ban_user"] . '.', "/admin/users", "success");
+        Utilities::notifyBanner("Banned " . $_POST["ban_user"] . '.', "/admin/users", "success");
     }
 }
 

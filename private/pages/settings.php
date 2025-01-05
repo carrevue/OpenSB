@@ -10,12 +10,12 @@ global $auth;
 
 if (!$auth->isUserLoggedIn())
 {
-    Utilities::bannerNotification("Please login to continue.", "/login");
+    Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
 // we shouldn't let banned users change settings.
 if ($auth->getUserBanData()) {
-    Utilities::bannerNotification("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("You cannot proceed with this action.", "/");
 }
 
 if (isset($_POST['save'])) {
@@ -60,7 +60,7 @@ if (isset($_POST['save'])) {
                 $database->query("UPDATE users SET password = ?, token = ? WHERE id = ?",
                     [password_hash($pass, PASSWORD_DEFAULT), bin2hex(random_bytes(32)), $auth->getUserID()]);
 
-                Utilities::bannerNotification("Your password has been changed.", "/login");
+                Utilities::notifyBanner("Your password has been changed.", "/login");
             } else {
                 $error .= " The new passwords aren't identical.";
             }
@@ -121,14 +121,14 @@ if (isset($_POST['save'])) {
         $name = $_FILES['profilePicture']['name'];
         $temp_name = $_FILES['profilePicture']['tmp_name'];
         $ext = pathinfo($_FILES['profilePicture']['name'], PATHINFO_EXTENSION);
-        $storage->uploadProfilePicture($temp_name, $auth->getUserData()["id"]);
+        $storage->processProfilePicture($temp_name, $auth->getUserData()["id"]);
     }
 
     if (!empty($_FILES['profileBanner']['name'])) {
         $name = $_FILES['profileBanner']['name'];
         $temp_name = $_FILES['profileBanner']['tmp_name'];
         $ext = pathinfo($_FILES['profileBanner']['name'], PATHINFO_EXTENSION);
-        $storage->uploadProfileBanner($temp_name, $auth->getUserData()["id"]);
+        $storage->processProfileBanner($temp_name, $auth->getUserData()["id"]);
     }
 
     if (!$error) {
@@ -150,9 +150,9 @@ if (isset($_POST['save'])) {
             $url = "/user/" . $auth->getUserData()["name"];
         }
 
-        Utilities::bannerNotification("Your settings have been successfully updated.", $url, "success");
+        Utilities::notifyBanner("Your settings have been successfully updated.", $url, "success");
     } else {
-        Utilities::bannerNotification($error, "/settings.php");
+        Utilities::notifyBanner($error, "/settings.php");
     }
 }
 

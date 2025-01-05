@@ -39,7 +39,7 @@ if ($user) {
     // TODO: handle old names
     $id = Utilities::usernameToID($database, $user);
     if (!$id) {
-        Utilities::bannerNotification("This user does not exist.", "/");
+        Utilities::notifyBanner("This user does not exist.", "/");
     }
     $submissions = $submission_query->query($order, $limit, "v.author = ?", [$id]);
     $submission_count = $submission_query->count("v.author = ?", [$id]);

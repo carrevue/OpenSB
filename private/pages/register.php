@@ -8,13 +8,13 @@ use DateTime;
 use SquareBracket\Utilities;
 
 if ($disableRegistration) {
-    Utilities::bannerNotification("The ability to register has been disabled.", "/");
+    Utilities::notifyBanner("The ability to register has been disabled.", "/");
 }
 
 $ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress());
 
 if (str_contains($ipcheck, "<appears>yes</appears>") && !$isDebug) {
-    Utilities::bannerNotification("Your IP address appears to be suspicious.", "/");
+    Utilities::notifyBanner("Your IP address appears to be suspicious.", "/");
 }
 
 if (isset($_POST['registersubmit'])) {
@@ -98,7 +98,7 @@ if (isset($_POST['registersubmit'])) {
 
         Utilities::redirect('./');
     } else {
-        Utilities::bannerNotification($error, "/register.php");
+        Utilities::notifyBanner($error, "/register.php");
     }
 }
 

@@ -8,15 +8,15 @@ use SquareBracket\UploadData;
 use SquareBracket\Utilities;
 
 if (!$auth->isUserAdmin()) {
-    Utilities::bannerNotification("You do not have permission to access this page.", "/");
+    Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsAnAdmin()) {
-    Utilities::bannerNotification("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "charla") {
-    Utilities::bannerNotification("Please change your skin to Biscuit.", "/theme");
+    Utilities::notifyBanner("Please change your skin to Biscuit.", "/theme");
 }
 
 $id = $path[3] ?? null;
@@ -27,7 +27,7 @@ $data = $upload->getData();
 
 if (!$data)
 {
-    Utilities::bannerNotification("This upload does not exist.", "/admin/");
+    Utilities::notifyBanner("This upload does not exist.", "/admin/");
 }
 
 $flags = $upload->bitmaskToArray();
@@ -54,12 +54,12 @@ if (isset($_POST['flagsubmit'])) {
 
     $database->query("UPDATE uploads SET flags = ? WHERE video_id = ?",
         [$flags, $id]);
-    Utilities::bannerNotification("Your upload's details have been successfully modified.",
+    Utilities::notifyBanner("Your upload's details have been successfully modified.",
         "/admin/uploads/" . $id, "success");
 }
 
 
-if ($storage->fileExists(SB_DYNAMIC_PATH . "/videos/" . $id . ".log")) {
+if (file_exists(SB_DYNAMIC_PATH . "/videos/" . $id . ".log")) {
     $log = file_get_contents(SB_DYNAMIC_PATH . "/videos/" . $id . ".log");
 } else {
     $log = null;
@@ -74,7 +74,7 @@ $page_data = [
     "original_site" => $data["original_site"],
     "published_originally" => $data["original_time"],
     "type" => $data["post_type"],
-    "file" => Utilities::getUploadFile($data),
+    "file" => $data["videofile"],
     //"author" => [
     //    "id" => $data["author"],
     //    "info" => $author->getUserArray(),

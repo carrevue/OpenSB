@@ -90,7 +90,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     global $storage;
                     $emoji_name = strtolower($matches[1]);
                     // check if emoji exists so we dont load nothing
-                    if ($storage->fileExists('../dynamic/emojis/' . $emoji_name . '.png')) {
+                    if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
                         return '<img class="emoji" src="/dynamic/emojis/' . $emoji_name . '.png" alt=":' . $emoji_name . ':" />';
                     } else {
                         return ':' . $emoji_name . ':';
@@ -120,7 +120,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     global $storage;
                     $emoji_name = strtolower($matches[1]);
                     // check if emoji exists so we dont load nothing
-                    if ($storage->fileExists('../dynamic/emojis/' . $emoji_name . '.png')) {
+                    if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
                         return '<img class="emoji" src="/dynamic/emojis/' . $emoji_name . '.png" alt=":' . $emoji_name . ':" />';
                     } else {
                         return ':' . $emoji_name . ':';
@@ -225,10 +225,10 @@ class SquareBracketTwigExtension extends AbstractExtension
         $data = null;
 
         if ($type == 0) {
-            $data = $storage->getVideoThumbnail($id, $custom);
+            $data = $storage->getVideoUploadThumbnail($id, $custom);
         }
         if ($type == 2) {
-            $data = $storage->getImageThumbnail($id, $custom);
+            $data = $storage->getImageUploadThumbnail($id, $custom);
         }
 
         return $data;
@@ -246,7 +246,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         if ($is_banned) {
             $data = "/assets/profiledef.svg";
         } else {
-            if ($storage->fileExists('..' . $location)) {
+            if (file_exists('..' . $location)) {
                 $data = $location;
             } else {
                 $data = "/assets/profiledef.svg";
@@ -263,7 +263,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         $id = Utilities::usernameToID($database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
-        if ($storage->fileExists('..' . $location)) {
+        if (file_exists('..' . $location)) {
             $data = $location;
         } else {
             $data = "/assets/profiledef.svg";
@@ -279,7 +279,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $id = Utilities::usernameToID($database, $username);
         $location = '/dynamic/banners/' . $id . '.png';
 
-        if ($storage->fileExists('..' . $location)) {
+        if (file_exists('..' . $location)) {
             $data = $location;
         } else {
             $data = "/assets/biscuit_banner.svg";

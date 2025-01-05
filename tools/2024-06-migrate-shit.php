@@ -48,5 +48,5 @@ var_dump($convertedVideos);
 // if this fails during a video, edit default_socket_timeout in php.ini to a higher value.
 foreach ($convertedVideos as $video) {
     echo $video . PHP_EOL;
-    $storage->processVideo($video, $directory . '/' . $video . '.converted.mp4');
+    $storage->processVideoUpload($video, $directory . '/' . $video . '.converted.mp4');
 }

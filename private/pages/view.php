@@ -15,22 +15,22 @@ use SquareBracket\UserData;
 
 $id = $path[2] ?? null;
 
-$submission = new UploadData($database, $id);
+$upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
-$takedown = $submission->getTakedown();
+$takedown = $upload->getTakedown();
 if ($takedown && !$auth->isUserAdmin()) {
     // go back to homepage with a notification
-    Utilities::bannerNotification("This upload has been taken down.", "/");
+    Utilities::notifyBanner("This upload has been taken down.", "/");
 }
 
-if ($submission->isDeleted()) {
-    Utilities::bannerNotification("This upload has been deleted.", "/");
+if ($upload->isDeleted()) {
+    Utilities::notifyBanner("This upload has been deleted.", "/");
 }
 
-$data = $submission->getData();
+$data = $upload->getData();
 if (!$data) {
-    Utilities::bannerNotification("This upload does not exist.", "/");
+    Utilities::notifyBanner("This upload does not exist.", "/");
 }
 
 $tagBlacklist = $auth->getUserBlacklistedTags();
@@ -41,28 +41,28 @@ if (isset($data["tags"])) {
         foreach ($decodedTags as $tag) {
             if (in_array($tag, $tagBlacklist)) {
                 if ($auth->isUserLoggedIn()) {
-                    Utilities::bannerNotification("This upload is blacklisted per your settings.", "/");
+                    Utilities::notifyBanner("This upload is blacklisted per your settings.", "/");
                 } else {
-                    Utilities::bannerNotification("This upload is blacklisted by default.", "/");
+                    Utilities::notifyBanner("This upload is blacklisted by default.", "/");
                 }
             }
         }
     }
 }
 
-
 $comments = new CommentData($database, CommentLocation::Upload, $id);
 $author = new UserData($database, $data["author"]);
+
 if ($author->isUserBanned() && !$auth->isUserAdmin()) {
-    Utilities::bannerNotification("The author of this upload is banned.", "/");
+    Utilities::notifyBanner("This upload has been taken down.", "/");
 }
 
-$tags = $submission->getTags();
+$tags = $upload->getTags();
 
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["author"]]);
 $followed = Utilities::IsFollowingUser($data["author"]);
 
-// looks weird, whatever.
+// TODO: move this to a new UploadRatingData class which will be initialized through the UploadData class.
 $ratings = [
     "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$data["id"]]),
     "2" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=2", [$data["id"]]),
@@ -70,29 +70,26 @@ $ratings = [
     "4" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=4", [$data["id"]]),
     "5" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=5", [$data["id"]]),
 ];
-$favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
 
-$flags = $submission->bitmaskToArray();
+// TODO: this feature is unused.
+//$favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
+
+$flags = $upload->bitmaskToArray();
 
 if ($flags["block_guests"] && !$auth->isUserLoggedIn())
 {
-    Utilities::bannerNotification("The author of this upload has blocked guest access.", "/login");
+    Utilities::notifyBanner("Please login to view this upload.", "/login");
 }
 
 if (Utilities::RatingToNumber($data["rating"]) > Utilities::RatingToNumber($auth->getUserData()["comfortable_rating"])) {
-    Utilities::bannerNotification("Access to mature-rated uploads is restricted.", "/");
+    Utilities::notifyBanner("Access to mature-rated uploads is restricted.", "/");
 }
 
 $ip = Utilities::getIpAddress();
 
 $CrawlerDetect = new CrawlerDetect;
 
-if ($auth->isUserLoggedIn()) {
-    $type = "user";
-} else {
-    $type = "guest";
-}
-
+$type = $auth->isUserLoggedIn() ? "user" : "guest";
 
 // stupid fucking check
 function domainCheck()
@@ -184,7 +181,7 @@ if ($tags === []) {
     $recommended = false;
 } else {
     // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
-    // this isn't ported to UploadQuery for now since this query uses a slightly different syntax.
+    // this isn't ported to UploadQuery for now, as it requires me to rework all of UploadQuery.
 
     $query = "SELECT v.* 
     FROM uploads v
@@ -236,8 +233,7 @@ if (!$recommended && !$uploads_by_author) {
     $random_uploads_array = [];
 }
 
-
-if ($auth->getUserID() == $data["author"]) { $owner = true; } else { $owner = false; }
+$owner = ($auth->getUserID() == $data["author"]);
 
 $comment_data = $comments->getComments();
 $comment_count = $comments->getCommentCount();
@@ -252,7 +248,7 @@ $page_data = [
     "original_site" => $data["original_site"],
     "published_originally" => $data["original_time"],
     "type" => $data["post_type"],
-    "file" => Utilities::getUploadFile($data),
+    "file" => $data["videofile"],
     "author" => [
         "id" => $data["author"],
         "info" => $author->getUserArray(),
@@ -262,7 +258,7 @@ $page_data = [
     "interactions" => [
         "views" => $data["views"],
         "ratings" => Utilities::calculateUploadRatings($ratings),
-        "favorites" => $favorites,
+        "favorites" => 0, // TODO
         "comments" => $comment_count,
     ],
     "comments" => $comment_data,
@@ -274,16 +270,16 @@ $page_data = [
     "tags" => $tags,
 ];
 
-// if were on bootstrap or finalium 1, replicate like/dislike system.
+// if we are on bootstrap or on finalium 1, emulate the old like/dislike system.
 if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions()["skin"] == "bootstrap") {
-    // calculates the ratio for the likesaber
+    // calculates the ratio for the "likesaber" seen on finalium 1.
     function calculateRatio($number, $percent, $total): float|int
     {
-        // if there's no ratio or dislikes, return 100.
+        // if the upload has no "dislikes", return 100.
         if ($total == 0 or $number == 0) {
             return 100;
         } else {
-            // return the Like-to-dislike ratio.
+            // return the like-to-dislike ratio.
             return ($percent / $total) * $number * 100;
         }
     }
@@ -303,7 +299,7 @@ if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions
     }
 
     // translate 5 stars into like/dislikes. we do this because using the star rating ratio doesn't work that well
-    // with the likesaber on finalium. TODO: bring back like/dislike system onto bootstrap
+    // with the likesaber on finalium.
     // -chaziz 6/11/2024
     $likes = $ratings["4"] + $ratings["5"];
     $dislikes = $ratings["1"] + $ratings["2"];
@@ -317,6 +313,7 @@ if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions
     ];
 }
 
+// TODO: this should be moved to admin_upload_edit -chaziz 1/4/2025
 if ($auth->isUserAdmin() && $takedown) {
     $page_data["takedown"] = $takedown[0];
     $page_data["takedown"]["takedownee"] = Utilities::idToUsername($database, $takedown[0]["sender"]);

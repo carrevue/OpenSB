@@ -14,7 +14,7 @@ $id = ($_GET['j'] ?? null);
 $data = $database->fetch("SELECT j.* FROM journals j WHERE j.id = ?", [$id]);
 
 if (!$data) {
-    Utilities::bannerNotification("This journal does not exist.", "/");
+    Utilities::notifyBanner("This journal does not exist.", "/");
 }
 
 if ($auth->getUserID() == $data["author"]) {

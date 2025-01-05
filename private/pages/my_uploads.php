@@ -11,7 +11,7 @@ $page_number = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page
 
 if (!$auth->isUserLoggedIn())
 {
-    Utilities::bannerNotification("Please login to continue.", "/login");
+    Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
 $limit = sprintf("LIMIT %s,%s", (($page_number - 1) * 20), 20);

@@ -60,7 +60,7 @@ class Authentication
                 // this will prevent users from using IP banned accounts on other IPs.
                 if ($this->database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$this->user_data['ip']])) {
                     setcookie("SBTOKEN", "", time() - 3600);
-                    Utilities::bannerNotification("You have been logged out, as this user is linked to a banned IP address.", true);
+                    Utilities::notifyBanner("You have been logged out, as this user is linked to a banned IP address.", true);
                 }
 
                 // update "last logged in" timestamp after 12 hours.
@@ -73,12 +73,12 @@ class Authentication
                 // old system is left there for compatibility. -chaziz 6/9/2024
                 if ($this->user_data["comfortable_rating"] == "questionable") {
                     $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
-                    Utilities::bannerNotification("Your content filtering settings have been reset to General.", false, "primary");
+                    Utilities::notifyBanner("Your content filtering settings have been reset to General.", false, "primary");
                 }
 
                 if ($this->user_data["comfortable_rating"] == "mature" && !$this->isUserOver18()) {
                     $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
-                    Utilities::bannerNotification("Your content filtering settings have been reset to General.", false, "primary");
+                    Utilities::notifyBanner("Your content filtering settings have been reset to General.", false, "primary");
                 }
 
                 $this->has_authenticated_as_an_admin = $_SESSION["SB_ADMIN_AUTHED"] ?? null;

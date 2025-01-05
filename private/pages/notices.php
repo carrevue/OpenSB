@@ -86,7 +86,7 @@ function getRequiredData($database, $notice)
 
 if (!$auth->isUserLoggedIn())
 {
-    Utilities::bannerNotification("Please login to continue.", "/login");
+    Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
 $data = $database->fetchArray($database->query("SELECT * FROM user_notifications WHERE recipient = ? ORDER BY id DESC", [$auth->getUserID()]));

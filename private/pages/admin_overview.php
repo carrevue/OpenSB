@@ -7,15 +7,15 @@ global $auth, $isChazizSB, $twig, $database, $orange;
 use SquareBracket\Utilities;
 
 if (!$auth->isUserAdmin()) {
-    Utilities::bannerNotification("You do not have permission to access this page.", "/");
+    Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsAnAdmin()) {
-    Utilities::bannerNotification("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "charla") {
-    Utilities::bannerNotification("Please change your skin to Biscuit.", "/theme");
+    Utilities::notifyBanner("Please change your skin to Biscuit.", "/theme");
 }
 
 /**
@@ -81,7 +81,7 @@ if(isset($_POST["action"])) {
         $database->query("INSERT INTO invite_keys (invite_key, generated_by, generated_time) VALUES (?,?,?)",
             [$random, $auth->getUserID(), time()]);
 
-        Utilities::bannerNotification("Generated key! ($random)", "/admin.php", "success");
+        Utilities::notifyBanner("Generated key! ($random)", "/admin.php", "success");
     }
 }
 

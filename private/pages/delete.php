@@ -14,16 +14,16 @@ $data = $submission->getData();
 
 if (!$auth->isUserLoggedIn())
 {
-    Utilities::bannerNotification("Please login to continue.", "/login");
+    Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
 if ($auth->getUserID() != $data["author"]) {
-    Utilities::bannerNotification("This is not your upload.", "/");
+    Utilities::notifyBanner("This is not your upload.", "/");
 }
 
 $database->query("DELETE FROM uploads WHERE video_id = ?", [$id]);
 $database->query("INSERT INTO deleted_uploads (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["time"], time()]);
 
-$storage->deleteSubmission($data);
+$storage->deleteUploadFile($data);
 
-Utilities::bannerNotification("This upload has been successfully deleted.", "/my_uploads", "success");
+Utilities::notifyBanner("This upload has been successfully deleted.", "/my_uploads", "success");

@@ -18,15 +18,15 @@ $data = $submission->getData();
 
 if (!$auth->isUserLoggedIn())
 {
-    Utilities::bannerNotification("Please login to continue.", "/login");
+    Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
 if ($auth->getUserBanData() || $submission->getTakedown()) {
-    Utilities::bannerNotification("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("You cannot proceed with this action.", "/");
 }
 
 if ($auth->getUserID() != $data["author"]) {
-    Utilities::bannerNotification("This is not your upload.", "/");
+    Utilities::notifyBanner("This is not your upload.", "/");
 }
 
 if (isset($_POST['upload'])) {
@@ -37,13 +37,12 @@ if (isset($_POST['upload'])) {
         $name = $_FILES['thumbnail']['name'];
         $temp_name = $_FILES['thumbnail']['tmp_name'];
         $ext = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
-        $target_file = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $data["video_id"] . '.jpg';
-        $storage->uploadCustomThumbnail($temp_name, $target_file);
+        $storage->processCustomUploadThumbnail($temp_name, $data["video_id"]);
     }
 
     $database->query("UPDATE uploads SET title = ?, description = ? WHERE video_id = ?",
         [$title, $desc, $id]);
-    Utilities::bannerNotification("Your upload's details have been successfully modified.", "/view/" . $id, "success");
+    Utilities::notifyBanner("Your upload's details have been successfully modified.", "/view/" . $id, "success");
 }
 
 $infoData = [

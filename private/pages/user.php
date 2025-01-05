@@ -32,13 +32,13 @@ if (!$data)
         header("Location: /user/$new_username");
         exit();
     } else {
-        Utilities::bannerNotification("This user does not exist.", "/");
+        Utilities::notifyBanner("This user does not exist.", "/");
     }
 }
 
 if ($database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]]))
 {
-    Utilities::bannerNotification("This user is banned.", "/");
+    Utilities::notifyBanner("This user is banned.", "/");
 }
 
 $user_submissions_query_limit = 12;

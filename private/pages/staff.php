@@ -9,7 +9,7 @@ use SquareBracket\UserRoleEnum;
 use SquareBracket\Utilities;
 
 if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "charla") {
-    Utilities::bannerNotification("Please change your skin to Biscuit.", "/theme");
+    Utilities::notifyBanner("Please change your skin to Biscuit.", "/theme");
 }
 
 $staffQueryData = $database->fetchArray(

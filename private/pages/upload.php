@@ -13,15 +13,15 @@ $supportedImageFormats = ["png", "jpg", "jpeg"];
 
 if (!$auth->isUserLoggedIn())
 {
-    Utilities::bannerNotification("Please login to continue.", "/login");
+    Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
 if ($auth->getUserBanData()) {
-    Utilities::bannerNotification("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("You cannot proceed with this action.", "/");
 }
 
 if ($disableUploading) {
-    Utilities::bannerNotification("The ability to upload has been disabled.", "/");
+    Utilities::notifyBanner("The ability to upload has been disabled.", "/");
 }
 
 if (!$auth->isUserAdmin()) {
@@ -41,7 +41,7 @@ if (!$auth->isUserAdmin()) {
 
     if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$isDebug) {
         $waitTimeMinutes = $rateLimit / 60;
-        Utilities::bannerNotification("Please wait at least {$waitTimeMinutes} minutes before uploading again.", "/");
+        Utilities::notifyBanner("Please wait at least {$waitTimeMinutes} minutes before uploading again.", "/");
     }
 }
 
@@ -105,26 +105,26 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
                 [$new, $title, $description, $uploader, time(), json_encode($tags2), 'dynamic/videos/' . $new, $status, $rating]);
 
             if (!isset($noProcess)) {
-                $storage->processVideo($new, $target_file);
+                $storage->processVideoUpload($new, $target_file);
             }
 
             parse_tags($tags2, $new, $database);
 
-            Utilities::bannerNotification("Your upload has been completed.", "./watch.php?v=" . $new, "success");
+            Utilities::notifyBanner("Your upload has been completed.", "./watch.php?v=" . $new, "success");
         } else {
-            Utilities::bannerNotification("There is a problem with file permissions and/or PHP on this instance.", "/upload");
+            Utilities::notifyBanner("There is a problem with file permissions and/or PHP on this instance.", "/upload");
         }
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) {
-        $storage->processImage($temp_name, $new);
+        $storage->processImageUpload($temp_name, $new);
         $status = 0x0;
         $database->query("INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, post_type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
             [$new, $title, $description, $uploader, time(), json_encode(explode(', ', $_POST['tags'])), '/dynamic/art/' . $new . '.png', $status, 2, $rating]);
 
         parse_tags($tags2, $new, $database);
 
-        Utilities::bannerNotification("Your upload has been completed.", "./watch.php?v=" . $new, "success");
+        Utilities::notifyBanner("Your upload has been completed.", "./watch.php?v=" . $new, "success");
     } else {
-        Utilities::bannerNotification("This file format is not supported.", "/upload");
+        Utilities::notifyBanner("This file format is not supported.", "/upload");
     }
 }
 

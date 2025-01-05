@@ -2,6 +2,9 @@
 
 namespace SquareBracket;
 
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+
 class Storage
 {
     private Database $database;
@@ -9,7 +12,7 @@ class Storage
         $this->database = $database;
     }
 
-    public function processVideo($new, $target_file): void
+    public function processVideoUpload($new, $target_file): void
     {
         // this uses the version of php on path. if processing worker errors out with"OpenSB is not compatible
         // with your PHP version.", then your path's php is too old.
@@ -20,7 +23,7 @@ class Storage
         }
     }
 
-    public function getVideoThumbnail($id, $custom): string
+    public function getVideoUploadThumbnail($id, $custom): string
     {
         global $branding;
 
@@ -33,7 +36,7 @@ class Storage
         }
     }
 
-    public function getImageThumbnail($id, $custom): string
+    public function getImageUploadThumbnail($id, $custom): string
     {
         global $branding;
 
@@ -47,49 +50,64 @@ class Storage
         }
     }
 
-    // this is a leftover of when opensb used to support bunnycdn in 2023-2024.
-    public function fileExists($file): bool
-    {
-        return file_exists($file);
-    }
-
-    public function processImage($temp_name, $new): void
+    public function processImageUpload($temp_name, $new): void
     {
         $target_file = SB_DYNAMIC_PATH . '/art/' . $new . '.png';
         $target_thumbnail = SB_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
 
-        Utilities::processImageUploadFile($temp_name, $target_file);
-        Utilities::processImageUploadThumbnail($temp_name, $target_thumbnail);
+        // image upload
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->scaleDown(4096);
+        $img->toPng()->save($target_file);
+
+        // thumbnail
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->scaleDown(512);
+        $img->toJpeg(90)->save($target_thumbnail);
 
         unlink($temp_name);
     }
 
-    public function uploadProfilePicture($temp_name, $new): void
+    public function processProfilePicture($temp_name, $new): void
     {
         $target_file = SB_DYNAMIC_PATH . '/pfp/' . $new . '.png';
 
-        Utilities::processProfilePicture($temp_name, $target_file);
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        // i have to do this otherwise non-1:1 images that are smaller than 512x512 won't be stretched
+        $img->resize(512, 512);
+        $img->toPng()->save($target_file);
 
         unlink($temp_name);
     }
 
-    public function uploadCustomThumbnail($temp_name, $new): void
+    public function processCustomUploadThumbnail($temp_name, $new): void
     {
-        Utilities::processCustomUploadThumbnail($temp_name, $new);
+        $target_file = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
+
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->scaleDown(512);
+        $img->toJpeg(80)->save($target_file);
 
         unlink($temp_name);
     }
 
-    public function uploadProfileBanner($temp_name, $new): void
+    public function processProfileBanner($temp_name, $new): void
     {
         $target_file = SB_DYNAMIC_PATH . '/banners/' . $new . '.png';
 
-        Utilities::processProfileBanner($temp_name, $target_file);
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->resizeDown(height: 323);
+        $img->toPng()->save($target_file);
 
         unlink($temp_name);
     }
 
-    public function deleteSubmission($data): void
+    public function deleteUploadFile($data): void
     {
         unlink(SB_ROOT_PATH . $data["videofile"]);
     }

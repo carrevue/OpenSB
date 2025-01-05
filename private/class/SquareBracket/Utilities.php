@@ -15,22 +15,6 @@ use Random\Randomizer;
 class Utilities
 {
     /**
-     * Get the upload's file, works for all three storage modes.
-     *
-     * @param array $submission The upload data
-     * @return array|string|null
-     */
-    public static function getUploadFile(array $submission): array|string|null
-    {
-        if ($submission == null)
-        {
-            return null;
-        }
-
-        return $submission['videofile'];
-    }
-
-    /**
      * Calculate the upload's ratings.
      */
     public static function calculateUploadRatings($ratings): array
@@ -58,6 +42,7 @@ class Utilities
         ];
     }
 
+    // TODO: i think this should be refactored into UploadQuery? i should look into this later. -chaziz 1/4/2025
     public static function makeUploadArray($database, $uploads): array
     {
         if (!$uploads) return [];
@@ -65,7 +50,7 @@ class Utilities
         $submissionsData = [];
         foreach ($uploads as $upload) {
 
-            $flags = Utilities::submissionBitmaskToArray($upload["flags"]);
+            $flags = Utilities::uploadBitmaskToArray($upload["flags"]);
 
             $ratingData = [
                 "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$upload["id"]]),
@@ -199,7 +184,7 @@ class Utilities
         return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $auth->getUserID()]);
     }
 
-    public static function submissionBitmaskToArray($bitmask): array
+    public static function uploadBitmaskToArray($bitmask): array
     {
         return [
             "featured" => (bool)($bitmask & 1),
@@ -211,15 +196,16 @@ class Utilities
     }
 
     /**
-     * Notifies the user, VidLii-style.
+     * Notifies the current user with a banner.
      *
-     * Not to be confused with NotifyUser.
+     * This is not to be confused with NotifyUser, which is for the (still incomplete as of now)
+     * notifications system.
      *
      * @param $message
      * @param $redirect
      * @param string $color
      */
-    public static function bannerNotification($message, $redirect, string $color = "danger"): void
+    public static function notifyBanner($message, $redirect, string $color = "danger"): void
     {
         $_SESSION["notif_message"] = $message;
         $_SESSION["notif_color"] = $color;
@@ -228,51 +214,6 @@ class Utilities
             header(sprintf('Location: %s', $redirect));
             die();
         }
-    }
-
-
-    public static function processImageUploadFile($temp_name, $target): void
-    {
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->scaleDown(4096);
-        $img->toPng()->save($target);
-    }
-
-
-    public static function processImageUploadThumbnail($temp_name, $target): void
-    {
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->scaleDown(240); // used to be 500, but 500 was too big when the site displays thumbnails smaller than that.
-        $img->toJpeg(90)->save($target);
-    }
-
-
-    public static function processCustomUploadThumbnail($temp_name, $target): void
-    {
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->scaleDown(1280);
-        $img->toJpeg(80)->save($target);
-    }
-
-
-    public static function processProfilePicture($temp_name, $target): void
-    {
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        // i have to do this otherwise non-1:1 images that are smaller than 512x512 won't be stretched
-        $img->resize(512, 512);
-        $img->toPng()->save($target);
-    }
-
-    public static function processProfileBanner($temp_name, $target): void
-    {
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->resizeDown(height: 323);
-        $img->toPng()->save($target);
     }
 
     public static function rewritePHP(): void
@@ -284,7 +225,7 @@ class Utilities
         }
     }
 
-    #[NoReturn] public static function redirect($url, ...$args)
+    #[NoReturn] public static function redirect($url, ...$args): void
     {
         header('Location: ' . sprintf($url, ...$args));
         die();
@@ -347,7 +288,8 @@ class Utilities
         return $interval->y;
     }
 
-    public static function validateUsername($username, $database, $checkIfTaken = true) {
+    public static function validateUsername($username, $database, $checkIfTaken = true): string
+    {
         $error = "";
 
         if (!isset($username)) $error .= "This username is blank. ";
@@ -355,6 +297,9 @@ class Utilities
             if ($database->result("SELECT COUNT(*) FROM users WHERE name = ?", [$username])) $error .= "This username has already been taken. ";
         }
         if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $username)) $error .= "This username contains invalid characters. ";
+
+        // TODO: add blacklist for usernames
+        if ($username == "news") $error .= "This is an invalid username. ";
 
         return $error;
     }
