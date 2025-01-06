@@ -7,9 +7,16 @@ console.log(
     "color: red; font-family: monospace; font-size: 2em"
 );
 
+const sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
+
+if (sbOptions) {
+    const encodedOptions = sbOptions.split('=')[1];
+    const decodedOptions = decodeURIComponent(encodedOptions);
+    const options = JSON.parse(atob(decodedOptions));
+    console.log(options);
+}
+
 function updateConfig(key, value) {
-    // fetch sboptions cookie
-    let sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
     let options = {};
 
     if (sbOptions) {

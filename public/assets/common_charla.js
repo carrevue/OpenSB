@@ -4,17 +4,6 @@ function error(error) {
 }
 
 let uiSounds = false;
-const sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
-if (sbOptions) {
-    const encodedOptions = sbOptions.split('=')[1];
-    const decodedOptions = decodeURIComponent(encodedOptions);
-    const options = JSON.parse(atob(decodedOptions));
-    console.log(options);
-    if (options.hasOwnProperty('sounds')) {
-        uiSounds = options.sounds;
-    }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     let hamburgerButton = (document.getElementById('button-hamburger')); // TEMPORARY
     let hamburgerMenu = (document.getElementById('hamburger')); // TEMPORARY

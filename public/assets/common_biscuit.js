@@ -1,21 +1,9 @@
-sbAccounts = document.cookie.split('; ').find(row => row.startsWith('SBACCOUNTS='));
-
 function error(error) {
     play('error');
     console.error("OpenSB Biscuit Frontend Error: " + error);
 }
 
 let uiSounds = false;
-const sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
-if (sbOptions) {
-    const encodedOptions = sbOptions.split('=')[1];
-    const decodedOptions = decodeURIComponent(encodedOptions);
-    const options = JSON.parse(atob(decodedOptions));
-    if (options.hasOwnProperty('sounds')) {
-        uiSounds = options.sounds;
-    }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     // Get all tab links
     const tabLinks = document.querySelectorAll(".tablink");

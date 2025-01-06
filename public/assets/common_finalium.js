@@ -1,15 +1,6 @@
 index = 0;
 
 let uiSounds = false;
-const cookie = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
-if (cookie) {
-    const encodedOptions = cookie.split('=')[1];
-    const decodedOptions = decodeURIComponent(encodedOptions);
-    const options = JSON.parse(atob(decodedOptions));
-    if (options.hasOwnProperty('sounds')) {
-        uiSounds = options.sounds;
-    }
-}
 
 $(document).ready(function () {
     console.log("SquareBracket Sounds: " + uiSounds);

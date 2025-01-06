@@ -1,13 +1,4 @@
 let uiSounds = false;
-const cookie = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
-if (cookie) {
-	const encodedOptions = cookie.split('=')[1];
-	const decodedOptions = decodeURIComponent(encodedOptions);
-	const options = JSON.parse(atob(decodedOptions));
-	if (options.hasOwnProperty('sounds')) {
-		uiSounds = options.sounds;
-	}
-}
 
 function play(sound) {
 	if (JSON.parse(uiSounds) === true) {
@@ -19,50 +10,6 @@ $(document).ready(function(){
 	$(window).click(function() {
 	  $("#mainMenu").removeClass("show");
 	  $("#themeSelection").removeClass("show");
-	});
-	$("#openSettings").click(function(event){
-		event.stopPropagation();
-		$("#mainMenu").addClass("show");
-	});
-	$("#back").click(function(event){
-		event.stopPropagation();
-		$("#themeSelection").removeClass("show");
-		$("#mainMenu").addClass("show");
-	});
-	$("#themeSelect").click(function(event){
-		event.stopPropagation();
-		$("#mainMenu").removeClass("show");
-		$("#themeSelection").addClass("show");
-	});
-	$("#light").click(function(){
-		$("#themeSelection").removeClass("show");
-		$("#bootstrap").attr("href", "assets/bs.css");
-		$("#navbar").attr("class", "navbar navbar-light bg-light navbar-static-top navbar-expand-md");
-		Cookies.set("theme", "light", { expires: 1000 });
-	});
-	$("#vanilla").click(function(){
-		$("#themeSelection").removeClass("show");
-		$("#bootstrap").attr("href", "assets/bs-vanilla.css");
-		$("#navbar").attr("class", "navbar navbar-light bg-light navbar-static-top navbar-expand-md");
-		Cookies.set("theme", "vanilla", { expires: 1000 });
-	});
-	$("#dark").click(function(){
-		$("#themeSelection").removeClass("show");
-		$("#bootstrap").attr("href", "assets/bs-dark.css");
-		$("#navbar").attr("class", "navbar navbar-dark bg-dark navbar-static-top navbar-expand-md");
-		Cookies.set("theme", "dark", { expires: 1000 });
-	});
-	$("#finalium").click(function(){
-		$("#themeSelection").removeClass("show");
-		$("#bootstrap").attr("href", "assets/bs-finalium.css");
-		$("#navbar").attr("class", "navbar navbar-light bg-light navbar-static-top navbar-expand-md");
-		Cookies.set("theme", "finalium", { expires: 1000 });
-	});
-	$("#finalium-dark").click(function(){
-		$("#themeSelection").removeClass("show");
-		$("#bootstrap").attr("href", "assets/bs-finalium-dark.css");
-		$("#navbar").attr("class", "navbar navbar-dark bg-dark navbar-static-top navbar-expand-md");
-		Cookies.set("theme", "finalium-dark", { expires: 1000 });
 	});
 	$("#action_unlogged").click(function(){
 		play("error");
