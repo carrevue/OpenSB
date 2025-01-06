@@ -8,7 +8,7 @@
   cursor: pointer;
   text-decoration: none;
 
-  @if $theme != "biscuit" {
+  @if $theme == "soretro" {
     box-shadow: 0 1px 0 rgba(black, 0.2);
     text-shadow: 0 -1px 0 rgba(black, 0.4);
     font-weight: bold;
@@ -38,7 +38,7 @@
 
 @each $color, $value in $color-map {
   .button-#{$color} {
-    @if $theme != "biscuit" {
+    @if $theme == "soretro" {
       border: 1px solid adjust-hue(darken($value, 4%), 6);
       background-color: $value;
       @include gradient-y($start-color: adjust-hue(lighten($value, 9%), 2), $end-color: adjust-hue(darken($value, 6%), 6));
@@ -60,7 +60,7 @@
     }
 
     &:hover {
-      @if $theme != "biscuit" {
+      @if $theme == "soretro" {
         border-color: darken($value, 5%);
         background-color: lighten($value, 10%);
         @include gradient-y($start-color: adjust-hue(lighten($value, 15%), 1), $end-color: adjust-hue(darken($value, 2.5%), 2));
@@ -72,7 +72,7 @@
     }
 
     &:active {
-      @if $theme != "biscuit" {
+      @if $theme == "soretro" {
         border-color: darken($value, 12%);
         background-color: darken($value, 5%);
         @include gradient-y($start-color: $value, $end-color: adjust-hue(darken($value, 7%), 4));
@@ -89,12 +89,12 @@
 // how the other buttons are done without massively fucking things up. -chaziz 6/28/2024
 $value: #ffa60a;
 
-@if $theme != "biscuit" {
+@if $theme == "soretro" {
   $value: #ffb81f;
 }
 
 .button-warning {
-  @if $theme != "biscuit" {
+  @if $theme == "soretro" {
     border: 1px solid adjust-hue(darken($value, 4%), -6);
     background-color: $value;
     @include gradient-y($start-color: adjust-hue(lighten($value, 12%), 6), $end-color: adjust-hue(darken($value, 4%), -6));
@@ -107,7 +107,7 @@ $value: #ffa60a;
   color: #15110e;
 
   &:hover {
-    @if $theme != "biscuit" {
+    @if $theme == "soretro" {
       border-color: darken($value, 10%);
       @include gradient-y($start-color: adjust-hue(lighten($value, 15%), 8), $end-color: adjust-hue(lighten($value, 4.5%), -2));
       background-color: lighten($value, 10%);
@@ -119,7 +119,7 @@ $value: #ffa60a;
   }
 
   &:active {
-    @if $theme != "biscuit" {
+    @if $theme == "soretro" {
       border-color: darken($value, 12%);
       background-color: darken($value, 5%);
       @include gradient-y($start-color: $value, $end-color: adjust-hue(darken($value, 5%), -4));

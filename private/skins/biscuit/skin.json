@@ -13,6 +13,12 @@
         "author": "OpenSB developers"
       },
       {
+        "id": "dark",
+        "name": "Dark",
+        "description": "The dark theme of the default OpenSB user experience.",
+        "author": "OpenSB developers"
+      },
+      {
         "id": "soretro",
         "name": "So Retro",
         "description": "The July-August 2024 version of Biscuit.",

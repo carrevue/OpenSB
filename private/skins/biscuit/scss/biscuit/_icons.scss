@@ -52,7 +52,7 @@
   }
 
   &.search {
-    @if $theme == "soretro" {
+    @if $theme == "soretro" or $theme == "dark" {
       background-image: url('/assets/icons/search-dark.svg');
     } @else {
       background-image: url('/assets/icons/search-light.svg');

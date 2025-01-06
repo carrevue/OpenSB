@@ -1,22 +1,33 @@
 // colors
 
 $threshold: 66%;
-$primary: #3498db; // primary color
+$primary: #1b7fcc; // primary color
 $primary-darker: darken($primary, 33%); // darker primary color
-$secondary: #eee; //secondary color (nearly white)
-$green: #28c228;
-$red: #c01b0c;
-$yellow: #ffb81f;
+$secondary: #EEEEEE; //secondary color (nearly white)
+$green: #559900;
+$red: #993300;
+$yellow: #ffa60a;
 
 $link-color: #0061c5;
 
-@if $theme == "biscuit" {
-        $primary: #1b7fcc; // primary color
+@if $theme == "soretro" {
+        $primary: #3498db; // primary color
         $primary-darker: darken($primary, 33%); // darker primary color
-        $secondary: #EEEEEE; //secondary color (nearly white)
-        $green: #559900;
-        $red: #993300;
+        $secondary: #eee; //secondary color (nearly white)
+        $green: #28c228;
+        $red: #c01b0c;
+        $yellow: #ffb81f;
+}
+
+@if $theme == "dark" {
+        $primary: #f14fff; // primary color (orange)
+        $primary-darker: darken($primary, 33%); // darker primary color
+        $secondary: #333; //secondary color (nearly white)
+        $green: #198519;
+        $red: #c02626;
         $yellow: #ffa60a;
+
+        $link-color: $primary;
 }
 
 $color-map: (
@@ -38,9 +49,9 @@ $color-map-admin: (
 );
 
 // fonts
-$font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-@if $theme == "biscuit" {
-        $font: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@if $theme == "soretro" {
+        $font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 $font-serif: Georgia, "Times New Roman", serif;
 
@@ -75,6 +86,11 @@ $button-padding-huge: 0.5em 1em;
 $content-box-background-color: #FFF;
 $content-box-border-color: #DDD;
 $content-box-padding: 12px;
+
+@if $theme == "dark" {
+        $content-box-background-color: #2a2a2a;
+        $content-box-border-color: darken($secondary, 7.5%);
+}
 
 // header
 $header-height: 44px;

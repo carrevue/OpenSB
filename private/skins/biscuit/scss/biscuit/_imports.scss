@@ -1,7 +1,7 @@
 @import 'normalize';
 @import 'variables';
 
-@if $theme == "biscuit" {
+@if $theme != "soretro" {
   @import url('https://rsms.me/inter/inter.css');
 }
 
@@ -24,12 +24,12 @@
 // misc unorganized shit
 :root {
   font-family: $font;
-  @if $theme == "biscuit" {
+  @if $theme != "soretro" {
     font-feature-settings: 'calt' 1, 'ospz' 1;
   }
 }
 
-@if $theme == "biscuit" {
+@if $theme != "soretro" {
   @supports (font-variation-settings: normal) {
     :root { font-family: 'InterVariable', sans-serif; }
   }
@@ -45,12 +45,16 @@ body
 {
   @if $theme == "soretro" {
     background: #F5F5F5;
+  } @else if $theme == "dark" {
+    background: #303033;
   } @else {
     background: #F9F9F9;
   }
 
   @if $theme == "soretro" {
     color: #333;
+  } @else if $theme == "dark" {
+    color: #fff;
   } @else {
     color: #000;
   }
@@ -116,7 +120,11 @@ input[type="password"],
 input[type="number"] {
   border: 1px solid darken($content-box-border-color, 1%);
   background-color: lighten($content-box-background-color, 3.5%);
-  color: #000;
+  @if $theme == "dark" {
+    color: #fff;
+  } @else {
+    color: #000;
+  }
   transition: border linear 0.3s;
   border-radius: 3px;
   padding: 6px;
