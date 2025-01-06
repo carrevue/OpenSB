@@ -6,8 +6,8 @@
 }
 
 // bootstrap icons
-$bootstrap-icons-font-dir: "/assets" !default;
-@import "../../../../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.scss";
+//$bootstrap-icons-font-dir: "/assets" !default;
+//@import "../../../../../vendor/twbs/bootstrap-icons/font/bootstrap-icons.scss";
 
 @import 'mixins/responsiveness';
 @import 'mixins/gradients';
@@ -43,22 +43,18 @@ $bootstrap-icons-font-dir: "/assets" !default;
 
 body
 {
-  @if $theme == "cubicle" {
-    background: #333 url("/assets/biscuit_login_background.jpg") fixed;
-    background-size: cover;
-  } @else if $theme == "classic" {
-    background: #EAEAEA;
-  } @else if $theme == "biscuit" {
-    background: #F9F9F9;
-  } @else {
+  @if $theme == "soretro" {
     background: #F5F5F5;
+  } @else {
+    background: #F9F9F9;
   }
 
-  @if $theme == "biscuit" {
-    color: #000;
-  } @else {
+  @if $theme == "soretro" {
     color: #333;
+  } @else {
+    color: #000;
   }
+
   font-size: small;
   padding: 0;
   margin: 0;

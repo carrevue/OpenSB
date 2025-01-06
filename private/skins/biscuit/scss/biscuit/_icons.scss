@@ -50,4 +50,12 @@
   &.b-warning {
     background-image: url( '/assets/icons/banner-warning.svg' );
   }
+
+  &.search {
+    @if $theme == "soretro" {
+      background-image: url('/assets/icons/search-dark.svg');
+    } @else {
+      background-image: url('/assets/icons/search-light.svg');
+    }
+  }
 }

@@ -8,10 +8,6 @@
       align-self: center;
       margin: 0;
       flex-grow: 1;
-      @if $theme == "cubicle" {
-        color: #4e9a06;
-        font-family: "Trebuchet MS", $font;
-      }
     }
 
     a {

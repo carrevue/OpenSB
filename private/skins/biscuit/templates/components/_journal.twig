@@ -6,10 +6,11 @@
             </a>
         </div>
         <div class="content-description">
+            By {{ user_link(journal.author) }}
+            <br>
             {{ journal.published | relative_time }}
-        </div>
-        <div>
-            {{ journal.contents|u.truncate(250, '...') }}
+            <br>
+            {{ journal.contents|u.truncate(300, '...') }}
         </div>
     </div>
 </div>

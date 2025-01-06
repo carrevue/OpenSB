@@ -2,9 +2,6 @@
 
 $threshold: 66%;
 $primary: #3498db; // primary color
-@if $theme == "pink" {
-        $primary: #edb1c1; // primary color
-}
 $primary-darker: darken($primary, 33%); // darker primary color
 $secondary: #eee; //secondary color (nearly white)
 $green: #28c228;
@@ -12,9 +9,6 @@ $red: #c01b0c;
 $yellow: #ffb81f;
 
 $link-color: #0061c5;
-@if $theme == "pink" {
-        $link-color: #c61b7a;
-}
 
 @if $theme == "biscuit" {
         $primary: #1b7fcc; // primary color
@@ -84,21 +78,10 @@ $content-box-padding: 12px;
 
 // header
 $header-height: 44px;
-@if $theme == "cubicle" {
-        $header-height: 30px;
-} @else if $theme == "classic" {
-        $header-height: 35px;
-}
 $header-logo-height: 30px;
 $header-pfp-width: 28px;
-@if $theme == "cubicle" {
-        $header-pfp-width: 20px;
-}
 
 // profile
 $pfp-width-profiles: 70px;
-@if $theme == "cubicle" {
-        $pfp-width-profiles: 100px;
-}
 $pfp-width-watch: 35px;
 $profile-intro-height: 90px;

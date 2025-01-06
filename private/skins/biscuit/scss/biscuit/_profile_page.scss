@@ -32,9 +32,6 @@
 
       font-size: 24px;
       font-weight: bold;
-      @if $theme == "cubicle" {
-        font-family: "Trebuchet MS", $font;
-      }
 
       .profile-box-icon {
         width: 20px;
@@ -65,10 +62,6 @@
 }
 
 .profile-intro {
-  @if $theme != "cubicle" and $theme != "classic" {
-    margin-top: -75px;
-  }
-
   .page-contents {
     margin: auto;
   }

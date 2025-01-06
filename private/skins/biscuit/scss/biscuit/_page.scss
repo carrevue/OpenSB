@@ -5,19 +5,5 @@
 .page-contents
 {
   @include maxwidths();
-
-  @if $theme == "cubicle" or $theme == "classic" {
-    background: white;
-  }
-
-  @if $theme == "cubicle" {
-    margin: auto;
-    border-radius: 0 0 20px 20px;
-  } @else if $theme == "classic" {
-    margin: auto;
-    padding: 10px;
-    border-radius: 0 0 5px 5px;
-  } @else {
-    margin: 10px auto auto auto;
-  }
+  margin: 10px auto auto auto;
 }

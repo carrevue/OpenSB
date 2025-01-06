@@ -1,13 +1,5 @@
 .headers {
-  @if $theme == "cubicle" or $theme == "classic" {
-    position: static;
-  } @else {
-    position: sticky;
-  }
-
-  @if $theme == "classic" {
-    margin-top: 12px;
-  }
+  position: sticky;
 
   @if $theme == "biscuit" {
     backdrop-filter: blur(4px);
@@ -53,17 +45,6 @@
         }
       }
 
-      @if $theme == "cubicle" {
-        background: #64b713;
-        border-left: 1px solid #4e9e00;
-        border-right: 1px solid #4e9e00;
-
-        &.selected {
-          background: #2e2e2e;
-          color: #76b900;
-        }
-      }
-
       .user-menu-pfp {
         width: $header-pfp-width;
       }
@@ -71,9 +52,10 @@
       .user-menu-caret-container {
         display: inline-block;
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.75);
-        @if $theme == "classic" or $theme == "biscuit" {
+        @if $theme == "biscuit" {
           color: rgba(0, 0, 0, 0.75);
+        } @else {
+          color: rgba(255, 255, 255, 0.75);
         }
       }
     }
@@ -84,16 +66,7 @@
 {
   a {
     display: block;
-    @if $theme == "cubicle" or $theme == "classic" {
-      @include responsive('tiny') {
-        height: $header-logo-height;
-      }
-      @include responsive('medium') {
-        height: 40px;
-      }
-    } @else {
-      height: $header-logo-height;
-    }
+    height: $header-logo-height;
 
     &:focus {
       outline: none;
@@ -107,11 +80,7 @@
     @include responsive('medium') {
       display: inline;
     }
-    @if $theme == "cubicle" or $theme == "classic" {
-      height: 40px;
-    } @else {
-      height: $header-logo-height;
-    }
+    height: $header-logo-height;
   }
 
   .logo-small {
@@ -124,9 +93,7 @@
     height: $header-logo-height;
   }
 
-  @if $theme != "cubicle" and $theme != "classic" {
-    margin-right: 10px;
-  }
+  margin-right: 10px;
 }
 
 form.header-search
@@ -134,8 +101,8 @@ form.header-search
   position: relative;
   display: none;
 
-  @if $theme != "cubicle" and $theme != "classic" and $theme != "biscuit" {
-    #header-search-button {
+  #header-search-button {
+    @if $theme == "soretro" {
       position: absolute;
       right: 0;
 
@@ -150,24 +117,24 @@ form.header-search
       &:hover {
         cursor: pointer;
       }
+    } @else {
+      height: 30px;
     }
   }
 
   #header-search-input {
-    @if $theme != "biscuit" {
-      @if $theme != "cubicle" and $theme != "classic" {
-        border: 1px solid black;
-        color: #eee;
-        background: #575757;
-        box-shadow: 0 1px 0 #333;
-        padding: 6px 40px 6px 6px;
-        height: 30px;
+    @if $theme == "soretro" {
+      border: 1px solid black;
+      color: #eee;
+      background: #575757;
+      box-shadow: 0 1px 0 #333;
+      padding: 6px 40px 6px 6px;
+      height: 30px;
 
-        &:focus {
-          background: #eee;
-          color: #222;
-          box-shadow: 0 1px 0 #000;
-        }
+      &:focus {
+        background: #eee;
+        color: #222;
+        box-shadow: 0 1px 0 #000;
       }
     }
   }
@@ -176,18 +143,17 @@ form.header-search
     max-width: 120px;
   }
   @include responsive('small') {
-    display: block;
-    margin-left: 5px;
+    display: flex;
+    gap: 2px;
+    margin-left: 10px;
     max-width: 200px;
     #header-search-input {
       width: 100px;
     }
   }
   @include responsive('medium') {
-    display: block;
-    @if $theme != "cubicle" {
-      margin-left: 15px;
-    }
+    display: flex;
+    gap: 4px;
     max-width: 300px;
 
     #header-search-input {
@@ -213,11 +179,7 @@ td.h
     color: white;
   }
 
-  @if $theme == "cubicle" {
-    font-size: 16px;
-  }
-
-  @if $theme != "classic" and $theme != "biscuit" {
+  @if $theme == "soretro" {
     font-weight: bold;
   }
 
@@ -240,23 +202,11 @@ td.h
     flex-wrap: wrap;
     width: 100%;
     margin: 0 auto;
-    @if $theme == "cubicle" {
-      background: #4e9a06;
-      font-family: "Trebuchet MS", $font;
-      border-radius: 20px 20px 0 0;
-      padding: 0 20px;
-    } @else if $theme == "classic" {
-      background: linear-gradient(to bottom, #858585, #202020);
-      border-radius: 5px 5px 0 0;
-    }
   }
 
   width: 100%;
 
-  @if $theme == "cubicle" or $theme == "classic" {
-    background: none;
-    box-shadow: none;
-  } @else if $theme == "soretro" {
+  @if $theme == "soretro" {
     background: linear-gradient(to bottom, #333, #111);
     box-shadow: 0 1px 2px rgba(0,0,0,0.5);
   } @else {
@@ -311,22 +261,6 @@ td.h
   display: flex;
   .subheader-container {
     @include maxwidths();
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    width: 100%;
-    margin: auto;
-  }
-}
-
-// CUBICLE AND CLASSIC
-.cubicle-header {
-  padding: 5px 0;
-  color: white;
-  .cubicle-header-container {
-    @include maxwidths();
-    padding: 0;
     display: flex;
     align-items: center;
     gap: 12px;
