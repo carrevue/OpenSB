@@ -140,21 +140,25 @@ form.header-search
   }
 
   @include responsive('tiny') {
+    gap: 2px;
     max-width: 120px;
+    margin-left: 10px;
+    #header-search-input {
+      width: 100px;
+    }
   }
   @include responsive('small') {
     display: flex;
     gap: 2px;
-    margin-left: 10px;
     max-width: 200px;
     #header-search-input {
-      width: 100px;
+      width: 180px;
     }
   }
   @include responsive('medium') {
     display: flex;
     gap: 4px;
-    max-width: 300px;
+    max-width: 220px;
 
     #header-search-input {
       width: 200px;
@@ -256,18 +260,59 @@ td.h
   }
 }
 
-// SOOS
-.subheader {
-  height: 23px;
-  background: linear-gradient(to bottom, #E8E8E8, #D3D3D3);
-  display: flex;
-  .subheader-container {
-    @include maxwidths();
+.headers-2023 {
+  .menulink {
+    margin: 0 4px;
+    font-weight: 500;
+
+    &.userlink {
+      font-weight: 600;
+    }
+  }
+
+  .header-logo {
+    display: block;
+    margin: 0;
+    .logo {
+      display: block;
+    }
+  }
+
+  form.header-search {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+  }
+
+  .header-user {
+    @if $theme == "soretro" {
+      background: linear-gradient(to bottom, #E8E8E8, #D3D3D3);
+      .menulink {
+        color: black;
+      }
+    } @else {
+      background-color: rgba(lighten($secondary, 1%), 0.9);
+    }
+
     width: 100%;
-    margin: auto;
+    height: 25px;
+
+    display: flex;
+
+    .header-user-container {
+      @include maxwidths();
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 100%;
+      margin: 0 auto;
+
+      .header-user-links {
+        margin-left: auto;
+      }
+
+      .header-user-notifications {
+        margin-right: auto;
+      }
+    }
   }
 }
