@@ -4,8 +4,6 @@ namespace SquareBracket;
 
 use DateTime;
 
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
 use JetBrains\PhpStorm\NoReturn;
 use Random\Randomizer;
 

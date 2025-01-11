@@ -522,6 +522,6 @@ HTML;
 
     public function localize($key, ...$args) {
         global $localization;
-        return $localization->getMessage($key, ...$args);
+        return $localization->translate($key, ...$args);
     }
 }

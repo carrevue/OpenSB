@@ -3,15 +3,15 @@
 namespace SquareBracket;
 
 class Localization {
-    protected $locale;
-    protected $messages = [];
+    protected mixed $locale;
+    protected array $messages = [];
 
     public function __construct($locale = 'en-US') {
         $this->locale = $locale;
-        $this->loadMessages();
+        $this->loadLocalizationData();
     }
 
-    protected function loadMessages(): void
+    protected function loadLocalizationData(): void
     {
         $file = SB_PRIVATE_PATH . "/locales/{$this->locale}.json";
         if (file_exists($file)) {
@@ -22,7 +22,7 @@ class Localization {
         }
     }
 
-    public function getMessage($key, ...$args) {
+    public function translate($key, ...$args) {
         if (!isset($this->messages[$key])) {
             if ($args) {
                 return "[$key] (" . implode(', ', $args) . ")";

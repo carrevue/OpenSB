@@ -3,6 +3,8 @@ namespace OpenSB;
 
 global $database;
 
+// TODO: make this work with new opensb 1.3 table names -chaziz 1/6/2025
+
 define("SB_ROOT_PATH", dirname(__DIR__));
 define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
 define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension

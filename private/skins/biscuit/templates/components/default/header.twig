@@ -9,11 +9,11 @@
                     </a>
                 </div>
                 <form class="header-search" action="/search">
-                    <input id="header-search-input" type="text" name="query" placeholder="Search...">
+                    <input id="header-search-input" type="text" name="query" placeholder="{{ localize('search') }}...">
                     {% if current_theme != 'soretro' %}
                     <div class="form-button-container">
                         <button id="header-search-button" class="button button-secondary">
-                            <span>Search</span>
+                            <span>{{ localize('search') }}</span>
                         </button>
                     </div>
                     {% else %}

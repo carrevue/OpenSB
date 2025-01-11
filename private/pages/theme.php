@@ -2,9 +2,31 @@
 
 namespace OpenSB;
 
-global $twig, $orange;
+global $twig;
 
 use SquareBracket\Utilities;
+
+// scan for localizations
+$localesPath = SB_PRIVATE_PATH . "/locales/";
+$locales = [];
+
+if (is_dir($localesPath)) {
+    $files = scandir($localesPath);
+
+    foreach ($files as $file) {
+        $filePath = $localesPath . $file;
+
+        if (is_file($filePath) && pathinfo($filePath, PATHINFO_EXTENSION) === 'json') {
+            $id = pathinfo($filePath, PATHINFO_FILENAME);
+            $locales[] = [
+                'id' => $id,
+                'name' => $id, // TODO
+            ];
+        }
+    }
+}
+
+// the code to handle scanning themes is in the templating class
 
 if (isset($_POST['apply'])) {
     $options = [];
@@ -23,4 +45,6 @@ if (isset($_POST['apply'])) {
     Utilities::notifyBanner("Successfully changed your settings.", "/", "success");
 }
 
-echo $twig->render('theme.twig');
+echo $twig->render('theme.twig', [
+    'locales' => $locales,
+]);
