@@ -505,7 +505,15 @@ HTML;
 
     public function getCSSFileDate()
     {
-        return filemtime(SB_PUBLIC_PATH . "/assets/css/default.css");
+        // TODO: this should probably be changed to check the file date of the current theme, not just that of the
+        // default theme on biscuit (or charla if chaziz mode is enabled) -chaziz 1/13/2025.
+        global $isChazizSB;
+
+        if ($isChazizSB) {
+            return filemtime(SB_PUBLIC_PATH . "/assets/css/charla-default.css");
+        } else {
+            return filemtime(SB_PUBLIC_PATH . "/assets/css/default.css");
+        }
     }
 
     public function submissionBox($submission)
