@@ -1,0 +1,21 @@
+{
+  "browse": "Visite",
+  "browse_more": "Ver más",
+  "welcome_logged_in": "Bienvenido de nuevo, %s",
+  "welcome_logged_in_finalium": "Bienvenido a %s, %s",
+  "welcome_logged_in_finalium_beta": "Bienvenido, %s",
+  "welcome_logged_out": "Bienvenido a %s",
+  "random_uploads": "Al azar",
+  "random_uploads_desc": "Selección aleatoria de los contenidos cargados",
+  "recent_uploads": "Recientes",
+  "recent_uploads_desc": "Todas las últimas subidas",
+  "site_news": "Noticias",
+  "site_news_desc": "Anuncios del sitio",
+  "recent_tags": "Etiquetas",
+  "recent_tags_desc": "Últimas 100 etiquetas",
+  "more": "Más",
+  "search": "Buscar",
+  "write_comment": "Escriba aquí su comentario.",
+  "reply": "Respuesta",
+  "post": "Publicar"
+}
