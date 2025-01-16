@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig;
+global $twig, $isDebug;
 
 use SquareBracket\Utilities;
 
@@ -24,6 +24,13 @@ if (is_dir($localesPath)) {
             ];
         }
     }
+
+    if ($isDebug) {
+        $locales[] = [
+            'id' => "psuedo",
+            'name' => "Psuedolocale",
+        ];
+    }
 }
 
 // the code to handle scanning themes is in the templating class
@@ -39,6 +46,8 @@ if (isset($_POST['apply'])) {
     $options["skin"] = $new[0];
     $options["theme"] = $new[1];
     $options["sounds"] = $_POST['sounds'] ?? false;
+
+    $options["locale"] = $_POST['locale'];
 
     setcookie("SBOPTIONS", base64_encode(json_encode($options)), 2147483647);
 

@@ -22,5 +22,8 @@
 		"psr-4": {
 			"OpenSB\\": "private/"
 		}
+	},
+	"require-dev": {
+		"arokettu/pseudolocale": "^1.1"
 	}
 }

@@ -1,4 +1,6 @@
 {
+  "search": "Search",
+
   "browse": "Browse",
   "browse_more": "Browse more",
 
@@ -7,6 +9,9 @@
   "welcome_logged_in_finalium_beta": "Welcome, %s",
   "welcome_logged_out": "Welcome to %s",
 
+  "list": "List",
+  "grid": "Grid",
+
   "random_uploads": "Random",
   "random_uploads_desc": "Random selection of uploads",
 
@@ -14,10 +19,10 @@
   "recent_uploads_desc": "Most recent uploads",
 
   "following_uploads": "Following",
-  "following_uploads_desc": "Following uploads description",
+  "following_uploads_desc": "From users you follow",
 
   "featured_uploads": "Featured",
-  "featured_uploads_desc": "Featured uploads description",
+  "featured_uploads_desc": "Curated by staff",
 
   "recent_members": "Members",
   "recent_members_desc": "Last 5 members online",
@@ -27,13 +32,27 @@
 
   "more": "More",
 
-  "search": "Search",
+  "new": "New",
+  "popular": "Popular",
+  "random": "Random",
+  "uploads": "Uploads",
+  "journals": "Journals",
+  "comments": "Comments",
+  "about": "About",
 
   "write_comment": "Write your comment here.",
   "write_reply": "Write your reply here.",
 
   "comment": "Comment",
   "reply": "Reply",
+  "post": "Post",
 
-  "post": "Post"
+  "powered_by": "Powered by",
+  "footer_copyright": "© %s OpenSB contributors",
+
+  "change_theme": "Change theme",
+  "community_guidelines": "Community Guidelines",
+  "terms_of_service": "Terms of Service",
+  "privacy_policy": "Privacy Policy",
+  "staff": "Staff"
 }

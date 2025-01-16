@@ -129,7 +129,7 @@ $disableWritingJournals = false;
 $orange = new SquareBracket($host, $user, $pass, $db);
 $database = $orange->getDatabase();
 
-$localization_setting = $orange->getLocalOptions()["localization"] ?? "en-US";
+$localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
 if (!SB_CLI) {
     $auth = new Authentication($database);
