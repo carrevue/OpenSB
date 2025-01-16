@@ -30,6 +30,10 @@
   "search": "Search",
 
   "write_comment": "Write your comment here.",
+  "write_reply": "Write your reply here.",
+
+  "comment": "Comment",
   "reply": "Reply",
+
   "post": "Post"
 }
