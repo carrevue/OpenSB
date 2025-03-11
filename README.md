@@ -20,10 +20,10 @@ I wouldn't recommend using this code unless if you ***really*** know what you're
 
 ### Development specific
 
-1. Enable debugging features by setting `$isDebug` to true.
+1. Enable debugging features by setting `mode` to `DEV`.
 1. If you want to be able to upload during development, make the `dynamic/` directory and the directories inside it writable by your web server.
 
-### Apache's Virtual host example
+### Apache Virtual host example
 You will have to modify the directories to match your instance's location.
 ```
 <VirtualHost *> 
@@ -40,7 +40,7 @@ You will have to modify the directories to match your instance's location.
 </VirtualHost>
 ```
 
-### NGINX's config example
+### NGINX config example
 Please note that this example uses `php-fpm`.
 You will have to modify the directories to match your instance's location.
 ```
