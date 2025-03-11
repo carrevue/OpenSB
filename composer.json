@@ -10,7 +10,7 @@
     "twbs/bootstrap": "5.3.3",
     "twbs/bootstrap-icons": "1.11.3",
     "jaybizzle/crawler-detect": "1.3.0",
-    "filp/whoops": "2.16.0",
+    "filp/whoops": "2.17.0",
     "sendgrid/sendgrid": "dev-allow_starkbank_ecdsa_2",
     "ext-curl": "*"
   },
