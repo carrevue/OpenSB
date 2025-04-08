@@ -19,6 +19,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             $userlink_function_name = "UserLinkOld";
         }
 
+        // TODO: clean this up HOLY SHIT -chaziz 4/7/2025
         return [
             new TwigFunction('submission_view', [$this, 'submissionView']),
             new TwigFunction('thumbnail', [$this, 'thumbnail']),

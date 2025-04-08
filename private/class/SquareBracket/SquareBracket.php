@@ -22,7 +22,10 @@ class SquareBracket {
         } else {
             $defaultSkin = "biscuit";
             if ($isChazizSB) {
-                $defaultSkin = "charla";
+                // if we're on fulptube, set the default frontend to finalium 1, since its close enough to
+                // early-hitchhiker youtube (which is what og fulptube used to be based on). otherwise,
+                // set the default to charla. -chaziz 4/7/2025
+                $defaultSkin = Utilities::isFulpTube() ? "finalium" : "charla";
             }
 
             $this->options = [
