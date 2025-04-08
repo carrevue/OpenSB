@@ -359,7 +359,7 @@ class Utilities
     {
         global $isChazizSB, $orange, $isDebug;
 
-        $debugFulpTube = $orange->getLocalOptions()["debug_fulptube_branding"] ?? false;
+        $debugFulpTube = $orange?->getLocalOptions()["debug_fulptube_branding"] ?? false;
 
         // bypass logic completely if we're debugging fulptube branding.
         if ($debugFulpTube && $isDebug) {
@@ -383,7 +383,7 @@ class Utilities
 
         // de-fuck urls
         $urlReplacements = [
-            'fulptube.me' => 'squarebracket.me',
+            'fulptube.me' => 'squarebracket.me', // yeah its owned by sks but lets keep this here
             'fulptube.pw' => 'squarebracket.pw',
             'fulptube.veselcraft.ru' => 'squarebracket.veselcraft.ru', // this domain still works lol
         ];
@@ -392,10 +392,8 @@ class Utilities
 
         // now replace all *actual* squarebracket urls with fulptube.rocks
         $properUrlReplacements = [
-            '://squarebracket.me' => '://fulptube.rocks',
             '://squarebracket.pw' => '://fulptube.rocks',
             '://squarebracket.veselcraft.ru' => '://fulptube.rocks',
-            '://sb.billyisreal.com' => '://fulptube.rocks',
         ];
 
         $output = str_replace(array_keys($properUrlReplacements), array_values($properUrlReplacements), $output);
