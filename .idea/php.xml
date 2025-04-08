@@ -123,7 +123,6 @@
       <path value="$PROJECT_DIR$/pma/vendor/web-auth/webauthn-lib" />
       <path value="$PROJECT_DIR$/pma/vendor/league/uri" />
       <path value="$PROJECT_DIR$/pma/vendor/league/uri-interfaces" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php81" />
       <path value="$PROJECT_DIR$/vendor/sendgrid/php-http-client" />
       <path value="$PROJECT_DIR$/vendor/sendgrid/sendgrid" />
       <path value="$PROJECT_DIR$/vendor/starkbank/ecdsa" />
