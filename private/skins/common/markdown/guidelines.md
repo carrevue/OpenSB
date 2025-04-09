@@ -1,5 +1,5 @@
 # SquareBracket Community Guidelines 
-Last updated by Chaziz on January 2nd 2025.
+Last updated by Chaziz on April 9th 2025.
 
 (DRAFT)
 
@@ -14,6 +14,7 @@ This has been moved to the [Terms of Service](/tos).
 
 * Content intended for children (primarily preschool/educational cartoons)
 * Illegal content (**CSAM/CSEM/"CP" content**, **bestiality content**, doxxing)
+* Content promoting pedophilia, zoophilia and/or necrophilia.
 * Adult content (pornographic or otherwise erotic content)
 * Shock content (gore)
 * Offensive content (Racism, fascism, homophobia, transphobia)

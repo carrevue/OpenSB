@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 namespace OpenSB;
 
@@ -10,7 +11,7 @@ define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-require_once SB_PRIVATE_PATH . `/class/common.php`;
+require_once SB_PRIVATE_PATH . '/class/common.php';
 
 // migrate from opensb 1.2 table schema to opensb 1.3 table schema
 

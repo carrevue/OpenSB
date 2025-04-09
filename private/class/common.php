@@ -131,30 +131,28 @@ $database = $orange->getDatabase();
 
 $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
+$storage = new Storage($orange->getDatabase());
+
 if (!SB_CLI) {
     $auth = new Authentication($database);
     $profiler = new Profiler();
     $localization = new Localization($localization_setting);
-}
 
-// automatic stuff
-// this should probably have a cooldown or something i don't fucking know
+    // automatic stuff
+    // this should probably have a cooldown or something i don't fucking know
 
-// automatically ban accounts linked to banned ips.
-$ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
-foreach ($ipBannedUsers as $ipBannedUser) {
-    $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
-    foreach ($usersAssociatedWithIP as $ipBannedUser2) { // i can't really name variables that well
-        if (!$database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$ipBannedUser2["id"]])) {
-            $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-                [$ipBannedUser2["id"], "Automatically done by OpenSB", time()]);
+    // automatically ban accounts linked to banned ips.
+    $ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
+    foreach ($ipBannedUsers as $ipBannedUser) {
+        $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
+        foreach ($usersAssociatedWithIP as $ipBannedUser2) { // i can't really name variables that well
+            if (!$database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$ipBannedUser2["id"]])) {
+                $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
+                    [$ipBannedUser2["id"], "Automatically done by OpenSB", time()]);
+            }
         }
     }
-}
 
-$storage = new Storage($orange->getDatabase());
-
-if (!SB_CLI) {
     $twig = new Templating($orange);
     $twig_error = new ErrorTemplating($orange);
 
