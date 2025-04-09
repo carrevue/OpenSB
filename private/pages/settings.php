@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $auth, $database;
+global $twig, $auth, $database, $isChazizSB;
 
 use SquareBracket\Utilities;
 
@@ -37,7 +37,7 @@ if (isset($_POST['save'])) {
 
     $profile_layout = ($_POST['profile-layout'] ?? 0);
 
-    if ($auth->isUserOver18()) {
+    if ($auth->isUserOver18() && !$isChazizSB) {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
     } else {
         $rating = 'general';

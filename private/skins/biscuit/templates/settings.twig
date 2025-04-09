@@ -91,6 +91,7 @@
                             <h2>Filtering</h2>
                         </div>
 
+                        {% if not is_chaziz_sb %}
                         {% if isUserOver18 %}
                             <div class="form-submit">
                                 <input type="checkbox" name="rating" id="rating" value="true"
@@ -109,8 +110,8 @@
                                 administration.
                             </div>
                         {% endif %}
-
-                        <br>
+                            <br>
+                        {% endif %}
 
                         <div class="section-title">
                             <h3>Blacklisted tags</h3>

@@ -398,7 +398,6 @@ HTML;
         global $auth, $orange;
 
         $options = $orange->getLocalOptions();
-        $charla_2025_enabled = $orange->getLocalOptions()["charla_2025_ui"] ?? false;
 
         if ($auth->isUserLoggedIn()) {
             $username = $auth->getUserData()["name"];
@@ -438,12 +437,12 @@ HTML;
             }
 
             // remove upload link on finalium 1, bootstrap and charla
-            if ($options == "finalium" || $options == "bootstrap" || ($options == "charla" && $charla_2025_enabled)) {
+            if ($options["skin"] == "finalium" || $options["skin"] == "bootstrap" || $options["skin"] == "charla") {
                 unset($array["upload"]);
             }
 
             // remove write link on charla
-            if ($options["skin"] == "charla" && $charla_2025_enabled) {
+            if ($options["skin"] == "charla") {
                 unset($array["write"]);
             }
         } else {

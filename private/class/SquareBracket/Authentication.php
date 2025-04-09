@@ -52,21 +52,24 @@ class Authentication
                     $path = explode('/', $uri);
                     if ($path[1] != "verify_birthdate") {
                         header('Location: /verify_birthdate');
-                        die();
+                        exit();
                     }
                 }
 
                 // check if the current logged-in user is IP banned from another address, if so, then log them out.
                 // this will prevent users from using IP banned accounts on other IPs.
                 if ($this->database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$this->user_data['ip']])) {
-                    setcookie("SBTOKEN", "", time() - 3600);
-                    Utilities::notifyBanner("You have been logged out, as this user is linked to a banned IP address.", true);
+                    session_destroy();
+                    Utilities::redirect('./');
                 }
 
                 // update "last logged in" timestamp after 12 hours.
                 if ($database->result("SELECT COUNT(*) FROM users WHERE lastview < ? AND id = ?", [time() - (12 * 60 * 60), $this->user_id])) {
                     $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
                 }
+
+                // TODO: the content rating system is disabled on squarebracket, so if the user's "comfortable rating"
+                // isnt general, then reset it back to general.
 
                 // if "comfortable rating" is questionable, reset it back to general. this is because the site now uses
                 // "general" and "sensitive" instead of the old "general", "questionable" and "mature" ratings, but the

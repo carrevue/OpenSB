@@ -42,10 +42,12 @@
 
                             <div>File limit: {{ limit }}</div>
 
+                            {% if not is_chaziz_sb %}
                             <div class="form-submit">
                                 <input type="checkbox" name="rating" id="rating" value="true">
                                 <label for="rating"> Mark sensitive</label><br>
                             </div>
+                            {% endif %}
 
                             <div class="form-button-container">
                                 <input class="button button-primary" type="submit" id="upload" name="upload"

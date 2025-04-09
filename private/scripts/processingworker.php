@@ -4,6 +4,7 @@ namespace OpenSB;
 
 global $ffmpegPath, $ffprobePath, $database, $orange;
 
+use Exception;
 use SquareBracket\VersionNumber;
 
 use FFMpeg\Coordinate;
@@ -172,7 +173,7 @@ try {
     } else {
         log("Not a website video, skipping.");
     }
-} catch (\Exception $e) {
+} catch (Exception $e) {
     log("OpenSB Video Processing Worker Failure: " . $e->getMessage());
     clearstatcache();
     die();
