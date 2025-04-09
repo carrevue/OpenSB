@@ -28,7 +28,7 @@ class CoreException extends \Exception
 
         http_response_code(500);
         echo "<body>";
-        echo "<h1>OpenSB Orange Exception</h1>";
+        echo "<h1>OpenSB Exception</h1>";
         echo "<p>" . $errorMsg . "</p>";
         echo "</body>";
         die();

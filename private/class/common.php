@@ -71,6 +71,8 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
+// FIXME: what the fuck is this piece of shit -chaziz 4/9/2025
+
 // since opensb orange is shitty code and uses global everywhere. convert new config variables
 // to old global config variables to avoid fucking around with the legacy orange code.
 $host = $config["mysql"]["host"];
@@ -120,7 +122,7 @@ $branding = [
     "assets_location" => $config["branding"]["assets"],
 ];
 
-// TODO: port these to feature flags or settings that can be changed in-site.
+// TODO: port these into settings that can be changed in-site via the admin panel.
 $disableRegistration = false;
 $disableUploading = false;
 $disableWritingJournals = false;
@@ -148,7 +150,7 @@ if (!SB_CLI) {
         foreach ($usersAssociatedWithIP as $ipBannedUser2) { // i can't really name variables that well
             if (!$database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$ipBannedUser2["id"]])) {
                 $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-                    [$ipBannedUser2["id"], "Automatically done by OpenSB", time()]);
+                    [$ipBannedUser2["id"], "Automated by OpenSB", time()]);
             }
         }
     }

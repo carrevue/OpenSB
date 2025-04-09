@@ -32,7 +32,7 @@ class Storage
         } elseif (file_exists(SB_DYNAMIC_PATH . '/thumbnails/' . $id . '.png')) {
             return '/dynamic/thumbnails/' . $id . '.png';
         } else {
-            return $branding["assets_location"] . '/placeholder.png';
+            return '/assets/placeholder_video.svg';
         }
     }
 
@@ -44,9 +44,9 @@ class Storage
             return '/dynamic/custom_thumbnails/' . $id . '.jpg';
         }
         elseif (file_exists(SB_DYNAMIC_PATH . '/art_thumbnails/' . $id . '.jpg')) {
-            return'/dynamic/art_thumbnails/' . $id . '.jpg';
+            return '/dynamic/art_thumbnails/' . $id . '.jpg';
         } else {
-            return $branding["assets_location"] . '/placeholder.png';
+            return '/assets/placeholder_image.svg';
         }
     }
 
