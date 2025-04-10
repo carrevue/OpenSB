@@ -9,13 +9,30 @@ use Twig\TwigFunction;
 
 class SquareBracketTwigExtension extends AbstractExtension
 {
+    private $orange;
+    private $twig;
+
+    public function __construct(SquareBracket $orange, $twig)
+    {
+        $this->orange = $orange;
+        $this->twig = $twig;
+    }
+
     public function getFunctions(): array
     {
-        global $profiler, $orange;
+        global $profiler;
 
-        if ($orange->getLocalOptions()["skin"] == "biscuit" || $orange->getLocalOptions()["skin"] == "charla") {
+        $options = $this->orange->getLocalOptions();
+        $forceOldUserlink = $options['useOldUserlinkImplementation'] ?? null;
+
+        if (isset($forceOldUserlink)) {
+            // user preference
+            $userlink_function_name = $forceOldUserlink ? "UserLinkOld" : "UserLink";
+        } elseif ($options["skin"] == "biscuit" || $options["skin"] == "charla") {
+            // default to new implementation on biscuit/charla (this logic should be swapped later)
             $userlink_function_name = "UserLink";
         } else {
+            // otherwise use the old implementation.
             $userlink_function_name = "UserLinkOld";
         }
 
@@ -30,7 +47,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('profiler_stats', function () use ($profiler) {
                 $profiler->getStats();
             }),
-            new TwigFunction('version_banner', function () use ($orange) {
+            new TwigFunction('version_banner', function () {
                 echo (new VersionNumber)->printVersionForOutput();
             }),
             new TwigFunction('remove_notification', [$this, 'removeNotification']),
@@ -47,6 +64,11 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('localize', [$this, 'localize']),
             new TwigFunction('truncate_number', [$this, 'truncateNumber']),
             new TwigFunction('convert_time', [$this, 'convertTime']),
+            // BOOTSTRAP FRONTEND COMPATIBILITY
+            new TwigFunction('icon', function($icon, $size) {
+                return $this->twig->render('components/icon.twig', ['icon' => $icon, 'size' => $size]);
+            }, ['is_safe' => ['html']]),
+            // ---------------------------
         ];
     }
 
@@ -201,21 +223,20 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function submissionView($submission_data)
     {
-        global $twig;
         if (!$submission_data) {
             throw new CoreException('SubmissionView is null', 500);
         }
         if ($submission_data["type"] == 0) {
-            echo $twig->render("player.twig", ['submission' => $submission_data]);
+            echo $this->twig->render("player.twig", ['submission' => $submission_data]);
         }
 
         if ($submission_data["type"] == 2) {
-            echo $twig->render("image.twig", ['submission' => $submission_data]);
+            echo $this->twig->render("image.twig", ['submission' => $submission_data]);
         }
 
         // fyi: opensb still doesn't fully support music uploads.
         if ($submission_data["type"] == 3) {
-            echo $twig->render("music.twig", ['submission' => $submission_data]);
+            echo $this->twig->render("music.twig", ['submission' => $submission_data]);
         }
     }
 
@@ -237,7 +258,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function profilePicture($username)
     {
-        global $database, $storage;
+        global $database;
 
         $id = Utilities::usernameToID($database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
@@ -260,7 +281,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     //
     public function profilePictureAdmin($username)
     {
-        global $database, $storage;
+        global $database;
 
         $id = Utilities::usernameToID($database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
@@ -275,7 +296,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function profileBanner($username)
     {
-        global $database, $storage;
+        global $database;
 
         $id = Utilities::usernameToID($database, $username);
         $location = '/dynamic/banners/' . $id . '.png';
@@ -283,7 +304,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         if (file_exists('..' . $location)) {
             $data = $location;
         } else {
-            $data = "/assets/biscuit_banner.svg";
+            $data = "/assets/default_banner.svg";
         }
         return $data;
     }
@@ -373,8 +394,7 @@ HTML;
 
     public function pagination($levels, $lpp, $url, $current)
     {
-        global $twig;
-        return $twig->render('components/pagination.twig', ['levels' => $levels, 'lpp' => $lpp, 'url' => $url, 'current' => $current]);
+        return $this->twig->render('components/pagination.twig', ['levels' => $levels, 'lpp' => $lpp, 'url' => $url, 'current' => $current]);
     }
 
     public function headerMainLinks()
@@ -395,9 +415,9 @@ HTML;
 
     public function headerUserLinks()
     {
-        global $auth, $orange;
+        global $auth;
 
-        $options = $orange->getLocalOptions();
+        $options = $this->orange->getLocalOptions();
 
         if ($auth->isUserLoggedIn()) {
             $username = $auth->getUserData()["name"];
@@ -518,14 +538,12 @@ HTML;
 
     public function submissionBox($submission)
     {
-        global $twig;
-        return $twig->render('components/smallvideobox.twig', ['data' => $submission]);
+        return $this->twig->render('components/smallvideobox.twig', ['data' => $submission]);
     }
 
     public function comment($comment)
     {
-        global $twig;
-        return $twig->render('components/comment.twig', ['data' => $comment]);
+        return $this->twig->render('components/comment.twig', ['data' => $comment]);
     }
 
     public function localize($key, ...$args) {

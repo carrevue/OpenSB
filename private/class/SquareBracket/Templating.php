@@ -83,14 +83,8 @@ class Templating
             }
         }));
 
-        $this->twig->addExtension(new SquareBracketTwigExtension());
+        $this->twig->addExtension(new SquareBracketTwigExtension($orange, $this->twig));
         $this->twig->addExtension(new StringExtension());
-
-        // BOOTSTRAP FRONTEND COMPATIBILITY
-        $this->twig->addFunction(new TwigFunction('icon', function($icon, $size) {
-            return $this->render('components/icon.twig', ['icon' => $icon, 'size' => $size]);
-        }, ['is_safe' => ['html']]));
-        // ---------------------------
 
         if ($isDebug) {
             $this->twig->addExtension(new DebugExtension());
@@ -205,11 +199,15 @@ class Templating
     public function getAllSkins(): array
     {
         $skins = [];
-        $unfiltered_skins = glob('skins/*', GLOB_ONLYDIR);
 
-        // include currently installed skins, except "common" since thats not a skin.
-        foreach($unfiltered_skins as $skin) {
-            if ($skin != "skins/common" && $skin != "skins/cache" && $skin != "skins/error") {
+        // stuff in the skins folder that arent Proper skins
+        $excludedSkins = ['common', 'cache', 'error'];
+
+        // include currently installed skins
+        foreach (glob('skins/*', GLOB_ONLYDIR) as $skin) {
+            $skinName = basename($skin);
+
+            if (!in_array($skinName, $excludedSkins)) {
                 $skins[] = $skin;
             }
         }
@@ -246,6 +244,13 @@ class Templating
                 $incomplete = $isDebug ? false : ($metadata["metadata"]["incomplete"] ?? false);
                 // dont show incomplete skins
                 if (!$incomplete) {
+                    // dont show incomplete themes
+                    if (isset($metadata["metadata"]["themes"]) && is_array($metadata["metadata"]["themes"])) {
+                        $metadata["metadata"]["themes"] = array_filter($metadata["metadata"]["themes"], function($theme)
+                        use ($isDebug) {
+                            return $isDebug || !($theme["incomplete"] ?? false);
+                        });
+                    }
                     $skins[] = $metadata;
                 }
             }

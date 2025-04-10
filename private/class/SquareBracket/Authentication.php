@@ -96,63 +96,44 @@ class Authentication
 
     public function getUserID(): ?int
     {
-        if ($this->is_logged_in) {
-            return $this->user_id;
-        } else {
-            return null;
-        }
+        return $this->is_logged_in ? $this->user_id : null;
     }
 
     public function getUserData(): ?array
     {
-        if ($this->is_logged_in) {
-            return $this->user_data;
-        } else {
-            return [
-                "comfortable_rating" => "general",
-                "blacklisted_tags" => $this->default_tags_blacklist,
+        return $this->is_logged_in
+            ? $this->user_data
+            : [
+                'comfortable_rating' => 'general',
+                'blacklisted_tags' => $this->default_tags_blacklist,
             ];
-        }
     }
 
     public function getUserStatData(): array
     {
-        if ($this->is_logged_in) {
-            return $this->user_stat_data;
-        } else {
-            return [];
-        }
+        return $this->is_logged_in ? $this->user_stat_data : [];
     }
 
-    public function getUserBanData()
+    public function getUserBanData(): ?array
     {
-        return $this->user_ban_data;
+        return $this->user_ban_data ?: null;
     }
 
-    public function isUserAdmin()
+    public function isUserAdmin(): bool
     {
-        if ($this->is_logged_in) {
-            return ($this->user_data['powerlevel'] >= 3);
-        } else {
-            return false;
-        }
+        return $this->is_logged_in && ($this->user_data['powerlevel'] ?? 0) >= 3;
     }
 
-    public function hasUserAuthenticatedAsAnAdmin() {
-        if ($this->isUserAdmin()) {
-            return $this->has_authenticated_as_an_admin;
-        } else {
-            return false;
-        }
-    }
-
-    public function getUserBlacklistedTags()
+    public function hasUserAuthenticatedAsAnAdmin(): bool
     {
-        if ($this->is_logged_in) {
-            return $this->user_data['blacklisted_tags'];
-        } else {
-            return $this->default_tags_blacklist;
-        }
+        return $this->isUserAdmin() && $this->has_authenticated_as_an_admin;
+    }
+
+    public function getUserBlacklistedTags(): array
+    {
+        return $this->is_logged_in
+            ? $this->user_data['blacklisted_tags'] ?? $this->default_tags_blacklist
+            : $this->default_tags_blacklist;
     }
 
     public function isUserOver18(): bool

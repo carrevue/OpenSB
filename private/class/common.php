@@ -30,17 +30,8 @@ use SquareBracket\Templating;
 use SquareBracket\Utilities;
 
 // please use apache/nginx for production stuff.
-if (php_sapi_name() == "cli-server") {
-    define("SB_PHP_BUILTINSERVER", true);
-} else {
-    define("SB_PHP_BUILTINSERVER", false);
-}
-
-if (php_sapi_name() == "cli") {
-    define("SB_CLI", true);
-} else {
-    define("SB_CLI", false);
-}
+define('SB_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
+define('SB_CLI', php_sapi_name() === 'cli');
 
 if (!SB_CLI) {
     if (session_status() === PHP_SESSION_NONE) {
@@ -82,50 +73,31 @@ $pass = $config["mysql"]["password"];
 
 $captcha = $config["captcha"];
 
-if ($config["site"] == "squarebracket_chaziz") {
-    $isChazizSB = true;
-} else {
-    $isChazizSB = false;
-    if ($config["site"] != "squarebracket") {
-        trigger_error("This variable should be set to either squarebracket or squarebracket_chaziz.",
-            E_USER_ERROR);
-    }
+$allowedSites = ['squarebracket', 'squarebracket_chaziz'];
+if (!in_array($config["site"], $allowedSites)) {
+    trigger_error(
+        "This variable should be set to either squarebracket or squarebracket_chaziz.",
+        E_USER_ERROR
+    );
 }
+$isChazizSB = ($config["site"] === "squarebracket_chaziz");
 
-if ($config["mode"] == "DEV") {
-    $isDebug = true;
-} else {
-    $isDebug = false;
-}
+$isDebug = ($config["mode"] ?? '') === "DEV";
+$enableCache = (bool)($config["cache"] ?? false);
+$isMaintenance = (bool)($config["maintenance"] ?? false);
+$enableInviteKeys = (bool)($config["invite_keys"] ?? false);
 
-if ($config["cache"]) {
-    $enableCache = true;
-} else {
-    $enableCache = false;
-}
-
-if ($config["maintenance"]) {
-    $isMaintenance = true;
-} else {
-    $isMaintenance = false;
-}
-
-if ($config["invite_keys"]) {
-    $enableInviteKeys = true;
-} else {
-    $enableInviteKeys = false;
-}
-
-// Branding settings
 $branding = [
-    "name" => $config["branding"]["name"],
-    "assets_location" => $config["branding"]["assets"],
+    "name" => $config["branding"]["name"] ?? '',
+    "assets_location" => $config["branding"]["assets"] ?? '',
 ];
 
-// TODO: port these into settings that can be changed in-site via the admin panel.
-$disableRegistration = false;
-$disableUploading = false;
-$disableWritingJournals = false;
+// TODO: port these into settings that can be changed through the admin panel
+$disableRegistration = !($config["enable_registration"] ?? false);
+
+$lockdown = (bool)($config["lockdown"] ?? false);
+$disableUploading = $lockdown;
+$disableWritingJournals = $lockdown;
 
 // now initialize the orange classes
 $orange = new SquareBracket($host, $user, $pass, $db);

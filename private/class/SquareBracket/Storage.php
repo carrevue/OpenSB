@@ -14,7 +14,7 @@ class Storage
 
     public function processVideoUpload($new, $target_file): void
     {
-        // this uses the version of php on path. if processing worker errors out with"OpenSB is not compatible
+        // this uses the version of php on path. if processing worker errors out with "OpenSB is not compatible
         // with your PHP version.", then your path's php is too old.
         if (str_starts_with(php_uname(), "Windows")) {
             pclose(popen(sprintf('start /B  php %s "%s" "%s" "1" > %s', SB_PRIVATE_PATH . '\scripts\processingworker.php', $new, $target_file, SB_DYNAMIC_PATH . '/videos/' . $new . '.log'), "r"));
@@ -25,29 +25,24 @@ class Storage
 
     public function getVideoUploadThumbnail($id, $custom): string
     {
-        global $branding;
-
-        if ($custom && file_exists(SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg')) {
-            return '/dynamic/custom_thumbnails/' . $id . '.jpg';
-        } elseif (file_exists(SB_DYNAMIC_PATH . '/thumbnails/' . $id . '.png')) {
-            return '/dynamic/thumbnails/' . $id . '.png';
-        } else {
-            return '/assets/placeholder_video.svg';
-        }
+        return $this->getThumbnailPath(
+            $id,
+            $custom,
+            'thumbnails',
+            'png',
+            'placeholder_video.svg'
+        );
     }
 
     public function getImageUploadThumbnail($id, $custom): string
     {
-        global $branding;
-
-        if ($custom && file_exists(SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg')) {
-            return '/dynamic/custom_thumbnails/' . $id . '.jpg';
-        }
-        elseif (file_exists(SB_DYNAMIC_PATH . '/art_thumbnails/' . $id . '.jpg')) {
-            return '/dynamic/art_thumbnails/' . $id . '.jpg';
-        } else {
-            return '/assets/placeholder_image.svg';
-        }
+        return $this->getThumbnailPath(
+            $id,
+            $custom,
+            'art_thumbnails',
+            'jpg',
+            'placeholder_image.svg'
+        );
     }
 
     public function processImageUpload($temp_name, $new): void
@@ -101,7 +96,7 @@ class Storage
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
-        $img->resizeDown(height: 323);
+        $img->resizeDown(height: 300);
         $img->toPng()->save($target_file);
 
         unlink($temp_name);
@@ -110,5 +105,27 @@ class Storage
     public function deleteUploadFile($data): void
     {
         unlink(SB_ROOT_PATH . $data["videofile"]);
+    }
+
+    private function getThumbnailPath(
+        string $id,
+        bool $custom,
+        string $defaultFolder,
+        string $defaultExtension,
+        string $fallback
+    ): string {
+        $customPath = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg';
+        $defaultPath = SB_DYNAMIC_PATH . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
+
+        // if custom thumbnail exists then use that
+        if ($custom && file_exists($customPath)) {
+            return '/dynamic/custom_thumbnails/' . $id . '.jpg';
+        }
+
+        if (file_exists($defaultPath)) {
+            return '/dynamic/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
+        }
+
+        return '/assets/' . $fallback;
     }
 }
