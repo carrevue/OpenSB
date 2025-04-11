@@ -33,7 +33,7 @@ if (!$data) {
     Utilities::notifyBanner("This upload does not exist.", "/");
 }
 
-$tagBlacklist = $auth->getUserBlacklistedTags();
+$tagBlacklist = $auth->getUserTagBlacklist();
 
 if (isset($data["tags"])) {
     $decodedTags = json_decode($data["tags"]);
@@ -41,9 +41,9 @@ if (isset($data["tags"])) {
         foreach ($decodedTags as $tag) {
             if (in_array($tag, $tagBlacklist)) {
                 if ($auth->isUserLoggedIn()) {
-                    Utilities::notifyBanner("This upload is blacklisted per your settings.", "/");
+                    Utilities::notifyBanner("This upload contains tags you've blacklisted.", "/");
                 } else {
-                    Utilities::notifyBanner("This upload is blacklisted by default.", "/");
+                    Utilities::notifyBanner("This upload contains tags blacklisted by default.", "/");
                 }
             }
         }

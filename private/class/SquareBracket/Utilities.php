@@ -133,7 +133,7 @@ class Utilities
     public static function whereTagBlacklist(): string {
         global $auth;
         
-        $tagBlacklist = $auth->getUserBlacklistedTags();
+        $tagBlacklist = $auth->getUserTagBlacklist();
 
         // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
         // submission-related queries into 20 fucking useless lines that slows the site down to a crawl.
@@ -157,14 +157,14 @@ class Utilities
     }
 
     /**
-     * Not to be confused with Notification, which makes a banner.
+     * Not to be confused with notifyBanner, which makes a banner.
      */
     public static function NotifyUser($database, $user, $submission, $related_id, NotificationEnum $type): void
     {
         global $auth, $database;
 
         if (!$auth->isUserLoggedIn()) {
-            throw new CoreException("NotifyUser should not be called by the backend if current user is logged off.");
+            throw new CoreException("NotifyUser should not be called if the current user is logged off.");
         }
 
         // If this user hasn't been notified by an identical notification the day prior.
@@ -399,5 +399,10 @@ class Utilities
         $output = str_replace(array_keys($properUrlReplacements), array_values($properUrlReplacements), $output);
 
         return $output;
+    }
+
+    public static function logOutUser() {
+        session_destroy();
+        Utilities::redirect('./');
     }
 }

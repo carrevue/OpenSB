@@ -43,7 +43,7 @@ if (isset($_POST['save'])) {
         $rating = 'general';
     }
 
-    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? $auth->getDefaultBlacklistedTags());
+    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? $auth->getDefaultTagBlacklist());
 
     if ($blacklisted_tags === '') {
         $parsed_tags = [];

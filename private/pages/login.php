@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $database, $auth, $orange;
+global $twig, $database, $auth, $orange, $isChazizSB;
 
 use SquareBracket\Utilities;
 
@@ -62,7 +62,7 @@ if (isset($_POST["loginsubmit"])) {
     $username = ($_POST['username'] ?? null);
     $password = ($_POST['password'] ?? null);
 
-    // backwards compatibility with youclipped
+    // backwards compatibility with youclipped v1 usernames
     if ($username !== null) {
         $username = str_replace(' ', '_', $username);
     }
@@ -75,7 +75,12 @@ if (isset($_POST["loginsubmit"])) {
     }
 
     if (!$error) {
-        $logindata = $database->fetch("SELECT password,token,ip,id FROM users WHERE name = ?", [$username]);
+        // DUMB SHIT !
+        if ($isChazizSB) {
+            $logindata = $database->fetch("SELECT password,token,ip,id FROM users WHERE name = ?", [$username]);
+        } else {
+            $logindata = $database->fetch("SELECT password,token,ip,id,powerlevel FROM users WHERE name = ?", [$username]);
+        }
 
         if ($logindata && password_verify($password, $logindata['password'])) {
             if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
@@ -91,6 +96,15 @@ if (isset($_POST["loginsubmit"])) {
 
             if ($ipban) {
                 Utilities::notifyBanner("This account's latest IP address is banned.", "/login");
+            }
+
+            // testing code
+            if ($isChazizSB)
+            {
+                if ($logindata['powerlevel'] < 3)
+                {
+                    Utilities::notifyBanner("This instance is currently only open to the staff team.", "/login");
+                }
             }
 
             // if we're logged in, add our current token in an array for account switching purposes.

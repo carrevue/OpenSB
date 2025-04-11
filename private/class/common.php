@@ -133,6 +133,7 @@ if (!SB_CLI) {
     if ($ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()])) {
         $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]));
 
+        http_response_code(403);
         echo $twig_error->render("ip_banned.twig", [
             "page" => "ip-banned",
             "data" => $ipban,
@@ -142,6 +143,7 @@ if (!SB_CLI) {
     }
 
     if ($isMaintenance && !SB_PHP_BUILTINSERVER) {
+        http_response_code(503);
         echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
         die();
     }
