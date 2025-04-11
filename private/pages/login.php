@@ -77,9 +77,9 @@ if (isset($_POST["loginsubmit"])) {
     if (!$error) {
         // DUMB SHIT !
         if ($isChazizSB) {
-            $logindata = $database->fetch("SELECT password,token,ip,id FROM users WHERE name = ?", [$username]);
-        } else {
             $logindata = $database->fetch("SELECT password,token,ip,id,powerlevel FROM users WHERE name = ?", [$username]);
+        } else {
+            $logindata = $database->fetch("SELECT password,token,ip,id FROM users WHERE name = ?", [$username]);
         }
 
         if ($logindata && password_verify($password, $logindata['password'])) {
