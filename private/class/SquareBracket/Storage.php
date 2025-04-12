@@ -109,7 +109,7 @@ class Storage
 
     private function getThumbnailPath(
         string $id,
-        bool $custom,
+        ?bool $custom,
         string $defaultFolder,
         string $defaultExtension,
         string $fallback
