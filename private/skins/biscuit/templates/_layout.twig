@@ -68,6 +68,9 @@
     {% endblock %}
 </head>
 <body>
+{% if is_debug %}
+    {{ include(component('debug_dialog')) }}
+{% endif %}
 {% if show_warning_banner %}
 <div class="banner banner-danger full-screen">
     <span class="notification-text">

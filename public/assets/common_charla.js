@@ -46,8 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (firstTab) {
             const tabId = firstTab.getAttribute("data-tab");
             if (tabId) {
-                document.getElementById(tabId).style.display = "block";
-                firstTab.classList.add("active");
+                const firstTabId = document.getElementById(tabId);
+                if (firstTabId) {
+                    firstTabId.style.display = "block";
+                    firstTab.classList.add("active");
+                } else {
+                    error(`Tab ${tabId} is missing contents.`)
+                }
             }
         } else {
             error("THIS SHOULD NOT HAPPEN.");
@@ -72,8 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 // Show the selected tab content and mark the button as active
-                document.getElementById(tabId).style.display = "block";
-                this.classList.add("active");
+                const selectedTabId = document.getElementById(tabId);
+
+                if (selectedTabId) {
+                    selectedTabId.style.display = "block";
+                    this.classList.add("active");
+                } else {
+                    error(`Tab ${tabId} is missing contents.`)
+                }
             });
         }
     });

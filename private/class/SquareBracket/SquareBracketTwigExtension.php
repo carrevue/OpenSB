@@ -22,6 +22,8 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         global $profiler;
 
+        $db = $this->orange->getDatabase();
+
         $options = $this->orange->getLocalOptions();
         $forceOldUserlink = $options['useOldUserlinkImplementation'] ?? null;
 
@@ -46,6 +48,9 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('profile_banner', [$this, 'profileBanner']),
             new TwigFunction('profiler_stats', function () use ($profiler) {
                 $profiler->getStats();
+            }),
+            new TwigFunction('db_profiler_info', function () use ($profiler) {
+                return $profiler->getDatabaseProfilingReport();
             }),
             new TwigFunction('version_banner', function () {
                 echo (new VersionNumber)->printVersionForOutput();

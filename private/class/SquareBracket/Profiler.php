@@ -4,26 +4,34 @@ namespace SquareBracket;
 
 /**
  * Revamped profiler.
+ *
+ * NOTE: The database query profiler is in the Database class.
  */
 class Profiler
 {
+    private Database $database;
     private $starttime;
+    private $database_query_log;
+    private ?array $database_profiling_report;
+    private bool $database_profiler_function_called = false;
 
-    function __construct() {
+    public function __construct($database) {
+        $this->database = $database;
         $this->starttime = microtime(true);
     }
 
-    function getAuthData(): string
+    // this should be called AFTER the database is done with everything
+    private function getDatabaseProfilerInfo(): void
     {
-        global $auth;
-        if ($auth->isUserLoggedIn()) {
-            return "Currently logged in as " . htmlspecialchars($auth->getUserData()["name"]);
-        } else {
-            return "Logged out.";
+        // slightly ugly hack so we dont repeat this shit (because of squarebrackettwigextension)
+        if (!$this->database_profiler_function_called) {
+            $this->database_profiler_function_called = true;
+            $this->database_query_log = $this->database->getQueryLog();
+            $this->database_profiling_report  = $this->database->getProfilingReport();
         }
     }
 
-    function whoAmI(): string
+    private function whoAmI(): string
     {
         $whoami = exec('whoami');
         if ($whoami) {
@@ -32,10 +40,21 @@ class Profiler
         return "Running under unknown system user";
     }
 
-    function getStats(): void
+    public function getStats(): void
     {
-        printf("Rendered in %1.6fs with %dKB memory used. %s. %s",
+        $this->getDatabaseProfilerInfo();
+
+        printf("Rendered in %1.6fs with %dKB memory used and a total of %s database queries. %s.",
             microtime(true) - $this->starttime,
-            memory_get_usage(false) / 1024, $this->whoAmI(), $this->getAuthData());
+            memory_get_usage(false) / 1024,
+            $this->database_profiling_report["total_queries"],
+            $this->whoAmI());
+    }
+
+    public function getDatabaseProfilingReport(): ?array
+    {
+        $this->getDatabaseProfilerInfo();
+
+        return $this->database_profiling_report;
     }
 }

@@ -14,8 +14,16 @@ class SquareBracket {
      * Initialize core OpenSB classes. (this is fucking stupid)
      *
      */
-    public function __construct($host, $user, $pass, $db) {
+    public function __construct($config) {
         global $isChazizSB;
+
+        // extract mysql settings
+        $host = $config["mysql"]["host"];
+        $db = $config["mysql"]["database"];
+        $user = $config["mysql"]["username"];
+        $pass = $config["mysql"]["password"];
+
+        $isDebug = ($config["mode"] ?? '') === "DEV";
 
         if (isset($_COOKIE["SBOPTIONS"])) {
             $this->options = json_decode(base64_decode($_COOKIE["SBOPTIONS"]), true);
@@ -46,16 +54,20 @@ class SquareBracket {
 
         try {
             $this->database = new Database($host, $user, $pass, $db);
+            // enable db profiler (not to be confused with the other profiler)
+            // if we are on debug mode
+            if ($isDebug) {
+                $this->database->setProfiling(true);
+            }
         } catch (CoreException $e) {
             $e->page();
         }
     }
 
     /**
-     * Returns the database class for other OpenSB classes to use. (this is stupid design)
+     * Returns the database class for other OpenSB classes to use.
      *
      * @return Database
-     *
      */
     public function getDatabase(): Database
     {
@@ -85,7 +97,7 @@ class SquareBracket {
     /**
      * Returns array for changing accounts.
      *
-     * @return string
+     * @return array|string
      */
     public function getAccountsArray(): array|string
     {
