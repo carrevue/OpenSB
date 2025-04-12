@@ -4,21 +4,17 @@ namespace SquareBracket;
 
 class UploadRatingData
 {
-    private $database;
-    private $upload_id;
     private $upload_rating_data;
 
     public function __construct($database, $upload_id) {
-        $this->database = $database;
-        $this->upload_id = $upload_id;
+        // we don't need $this->database nor $this->upload_id.
 
-        $this->upload_rating_data = [
-            "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$upload_id]),
-            "2" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=2", [$upload_id]),
-            "3" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=3", [$upload_id]),
-            "4" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=4", [$upload_id]),
-            "5" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=5", [$upload_id]),
-        ];
+        $this->upload_rating_data = array_fill_keys(range(1, 5), 0);
+        $ratings = $database->query("SELECT rating, COUNT(*) as count FROM upload_ratings WHERE video=? GROUP BY rating", [$upload_id]);
+
+        foreach ($ratings as $row) {
+            $this->upload_rating_data[(string)$row['rating']] = $row['count'];
+        }
     }
 
     /**

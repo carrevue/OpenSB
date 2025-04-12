@@ -14,7 +14,9 @@ class UserData
         $this->database = $database;
         $this->id = $id;
 
-        $this->data = $this->database->fetch("SELECT u.* FROM users u WHERE u.id = ?", [$id]);
+        $this->data = $this->database->fetch("SELECT id, name, title, customcolor, joined, lastview, customcolor 
+        FROM users WHERE id = ?", [$id]);
+
         if ($this->data == null) {
             trigger_error("User ID $id is nonexistent.", E_USER_WARNING);
         }
