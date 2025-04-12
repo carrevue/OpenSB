@@ -57,13 +57,13 @@
                 </form>
                 <div class="header-links">
                     {% if is_user_logged_in %}
-                        <!--<a class="menulink" href="/notices">{{ user_stat_data.notifications }} notifications</a>-->
+                        <a class="menulink" href="/notices">{{ user_stat_data.notifications }} notifications</a>
                         <div class="user-menu-container">
                             <div class="menu-button user-menu-button" data-menu-id="user-menu">
                                 <img src="{{ profile_picture(user_data.name) }}" class="user-menu-pfp"
                                      alt="{{ user_data.name }}">
                                 <div class="menu-caret-container user-menu-caret-container">
-                                    <i class="bi bi-caret-down-fill menu-caret"></i>
+                                    <i class="biscuit-icon caret-closed menu-caret"></i>
                                 </div>
                             </div>
                             <div class="menu" id="user-menu">

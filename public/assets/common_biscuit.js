@@ -75,9 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // get the caret if that exists. this is primarily for the one in the header.
         const menuCaret = button.getElementsByClassName("menu-caret");
 
-        // DON'T FORGET TO UPDATE THIS IF WE EVER SWITCH OUT OF BOOTSTRAP ICONS (not that we should)
-        const menuCaretOff= "bi bi-caret-down-fill menu-caret";
-        const menuCaretOn = "bi bi-caret-up-fill menu-caret";
+        const menuCaretOff= "biscuit-icon caret-closed menu-caret";
+        const menuCaretOn = "biscuit-icon caret-open menu-caret";
 
         let actualCaret;
         if (menuCaret.length === 1) {
