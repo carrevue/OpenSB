@@ -62,15 +62,6 @@ $tags = $upload->getTags();
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["author"]]);
 $followed = Utilities::IsFollowingUser($data["author"]);
 
-// TODO: move this to a new UploadRatingData class which will be initialized through the UploadData class.
-$ratings = [
-    "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$data["id"]]),
-    "2" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=2", [$data["id"]]),
-    "3" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=3", [$data["id"]]),
-    "4" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=4", [$data["id"]]),
-    "5" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=5", [$data["id"]]),
-];
-
 // TODO: this feature is unused.
 //$favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
 
@@ -257,7 +248,7 @@ $page_data = [
     ],
     "interactions" => [
         "views" => $data["views"],
-        "ratings" => Utilities::calculateUploadRatings($ratings),
+        "ratings" => $upload->getRatingData(),
         "favorites" => 0, // TODO
         "comments" => $comment_count,
     ],

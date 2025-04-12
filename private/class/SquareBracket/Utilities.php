@@ -12,34 +12,6 @@ use Random\Randomizer;
  */
 class Utilities
 {
-    /**
-     * Calculate the upload's ratings.
-     */
-    public static function calculateUploadRatings($ratings): array
-    {
-        $total_ratings = ($ratings["1"] +
-            $ratings["2"] +
-            $ratings["3"] +
-            $ratings["4"] +
-            $ratings["5"]);
-
-        if ($total_ratings == 0) {
-            $average_ratings = 0;
-        } else {
-            $average_ratings = ($ratings["1"] +
-                    $ratings["2"] * 2 +
-                    $ratings["3"] * 3 +
-                    $ratings["4"] * 4 +
-                    $ratings["5"] * 5) / $total_ratings;
-        }
-
-        return [
-            "stars" => $ratings,
-            "total" => $total_ratings,
-            "average" => $average_ratings,
-        ];
-    }
-
     // TODO: i think this should be refactored into UploadQuery? i should look into this later. -chaziz 1/4/2025
     public static function makeUploadArray($database, $uploads): array
     {
@@ -50,13 +22,7 @@ class Utilities
 
             $flags = Utilities::uploadBitmaskToArray($upload["flags"]);
 
-            $ratingData = [
-                "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$upload["id"]]),
-                "2" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=2", [$upload["id"]]),
-                "3" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=3", [$upload["id"]]),
-                "4" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=4", [$upload["id"]]),
-                "5" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=5", [$upload["id"]]),
-            ];
+            $ratings = new UploadRatingData($database, $upload["id"]);
 
             $userData = new UserData($database, $upload["author"]);
             $submissionsData[] =
@@ -77,7 +43,7 @@ class Utilities
                         "info" => $userData->getUserArray(),
                     ],
                     "interactions" => [
-                        "ratings" => Utilities::calculateUploadRatings($ratingData),
+                        "ratings" => $ratings->calculateRatingData(),
                     ],
                 ];
         }

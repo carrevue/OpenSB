@@ -7,7 +7,8 @@ namespace SquareBracket;
  */
 class UploadData
 {
-    private \SquareBracket\Database $database;
+    private Database $database;
+    private UploadRatingData $ratings;
     private $takedown;
     private $data;
     private $tags;
@@ -15,10 +16,10 @@ class UploadData
 
     // FLAGS
 
-    // 00000001: featured upload flag that was used in mid-2021.
+    // 00000001: featured upload
     public const FLAG_FEATURED = 1;
 
-    // 00000010: Unprocessed VIDEO upload.
+    // 00000010: Unprocessed VIDEO upload
     public const FLAG_UNPROCESSED = 2;
 
     // 00000100: "Block guests from viewing this upload"
@@ -27,10 +28,10 @@ class UploadData
     // 00001000: "Block users from commenting in this upload"
     public const FLAG_BLOCK_COMMENTS = 8;
 
-    // 00010000: "upload has custom thumbnail" (apparently unused???)
+    // 00010000: "upload has custom thumbnail"
     public const FLAG_CUSTOM_THUMBNAIL = 16;
 
-    public function __construct(\SquareBracket\Database $database, $id)
+    public function __construct(Database $database, $id)
     {
         $this->database = $database;
 
@@ -49,6 +50,7 @@ class UploadData
         if ($this->data != []) {
             $this->takedown = $this->database->fetchArray($this->database->query("SELECT * FROM upload_takedowns t WHERE t.submission = ?", [$id]));
             $this->tags = $this->database->fetchArray($this->database->query("SELECT * FROM `upload_tag_index` ti JOIN upload_tag_meta t ON (t.tag_id = ti.tag_id) WHERE ti.video_id = ?", [$this->data["id"]]));
+            $this->ratings = new UploadRatingData($database, $id);
         }
     }
 
@@ -70,6 +72,11 @@ class UploadData
     public function isDeleted()
     {
         return $this->deleted_data;
+    }
+
+    public function getRatingData()
+    {
+        return $this->ratings->calculateRatingData();
     }
 
     public function bitmaskToArray()

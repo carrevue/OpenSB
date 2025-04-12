@@ -5,16 +5,16 @@ namespace SquareBracket;
 class UserData
 {
     private \SquareBracket\Database $database;
+    private $id;
+
     private $data;
-    private $followers;
-    private $is_banned;
 
     public function __construct(\SquareBracket\Database $database, $id)
     {
         $this->database = $database;
+        $this->id = $id;
+
         $this->data = $this->database->fetch("SELECT u.* FROM users u WHERE u.id = ?", [$id]);
-        $this->followers = $this->database->fetch("SELECT COUNT(user) FROM user_follows WHERE user = ?", [$id])['COUNT(user)'];
-        $this->is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
         if ($this->data == null) {
             trigger_error("User ID $id is nonexistent.", E_USER_WARNING);
         }
@@ -22,9 +22,16 @@ class UserData
 
     public function isUserBanned()
     {
-        if ($this->is_banned) { return true; }
+        if ($this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$this->id])) { return true; }
         return false;
     }
+
+    /*
+    private function getUserFollowerCount() {
+        return $this->database->fetch("SELECT COUNT(user) FROM user_follows WHERE user = ?",
+            [$this->id])['COUNT(user)'];
+    }
+    */
 
     public function getUserArray(): array
     {
@@ -33,7 +40,7 @@ class UserData
                 "username" => $this->data["name"],
                 "displayname" => $this->data["title"],
                 "color" => $this->data["customcolor"],
-                "followers" => $this->followers,
+                //"followers" => $this->getUserFollowerCount(),
                 "joined" => $this->data["joined"],
                 "connected" => $this->data["lastview"],
                 "customcolor" => $this->data["customcolor"],

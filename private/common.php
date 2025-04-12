@@ -117,6 +117,8 @@ if (!SB_CLI) {
     // this should probably have a cooldown or something i don't fucking know
 
     // automatically ban accounts linked to banned ips.
+    // TODO: add ip ban functionality in admin panel instead of this crude ass shit
+    /*
     $ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
     foreach ($ipBannedUsers as $ipBannedUser) {
         $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
@@ -127,6 +129,7 @@ if (!SB_CLI) {
             }
         }
     }
+    */
 
     $twig_error = new ErrorTemplating($orange);
 
