@@ -10,7 +10,7 @@ define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-require_once SB_PRIVATE_PATH . '/class/common.php';
+require_once SB_PRIVATE_PATH . '/common.php';
 
 $uploads = $database->fetchArray($database->query("SELECT * FROM videos"));
 

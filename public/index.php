@@ -11,7 +11,7 @@ define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() I
 use JetBrains\PhpStorm\NoReturn;
 use SquareBracket\Utilities;
 
-require_once SB_PRIVATE_PATH . '/class/common.php';
+require_once SB_PRIVATE_PATH . '/common.php';
 
 // very fucking ugly, temporary for now. -chaziz 4/11/2025
 global $isChazizSB, $auth;
