@@ -21,7 +21,9 @@
 
             <strong>Fastest query ({{ profiler.fastest_query.execution_time }}s):</strong><br>
             {{ profiler.fastest_query.query }}<br>
-            Parameters: {{ profiler.fastest_query.params|json_encode }}<br><br>
+            Parameters: {{ profiler.fastest_query.params|json_encode }}
+
+            <hr>
 
             <strong>All Queries:</strong><br>
             {% for query in profiler.queries %}

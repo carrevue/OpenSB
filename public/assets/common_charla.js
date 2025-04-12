@@ -278,6 +278,18 @@ document.addEventListener("DOMContentLoaded", () => {
             document.documentElement.style.setProperty('--link-color', settings_custom_color.value);
         });
     }
+
+    let debug_button = (document.getElementById('debug-button'));
+    let debug_close_button = (document.getElementById('debug-close-button'));
+    let debug_dialog = (document.getElementById('debug-dialog'));
+
+    debug_button.addEventListener("click", () => {
+        debug_dialog.showModal();
+    });
+
+    debug_close_button.addEventListener("click", () => {
+        debug_dialog.close();
+    });
 });
 
 function play(sound) {
