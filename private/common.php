@@ -18,6 +18,8 @@ if (!file_exists(SB_PRIVATE_PATH . '/config/config.php')) {
 
 $config = include_once(SB_PRIVATE_PATH . '/config/config.php');
 
+$isDebug = ($config["mode"] ?? '') === "DEV";
+
 require_once(SB_VENDOR_PATH . '/autoload.php');
 
 use SquareBracket\Authentication;
@@ -83,7 +85,6 @@ if (!in_array($config["site"], $allowedSites)) {
 }
 $isChazizSB = ($config["site"] === "squarebracket_chaziz");
 
-$isDebug = ($config["mode"] ?? '') === "DEV";
 $enableCache = (bool)($config["cache"] ?? false);
 $isMaintenance = (bool)($config["maintenance"] ?? false);
 $enableInviteKeys = (bool)($config["invite_keys"] ?? false);
@@ -104,13 +105,14 @@ $disableWritingJournals = $lockdown;
 $orange = new SquareBracket($config);
 $database = $orange->getDatabase();
 
+$profiler = new Profiler($database, $isDebug);
+
 $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
 $storage = new Storage($orange->getDatabase());
 
 if (!SB_CLI) {
     $auth = new Authentication($database);
-    $profiler = new Profiler($database);
     $localization = new Localization($localization_setting);
 
     // automatic stuff

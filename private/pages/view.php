@@ -82,35 +82,14 @@ $CrawlerDetect = new CrawlerDetect;
 
 $type = $auth->isUserLoggedIn() ? "user" : "guest";
 
-// stupid fucking check
-function domainCheck()
-{
-    global $isDebug, $isChazizSB;
-
-    if ($isDebug) { return true; }
-
-    $allowedChazizSbDomains = ['squarebracket.pw', 'squarebracket.lol', 'fulptube.rocks'];
-    $currentDomain = $_SERVER['HTTP_HOST'];
-
-    if ($isChazizSB) {
-        if (in_array($currentDomain, $allowedChazizSbDomains)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return true;
-    }
-}
-
 // probably shit
-if (!$CrawlerDetect->isCrawler() && domainCheck()) {
+if (!$CrawlerDetect->isCrawler()) {
     if ($database->fetch("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip])['COUNT(video_id)'] < 1) {
         $database->query("INSERT INTO upload_views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
             [$id, $ip, time(), $type]);
 
-        // increment the indexed view count. this might go out of sync eventually, but this can be fixed with a
-        // script that'll be run at least once a week via cron. -chaziz 4/6/2024
+        // increment the indexed view count. this might go out of sync eventually, but this can be fixed through
+        // 2024-08-recount-views.php.
         $new_views = $data["views"] + 1;
         $database->query("UPDATE uploads SET views = ? WHERE id = ?",
             [$new_views, $data["id"]]);

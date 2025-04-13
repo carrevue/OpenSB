@@ -33,7 +33,7 @@ class VersionNumber
 
     public function printVersionForOutput()
     {
-        return sprintf("OpenSB %s - Executed at %s", VersionNumber::getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
+        return sprintf("OpenSB %s - Executed on %s", VersionNumber::getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
     }
 
     /**
