@@ -89,7 +89,7 @@ function domainCheck()
 
     if ($isDebug) { return true; }
 
-    $allowedChazizSbDomains = ['squarebracket.pw', 'squaerbracket.lol', 'fulptube.rocks'];
+    $allowedChazizSbDomains = ['squarebracket.pw', 'squarebracket.lol', 'fulptube.rocks'];
     $currentDomain = $_SERVER['HTTP_HOST'];
 
     if ($isChazizSB) {
