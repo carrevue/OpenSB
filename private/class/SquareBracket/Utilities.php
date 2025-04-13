@@ -316,7 +316,7 @@ class Utilities
 
         $ip = $_SERVER['REMOTE_ADDR'];
 
-        if ($ip == "127.0.0.1" | $ip == "::1") return "localhost";
+        if ($ip == "127.0.0.1" | $ip == "::1" | $ip == "localhost") return "localhost";
 
         return crypt($ip, $ip);
     }

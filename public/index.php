@@ -16,6 +16,7 @@ require_once SB_PRIVATE_PATH . '/common.php';
 // very fucking ugly, temporary for now. -chaziz 4/11/2025
 global $isChazizSB, $auth;
 
+// TODO: make this cachable
 #[NoReturn] function load_thumbnail_from_skin($path) {
     $pathParts = explode('_', $path);
     $skin = $pathParts[0] ?? '';
@@ -62,8 +63,7 @@ if ($isChazizSB)
         Utilities::logOutUser();
     }
 
-    if (!$auth->isUserLoggedIn() && $path[1] != "login")
-    {
+    if (Utilities::getIpAddress() != "localhost" && !$auth->isUserLoggedIn() && $path[1] != "login") {
         Utilities::redirect("/login");
     }
 }
