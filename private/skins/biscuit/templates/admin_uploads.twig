@@ -6,7 +6,7 @@
     {% set le_url = '?page=%s&amount=' ~ amount %}
 {% endif %}
 
-{% set title = "Users" %}
+{% set title = "Uploads" %}
 
 	{% block admincontent %}
         {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
@@ -14,49 +14,45 @@
 
         <div class="form-flex">
             <form action="/admin/uploads/" method="GET" id="num_change">
-                <select name="amount" onchange="document.getElementById('num_change').submit()" style="height:30px;">
-                    <option value="8"{% if amount is defined and amount == 8 %} selected{% endif %}>8</option>
-                    <option value="16"{% if amount is defined and amount == 16 %} selected{% endif %}>16</option>
-                    <option value="32"{% if amount is defined and amount == 32 %} selected{% endif %}>32</option>
-                    <option value="64"{% if amount is defined and amount == 64 %} selected{% endif %}>64</option>
-                    <option value="128"{% if amount is defined and amount == 128 %} selected{% endif %}>128</option>
-                    <option value="256"{% if amount is defined and amount == 256 %} selected{% endif %}>256</option>
+                <select name="amount" onchange="this.form.submit()" style="height:30px;">
+                    {% for option in [8, 16, 32, 64, 128, 256] %}
+                        <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
+                    {% endfor %}
                 </select>
             </form>
-            <form action="/admin/uploads/" method="GET" style="margin-left: auto;">
+
+            <form method="GET" action="/admin/uploads/" style="margin-left: auto;">
                 <input type="hidden" name="amount" value="{{ amount }}">
-                <input type="text" name="search" value="{{ search }}" style="width:170px;">
-                <input class="button button-secondary" type="submit" value="Search">
+                <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
+                <button type="submit" class="button button-secondary">{{ localize('search') }}</button>
             </form>
         </div>
         <hr>
-        <table class="c1">
-            <tr class="h">
-                <th>Thumbnail</th>
-                <th>Default thumbnail</th>
-                <th>Title</th>
-                <th style="width: 160px;">Actions</th>
-            </tr>
-            {% for upload in uploads %}
-                <tr class="{% if user.class %}{{ user.class }}{% endif %}">
-                    <td class="a">
-                        <img src="{{ thumbnail(upload.id, upload.type, true) }}"
-                             width="90" alt="{{ upload.title }}" class="content-image thumbnail">
-                    </td>
-                    <td class="a">
-                        <img src="{{ thumbnail(upload.id, upload.type, false) }}"
-                             width="90" alt="{{ upload.title }}" class="content-image thumbnail">
-                    </td>
-                    <td class="a">
+        {% for upload in uploads %}
+            <div class="content-entry">
+                <div class="content-thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, true) }}"
+                         width="120" alt="{{ upload.title }}" class="content-image thumbnail">
+                </div>
+                <div class="content-thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, false) }}"
+                         width="120" alt="{{ upload.title }}" class="content-image thumbnail">
+                </div>
+                <div class="content-info">
+                    <div class="content-title">
                         {{ upload.title }}
-                    </td>
-                    <td class="a fade-into-bg">
+                    </div>
+                    <div class="content-description">
+                        TODO
+                    </div>
+                    <div>
                         <a class="button button-secondary" href="/admin/uploads/{{ upload.id }}">
                             Check
                         </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
         {{ pagination(count, amount, le_url, current_page) }}
     {% endblock %}

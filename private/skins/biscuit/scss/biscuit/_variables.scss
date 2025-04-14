@@ -38,16 +38,6 @@ $color-map: (
         "warning": $yellow,
 );
 
-$color-map-admin: (
-        "banned-other-unbanned": #ff6b6b,
-        "unbanned-other-banned": #ffa726,
-        "banned": #ff8a80,
-        "shadow-banned": #ffccbc,
-        "unbanned-other-unbanned": #fff59d,
-        "partner": #a5d6a7,
-        "staff": #90caf9,
-);
-
 // fonts
 $font: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 @if $theme == "soretro" {

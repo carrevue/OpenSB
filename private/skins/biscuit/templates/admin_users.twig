@@ -12,92 +12,75 @@
         {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
         {% set current_page = page %}
 
-        <div class="admin-legend-title">Legend:</div>
-        <ul class="admin-legend">
-            <li class="admin-legend-entry">
-                <span class="admin-legend-icon banned-other-unbanned"></span>
-                Banned with other unbanned accounts
-            </li>
-            <li class="admin-legend-entry">
-                <span class="admin-legend-icon unbanned-other-banned"></span>
-                Unbanned with other banned accounts
-            </li>
-            <li class="admin-legend-entry">
-                <span class="admin-legend-icon banned"></span>
-                Banned
-            </li>
-            <li class="admin-legend-entry">
-                <span class="admin-legend-icon shadow-banned"></span>
-                Shadowbanned (unused)
-            </li>
-            <li class="admin-legend-entry">
-                <span class="admin-legend-icon unbanned-other-unbanned"></span>
-                Unbanned with other unbanned accounts
-            </li>
-            <li class="admin-legend-entry">
-                <span class="admin-legend-icon partner"></span>
-                Partner (unused)
-            </li>
-            <li class="admin-legend-entry">
-                <span class="admin-legend-icon staff"></span>
-                Staff
-            </li>
-        </ul>
-        <hr>
         <div class="form-flex">
             <form action="/admin/users/" method="GET" id="num_change">
-                <select name="amount" onchange="document.getElementById('num_change').submit()" style="height:30px;">
-                    <option value="8"{% if amount is defined and amount == 8 %} selected{% endif %}>8</option>
-                    <option value="16"{% if amount is defined and amount == 16 %} selected{% endif %}>16</option>
-                    <option value="32"{% if amount is defined and amount == 32 %} selected{% endif %}>32</option>
-                    <option value="64"{% if amount is defined and amount == 64 %} selected{% endif %}>64</option>
-                    <option value="128"{% if amount is defined and amount == 128 %} selected{% endif %}>128</option>
-                    <option value="256"{% if amount is defined and amount == 256 %} selected{% endif %}>256</option>
+                <select name="amount" onchange="this.form.submit()" style="height:30px;">
+                    {% for option in [8, 16, 32, 64, 128, 256] %}
+                        <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
+                    {% endfor %}
                 </select>
             </form>
-            <form action="/admin/users/" method="GET" style="margin-left: auto;">
+
+            <form method="GET" action="/admin/users/" style="margin-left: auto;">
                 <input type="hidden" name="amount" value="{{ amount }}">
-                <input type="text" name="search" value="{{ search }}" style="width:170px;">
-                <input class="button button-secondary" type="submit" value="Search">
+                <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
+                <button type="submit" class="button button-secondary">{{ localize('search') }}</button>
             </form>
         </div>
         <hr>
-        <table class="c1">
-            <tr class="h">
-                <th>Username</th>
-                <th>Uploads</th>
-                <th>Journals</th>
-                <th>Registered</th>
-                <th>Last logged in</th>
-                <th style="width: 160px;">Actions</th>
-            </tr>
-            {% for user in users %}
-                <tr class="{% if user.class %}{{ user.class }}{% endif %}">
-                    <td class="a">
-                        {{ user.info.username }}
-                    </td>
-                    <td class="a">{{ user.submissions }}</td>
-                    <td class="a">{{ user.journals }}</td>
-                    <td class="a">{{ user.info.joined | relative_time() }}</td>
-                    <td class="a">{{ user.info.connected | relative_time() }}</td>
-                    <td class="a fade-into-bg">
-                        <a class="button button-secondary" href="/admin/users/{{ user.info.username }}">
-                            Check
-                        </a>
-                        {% if user.powerlevel <= 1 %}
-                            {% if user.banned %}
-                                <form id="banForm" method="post" action="/admin/users/{{ user.info.username }}" enctype="multipart/form-data">
-                                    <button name="ban_user" value="{{ user.info.username }}" class="button button-warning" onclick="if (!confirm('Are you sure you want to unban this user?')) { return false }">Unban</button>
-                                </form>
-                            {% else %}
-                                <form id="banForm" method="post" action="/admin/users/{{ user.info.username }}" enctype="multipart/form-data">
-                                    <button name="ban_user" value="{{ user.info.username }}" class="button button-danger" onclick="if (!confirm('Are you sure you want to ban this user?')) { return false }">Ban</button>
-                                </form>
-                            {% endif %}
+        {% for user in users %}
+        <div class="content-entry">
+            <div class="content-thumbnail">
+                <a href="/user/{{ user.info.username }}">
+                    <img src="{{ profile_picture_admin(user.info.username) }}" width="80"
+                         alt="{{ user.info.username }}" class="content-image pfp">
+                </a>
+            </div>
+            <div class="content-info">
+                <div class="content-title">
+                    {{ user_link(user) }}
+                </div>
+                <div class="content-description">
+                    <div>
+                        {{ user.submissions }} uploads · {{ user.journals }} journals
+                    </div>
+                    <div>
+                        Power level:
+                        {% if user.powerlevel == 1 %}
+                            User
+                        {% elseif user.powerlevel == 2 %}
+                            Moderator
+                        {% elseif user.powerlevel == 3 %}
+                            Admin
+                        {% else %}
+                            Owner
                         {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+                    </div>
+                    <div>
+                        Joined: {{ user.info.joined | relative_time() }}
+                    </div>
+                    <div>
+                        Last login: {{ user.info.joined | relative_time() }}
+                    </div>
+                </div>
+                <div>
+                    <a class="button button-secondary" href="/admin/users/{{ user.info.username }}">
+                        Check
+                    </a>
+                    {% if user.powerlevel <= 1 %}
+                        {% if user.banned %}
+                            <form id="banForm" method="post" action="/admin/users/{{ user.info.username }}" enctype="multipart/form-data">
+                                <button name="ban_user" value="{{ user.info.username }}" class="button button-warning" onclick="if (!confirm('Are you sure you want to unban this user?')) { return false }">Unban</button>
+                            </form>
+                        {% else %}
+                            <form id="banForm" method="post" action="/admin/users/{{ user.info.username }}" enctype="multipart/form-data">
+                                <button name="ban_user" value="{{ user.info.username }}" class="button button-danger" onclick="if (!confirm('Are you sure you want to ban this user?')) { return false }">Ban</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
         {{ pagination(count, amount, le_url, current_page) }}
     {% endblock %}

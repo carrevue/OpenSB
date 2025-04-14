@@ -21,6 +21,20 @@
                                 <td>{{ user.name }}</td>
                             </tr>
                             <tr>
+                                <td>Power level</td>
+                                <td>
+                                    {% if user.powerlevel == 1 %}
+                                        User
+                                    {% elseif user.powerlevel == 2 %}
+                                        Moderator
+                                    {% elseif user.powerlevel == 3 %}
+                                        Admin
+                                    {% else %}
+                                        Owner
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Age/Birthday</td>
                                 <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | date("F j Y") }}</td>
                             </tr>
@@ -32,6 +46,10 @@
                             <tr>
                                 <td>Last logged in</td>
                                 <td>{{ user.lastview | date("F j Y, h:i:s A") }}</td>
+                            </tr>
+                            <tr>
+                                <td>Comfortable rating</td>
+                                <td>{{ user.comfortable_rating }}</td>
                             </tr>
                             <tr>
                                 <td>Color</td>
