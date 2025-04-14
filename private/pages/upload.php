@@ -11,7 +11,7 @@ use SquareBracket\Utilities;
 // TODO: a more automated method to detect which file format the user is trying to upload.
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
 $supportedImageFormats = ["png", "jpg", "jpeg", "bmp", "webp"];
-$supportedMusicFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"]; // TODO
+$supportedAudioFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"]; // TODO
 
 if (!$auth->isUserLoggedIn())
 {
@@ -132,7 +132,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         parse_tags($tags2, $new, $database);
 
         Utilities::notifyBanner("Your upload has been completed.", "./watch.php?v=" . $new, "success");
-    } elseif (in_array(strtolower($ext), $supportedMusicFormats, true)) { // MUSIC
+    } elseif (in_array(strtolower($ext), $supportedAudioFormats, true)) { // MUSIC
         Utilities::notifyBanner("Audio uploading will be implemented at a later date.", "/upload");
     } else {
         Utilities::notifyBanner("This file format is not supported.", "/upload");
