@@ -1,5 +1,5 @@
 # SquareBracket Community Guidelines 
-Last updated by Victoria Perez on April 10th 2025.
+Last updated by Victoria Perez on April 14th 2025.
 
 By using our services you agree to our [Terms of Service](/tos).
 
@@ -17,7 +17,7 @@ By using our services you agree to our [Terms of Service](/tos).
 5. Discriminatory content (i.e. racism, fascism, nazism, homophobia, transphobia)
 6. Content spreading misinformation.
 7 **Reuploads of pre-existing copyrighted content that do not fall into fair use** (You must provide some sort of
-  commentary in your content. This does not affect content uploaded before April 2024)
+  commentary in your content. This does not affect content uploaded before April 2023)
 8. Content that violates Endless Hosting's [Terms of Service](https://portal.theendlessweb.com/plugin/support_manager/knowledgebase/view/2/terms-of-service/).
 
 ### Age ratings
