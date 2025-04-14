@@ -6,8 +6,29 @@
 
   "welcome_logged_in": "Bienvenue, %s",
   "welcome_logged_in_finalium": "Bienvenue sur %s, %s",
-  "welcome_logged_in_finalium_beta": "Welcome, %s",
+  "welcome_logged_in_finalium_beta": "Bienvenue, %s",
   "welcome_logged_out": "Bienvenue sur %s",
+
+  "list": "Liste",
+  "grid": "Grille",
+
+  "random_uploads": "Aléatoire",
+  "random_uploads_desc": "Une sélection aléatoire de publications",
+
+  "recent_uploads": "Nouveau",
+  "recent_uploads_desc": "Les plus récents publications",
+
+  "following_uploads": "Suivis",
+  "following_uploads_desc": "Publications par les personnes que vous suivez",
+
+  "featured_uploads": "En vedette",
+  "featured_uploads_desc": "i have no idea for this LOL",
+
+  "recent_members": "Members",
+  "recent_members_desc": "Last 5 members online",
+
+  "site_news": "Nouvelles",
+  "site_news_desc": "Les nouvelles du site",
 
   "more": "Plus",
 
@@ -27,8 +48,9 @@
   "footer_copyright": "© %s Contributeurs OpenSB",
 
   "change_theme": "Thème",
+  "help": "Aide",
   "community_guidelines": "Règles Communautaires",
   "terms_of_service": "Conditions de Service",
   "privacy_policy": "Politique de Confidentialité",
-  "staff": "Personnel"
+  "staff": "Équipe"
 }
