@@ -26,8 +26,8 @@
         <div class="content-box no-border-top">
             <h1>Statistics</h1>
             <ul>
-                {% for key, number in data.numbers %}
-                    <li>{{ key }}: {{ number }}</li>
+                {% for item in data.numbers %}
+                    <li>{{ item.name }}: {{ item.value }}</li>
                 {% endfor %}
             </ul>
         </div>

@@ -70,44 +70,69 @@ function countViews($database): array
     ));
 }
 
-
 $date = $database->fetch("SELECT u.joined FROM users u ORDER BY u.joined ASC")["joined"];
 
-// Admin actions
-if(isset($_POST["action"])) {
-    if ($_POST["action"] == "generate_invite_key") {
-        $random = strtoupper("SB" . Utilities::generateRandomString(32));
+$thingsToCount = [
+    'upload_comments' => 'Comments on uploads',
+    'user_profile_comments' => 'Comments on profiles',
+    'journal_comments' => 'Comments on journals',
+    'users' => 'Users',
+    'uploads' => 'Uploads',
+    'upload_deleted' => 'Deleted uploads',
+    'upload_takedowns' => 'Taken down uploads',
+    'upload_views' => 'Views',
+    'user_favorites' => 'Favorites',
+    'user_bans' => 'Bans',
+    'journals' => 'Journals'
+];
 
-        $database->query("INSERT INTO invite_keys (invite_key, generated_by, generated_time) VALUES (?,?,?)",
-            [$random, $auth->getUserID(), time()]);
-
-        Utilities::notifyBanner("Generated key! ($random)", "/admin.php", "success");
-    }
-}
-
-// Total number of things
-$thingsToCount = ['upload_comments', 'user_profile_comments', 'users', 'uploads', 'upload_views', 'user_favorites', 'user_bans', 'journals'];
 $query = "SELECT ";
-foreach ($thingsToCount as $thing) {
-    if ($query != "SELECT ") $query .= ", ";
-    $query .= sprintf("(SELECT COUNT(*) FROM %s) %s", $thing, $thing);
+$first = true;
+
+foreach ($thingsToCount as $table => $uiName) {
+    if (!$first) {
+        $query .= ", ";
+    }
+    $query .= sprintf("(SELECT COUNT(*) FROM %s) AS %s", $table, $table);
+    $first = false;
 }
 
 $numbersOfThingsArray = $database->fetch($query);
 
-// Get the invite keys
-$inviteKeys = $database->fetchArray($database->query("SELECT * FROM invite_keys"));
-
-$inviteKeyData = [];
-foreach ($inviteKeys as $inviteKey) {
-    $generatedBy = $database->fetch("SELECT u.name FROM users u WHERE u.id = ?", [$inviteKey["generated_by"]]);
-    $claimedBy = $database->fetch("SELECT u.name FROM users u WHERE u.id = ?", [$inviteKey["claimed_by"]]);
-
-    $inviteKey["generated_by"] = $generatedBy;
-    $inviteKey["claimed_by"] = $claimedBy;
-
-    $inviteKeyData[] = $inviteKey;
+$results = [];
+foreach ($thingsToCount as $table => $uiName) {
+    $results[] = [
+        'name' => $uiName,
+        'value' => $numbersOfThingsArray[$table],
+        'table' => $table,
+    ];
 }
+
+// unbanned-to-banned user ratio
+$totalUsers = $numbersOfThingsArray['users'];
+$bannedUsers = $numbersOfThingsArray['user_bans'];
+$unbannedUsers = $totalUsers - $bannedUsers;
+$unbannedRatio = ($totalUsers > 0) ? ($unbannedUsers / $totalUsers) * 100 : 0;
+
+$results[] = [
+    'name' => "Unbanned user percentage",
+    'value' => round($unbannedRatio) . "%",
+];
+
+// undeleted-to-deleted upload ratio
+
+// this does not include takedowns yet, why? because, at least in the prod sb db, the table for it reference uploads
+// that were later completely deleted off the database. -chaziz -4/14/2025
+$undeletedUploads = $numbersOfThingsArray['uploads'];
+$deletedUploads = $numbersOfThingsArray['upload_deleted'];
+
+$totalUploads = $undeletedUploads + $deletedUploads;
+$undeletedRatio = ($totalUploads > 0) ? ($undeletedUploads / $totalUploads) * 100 : 0;
+
+$results[] = [
+    'name' => "Non-deleted upload percentage",
+    'value' => round($undeletedRatio) . "%",
+];
 
 $is_windows = str_starts_with(php_uname(), "Windows") ?? false;
 
@@ -135,7 +160,7 @@ if (file_exists('/etc/os-release')) {
 
 
 $data = [
-    "numbers" => $numbersOfThingsArray,
+    "numbers" => $results,
     "system" => [
         "uname" => php_uname(),
         "os_name" => $os_name,
@@ -148,7 +173,6 @@ $data = [
         "journals" => makeRunningTotalGraph($database, 'journals', 'date'),
         "views" => countViews($database),
     ],
-    "invites" => $inviteKeyData,
     "time" => [
         "formatted_date" => date("F j, Y", $date),
         "relative_days" => round((time() - $date) / 60 / 60 / 24), // we want the total number of days,
