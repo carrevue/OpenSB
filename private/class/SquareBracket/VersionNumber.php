@@ -8,7 +8,7 @@ class VersionNumber
     private string $versionString;
 
     public function __construct() {
-        $this->versionNumber = "1.3.0-beta.6";
+        $this->versionNumber = "1.3.0-beta.7";
         $this->versionString = $this->makeVersionString();
     }
 
@@ -33,7 +33,7 @@ class VersionNumber
 
     public function printVersionForOutput()
     {
-        return sprintf("OpenSB %s - Executed at %s", VersionNumber::getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
+        return sprintf("OpenSB %s - Executed on %s", VersionNumber::getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
     }
 
     /**

@@ -12,34 +12,6 @@ use Random\Randomizer;
  */
 class Utilities
 {
-    /**
-     * Calculate the upload's ratings.
-     */
-    public static function calculateUploadRatings($ratings): array
-    {
-        $total_ratings = ($ratings["1"] +
-            $ratings["2"] +
-            $ratings["3"] +
-            $ratings["4"] +
-            $ratings["5"]);
-
-        if ($total_ratings == 0) {
-            $average_ratings = 0;
-        } else {
-            $average_ratings = ($ratings["1"] +
-                    $ratings["2"] * 2 +
-                    $ratings["3"] * 3 +
-                    $ratings["4"] * 4 +
-                    $ratings["5"] * 5) / $total_ratings;
-        }
-
-        return [
-            "stars" => $ratings,
-            "total" => $total_ratings,
-            "average" => $average_ratings,
-        ];
-    }
-
     // TODO: i think this should be refactored into UploadQuery? i should look into this later. -chaziz 1/4/2025
     public static function makeUploadArray($database, $uploads): array
     {
@@ -50,13 +22,7 @@ class Utilities
 
             $flags = Utilities::uploadBitmaskToArray($upload["flags"]);
 
-            $ratingData = [
-                "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$upload["id"]]),
-                "2" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=2", [$upload["id"]]),
-                "3" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=3", [$upload["id"]]),
-                "4" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=4", [$upload["id"]]),
-                "5" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=5", [$upload["id"]]),
-            ];
+            $ratings = new UploadRatingData($database, $upload["id"]);
 
             $userData = new UserData($database, $upload["author"]);
             $submissionsData[] =
@@ -77,7 +43,7 @@ class Utilities
                         "info" => $userData->getUserArray(),
                     ],
                     "interactions" => [
-                        "ratings" => Utilities::calculateUploadRatings($ratingData),
+                        "ratings" => $ratings->calculateRatingData(),
                     ],
                 ];
         }
@@ -133,7 +99,7 @@ class Utilities
     public static function whereTagBlacklist(): string {
         global $auth;
         
-        $tagBlacklist = $auth->getUserBlacklistedTags();
+        $tagBlacklist = $auth->getUserTagBlacklist();
 
         // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
         // submission-related queries into 20 fucking useless lines that slows the site down to a crawl.
@@ -157,14 +123,14 @@ class Utilities
     }
 
     /**
-     * Not to be confused with Notification, which makes a banner.
+     * Not to be confused with notifyBanner, which makes a banner.
      */
     public static function NotifyUser($database, $user, $submission, $related_id, NotificationEnum $type): void
     {
         global $auth, $database;
 
         if (!$auth->isUserLoggedIn()) {
-            throw new CoreException("NotifyUser should not be called by the backend if current user is logged off.");
+            throw new CoreException("NotifyUser should not be called if the current user is logged off.");
         }
 
         // If this user hasn't been notified by an identical notification the day prior.
@@ -350,7 +316,7 @@ class Utilities
 
         $ip = $_SERVER['REMOTE_ADDR'];
 
-        if ($ip == "127.0.0.1" | $ip == "::1") return "localhost";
+        if ($ip == "127.0.0.1" | $ip == "::1" | $ip == "localhost") return "localhost";
 
         return crypt($ip, $ip);
     }
@@ -399,5 +365,10 @@ class Utilities
         $output = str_replace(array_keys($properUrlReplacements), array_values($properUrlReplacements), $output);
 
         return $output;
+    }
+
+    public static function logOutUser() {
+        session_destroy();
+        Utilities::redirect('./');
     }
 }

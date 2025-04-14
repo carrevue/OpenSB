@@ -46,8 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (firstTab) {
             const tabId = firstTab.getAttribute("data-tab");
             if (tabId) {
-                document.getElementById(tabId).style.display = "block";
-                firstTab.classList.add("active");
+                const firstTabId = document.getElementById(tabId);
+                if (firstTabId) {
+                    firstTabId.style.display = "block";
+                    firstTab.classList.add("active");
+                } else {
+                    error(`Tab ${tabId} is missing contents.`)
+                }
             }
         } else {
             error("THIS SHOULD NOT HAPPEN.");
@@ -72,8 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 // Show the selected tab content and mark the button as active
-                document.getElementById(tabId).style.display = "block";
-                this.classList.add("active");
+                const selectedTabId = document.getElementById(tabId);
+
+                if (selectedTabId) {
+                    selectedTabId.style.display = "block";
+                    this.classList.add("active");
+                } else {
+                    error(`Tab ${tabId} is missing contents.`)
+                }
             });
         }
     });
@@ -267,6 +278,18 @@ document.addEventListener("DOMContentLoaded", () => {
             document.documentElement.style.setProperty('--link-color', settings_custom_color.value);
         });
     }
+
+    let debug_button = (document.getElementById('debug-button'));
+    let debug_close_button = (document.getElementById('debug-close-button'));
+    let debug_dialog = (document.getElementById('debug-dialog'));
+
+    debug_button.addEventListener("click", () => {
+        debug_dialog.showModal();
+    });
+
+    debug_close_button.addEventListener("click", () => {
+        debug_dialog.close();
+    });
 });
 
 function play(sound) {

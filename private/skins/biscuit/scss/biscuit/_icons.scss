@@ -58,4 +58,20 @@
       background-image: url('/assets/icons/search-light.svg');
     }
   }
+
+  &.caret-closed {
+    @if $theme == "soretro" or $theme == "dark" {
+      background-image: url( '/assets/icons/caret-closed-dark.svg' );
+    } @else {
+      background-image: url( '/assets/icons/caret-closed-light.svg' );
+    }
+  }
+
+  &.caret-open {
+    @if $theme == "soretro" or $theme == "dark" {
+      background-image: url( '/assets/icons/caret-open-dark.svg' );
+    } @else {
+      background-image: url( '/assets/icons/caret-open-light.svg' );
+    }
+  }
 }

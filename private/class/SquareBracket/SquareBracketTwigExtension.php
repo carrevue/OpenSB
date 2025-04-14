@@ -22,6 +22,8 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         global $profiler;
 
+        $db = $this->orange->getDatabase();
+
         $options = $this->orange->getLocalOptions();
         $forceOldUserlink = $options['useOldUserlinkImplementation'] ?? null;
 
@@ -46,6 +48,9 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('profile_banner', [$this, 'profileBanner']),
             new TwigFunction('profiler_stats', function () use ($profiler) {
                 $profiler->getStats();
+            }),
+            new TwigFunction('db_profiler_info', function () use ($profiler) {
+                return $profiler->getDatabaseProfilingReport();
             }),
             new TwigFunction('version_banner', function () {
                 echo (new VersionNumber)->printVersionForOutput();
@@ -278,7 +283,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $data;
     }
 
-    //
+    // TODO: merge this into profilePicture()
     public function profilePictureAdmin($username)
     {
         global $database;
@@ -315,7 +320,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         // get user info
         $username = htmlspecialchars($user["info"]["username"]);
         $displayName = htmlspecialchars($user["info"]["displayname"]);
-        $customColor = htmlspecialchars($user["info"]["customcolor"]);
+        $customColor = htmlspecialchars($user["info"]["color"]);
 
         // Define common values
         $href = "/user/" . $username;
@@ -343,7 +348,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function UserLinkOld($user): string
     {
         return <<<HTML
-<a class="userlink userlink-{$user["info"]["username"]}" style="color:{$user["info"]["customcolor"]};" href="/user/{$user["info"]["username"]}">{$user["info"]["username"]}</a>
+<a class="userlink userlink-{$user["info"]["username"]}" style="color:{$user["info"]["color"]};" href="/user/{$user["info"]["username"]}">{$user["info"]["username"]}</a>
 HTML;
     }
 
@@ -449,13 +454,6 @@ HTML;
                 ],
             ];
 
-            if ($auth->isUserAdmin()) {
-                $array["admin"] = [
-                    "name" => "Admin",
-                    "url" => "/admin",
-                ];
-            }
-
             // remove upload link on finalium 1, bootstrap and charla
             if ($options["skin"] == "finalium" || $options["skin"] == "bootstrap" || $options["skin"] == "charla") {
                 unset($array["upload"]);
@@ -464,6 +462,17 @@ HTML;
             // remove write link on charla
             if ($options["skin"] == "charla") {
                 unset($array["write"]);
+            }
+
+            if ($auth->isUserAdmin()) {
+                $arrayThatContainsOnlyTheLinkToTheAdminPanel = [
+                    "admin" => [
+                        "name" => "Admin",
+                        "url" => "/admin",
+                    ],
+                ];
+                // Merge admin item with the rest of the array
+                $array = array_merge($arrayThatContainsOnlyTheLinkToTheAdminPanel, $array);
             }
         } else {
             $array = [

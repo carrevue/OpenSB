@@ -190,6 +190,21 @@ hr {
   vertical-align: middle;
 }
 
+.debug-dialog {
+  z-index: 50000;
+  width: 800px;
+
+  .tabcontent {
+    overflow-y: auto;
+    height: 400px;
+  }
+}
+
+::backdrop {
+  background: black;
+  opacity: 0.6;
+}
+
 @import 'header';
 @import 'footer';
 @import 'forms';
@@ -207,7 +222,5 @@ hr {
 @import 'watch_page';
 @import 'profile_page';
 @import 'notice_page';
-@import 'admin_page';
 @import 'login_register_page';
-@import 'chat_page';
 @import 'version_page';

@@ -22,12 +22,6 @@ table.c1 {
         border: 1px solid darken($content-box-border-color, 10%);
       }
     }
-
-    @each $color, $value in $color-map-admin {
-      &.#{$color} {
-        background: $value;
-      }
-    }
   }
 
   td {

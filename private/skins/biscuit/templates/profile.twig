@@ -37,20 +37,22 @@
                 <div class="profile-box-handle">
                     @{{ data.username }}
                 </div>
+                {% if options.biscuit_show_more_profile_info %}
+                <div>
+                Joined {{ data.joined | relative_time }} |
+                <span id="follower_count">{{ data.followers }}</span> followers
+                {% if data.old_usernames %}
+                    <br>Old usernames:
+                    {% for old_username in data.old_usernames %}
+                        {{ old_username.old_name }}{{ not loop.last ? ',' }}
+                    {% endfor %}
+                </div>
+                {% endif %}
                 <div class="profile-box-details">
                     {% if data.about | trim is not empty %}
                         {{ data.about | markdown_user_written }}
                     {% endif %}
-                    {#
-                    | Joined {{ data.joined | relative_time }} |
-                    <span id="follower_count">{{ data.followers }}</span> followers
-                    {% if data.old_usernames %}
-                        <br>Old usernames:
-                        {% for old_username in data.old_usernames %}
-                            {{ old_username.old_name }}{{ not loop.last ? ',' }}
-                        {% endfor %}
                     {% endif %}
-                    #}
                 </div>
             </div>
             <div class="profile-box-follow">

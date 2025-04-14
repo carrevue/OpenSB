@@ -15,8 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (firstTab) {
             const tabId = firstTab.getAttribute("data-tab");
             if (tabId) {
-                document.getElementById(tabId).style.display = "block";
-                firstTab.classList.add("active");
+                const firstTabId = document.getElementById(tabId);
+                if (firstTabId) {
+                    firstTabId.style.display = "block";
+                    firstTab.classList.add("active");
+                } else {
+                    error(`Tab ${tabId} is missing contents.`)
+                }
             } //else {
             //    error("THIS SHOULD NOT HAPPEN. (tab code fail 1)");
             //}
@@ -44,8 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 // Show the selected tab content and mark the button as active
-                document.getElementById(tabId).style.display = "block";
-                this.classList.add("active");
+                const selectedTabId = document.getElementById(tabId);
+
+                if (selectedTabId) {
+                    selectedTabId.style.display = "block";
+                    this.classList.add("active");
+                } else {
+                    error(`Tab ${tabId} is missing contents.`)
+                }
             });
         }
     });
@@ -64,9 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // get the caret if that exists. this is primarily for the one in the header.
         const menuCaret = button.getElementsByClassName("menu-caret");
 
-        // DON'T FORGET TO UPDATE THIS IF WE EVER SWITCH OUT OF BOOTSTRAP ICONS (not that we should)
-        const menuCaretOff= "bi bi-caret-down-fill menu-caret";
-        const menuCaretOn = "bi bi-caret-up-fill menu-caret";
+        const menuCaretOff= "biscuit-icon caret-closed menu-caret";
+        const menuCaretOn = "biscuit-icon caret-open menu-caret";
 
         let actualCaret;
         if (menuCaret.length === 1) {
@@ -216,6 +226,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
     }
+
+    let debug_button = (document.getElementById('debug-button'));
+    let debug_close_button = (document.getElementById('debug-close-button'));
+    let debug_dialog = (document.getElementById('debug-dialog'));
+
+    debug_button.addEventListener("click", () => {
+        debug_dialog.showModal();
+    });
+
+    debug_close_button.addEventListener("click", () => {
+        debug_dialog.close();
+    });
 });
 
 function play(sound) {

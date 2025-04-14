@@ -1,0 +1,44 @@
+{% set profiler = db_profiler_info() %}
+<dialog class="content-box debug-dialog" id="debug-dialog">
+    {{ version_banner() }}
+    <hr>
+    <div class="tabs">
+        {# spaceless removes html whitespace causes unnecessary margins #}
+        {% apply spaceless %}
+            <button class="tablink" data-tab="tab_db">Database Statistics</button>
+            <button class="tablink" data-tab="tab_twig">Twig Dump Info</button>
+        {% endapply %}
+    </div>
+    <div class="content-box no-border-top">
+        <div id="tab_db" class="tabcontent">
+            Total queries: {{ profiler.total_queries }}<br>
+            Total query time: {{ profiler.total_time }} seconds<br>
+            Average time: {{ profiler.average_time }} seconds<br><br>
+
+            <strong>Slowest query ({{ profiler.slowest_query.execution_time }}s):</strong><br>
+            {{ profiler.slowest_query.query }}<br>
+            Parameters: {{ profiler.slowest_query.params|json_encode }}<br><br>
+
+            <strong>Fastest query ({{ profiler.fastest_query.execution_time }}s):</strong><br>
+            {{ profiler.fastest_query.query }}<br>
+            Parameters: {{ profiler.fastest_query.params|json_encode }}
+
+            <hr>
+
+            <strong>All Queries:</strong><br>
+            {% for query in profiler.queries %}
+                #{{ loop.index }} ({{ query.time }}s): {{ query.query }}<br>
+                Parameters: {{ query.params|json_encode }}<br><br>
+            {% endfor %}
+        </div>
+        <div id="tab_twig" class="tabcontent">
+    <pre>
+{{ dump() }}
+    </pre>
+        </div>
+    </div>
+    <br>
+    <form method="dialog" class="form-button-container">
+        <button class="button button-secondary" id="debug-close-button">OK</button>
+    </form>
+</dialog>

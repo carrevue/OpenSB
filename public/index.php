@@ -11,10 +11,12 @@ define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() I
 use JetBrains\PhpStorm\NoReturn;
 use SquareBracket\Utilities;
 
-require_once SB_PRIVATE_PATH . '/class/common.php';
+require_once SB_PRIVATE_PATH . '/common.php';
 
-global $twig_error;
+// very fucking ugly, temporary for now. -chaziz 4/11/2025
+global $isChazizSB, $auth;
 
+// TODO: make this cachable
 #[NoReturn] function load_thumbnail_from_skin($path) {
     $pathParts = explode('_', $path);
     $skin = $pathParts[0] ?? '';
@@ -42,7 +44,7 @@ global $twig_error;
 
 function last_resort(): void
 {
-    global $twig_error;
+    global $twig_error; // Ugly
 
     Utilities::rewritePHP();
 
@@ -52,6 +54,19 @@ function last_resort(): void
 
 $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $path = explode('/', $uri);
+
+// testing code
+if ($isChazizSB)
+{
+    // if the user is still logged in but isnt an admin, log them out.
+    if ($auth->isUserLoggedIn() && !$auth->isUserAdmin()) {
+        Utilities::logOutUser();
+    }
+
+    if (Utilities::getIpAddress() != "localhost" && !$auth->isUserLoggedIn() && $path[1] != "login") {
+        Utilities::redirect("/login");
+    }
+}
 
 // Originally based on Rollerozxa's router implementation in Principia-Web.
 // https://github.com/principia-game/principia-web/blob/master/router.php

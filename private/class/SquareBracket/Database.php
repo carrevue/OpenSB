@@ -11,6 +11,8 @@ use PDOException;
 class Database
 {
     private $sql;
+    private $queryLog = [];
+    private $profilingEnabled = false;
 
     /**
      * @throws CoreException
@@ -30,6 +32,64 @@ class Database
         }
     }
 
+    public function setProfiling(bool $enabled): void
+    {
+        $this->profilingEnabled = $enabled;
+    }
+
+    public function getQueryLog(): array
+    {
+        return $this->queryLog;
+    }
+
+    /**
+     * IMPORTANT: DO NOT CALL THIS FUNCTION OUTSIDE OF PROFILER. IF YOU NEED THE DATABASE PROFILING REPORT.
+     * GET THAT SHIT THROUGH THE PROFILER CLASS' getDatabaseProfilerInfo FUNCTION (because then youll get
+     * the full data). -chaziz -4/12/2025
+     */
+    public function getProfilingReport(): array
+    {
+        $report = [
+            'total_queries' => count($this->queryLog),
+            'total_time' => 0,
+            'queries' => [],
+            'slowest_query' => null,
+            'fastest_query' => null,
+        ];
+
+        if (empty($this->queryLog)) {
+            return $report;
+        }
+
+        $slowest = $this->queryLog[0];
+        $fastest = $this->queryLog[0];
+
+        foreach ($this->queryLog as $query) {
+            $report['total_time'] += $query['execution_time'];
+
+            // find the slowest and fastest queries
+            if ($query['execution_time'] > $slowest['execution_time']) {
+                $slowest = $query;
+            }
+
+            if ($query['execution_time'] < $fastest['execution_time']) {
+                $fastest = $query;
+            }
+
+            $report['queries'][] = [
+                'query' => $query['query'],
+                'time' => $query['execution_time'],
+                'params' => $query['params'],
+            ];
+        }
+
+        $report['slowest_query'] = $slowest;
+        $report['fastest_query'] = $fastest;
+        $report['average_time'] = $report['total_time'] / $report['total_queries'];
+
+        return $report;
+    }
+
     public function result($query, $params = [])
     {
         $res = $this->query($query, $params);
@@ -38,8 +98,22 @@ class Database
 
     public function query($query, $params = [])
     {
+        $startTime = microtime(true);
+
         $res = $this->sql->prepare($query);
         $res->execute($params);
+
+        $executionTime = microtime(true) - $startTime;
+
+        if ($this->profilingEnabled) {
+            $this->queryLog[] = [
+                'query' => $query,
+                'params' => $params,
+                'execution_time' => $executionTime,
+                'timestamp' => microtime(true),
+            ];
+        }
+
         return $res;
     }
 

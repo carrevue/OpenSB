@@ -5,25 +5,50 @@ namespace SquareBracket;
 class UserData
 {
     private \SquareBracket\Database $database;
+    private $id;
     private $data;
-    private $followers;
-    private $is_banned;
+
+    private static $userDataCache = [];
 
     public function __construct(\SquareBracket\Database $database, $id)
     {
         $this->database = $database;
-        $this->data = $this->database->fetch("SELECT u.* FROM users u WHERE u.id = ?", [$id]);
-        $this->followers = $this->database->fetch("SELECT COUNT(user) FROM user_follows WHERE user = ?", [$id])['COUNT(user)'];
-        $this->is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
+        $this->id = $id;
+
+        // check if user data has already been cached
+        if (isset(self::$userDataCache[$id])) {
+            $this->data = self::$userDataCache[$id];
+            return;
+        } else {
+            // otherwise fetch the data from the db
+            $this->data = $this->database->fetch(
+                "SELECT id, name, title, customcolor, joined, lastview FROM users WHERE id = ?",
+                [$id]
+            );
+        }
+
         if ($this->data == null) {
             trigger_error("User ID $id is nonexistent.", E_USER_WARNING);
+        } else {
+            // cache the data
+            self::$userDataCache[$id] = $this->data;
         }
     }
 
-    public function isUserBanned()
+    public function isUserBanned(): bool
     {
-        if ($this->is_banned) { return true; }
-        return false;
+        // also cache if a user is banned (for later)
+        if (isset(self::$userDataCache["banned_$this->id"])) {
+            return self::$userDataCache["banned_$this->id"];
+        }
+
+        $isBanned = (bool) $this->database->fetch(
+            "SELECT * FROM user_bans WHERE userid = ?",
+            [$this->id]
+        );
+
+        self::$userDataCache["banned_$this->id"] = $isBanned;
+        return $isBanned;
     }
 
     public function getUserArray(): array
@@ -33,20 +58,16 @@ class UserData
                 "username" => $this->data["name"],
                 "displayname" => $this->data["title"],
                 "color" => $this->data["customcolor"],
-                "followers" => $this->followers,
                 "joined" => $this->data["joined"],
                 "connected" => $this->data["lastview"],
-                "customcolor" => $this->data["customcolor"],
             ];
         } else {
             return [
                 "username" => "InvalidUser!",
                 "displayname" => "Invalid user!",
                 "color" => "#FF0000",
-                "followers" => 0,
                 "joined" => 0,
                 "connected" => 0,
-                "customcolor" => "#FF0000",
             ];
         }
     }

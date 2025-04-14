@@ -14,7 +14,7 @@ class Authentication
     private $user_ban_data;
     private $user_stat_data;
     // TODO: make this default blacklist configurable per instance
-    private $default_tags_blacklist = [];
+    private $default_tag_blacklist = [];
     private $has_authenticated_as_an_admin = false;
 
     public function __construct(Database $database)
@@ -42,12 +42,17 @@ class Authentication
                 // -------------------
 
                 if (!isset($this->user_data['blacklisted_tags'])) {
-                    $this->user_data['blacklisted_tags'] = $this->default_tags_blacklist;
+                    $this->user_data['blacklisted_tags'] = $this->default_tag_blacklist;
                 } else {
                     $this->user_data['blacklisted_tags'] = json_decode($this->user_data['blacklisted_tags']); // decode this shit on the fly
                 }
 
+                // if the current logged-in user doesnt have a birthdate, redirect them to the
+                // "specify your birthdate" verification page.
                 if (!isset($this->user_data['birthdate'])) {
+                    // dumbass hack, this is because we cant access the global $path variable
+                    // set in /public/index.php since it probably hasnt been defined yet at this
+                    // point in the code.
                     $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
                     $path = explode('/', $uri);
                     if ($path[1] != "verify_birthdate") {
@@ -59,8 +64,7 @@ class Authentication
                 // check if the current logged-in user is IP banned from another address, if so, then log them out.
                 // this will prevent users from using IP banned accounts on other IPs.
                 if ($this->database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$this->user_data['ip']])) {
-                    session_destroy();
-                    Utilities::redirect('./');
+                    Utilities::logOutUser();
                 }
 
                 // update "last logged in" timestamp after 12 hours.
@@ -89,53 +93,77 @@ class Authentication
         }
     }
 
+    /**
+     * Checks if the user is logged in or not
+     */
     public function isUserLoggedIn(): bool
     {
         return $this->is_logged_in;
     }
 
+    /**
+     * Returns only the user's id
+     */
     public function getUserID(): ?int
     {
         return $this->is_logged_in ? $this->user_id : null;
     }
 
+    /**
+     * Returns user data
+     */
     public function getUserData(): ?array
     {
         return $this->is_logged_in
             ? $this->user_data
             : [
                 'comfortable_rating' => 'general',
-                'blacklisted_tags' => $this->default_tags_blacklist,
+                'blacklisted_tags' => $this->default_tag_blacklist,
             ];
     }
 
+    /**
+     * Returns user statistic data (views, followers) if it exists
+     */
     public function getUserStatData(): array
     {
         return $this->is_logged_in ? $this->user_stat_data : [];
     }
 
+    /**
+     * Returns user ban data if it exists.
+     */
     public function getUserBanData(): ?array
     {
         return $this->user_ban_data ?: null;
     }
 
+    /**
+     * Checks if the logged-in user is an administrator.
+     */
     public function isUserAdmin(): bool
     {
         return $this->is_logged_in && ($this->user_data['powerlevel'] ?? 0) >= 3;
     }
 
+    /**
+     * Checks if the logged-in user has authenticated as an administrator.
+     */
     public function hasUserAuthenticatedAsAnAdmin(): bool
     {
         return $this->isUserAdmin() && $this->has_authenticated_as_an_admin;
     }
 
-    public function getUserBlacklistedTags(): array
+    public function getUserTagBlacklist(): array
     {
         return $this->is_logged_in
-            ? $this->user_data['blacklisted_tags'] ?? $this->default_tags_blacklist
-            : $this->default_tags_blacklist;
+            ? $this->user_data['blacklisted_tags'] ?? $this->default_tag_blacklist
+            : $this->default_tag_blacklist;
     }
 
+    /**
+     * Checks if the logged-in user is over 18.
+     */
     public function isUserOver18(): bool
     {
         if ($this->is_logged_in) {
@@ -147,8 +175,11 @@ class Authentication
         }
     }
 
-    public function getDefaultBlacklistedTags()
+    /**
+     * Returns the instance's default tag blacklist.
+     */
+    public function getDefaultTagBlacklist(): array
     {
-        return $this->default_tags_blacklist;
+        return $this->default_tag_blacklist;
     }
 }

@@ -3,20 +3,22 @@
 namespace OpenSB;
 
 if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
-    die('<strong>OpenSB is not compatible with your PHP version. OpenSB supports PHP 8.2 or newer.</strong>');
+    die('OpenSB is not compatible with your PHP version. OpenSB supports PHP 8.2 or newer.');
 }
 
 if (!file_exists(SB_VENDOR_PATH . '/autoload.php')) {
-    die('<strong>You are missing the required Composer packages. Please read the installing instructions in the README file.</strong>');
+    die('The required Composer packages are missing. Please read the setup instructions in the README file.');
 }
 
 // yes. you can call me stupid for this. but this is done because i don't want the new code to use the old shitty
 // configs. -chaziz 7/31/2024
 if (!file_exists(SB_PRIVATE_PATH . '/config/config.php')) {
-    die('<strong>The configuration file could not be found. Please read the installing instructions in the README file.</strong>');
+    die('The configuration file could not be found. Please read the setup instructions in the README file.');
 }
 
 $config = include_once(SB_PRIVATE_PATH . '/config/config.php');
+
+$isDebug = ($config["mode"] ?? '') === "DEV";
 
 require_once(SB_VENDOR_PATH . '/autoload.php');
 
@@ -63,6 +65,7 @@ spl_autoload_register(function ($class_name) {
 });
 
 // FIXME: what the fuck is this piece of shit -chaziz 4/9/2025
+// WIP: moving these to the core "SquareBracket" class. -chaziz 4/12/2025
 
 // since opensb orange is shitty code and uses global everywhere. convert new config variables
 // to old global config variables to avoid fucking around with the legacy orange code.
@@ -82,7 +85,6 @@ if (!in_array($config["site"], $allowedSites)) {
 }
 $isChazizSB = ($config["site"] === "squarebracket_chaziz");
 
-$isDebug = ($config["mode"] ?? '') === "DEV";
 $enableCache = (bool)($config["cache"] ?? false);
 $isMaintenance = (bool)($config["maintenance"] ?? false);
 $enableInviteKeys = (bool)($config["invite_keys"] ?? false);
@@ -100,8 +102,10 @@ $disableUploading = $lockdown;
 $disableWritingJournals = $lockdown;
 
 // now initialize the orange classes
-$orange = new SquareBracket($host, $user, $pass, $db);
+$orange = new SquareBracket($config);
 $database = $orange->getDatabase();
+
+$profiler = new Profiler($database, $isDebug);
 
 $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
@@ -109,13 +113,14 @@ $storage = new Storage($orange->getDatabase());
 
 if (!SB_CLI) {
     $auth = new Authentication($database);
-    $profiler = new Profiler();
     $localization = new Localization($localization_setting);
 
     // automatic stuff
     // this should probably have a cooldown or something i don't fucking know
 
     // automatically ban accounts linked to banned ips.
+    // TODO: add ip ban functionality in admin panel instead of this crude ass shit
+    /*
     $ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
     foreach ($ipBannedUsers as $ipBannedUser) {
         $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
@@ -126,13 +131,14 @@ if (!SB_CLI) {
             }
         }
     }
+    */
 
-    $twig = new Templating($orange);
     $twig_error = new ErrorTemplating($orange);
 
     if ($ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()])) {
         $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]));
 
+        http_response_code(403);
         echo $twig_error->render("ip_banned.twig", [
             "page" => "ip-banned",
             "data" => $ipban,
@@ -142,7 +148,10 @@ if (!SB_CLI) {
     }
 
     if ($isMaintenance && !SB_PHP_BUILTINSERVER) {
+        http_response_code(503);
         echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
         die();
     }
+
+    $twig = new Templating($orange);
 }

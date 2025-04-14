@@ -155,7 +155,6 @@ class Templating
         $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
-        $this->twig->addGlobal('is_opensb_v2', false);
         $this->twig->addGlobal('is_opensb_v1_3', true);
         $this->twig->addGlobal('options', $options);
 

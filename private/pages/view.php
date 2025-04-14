@@ -33,7 +33,7 @@ if (!$data) {
     Utilities::notifyBanner("This upload does not exist.", "/");
 }
 
-$tagBlacklist = $auth->getUserBlacklistedTags();
+$tagBlacklist = $auth->getUserTagBlacklist();
 
 if (isset($data["tags"])) {
     $decodedTags = json_decode($data["tags"]);
@@ -41,9 +41,9 @@ if (isset($data["tags"])) {
         foreach ($decodedTags as $tag) {
             if (in_array($tag, $tagBlacklist)) {
                 if ($auth->isUserLoggedIn()) {
-                    Utilities::notifyBanner("This upload is blacklisted per your settings.", "/");
+                    Utilities::notifyBanner("This upload contains tags you've blacklisted.", "/");
                 } else {
-                    Utilities::notifyBanner("This upload is blacklisted by default.", "/");
+                    Utilities::notifyBanner("This upload contains tags blacklisted by default.", "/");
                 }
             }
         }
@@ -61,15 +61,6 @@ $tags = $upload->getTags();
 
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["author"]]);
 $followed = Utilities::IsFollowingUser($data["author"]);
-
-// TODO: move this to a new UploadRatingData class which will be initialized through the UploadData class.
-$ratings = [
-    "1" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=1", [$data["id"]]),
-    "2" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=2", [$data["id"]]),
-    "3" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=3", [$data["id"]]),
-    "4" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=4", [$data["id"]]),
-    "5" => $database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND rating=5", [$data["id"]]),
-];
 
 // TODO: this feature is unused.
 //$favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
@@ -91,35 +82,14 @@ $CrawlerDetect = new CrawlerDetect;
 
 $type = $auth->isUserLoggedIn() ? "user" : "guest";
 
-// stupid fucking check
-function domainCheck()
-{
-    global $isDebug, $isChazizSB;
-
-    if ($isDebug) { return true; }
-
-    $allowedChazizSbDomains = ['squarebracket.pw', 'fulptube.rocks'];
-    $currentDomain = $_SERVER['HTTP_HOST'];
-
-    if ($isChazizSB) {
-        if (in_array($currentDomain, $allowedChazizSbDomains)) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        return true;
-    }
-}
-
 // probably shit
-if (!$CrawlerDetect->isCrawler() && domainCheck()) {
+if (!$CrawlerDetect->isCrawler()) {
     if ($database->fetch("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip])['COUNT(video_id)'] < 1) {
         $database->query("INSERT INTO upload_views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
             [$id, $ip, time(), $type]);
 
-        // increment the indexed view count. this might go out of sync eventually, but this can be fixed with a
-        // script that'll be run at least once a week via cron. -chaziz 4/6/2024
+        // increment the indexed view count. this might go out of sync eventually, but this can be fixed through
+        // 2024-08-recount-views.php.
         $new_views = $data["views"] + 1;
         $database->query("UPDATE uploads SET views = ? WHERE id = ?",
             [$new_views, $data["id"]]);
@@ -257,7 +227,7 @@ $page_data = [
     ],
     "interactions" => [
         "views" => $data["views"],
-        "ratings" => Utilities::calculateUploadRatings($ratings),
+        "ratings" => $upload->getRatingData(),
         "favorites" => 0, // TODO
         "comments" => $comment_count,
     ],

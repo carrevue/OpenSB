@@ -1,4 +1,5 @@
 # SquareBracket Community Guidelines 
+
 Last updated by Victoria Perez on April 14th 2025.
 
 By using our services you agree to our [Terms of Service](/tos).
@@ -31,3 +32,15 @@ All users by default can only view General rated content. This rating indicates 
 Users who enable this setting can view Sensitive rated content that may not be suitable for all audiences. Users must be over the age of 18 to access Sensitive rated content.
 
 Please note that even if is rated Sensitive, pornography is strictly against our Community Guidelines.
+=======
+* Content intended for children (primarily preschool/educational cartoons)
+* Illegal content (**CSAM/CSEM/"CP" content**, **bestiality content**, doxxing)
+* **Content promoting pedophilia, zoophilia and/or necrophilia.**
+* Adult content (pornographic or otherwise erotic content)
+* Shock content (gore)
+* Offensive content (Racism, fascism, homophobia, transphobia)
+* Content promoting misleading information
+* **Reuploads of pre-existing copyrighted content that do not fall into fair use** (You must provide some sort of
+  commentary. If you reupload something and claim it is under fair use we will take it down regardless. This does not
+  affect legacy content from before April 2023 [do we keep the old data or not???])
+* Content that breaks the [terms of service](https://portal.theendlessweb.com/plugin/support_manager/knowledgebase/view/2/terms-of-service/) of our hosting provider, Endless Hosting.

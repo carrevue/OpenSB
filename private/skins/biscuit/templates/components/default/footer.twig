@@ -10,6 +10,9 @@
             <span>© 2021-{{ 'now' | date('Y') }} OpenSB contributors.</span>
             {% if is_debug %}
                 <p>{{ profiler_stats() }}</p>
+                <div>
+                    <a class="button button-danger button-small" title="Spicy!" id="debug-button">Debug</a>
+                </div>
             {% endif %}
         </div>
     </div>
