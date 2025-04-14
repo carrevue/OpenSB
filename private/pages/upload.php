@@ -8,8 +8,10 @@ use SquareBracket\Pages\SubmissionUpload;
 use SquareBracket\Templating;
 use SquareBracket\Utilities;
 
+// TODO: a more automated method to detect which file format the user is trying to upload.
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
-$supportedImageFormats = ["png", "jpg", "jpeg"];
+$supportedImageFormats = ["png", "jpg", "jpeg", "bmp", "webp"];
+$supportedMusicFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"]; // TODO
 
 if (!$auth->isUserLoggedIn())
 {
@@ -29,7 +31,7 @@ if (!$auth->isUserAdmin()) {
     $timeSinceJoin = time() - strtotime($joindate);
 
     if ($timeSinceJoin < 2 * 24 * 60 * 60) {
-        // if we have a new account, make the ratelimit longer.
+        // if we have a new account, make the ratelimit longer as an antispam measure.
         $rateLimit = 10 * 60;
     } elseif ($timeSinceJoin < 7 * 24 * 60 * 60) {
         // if its 2-7 days old make the rate limit smaller.
@@ -98,7 +100,8 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $name = $_FILES['fileToUpload']['name'];
     $temp_name = $_FILES['fileToUpload']['tmp_name']; // gets upload info
     $ext = pathinfo($_FILES['fileToUpload']['name'], PATHINFO_EXTENSION);
-    if (in_array(strtolower($ext), $supportedVideoFormats, true)) {
+
+    if (in_array(strtolower($ext), $supportedVideoFormats, true)) { // VIDEO
         if (isset($noProcess) && $isDebug) {
             $status = 0x0; // pretend that video has been successfully uploaded
             $target_file = SB_DYNAMIC_PATH . '/dynamic/videos/' . $new . '.converted.' . $ext;
@@ -120,7 +123,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         } else {
             Utilities::notifyBanner("There is a problem with file permissions and/or PHP on this instance.", "/upload");
         }
-    } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) {
+    } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
         $storage->processImageUpload($temp_name, $new);
         $status = 0x0;
         $database->query("INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, post_type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
@@ -129,6 +132,8 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         parse_tags($tags2, $new, $database);
 
         Utilities::notifyBanner("Your upload has been completed.", "./watch.php?v=" . $new, "success");
+    } elseif (in_array(strtolower($ext), $supportedMusicFormats, true)) { // MUSIC
+        Utilities::notifyBanner("Audio uploading will be implemented at a later date.", "/upload");
     } else {
         Utilities::notifyBanner("This file format is not supported.", "/upload");
     }

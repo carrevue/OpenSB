@@ -85,7 +85,7 @@ class Storage
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
         $img->scaleDown(512);
-        $img->toJpeg(80)->save($target_file);
+        $img->toJpeg(90)->save($target_file);
 
         unlink($temp_name);
     }
