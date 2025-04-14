@@ -320,7 +320,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         // get user info
         $username = htmlspecialchars($user["info"]["username"]);
         $displayName = htmlspecialchars($user["info"]["displayname"]);
-        $customColor = htmlspecialchars($user["info"]["customcolor"]);
+        $customColor = htmlspecialchars($user["info"]["color"]);
 
         // Define common values
         $href = "/user/" . $username;
@@ -348,7 +348,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function UserLinkOld($user): string
     {
         return <<<HTML
-<a class="userlink userlink-{$user["info"]["username"]}" style="color:{$user["info"]["customcolor"]};" href="/user/{$user["info"]["username"]}">{$user["info"]["username"]}</a>
+<a class="userlink userlink-{$user["info"]["username"]}" style="color:{$user["info"]["color"]};" href="/user/{$user["info"]["username"]}">{$user["info"]["username"]}</a>
 HTML;
     }
 
