@@ -1,8 +1,6 @@
 <?php
 namespace OpenSB;
 
-global $database;
-
 // TODO: make this work with new opensb 1.3 table names -chaziz 1/6/2025
 
 define("SB_ROOT_PATH", dirname(__DIR__));
@@ -11,6 +9,8 @@ define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBr
 define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+
+global $database;
 
 require_once SB_PRIVATE_PATH . '/common.php';
 

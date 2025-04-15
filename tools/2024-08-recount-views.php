@@ -1,8 +1,6 @@
 <?php
 namespace OpenSB;
 
-global $database;
-
 define("SB_ROOT_PATH", dirname(__DIR__));
 define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
 define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
@@ -11,6 +9,8 @@ define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 require_once SB_PRIVATE_PATH . '/common.php';
+
+global $database;
 
 $uploads = $database->fetchArray($database->query("SELECT * FROM videos"));
 

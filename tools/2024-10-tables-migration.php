@@ -2,14 +2,14 @@
 <?php
 namespace OpenSB;
 
-global $database;
-
 define("SB_ROOT_PATH", dirname(__DIR__));
 define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
 define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
 define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+
+global $database;
 
 require_once SB_PRIVATE_PATH . '/common.php';
 
@@ -39,5 +39,5 @@ $database->query("RENAME TABLE `takedowns` TO `upload_takedowns`");
 $database->query("RENAME TABLE `videos` TO `uploads`");
 $database->query("RENAME TABLE `views` TO `upload_views`");
 
-// profile layout
+// profile layout (TODO: this should probably be removed)
 $database->query("ALTER TABLE `users` ADD `profile_layout` TINYINT NOT NULL AFTER `customcolor`");
