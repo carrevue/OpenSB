@@ -158,12 +158,24 @@ if (file_exists('/etc/os-release')) {
     $os_name = null;
 }
 
+// we dont really support windows hosts, because most people on windows would just attempt hosting opensb using xampp as
+// a basis which hasnt been updated since november 2023 and is a big pile of shit. also, theres no reliably fast method
+// of getting the uptime of a windows system through php without relying on systemfo which is slow as shit or possibly
+// fucking around with winmgmts through the unholy com php class. i didnt even know it was possible to interface with
+// windows' ole api via php, what the fuck??? -chaziz 4/15/2025
+
+if (!$is_windows) {
+    $uptime = shell_exec('uptime -p');
+} else {
+    $uptime = "Unknown";
+}
 
 $data = [
     "numbers" => $results,
     "system" => [
         "uname" => php_uname(),
         "os_name" => $os_name,
+        "uptime" => $uptime,
         "is_windows" => $is_windows,
     ],
     "graph_data" => [

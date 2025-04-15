@@ -20,7 +20,8 @@
                 {% if is_opensb_v1_3 and data.system.os_name %}
                     <li>Operating System: {{ data.system.os_name }}</li>
                 {% endif %}
-                <li>Uname: {{ data.system.uname }}</li>
+                <li>Uname: <code>{{ data.system.uname }}</code></li>
+                <li>Uptime: <code>{{ data.system.uptime }}</code></li>
             </ul>
         </div>
         <div class="content-box no-border-top">
