@@ -89,6 +89,14 @@ if (!$auth->isUserLoggedIn())
     Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
+if (isset($_GET["action"])) {
+    if ($_GET["action"] == "clear_all") {
+        $database->query("DELETE FROM user_notifications WHERE recipient = ?;", [$auth->getUserID()]);
+
+        Utilities::notifyBanner("Cleared.", "/notices", "success");
+    }
+}
+
 $data = $database->fetchArray($database->query("SELECT * FROM user_notifications WHERE recipient = ? ORDER BY id DESC", [$auth->getUserID()]));
 
 $noticeData = [];
@@ -109,6 +117,6 @@ foreach ($data as $notice) {
     ];
 }
 
-echo $twig->render('portal.twig', [
+echo $twig->render('notifications.twig', [
     'data' => $noticeData,
 ]);

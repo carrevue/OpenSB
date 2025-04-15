@@ -6,12 +6,7 @@
     <div class="section">
         <div class="section-title">
             <h1>Notifications</h1>
-            {% if 0 %}
             <a href="notices?action=clear_all">Clear all</a>
-            {% endif %}
-        </div>
-        <div class="banner banner-secondary">
-            <strong>NOTE</strong>: This page is still incomplete.
         </div>
         <div class="content-box">
             {% for notice in data %}
@@ -37,9 +32,7 @@
                     </div>
                 </div>
             {% else %}
-            <p>
                 No notifications.
-            </p>
             {% endfor %}
         </div>
     </div>
