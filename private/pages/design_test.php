@@ -17,16 +17,6 @@ $data["color_types"] = [
     "warning",
 ];
 
-$data["color_types_admin"] = [
-    "banned-other-unbanned",
-    "unbanned-other-banned",
-    "banned",
-    "shadow-banned",
-    "unbanned-other-unbanned",
-    "partner",
-    "staff"
-];
-
 $data["icons"] = [
     "star-full",
     "star-half",
