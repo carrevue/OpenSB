@@ -33,7 +33,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         } elseif ($options["skin"] == "biscuit" || $options["skin"] == "charla") {
             // default to new implementation on biscuit/charla (this logic should be swapped later)
             $userlink_function_name = "UserLink";
-        } else {
+        } else { // Utilities::isLegacyFrontend()
             // otherwise use the old implementation.
             $userlink_function_name = "UserLinkOld";
         }
@@ -455,7 +455,7 @@ HTML;
             ];
 
             // remove upload link on finalium 1, bootstrap and charla
-            if ($options["skin"] == "finalium" || $options["skin"] == "bootstrap" || $options["skin"] == "charla") {
+            if (Utilities::isLegacyFrontend() || $options["skin"] == "charla") {
                 unset($array["upload"]);
             }
 

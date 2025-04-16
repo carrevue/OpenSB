@@ -112,7 +112,7 @@ foreach ($thingsToCount as $table => $uiName) {
 $totalUsers = $numbersOfThingsArray['users'];
 $bannedUsers = $numbersOfThingsArray['user_bans'];
 $unbannedUsers = $totalUsers - $bannedUsers;
-$unbannedRatio = ($totalUsers > 0) ? ($unbannedUsers / $totalUsers) * 100 : 0;
+$unbannedRatio = Utilities::calculatePercentage(1, $unbannedUsers, $totalUsers);
 
 $results[] = [
     'name' => "Unbanned user percentage",
@@ -127,7 +127,7 @@ $undeletedUploads = $numbersOfThingsArray['uploads'];
 $deletedUploads = $numbersOfThingsArray['upload_deleted'];
 
 $totalUploads = $undeletedUploads + $deletedUploads;
-$undeletedRatio = ($totalUploads > 0) ? ($undeletedUploads / $totalUploads) * 100 : 0;
+$undeletedRatio = Utilities::calculatePercentage(1, $undeletedUploads, $totalUploads);
 
 $results[] = [
     'name' => "Non-deleted upload percentage",

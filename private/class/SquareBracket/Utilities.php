@@ -326,6 +326,26 @@ class Utilities
         return ($isChazizSB) && isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'fulptube.rocks');
     }
 
+    public static function isLegacyFrontend()
+    {
+        global $orange;
+
+        $localOptions = $orange?->getLocalOptions();
+
+        return ($localOptions["skin"] == "finalium" || $localOptions["skin"] == "bootstrap");
+    }
+
+    public static function calculatePercentage($number, $percent, $total): float|int
+    {
+        // if the upload has no "dislikes", return 100.
+        if ($total == 0 or $number == 0) {
+            return 100;
+        } else {
+            // return the like-to-dislike ratio.
+            return ($percent / $total) * $number * 100;
+        }
+    }
+
     public static function replaceSquareBracketWithFulpTube($input)
     {
         // replace "squarebracket" with "fulptube"

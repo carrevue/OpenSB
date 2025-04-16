@@ -241,19 +241,7 @@ $page_data = [
 ];
 
 // if we are on bootstrap or on finalium 1, emulate the old like/dislike system.
-if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions()["skin"] == "bootstrap") {
-    // calculates the ratio for the "likesaber" seen on finalium 1.
-    function calculateRatio($number, $percent, $total): float|int
-    {
-        // if the upload has no "dislikes", return 100.
-        if ($total == 0 or $number == 0) {
-            return 100;
-        } else {
-            // return the like-to-dislike ratio.
-            return ($percent / $total) * $number * 100;
-        }
-    }
-
+if (Utilities::isLegacyFrontend()) {
     if ($auth->isUserLoggedIn()) {
         $current_rating_from_db = $database->result("SELECT rating FROM upload_ratings WHERE video=? AND user=?", [$data["id"], $auth->getUserID()]);
 
@@ -271,6 +259,8 @@ if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions
     // translate 5 stars into like/dislikes. we do this because using the star rating ratio doesn't work that well
     // with the likesaber on finalium.
     // -chaziz 6/11/2024
+    $ratings = $page_data["interactions"]["ratings"]["stars"];
+
     $likes = $ratings["4"] + $ratings["5"];
     $dislikes = $ratings["1"] + $ratings["2"];
     $total = $likes + $dislikes;
@@ -278,7 +268,7 @@ if ($orange->getLocalOptions()["skin"] == "finalium" || $orange->getLocalOptions
     $page_data["interactions"]["legacy"] = [
         "likes" => $likes,
         "dislikes" => $dislikes,
-        "ratio" => calculateRatio($dislikes, $likes, $total),
+        "ratio" => Utilities::calculatePercentage($dislikes, $likes, $total),
         "current_rating" => $current_rating,
     ];
 }
