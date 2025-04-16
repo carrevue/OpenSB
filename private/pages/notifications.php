@@ -64,20 +64,28 @@ function getRequiredData($database, $notice)
             $data["origin"] = false;
             break;
 
-        case NotificationEnum::CommentUpload:
-            $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM upload_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
-            $upload = $database->fetch("SELECT v.video_id, v.author, v.title FROM uploads v WHERE v.id = ?", [$notice["level"]]);
-
-            $data["info"] = $comment["comment"];
-            $data["origin"] = $upload["title"] ?? "Unknown upload";
-            break;
-
         case NotificationEnum::CommentProfile:
             $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM user_profile_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
             $profile = $database->fetch("SELECT u.name FROM users u WHERE u.id = ?", [$notice["level"]]);
 
             $data["info"] = $comment["comment"];
             $data["origin"] = $profile["name"] . "'s profile";
+            break;
+
+        case NotificationEnum::CommentJournal:
+            $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM journal_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
+            $journal = $database->fetch("SELECT title FROM journals WHERE id = ?", [$notice["level"]]);
+
+            $data["info"] = $comment["comment"];
+            $data["origin"] = $journal["title"];
+            break;
+
+        case NotificationEnum::CommentUpload:
+            $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM upload_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
+            $upload = $database->fetch("SELECT v.video_id, v.author, v.title FROM uploads v WHERE v.id = ?", [$notice["level"]]);
+
+            $data["info"] = $comment["comment"];
+            $data["origin"] = $upload["title"] ?? "Unknown upload";
             break;
     }
 

@@ -265,7 +265,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         global $database;
 
-        $id = Utilities::usernameToID($database, $username);
+        $id = Utilities::usernameToUserID($database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
         // don't bother with userdata since that might slow shit down
         $is_banned = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
@@ -288,7 +288,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         global $database;
 
-        $id = Utilities::usernameToID($database, $username);
+        $id = Utilities::usernameToUserID($database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
         if (file_exists('..' . $location)) {
             $data = $location;
@@ -303,7 +303,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         global $database;
 
-        $id = Utilities::usernameToID($database, $username);
+        $id = Utilities::usernameToUserID($database, $username);
         $location = '/dynamic/banners/' . $id . '.png';
 
         if (file_exists('..' . $location)) {

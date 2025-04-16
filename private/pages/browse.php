@@ -37,7 +37,7 @@ $limit = sprintf("%s,%s", (($page_number - 1) * 20), 20);
 
 if ($user) {
     // TODO: handle old names
-    $id = Utilities::usernameToID($database, $user);
+    $id = Utilities::usernameToUserID($database, $user);
     if (!$id) {
         Utilities::notifyBanner("This user does not exist.", "/");
     }

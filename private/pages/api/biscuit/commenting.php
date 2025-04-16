@@ -4,9 +4,13 @@ namespace OpenSB;
 
 global $auth, $orange, $twig, $isDebug;
 
+use SquareBracket\NotificationEnum;
 use SquareBracket\UserData;
+use SquareBracket\Utilities;
 
 $post_data = json_decode(file_get_contents('php://input'), true);
+
+$userId = $auth->getUserID();
 
 $apiOutput = [
     "error" => "Invalid request."
@@ -26,7 +30,7 @@ $database = $orange->getDatabase();
 $author = new UserData($database, $auth->getUserID());
 $commentText = trim($post_data['comment']);
 
-if ($commentText === "" || $commentText === null) {
+if ($commentText === "") {
     echo json_encode(["error" => "This comment is invalid."]);
     exit;
 }
@@ -38,11 +42,11 @@ if (strlen($commentText) > 1000) {
 
 if (!$isDebug) {
     $timeLimit = time() - 15;
-    $userId = $auth->getUserID();
     if ($database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
         $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
         $database->result("SELECT COUNT(*) FROM journal_comments WHERE date > ? AND author = ?", [$timeLimit, $userId])
     ) {
+        // TODO: display a ui notification
         echo json_encode(["error" => "Please wait at least 15 seconds before commenting again."]);
         exit;
     }
@@ -64,9 +68,6 @@ $html = $twig->render('components/_comment.twig', ['comment' => $comment]);
 
 $id = $post_data["id"];
 $replyTo = $post_data['reply_to'] ?? 0;
-$userId = $auth->getUserID();
-$currentTime = time();
-$table = '';
 
 switch ($post_data['type']) {
     case 'submission':
@@ -85,8 +86,32 @@ switch ($post_data['type']) {
 
 $database->query(
     "INSERT INTO {$table} (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
-    [$id, $replyTo, $commentText, $userId, $currentTime, 0]
+    [$id, $replyTo, $commentText, $userId, time(), 0]
 );
+
+// hacky because we need the insertid right before we call anything else to avoid a "trying to access array offset
+// on false" error.
+$insertID = $database->insertID();
+
+// not gonna put this code in the first switch case YET due to a weird ass hack i have to do with upload comments
+switch ($post_data['type']) {
+    case 'submission':
+        // comments use the upload's string id and not the numeric id as the location of an upload, so we have to do
+        // this weird shit.
+        $numericID = Utilities::uploadStringIDToUploadNumericID($database, $post_data["id"]);
+        Utilities::notifyUser($database, 1, $numericID, $insertID, NotificationEnum::CommentUpload);
+        break;
+    case 'profile':
+        $table = 'user_profile_comments';
+        Utilities::notifyUser($database, 1, $id, $insertID, NotificationEnum::CommentProfile);
+        break;
+    case 'journal':
+        $table = 'journal_comments';
+        Utilities::notifyUser($database, 1, $id, $insertID, NotificationEnum::CommentJournal);
+        break;
+    default:
+        exit;
+}
 
 $apiOutput = [
     "comment" => $comment,

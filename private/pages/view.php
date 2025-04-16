@@ -276,7 +276,7 @@ if (Utilities::isLegacyFrontend()) {
 // TODO: this should be moved to admin_upload_edit -chaziz 1/4/2025
 if ($auth->isUserAdmin() && $takedown) {
     $page_data["takedown"] = $takedown[0];
-    $page_data["takedown"]["takedownee"] = Utilities::idToUsername($database, $takedown[0]["sender"]);
+    $page_data["takedown"]["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
     $page_data["author_banned"] = $author->isUserBanned();
 } else {
     $page_data["takedown"] = [];

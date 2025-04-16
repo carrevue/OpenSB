@@ -125,7 +125,7 @@ class Utilities
     /**
      * Not to be confused with notifyBanner, which makes a banner.
      */
-    public static function notifyUser($database, $user, $submission, $related_id, NotificationEnum $type): void
+    public static function notifyUser($database, $user, $location, $related_id, NotificationEnum $type): void
     {
         global $auth, $database;
 
@@ -133,12 +133,21 @@ class Utilities
             throw new CoreException("NotifyUser should not be called if the current user is logged off.");
         }
 
-        // If this user hasn't been notified by an identical notification the day prior.
-        if (!$database->result("SELECT COUNT(*) FROM user_notifications WHERE timestamp > ? AND type = ? AND recipient = ? AND sender = ?",
-                [time() - 86400, $type->value, $user, $auth->getUserID()])) {
+        $dontNotify = false;
+
+        // dont bother notifying someone if someones re-following them in less than a week of the first time they
+        // followed that user
+        if ($type == NotificationEnum::Follow) {
+            if ($database->result("SELECT COUNT(*) FROM user_notifications WHERE timestamp > ? AND type = ?
+                AND recipient = ? AND sender = ?", [time() - 604800, $type->value, $user, $auth->getUserID()])) {
+                $dontNotify = true;
+            }
+        }
+
+        if (!$dontNotify) {
             // Notify the user
             $database->query("INSERT INTO user_notifications (type, level, recipient, sender, timestamp, related_id) VALUES (?,?,?,?,?,?);",
-                [$type->value, $submission, $user, $auth->getUserID(), time(), $related_id]);
+                [$type->value, $location, $user, $auth->getUserID(), time(), $related_id]);
         }
     }
 
@@ -208,7 +217,7 @@ class Utilities
         return $new;
     }
 
-    public static function usernameToID($database, $username)
+    public static function usernameToUserID($database, $username)
     {
         if ($data = $database->fetch("SELECT id FROM users WHERE name = ?", [$username])) {
             return $data["id"];
@@ -217,10 +226,28 @@ class Utilities
         }
     }
 
-    public static function idToUsername($database, $id)
+    public static function userIDToUsername($database, $id)
     {
         if ($data = $database->fetch("SELECT name FROM users WHERE id = ?", [$id])) {
             return $data["name"];
+        } else {
+            return false;
+        }
+    }
+
+    public static function uploadStringIDToUploadNumericID($database, $uploadStringID)
+    {
+        if ($data = $database->fetch("SELECT id FROM uploads WHERE video_id = ?", [$uploadStringID])) {
+            return $data["id"];
+        } else {
+            return false;
+        }
+    }
+
+    public static function uploadNumericIDToUploadStringID($database, $uploadNumericID)
+    {
+        if ($data = $database->fetch("SELECT video_id FROM uploads WHERE id = ?", [$uploadNumericID])) {
+            return $data["video_id"];
         } else {
             return false;
         }

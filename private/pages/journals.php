@@ -23,7 +23,7 @@ if ($user) {
             "SELECT COUNT(*) FROM journals j WHERE j.is_site_news = 1");
     } else {
         // TODO: handle old names
-        $id = Utilities::usernameToID($database, $user);
+        $id = Utilities::usernameToUserID($database, $user);
         if (!$id) {
             Utilities::notifyBanner("This user does not exist.", "/");
         }

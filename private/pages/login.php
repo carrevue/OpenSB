@@ -16,7 +16,7 @@ if (isset($path_username)) {
     }
 
     $is_the_account_in_the_accounts_array = false;
-    $id = Utilities::usernameToID($database, $path_username);
+    $id = Utilities::usernameToUserID($database, $path_username);
     $accounts = $orange->getAccountsArray();
     $new_array = [];
     $token = null;
