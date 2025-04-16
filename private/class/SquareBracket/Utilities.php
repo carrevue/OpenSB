@@ -17,7 +17,7 @@ class Utilities
     {
         if (!$uploads) return [];
 
-        $submissionsData = [];
+        $uploadArray = [];
         foreach ($uploads as $upload) {
 
             $flags = Utilities::uploadBitmaskToArray($upload["flags"]);
@@ -25,7 +25,7 @@ class Utilities
             $ratings = new UploadRatingData($database, $upload["id"]);
 
             $userData = new UserData($database, $upload["author"]);
-            $submissionsData[] =
+            $uploadArray[] =
                 [
                     "id" => $upload["video_id"],
                     "title" => $upload["title"],
@@ -48,7 +48,7 @@ class Utilities
                 ];
         }
 
-        return $submissionsData;
+        return $uploadArray;
     }
 
     public static function makeJournalArray($database, $journals): array
@@ -113,7 +113,7 @@ class Utilities
     }
 
     // TODO: This should probably be an enum class.
-    public static function RatingToNumber($rating): int
+    public static function ratingToNumber($rating): int
     {
         return match ($rating) {
             'general' => 0,
@@ -125,7 +125,7 @@ class Utilities
     /**
      * Not to be confused with notifyBanner, which makes a banner.
      */
-    public static function NotifyUser($database, $user, $submission, $related_id, NotificationEnum $type): void
+    public static function notifyUser($database, $user, $submission, $related_id, NotificationEnum $type): void
     {
         global $auth, $database;
 
@@ -142,7 +142,7 @@ class Utilities
         }
     }
 
-    public static function IsFollowingUser($user) {
+    public static function isFollowingUser($user) {
         global $auth, $database;
 
         return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $auth->getUserID()]);
@@ -176,15 +176,6 @@ class Utilities
 
         if ($redirect) {
             header(sprintf('Location: %s', $redirect));
-            die();
-        }
-    }
-
-    public static function rewritePHP(): void
-    {
-        if (str_contains($_SERVER["REQUEST_URI"], '.php')) {
-            $newUrl = str_replace('.php', '', $_SERVER["REQUEST_URI"]);
-            header('Location: ' . $newUrl, true, 301);
             die();
         }
     }

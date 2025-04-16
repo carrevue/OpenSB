@@ -117,7 +117,7 @@ if ($orange->getLocalOptions()["skin"] == "charla") {
 $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
 
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["id"]]);
-$followed = Utilities::IsFollowingUser($data["id"]);
+$followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
 
 $profile_data = [

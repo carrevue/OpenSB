@@ -46,7 +46,11 @@ function last_resort(): void
 {
     global $twig_error; // Ugly
 
-    Utilities::rewritePHP();
+    if (str_contains($_SERVER["REQUEST_URI"], '.php')) {
+        $newUrl = str_replace('.php', '', $_SERVER["REQUEST_URI"]);
+        header('Location: ' . $newUrl, true, 301);
+        die();
+    }
 
     http_response_code(404);
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);

@@ -60,7 +60,7 @@ if ($author->isUserBanned() && !$auth->isUserAdmin()) {
 $tags = $upload->getTags();
 
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["author"]]);
-$followed = Utilities::IsFollowingUser($data["author"]);
+$followed = Utilities::isFollowingUser($data["author"]);
 
 // TODO: this feature is unused.
 //$favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
@@ -72,7 +72,7 @@ if ($flags["block_guests"] && !$auth->isUserLoggedIn())
     Utilities::notifyBanner("Please login to view this upload.", "/login");
 }
 
-if (Utilities::RatingToNumber($data["rating"]) > Utilities::RatingToNumber($auth->getUserData()["comfortable_rating"])) {
+if (Utilities::ratingToNumber($data["rating"]) > Utilities::ratingToNumber($auth->getUserData()["comfortable_rating"])) {
     Utilities::notifyBanner("Access to mature-rated uploads is restricted.", "/");
 }
 
