@@ -11,6 +11,11 @@ if ($disableRegistration) {
     Utilities::notifyBanner("The ability to register has been disabled.", "/");
 }
 
+// tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
+// kind of access denied error. run this command as root/sudo:
+// setsebool -P httpd_can_network_connect on
+// -chaziz 4/19/2025
+
 $ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress(false));
 
 if (str_contains($ipcheck, "<appears>yes</appears>") && !$isDebug) {

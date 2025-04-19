@@ -36,7 +36,7 @@ class Authentication
 
                 $this->user_stat_data = [
                     "followers" => $followers,
-                    "views" => $views,
+                    "views" => $views ?? 0, // hacky fix otherwise on charla if you have no views then it looks fucked
                     "notifications" => $notifications,
                 ];
                 // -------------------
