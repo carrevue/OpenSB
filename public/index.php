@@ -136,6 +136,7 @@ if (isset($path[1]) && $path[1] != '') {
         'login' => require(SB_PRIVATE_PATH . '/pages/login.php'),
         'logout' => require(SB_PRIVATE_PATH . '/pages/logout.php'),
         'my_submissions' => Utilities::redirect('/my_uploads'),
+        'my_messages' => require(SB_PRIVATE_PATH . '/pages/my_messages.php'),
         'my_uploads' => require(SB_PRIVATE_PATH . '/pages/my_uploads.php'),
         'notices' => Utilities::redirect('/notifications'),
         'notifications' => require(SB_PRIVATE_PATH . '/pages/notifications.php'),

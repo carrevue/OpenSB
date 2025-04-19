@@ -41,3 +41,13 @@ $database->query("RENAME TABLE `views` TO `upload_views`");
 
 // profile layout (TODO: this should probably be removed)
 $database->query("ALTER TABLE `users` ADD `profile_layout` TINYINT NOT NULL AFTER `customcolor`");
+
+$database->query("CREATE TABLE `private_messages` (
+  `id` int NOT NULL,
+  `reply_to_id` int NULL,
+  `title` varchar(128) NOT NULL,
+  `contents` text NOT NULL,
+  `author` int NOT NULL,
+  `recipient` int NOT NULL,
+  `date` int NOT NULL
+);");
