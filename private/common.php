@@ -23,6 +23,7 @@ $isDebug = ($config["mode"] ?? '') === "DEV";
 require_once(SB_VENDOR_PATH . '/autoload.php');
 
 use SquareBracket\Authentication;
+use SquareBracket\CoreException;
 use SquareBracket\ErrorTemplating;
 use SquareBracket\Localization;
 use SquareBracket\Profiler;
@@ -78,10 +79,7 @@ $captcha = $config["captcha"];
 
 $allowedSites = ['squarebracket', 'squarebracket_chaziz'];
 if (!in_array($config["site"], $allowedSites)) {
-    trigger_error(
-        "This variable should be set to either squarebracket or squarebracket_chaziz.",
-        E_USER_ERROR
-    );
+    die("The site variable in the configuration file should be either set to squarebracket or squarebracket_chaziz.");
 }
 $isChazizSB = ($config["site"] === "squarebracket_chaziz");
 
@@ -101,57 +99,61 @@ $lockdown = (bool)($config["lockdown"] ?? false);
 $disableUploading = $lockdown;
 $disableWritingJournals = $lockdown;
 
+try {
 // now initialize the orange classes
-$orange = new SquareBracket($config);
-$database = $orange->getDatabase();
+    $orange = new SquareBracket($config);
+    $database = $orange->getDatabase();
 
-$profiler = new Profiler($database, $isDebug);
+    $profiler = new Profiler($database, $isDebug);
 
-$localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
+    $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
-$storage = new Storage($orange->getDatabase());
+    $storage = new Storage($orange->getDatabase());
 
-if (!SB_CLI) {
-    $auth = new Authentication($database);
-    $localization = new Localization($localization_setting);
+    if (!SB_CLI) {
+        $auth = new Authentication($database);
+        $localization = new Localization($localization_setting);
 
-    // automatic stuff
-    // this should probably have a cooldown or something i don't fucking know
+        // automatic stuff
+        // this should probably have a cooldown or something i don't fucking know
 
-    // automatically ban accounts linked to banned ips.
-    // TODO: add ip ban functionality in admin panel instead of this crude ass shit
-    /*
-    $ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
-    foreach ($ipBannedUsers as $ipBannedUser) {
-        $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
-        foreach ($usersAssociatedWithIP as $ipBannedUser2) { // i can't really name variables that well
-            if (!$database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$ipBannedUser2["id"]])) {
-                $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-                    [$ipBannedUser2["id"], "Automated by OpenSB", time()]);
+        // automatically ban accounts linked to banned ips.
+        // TODO: add ip ban functionality in admin panel instead of this crude ass shit
+        /*
+        $ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
+        foreach ($ipBannedUsers as $ipBannedUser) {
+            $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
+            foreach ($usersAssociatedWithIP as $ipBannedUser2) { // i can't really name variables that well
+                if (!$database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$ipBannedUser2["id"]])) {
+                    $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
+                        [$ipBannedUser2["id"], "Automated by OpenSB", time()]);
+                }
             }
         }
+        */
+
+        $twig_error = new ErrorTemplating($orange);
+
+        if ($ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()])) {
+            $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]));
+
+            http_response_code(403);
+            echo $twig_error->render("ip_banned.twig", [
+                "page" => "ip-banned",
+                "data" => $ipban,
+                "users" => $usersAssociatedWithIP,
+            ]);
+            die();
+        }
+
+        if ($isMaintenance && !SB_PHP_BUILTINSERVER) {
+            http_response_code(503);
+            echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
+            die();
+        }
+
+        $twig = new Templating($orange);
     }
-    */
-
-    $twig_error = new ErrorTemplating($orange);
-
-    if ($ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()])) {
-        $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]));
-
-        http_response_code(403);
-        echo $twig_error->render("ip_banned.twig", [
-            "page" => "ip-banned",
-            "data" => $ipban,
-            "users" => $usersAssociatedWithIP,
-        ]);
-        die();
-    }
-
-    if ($isMaintenance && !SB_PHP_BUILTINSERVER) {
-        http_response_code(503);
-        echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
-        die();
-    }
-
-    $twig = new Templating($orange);
+} catch (CoreException $e) {
+    $e->page();
 }

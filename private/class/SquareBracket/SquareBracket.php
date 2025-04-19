@@ -52,6 +52,8 @@ class SquareBracket {
             $this->accounts = [];
         }
 
+        // keep the try/catch shit here since the class initalization shit in common.php should
+        // be moved here.
         try {
             $this->database = new Database($host, $user, $pass, $db);
             // enable db profiler (not to be confused with the other profiler)

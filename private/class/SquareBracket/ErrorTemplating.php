@@ -17,7 +17,7 @@ class ErrorTemplating
     private Environment $twig;
 
     /**
-     * @throws LoaderError
+     * @throws CoreException
      */
     public function __construct(SquareBracket $orange)
     {
@@ -34,7 +34,7 @@ class ErrorTemplating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            trigger_error("Error skin does not exist.", E_USER_ERROR);
+            throw new CoreException("The error skin does not exist.");
         }
 
         $this->twig = new Environment($this->loader, ['debug' => $isDebug, 'cache' => false]);

@@ -15,6 +15,9 @@ class Localization {
         $this->loadLocalizationData();
     }
 
+    /**
+     * @throws CoreException
+     */
     protected function loadLocalizationData(): void
     {
         $file = SB_PRIVATE_PATH . "/locales/{$this->locale}.json";
@@ -37,7 +40,7 @@ class Localization {
                 $json = file_get_contents($file_fallback);
                 $this->messages_fallback = json_decode($json, true);
             } else {
-                trigger_error("en-US is missing???", E_USER_ERROR);
+                throw new CoreException("The default en-US locale is missing.");
             }
         }
     }

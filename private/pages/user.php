@@ -93,7 +93,7 @@ $template = "profile.twig";
 $page_name = "user";
 
 if ($orange->getLocalOptions()["skin"] == "charla") {
-    switch (ProfileLayoutEnum::from($data["profile_layout"])) {
+    switch (ProfileLayoutEnum::from($data["profile_layout"] ?? 0)) {
         //case ProfileLayoutEnum::Default:
         //    $template = "profile.twig";
         //    $page_name = "user";

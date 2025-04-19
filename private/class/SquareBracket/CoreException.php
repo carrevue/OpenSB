@@ -8,7 +8,7 @@ use Throwable;
 
 class CoreException extends \Exception
 {
-    public function __construct($message, $code = 500, Throwable $previous = null) {
+    public function __construct($message, $code = 500, ?Throwable $previous = null) {
         parent::__construct($message, $code, $previous);
     }
     
