@@ -11,7 +11,7 @@ if ($disableRegistration) {
     Utilities::notifyBanner("The ability to register has been disabled.", "/");
 }
 
-$ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress());
+$ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress(false));
 
 if (str_contains($ipcheck, "<appears>yes</appears>") && !$isDebug) {
     Utilities::notifyBanner("Your IP address appears to be suspicious.", "/");

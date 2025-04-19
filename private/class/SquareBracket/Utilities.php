@@ -328,7 +328,7 @@ class Utilities
     }
 
     // if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
-    public static function getIpAddress()
+    public static function getIpAddress($encrypted = true)
     {
         if (SB_CLI) return null;
 
@@ -336,7 +336,11 @@ class Utilities
 
         if ($ip == "127.0.0.1" | $ip == "::1" | $ip == "localhost") return "localhost";
 
-        return crypt($ip, $ip);
+        if ($encrypted) {
+            return crypt($ip, $ip);
+        } else {
+            return $ip;
+        }
     }
 
     public static function isFulpTube()

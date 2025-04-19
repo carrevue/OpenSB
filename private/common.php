@@ -95,7 +95,7 @@ $branding = [
 ];
 
 // TODO: port these into settings that can be changed through the admin panel
-$disableRegistration = !($config["enable_registration"] ?? false);
+$disableRegistration = ($config["enable_registration"] ?? false);
 
 $lockdown = (bool)($config["lockdown"] ?? false);
 $disableUploading = $lockdown;
