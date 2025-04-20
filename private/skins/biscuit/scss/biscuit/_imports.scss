@@ -205,6 +205,15 @@ hr {
   opacity: 0.6;
 }
 
+.userlink {
+  display: inline-flex;
+  align-items: center;
+  white-space: break-spaces;
+  .biscuit-icon {
+    margin-left: 0.1em;
+  }
+}
+
 @import 'header';
 @import 'footer';
 @import 'forms';

@@ -22,7 +22,7 @@ class UserData
         } else {
             // otherwise fetch the data from the db
             $this->data = $this->database->fetch(
-                "SELECT id, name, title, customcolor, joined, lastview FROM users WHERE id = ?",
+                "SELECT id, name, title, customcolor, joined, lastview, powerlevel FROM users WHERE id = ?",
                 [$id]
             );
         }
@@ -60,6 +60,7 @@ class UserData
                 "color" => $this->data["customcolor"],
                 "joined" => $this->data["joined"],
                 "connected" => $this->data["lastview"],
+                "powerlevel" => $this->data["powerlevel"], // TODO: rename powerlevel to something better
             ];
         } else {
             return [
@@ -68,6 +69,7 @@ class UserData
                 "color" => "#FF0000",
                 "joined" => 0,
                 "connected" => 0,
+                "powerlevel" => 1,
             ];
         }
     }

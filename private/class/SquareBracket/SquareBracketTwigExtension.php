@@ -69,10 +69,8 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('localize', [$this, 'localize']),
             new TwigFunction('truncate_number', [$this, 'truncateNumber']),
             new TwigFunction('convert_time', [$this, 'convertTime']),
-            // BOOTSTRAP FRONTEND COMPATIBILITY
-            new TwigFunction('icon', function($icon, $size) {
-                return $this->twig->render('components/icon.twig', ['icon' => $icon, 'size' => $size]);
-            }, ['is_safe' => ['html']]),
+            // BOOTSTRAP/FINALIUM FRONTEND COMPATIBILITY (DO NOT USE THIS ON BISCUIT/CHARLA)
+            new TwigFunction('icon', [$this, 'legacyIcon'], ['is_safe' => ['html']]),
             // ---------------------------
         ];
     }
@@ -320,12 +318,13 @@ class SquareBracketTwigExtension extends AbstractExtension
         // get user info
         $username = htmlspecialchars($user["info"]["username"]);
         $displayName = htmlspecialchars($user["info"]["displayname"]);
-        $customColor = htmlspecialchars($user["info"]["color"]);
+        $color = $user["info"]["color"];
+        $powerlevel =  $user["info"]["powerlevel"];
 
         // Define common values
         $href = "/user/" . $username;
-        $class = "userlink userlink-" . $username;
-        $style = "color:" . $customColor;
+        $class = "userlink-" . $username;
+        $style = "color:" . $color;
 
         if (mb_strtolower($username) === mb_strtolower($displayName)) {
             // if username matches display name
@@ -340,16 +339,46 @@ class SquareBracketTwigExtension extends AbstractExtension
             );
         }
 
+        if ($powerlevel > 1) {
+            $staff_icon = '<div class="biscuit-icon staff"></div>';
+        }
+
         // return link
-        return sprintf('<a class="%s" style="%s" href="%s">%s</a>', $class, $style, $href, $displayText);
+        return sprintf('<div class="userlink"><a class="%s" style="%s" href="%s">%s</a>%s</div>',
+            $class,
+            $style,
+            $href,
+            $displayText,
+            ($staff_icon ?? ''));
     }
 
     // old userlink used on bootstrap and finalium
     public function UserLinkOld($user): string
     {
-        return <<<HTML
-<a class="userlink userlink-{$user["info"]["username"]}" style="color:{$user["info"]["color"]};" href="/user/{$user["info"]["username"]}">{$user["info"]["username"]}</a>
-HTML;
+        $username = htmlspecialchars($user['info']['username']);
+        $color = $user["info"]["color"];
+        // the old userlink function used to show if someone was staff, this was implemented around april 2023.
+        $powerlevel =  $user["info"]["powerlevel"];
+
+        $userlink = sprintf(
+            '<a class="userlink userlink-%s" style="color:%s;" href="/user/%s">%s</a>',
+            $username,
+            $color,
+            $username,
+            $username
+        );
+
+        if ($powerlevel > 1) {
+            $staff_icon = $this->legacyIcon("shield", 14);
+
+            return sprintf(
+                '%s %s',
+                $userlink,
+                $staff_icon
+            );
+        } else {
+            return $userlink;
+        }
     }
 
     public function removeNotification()
@@ -545,6 +574,16 @@ HTML;
         }
     }
 
+    // legacy functions used by finalium and bootstrap frontend only.
+
+    public function legacyIcon($icon, $size) {
+        if (!Utilities::isLegacyFrontend()) {
+            trigger_error("legacyIcon function called outside of a legacy frontend.", E_USER_WARNING);
+        }
+
+        return $this->twig->render('components/icon.twig', ['icon' => $icon, 'size' => $size]);
+    }
+
     public function submissionBox($submission)
     {
         return $this->twig->render('components/smallvideobox.twig', ['data' => $submission]);
@@ -554,6 +593,7 @@ HTML;
     {
         return $this->twig->render('components/comment.twig', ['data' => $comment]);
     }
+    //
 
     public function localize($key, ...$args) {
         global $localization;
