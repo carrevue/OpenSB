@@ -25,3 +25,5 @@ jobs:
         stale-pr-message: 'This pull request is stale.'
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
+        exempt-issue-labels: 'stale-exempt'
+        exempt-pr-labels: 'stale-exempt'
