@@ -4,9 +4,9 @@ namespace OpenSB;
 
 global $twig, $database, $orange;
 
-use SquareBracket\UploadData;
 use SquareBracket\Utilities;
 use SquareBracket\UploadQuery;
+use SquareBracket\UploadFlags;
 
 $submission_query = new UploadQuery($database);
 
@@ -43,7 +43,7 @@ if ($options["skin"] == "bootstrap") {
 
 $submissions_recent = $submission_query->query("v.time DESC", $submissions_recent_query_limit);
 
-$featured_flag_bullshit = UploadData::FLAG_FEATURED; // looks like shit -chaziz 1/3/2025
+$featured_flag_bullshit = UploadFlags::FLAG_FEATURED->value; // looks like shit -chaziz 1/3/2025
 $submissions_featured = $submission_query->query("v.time DESC", $submissions_featured_query_limit,
     "v.flags & $featured_flag_bullshit = $featured_flag_bullshit");
 

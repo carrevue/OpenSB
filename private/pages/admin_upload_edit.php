@@ -5,6 +5,7 @@ namespace OpenSB;
 global $auth, $twig, $database, $orange, $path, $storage;
 
 use SquareBracket\UploadData;
+use SquareBracket\UploadFlags;
 use SquareBracket\Utilities;
 
 if (!$auth->isUserAdmin()) {
@@ -37,19 +38,19 @@ if (isset($_POST['flagsubmit'])) {
     $flags = 0;
 
     if (isset($_POST['flag_featured'])) {
-        $flags |= UploadData::FLAG_FEATURED;
+        $flags |= UploadFlags::FLAG_FEATURED->value;
     }
     if (isset($_POST['flag_unprocessed'])) {
-        $flags |= UploadData::FLAG_UNPROCESSED;
+        $flags |= UploadFlags::FLAG_UNPROCESSED->value;
     }
     if (isset($_POST['flag_block_guests'])) {
-        $flags |= UploadData::FLAG_BLOCK_GUESTS;
+        $flags |= UploadFlags::FLAG_BLOCK_GUESTS->value;
     }
     if (isset($_POST['flag_block_comments'])) {
-        $flags |= UploadData::FLAG_BLOCK_COMMENTS;
+        $flags |= UploadFlags::FLAG_BLOCK_COMMENTS->value;
     }
     if (isset($_POST['flag_custom_thumbnail'])) {
-        $flags |= UploadData::FLAG_CUSTOM_THUMBNAIL;
+        $flags |= UploadFlags::FLAG_CUSTOM_THUMBNAIL->value;
     }
 
     $database->query("UPDATE uploads SET flags = ? WHERE video_id = ?",

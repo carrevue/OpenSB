@@ -14,23 +14,6 @@ class UploadData
     private $tags;
     private $deleted_data;
 
-    // FLAGS
-
-    // 00000001: featured upload
-    public const FLAG_FEATURED = 1;
-
-    // 00000010: Unprocessed VIDEO upload
-    public const FLAG_UNPROCESSED = 2;
-
-    // 00000100: "Block guests from viewing this upload"
-    public const FLAG_BLOCK_GUESTS = 4;
-
-    // 00001000: "Block users from commenting in this upload"
-    public const FLAG_BLOCK_COMMENTS = 8;
-
-    // 00010000: "upload has custom thumbnail"
-    public const FLAG_CUSTOM_THUMBNAIL = 16;
-
     public function __construct(Database $database, $id)
     {
         $this->database = $database;
@@ -81,14 +64,6 @@ class UploadData
 
     public function bitmaskToArray()
     {
-        if ($this->data != []) {
-            return [
-                "featured" => (bool)($this->data["flags"] & $this::FLAG_FEATURED),
-                "unprocessed" => (bool)($this->data["flags"] & $this::FLAG_UNPROCESSED),
-                "block_guests" => (bool)($this->data["flags"] & $this::FLAG_BLOCK_GUESTS),
-                "block_comments" => (bool)($this->data["flags"] & $this::FLAG_BLOCK_COMMENTS),
-                "custom_thumbnail" => (bool)($this->data["flags"] & $this::FLAG_CUSTOM_THUMBNAIL),
-            ];
-        }
+        return UploadFlags::toArray($this->data["flags"]);
     }
 }
