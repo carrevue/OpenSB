@@ -28,8 +28,8 @@ $database_data = [
         "id" => 1,
         "reply_to_id" => null,
         "title" => "OpenSB Private Message Test",
-        "contents" => "This is a private message. You are not supposed to see the contents of this private message
-        (because this page is a list of private messages).",
+        "contents" => "This is a private message. You should see a small portion of the contents of this private 
+        message.",
         "author" => 1,
         "recipient" => 1,
         "date" => time() - 1200,
@@ -38,8 +38,8 @@ $database_data = [
         "id" => 2,
         "reply_to_id" => null,
         "title" => "OpenSB Private Message Test #2",
-        "contents" => "This is another private message. You are not supposed to see the contents of this private message
-        (because this page is a list of private messages).",
+        "contents" => "This is another private message. Something something lorem ipsum. You should see a small portion 
+        of the contents of this private message. Foo!",
         "author" => 1,
         "recipient" => 1,
         "date" => time() - 700,
