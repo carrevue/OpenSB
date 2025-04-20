@@ -27,3 +27,7 @@ jobs:
         stale-pr-label: 'no-pr-activity'
         exempt-issue-labels: 'stale-exempt'
         exempt-pr-labels: 'stale-exempt'
+        days-before-issue-stale: 28
+        days-before-pr-stale: 28
+        days-before-issue-close: 7
+        days-before-pr-close: 7
