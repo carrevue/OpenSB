@@ -68,14 +68,14 @@ if ($is_own_profile || $auth->isUserAdmin()) {
 $profile_color_data = [
     "font" => '"Comic Sans MS", "Comic Sans", cursive;',
     "background_color" => "#FFFFFF",
+    "title_color" => "#333333",
     "link_color" => "#0033CC",
-    "label_color" => "#666666",
-    //"opacity" => "95", // pretty sure the default was 95%
     "basic_box_border_color" => "#666666",
     "basic_box_background_color" => "#FFFFFF",
     "basic_box_text_color" => "#000000",
+    "highlight_box_border_color" => "#666666",
     "highlight_box_background_color" => "#E6E6E6",
-    "highlight_box_text_color" => "#666666",
+    "highlight_box_text_color" => "#000000",
 ];
 
 $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);

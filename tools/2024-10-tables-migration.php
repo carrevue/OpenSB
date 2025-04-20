@@ -55,17 +55,17 @@ $database->query("CREATE TABLE `private_messages` (
 // NOTE: on prod, old profile custoization settings should be migrated from the pre-2023 sb db using
 // cattledog. -chaziz 4/20/2025
 
-// TODO: replace the default color palette (which wont be normally shown on the site but still)
 $database->query("CREATE TABLE `user_profile_customization` (
   `user` int(11) NOT NULL,
-  `background` varchar(7) NOT NULL DEFAULT '#ffffff',
-  `fontcolor` varchar(7) NOT NULL DEFAULT '#222222',
-  `titlefont` varchar(7) NOT NULL DEFAULT '#ffffff',
-  `link` varchar(7) NOT NULL DEFAULT '#0033CC',
-  `headerfont` varchar(7) NOT NULL DEFAULT '#ffffff',
-  `highlightheader` varchar(7) NOT NULL DEFAULT '#3399cc',
-  `highlightinside` varchar(7) NOT NULL DEFAULT '#ecf4fb',
-  `regularheader` varchar(7) NOT NULL DEFAULT '#3399cc',
-  `regularinside` varchar(7) NOT NULL DEFAULT '#ffffff',
+  `font` text DEFAULT '',
+  `background_color` varchar(7) NOT NULL DEFAULT '#FFFFFF',
+  `title_color` varchar(7) NOT NULL DEFAULT '#333333',
+  `link_color` varchar(7) NOT NULL DEFAULT '#0033cc',
+  `basic_box_border_color` varchar(7) NOT NULL DEFAULT '#666666',
+  `basic_box_background_color` varchar(7) NOT NULL DEFAULT '#FFFFFF',
+  `basic_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
+  `highlight_box_border_color` varchar(7) NOT NULL DEFAULT '#666666',
+  `highlight_box_background_color` varchar(7) NOT NULL DEFAULT '#E6E6E6',
+  `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`user`)
 )");
