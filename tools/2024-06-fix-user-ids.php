@@ -21,14 +21,6 @@ $id_mapping = [];
 $temp_id_base = 1000000; // avoid stupid conflicting shit
 
 // internally update all user ids to be in an order more akin to join date.
-// squarebracket's prod db has a gap between id205 and id1654 due to a botting incident from around june 2023
-// this fixes that. poktube accs will however be in the wrong order due to poktube's db originally only storing
-// dates as YYYY-MM-DD.
-// i did however have to update the db in preparation for this script:
-// * chaziz and squarebracket's join dates have been modified, so they stay as account #1 and #2
-// * the old qobo and poktube accounts were merged into the squarebracket account.
-// * renamed "dummy" accounts (for example, dummyID12 to DummyAccount-2022-04-07).
-// -chaziz 6/19/2024
 foreach ($users as $user) {
     $new_id++;
     $temp_id = $temp_id_base + $new_id;
@@ -81,6 +73,7 @@ foreach ($id_mapping as $old_id => $temp_id) {
     $database->query("UPDATE user_old_names SET user = ? WHERE user = ?", [$new_id, $temp_id]);
     $database->query("UPDATE videos SET author = ? WHERE author = ?", [$new_id, $temp_id]);
 
+    // TODO: fix this for opensb 1.3
     $pfpOld = SB_DYNAMIC_PATH . '/pfp/' . $user["name"] . '.png';
     $pfpNew = SB_DYNAMIC_PATH . '/pfp/' . $new_id . '.png';
     $bannerOld = SB_DYNAMIC_PATH . '/banners/' . $user["name"] . '.png';
