@@ -54,7 +54,8 @@
                         </div>
 
                         <div class="form-submit">
-                            <input type="checkbox" name="enable_customization" id="enable_customization" value="true">
+                            <input type="checkbox" name="enable_customization" id="enable_customization"
+                                   value="true" {% if flags.profile_customization_enabled %}checked{% endif %}>
                             <label for="enable_customization"> Enable profile customization</label><br>
                         </div>
 

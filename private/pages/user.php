@@ -7,6 +7,7 @@ global $auth, $database, $twig, $orange;
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\ProfileLayoutEnum;
+use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 use SquareBracket\UploadQuery;
 
@@ -64,13 +65,10 @@ if ($is_own_profile || $auth->isUserAdmin()) {
     $old_usernames = [];
 }
 
-// todo: make use of this variable
-$customization_enabled = true;
+$flags = UserFlags::toArray($data["u_flags"]);
 
-$profile_color_data = $database->fetch("SELECT * FROM user_profile_customization WHERE user = ?", [$data["id"]]);
-
-if(!$profile_color_data) {
-    $customization_enabled = false;
+if ($flags["profile_customization_enabled"]) {
+    $profile_color_data = $database->fetch("SELECT * FROM user_profile_customization WHERE user = ?", [$data["id"]]);
 }
 
 $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);

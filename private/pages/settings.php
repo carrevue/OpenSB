@@ -2,11 +2,10 @@
 
 namespace OpenSB;
 
-global $twig, $auth, $database, $isChazizSB;
+global $twig, $auth, $database, $isChazizSB, $storage;
 
+use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
-
-global $auth;
 
 if (!$auth->isUserLoggedIn())
 {
@@ -23,7 +22,7 @@ $profile_color_data = $database->fetch("SELECT * FROM user_profile_customization
     [$auth->getUserData()["id"]]);
 
 if (isset($_POST['save'])) {
-    global $auth, $storage;
+    $flags = 0;
 
     $title = htmlspecialchars($_POST['title']) ?? null;
 
@@ -36,6 +35,8 @@ if (isset($_POST['save'])) {
     $pass = ($_POST['pass'] ?? null);
     $pass2 = ($_POST['pass2'] ?? null);
     $new_username = $_POST['new_username'] ?? null;
+
+    $enable_customization = $_POST['enable_customization'] ?? false;
 
     // the colors
     $customcolor = ($_POST['customcolor'] ?? '#523bb8');
@@ -62,6 +63,10 @@ if (isset($_POST['save'])) {
         $parsed_tags = [];
     } else {
         $parsed_tags = preg_split('/[\s,]+/', trim($blacklisted_tags, ","));
+    }
+
+    if ($enable_customization) {
+        $flags |= UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
     }
 
     $error = '';
@@ -150,10 +155,10 @@ if (isset($_POST['save'])) {
                  about = ?, 
                  comfortable_rating = ?, 
                  customcolor = ?, 
-                 profile_layout = ?,
+                 u_flags = ?,
                  blacklisted_tags = ?
                  WHERE id = ?",
-            [$title, $about, $rating, $customcolor, 0, json_encode($parsed_tags), $auth->getUserID()]);
+            [$title, $about, $rating, $customcolor, $flags, json_encode($parsed_tags), $auth->getUserID()]);
 
         if ($profile_color_data) {
             // if so, update their customizations
@@ -207,5 +212,6 @@ if (isset($_POST['save'])) {
 
 echo $twig->render('settings.twig', [
     'isUserOver18' => $auth->isUserOver18(),
+    'flags' => $auth->getUserFlags(),
     'profile_color_data' => $profile_color_data
 ]);

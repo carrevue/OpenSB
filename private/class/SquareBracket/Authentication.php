@@ -19,7 +19,7 @@ class Authentication
 
     public function __construct(Database $database)
     {
-        $accountfields = "id, ip, name, title, email, title, about, powerlevel, joined, lastview, birthdate, comfortable_rating, customcolor, blacklisted_tags, token";
+        $accountfields = "id, ip, name, title, email, token, about, powerlevel, joined, lastview, birthdate, comfortable_rating, customcolor, blacklisted_tags, u_flags";
         $this->database = $database;
         $token = $_SESSION["SBTOKEN"] ?? null;
 
@@ -154,11 +154,22 @@ class Authentication
         return $this->isUserAdmin() && $this->has_authenticated_as_an_admin;
     }
 
+    /**
+     * Returns the user's tag blacklist.
+     */
     public function getUserTagBlacklist(): array
     {
         return $this->is_logged_in
             ? $this->user_data['blacklisted_tags'] ?? $this->default_tag_blacklist
             : $this->default_tag_blacklist;
+    }
+
+    /**
+     * Returns the instance's default tag blacklist.
+     */
+    public function getUserFlags(): array
+    {
+        return UserFlags::toArray($this->user_data['u_flags']);
     }
 
     /**
