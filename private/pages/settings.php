@@ -18,6 +18,10 @@ if ($auth->getUserBanData()) {
     Utilities::notifyBanner("You cannot proceed with this action.", "/");
 }
 
+// check if this user has an entry in the profile customization table
+$profile_color_data = $database->fetch("SELECT * FROM user_profile_customization WHERE user = ?",
+    [$auth->getUserData()["id"]]);
+
 if (isset($_POST['save'])) {
     global $auth, $storage;
 
@@ -33,7 +37,18 @@ if (isset($_POST['save'])) {
     $pass2 = ($_POST['pass2'] ?? null);
     $new_username = $_POST['new_username'] ?? null;
 
+    // the colors
     $customcolor = ($_POST['customcolor'] ?? '#523bb8');
+    $font = $_POST['font'] ?? '';
+    $background_color = $_POST['background_color'] ?? '#FFFFFF';
+    $title_color = $_POST['title_color'] ?? '#333333';
+    $link_color = $_POST['link_color'] ?? '#0033cc';
+    $basic_box_border_color = $_POST['basic_box_border_color'] ?? '#666666';
+    $basic_box_background_color = $_POST['basic_box_background_color'] ?? '#FFFFFF';
+    $basic_box_text_color = $_POST['basic_box_text_color'] ?? '#000000';
+    $highlight_box_border_color = $_POST['highlight_box_border_color'] ?? '#666666';
+    $highlight_box_background_color = $_POST['highlight_box_background_color'] ?? '#E6E6E6';
+    $highlight_box_text_color = $_POST['highlight_box_text_color'] ?? '#000000';
 
     if ($auth->isUserOver18() && !$isChazizSB) {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
@@ -140,6 +155,42 @@ if (isset($_POST['save'])) {
                  WHERE id = ?",
             [$title, $about, $rating, $customcolor, 0, json_encode($parsed_tags), $auth->getUserID()]);
 
+        if ($profile_color_data) {
+            // if so, update their customizations
+            $database->query("
+        UPDATE user_profile_customization SET
+            font = ?,
+            background_color = ?,
+            title_color = ?,
+            link_color = ?,
+            basic_box_border_color = ?,
+            basic_box_background_color = ?,
+            basic_box_text_color = ?,
+            highlight_box_border_color = ?,
+            highlight_box_background_color = ?,
+            highlight_box_text_color = ?
+        WHERE user = ?
+    ", [
+                $font, $background_color, $title_color, $link_color,
+                $basic_box_border_color, $basic_box_background_color, $basic_box_text_color,
+                $highlight_box_border_color, $highlight_box_background_color, $highlight_box_text_color,
+                $auth->getUserID()
+            ]);
+        } else {
+            // if not, initialize the shit.
+            $database->query("
+        INSERT INTO user_profile_customization (
+            user, font, background_color, title_color, link_color,
+            basic_box_border_color, basic_box_background_color, basic_box_text_color,
+            highlight_box_border_color, highlight_box_background_color, highlight_box_text_color
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ", [
+                $auth->getUserID(), $font, $background_color, $title_color, $link_color,
+                $basic_box_border_color, $basic_box_background_color, $basic_box_text_color,
+                $highlight_box_border_color, $highlight_box_background_color, $highlight_box_text_color
+            ]);
+        }
+
         if ($username_changed) {
             // avoids "This user does not exist." error since $auth by this point still uses outdated data.
             // poor design? pretty much, yea. -chaziz 6/18/2024
@@ -154,4 +205,7 @@ if (isset($_POST['save'])) {
     }
 }
 
-echo $twig->render('settings.twig', ['isUserOver18' => $auth->isUserOver18()]);
+echo $twig->render('settings.twig', [
+    'isUserOver18' => $auth->isUserOver18(),
+    'profile_color_data' => $profile_color_data
+]);

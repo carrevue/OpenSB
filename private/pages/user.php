@@ -64,19 +64,14 @@ if ($is_own_profile || $auth->isUserAdmin()) {
     $old_usernames = [];
 }
 
-// placeholder
-$profile_color_data = [
-    "font" => '"Comic Sans MS", "Comic Sans", cursive;',
-    "background_color" => "#FFFFFF",
-    "title_color" => "#333333",
-    "link_color" => "#0033CC",
-    "basic_box_border_color" => "#666666",
-    "basic_box_background_color" => "#FFFFFF",
-    "basic_box_text_color" => "#000000",
-    "highlight_box_border_color" => "#666666",
-    "highlight_box_background_color" => "#E6E6E6",
-    "highlight_box_text_color" => "#000000",
-];
+// todo: make use of this variable
+$customization_enabled = true;
+
+$profile_color_data = $database->fetch("SELECT * FROM user_profile_customization WHERE user = ?", [$data["id"]]);
+
+if(!$profile_color_data) {
+    $customization_enabled = false;
+}
 
 $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
 
@@ -101,7 +96,7 @@ $profile_data = [
     "is_staff" => ($data["powerlevel"] > 1),
     "views" => $views,
     "old_usernames" => $old_usernames,
-    "customization" => $profile_color_data,
+    "customization" => $profile_color_data ?? false,
 ];
 
 // calculate the color used for profile banner on the bootstrap frontend

@@ -47,85 +47,155 @@
 
                     <div class="section">
                         <div class="section-title">
-                            <h2>Security</h2>
+                            <h2>Profile colors (CURRENTLY CHARLA ONLY)</h2>
                         </div>
-
-                        <div class="form-input">
-                            <label for="current_pass">Current password:</label>
-                            <input class="form-submit" type="password" name="current_pass" size="30" maxlength="256"
-                                   placeholder="Current password">
-                        </div>
-
-                        <br>
-                        <div class="section-title">
-                            <h3>Change username</h3>
-                        </div>
-
-                        <div class="form-input">
-                            <label for="current_pass">New username:</label>
-                            <input class="form-submit" type="text" name="new_username" size="30" maxlength="256"
-                                   placeholder="New username">
-                        </div>
-
-                        <br>
-                        <div class="section-title">
-                            <h3>Change password</h3>
-                        </div>
-
-                        <div class="form-input">
-                            <label for="pass">New password:</label>
-                            <input class="form-submit" type="password" name="pass" size="30" maxlength="256" placeholder="New password"><br>
-                        </div>
-
-                        <div class="form-input">
-                            <label for="pass2">Confirm new password:</label>
-                            <input class="form-submit" type="password" name="pass2" size="30" maxlength="256"
-                                   placeholder="Confirm new password">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="section">
-                        <div class="section-title">
-                            <h2>Filtering</h2>
-                        </div>
-
-                        {% if not is_chaziz_sb %}
-                        {% if isUserOver18 %}
-                            <div class="form-submit">
-                                <input type="checkbox" name="rating" id="rating" value="true"
-                                       {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
-                                <label for="rating"> {% if is_opensb_v1_3 %}Enable adult content{% else %}Enable sensitive content{% endif %}</label><br>
-                            </div>
-
-                            <div class="form-submit">
-                                <input type="checkbox" name="rating" id="rating" value="true">
-                                <label for="rating"> Block profile/upload access from people under 18</label><br>
-                            </div>
-                        {% else %}
-                            <div>
-                                Based on your account's birthdate, access to mature-rated content is restricted.
-                                If you entered an incorrect birthdate, please contact {{ website_branding.name }}
-                                administration.
-                            </div>
-                        {% endif %}
-                            <br>
-                        {% endif %}
-
-                        <div class="section-title">
-                            <h3>Blacklisted tags</h3>
+                        <div>
+                            These will be shown to everyone on your profile.
                         </div>
 
                         <div class="form-submit">
-                            <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80" wrap="hard">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
+                            <input type="checkbox" name="enable_customization" id="enable_customization" value="true">
+                            <label for="enable_customization"> Enable profile customization</label><br>
+                        </div>
+
+                        <div>
+                            <div class="banner banner-secondary">
+                                TODO: FONTS (which should be a dropdown menu with hardcoded options)
+                            </div>
+                        </div>
+
+                        <div class="form-input">
+                            <label for="title_color">Title color:</label>
+                            <input name="title_color" id="settings-title-color" type="text" data-coloris
+                                   value="{{ profile_color_data.title_color | default('#333333') }}">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="link_color">Link color:</label>
+                            <input name="link_color" id="settings-link-color" type="text" data-coloris
+                                   value="{{ profile_color_data.link_color | default('#0033cc') }}">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="basic_box_border_color">Basic box border color:</label>
+                            <input name="basic_box_border_color" id="settings-basic-box-border-color" type="text" data-coloris
+                                   value="{{ profile_color_data.basic_box_border_color | default('#666666') }}">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="basic_box_background_color">Basic box background color:</label>
+                            <input name="basic_box_background_color" id="settings-basic-box-background-color" type="text" data-coloris
+                                   value="{{ profile_color_data.basic_box_background_color | default('#FFFFFF') }}">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="basic_box_text_color">Basic box text color:</label>
+                            <input name="basic_box_text_color" id="settings-basic-box-text-color" type="text" data-coloris
+                                   value="{{ profile_color_data.basic_box_text_color | default('#000000') }}">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="highlight_box_border_color">Highlight box border color:</label>
+                            <input name="highlight_box_border_color" id="settings-highlight-box-border-color" type="text" data-coloris
+                                   value="{{ profile_color_data.highlight_box_border_color | default('#666666') }}">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="highlight_box_background_color">Highlight box background color:</label>
+                            <input name="highlight_box_background_color" id="settings-highlight-box-background-color" type="text" data-coloris
+                                   value="{{ profile_color_data.highlight_box_background_color | default('#E6E6E6') }}">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="highlight_box_text_color">Highlight box text color:</label>
+                            <input name="highlight_box_text_color" id="settings-highlight-box-text-color" type="text" data-coloris
+                                   value="{{ profile_color_data.highlight_box_text_color | default('#000000') }}">
                         </div>
 
                         <hr>
 
-                        <div class="form-button-container">
-                            <input type="submit" id="upload" name="save" class="button button-primary"
-                                   value="Save changes">
+                        <div class="section">
+                            <div class="section-title">
+                                <h2>Security</h2>
+                            </div>
+
+                            <div class="form-input">
+                                <label for="current_pass">Current password:</label>
+                                <input class="form-submit" type="password" name="current_pass" size="30" maxlength="256"
+                                       placeholder="Current password">
+                            </div>
+
+                            <br>
+                            <div class="section-title">
+                                <h3>Change username</h3>
+                            </div>
+
+                            <div class="form-input">
+                                <label for="current_pass">New username:</label>
+                                <input class="form-submit" type="text" name="new_username" size="30" maxlength="256"
+                                       placeholder="New username">
+                            </div>
+
+                            <br>
+                            <div class="section-title">
+                                <h3>Change password</h3>
+                            </div>
+
+                            <div class="form-input">
+                                <label for="pass">New password:</label>
+                                <input class="form-submit" type="password" name="pass" size="30" maxlength="256" placeholder="New password"><br>
+                            </div>
+
+                            <div class="form-input">
+                                <label for="pass2">Confirm new password:</label>
+                                <input class="form-submit" type="password" name="pass2" size="30" maxlength="256"
+                                       placeholder="Confirm new password">
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="section">
+                            <div class="section-title">
+                                <h2>Filtering</h2>
+                            </div>
+
+                            {% if not is_chaziz_sb %}
+                                {% if isUserOver18 %}
+                                    <div class="form-submit">
+                                        <input type="checkbox" name="rating" id="rating" value="true"
+                                               {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
+                                        <label for="rating"> {% if is_opensb_v1_3 %}Enable adult content{% else %}Enable sensitive content{% endif %}</label><br>
+                                    </div>
+
+                                    <div class="form-submit">
+                                        <input type="checkbox" name="rating" id="rating" value="true">
+                                        <label for="rating"> Block profile/upload access from people under 18</label><br>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        Based on your account's birthdate, access to mature-rated content is restricted.
+                                        If you entered an incorrect birthdate, please contact {{ website_branding.name }}
+                                        administration.
+                                    </div>
+                                {% endif %}
+                                <br>
+                            {% endif %}
+
+                            <div class="section-title">
+                                <h3>Blacklisted tags</h3>
+                            </div>
+
+                            <div class="form-submit">
+                                <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80" wrap="hard">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
+                            </div>
+
+                            <hr>
+
+                            <div class="form-button-container">
+                                <input type="submit" id="upload" name="save" class="button button-primary"
+                                       value="Save changes">
+                            </div>
                         </div>
                     </div>
                 </form>
