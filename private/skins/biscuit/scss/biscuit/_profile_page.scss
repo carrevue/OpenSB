@@ -1,7 +1,11 @@
+.container {
+  &.user, &.read {
+    margin-top: -5rem;
+  }
+}
+
 .profile-box {
   display: flex;
-  padding: 8px;
-  min-height: $profile-intro-height;
 
   &.centered {
     text-align: center

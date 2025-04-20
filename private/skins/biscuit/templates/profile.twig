@@ -22,88 +22,76 @@
 {% endblock %}
 
 {% block content %}
-    <div class="content-box">
-        <div class="profile-box">
-            <div class="profile-box-pfp">
-                <img src="{{ profile_picture(data.username) }}" class="pfp" alt="{{ data.username }}">
-            </div>
-            <div class="profile-box-info">
-                <div class="profile-box-username">
-                    <span style="color:{{ data.color }}">{{ data.displayname }}</span>
-                    {% if data.is_staff %}
-                        <div class="profile-box-icon biscuit-icon staff"></div>
-                    {% endif %}
-                </div>
-                <div class="profile-box-handle">
-                    @{{ data.username }}
-                </div>
-                {% if options.biscuit_show_more_profile_info %}
-                <div>
-                Joined {{ data.joined | relative_time }} |
-                <span id="follower_count">{{ data.followers }}</span> followers
-                {% if data.old_usernames %}
-                    <br>Old usernames:
-                    {% for old_username in data.old_usernames %}
-                        {{ old_username.old_name }}{{ not loop.last ? ',' }}
-                    {% endfor %}
-                </div>
-                {% endif %}
-                <div class="profile-box-details">
-                    {% if data.about | trim is not empty %}
-                        {{ data.about | markdown_user_written }}
-                    {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-            <div class="profile-box-follow">
-                {% if not data.is_current %}
-                    <button class="button button-secondary" id="follow-user">
-                        {% if data.following %}
-                            Unfollow
-                        {% else %}
-                            Follow
-                        {% endif %}
-                    </button>
-                {% else %}
-                    <a class="button button-primary" href="/settings">
-                        Edit
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="content-box no-border-top">
-        <div class="tabs">
-            {# spaceless removes html whitespace causes unnecessary margins #}
-            {% apply spaceless %}
-                {% if data.submissions %}
-                    <button class="tablink" data-tab="tab_uploads">Uploads</button>
-                {% endif %}
-                {% if data.journals %}
-                    <button class="tablink" data-tab="tab_posts">Journals</button>
-                {% endif %}
-                <button class="tablink" data-tab="tab_comments">Comments</button>
-            {% endapply %}
-        </div>
+    <div class="grid">
+        <div class="col-4">
+            <div class="section">
+                <div class="content-box highlight-box">
+                    <div class="profile-box">
+                        <div class="profile-box-pfp">
+                            <img src="{{ profile_picture(data.username) }}" class="pfp" alt="{{ data.username }}">
+                        </div>
+                        <div class="profile-box-info">
+                            <div class="profile-box-username">
+                                <span style="color:{{ data.color }}">
+                                    {% if data.displayname == data.username %}
+                                        @{{ data.displayname }}
+                                    {% else %}
+                                        {{ data.displayname }}
+                                    {% endif %}
+                                </span>
+                                {% if data.is_staff %}
+                                    <div class="biscuit-icon size-24 staff"></div>
+                                {% endif %}
+                            </div>
 
-        <div id="tab_uploads" class="tabcontent">
-            {% if data.submissions %}
-                <div class="section">
-                    <div class="content-box no-border-top">
-                        {% for submission in data.submissions %}
-                            {{ include('/components/_index_submission.twig') }}
-                        {% endfor %}
-                        <div class="content-entry">
-                            <a href="/browse?user={{ data.username }}">{{ localize('browse_more') }}</a>
+                            {% if data.displayname != data.username %}
+                                <div class="profile-box-handle">
+                                    @{{ data.username }}
+                                </div>
+                            {% endif %}
+                            <div class="profile-box-details">
+                                <span id="follower_count">{{ data.followers }}</span> followers
+                            </div>
+                        </div>
+                        <div class="profile-box-follow">
+                            {% if is_user_logged_in %}
+                                {% if not data.is_current %}
+                                    <button class="button button-secondary" id="follow-user">
+                                        {% if data.following %}
+                                            Unfollow
+                                        {% else %}
+                                            Follow
+                                        {% endif %}
+                                    </button>
+                                {% else %}
+                                    <a href="/settings">
+                                        Edit
+                                    </a>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
+                    <hr>
+                    {% if data.about | trim is not empty %}
+                        {{ data.about | markdown_user_written }}
+                        <hr>
+                    {% endif %}
+                    <ul>
+                        <li>
+                            Joined: {{ data.joined | relative_time() }}
+                        </li>
+                        <li>
+                            Last login: {{ data.connected | relative_time() }}
+                        </li>
+                    </ul>
                 </div>
-            {% endif %}
-        </div>
-
-        <div id="tab_posts" class="tabcontent">
+            </div>
             <div class="section">
-                <div class="content-box no-border-top">
+                <div class="content-box basic-box">
+                    <div class="section-title">
+                        <h2>{{ localize('journals') }}</h2>
+                        <a href="/journals/{{ data.username }}">{{ localize('more') }}</a>
+                    </div>
                     {% if data.journals %}
                         {% for journal in data.journals %}
                             {{ include('/components/_journal.twig') }}
@@ -112,14 +100,43 @@
                 </div>
             </div>
         </div>
+        <div class="col-8">
+            {% if data.submissions %}
+                <div class="section">
+                    <div class="content-box basic-box">
+                        <div class="section-title">
+                            <h2>{{ localize('uploads') }}</h2>
+                            <a href="/browse">{{ localize('more') }}</a>
+                        </div>
+                        {% for submission in data.submissions %}
+                            <div class="content-entry">
+                                {{ include('/components/_index_submission.twig') }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
 
-        <div id="tab_comments" class="tabcontent">
+            {% if options.enable_incomplete_features %}
+                <div class="section">
+                    <div class="content-box basic-box">
+                        <div class="section-title">
+                            <h2>Collections</h2>
+                        </div>
+                        <div>
+                            PLACEHOLDER
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="section">
-                <div class="content-box no-border-top">
-                    {% if is_user_logged_in %}
-                        {{ include('/components/_comment_input.twig') }}
-                    {% endif %}
-                    <div id="new-comments-here"></div>
+                <div class="content-box basic-box">
+                    <div class="section-title">
+                        <h2>{{ localize('comments') }}</h2>
+                    </div>
+                    {{ include('/components/_comment_input.twig') }}
+                    <hr>
                     {% for comment in data.comments %}
                         {{ include('/components/_comment.twig') }}
                     {% endfor %}

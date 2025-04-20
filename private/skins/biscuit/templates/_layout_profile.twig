@@ -5,22 +5,42 @@
         .jumbotron.profile-banner {
             background-image: url('{{ banner_picture }}');
         }
-        {#
-        body {
-            background: #323232;
+
+        {% if data.customization %}
+        .page {
+            padding-top: 10px;
+            background: {{ data.customization.background_color }};
+            font-family: {{ data.customization.font | raw }};
         }
-        #}
+
+        .page a {
+            color: {{ data.customization.link_color }};
+        }
+
+        /* Titles */
+        .section-title {
+            color: {{ data.customization.title_color }};
+        }
+
+        /* Highlight box */
+        .content-box.highlight-box {
+            background-color: {{ data.customization.highlight_box_background_color }};
+            border-color: {{ data.customization.basic_box_border_color }};
+            color: {{ data.customization.highlight_box_text_color }};
+        }
+
+        /* Basic box */
+        .content-box.basic-box {
+            background-color: {{ data.customization.basic_box_background_color }};
+            border-color: {{ data.customization.basic_box_border_color }};
+            color: {{ data.customization.basic_box_text_color }};
+        }
+        {% endif %}
     </style>
 {% endblock %}
 
 {% block precontent %}
     <div class="jumbotron profile-banner"></div>
-    <div class="profile-intro">
-        <div class="page">
-            <div class="page-contents">
-            </div>
-        </div>
-    </div>
 {% endblock %}
 
 {% block content %}{% endblock %}
