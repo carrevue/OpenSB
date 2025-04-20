@@ -2,10 +2,33 @@
 
 namespace OpenSB;
 
-global $auth, $database, $twig;
+global $auth, $database, $twig, $isDebug;
 
-use SquareBracket\Templating;
 use SquareBracket\UserData;
+
+// simple shit fix for shitty finalium bug that dates from 2021 -chaziz 4/12/2023
+if ($_POST["comment"] == "")
+{
+    die("This comment is invalid.");
+}
+
+// Fuck -chaziz 4/19/2023
+if (strlen($_POST["comment"]) > 1000) {
+    die("This comment is too long.");
+}
+
+// apparantly this wasnt a thing in the legacy api? oops -chaziz 4/20/2025
+if (!$isDebug) {
+    $timeLimit = time() - 15;
+    if ($database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
+        $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
+        $database->result("SELECT COUNT(*) FROM journal_comments WHERE date > ? AND author = ?", [$timeLimit, $userId])
+    ) {
+        die("Please wait at least 15 seconds before commenting again.");
+    }
+}
+
+$type = 0;
 
 if (isset($_POST['really'])) {
     switch ($_POST['type']) {
