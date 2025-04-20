@@ -13,6 +13,12 @@ $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
 $supportedImageFormats = ["png", "jpg", "jpeg", "bmp", "webp"];
 $supportedAudioFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"]; // TODO
 
+// tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
+// kind of access denied error. run these commands as root/sudo:
+// semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/opensb/dynamic(/.*)?"
+// restorecon -Rv /var/www/opensb/dynamic
+// -chaziz 4/20/2025
+
 if (!$auth->isUserLoggedIn())
 {
     Utilities::notifyBanner("Please login to continue.", "/login");

@@ -23,6 +23,17 @@ I wouldn't recommend using this code unless if you ***really*** know what you're
 1. Enable debugging features by setting `mode` to `DEV`.
 1. If you want to be able to upload during development, make the `dynamic/` directory and the directories inside it writable by your web server.
 
+### SELinux
+If you are trying to setup an instance of OpenSB on a Linux installation with SELinux enabled (eg: Fedora installs by default). There may be some issues.
+
+Run these commands as root or through an utility like sudo (replace ``/var/www/opensb`` with the location of your instance):
+
+```
+setsebool -P httpd_can_network_connect on
+semanage fcontext -a -t httpd_sys_rw_content_t "/var/www/opensb/dynamic(/.*)?"
+restorecon -Rv /var/www/opensb/dynamic
+```
+
 ### Apache Virtual host example
 You will have to modify the directories to match your instance's location.
 ```

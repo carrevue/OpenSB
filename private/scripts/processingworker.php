@@ -2,16 +2,18 @@
 <?php
 namespace OpenSB;
 
-global $ffmpegPath, $ffprobePath, $database, $orange;
+global $ffmpegPath, $ffprobePath, $database;
 
-use Exception;
 use SquareBracket\VersionNumber;
+
+use Alchemy\BinaryDriver\Exception\ExecutionFailureException;
 
 use FFMpeg\Coordinate;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use FFMpeg\Filters;
 use FFMpeg\Format\Video\X264;
+use FFMpeg\Exception\RuntimeException;
 
 define("SB_DYNAMIC_PATH", dirname(__DIR__, 2) . '/dynamic');
 define("SB_PRIVATE_PATH", dirname(__DIR__, 2) . '/private');
@@ -173,8 +175,16 @@ try {
     } else {
         log("Not a website video, skipping.");
     }
-} catch (Exception $e) {
+} catch (RuntimeException $e) {
     log("OpenSB Video Processing Worker Failure: " . $e->getMessage());
+
+    // now try to get the ffmpeg error output
+    $previous = $e->getPrevious();
+
+    if ($previous instanceof ExecutionFailureException) {
+        log($previous->getErrorOutput());
+    }
+
     clearstatcache();
     die();
 }
