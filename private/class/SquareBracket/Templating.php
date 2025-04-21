@@ -115,9 +115,9 @@ class Templating
             }
         }
 
-        // fucking stupid
-        /*
-        $warningBannerTextIfOnChazizOwnedDomain = "Warning banner text";
+        // TODO: make this dynamically changeable through the admin panel.
+        $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is back online. Registrations are closed until
+        the site is ready.";
 
         if ($isChazizSB) {
             $showWarningBanner = true;
@@ -126,10 +126,6 @@ class Templating
             $showWarningBanner = false;
             $warningBannerText = null;
         }
-        */
-
-        $showWarningBanner = false;
-        $warningBannerText = null;
 
         $versionNumber = new VersionNumber;
 

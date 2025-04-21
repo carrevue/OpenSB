@@ -71,7 +71,7 @@ if (isset($_POST["loginsubmit"])) {
     if (!$password) $error = true;
 
     if ($auth->isUserLoggedIn() && $username == $auth->getUserData()["name"]) {
-        Utilities::notifyBanner("You're already logged into this account.", "/");
+        Utilities::notifyBanner("You've already logged into this account.", "/");
     }
 
     if (!$error) {
@@ -91,19 +91,28 @@ if (isset($_POST["loginsubmit"])) {
                 $database->query("UPDATE users SET password = ? WHERE id = ?", [$new_password_hash, $logindata['id']]);
             }
 
+            // check if the account is banned (temporary code taken from userdata)
+            $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$logindata['ip']]);
+
             // check if the account is from an ip that is in ip_bans
             $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
 
             if ($ipban) {
-                Utilities::notifyBanner("This account's latest IP address is banned.", "/login");
+                Utilities::notifyBanner("This account is banned.", "/login");
             }
 
             // testing code
             if ($isChazizSB)
             {
+                /* TODO: make this a setting that can be changed through the admin panel.
                 if ($logindata['powerlevel'] < 3)
                 {
                     Utilities::notifyBanner("This instance is currently only open to the staff team.", "/login");
+                }
+                */
+
+                if ($isBanned) {
+                    Utilities::notifyBanner("This account is banned.", "/login");
                 }
             }
 

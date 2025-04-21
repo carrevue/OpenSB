@@ -62,8 +62,13 @@ $path = explode('/', $uri);
 // testing code
 if ($isChazizSB)
 {
+    /*
     // if the user is still logged in but isnt an admin, log them out.
     if ($auth->isUserLoggedIn() && !$auth->isUserAdmin()) {
+    */
+
+    // if the user is still logged in despite being banned, log them out.
+    if ($auth->isUserLoggedIn() && $auth->getUserBanData()) {
         Utilities::logOutUser();
     }
 
