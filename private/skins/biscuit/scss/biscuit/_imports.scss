@@ -208,10 +208,9 @@ hr {
 .userlink {
   display: inline-flex;
   align-items: center;
-  white-space: break-spaces;
-  .biscuit-icon {
-    margin-left: 0.1em;
-  }
+
+  /* this should be close enough to a space. */
+  gap: 0.5ch;
 }
 
 @import 'header';
