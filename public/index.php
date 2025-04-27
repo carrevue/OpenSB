@@ -72,9 +72,11 @@ if ($isChazizSB)
         Utilities::logOutUser();
     }
 
+    /*
     if (Utilities::getIpAddress() != "localhost" && !$auth->isUserLoggedIn() && $path[1] != "login") {
         Utilities::redirect("/login");
     }
+    */
 }
 
 // Originally based on Rollerozxa's router implementation in Principia-Web.

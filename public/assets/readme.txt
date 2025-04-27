@@ -21,4 +21,4 @@ finalium homepage banner "droplets" background by Armennano on Pixabay: https://
 
 vidshr.png (original FulpTube logo) by evodesign.
 
-Chaz Heeler (in chaz_opensb.png) by Chaziz.
+Chaz Craft (in chaz_opensb.png) by Chaziz.
