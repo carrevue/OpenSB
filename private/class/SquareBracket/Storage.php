@@ -17,9 +17,17 @@ class Storage
         // this uses the version of php on path. if processing worker errors out with "OpenSB is not compatible
         // with your PHP version.", then your path's php is too old.
         if (str_starts_with(php_uname(), "Windows")) {
-            pclose(popen(sprintf('start /B  php %s "%s" "%s" "1" > %s', SB_PRIVATE_PATH . '\scripts\processingworker.php', $new, $target_file, SB_DYNAMIC_PATH . '/videos/' . $new . '.log'), "r"));
+            pclose(popen(sprintf('start /B  php %s "%s" "%s" "video" "1" > %s',
+                SB_PRIVATE_PATH . '\scripts\processingworker.php',
+                $new,
+                $target_file,
+                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'), "r"));
         } else {
-            system(sprintf('php %s "%s" "%s" "1" > %s 2>&1 &', SB_PRIVATE_PATH . '/scripts/processingworker.php', $new, $target_file, SB_DYNAMIC_PATH . '/videos/' . $new . '.log'));
+            system(sprintf('php %s "%s" "%s" "video" "1" > %s 2>&1 &',
+                SB_PRIVATE_PATH . '/scripts/processingworker.php',
+                $new,
+                $target_file,
+                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'));
         }
     }
 

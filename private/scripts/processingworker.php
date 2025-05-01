@@ -31,7 +31,7 @@ function log(string $message): void
     echo $timestamp . ": " . $message . PHP_EOL;
 }
 
-function downscaleVideoForThumbnail($videoWidth, $videoHeight)
+function downscaleVideoForThumbnail($videoWidth, $videoHeight): array
 {
     $targetWidth = 512;
 
@@ -57,15 +57,18 @@ $config = [
 ];
 
 // Here's an example of the required parameters for the processing worker:
-// php private/scripts/processingworker.php "videoid" "dynamic/videos/videoid.mp4" "0"
+// php private/scripts/processingworker.php "videoid" "dynamic/videos/videoid.mp4" "video" "0"
 
 if (!isset($argv[1])) {
-    die("No parameters have been specified.");
+    log("No parameters have been specified.");
 }
 
 $new = $argv[1];
 $target_file = $argv[2];
-$for_website = $argv[3];
+$upload_type =  $argv[3];
+$for_website = $argv[4];
+
+log("Upload type: " .  $upload_type);
 
 try {
     $ffmpeg = FFMpeg::create($config);
@@ -145,7 +148,7 @@ try {
     // calculate thumbnail resolution in a way that wont fuck up the aspect ratio
     $resolution = downscaleVideoForThumbnail($videoWidth, $videoHeight);
 
-    log("Downscaled resolution: " . $resolution["width"] . "x" . $resolution["height"]);
+    log("Resolution for thumbnail: " . $resolution["width"] . "x" . $resolution["height"]);
 
     if ($fucked) {
         log("Taking thumbnail from first frame");
@@ -162,11 +165,35 @@ try {
     log("Thumbnail saved!");
 
     // Video
-    $video->filters()->resize(
-            new Coordinate\Dimension(1280, 720), Filters\Video\ResizeFilter::RESIZEMODE_INSET, true)
-        ->custom('format=yuv420p');
 
-  log("Converting video");
+    // bitrate stuff
+    $isHD = ($videoWidth >= 1280 || $videoHeight >= 720);
+
+    if ($isHD) {
+        $bitrate = 4000;
+    } else {
+        // calculate bitrate for video based on the resolution.
+        $videoScaleFactor = min($videoWidth / 1280, $videoHeight / 720);
+        $bitrate = (int)max(1000, 4000 * $videoScaleFactor);
+    }
+
+    log("Video bitrate: " . $bitrate);
+
+    // if the video is higher than 1280x720 then scale it down to 720p.
+    if ($videoWidth > 1280 || $videoHeight > 720) {
+        log("Scaling down video to 720p.");
+        $video->filters()->resize(
+            new Coordinate\Dimension(1280, 720),
+            Filters\Video\ResizeFilter::RESIZEMODE_INSET,
+            true
+        );
+    }
+
+    $h264->setKiloBitrate($bitrate);
+
+    $video->filters()->custom('format=yuv420p');
+
+    log("Converting video");
     $video->save($h264, SB_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
 
     debug_print_backtrace();
