@@ -2,10 +2,11 @@
 <?php
 namespace OpenSB;
 
-global $ffmpegPath, $ffprobePath, $database;
+global $database;
 
 use SquareBracket\VersionNumber;
 
+use DivisionByZeroError;
 use Alchemy\BinaryDriver\Exception\ExecutionFailureException;
 
 use FFMpeg\Coordinate;
@@ -51,8 +52,8 @@ echo (new VersionNumber)->printVersionForOutput();
 $config = [
     'timeout' => 3600, // The timeout for the underlying process (1 hour)
     'ffmpeg.threads' => 12,   // The number of threads that FFmpeg should use
-    'ffmpeg.binaries' => ($ffmpegPath ? $ffmpegPath : 'ffmpeg'),
-    'ffprobe.binaries' => ($ffprobePath ? $ffprobePath : 'ffprobe'),
+    'ffmpeg.binaries' => 'ffmpeg',
+    'ffprobe.binaries' => 'ffprobe',
 ];
 
 // Here's an example of the required parameters for the processing worker:
@@ -127,28 +128,34 @@ try {
         ->first()               // returns the first video stream
         ->get("height");
 
-    //get the actual framerate
-    $framerate = explode("/", $fracFramerate)[0] / explode("/", $fracFramerate)[1];
+    // attempt to get the actual framerate
+    try {
+        $framerate = explode("/", $fracFramerate)[0] / explode("/", $fracFramerate)[1];
+        log("Framerate: " . $fracFramerate);
+    } catch (DivisionByZeroError) {
+        log("Failed to get framerate.");
+        $fucked = true;
+    }
 
     log("Resolution: " . $videoWidth . "x" . $videoHeight);
     log("Creating thumbnail...");
 
     // Thumbnail
 
-    // if we cant actually get the total framecount, fallback to the 1st (or 2nd???) frame of the video.
-    if ($fucked) {
-        $thumbnailTime = 1;
-    } else {
-        $thumbnailTime = $duration * 0.33;
-    }
-
     // calculate thumbnail resolution in a way that wont fuck up the aspect ratio
     $resolution = downscaleVideoForThumbnail($videoWidth, $videoHeight);
 
     log("Downscaled resolution: " . $resolution["width"] . "x" . $resolution["height"]);
 
-    log("Taking thumbnail from frame " . $thumbnailTime);
-    $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
+    if ($fucked) {
+        log("Taking thumbnail from first frame");
+        $frame = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+    } else {
+        $thumbnailTime = $duration * 0.33;
+        log("Taking thumbnail from frame " . $thumbnailTime);
+        $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
+    }
+
     $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
     log("Saving thumbnail");
     $frame->save(SB_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
@@ -167,11 +174,18 @@ try {
     //delete_directory($preload_folder);
 
     if ($for_website) {
-        log("Updating database flags...");
+        log("Updating database entry...");
         $videoData = $database->fetch("SELECT v.* FROM uploads v WHERE v.video_id = ?", [$new]);
 
+        // if we couldnt get length just fallback to 0 seconds.
+        if ($fucked) {
+            $length = 0;
+        } else {
+            $length = round($duration / $framerate);
+        }
+
         $database->query("UPDATE uploads SET videolength = ?, flags = ? WHERE video_id = ?",
-            [round($duration / $framerate), $videoData['flags'] ^ 0x2, $new]);
+            [$length, $videoData['flags'] ^ 0x2, $new]);
     } else {
         log("Not a website video, skipping.");
     }
