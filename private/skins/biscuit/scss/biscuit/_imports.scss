@@ -171,11 +171,6 @@ hr {
   }
 }
 
-.userlink-handle {
-  color: #aaa;
-  text-decoration: none;
-}
-
 .fade {
   color: #888;
 }
@@ -207,10 +202,34 @@ hr {
 
 .userlink {
   display: inline-flex;
-  align-items: center;
+  text-wrap: auto;
+  flex-wrap: wrap;
 
-  /* this should be close enough to a space. */
-  gap: 0.5ch;
+  // ok so if the userlink is in a "small content entry" then center that shit.
+  .content-entry-small & {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .userlink-displayname {
+    margin-right: 0.5ch;
+  }
+
+  .userlink-bullshit {
+    display: inline-flex;
+    flex-wrap: wrap;
+    //gap: 0.5ch; (fucks shit up???)
+    align-items: center;
+
+    .userlink-handle {
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    .biscuit-icon {
+      margin-left: 0.5ch;
+    }
+  }
 }
 
 @import 'header';

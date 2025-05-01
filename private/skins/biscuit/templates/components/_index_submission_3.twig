@@ -8,6 +8,14 @@
                  class="content-image thumbnail">
         </a>
     </div>
-    <div class="content-author">By {{ user_link(submission.author) }}</div>
+    <div class="content-title">
+        {{ submission.title }}
+    </div>
+    <div class="content-author">
+        {{ user_link(submission.author) }}
+    </div>
+    <div class="content-rating">
+        {{ show_ratings(submission.interactions.ratings) }}
+    </div>
 </div>
 </li>

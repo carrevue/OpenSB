@@ -326,30 +326,46 @@ class SquareBracketTwigExtension extends AbstractExtension
         $class = "userlink-" . $username;
         $style = "color:" . $color;
 
+        // if user is staff
+        if ($powerlevel > 1) {
+            $staff_icon = '<div class="biscuit-icon staff"></div>';
+        } else {
+            $staff_icon = '';
+        }
+
         if (mb_strtolower($username) === mb_strtolower($displayName)) {
             // if username matches display name
-            $displayText = sprintf('<span style="%s">@%s</span>', $style, $username);
+            $displayText = sprintf('
+<div class="userlink-bullshit">
+<span style="%s">@%s</span>
+%s
+</div>',
+                $style,
+                $username,
+                $staff_icon
+            );
         } else {
             // if theyre different
             $displayText = sprintf(
-                '%s <a class="userlink-handle" style="text-decoration: none;" href="%s">@%s</a>',
+                '
+<div class="userlink-displayname">%s</div>
+<div class="userlink-bullshit">
+<a class="userlink-handle" style="text-decoration: none;" href="%s">@%s</a> %s
+</div>
+',
                 $displayName,
                 $href,
-                $username
+                $username,
+                $staff_icon
             );
         }
 
-        if ($powerlevel > 1) {
-            $staff_icon = '<div class="biscuit-icon staff"></div>';
-        }
-
         // return link
-        return sprintf('<div class="userlink"><a class="%s" style="%s" href="%s">%s</a>%s</div>',
+        return sprintf('<div class="userlink"><a class="%s" style="%s" href="%s">%s</a></div>',
             $class,
             $style,
             $href,
-            $displayText,
-            ($staff_icon ?? ''));
+            $displayText);
     }
 
     // old userlink used on bootstrap and finalium

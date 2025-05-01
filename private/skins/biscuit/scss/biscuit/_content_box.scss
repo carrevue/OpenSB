@@ -1,3 +1,14 @@
+@mixin content-box-small-info {
+    font-size: 10px;
+    font-weight: normal;
+
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+}
+
 .thumbnail
 {
     border: 1px solid $image-border-color;
@@ -83,19 +94,16 @@
 
     .content-entry-small
     {
-        max-height: 140px;
+        max-height: 240px;
         text-align: center;
+
+        .content-title {
+            @include content-box-small-info;
+        }
 
         // make "By [uploader]" (index) and "[submission title]" (profile) text smaller
         .content-author {
-            font-size: 10px;
-            font-weight: normal;
-
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: inline-block;
-            white-space: nowrap;
+            @include content-box-small-info;
 
             // make links thinner
             a {
@@ -105,6 +113,14 @@
                 &.userlink {
                     font-weight: bold;
                 }
+            }
+        }
+
+        .content-rating {
+            .biscuit-icon {
+                width: 12px;
+                height: 12px;
+                background-size: 12px;
             }
         }
 
