@@ -1,9 +1,9 @@
 # Terms of Service
-Last updated by Chaziz on January 6th 2025.
-
-(DRAFT)
+Last updated by Chaziz on May 2nd 2025.
 
 The term "platform" refers to both the SquareBracket website, and its sister/mirror website FulpTube. We are not affiliated with the original FulpTube from 2020-2021, nor the unrelated website known as squareBracket that previously went by the names Quadium and Brickface.
+
+The platform is unavailable in certain countries, including Azerbaijan.
 
 By using the platform, you agree to these terms:
 
