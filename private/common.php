@@ -134,8 +134,18 @@ try {
 
         $twig_error = new ErrorTemplating($orange);
 
-        if ($ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()])) {
-            $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]));
+        $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()]);
+
+        // if theres no ipban, check again with the unencrypted ip address.
+        // this is temporary.
+        if (!$ipban) {
+            $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress(false)]);
+        }
+
+        if ($ipban) {
+            $usersAssociatedWithIP = $database->fetchArray($database->query(
+                "SELECT name FROM users WHERE ip LIKE ? OR ip LIKE ?",
+                [Utilities::getIpAddress(), Utilities::getIpAddress(false)]));
 
             http_response_code(403);
             echo $twig_error->render("ip_banned.twig", [
