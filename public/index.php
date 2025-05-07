@@ -126,7 +126,7 @@ if (isset($path[1]) && $path[1] != '') {
             default => die("Invalid API.")
         },
         'assets' => match ($path[2] ?? null) {
-            'bootstrap-icons.woff2' => load_file_from_vendor('/twbs/bootstrap-icons/font/fonts/bootstrap-icons.woff2', 'font/woff2'),
+            'bootstrap-icons.svg' => load_file_from_vendor('/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml'),
             'previews' => load_thumbnail_from_skin($path[3] ?? ''),
             default => die(),
         },

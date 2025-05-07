@@ -597,7 +597,8 @@ class SquareBracketTwigExtension extends AbstractExtension
             trigger_error("legacyIcon function called outside of a legacy frontend.", E_USER_WARNING);
         }
 
-        return $this->twig->render('components/icon.twig', ['icon' => $icon, 'size' => $size]);
+        // this should be in common
+        return $this->twig->render('bootstrap_icon.twig', ['icon' => $icon, 'size' => $size]);
     }
 
     public function submissionBox($submission)

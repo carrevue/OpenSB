@@ -10,7 +10,9 @@ class UploadRatingData
         // we don't need $this->database nor $this->upload_id.
 
         $this->upload_rating_data = array_fill_keys(range(1, 5), 0);
-        $ratings = $database->query("SELECT rating, COUNT(*) as count FROM upload_ratings WHERE video=? GROUP BY rating", [$upload_id]);
+        $ratings = $database->fetchArray(
+            $database->query("SELECT rating, COUNT(*) as count FROM upload_ratings WHERE video=? GROUP BY rating", [$upload_id])
+        );
 
         foreach ($ratings as $row) {
             $this->upload_rating_data[(string)$row['rating']] = $row['count'];

@@ -33,7 +33,7 @@ class UploadData
         if ($this->data != []) {
             $this->takedown = $this->database->fetchArray($this->database->query("SELECT * FROM upload_takedowns t WHERE t.submission = ?", [$id]));
             $this->tags = $this->database->fetchArray($this->database->query("SELECT * FROM `upload_tag_index` ti JOIN upload_tag_meta t ON (t.tag_id = ti.tag_id) WHERE ti.video_id = ?", [$this->data["id"]]));
-            $this->ratings = new UploadRatingData($database, $id);
+            $this->ratings = new UploadRatingData($database, $this->data["id"]);
         }
     }
 
