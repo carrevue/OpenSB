@@ -2,8 +2,6 @@
   "browse": "Visite",
   "browse_more": "Ver más",
   "welcome_logged_in": "Bienvenido de nuevo, %s",
-  "welcome_logged_in_finalium": "Bienvenido a %s, %s",
-  "welcome_logged_in_finalium_beta": "Bienvenido, %s",
   "welcome_logged_out": "Bienvenido a %s",
   "random_uploads": "Al azar",
   "random_uploads_desc": "Selección aleatoria de los contenidos cargados",

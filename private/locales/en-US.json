@@ -5,9 +5,10 @@
   "browse_more": "Browse more",
 
   "welcome_logged_in": "Welcome back, %s",
-  "welcome_logged_in_finalium": "Welcome to %s, %s",
-  "welcome_logged_in_finalium_beta": "Welcome, %s",
   "welcome_logged_out": "Welcome to %s",
+
+  "login": "Login",
+  "register": "Register",
 
   "list": "List",
   "grid": "Grid",
@@ -55,5 +56,6 @@
   "community_guidelines": "Community Guidelines",
   "terms_of_service": "Terms of Service",
   "privacy_policy": "Privacy Policy",
-  "staff": "Staff"
+  "staff": "Staff",
+  "debug": "Debug"
 }
