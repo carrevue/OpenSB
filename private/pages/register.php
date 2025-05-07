@@ -103,7 +103,7 @@ if (isset($_POST['registersubmit'])) {
 
         Utilities::redirect('./');
     } else {
-        Utilities::notifyBanner($error, "/register.php");
+        Utilities::notifyBanner($error, "/register");
     }
 }
 

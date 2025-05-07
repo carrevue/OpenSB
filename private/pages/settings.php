@@ -206,7 +206,7 @@ if (isset($_POST['save'])) {
 
         Utilities::notifyBanner("Your settings have been successfully updated.", $url, "success");
     } else {
-        Utilities::notifyBanner($error, "/settings.php");
+        Utilities::notifyBanner($error, "/settings");
     }
 }
 

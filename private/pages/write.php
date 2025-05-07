@@ -33,7 +33,8 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $database->query("INSERT INTO journals (title, post, author, date, is_site_news) VALUES (?,?,?,?,?)",
         [$title, $description, $uploader, time(), $isSiteNews]);
 
-    Utilities::notifyBanner("Your journal has been posted.", "./user.php?name=" . $auth->getUserData()["name"], "success");
+    // TODO: this should redirect to the journal itself, not the user's profile.
+    Utilities::notifyBanner("Your journal has been posted.", "/user/" . $auth->getUserData()["name"], "success");
 }
 
 echo $twig->render('write_journal.twig');

@@ -125,7 +125,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
             parse_tags($tags2, $new, $database);
 
-            Utilities::notifyBanner("Your upload has been completed.", "./watch.php?v=" . $new, "success");
+            Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
         } else {
             Utilities::notifyBanner("There is a problem with file permissions and/or PHP on this instance.", "/upload");
         }
@@ -137,7 +137,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
         parse_tags($tags2, $new, $database);
 
-        Utilities::notifyBanner("Your upload has been completed.", "./watch.php?v=" . $new, "success");
+        Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
     } elseif (in_array(strtolower($ext), $supportedAudioFormats, true)) { // MUSIC
         Utilities::notifyBanner("Audio uploading will be implemented at a later date.", "/upload");
     } else {
