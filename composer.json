@@ -1,13 +1,13 @@
 {
 	"require": {
-		"twig/twig": "3.20.0",
+		"twig/twig": "3.21.1",
 		"intervention/image": "3.11.2",
 		"erusev/parsedown": "dev-master",
 		"php-ffmpeg/php-ffmpeg": "1.3.2",
 		"ext-pdo": "*",
-		"twig/string-extra": "3.20.0",
+		"twig/string-extra": "3.21.0",
 		"twbs/bootstrap": "5.3.5",
-		"twbs/bootstrap-icons": "1.11.3",
+		"twbs/bootstrap-icons": "1.12.1",
 		"jaybizzle/crawler-detect": "1.3.4",
 		"ext-curl": "*"
 	},
