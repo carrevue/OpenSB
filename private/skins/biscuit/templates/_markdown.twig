@@ -4,6 +4,6 @@
 
 {% block content %}
 	<div class="content-box">
-		{{ source('markdown/' ~ file) | markdown_unsafe }}
+		{{ source('markdown/' ~ file) | markdown_info_page }}
 	</div>
 {% endblock %}

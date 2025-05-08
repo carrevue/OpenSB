@@ -26,7 +26,7 @@ class Templating
      */
     public function __construct(SquareBracket $orange)
     {
-        global $isChazizSB, $auth, $isDebug, $branding, $enableInviteKeys, $enableCache;
+        global $isChazizSB, $auth, $isDebug, $enableInviteKeys, $enableCache;
         chdir(SB_PRIVATE_PATH);
 
         $options = $orange->getLocalOptions();
@@ -94,26 +94,8 @@ class Templating
             }));
         }
 
-        // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
-        // this fulptube branding is meant to look like the squarebracket branding on purpose, since
-        // both squarebracket.pw and fulptube.rocks lead to the same site.
-        if (Utilities::isFulpTube()) {
-            $isFulpTube = true;
-            $branding = [
-                "name" => "FulpTube",
-                "assets_location" => "/assets/sb_branding/fulp",
-            ];
-        } else {
-            $isFulpTube = false;
-            // custom branding for themes. for that Extra Accuracy™.
-            if ($isChazizSB) {
-                if ($this->skin == "finalium" && $this->theme == "beta") {
-                    $branding["name"] = "cheeseRox";
-                } elseif ($this->skin == "finalium" || $this->skin == "bootstrap") {
-                    $branding["name"] = "squareBracket";
-                }
-            }
-        }
+        $isFulpTube = Utilities::isFulpTube();
+        $branding = $orange->returnBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.
         $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is back online. Registrations are closed until

@@ -10,19 +10,19 @@ use Twig\TwigFunction;
 class SquareBracketTwigExtension extends AbstractExtension
 {
     private $orange;
+    private $database;
     private $twig;
 
     public function __construct(SquareBracket $orange, $twig)
     {
         $this->orange = $orange;
+        $this->database = $this->orange->getDatabase();
         $this->twig = $twig;
     }
 
     public function getFunctions(): array
     {
         global $profiler;
-
-        $db = $this->orange->getDatabase();
 
         $options = $this->orange->getLocalOptions();
         $forceOldUserlink = $options['useOldUserlinkImplementation'] ?? null;
@@ -157,6 +157,17 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             }, ['is_safe' => ['html']]),
 
+            // Markdown function for info pages. **NOT SANITIZED, DON'T LET IT EVER TOUCH USER INPUT**
+            new TwigFilter('markdown_info_page', function ($text) {
+                $branding = $this->orange->returnBrandingSettings();
+                $markdown = new Parsedown();
+
+                // replace hardcoded dummy strings with proper strings
+                $text = str_replace("OpenSBInstanceName", $branding["name"], $text);
+
+                return $markdown->text($text);
+            }, ['is_safe' => ['html']]),
+
             // Markdown function for non-inline text. **NOT SANITIZED, DON'T LET IT EVER TOUCH USER INPUT**
             new TwigFilter('markdown_unsafe', function ($text) {
                 $markdown = new Parsedown();
@@ -261,12 +272,10 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function profilePicture($username)
     {
-        global $database;
-
-        $id = Utilities::usernameToUserID($database, $username);
+        $id = Utilities::usernameToUserID($this->database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
         // don't bother with userdata since that might slow shit down
-        $is_banned = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
+        $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
 
         if ($is_banned) {
             $data = "/assets/profiledef.svg";
@@ -284,9 +293,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     // TODO: merge this into profilePicture()
     public function profilePictureAdmin($username)
     {
-        global $database;
-
-        $id = Utilities::usernameToUserID($database, $username);
+        $id = Utilities::usernameToUserID($this->database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
         if (file_exists('..' . $location)) {
             $data = $location;
@@ -299,9 +306,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function profileBanner($username)
     {
-        global $database;
-
-        $id = Utilities::usernameToUserID($database, $username);
+        $id = Utilities::usernameToUserID($this->database, $username);
         $location = '/dynamic/banners/' . $id . '.png';
 
         if (file_exists('..' . $location)) {
@@ -537,13 +542,12 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function headerUserAccountLinks()
     {
-        global $orange, $database;
-        $accountsArray = $orange->getAccountsArray();
+        $accountsArray = $this->orange->getAccountsArray();
 
         $array = [];
 
         foreach ($accountsArray as $account) {
-            $data = $database->result("SELECT name FROM users WHERE id = ?", [$account["userid"]]);
+            $data = $this->database->result("SELECT name FROM users WHERE id = ?", [$account["userid"]]);
 
             $array[] = [
                 "id" => $account["userid"],
@@ -555,18 +559,19 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     public function sidebarFollowingUsers() {
-        global $auth, $database;
+        global $auth;
+        // Fuck. ok i think the squarebracket class should have a getAuthClass function or something like that
 
         $userid = $auth->getUserID();
 
-        $users = $database->fetchArray(
-            $database->query("SELECT s.* FROM user_follows s JOIN users u ON s.user = u.id WHERE s.user = ?", [$userid])
+        $users = $this->database->fetchArray(
+            $this->database->query("SELECT s.* FROM user_follows s JOIN users u ON s.user = u.id WHERE s.user = ?", [$userid])
         );
 
         $array = [];
 
         foreach ($users as $user) {
-            $data = $database->result("SELECT name FROM users WHERE id = ?", [$user["id"]]);
+            $data = $this->database->result("SELECT name FROM users WHERE id = ?", [$user["id"]]);
 
             $array[] = [
                 "id" => $user["user"],

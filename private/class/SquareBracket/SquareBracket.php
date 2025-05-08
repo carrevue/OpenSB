@@ -8,6 +8,7 @@ class SquareBracket {
     private Database $database;
     public array $options;
     private array $accounts;
+    private array $branding_settings;
     private string $accounts_cookie_warning = "DO-NOT-SHARE-THIS-WITH-ANYONE-";
 
     /**
@@ -50,6 +51,33 @@ class SquareBracket {
             $this->accounts = json_decode(base64_decode($stupid_fucking_bullshit), true);
         } else {
             $this->accounts = [];
+        }
+
+        // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
+        // this fulptube branding is meant to look like the squarebracket branding on purpose, since
+        // both squarebracket.pw and fulptube.rocks lead to the same site.
+        if (Utilities::isFulpTube($this->options["debug_fulptube_branding"])) {
+            //$isFulpTube = true;
+            $this->branding_settings = [
+                "name" => "FulpTube",
+                "assets_location" => "/assets/sb_branding/fulp",
+            ];
+        } else {
+            //$isFulpTube = false;
+            $this->branding_settings = [
+                "name" => $config["branding"]["name"] ?? '',
+                "assets_location" => $config["branding"]["assets"] ?? '',
+            ];
+
+            // custom branding for themes. for that Extra Accuracy™.
+            if ($isChazizSB) {
+                //if ($this->options["skin"] == "finalium" && $this->options["skin"] == "beta") {
+                //    $this->branding_settings["name"] = "cheeseRox";
+                //} elseif ($this->skin == "finalium" || $this->skin == "bootstrap") {
+                if ($this->options["skin"] == "finalium" || $this->options["skin"] == "bootstrap") {
+                    $this->branding_settings["name"] = "squareBracket";
+                }
+            }
         }
 
         // keep the try/catch shit here since the class initalization shit in common.php should
@@ -104,5 +132,14 @@ class SquareBracket {
     public function getAccountsArray(): array|string
     {
         return $this->accounts;
+    }
+
+    /**
+     * Returns array for the instance's branding.
+     *
+     * @return array
+     */
+    public function returnBrandingSettings(): array {
+        return $this->branding_settings;
     }
 }

@@ -67,14 +67,6 @@ spl_autoload_register(function ($class_name) {
 
 // FIXME: what the fuck is this piece of shit -chaziz 4/9/2025
 // WIP: moving these to the core "SquareBracket" class. -chaziz 4/12/2025
-
-// since opensb orange is shitty code and uses global everywhere. convert new config variables
-// to old global config variables to avoid fucking around with the legacy orange code.
-$host = $config["mysql"]["host"];
-$db = $config["mysql"]["database"];
-$user = $config["mysql"]["username"];
-$pass = $config["mysql"]["password"];
-
 $captcha = $config["captcha"];
 
 $allowedSites = ['squarebracket', 'squarebracket_chaziz'];
@@ -86,11 +78,6 @@ $isChazizSB = ($config["site"] === "squarebracket_chaziz");
 $enableCache = (bool)($config["cache"] ?? false);
 $isMaintenance = (bool)($config["maintenance"] ?? false);
 $enableInviteKeys = (bool)($config["invite_keys"] ?? false);
-
-$branding = [
-    "name" => $config["branding"]["name"] ?? '',
-    "assets_location" => $config["branding"]["assets"] ?? '',
-];
 
 // TODO: port these into settings that can be changed through the admin panel
 $disableRegistration = !($config["enable_registration"] ?? false);
