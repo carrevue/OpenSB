@@ -455,6 +455,10 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function headerMainLinks()
     {
         $array = [
+            "home" => [
+                "name" => "Home",
+                "url" => "/",
+            ],
             "browse" => [
                 "name" => "Browse",
                 "url" => "/browse",

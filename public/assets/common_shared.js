@@ -1,10 +1,10 @@
 console.log(
     "%cOpenSB " + opensb_version,
-    "color: blue; font-family: sans-serif; font-size: 4em;"
+    "color: #0069B4; font-family: sans-serif; font-size: 2em;"
 );
 console.log(
-    "%cWarning: If someone instructs you to copy and paste content here, they may be attempting to access your account information.",
-    "color: red; font-family: monospace; font-size: 2em"
+    "%cWarning: DO NOT PASTE ANYTHING SUSPICIOUS. If someone is asking you to paste something here, they may be attempting to steal your account.",
+    "color: red; font-family: monospace; font-size: 1em"
 );
 
 const sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
@@ -16,7 +16,7 @@ if (sbOptions) {
     console.log(options);
 }
 
-function updateConfig(key, value) {
+function setConfig(key, value) {
     let options = {};
 
     if (sbOptions) {

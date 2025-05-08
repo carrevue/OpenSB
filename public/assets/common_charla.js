@@ -24,14 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (indexListButton) {
         indexListButton.onclick = function () {
-            updateConfig("charla_homepage_type", "list");
+            setConfig("charla_homepage_type", "list");
             location.reload();
         }
     }
 
     if (indexGridButton) {
         indexGridButton.onclick = function () {
-            updateConfig("charla_homepage_type", "grid");
+            setConfig("charla_homepage_type", "grid");
             location.reload();
         }
     }
