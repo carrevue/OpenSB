@@ -69,7 +69,7 @@ $comment = [
 ];
 
 if ($type == 0) {
-    $database->query("INSERT INTO comments (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
+    $database->query("INSERT INTO upload_comments (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
         [$id, $reply_to, $_POST['comment'], $auth->getUserID(), time(), 0]);
 } elseif ($type == 1) {
     $database->query("INSERT INTO user_profile_comments (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
