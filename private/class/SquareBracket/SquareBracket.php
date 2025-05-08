@@ -56,7 +56,7 @@ class SquareBracket {
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
         // this fulptube branding is meant to look like the squarebracket branding on purpose, since
         // both squarebracket.pw and fulptube.rocks lead to the same site.
-        if (Utilities::isFulpTube($this->options["debug_fulptube_branding"] ?? false)) {
+        if (Utilities::isFulpTube($this->options)) {
             //$isFulpTube = true;
             $this->branding_settings = [
                 "name" => "FulpTube",
@@ -71,10 +71,12 @@ class SquareBracket {
 
             // custom branding for themes. for that Extra Accuracy™.
             if ($isChazizSB) {
-                //if ($this->options["skin"] == "finalium" && $this->options["skin"] == "beta") {
-                //    $this->branding_settings["name"] = "cheeseRox";
-                //} elseif ($this->skin == "finalium" || $this->skin == "bootstrap") {
-                if ($this->options["skin"] == "finalium" || $this->options["skin"] == "bootstrap") {
+                if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker") {
+                    $this->branding_settings = [
+                        "name" => "FulpTube",
+                        "assets_location" => "/assets/sb_branding/fulp",
+                    ];
+                } elseif ($this->options["skin"] == "finalium" || $this->options["skin"] == "bootstrap") {
                     $this->branding_settings["name"] = "squareBracket";
                 }
             }

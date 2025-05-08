@@ -343,22 +343,25 @@ class Utilities
         }
     }
 
-    // ok so $stupidFuckingHack exists because $debugFulpTube may not be fully initalized if this gets called
+    // ok so $optionsFallback exists because $debugFulpTube may not be fully initalized if this gets called
     // too early. maybe this function should just be moved into the core SquareBracket class? -chaziz 5/7/2025
-    public static function isFulpTube($stupidFuckingHack = false)
+    public static function isFulpTube(array $optionsFallback = []): bool
     {
         global $isChazizSB, $orange, $isDebug;
 
-        $debugFulpTube = $orange?->getLocalOptions()["debug_fulptube_branding"] ?? false;
+        $localOptions = $orange?->getLocalOptions() ?? $optionsFallback;
+        $isDebugMode = ($localOptions['debug_fulptube_branding'] ?? false) && $isDebug;
 
-        if ($stupidFuckingHack) { $debugFulpTube = true; }
-
-        // bypass logic completely if we're debugging fulptube branding.
-        if ($debugFulpTube && $isDebug) {
+        if ($isDebugMode) {
             return true;
         }
 
-        return ($isChazizSB) && isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] == 'fulptube.rocks');
+        $isHitchhikerTheme = ($localOptions['skin'] ?? '') === 'finalium'
+            && ($localOptions['theme'] ?? '') === 'hitchhiker';
+
+        $isFulpTubeDomain = isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'fulptube.rocks';
+
+        return $isChazizSB && ($isHitchhikerTheme || $isFulpTubeDomain);
     }
 
     public static function isLegacyFrontend()
