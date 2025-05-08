@@ -56,7 +56,7 @@ class SquareBracket {
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
         // this fulptube branding is meant to look like the squarebracket branding on purpose, since
         // both squarebracket.pw and fulptube.rocks lead to the same site.
-        if (Utilities::isFulpTube($this->options["debug_fulptube_branding"])) {
+        if (Utilities::isFulpTube($this->options["debug_fulptube_branding"] ?? false)) {
             //$isFulpTube = true;
             $this->branding_settings = [
                 "name" => "FulpTube",
