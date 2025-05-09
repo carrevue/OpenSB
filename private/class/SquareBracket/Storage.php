@@ -63,13 +63,13 @@ class Storage
     {
         $placeholder = $this->orange->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
-        return $this->getThumbnailPath(
-            $id,
-            false,
-            'pfp',
-            'png',
-            $placeholder
-        );
+        $path = SB_DYNAMIC_PATH . '/pfp/' . $id . '.png';
+
+        if (file_exists($path)) {
+            return '/dynamic/pfp/' . $id . '.png';
+        }
+
+        return '/assets/' . $placeholder;
     }
 
     public function processImageUpload($temp_name, $new): void

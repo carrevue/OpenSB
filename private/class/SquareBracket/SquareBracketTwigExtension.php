@@ -288,7 +288,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         if ($is_banned) {
             $data = "/assets/profiledef.svg";
         } else {
-            $data = $storage->getUserProfilePicture($username);
+            $data = $storage->getUserProfilePicture($id);
         }
 
         return $data;
@@ -300,9 +300,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         global $storage;
 
         $id = Utilities::usernameToUserID($this->database, $username);
-        $location = '/dynamic/pfp/' . $id . '.png';
 
-        $data = $storage->getUserProfilePicture($username);
+        $data = $storage->getUserProfilePicture($id);
 
         return $data;
     }
