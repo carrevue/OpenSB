@@ -98,10 +98,15 @@ class SquareBracketTwigExtension extends AbstractExtension
             }, ['is_safe' => ['html']]),
 
             // Markdown function for any posts.
-            new TwigFilter('markdown_user_written', function ($text) {
-                $markdown = new ParsedownExtension();
+            new TwigFilter('markdown_user_written', function ($text, $enableHeaders = false) {
+                if ($enableHeaders) {
+                    $markdown = new Parsedown();
+                } else {
+                    $markdown = new ParsedownExtension();
+                }
                 $markdown->setSafeMode(true);
                 $markdown->setUrlsLinked(true);
+                $markdown->setBreaksEnabled(true);
 
                 $parsed_text = $markdown->text($text);
 

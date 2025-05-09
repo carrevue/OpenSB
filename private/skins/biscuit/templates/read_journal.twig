@@ -26,7 +26,7 @@
 	<div class="content-box">
 		<h1>{{ data.title }}</h1>
 		<p>By {{ user_link(data.author) }}, {{ data.published | relative_time }}</p>
-		{{ data.contents | markdown_user_journal }}
+		{{ data.contents | markdown_user_written(true) }}
 	</div>
 	<div id="comments">
 		<div class="content-box no-border-top">

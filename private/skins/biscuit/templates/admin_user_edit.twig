@@ -144,7 +144,7 @@
                                     <div>
                                         By {{ user_link(note.author) }}, {{ note.time | relative_time }}
                                     </div>
-                                    {{ note.content | markdown_user_journal }}
+                                    {{ note.content | markdown_user_written(true) }}
                                 </div>
                             {% endfor %}
                         </div>

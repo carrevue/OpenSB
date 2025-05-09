@@ -94,7 +94,7 @@
                         {% endif %}
                         <div class="watch-box-description-contents">
                             {% if submission.description | trim is not empty %}
-                                {{ submission.description | markdown_user_journal }}
+                                {{ submission.description | markdown_user_written }}
                             {% endif %}
                         </div>
                     </div>
