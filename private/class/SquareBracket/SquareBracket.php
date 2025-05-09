@@ -137,6 +137,16 @@ class SquareBracket {
     }
 
     /**
+     * Returns boolean. (temporary)
+     *
+     * @return bool
+     */
+    public function isFulpTube(): bool
+    {
+        return Utilities::isFulpTube($this->options);
+    }
+
+    /**
      * Returns array for the instance's branding.
      *
      * @return array

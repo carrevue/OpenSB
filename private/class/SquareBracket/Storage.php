@@ -7,9 +7,11 @@ use Intervention\Image\ImageManager;
 
 class Storage
 {
+    private SquareBracket $orange;
     private Database $database;
-    public function __construct(Database $database) {
-        $this->database = $database;
+    public function __construct(SquareBracket $orange) {
+        $this->orange = $orange;
+        $this->database = $orange->getDatabase();
     }
 
     public function processVideoUpload($new, $target_file): void
@@ -33,23 +35,40 @@ class Storage
 
     public function getVideoUploadThumbnail($id, $custom): string
     {
+        $placeholder = $this->orange->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
+
         return $this->getThumbnailPath(
             $id,
             $custom,
             'thumbnails',
             'png',
-            'placeholder_video.svg'
+            $placeholder
         );
     }
 
     public function getImageUploadThumbnail($id, $custom): string
     {
+        $placeholder = $this->orange->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
+
         return $this->getThumbnailPath(
             $id,
             $custom,
             'art_thumbnails',
             'jpg',
-            'placeholder_image.svg'
+            $placeholder
+        );
+    }
+
+    public function getUserProfilePicture($id): string
+    {
+        $placeholder = $this->orange->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+
+        return $this->getThumbnailPath(
+            $id,
+            false,
+            'pfp',
+            'png',
+            $placeholder
         );
     }
 

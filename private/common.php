@@ -95,7 +95,7 @@ try {
 
     $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
-    $storage = new Storage($orange->getDatabase());
+    $storage = new Storage($orange);
 
     if (!SB_CLI) {
         $auth = new Authentication($database);

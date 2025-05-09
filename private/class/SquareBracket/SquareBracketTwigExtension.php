@@ -275,21 +275,20 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $data;
     }
 
+    // TODO: move parts of this to Storage
     public function profilePicture($username)
     {
+        global $storage;
+
         $id = Utilities::usernameToUserID($this->database, $username);
-        $location = '/dynamic/pfp/' . $id . '.png';
+
         // don't bother with userdata since that might slow shit down
         $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
 
         if ($is_banned) {
             $data = "/assets/profiledef.svg";
         } else {
-            if (file_exists('..' . $location)) {
-                $data = $location;
-            } else {
-                $data = "/assets/profiledef.svg";
-            }
+            $data = $storage->getUserProfilePicture($username);
         }
 
         return $data;
@@ -298,13 +297,12 @@ class SquareBracketTwigExtension extends AbstractExtension
     // TODO: merge this into profilePicture()
     public function profilePictureAdmin($username)
     {
+        global $storage;
+
         $id = Utilities::usernameToUserID($this->database, $username);
         $location = '/dynamic/pfp/' . $id . '.png';
-        if (file_exists('..' . $location)) {
-            $data = $location;
-        } else {
-            $data = "/assets/profiledef.svg";
-        }
+
+        $data = $storage->getUserProfilePicture($username);
 
         return $data;
     }
