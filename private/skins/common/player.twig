@@ -2,7 +2,7 @@
 <script src="https://unpkg.com/plyr@3.7.8/dist/plyr.min.js"></script>
 {% set video = "/dynamic/videos/" ~ submission.id ~ ".converted.mp4" %}
 
-{% if is_fulptube and current_theme == "hitchhiker" %}
+{% if current_skin == "finalium" and current_theme == "hitchhiker" %}
     {% set simulate_youtube_player = true %}
 {% endif %}
 
@@ -41,12 +41,7 @@
         }
 
         .plyr--video .plyr__controls {
-        {% if simulate_youtube_player %}
-            padding: 8px 4px 2px 4px;
-        {% else %}
-            padding: 1px;
-            background: #181818;
-        {% endif %}
+            padding: 32px 4px 2px 4px;
         }
 
         .plyr--video .plyr__control.plyr__tab-focus,
