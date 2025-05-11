@@ -46,25 +46,12 @@ class ErrorTemplating
             }));
         }
 
-        // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
-        // this fulptube branding is meant to look like the squarebracket branding on purpose, since
-        // both squarebracket.pw and fulptube.rocks lead to the same site.
-        if (Utilities::isFulpTube()) {
-            $isFulpTube = true;
-            $branding = [
-                "name" => "FulpTube",
-                "assets_location" => "/assets/sb_branding/fulp",
-            ];
-        } else {
-            $isFulpTube = false;
-        }
-
         $versionNumber = new VersionNumber;
 
         $this->twig->addGlobal('is_chaziz_sb', $orange->isDebug());
-        $this->twig->addGlobal('is_fulptube', $isFulpTube);
+        $this->twig->addGlobal('is_fulptube', $orange->isFulpTube());
         $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
-        $this->twig->addGlobal('website_branding', $branding);
+        $this->twig->addGlobal('website_branding', $orange->getBrandingSettings());
     }
 
     /**

@@ -99,7 +99,7 @@ class Templating
         }
 
         $isFulpTube = Utilities::isFulpTube();
-        $branding = $orange->returnBrandingSettings();
+        $branding = $orange->getBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.
         $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is back online. Registrations are closed until

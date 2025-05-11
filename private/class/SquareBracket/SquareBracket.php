@@ -6,7 +6,7 @@ namespace SquareBracket;
  */
 class SquareBracket {
     private Database $database;
-    private VersionNumber $version_number;
+    //private VersionNumber $version_number;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
     private bool $template_caching_enabled = false;
@@ -240,7 +240,7 @@ class SquareBracket {
      *
      * @return array
      */
-    public function returnBrandingSettings(): array {
+    public function getBrandingSettings(): array {
         return $this->branding_settings;
     }
 
