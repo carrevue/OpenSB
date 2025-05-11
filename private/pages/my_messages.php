@@ -4,8 +4,8 @@ namespace OpenSB;
 
 global $twig, $database, $auth;
 
-use SquareBracket\Utilities;
 use SquareBracket\UserData;
+use SquareBracket\Utilities;
 
 if (!$auth->isUserLoggedIn())
 {

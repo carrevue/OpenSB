@@ -47,7 +47,7 @@ function downscaleVideoForThumbnail($videoWidth, $videoHeight): array
     return ['width' => $targetWidth, 'height' => $newHeight];
 }
 
-echo (new VersionNumber)->printVersionForOutput();
+echo (new VersionNumber)->outputVersionBanner();
 
 $config = [
     'timeout' => 3600, // The timeout for the underlying process (1 hour)

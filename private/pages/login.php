@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $database, $auth, $orange, $isChazizSB;
+global $twig, $database, $auth, $orange;
 
 use SquareBracket\Utilities;
 
@@ -75,12 +75,7 @@ if (isset($_POST["loginsubmit"])) {
     }
 
     if (!$error) {
-        // DUMB SHIT !
-        if ($isChazizSB) {
-            $logindata = $database->fetch("SELECT password,token,ip,id,powerlevel FROM users WHERE name = ?", [$username]);
-        } else {
-            $logindata = $database->fetch("SELECT password,token,ip,id FROM users WHERE name = ?", [$username]);
-        }
+        $logindata = $database->fetch("SELECT password,token,ip,id FROM users WHERE name = ?", [$username]);
 
         if ($logindata && password_verify($password, $logindata['password'])) {
             if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
@@ -97,23 +92,8 @@ if (isset($_POST["loginsubmit"])) {
             // check if the account is from an ip that is in ip_bans
             $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
 
-            if ($ipban) {
+            if ($ipban || $isBanned) {
                 Utilities::notifyBanner("This account is banned.", "/login");
-            }
-
-            // testing code
-            if ($isChazizSB)
-            {
-                /* TODO: make this a setting that can be changed through the admin panel.
-                if ($logindata['powerlevel'] < 3)
-                {
-                    Utilities::notifyBanner("This instance is currently only open to the staff team.", "/login");
-                }
-                */
-
-                if ($isBanned) {
-                    Utilities::notifyBanner("This account is banned.", "/login");
-                }
             }
 
             // if we're logged in, add our current token in an array for account switching purposes.

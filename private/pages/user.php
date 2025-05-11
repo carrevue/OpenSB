@@ -7,9 +7,9 @@ global $auth, $database, $twig, $orange;
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\ProfileLayoutEnum;
+use SquareBracket\UploadQuery;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
-use SquareBracket\UploadQuery;
 
 $submission_query = new UploadQuery($database);
 

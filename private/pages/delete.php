@@ -7,9 +7,11 @@ global $auth, $orange, $storage, $database;
 use SquareBracket\UploadData;
 use SquareBracket\Utilities;
 
+// TODO: merge this into my_uploads.php -chaziz 5/10/2025
+
 $id = ($_GET['v'] ?? null);
 
-$submission = new UploadData($orange->getDatabase(), $id);
+$submission = new UploadData($orange->getDatabaseClass(), $id);
 $data = $submission->getData();
 
 if (!$auth->isUserLoggedIn())

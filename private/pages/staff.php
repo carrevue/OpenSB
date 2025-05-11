@@ -6,11 +6,6 @@ global $twig, $database, $orange;
 
 use SquareBracket\UserData;
 use SquareBracket\UserRoleEnum;
-use SquareBracket\Utilities;
-
-if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "charla") {
-    Utilities::notifyBanner("Please change your skin to Biscuit.", "/theme");
-}
 
 $staffQueryData = $database->fetchArray(
     $database->query(

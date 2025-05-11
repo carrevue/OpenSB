@@ -6,9 +6,18 @@ namespace SquareBracket;
  */
 class SquareBracket {
     private Database $database;
+    private VersionNumber $version_number;
+    private bool $is_debug = false;
+    private bool $is_chaziz_squarebracket_instance = false;
+    private bool $template_caching_enabled = false;
+    private bool $under_maintenance = false;
+    private bool $enable_account_registration = true;
+    private bool $enable_invite_keys = false;
+    private bool $enable_lockdown = false;
+    private array $branding_settings;
+    private array $captcha_settings;
     public array $options;
     private array $accounts;
-    private array $branding_settings;
     private string $accounts_cookie_warning = "DO-NOT-SHARE-THIS-WITH-ANYONE-";
 
     /**
@@ -16,21 +25,37 @@ class SquareBracket {
      *
      */
     public function __construct($config) {
-        global $isChazizSB;
-
         // extract mysql settings
         $host = $config["mysql"]["host"];
         $db = $config["mysql"]["database"];
         $user = $config["mysql"]["username"];
         $pass = $config["mysql"]["password"];
 
-        $isDebug = ($config["mode"] ?? '') === "DEV";
+        $this->is_debug = ($config["mode"] ?? '') === "DEV";
+
+        $this->captcha_settings = $config["captcha"];
+
+        $allowedSites = ['squarebracket', 'squarebracket_chaziz'];
+        if (!in_array($config["site"], $allowedSites)) {
+            trigger_error("The site mode in the configuration file should be 
+            set either to squarebracket or squarebracket_chaziz.", E_USER_WARNING);
+        }
+        $this->is_chaziz_squarebracket_instance = ($config["site"] === "squarebracket_chaziz");
+
+        $this->template_caching_enabled = (bool)($config["cache"] ?? false);
+
+        // TODO: port these into settings that can be changed through the admin panel
+        $this->under_maintenance = (bool)($config["maintenance"] ?? false);
+        $this->enable_account_registration = ($config["enable_registration"] ?? false);
+        $this->enable_invite_keys = (bool)($config["invite_keys"] ?? false);
+        $this->enable_lockdown = (bool)($config["lockdown"] ?? false);
+        //
 
         if (isset($_COOKIE["SBOPTIONS"])) {
             $this->options = json_decode(base64_decode($_COOKIE["SBOPTIONS"]), true);
         } else {
             $defaultSkin = "biscuit";
-            if ($isChazizSB) {
+            if ($this->is_chaziz_squarebracket_instance) {
                 // if we're on fulptube, set the default frontend to finalium 1, since its close enough to
                 // early-hitchhiker youtube (which is what og fulptube used to be based on). otherwise,
                 // set the default to charla. -chaziz 4/7/2025
@@ -70,7 +95,7 @@ class SquareBracket {
             ];
 
             // custom branding for themes. for that Extra Accuracy™.
-            if ($isChazizSB) {
+            if ($this->is_chaziz_squarebracket_instance) {
                 if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker") {
                     $this->branding_settings = [
                         "name" => "FulpTube",
@@ -82,37 +107,41 @@ class SquareBracket {
             }
         }
 
-        // keep the try/catch shit here since the class initalization shit in common.php should
-        // be moved here.
-        try {
-            $this->database = new Database($host, $user, $pass, $db);
-            // enable db profiler (not to be confused with the other profiler)
-            // if we are on debug mode
-            if ($isDebug) {
-                $this->database->setProfiling(true);
-            }
-        } catch (CoreException $e) {
-            $e->page();
+        $this->database = new Database($host, $user, $pass, $db);
+        // enable db profiler (not to be confused with the other profiler)
+        // if we are on debug mode
+        if ($this->is_debug) {
+            $this->database->setProfiling(true);
         }
+
+        //$this->version_number = new VersionNumber();
     }
 
     /**
-     * Returns the database class for other OpenSB classes to use.
+     * Returns the database class for other classes to use.
      *
      * @return Database
      */
-    public function getDatabase(): Database
-    {
+    public function getDatabaseClass(): Database {
         return $this->database;
     }
+
+    ///**
+    // * Returns the version number class for other OpenSB classes to use.
+    // *
+    // * @return VersionNumber
+    // */
+    //public function getVersionNumberClass(): VersionNumber
+    //{
+    //    return $this->version_number;
+    //}
 
     /**
      * Returns the user's local settings.
      *
      * @return array
      */
-    public function getLocalOptions(): array
-    {
+    public function getLocalOptions(): array {
         return $this->options;
     }
 
@@ -121,8 +150,7 @@ class SquareBracket {
      *
      * @return string
      */
-    public function getWarningString(): string
-    {
+    public function getWarningString(): string {
         return $this->accounts_cookie_warning;
     }
 
@@ -131,9 +159,17 @@ class SquareBracket {
      *
      * @return array|string
      */
-    public function getAccountsArray(): array|string
-    {
+    public function getAccountsArray(): array|string {
         return $this->accounts;
+    }
+
+    /**
+     * Returns boolean that indicates if debug is enabled.
+     *
+     * @return bool
+     */
+    public function isDebug(): bool {
+        return $this->is_debug;
     }
 
     /**
@@ -141,9 +177,62 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isFulpTube(): bool
-    {
+    public function isFulpTube(): bool {
         return Utilities::isFulpTube($this->options);
+    }
+
+    /**
+     * Returns boolean for enabling template caching.
+     *
+     * @return bool
+     */
+    public function isTemplateCachingEnabled(): bool {
+        return $this->template_caching_enabled;
+    }
+
+    /**
+     * Returns boolean for enabling account registration.
+     *
+     * @return bool
+     */
+    public function isAccountRegistrationEnabled(): bool {
+        return $this->enable_account_registration;
+    }
+
+    /**
+     * Returns boolean for enabling invite keys for account registration.
+     *
+     * @return bool
+     */
+    public function isInviteKeysEnabled(): bool {
+        return $this->enable_invite_keys;
+    }
+
+    /**
+     * Returns boolean for enabling lockdown.
+     *
+     * @return bool
+     */
+    public function isLockdownEnabled(): bool {
+        return $this->enable_lockdown;
+    }
+
+    /**
+     * Returns boolean for if the instance is under maintenance.
+     *
+     * @return bool
+     */
+    public function isUnderMaintenance(): bool {
+        return $this->under_maintenance;
+    }
+
+    /**
+     * Returns a bool that indicates if the instance is set to "Chaziz SquareBracket" mode.
+     *
+     * @return bool
+     */
+    public function isChazizSquareBracketInstance(): bool {
+        return  $this->is_chaziz_squarebracket_instance;
     }
 
     /**
@@ -153,5 +242,14 @@ class SquareBracket {
      */
     public function returnBrandingSettings(): array {
         return $this->branding_settings;
+    }
+
+    /**
+     * Returns array for the captcha settings.
+     *
+     * @return array
+     */
+    public function returnCaptchaSettings(): array {
+        return $this->captcha_settings;
     }
 }

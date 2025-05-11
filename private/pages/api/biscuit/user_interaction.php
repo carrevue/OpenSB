@@ -21,7 +21,7 @@ if ($auth->getUserBanData()) {
     ];
 }
 
-$database = $orange->getDatabase();
+$database = $orange->getDatabaseClass();
 
 function follow($member): array
 {

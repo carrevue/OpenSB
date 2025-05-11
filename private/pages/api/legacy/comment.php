@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $auth, $database, $twig, $isDebug;
+global $auth, $database, $twig, $orange;
 
 use SquareBracket\UserData;
 
@@ -18,7 +18,7 @@ if (strlen($_POST["comment"]) > 1000) {
 }
 
 // apparantly this wasnt a thing in the legacy api? oops -chaziz 4/20/2025
-if (!$isDebug) {
+if (!$orange->isDebug()) {
     $timeLimit = time() - 15;
     if ($database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
         $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||

@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $isDebug;
+global $orange, $twig;
 
 use SquareBracket\Utilities;
 
@@ -25,7 +25,7 @@ if (is_dir($localesPath)) {
         }
     }
 
-    if ($isDebug) {
+    if ($orange->isDebug()) {
         $locales[] = [
             'id' => "psuedo",
             'name' => "Psuedolocale",

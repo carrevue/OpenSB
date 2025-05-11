@@ -16,7 +16,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function __construct(SquareBracket $orange, $twig)
     {
         $this->orange = $orange;
-        $this->database = $this->orange->getDatabase();
+        $this->database = $this->orange->getDatabaseClass();
         $this->twig = $twig;
     }
 
@@ -53,7 +53,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 return $profiler->getDatabaseProfilingReport();
             }),
             new TwigFunction('version_banner', function () {
-                echo (new VersionNumber)->printVersionForOutput();
+                echo (new VersionNumber)->outputVersionBanner();
             }),
             new TwigFunction('remove_notification', [$this, 'removeNotification']),
             new TwigFunction('show_ratings', [$this, 'showRatings']),
@@ -243,7 +243,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function submissionView($submission_data)
     {
         if (!$submission_data) {
-            throw new CoreException('SubmissionView is null', 500);
+            throw new \Exception('SubmissionView is null', 500);
         }
         if ($submission_data["type"] == 0) {
             echo $this->twig->render("player.twig", ['submission' => $submission_data]);
@@ -592,9 +592,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         // TODO: this should probably be changed to check the file date of the current theme, not just that of the
         // default theme on biscuit (or charla if chaziz mode is enabled) -chaziz 1/13/2025.
-        global $isChazizSB;
-
-        if ($isChazizSB) {
+        if ($this->orange->isChazizSquareBracketInstance()) {
             return filemtime(SB_PUBLIC_PATH . "/assets/css/charla-default.css");
         } else {
             return filemtime(SB_PUBLIC_PATH . "/assets/css/default.css");

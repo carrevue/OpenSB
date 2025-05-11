@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $database, $auth, $orange, $isChazizSB;
+global $twig, $database, $auth, $orange;
 
 use DateTime;
 use SquareBracket\Utilities;
@@ -15,11 +15,13 @@ if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions(
     if (isset($_COOKIE['SBOPTIONS'])) {
         $options = json_decode(base64_decode($_COOKIE['SBOPTIONS']), true);
     }
-    if ($isChazizSB) {
+
+    if ($orange->isChazizSquareBracketInstance()) {
         $options["skin"] = "charla";
     } else {
         $options["skin"] = "biscuit";
     }
+
     $options["theme"] = "default";
     setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);
     header(sprintf('Location: /verify_birthdate'));

@@ -9,6 +9,8 @@ global $database, $auth;
 // removed around mid-2024 due to a redesign of profiles. this *may* comeback if i redesign profiles
 // on the charla frontend. -chaziz 1/4/2025
 
+// TODO: merge this into my_uploads.php -chaziz 5/10/2025
+
 use SquareBracket\Utilities;
 
 $id = ($_GET['v'] ?? null);

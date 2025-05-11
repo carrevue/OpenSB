@@ -4,9 +4,9 @@ namespace OpenSB;
 
 global $twig, $database, $orange;
 
-use SquareBracket\Utilities;
-use SquareBracket\UploadQuery;
 use SquareBracket\UploadFlags;
+use SquareBracket\UploadQuery;
+use SquareBracket\Utilities;
 
 $submission_query = new UploadQuery($database);
 

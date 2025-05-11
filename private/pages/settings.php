@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $auth, $database, $isChazizSB, $storage;
+global $orange, $twig, $auth, $database, $storage;
 
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
@@ -51,7 +51,7 @@ if (isset($_POST['save'])) {
     $highlight_box_background_color = $_POST['highlight_box_background_color'] ?? '#E6E6E6';
     $highlight_box_text_color = $_POST['highlight_box_text_color'] ?? '#000000';
 
-    if ($auth->isUserOver18() && !$isChazizSB) {
+    if ($auth->isUserOver18() && !$orange->isChazizSquareBracketInstance()) {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
     } else {
         $rating = 'general';

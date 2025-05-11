@@ -18,12 +18,9 @@ if (!file_exists(SB_PRIVATE_PATH . '/config/config.php')) {
 
 $config = include_once(SB_PRIVATE_PATH . '/config/config.php');
 
-$isDebug = ($config["mode"] ?? '') === "DEV";
-
 require_once(SB_VENDOR_PATH . '/autoload.php');
 
 use SquareBracket\Authentication;
-use SquareBracket\CoreException;
 use SquareBracket\ErrorTemplating;
 use SquareBracket\Localization;
 use SquareBracket\Profiler;
@@ -31,6 +28,7 @@ use SquareBracket\SquareBracket;
 use SquareBracket\Storage;
 use SquareBracket\Templating;
 use SquareBracket\Utilities;
+use SquareBracket\VersionNumber;
 
 // please use apache/nginx for production stuff.
 define('SB_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
@@ -65,92 +63,117 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-// FIXME: what the fuck is this piece of shit -chaziz 4/9/2025
-// WIP: moving these to the core "SquareBracket" class. -chaziz 4/12/2025
-$captcha = $config["captcha"];
+set_exception_handler(function ($exception) {
+    // kinda ugly imo
+    $version_number = new VersionNumber();
 
-$allowedSites = ['squarebracket', 'squarebracket_chaziz'];
-if (!in_array($config["site"], $allowedSites)) {
-    die("The site variable in the configuration file should be either set to squarebracket or squarebracket_chaziz.");
-}
-$isChazizSB = ($config["site"] === "squarebracket_chaziz");
+    if (SB_CLI) {
+        $errorMsg = sprintf(
+            "Error: %s" . PHP_EOL .
+            "Code: %s" . PHP_EOL .
+            "File: %s" . PHP_EOL .
+            "Line: %s" . PHP_EOL .
+            "Version: %s" . PHP_EOL .
+            "Stack Trace:" . PHP_EOL . "%s" . PHP_EOL,
+            $exception->getMessage(),
+            $exception->getCode(),
+            $exception->getFile(),
+            $exception->getLine(),
+            $version_number->getVersionString(),
+            $exception->getTraceAsString()
+        );
 
-$enableCache = (bool)($config["cache"] ?? false);
-$isMaintenance = (bool)($config["maintenance"] ?? false);
-$enableInviteKeys = (bool)($config["invite_keys"] ?? false);
+        echo "An error has occurred:" . PHP_EOL;
+        echo $errorMsg;
+        die(1);
+    } else {
+        $errorMsg = sprintf(
+            '<b>Error:</b> %s<br>'
+            . '<b>Code:</b> %s<br>'
+            . '<b>File:</b> %s<br>'
+            . '<b>Line:</b> %s<br>'
+            . '<b>Version:</b> %s<br>'
+            . '<b>Stack Trace:</b><pre>%s</pre>',
+            $exception->getMessage(),
+            $exception->getCode(),
+            $exception->getFile(),
+            $exception->getLine(),
+            $version_number->getVersionString(),
+            $exception->getTraceAsString()
+        );
 
-// TODO: port these into settings that can be changed through the admin panel
-$disableRegistration = !($config["enable_registration"] ?? false);
+        echo sprintf(
+            "<h1>An error has occurred</h1>" .
+            "<div style='padding: 1em; border: 1px solid red;'>" .
+            "<pre>%s</pre>" .
+            "</div>",
+            $errorMsg,
+        );
+        die();
+    }
+});
 
-$lockdown = (bool)($config["lockdown"] ?? false);
-$disableUploading = $lockdown;
-$disableWritingJournals = $lockdown;
-
-try {
 // now initialize the orange classes
-    $orange = new SquareBracket($config);
-    $database = $orange->getDatabase();
+$orange = new SquareBracket($config);
+$database = $orange->getDatabaseClass();
 
-    $profiler = new Profiler($database, $isDebug);
+$profiler = new Profiler($database, $orange->isDebug());
 
-    $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
+$localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
-    $storage = new Storage($orange);
+$storage = new Storage($orange);
 
-    if (!SB_CLI) {
-        $auth = new Authentication($database);
-        $localization = new Localization($localization_setting);
+if (!SB_CLI) {
+    $auth = new Authentication($database);
+    $localization = new Localization($localization_setting);
 
-        // automatic stuff
-        // this should probably have a cooldown or something i don't fucking know
+    // automatic stuff
+    // this should probably have a cooldown or something i don't fucking know
 
-        // automatically ban accounts linked to banned ips.
-        // TODO: add ip ban functionality in admin panel instead of this crude ass shit
-        /*
-        $ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
-        foreach ($ipBannedUsers as $ipBannedUser) {
-            $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
-            foreach ($usersAssociatedWithIP as $ipBannedUser2) { // i can't really name variables that well
-                if (!$database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$ipBannedUser2["id"]])) {
-                    $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-                        [$ipBannedUser2["id"], "Automated by OpenSB", time()]);
-                }
+    // automatically ban accounts linked to banned ips.
+    // TODO: add ip ban functionality in admin panel instead of this crude ass shit
+    /*
+    $ipBannedUsers = $database->fetchArray($database->query("SELECT * from ip_bans"));
+    foreach ($ipBannedUsers as $ipBannedUser) {
+        $usersAssociatedWithIP = $database->fetchArray($database->query("SELECT id, name FROM users WHERE ip LIKE ?", [$ipBannedUser["ip"]]));
+        foreach ($usersAssociatedWithIP as $ipBannedUser2) { // i can't really name variables that well
+            if (!$database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$ipBannedUser2["id"]])) {
+                $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
+                    [$ipBannedUser2["id"], "Automated by OpenSB", time()]);
             }
         }
-        */
-
-        $twig_error = new ErrorTemplating($orange);
-
-        $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()]);
-
-        // if theres no ipban, check again with the unencrypted ip address.
-        // this is temporary.
-        if (!$ipban) {
-            $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress(false)]);
-        }
-
-        if ($ipban) {
-            $usersAssociatedWithIP = $database->fetchArray($database->query(
-                "SELECT name FROM users WHERE ip LIKE ? OR ip LIKE ?",
-                [Utilities::getIpAddress(), Utilities::getIpAddress(false)]));
-
-            http_response_code(403);
-            echo $twig_error->render("ip_banned.twig", [
-                "page" => "ip-banned",
-                "data" => $ipban,
-                "users" => $usersAssociatedWithIP,
-            ]);
-            die();
-        }
-
-        if ($isMaintenance && !SB_PHP_BUILTINSERVER) {
-            http_response_code(503);
-            echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
-            die();
-        }
-
-        $twig = new Templating($orange);
     }
-} catch (CoreException $e) {
-    $e->page();
+    */
+
+    $twig_error = new ErrorTemplating($orange);
+
+    $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()]);
+
+    // if theres no ipban, check again with the unencrypted ip address.
+    // this is temporary.
+    if (!$ipban) {
+        $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress(false)]);
+    }
+
+    if ($ipban) {
+        $usersAssociatedWithIP = $database->fetchArray($database->query(
+            "SELECT name FROM users WHERE ip LIKE ? OR ip LIKE ?",
+            [Utilities::getIpAddress(), Utilities::getIpAddress(false)]));
+
+        http_response_code(403);
+        echo $twig_error->render("ip_banned.twig", [
+            "page" => "ip-banned",
+            "data" => $ipban,
+            "users" => $usersAssociatedWithIP,
+        ]);
+        die();
+    }
+
+    if ($orange->isUnderMaintenance() && !SB_PHP_BUILTINSERVER) {
+        http_response_code(503);
+        echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
+        die();
+    }
+
+    $twig = new Templating($orange);
 }

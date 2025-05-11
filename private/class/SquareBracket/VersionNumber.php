@@ -31,9 +31,14 @@ class VersionNumber
         }
     }
 
-    public function printVersionForOutput()
+    /**
+     * Outputs a version banner.
+     *
+     * @return string
+     */
+    public function outputVersionBanner(): string
     {
-        return sprintf("OpenSB %s - Executed on %s", VersionNumber::getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
+        return sprintf("OpenSB %s - Executed on %s", $this->getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
     }
 
     /**

@@ -18,16 +18,20 @@ class Templating
 {
     private $skin;
     private $theme;
+    private SquareBracket $orange;
     private FilesystemLoader $loader;
     private Environment $twig;
+    private VersionNumber $version_number;
 
     /**
      * @throws LoaderError
      */
     public function __construct(SquareBracket $orange)
     {
-        global $isChazizSB, $auth, $isDebug, $enableInviteKeys, $enableCache;
+        global $auth, $enableInviteKeys;
         chdir(SB_PRIVATE_PATH);
+
+        $this->orange = $orange;
 
         $options = $orange->getLocalOptions();
 
@@ -65,10 +69,10 @@ class Templating
             $this->loader = new FilesystemLoader($templatePath);
         }
 
-        $doCache = !$enableCache ? false : 'skins/cache/';
+        $doCache = !$orange->isTemplateCachingEnabled() ? false : 'skins/cache/';
 
         $this->loader->addPath('skins/common/');
-        $this->twig = new Environment($this->loader, ['debug' => $isDebug, 'cache' => $doCache]);
+        $this->twig = new Environment($this->loader, ['debug' => $orange->isDebug(), 'cache' => $doCache]);
 
         $this->twig->addFunction(new TwigFunction('component', function($component) use ($templatePath) {
             $path = '/components/' . $this->theme . '/' . $component . '.twig';
@@ -86,7 +90,7 @@ class Templating
         $this->twig->addExtension(new SquareBracketTwigExtension($orange, $this->twig));
         $this->twig->addExtension(new StringExtension());
 
-        if ($isDebug) {
+        if ($orange->isDebug()) {
             $this->twig->addExtension(new DebugExtension());
         } else {
             $this->twig->addFunction(new TwigFunction('dump', function() {
@@ -101,7 +105,7 @@ class Templating
         $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is back online. Registrations are closed until
         the site is ready.";
 
-        if ($isChazizSB) {
+        if ($orange->isChazizSquareBracketInstance()) {
             $showWarningBanner = true;
             $warningBannerText = $warningBannerTextIfOnChazizOwnedDomain;
         } else {
@@ -109,11 +113,12 @@ class Templating
             $warningBannerText = null;
         }
 
-        $versionNumber = new VersionNumber;
+        //$this->version_number = $orange->getVersionNumberClass();
+        $this->version_number = new VersionNumber();
 
-        $this->twig->addGlobal('is_chaziz_sb', $isChazizSB);
+        $this->twig->addGlobal('is_chaziz_sb', $orange->isChazizSquareBracketInstance());
         $this->twig->addGlobal('is_fulptube', $isFulpTube);
-        $this->twig->addGlobal('is_debug', $isDebug);
+        $this->twig->addGlobal('is_debug', $orange->isDebug());
         $this->twig->addGlobal('is_user_logged_in', $auth->isUserLoggedIn());
         $this->twig->addGlobal('user_data', $auth->getUserData());
         $this->twig->addGlobal('user_ban_data', $auth->getUserBanData());
@@ -122,7 +127,7 @@ class Templating
         $this->twig->addGlobal('user_is_admin', $auth->isUserAdmin());
         $this->twig->addGlobal('user_is_authenticated_admin', $auth->hasUserAuthenticatedAsAnAdmin());
         $this->twig->addGlobal('skins', $this->getAllSkinsMetadata());
-        $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
+        $this->twig->addGlobal('opensb_version', $this->version_number->getVersionNumber());
         $this->twig->addGlobal('session', $_SESSION);
         $this->twig->addGlobal('website_branding', $branding);
         $this->twig->addGlobal('current_theme', $this->theme); // not to be confused with skins
@@ -212,13 +217,15 @@ class Templating
 
     public function getAllSkinsMetadata(): array
     {
-        global $isDebug;
+        // kinda ugly but if i dont do this then it fucks up
+        $isDebug = $this->orange->isDebug();
+
         $skins = [];
         foreach($this->getAllSkins() as $skin) {
             $metadata = $this->getSkinMetadata($skin);
             $site = $metadata["metadata"]["site"] ?? "unknown";
             if ($site == "squarebracket") {
-                $incomplete = $isDebug ? false : ($metadata["metadata"]["incomplete"] ?? false);
+                $incomplete = $this->orange->isDebug() ? false : ($metadata["metadata"]["incomplete"] ?? false);
                 // dont show incomplete skins
                 if (!$incomplete) {
                     // dont show incomplete themes

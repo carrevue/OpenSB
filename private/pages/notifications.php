@@ -5,8 +5,8 @@ namespace OpenSB;
 global $twig, $database, $auth;
 
 use SquareBracket\NotificationEnum;
-use SquareBracket\Utilities;
 use SquareBracket\UserData;
+use SquareBracket\Utilities;
 
 function typeToName($type)
 {

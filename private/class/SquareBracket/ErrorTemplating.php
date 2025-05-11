@@ -17,11 +17,10 @@ class ErrorTemplating
     private Environment $twig;
 
     /**
-     * @throws CoreException
+     * @throws \Exception
      */
     public function __construct(SquareBracket $orange)
     {
-        global $isDebug, $branding, $isChazizSB;
         chdir(SB_PRIVATE_PATH);
 
         $options = $orange->getLocalOptions();
@@ -34,12 +33,12 @@ class ErrorTemplating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            throw new CoreException("The error skin does not exist.");
+            throw new \Exception("The error skin does not exist.");
         }
 
-        $this->twig = new Environment($this->loader, ['debug' => $isDebug, 'cache' => false]);
+        $this->twig = new Environment($this->loader, ['debug' => $orange->isDebug(), 'cache' => false]);
 
-        if ($isDebug) {
+        if ($orange->isDebug()) {
             $this->twig->addExtension(new DebugExtension());
         } else {
             $this->twig->addFunction(new TwigFunction('dump', function() {
@@ -62,7 +61,7 @@ class ErrorTemplating
 
         $versionNumber = new VersionNumber;
 
-        $this->twig->addGlobal('is_chaziz_sb', $isChazizSB);
+        $this->twig->addGlobal('is_chaziz_sb', $orange->isDebug());
         $this->twig->addGlobal('is_fulptube', $isFulpTube);
         $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
         $this->twig->addGlobal('website_branding', $branding);

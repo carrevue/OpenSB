@@ -2,10 +2,8 @@
 
 namespace OpenSB;
 
-global $database, $twig, $disableUploading, $auth, $isDebug, $storage, $isChazizSB;
+global $orange, $database, $twig, $auth, $storage;
 
-use SquareBracket\Pages\SubmissionUpload;
-use SquareBracket\Templating;
 use SquareBracket\Utilities;
 
 // TODO: a more automated method to detect which file format the user is trying to upload.
@@ -28,7 +26,7 @@ if ($auth->getUserBanData()) {
     Utilities::notifyBanner("You cannot proceed with this action.", "/");
 }
 
-if ($disableUploading) {
+if ($orange->isLockdownEnabled()) {
     Utilities::notifyBanner("The ability to upload has been disabled.", "/");
 }
 
@@ -47,7 +45,7 @@ if (!$auth->isUserAdmin()) {
         $rateLimit = 2 * 60;
     }
 
-    if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$isDebug) {
+    if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$orange->isDebug()) {
         $waitTimeMinutes = $rateLimit / 60;
         Utilities::notifyBanner("Please wait at least {$waitTimeMinutes} minutes before uploading again.", "/");
     }
@@ -86,7 +84,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $title = ($_POST['title'] ?? null);
     $description = ($_POST['desc'] ?? null);
 
-    if ($isChazizSB) {
+    if ($orange->isChazizSquareBracketInstance()) {
         $rating = 'general';
     } else {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
@@ -99,7 +97,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         $tags2 = preg_split('/[\s,]+/', trim($tags, ","));
     }
 
-    if ($isDebug) {
+    if ($orange->isDebug()) {
         $noProcess = ($_POST['debugUploaderSkip'] ?? null);
     }
 
@@ -108,7 +106,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $ext = pathinfo($_FILES['fileToUpload']['name'], PATHINFO_EXTENSION);
 
     if (in_array(strtolower($ext), $supportedVideoFormats, true)) { // VIDEO
-        if (isset($noProcess) && $isDebug) {
+        if (isset($noProcess) && $orange->isDebug()) {
             $status = 0x0; // pretend that video has been successfully uploaded
             $target_file = SB_DYNAMIC_PATH . '/dynamic/videos/' . $new . '.converted.' . $ext;
         } else {

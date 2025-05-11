@@ -16,7 +16,7 @@ if (!$auth->isUserLoggedIn())
 
 $limit = sprintf("LIMIT %s,%s", (($page_number - 1) * 20), 20);
 
-$database = $orange->getDatabase();
+$database = $orange->getDatabaseClass();
 $submissions = $database->fetchArray($database->query("SELECT v.* FROM uploads v WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns) AND v.author = ? ORDER BY v.id DESC $limit", [$auth->getUserID()]));
 $submission_count = $database->result("SELECT COUNT(*) FROM uploads u where u.author = ?", [$auth->getUserID()]);
 

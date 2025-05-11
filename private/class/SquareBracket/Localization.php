@@ -16,7 +16,7 @@ class Localization {
     }
 
     /**
-     * @throws CoreException
+     * @throws \Exception
      */
     protected function loadLocalizationData(): void
     {
@@ -40,7 +40,7 @@ class Localization {
                 $json = file_get_contents($file_fallback);
                 $this->messages_fallback = json_decode($json, true);
             } else {
-                throw new CoreException("The default en-US locale is missing.");
+                throw new \Exception("The default en-US locale is missing.");
             }
         }
     }

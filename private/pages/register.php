@@ -2,14 +2,16 @@
 
 namespace OpenSB;
 
-global $disableRegistration, $enableInviteKeys, $twig, $database, $captcha, $isDebug;
+global $orange, $enableInviteKeys, $twig, $database;
 
 use DateTime;
 use SquareBracket\Utilities;
 
-if ($disableRegistration) {
+if (!$orange->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("The ability to register has been disabled.", "/");
 }
+
+$captcha = $orange->returnCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
 // kind of access denied error. run this command as root/sudo:
@@ -18,7 +20,7 @@ if ($disableRegistration) {
 
 $ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress(false));
 
-if (str_contains($ipcheck, "<appears>yes</appears>") && !$isDebug) {
+if (str_contains($ipcheck, "<appears>yes</appears>") && !$orange->isDebug()) {
     Utilities::notifyBanner("Your IP address appears to be suspicious.", "/");
 }
 

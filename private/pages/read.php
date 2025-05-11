@@ -6,8 +6,8 @@ global $twig, $database, $auth;
 
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
-use SquareBracket\Utilities;
 use SquareBracket\UserData;
+use SquareBracket\Utilities;
 
 $id = ($_GET['j'] ?? null);
 

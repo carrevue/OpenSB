@@ -11,7 +11,7 @@ class Storage
     private Database $database;
     public function __construct(SquareBracket $orange) {
         $this->orange = $orange;
-        $this->database = $orange->getDatabase();
+        $this->database = $orange->getDatabaseClass();
     }
 
     public function processVideoUpload($new, $target_file): void

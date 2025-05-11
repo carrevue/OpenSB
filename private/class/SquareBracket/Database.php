@@ -15,7 +15,7 @@ class Database
     private $profilingEnabled = false;
 
     /**
-     * @throws CoreException
+     * @throws \Exception
      */
     public function __construct($host, $user, $pass, $db)
     {
@@ -25,11 +25,8 @@ class Database
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET sql_mode="TRADITIONAL"'
         ];
-        try {
-            $this->sql = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, $options);
-        } catch (PDOException $e) {
-            throw new CoreException('The database is currently not available. [' . $e . ']');
-        }
+
+        $this->sql = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, $options);
     }
 
     public function setProfiling(bool $enabled): void

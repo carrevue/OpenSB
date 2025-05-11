@@ -5,13 +5,12 @@ namespace OpenSB;
 global $twig, $database, $auth, $orange;
 
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
-
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\UploadData;
 use SquareBracket\UploadQuery;
-use SquareBracket\Utilities;
 use SquareBracket\UserData;
+use SquareBracket\Utilities;
 
 $id = $path[2] ?? null;
 

@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $auth, $orange, $twig, $isDebug;
+global $auth, $orange, $twig;
 
 use SquareBracket\NotificationEnum;
 use SquareBracket\UserData;
@@ -26,7 +26,7 @@ if (!isset($post_data['type']) || !isset($post_data['comment'])) {
     exit;
 }
 
-$database = $orange->getDatabase();
+$database = $orange->getDatabaseClass();
 $author = new UserData($database, $auth->getUserID());
 $commentText = trim($post_data['comment']);
 
@@ -40,7 +40,7 @@ if (strlen($commentText) > 1000) {
     exit;
 }
 
-if (!$isDebug) {
+if (!$orange->isDebug()) {
     $timeLimit = time() - 15;
     if ($database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
         $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||

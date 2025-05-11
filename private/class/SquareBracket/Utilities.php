@@ -130,7 +130,7 @@ class Utilities
         global $auth, $database;
 
         if (!$auth->isUserLoggedIn()) {
-            throw new CoreException("NotifyUser should not be called if the current user is logged off.");
+            throw new \Exception("NotifyUser should not be called if the current user is logged off.");
         }
 
         $dontNotify = false;
@@ -347,10 +347,10 @@ class Utilities
     // too early. maybe this function should just be moved into the core SquareBracket class? -chaziz 5/7/2025
     public static function isFulpTube(array $optionsFallback = []): bool
     {
-        global $isChazizSB, $orange, $isDebug;
+        global $orange;
 
         $localOptions = $orange?->getLocalOptions() ?? $optionsFallback;
-        $isDebugMode = ($localOptions['debug_fulptube_branding'] ?? false) && $isDebug;
+        $isDebugMode = ($localOptions['debug_fulptube_branding'] ?? false) && $orange?->isDebug();
 
         if ($isDebugMode) {
             return true;
@@ -361,7 +361,7 @@ class Utilities
 
         $isFulpTubeDomain = isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'fulptube.rocks';
 
-        return $isChazizSB && ($isHitchhikerTheme || $isFulpTubeDomain);
+        return $orange?->isChazizSquareBracketInstance() && ($isHitchhikerTheme || $isFulpTubeDomain);
     }
 
     public static function isLegacyFrontend()

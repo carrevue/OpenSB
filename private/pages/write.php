@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $database, $disableWritingJournals, $auth, $isDebug;
+global $orange, $twig, $database, $auth;
 
 use SquareBracket\Utilities;
 
@@ -14,11 +14,11 @@ if ($auth->getUserBanData()) {
     Utilities::notifyBanner("You cannot proceed with this action.", "/");
 }
 
-if ($disableWritingJournals) {
+if ($orange->isLockdownEnabled()) {
     Utilities::notifyBanner("The ability to write journals has been disabled.", "/");
 }
 
-if ($database->result("SELECT COUNT(*) FROM journals WHERE date > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$isDebug) {
+if ($database->result("SELECT COUNT(*) FROM journals WHERE date > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$orange->isDebug()) {
     Utilities::notifyBanner("Please wait a minute before posting a journal again.", "/");
 }
 
