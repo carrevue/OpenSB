@@ -94,6 +94,7 @@ class Templating
             $this->twig->addExtension(new DebugExtension());
         } else {
             $this->twig->addFunction(new TwigFunction('dump', function() {
+                trigger_error("Twig dump function called outside of debug mode!", E_USER_WARNING);
                 return "This function is not available outside of debug mode.";
             }));
         }
@@ -102,8 +103,8 @@ class Templating
         $branding = $orange->getBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.
-        $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is back online. Registrations are closed until
-        the site is ready.";
+        $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is currently in a testing phase.
+        Registrations are closed until the site is ready.";
 
         if ($orange->isChazizSquareBracketInstance()) {
             $showWarningBanner = true;
@@ -122,7 +123,6 @@ class Templating
         $this->twig->addGlobal('is_user_logged_in', $auth->isUserLoggedIn());
         $this->twig->addGlobal('user_data', $auth->getUserData());
         $this->twig->addGlobal('user_ban_data', $auth->getUserBanData());
-        $this->twig->addGlobal('user_notice_data', "DEPRECATED"); // DEPRECATED
         $this->twig->addGlobal('user_stat_data', $auth->getUserStatData());
         $this->twig->addGlobal('user_is_admin', $auth->isUserAdmin());
         $this->twig->addGlobal('user_is_authenticated_admin', $auth->hasUserAuthenticatedAsAnAdmin());
@@ -134,21 +134,11 @@ class Templating
         $this->twig->addGlobal('invite_keys_enabled', $enableInviteKeys);
         $this->twig->addGlobal('items_per_page', 20);
         // shit
-        $this->twig->addGlobal('current_skin_and_theme', $this->skin . ',' . $this->theme); // move this shit
         $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('is_opensb_v1_3', true);
         $this->twig->addGlobal('options', $options);
-
-        /*
-        if ($this->skin == "finalium" && $this->theme == "beta")
-        {
-            $db = $orange->getDatabase();
-            $footerstats = $db->fetch("SELECT (SELECT COUNT(*) FROM users) users, (SELECT COUNT(*) FROM uploads) submissions");
-            $this->twig->addGlobal('footer_stats', $footerstats);
-        }
-        */
 
         if (isset($_SERVER["REQUEST_URI"])) {
             $uri = explode('?', $_SERVER["REQUEST_URI"])[0];
@@ -164,7 +154,6 @@ class Templating
 
             $this->twig->addGlobal('page_name', $pageName);
         }
-
 
         if (isset($_SERVER['HTTP_HOST'])) {
             $this->twig->addGlobal("page_url", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
