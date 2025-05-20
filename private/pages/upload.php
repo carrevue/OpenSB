@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $orange, $database, $twig, $auth, $storage;
+global $orange, $database, $twig, $auth;
 
 use SquareBracket\Utilities;
 
@@ -118,7 +118,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
                 [$new, $title, $description, $uploader, time(), json_encode($tags2), 'dynamic/videos/' . $new, $status, $rating]);
 
             if (!isset($noProcess)) {
-                $storage->processVideoUpload($new, $target_file);
+                $orange->getStorageClass()->processVideoUpload($new, $target_file);
             }
 
             parse_tags($tags2, $new, $database);
@@ -128,7 +128,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             Utilities::notifyBanner("There is a problem with file permissions and/or PHP on this instance.", "/upload");
         }
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
-        $storage->processImageUpload($temp_name, $new);
+        $orange->getStorageClass()->processImageUpload($temp_name, $new);
         $status = 0x0;
         $database->query("INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, post_type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
             [$new, $title, $description, $uploader, time(), json_encode(explode(', ', $_POST['tags'])), '/dynamic/art/' . $new . '.png', $status, 2, $rating]);

@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $database, $auth, $storage;
+global $twig, $database, $auth, $orange;
 
 use SquareBracket\UploadData;
 use SquareBracket\Utilities;
@@ -37,7 +37,7 @@ if (isset($_POST['upload'])) {
         $name = $_FILES['thumbnail']['name'];
         $temp_name = $_FILES['thumbnail']['tmp_name'];
         $ext = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
-        $storage->processCustomUploadThumbnail($temp_name, $data["video_id"]);
+        $orange->getStorageClass()->processCustomUploadThumbnail($temp_name, $data["video_id"]);
     }
 
     $database->query("UPDATE uploads SET title = ?, description = ? WHERE video_id = ?",

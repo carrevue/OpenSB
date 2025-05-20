@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $auth, $twig, $database, $orange, $path, $storage;
+global $auth, $twig, $database, $orange, $path;
 
 use SquareBracket\UploadData;
 use SquareBracket\UploadFlags;

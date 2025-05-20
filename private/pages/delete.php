@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $auth, $orange, $storage, $database;
+global $auth, $orange, $database;
 
 use SquareBracket\UploadData;
 use SquareBracket\Utilities;
@@ -26,6 +26,6 @@ if ($auth->getUserID() != $data["author"]) {
 $database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["time"], time()]);
 $database->query("DELETE FROM uploads WHERE video_id = ?", [$id]);
 
-$storage->deleteUploadFile($data);
+$orange->getStorageClass()->deleteUploadFile($data);
 
 Utilities::notifyBanner("This upload has been successfully deleted.", "/my_uploads", "success");

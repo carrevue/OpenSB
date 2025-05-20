@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $orange, $twig, $auth, $database, $storage;
+global $orange, $twig, $auth, $database;
 
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
@@ -139,14 +139,14 @@ if (isset($_POST['save'])) {
         $name = $_FILES['profilePicture']['name'];
         $temp_name = $_FILES['profilePicture']['tmp_name'];
         $ext = pathinfo($_FILES['profilePicture']['name'], PATHINFO_EXTENSION);
-        $storage->processProfilePicture($temp_name, $auth->getUserData()["id"]);
+        $orange->getStorageClass()->processProfilePicture($temp_name, $auth->getUserData()["id"]);
     }
 
     if (!empty($_FILES['profileBanner']['name'])) {
         $name = $_FILES['profileBanner']['name'];
         $temp_name = $_FILES['profileBanner']['tmp_name'];
         $ext = pathinfo($_FILES['profileBanner']['name'], PATHINFO_EXTENSION);
-        $storage->processProfileBanner($temp_name, $auth->getUserData()["id"]);
+        $orange->getStorageClass()->processProfileBanner($temp_name, $auth->getUserData()["id"]);
     }
 
     if (!$error) {
