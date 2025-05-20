@@ -7,6 +7,8 @@ namespace SquareBracket;
 class SquareBracket {
     private Database $database;
     //private VersionNumber $version_number;
+    private Profiler $profiler;
+    private Storage $storage;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
     private bool $template_caching_enabled = false;
@@ -115,6 +117,8 @@ class SquareBracket {
         }
 
         //$this->version_number = new VersionNumber();
+        $this->profiler = new Profiler($this->database);
+        $this->storage = new Storage($this);
     }
 
     /**
@@ -135,6 +139,26 @@ class SquareBracket {
     //{
     //    return $this->version_number;
     //}
+
+    /**
+     * Returns the profiler class for other OpenSB classes to use.
+     *
+     * @return Profiler
+     */
+    public function getProfilerClass(): Profiler
+    {
+        return $this->profiler;
+    }
+
+    /**
+     * Returns the storage class for other OpenSB classes to use.
+     *
+     * @return Storage
+     */
+    public function getStorageClass(): Storage
+    {
+        return $this->storage;
+    }
 
     /**
      * Returns the user's local settings.

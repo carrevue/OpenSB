@@ -117,11 +117,7 @@ set_exception_handler(function ($exception) {
 $orange = new SquareBracket($config);
 $database = $orange->getDatabaseClass();
 
-$profiler = new Profiler($database, $orange->isDebug());
-
 $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
-
-$storage = new Storage($orange);
 
 if (!SB_CLI) {
     $auth = new Authentication($database);

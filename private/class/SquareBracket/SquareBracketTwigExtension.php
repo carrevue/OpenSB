@@ -9,21 +9,23 @@ use Twig\TwigFunction;
 
 class SquareBracketTwigExtension extends AbstractExtension
 {
-    private $orange;
-    private $database;
+    private SquareBracket $orange;
+    private Database $database;
+    private Profiler $profiler;
+    private Storage $storage;
     private $twig;
 
     public function __construct(SquareBracket $orange, $twig)
     {
         $this->orange = $orange;
         $this->database = $this->orange->getDatabaseClass();
+        $this->profiler = $this->orange->getProfilerClass();
+        $this->storage = $this->orange->getStorageClass();
         $this->twig = $twig;
     }
 
     public function getFunctions(): array
     {
-        global $profiler;
-
         $options = $this->orange->getLocalOptions();
         $forceOldUserlink = $options['useOldUserlinkImplementation'] ?? null;
 
@@ -46,11 +48,11 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('profile_picture', [$this, 'profilePicture']),
             new TwigFunction('profile_picture_admin', [$this, 'profilePictureAdmin']),
             new TwigFunction('profile_banner', [$this, 'profileBanner']),
-            new TwigFunction('profiler_stats', function () use ($profiler) {
-                $profiler->getStats();
+            new TwigFunction('profiler_stats', function () {
+                $this->profiler->getStats();
             }),
-            new TwigFunction('db_profiler_info', function () use ($profiler) {
-                return $profiler->getDatabaseProfilingReport();
+            new TwigFunction('db_profiler_info', function () {
+                $this->profiler->getDatabaseProfilingReport();
             }),
             new TwigFunction('version_banner', function () {
                 echo (new VersionNumber)->outputVersionBanner();
@@ -118,7 +120,6 @@ class SquareBracketTwigExtension extends AbstractExtension
 
                 // Emojis
                 $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function($matches) {
-                    global $storage;
                     $emoji_name = strtolower($matches[1]);
                     // check if emoji exists so we dont load nothing
                     if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
@@ -148,7 +149,6 @@ class SquareBracketTwigExtension extends AbstractExtension
 
                 // Emojis
                 $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function($matches) {
-                    global $storage;
                     $emoji_name = strtolower($matches[1]);
                     // check if emoji exists so we dont load nothing
                     if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
@@ -261,15 +261,13 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function thumbnail($id, $type, $custom)
     {
-        global $storage;
-
         $data = null;
 
         if ($type == 0) {
-            $data = $storage->getVideoUploadThumbnail($id, $custom);
+            $data = $this->storage->getVideoUploadThumbnail($id, $custom);
         }
         if ($type == 2) {
-            $data = $storage->getImageUploadThumbnail($id, $custom);
+            $data = $this->storage->getImageUploadThumbnail($id, $custom);
         }
 
         return $data;
@@ -278,8 +276,6 @@ class SquareBracketTwigExtension extends AbstractExtension
     // TODO: move parts of this to Storage
     public function profilePicture($username)
     {
-        global $storage;
-
         $id = Utilities::usernameToUserID($this->database, $username);
 
         // don't bother with userdata since that might slow shit down
@@ -288,7 +284,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         if ($is_banned) {
             $data = "/assets/profiledef.svg";
         } else {
-            $data = $storage->getUserProfilePicture($id);
+            $data = $this->storage->getUserProfilePicture($id);
         }
 
         return $data;
@@ -297,11 +293,9 @@ class SquareBracketTwigExtension extends AbstractExtension
     // TODO: merge this into profilePicture()
     public function profilePictureAdmin($username)
     {
-        global $storage;
-
         $id = Utilities::usernameToUserID($this->database, $username);
 
-        $data = $storage->getUserProfilePicture($id);
+        $data = $this->storage->getUserProfilePicture($id);
 
         return $data;
     }
