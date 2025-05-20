@@ -28,7 +28,7 @@ class Templating
      */
     public function __construct(SquareBracket $orange)
     {
-        global $auth, $enableInviteKeys;
+        global $auth;
         chdir(SB_PRIVATE_PATH);
 
         $this->orange = $orange;
@@ -131,7 +131,7 @@ class Templating
         $this->twig->addGlobal('session', $_SESSION);
         $this->twig->addGlobal('website_branding', $branding);
         $this->twig->addGlobal('current_theme', $this->theme); // not to be confused with skins
-        $this->twig->addGlobal('invite_keys_enabled', $enableInviteKeys);
+        $this->twig->addGlobal('invite_keys_enabled', $orange->isInviteKeysEnabled());
         $this->twig->addGlobal('items_per_page', 20);
         // shit
         $this->twig->addGlobal('current_skin', $this->skin);
