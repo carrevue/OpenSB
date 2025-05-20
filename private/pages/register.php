@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $orange, $enableInviteKeys, $twig, $database;
+global $orange, $twig, $database;
 
 use DateTime;
 use SquareBracket\Utilities;
@@ -23,6 +23,8 @@ $ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities
 if (str_contains($ipcheck, "<appears>yes</appears>") && !$orange->isDebug()) {
     Utilities::notifyBanner("Your IP address appears to be suspicious.", "/");
 }
+
+$enableInviteKeys = $orange->isInviteKeysEnabled();
 
 if (isset($_POST['registersubmit'])) {
     $error = "";
@@ -98,7 +100,8 @@ if (isset($_POST['registersubmit'])) {
         $userId = $database->insertId();
 
         if ($enableInviteKeys) {
-            $database->query("UPDATE invite_keys SET claimed_by = ?, claimed_time = ? WHERE invite_key = ?", [$userId, time(), $invite]);
+            $database->query("UPDATE invite_keys SET claimed_by = ?, claimed_time = ? WHERE invite_key = ?",
+                [$userId, time(), $invite]);
         }
 
         $_SESSION["SBTOKEN"] = $token;
