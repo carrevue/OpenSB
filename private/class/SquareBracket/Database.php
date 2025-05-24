@@ -36,6 +36,10 @@ class Database
 
     public function getQueryLog(): array
     {
+        if (!$this->profilingEnabled) {
+            return [];
+        }
+
         return $this->queryLog;
     }
 
@@ -46,6 +50,10 @@ class Database
      */
     public function getProfilingReport(): array
     {
+        if (!$this->profilingEnabled) {
+            return [];
+        }
+
         $report = [
             'total_queries' => count($this->queryLog),
             'total_time' => 0,

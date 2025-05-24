@@ -52,7 +52,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $this->profiler->getStats();
             }),
             new TwigFunction('db_profiler_info', function () {
-                $this->profiler->getDatabaseProfilingReport();
+                return $this->profiler->getDatabaseProfilingReport();
             }),
             new TwigFunction('version_banner', function () {
                 echo (new VersionNumber)->outputVersionBanner();
@@ -164,7 +164,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             // Markdown function for info pages. **NOT SANITIZED, DON'T LET IT EVER TOUCH USER INPUT**
             new TwigFilter('markdown_info_page', function ($text) {
-                $branding = $this->orange->returnBrandingSettings();
+                $branding = $this->orange->getBrandingSettings();
                 $markdown = new Parsedown();
 
                 // replace hardcoded dummy strings with proper strings

@@ -35,6 +35,17 @@ class SquareBracket {
 
         $this->is_debug = ($config["mode"] ?? '') === "DEV";
 
+        $this->database = new Database($host, $user, $pass, $db);
+        // enable db profiler (not to be confused with the other profiler)
+        // if we are on debug mode
+        if ($this->is_debug) {
+            $this->database->setProfiling(true);
+        }
+
+        //$this->version_number = new VersionNumber();
+        $this->profiler = new Profiler($this->database);
+        $this->storage = new Storage($this);
+
         $this->captcha_settings = $config["captcha"];
 
         $allowedSites = ['squarebracket', 'squarebracket_chaziz'];
@@ -108,17 +119,6 @@ class SquareBracket {
                 }
             }
         }
-
-        $this->database = new Database($host, $user, $pass, $db);
-        // enable db profiler (not to be confused with the other profiler)
-        // if we are on debug mode
-        if ($this->is_debug) {
-            $this->database->setProfiling(true);
-        }
-
-        //$this->version_number = new VersionNumber();
-        $this->profiler = new Profiler($this->database);
-        $this->storage = new Storage($this);
     }
 
     /**
