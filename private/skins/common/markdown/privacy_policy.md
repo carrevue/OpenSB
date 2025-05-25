@@ -31,4 +31,4 @@ If you have published personal information you would like to remove, use the too
 SquareBracket runs on OpenSB, which is fully open source and its source code [is available on GitHub](https://github.com/Bluffingo/OpenSB). You may inspect the source code yourself to see how your data is handled by the software.
 
 ## Updates
-Updates to this privacy policy are done as commits to the OpenSB Git repository ([View changes](https://github.com/Bluffingo/OpenSB/blob/main/private/skins/common/markdown/privacy_policy.md)). You will be alerted of any substantial changes made to the privacy policy through the SquareBracket website.
+Updates to this privacy policy are done as commits to the OpenSB Git repository ([View changes](https://github.com/Bluffingo/OpenSB/blob/opensb-1.3/private/skins/common/markdown/privacy_policy.md)). You will be alerted of any substantial changes made to the privacy policy through the SquareBracket website.
