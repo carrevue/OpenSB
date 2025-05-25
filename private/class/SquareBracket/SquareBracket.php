@@ -197,6 +197,16 @@ class SquareBracket {
     }
 
     /**
+     * Returns boolean that indicates if incomplete features should be enabled.
+     * This is separate from isDebug.
+     *
+     * @return bool
+     */
+    public function isIncompleteFeaturesEnabled(): bool {
+        return $this->options["enable_incomplete_features"] ?? false;
+    }
+
+    /**
      * Returns boolean. (temporary)
      *
      * @return bool

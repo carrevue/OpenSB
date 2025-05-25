@@ -31,7 +31,12 @@ if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions(
 if (isset($_POST['birthdatesubmit'])) {
     $birthdate = $_POST['birthdate'] ?? '';
 
-    $dobDateTime = new DateTime($birthdate);
+    try {
+        $dobDateTime = new DateTime($birthdate);
+    } catch (\DateMalformedStringException $e) {
+        Utilities::notifyBanner("Failed to process birthdate, please verify again.", "/verify_birthdate");
+    }
+
     $currentDate = new DateTime();
 
     $age = $currentDate->diff($dobDateTime)->y;

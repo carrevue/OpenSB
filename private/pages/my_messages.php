@@ -2,10 +2,15 @@
 
 namespace OpenSB;
 
-global $twig, $database, $auth;
+global $twig, $database, $auth, $twig_error, $orange;
 
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
+
+if(!$orange->isIncompleteFeaturesEnabled()) {
+    http_response_code(404);
+    echo $twig_error->render("404.twig", ["page" => "failwhale"]);
+}
 
 if (!$auth->isUserLoggedIn())
 {
