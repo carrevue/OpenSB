@@ -106,6 +106,7 @@ class Templating
         $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is currently in a testing phase.
         Registrations are closed until the site is ready.";
 
+        /*
         if ($orange->isChazizSquareBracketInstance()) {
             $showWarningBanner = true;
             $warningBannerText = $warningBannerTextIfOnChazizOwnedDomain;
@@ -113,6 +114,10 @@ class Templating
             $showWarningBanner = false;
             $warningBannerText = null;
         }
+        */
+
+        $showWarningBanner = false;
+        $warningBannerText = null;
 
         //$this->version_number = $orange->getVersionNumberClass();
         $this->version_number = new VersionNumber();
