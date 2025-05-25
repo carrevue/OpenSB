@@ -499,7 +499,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "url" => "/write",
                 ],
                 "logout" => [
-                    "name" => "Log out",
+                    "name" => "Logout",
                     "url" => "/logout",
                 ],
             ];

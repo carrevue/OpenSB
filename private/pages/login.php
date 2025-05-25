@@ -135,7 +135,7 @@ if (isset($_POST["loginsubmit"])) {
                     'expires' => time() + (30 * 24 * 60 * 60),
                     'path' => '/',
                     'domain' => '',
-                    'secure' => true,
+                    'secure' => isset($_SERVER['HTTPS']),
                     'httponly' => true,
                     'samesite' =>'Lax',
                 ]);
