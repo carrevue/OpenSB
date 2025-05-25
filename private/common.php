@@ -35,6 +35,20 @@ define('SB_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
 define('SB_CLI', php_sapi_name() === 'cli');
 
 if (!SB_CLI) {
+    $blacklisted_user_agents = [
+        '/python-requests/i',
+        '/curl/i',
+    ];
+
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+    foreach ($blacklisted_user_agents as $pattern) {
+        if (preg_match($pattern, $user_agent)) {
+            http_response_code(403);
+            exit;
+        }
+    }
+
     if (session_status() === PHP_SESSION_NONE) {
         session_name("sb_session");
 
