@@ -7,7 +7,7 @@ global $twig, $database, $auth, $orange;
 use DateTime;
 use SquareBracket\Utilities;
 
-if (isset($auth->getUserData()['birthdate'])) {
+if (isset($auth->getUserData()['birthdate']) && !$orange->isDebug()) {
     header('Location: /index');
 }
 
