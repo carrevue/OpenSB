@@ -59,10 +59,18 @@ if (isset($_POST['registersubmit'])) {
     if ($database->result("SELECT COUNT(*) FROM users WHERE email = ?", [$mail]) > 0) $error .= "This email address is used by another account. ";
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
     if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
-    if (Utilities::getIpAddress() != "localhost") {
-        if ($database->result("SELECT COUNT(*) FROM users WHERE ip = ?", [Utilities::getIpAddress()]) >= 2)
-            $error .= "Your IP address has too many accounts associated with it. ";
+
+    $isLocalIp = (Utilities::getIpAddress(false) === "localhost"
+              || filter_var(Utilities::getIpAddress(false),
+            FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false);
+
+    if (!$orange->isInviteKeysEnabled() || !$orange->isDebug()) {
+        if (!$isLocalIp) {
+            if ($database->result("SELECT COUNT(*) FROM users WHERE ip = ?", [Utilities::getIpAddress()]) >= 2)
+                $error .= "Your IP address has too many accounts associated with it. ";
+        }
     }
+
     if ($database->fetch("SELECT COUNT(*) FROM user_old_names WHERE old_name = ?", [$username])["COUNT(*)"] >= 1)
         $error .= "You cannot use someone's previous username. ";
 
