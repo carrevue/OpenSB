@@ -3,6 +3,7 @@
 namespace OpenSB;
 
 use SquareBracket\NotificationEnum;
+use SquareBracket\Utilities;
 
 global $orange, $database, $auth;
 // and nope, no twig here. this is a quick and dirty page meant to test out notifications.
@@ -13,6 +14,13 @@ if (!$orange->isDebug()) {
     die();
 }
 
+if (isset($_POST["submit"])) {
+    Utilities::notifyUser($database,
+        $_POST["user_id"],
+        $_POST["location_id"],
+        $_POST["related_id"],
+        NotificationEnum::from($_POST["notification_type"]));
+}
 
 ?>
 <h1>Notifications</h1>
@@ -27,7 +35,7 @@ if (!$orange->isDebug()) {
 </div>
 <div>
     <h2>Create-a-Notification</h2>
-    <form action="/tests/notifications" method="post">
+    <form action="/debug/notifications" method="post">
         <div>
             <label for="user_id">User ID:</label>
             <input type="number" id="user_id" name="user_id" value="1" required>
@@ -59,7 +67,7 @@ if (!$orange->isDebug()) {
         </div>
 
         <div>
-            <input type="submit" value="Notify User">
+            <input type="submit" name="submit" value="Notify User">
         </div>
     </form>
 </div>

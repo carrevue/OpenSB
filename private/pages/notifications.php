@@ -8,34 +8,9 @@ use SquareBracket\NotificationEnum;
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
-function typeToName($type)
-{
-    $name = "generic";
-
-    switch (NotificationEnum::from($type)) {
-        case NotificationEnum::CommentUpload:
-            $name = "comment_upload";
-            break;
-        case NotificationEnum::CommentProfile:
-            $name = "comment_profile";
-            break;
-        case NotificationEnum::CommentJournal:
-            $name = "comment_journal";
-            break;
-        case NotificationEnum::UploadTakedown:
-            $name = "upload_takedown";
-            break;
-        case NotificationEnum::Follow:
-            $name = "user_follow";
-            break;
-    }
-
-    return $name;
-}
-
 function typeToIntro($type)
 {
-    $intro = "Generic notice by ";
+    $intro = NotificationEnum::from($type)->name . " Intro";
 
     switch (NotificationEnum::from($type)) {
         case NotificationEnum::CommentProfile:
@@ -43,8 +18,11 @@ function typeToIntro($type)
         case NotificationEnum::CommentUpload:
             $intro = "Comment by ";
             break;
-        case NotificationEnum::UploadTakedown:
-            $intro = "Your upload has been taken down.";
+        case NotificationEnum::NewUpload:
+            $intro = "Upload by";
+            break;
+        case NotificationEnum::NewJournal:
+            $intro = "Journal by";
             break;
         case NotificationEnum::Follow:
             $intro = "Followed by ";
@@ -69,7 +47,12 @@ function getRequiredData($database, $notice)
             $profile = $database->fetch("SELECT u.name FROM users u WHERE u.id = ?", [$notice["level"]]);
 
             $data["info"] = $comment["comment"];
-            $data["origin"] = $profile["name"] . "'s profile";
+
+            if (str_ends_with($profile["name"], "s")) {
+                $data["origin"] = $profile["name"] . "' profile";
+            } else {
+                $data["origin"] = $profile["name"] . "'s profile";
+            }
             break;
 
         case NotificationEnum::CommentJournal:
@@ -86,6 +69,21 @@ function getRequiredData($database, $notice)
 
             $data["info"] = $comment["comment"];
             $data["origin"] = $upload["title"] ?? "Unknown upload";
+            break;
+
+        case NotificationEnum::NewUpload:
+            $data["info"] = "Upload Title";
+            $data["origin"] = "Upload Title";
+            break;
+
+        case NotificationEnum::NewJournal:
+            $data["info"] = "Journal Title";
+            $data["origin"] = "Journal Title";
+            break;
+
+        case NotificationEnum::UserRename:
+            $data["info"] = "From now on, all references to this user will display this name.";
+            $data["origin"] = false;
             break;
     }
 
@@ -114,7 +112,6 @@ foreach ($data as $notice) {
 
     $noticeData[] = [
         "id" => $notice["id"],
-        "type" => typeToName($notice["type"]),
         "sender" => [
             "id" => $notice["sender"],
             "info" => $userData->getUserArray(),

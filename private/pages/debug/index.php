@@ -24,7 +24,7 @@ foreach ($files as $file) {
 }
 ?>
 <img src="/assets/chaz_opensb.png" width="200">
-<h1>OpenSB Debug</h1>
+<h1>OpenSB Backend Debug</h1>
 <hr>
 <?php
 foreach ($fileUrls as $file) {
