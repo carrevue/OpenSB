@@ -89,8 +89,7 @@ $database->query(
     [$id, $replyTo, $commentText, $userId, time(), 0]
 );
 
-// hacky because we need the insertid right before we call anything else to avoid a "trying to access array offset
-// on false" error.
+// we need the insertid right before we call anything else to avoid a "trying to access array offset on false" warning.
 $insertID = $database->insertID();
 
 // not gonna put this code in the first switch case YET due to a weird ass hack i have to do with upload comments
@@ -99,14 +98,13 @@ switch ($post_data['type']) {
         // comments use the upload's string id and not the numeric id as the location of an upload, so we have to do
         // this weird shit.
         $numericID = Utilities::uploadStringIDToUploadNumericID($database, $post_data["id"]);
+
         Utilities::notifyUser($database, 1, $numericID, $insertID, NotificationEnum::CommentUpload);
         break;
     case 'profile':
-        $table = 'user_profile_comments';
         Utilities::notifyUser($database, 1, $id, $insertID, NotificationEnum::CommentProfile);
         break;
     case 'journal':
-        $table = 'journal_comments';
         Utilities::notifyUser($database, 1, $id, $insertID, NotificationEnum::CommentJournal);
         break;
     default:

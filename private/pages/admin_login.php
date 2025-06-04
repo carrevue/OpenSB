@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $auth, $twig, $database, $orange, $path;
+global $auth, $twig, $database, $orange;
 
 use SquareBracket\Utilities;
 

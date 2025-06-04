@@ -108,13 +108,13 @@ if (isset($path[1]) && $path[1] != '') {
                 'commenting' => require(SB_PRIVATE_PATH . '/pages/api/biscuit/commenting.php'),
                 'submission_interaction' => require(SB_PRIVATE_PATH . '/pages/api/biscuit/submission_interaction.php'),
                 'user_interaction' => require(SB_PRIVATE_PATH . '/pages/api/biscuit/user_interaction.php'),
-                default => die("Invalid API.")
+                default => last_resort(),
             },
             'legacy' => match ($path[3] ?? null) {
                 'comment' => require(SB_PRIVATE_PATH . '/pages/api/legacy/comment.php'),
                 'rate' => require(SB_PRIVATE_PATH . '/pages/api/legacy/rate.php'),
                 'subscribe' => require(SB_PRIVATE_PATH . '/pages/api/legacy/subscribe.php'),
-                default => die("Invalid API.")
+                default => last_resort(),
             },
             'v3' => match ($path[3] ?? null) { //TODO
                 'get_comments' => require(SB_PRIVATE_PATH . '/pages/api/v3/get_comments.php'),
@@ -123,14 +123,19 @@ if (isset($path[1]) && $path[1] != '') {
                 //'get_uploads' => require(SB_PRIVATE_PATH . '/pages/api/v3/get_uploads.php'),
                 default => die(json_encode("Invalid API."))
             },
-            default => die("Invalid API.")
+            default => last_resort(),
         },
         'assets' => match ($path[2] ?? null) {
             'bootstrap-icons.svg' => load_file_from_vendor('/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml'),
             'previews' => load_thumbnail_from_skin($path[3] ?? ''),
-            default => die(),
+            default => last_resort(),
         },
         'browse' => require(SB_PRIVATE_PATH . '/pages/browse.php'),
+        'debug' => match ($path[2] ?? null) {
+            null, '', 'index' => require(SB_PRIVATE_PATH . '/pages/debug/index.php'),
+            'notifications' => require(SB_PRIVATE_PATH . '/pages/debug/notifications.php'),
+            default => last_resort(),
+        },
         'delete' => require(SB_PRIVATE_PATH . '/pages/delete.php'),
         'design_test' => require(SB_PRIVATE_PATH . '/pages/design_test.php'),
         'edit' => require(SB_PRIVATE_PATH . '/pages/edit.php'),
