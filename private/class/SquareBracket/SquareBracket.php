@@ -46,7 +46,9 @@ class SquareBracket {
         $this->database = new Database($host, $user, $pass, $db);
         $this->authentication = new Authentication($this->database);
         // TEMPORARY. SHOULD BE REMOVED WHEN OPENSB 1.3 IS DONE
-        if ($this->is_chaziz_squarebracket_instance && ($this->authentication->getUserData()["name"] == "Chaziz")) {
+        if ($this->is_chaziz_squarebracket_instance &&
+            isset($this->authentication->getUserData()["name"]) &&
+            $this->authentication->getUserData()["name"] == "Chaziz") {
             $this->is_debug = true;
         }
 
