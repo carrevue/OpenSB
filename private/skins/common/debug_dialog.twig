@@ -2,9 +2,12 @@
    it'll be moved back to charla once biscuit gets removed from opensb. -chaziz 6/4/2025 #}
 
 {% set profiler = db_profiler_info() %}
+{% if not user_data_cache %}
 {% set user_data_cache = get_user_data_cache() %}
+{% endif %}
 <dialog class="content-box debug-dialog" id="debug-dialog">
-    {{ version_banner() }}
+    <div>{{ version_banner() }}</div>
+    <div><a href="/debug">Debug backend</a></div>
     <hr>
     <div class="tabs">
         {# spaceless removes html whitespace causes unnecessary margins #}
