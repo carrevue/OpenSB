@@ -13,6 +13,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     private Database $database;
     private Profiler $profiler;
     private Storage $storage;
+    private Authentication $authentication;
     private $twig;
 
     public function __construct(SquareBracket $orange, $twig)
@@ -21,6 +22,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $this->database = $this->orange->getDatabaseClass();
         $this->profiler = $this->orange->getProfilerClass();
         $this->storage = $this->orange->getStorageClass();
+        $this->authentication = $this->orange->getAuthenticationClass();
         $this->twig = $twig;
     }
 
@@ -71,6 +73,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('localize', [$this, 'localize']),
             new TwigFunction('truncate_number', [$this, 'truncateNumber']),
             new TwigFunction('convert_time', [$this, 'convertTime']),
+            new TwigFunction('get_user_data_cache', [$this, 'getUserDataCache']),
             // BOOTSTRAP/FINALIUM FRONTEND COMPATIBILITY (DO NOT USE THIS ON BISCUIT/CHARLA)
             new TwigFunction('icon', [$this, 'legacyIcon'], ['is_safe' => ['html']]),
             // ---------------------------
@@ -470,12 +473,12 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function headerUserLinks()
     {
-        global $auth;
+
 
         $options = $this->orange->getLocalOptions();
 
-        if ($auth->isUserLoggedIn()) {
-            $username = $auth->getUserData()["name"];
+        if ($this->authentication->isUserLoggedIn()) {
+            $username = $this->authentication->getUserData()["name"];
 
             $array = [
                 "profile" => [
@@ -514,7 +517,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 unset($array["write"]);
             }
 
-            if ($auth->isUserAdmin()) {
+            if ($this->authentication->isUserAdmin()) {
                 $arrayThatContainsOnlyTheLinkToTheAdminPanel = [
                     "admin" => [
                         "name" => "Admin",
@@ -559,10 +562,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     public function sidebarFollowingUsers() {
-        global $auth;
-        // Fuck. ok i think the squarebracket class should have a getAuthClass function or something like that
-
-        $userid = $auth->getUserID();
+        $userid = $this->authentication->getUserID();
 
         $users = $this->database->fetchArray(
             $this->database->query("SELECT s.* FROM user_follows s JOIN users u ON s.user = u.id WHERE s.user = ?", [$userid])
@@ -615,8 +615,14 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
     //
 
-    public function localize($key, ...$args) {
+    public function localize($key, ...$args)
+    {
         global $localization;
         return $localization->translate($key, ...$args);
+    }
+
+    public function getUserDataCache(): array
+    {
+        return UserData::getUserDataCache();
     }
 }

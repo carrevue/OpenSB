@@ -9,6 +9,7 @@ class SquareBracket {
     //private VersionNumber $version_number;
     private Profiler $profiler;
     private Storage $storage;
+    private Authentication $authentication;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
     private bool $template_caching_enabled = false;
@@ -27,26 +28,11 @@ class SquareBracket {
      *
      */
     public function __construct($config) {
-        // extract mysql settings
+        // extract settings
         $host = $config["mysql"]["host"];
         $db = $config["mysql"]["database"];
         $user = $config["mysql"]["username"];
         $pass = $config["mysql"]["password"];
-
-        $this->is_debug = ($config["mode"] ?? '') === "DEV";
-
-        $this->database = new Database($host, $user, $pass, $db);
-        // enable db profiler (not to be confused with the other profiler)
-        // if we are on debug mode
-        if ($this->is_debug) {
-            $this->database->setProfiling(true);
-        }
-
-        //$this->version_number = new VersionNumber();
-        $this->profiler = new Profiler($this->database);
-        $this->storage = new Storage($this);
-
-        $this->captcha_settings = $config["captcha"];
 
         $allowedSites = ['squarebracket', 'squarebracket_chaziz'];
         if (!in_array($config["site"], $allowedSites)) {
@@ -54,6 +40,27 @@ class SquareBracket {
             set either to squarebracket or squarebracket_chaziz.", E_USER_WARNING);
         }
         $this->is_chaziz_squarebracket_instance = ($config["site"] === "squarebracket_chaziz");
+
+        $this->is_debug = ($config["mode"] ?? '') === "DEV";
+
+        $this->database = new Database($host, $user, $pass, $db);
+        $this->authentication = new Authentication($this->database);
+        // TEMPORARY. SHOULD BE REMOVED WHEN OPENSB 1.3 IS DONE
+        if ($this->is_chaziz_squarebracket_instance && ($this->authentication->getUserData()["name"] == "Chaziz")) {
+            $this->is_debug = true;
+        }
+
+        //$this->version_number = new VersionNumber();
+        $this->profiler = new Profiler($this->database);
+        if ($this->is_debug) {
+            // enable db profiler (not to be confused with the other profiler)
+            // if we are on debug mode
+            $this->database->setProfiling(true);
+        }
+
+        $this->storage = new Storage($this);
+
+        $this->captcha_settings = $config["captcha"];
 
         $this->template_caching_enabled = (bool)($config["cache"] ?? false);
 
@@ -158,6 +165,16 @@ class SquareBracket {
     public function getStorageClass(): Storage
     {
         return $this->storage;
+    }
+
+    /**
+     * Returns the authentication class for other OpenSB classes to use.
+     *
+     * @return Authentication
+     */
+    public function getAuthenticationClass(): Authentication
+    {
+        return $this->authentication;
     }
 
     /**

@@ -79,10 +79,10 @@ class Utilities
 
     public static function whereRatings(): string
     {
-        global $auth;
+        global $orange;
 
-        if ($auth->isUserLoggedIn()) {
-            $rating = $auth->getUserData()["comfortable_rating"];
+        if ($orange->getAuthenticationClass()->isUserLoggedIn()) {
+            $rating = $orange->getAuthenticationClass()->getUserData()["comfortable_rating"];
 
             $return_value = match ($rating) {
                 'general' => 'v.rating IN ("general")',
@@ -97,9 +97,9 @@ class Utilities
     }
 
     public static function whereTagBlacklist(): string {
-        global $auth;
+        global $orange;
         
-        $tagBlacklist = $auth->getUserTagBlacklist();
+        $tagBlacklist = $orange->getAuthenticationClass()->getUserTagBlacklist();
 
         // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
         // submission-related queries into 20 fucking useless lines that slows the site down to a crawl.
@@ -127,9 +127,9 @@ class Utilities
      */
     public static function notifyUser($database, $user, $location, $related_id, NotificationEnum $type): void
     {
-        global $auth, $database;
+        global $orange, $database;
 
-        if (!$auth->isUserLoggedIn()) {
+        if (!$orange->getAuthenticationClass()->isUserLoggedIn()) {
             throw new \Exception("NotifyUser should not be called if the current user is logged off.");
         }
 
@@ -139,7 +139,7 @@ class Utilities
         // followed that user
         if ($type == NotificationEnum::Follow) {
             if ($database->result("SELECT COUNT(*) FROM user_notifications WHERE timestamp > ? AND type = ?
-                AND recipient = ? AND sender = ?", [time() - 604800, $type->value, $user, $auth->getUserID()])) {
+                AND recipient = ? AND sender = ?", [time() - 604800, $type->value, $user, $orange->getAuthenticationClass()->getUserID()])) {
                 $dontNotify = true;
             }
         }
@@ -147,14 +147,14 @@ class Utilities
         if (!$dontNotify) {
             // Notify the user
             $database->query("INSERT INTO user_notifications (type, level, recipient, sender, timestamp, related_id) VALUES (?,?,?,?,?,?);",
-                [$type->value, $location, $user, $auth->getUserID(), time(), $related_id]);
+                [$type->value, $location, $user, $orange->getAuthenticationClass()->getUserID(), time(), $related_id]);
         }
     }
 
     public static function isFollowingUser($user) {
-        global $auth, $database;
+        global $orange, $database;
 
-        return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $auth->getUserID()]);
+        return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $orange->getAuthenticationClass()->getUserID()]);
     }
 
     public static function uploadBitmaskToArray($bitmask): array

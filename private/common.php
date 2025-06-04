@@ -134,7 +134,7 @@ $database = $orange->getDatabaseClass();
 $localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
 
 if (!SB_CLI) {
-    $auth = new Authentication($database);
+    $auth = $orange->getAuthenticationClass(); // temporary ig?
     $localization = new Localization($localization_setting);
 
     // automatic stuff

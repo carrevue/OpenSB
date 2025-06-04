@@ -19,6 +19,7 @@ class Templating
     private $skin;
     private $theme;
     private SquareBracket $orange;
+    private Authentication $authentication;
     private FilesystemLoader $loader;
     private Environment $twig;
     private VersionNumber $version_number;
@@ -28,10 +29,10 @@ class Templating
      */
     public function __construct(SquareBracket $orange)
     {
-        global $auth;
         chdir(SB_PRIVATE_PATH);
 
         $this->orange = $orange;
+        $this->authentication = $this->orange->getAuthenticationClass();
 
         $options = $orange->getLocalOptions();
 
@@ -77,11 +78,14 @@ class Templating
         $this->twig->addFunction(new TwigFunction('component', function($component) use ($templatePath) {
             $path = '/components/' . $this->theme . '/' . $component . '.twig';
             $path_default = '/components/default/' . $component . '.twig';
+            $path_common = 'skins/common/' . $component . '.twig';
 
             if (file_exists(SB_PRIVATE_PATH . '/' . $templatePath . $path)) {
                 return $path;
             } elseif (file_exists(SB_PRIVATE_PATH . '/' . $templatePath . $path_default)) {
                 return $path_default;
+            } elseif (file_exists(SB_PRIVATE_PATH . '/' . $path_common)) {
+                return $component . '.twig'; // i guess???
             } else {
                 return '/missing_component.twig';
             }
@@ -125,12 +129,12 @@ class Templating
         $this->twig->addGlobal('is_chaziz_sb', $orange->isChazizSquareBracketInstance());
         $this->twig->addGlobal('is_fulptube', $isFulpTube);
         $this->twig->addGlobal('is_debug', $orange->isDebug());
-        $this->twig->addGlobal('is_user_logged_in', $auth->isUserLoggedIn());
-        $this->twig->addGlobal('user_data', $auth->getUserData());
-        $this->twig->addGlobal('user_ban_data', $auth->getUserBanData());
-        $this->twig->addGlobal('user_stat_data', $auth->getUserStatData());
-        $this->twig->addGlobal('user_is_admin', $auth->isUserAdmin());
-        $this->twig->addGlobal('user_is_authenticated_admin', $auth->hasUserAuthenticatedAsAnAdmin());
+        $this->twig->addGlobal('is_user_logged_in', $this->authentication->isUserLoggedIn());
+        $this->twig->addGlobal('user_data', $this->authentication->getUserData());
+        $this->twig->addGlobal('user_ban_data', $this->authentication->getUserBanData());
+        $this->twig->addGlobal('user_stat_data', $this->authentication->getUserStatData());
+        $this->twig->addGlobal('user_is_admin', $this->authentication->isUserAdmin());
+        $this->twig->addGlobal('user_is_authenticated_admin', $this->authentication->hasUserAuthenticatedAsAnAdmin());
         $this->twig->addGlobal('skins', $this->getAllSkinsMetadata());
         $this->twig->addGlobal('opensb_version', $this->version_number->getVersionNumber());
         $this->twig->addGlobal('session', $_SESSION);

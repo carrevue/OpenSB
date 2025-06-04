@@ -73,4 +73,8 @@ class UserData
             ];
         }
     }
+
+    public static function getUserDataCache(): array {
+        return self::$userDataCache;
+    }
 }

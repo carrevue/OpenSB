@@ -1,4 +1,8 @@
+{# this uses biscuit/charla-specific syntax. im putting this here since this works for both frontends.
+   it'll be moved back to charla once biscuit gets removed from opensb. -chaziz 6/4/2025 #}
+
 {% set profiler = db_profiler_info() %}
+{% set user_data_cache = get_user_data_cache() %}
 <dialog class="content-box debug-dialog" id="debug-dialog">
     {{ version_banner() }}
     <hr>
@@ -7,6 +11,7 @@
         {% apply spaceless %}
             <button class="tablink" data-tab="tab_db">Database Statistics</button>
             <button class="tablink" data-tab="tab_twig">Twig Dump Info</button>
+            <button class="tablink" data-tab="tab_user">User Data Cache</button>
         {% endapply %}
     </div>
     <div class="content-box no-border-top">
@@ -35,6 +40,36 @@
     <pre>
 {{ dump() }}
     </pre>
+        </div>
+        <div id="tab_user" class="tabcontent">
+            <table class="c1">
+                <tr class="h">
+                    <th>ID</th>
+                    <th>Names</th>
+                    <th>Stats</th>
+                    <th>Color</th>
+                </tr>
+            {% for user in user_data_cache %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}<br><small>{{ user.title }}</small></td>
+                    <td>
+                        <ul>
+                            <li>
+                                Powerlevel: {{ user.powerlevel }}
+                            </li>
+                            <li>
+                                Joined: {{ user.joined | date('M d Y H:i T') }}
+                            </li>
+                            <li>
+                                Logged in: {{ user.lastview | date('M d Y H:i T') }}
+                            </li>
+                        </ul>
+                    </td>
+                    <td style="background:{{ user.customcolor }}"></td>
+                </tr>
+            {% endfor %}
+            </table>
         </div>
     </div>
     <br>
