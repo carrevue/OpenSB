@@ -79,6 +79,23 @@ if ($isChazizSB)
     */
 }
 
+// its dynamic shit because i cant be arsed
+function handle_debug_page_path(string $path): void
+{
+    $debug_pages_path = SB_PRIVATE_PATH . '/pages/debug/';
+
+    if (!$path) $path = "index";
+    $path = str_replace(['..', '/', '\\'], '', $path);
+
+    $full_path = $debug_pages_path . $path . ".php";
+
+    if (file_exists($full_path) && str_starts_with(realpath($full_path), $debug_pages_path)) {
+        require $full_path;
+    } else {
+        last_resort();
+    }
+}
+
 // Originally based on Rollerozxa's router implementation in Principia-Web.
 // https://github.com/principia-game/principia-web/blob/master/router.php
 
@@ -120,7 +137,7 @@ if (isset($path[1]) && $path[1] != '') {
                 'get_comments' => require(SB_PRIVATE_PATH . '/pages/api/v3/get_comments.php'),
                 'get_instance_info' => require(SB_PRIVATE_PATH . '/pages/api/v3/get_instance_info.php'),
                 'get_upload' => require(SB_PRIVATE_PATH . '/pages/api/v3/get_upload.php'),
-                //'get_uploads' => require(SB_PRIVATE_PATH . '/pages/api/v3/get_uploads.php'),
+                'get_uploads' => require(SB_PRIVATE_PATH . '/pages/api/v3/get_uploads.php'),
                 default => die(json_encode("Invalid API."))
             },
             default => last_resort(),
@@ -132,9 +149,9 @@ if (isset($path[1]) && $path[1] != '') {
         },
         'browse' => require(SB_PRIVATE_PATH . '/pages/browse.php'),
         'debug' => match ($path[2] ?? null) {
-            null, '', 'index' => require(SB_PRIVATE_PATH . '/pages/debug/index.php'),
-            'notifications' => require(SB_PRIVATE_PATH . '/pages/debug/notifications.php'),
-            default => last_resort(),
+            //null, '', 'index' => require(SB_PRIVATE_PATH . '/pages/debug/index.php'),
+            //'notifications' => require(SB_PRIVATE_PATH . '/pages/debug/notifications.php'),
+            default => handle_debug_page_path($path[2] ?? ''),
         },
         'delete' => require(SB_PRIVATE_PATH . '/pages/delete.php'),
         'design_test' => require(SB_PRIVATE_PATH . '/pages/design_test.php'),

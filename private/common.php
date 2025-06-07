@@ -57,7 +57,7 @@ if (!SB_CLI) {
         session_set_cookie_params([
             'lifetime' => 0,
             'path' => '/',
-            'domain' => $_SERVER['HTTP_HOST'],
+            //'domain' => $_SERVER['HTTP_HOST'],
             'secure' => $is_secure,
             'httponly' => true,
             'samesite' => 'Strict'

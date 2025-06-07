@@ -35,7 +35,7 @@ foreach ($inviteKeys as $inviteKey) {
 // Admin actions
 if (isset($_POST["action"])) {
     if ($_POST["action"] == "generate_invite_key") {
-        $random = strtoupper("SB" . Utilities::generateRandomString(32));
+        $random = strtoupper("SBA_" . Utilities::generateRandomString(32));
 
         $database->query("INSERT INTO invite_keys (invite_key, generated_by, generated_time) VALUES (?,?,?)",
             [$random, $auth->getUserID(), time()]);

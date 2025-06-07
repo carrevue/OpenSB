@@ -27,7 +27,7 @@ function handleCommentData($data) {
                 'id' => $comment['author']['id'],
                 'username' => $comment['author']['info']['username'],
                 'displayname' => $comment['author']['info']['displayname'],
-                'color' => $comment['author']['info']['customcolor'],
+                'color' => $comment['author']['info']['color'],
             ],
             'replies' => handleCommentData($comment['replies']),
         ];

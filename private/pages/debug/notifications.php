@@ -91,8 +91,8 @@ if (isset($_POST["submit"])) {
                 <td><?= $n['id'] ?></td>
                 <td><?= NotificationEnum::from($n['type'])->name ?></td>
                 <td><?= $n['level'] ?></td>
-                <td><?= $n['sender'] ?></td>
-                <td><?= $n['recipient'] ?></td>
+                <td><?= Utilities::userIDToUsername($database, $n['sender']) ?></td>
+                <td><?= Utilities::userIDToUsername($database, $n['recipient']) ?></td>
                 <td><?= date('Y-m-d H:i:s', $n['timestamp']) ?></td>
                 <td><?= $n['related_id'] ?></td>
             </tr>
