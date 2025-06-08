@@ -37,7 +37,8 @@ $limit = sprintf("%s,%s", (($page - 1) * $amount), $amount);
 
 $count = $database->result("SELECT COUNT(*) FROM uploads u");
 
-$uploads = $upload_query->query('v.time DESC', $limit);
+// kinda fucking stupid i guess but whatever
+$uploads = $upload_query->query('v.time DESC', $limit, null, [], true);
 
 echo $twig->render("admin_uploads.twig", [
     "uploads" => Utilities::makeUploadArray($database, $uploads),

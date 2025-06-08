@@ -83,7 +83,24 @@ $type = $auth->isUserLoggedIn() ? "user" : "guest";
 
 // probably shit
 if (!$CrawlerDetect->isCrawler()) {
-    if ($database->fetch("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip])['COUNT(video_id)'] < 1) {
+    $ratelimit = false;
+
+    // add a limit of one view per minute on guests. this is to deter other forms of crawlers/bots that may
+    // not be properly caught by crawlerdetect.
+    if (!$auth->isUserLoggedIn() &&
+        $database->result("SELECT COUNT(*) FROM upload_views WHERE user=? AND timestamp > 60", [$ip])) {
+        $ratelimit = true;
+    }
+
+    // add a limit of one guest view per 10 minutes on uploads. this is to deter potential viewbots from
+    // quickly botting an upload.
+    if (!$auth->isUserLoggedIn() &&
+        $database->result("SELECT COUNT(*) FROM upload_views WHERE video_id=? AND timestamp > 600", [$ip])) {
+        $ratelimit = true;
+    }
+
+    if ($database->result("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip]) < 1
+        && !$ratelimit) {
         $database->query("INSERT INTO upload_views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
             [$id, $ip, time(), $type]);
 
@@ -150,7 +167,7 @@ if ($tags === []) {
     $recommended = false;
 } else {
     // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
-    // this isn't ported to UploadQuery for now, as it requires me to rework all of UploadQuery.
+    // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
 
     $query = "SELECT v.* 
     FROM uploads v

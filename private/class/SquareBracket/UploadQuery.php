@@ -14,27 +14,34 @@ class UploadQuery
         $this->whereTagBlacklist = Utilities::whereTagBlacklist();
     }
 
-    public function query($order, $limit, $whereCondition = null, $params = []) {
-        $query = "
-        SELECT v.*
-        FROM uploads v
-        WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns)
-        AND v.author NOT IN (SELECT userid FROM user_bans)
-        ";
+    public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false) {
+        $query = "SELECT v.* FROM uploads v";
+        $whereClauses = [];
+
+        if (!$adminPanel) {
+            // if upload isnt taken down
+            $whereClauses[] = "v.video_id NOT IN (SELECT submission FROM upload_takedowns)";
+            // if upload does not belong to someone who has been banned
+            $whereClauses[] = "v.author NOT IN (SELECT userid FROM user_bans)";
+        }
 
         if (!empty($whereCondition)) {
-            $query .= "AND $whereCondition ";
+            $whereClauses[] = $whereCondition;
         }
 
         if (!empty($this->whereRatings)) {
-            $query .= "AND $this->whereRatings ";
+            $whereClauses[] = $this->whereRatings;
         }
 
         if (!empty($this->whereTagBlacklist)) {
-            $query .= "AND $this->whereTagBlacklist ";
+            $whereClauses[] = $this->whereTagBlacklist;
         }
 
-        $query .= "ORDER BY $order LIMIT $limit";
+        if (!empty($whereClauses)) {
+            $query .= " WHERE " . implode(" AND ", $whereClauses);
+        }
+
+        $query .= " ORDER BY $order LIMIT $limit";
 
         return $this->database->fetchArray($this->database->query($query, $params));
     }

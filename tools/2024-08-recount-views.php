@@ -12,7 +12,7 @@ require_once SB_PRIVATE_PATH . '/common.php';
 
 global $database;
 
-$uploads = $database->fetchArray($database->query("SELECT * FROM videos"));
+$uploads = $database->fetchArray($database->query("SELECT * FROM uploads"));
 
 foreach ($uploads as $upload) {
     $viewCountsQuery = $database->query("
@@ -20,7 +20,7 @@ foreach ($uploads as $upload) {
             COUNT(CASE WHEN type = 'user' THEN 1 END) AS logged_in_views,
             COUNT(CASE WHEN type = 'guest' THEN 1 END) AS logged_out_views
         FROM
-            views
+            upload_views
         WHERE
             video_id = ?
     ", [$upload["video_id"]]);
@@ -44,5 +44,5 @@ foreach ($uploads as $upload) {
 
     echo "Video ID: " . $upload["video_id"] . " - Adjusted View Count: " . round($adjustedViewCount) . "\n";
 
-    $database->query("UPDATE videos SET views = ? WHERE video_id = ?", [$adjustedViewCount, $upload["video_id"]]);
+    $database->query("UPDATE uploads SET views = ? WHERE video_id = ?", [$adjustedViewCount, $upload["video_id"]]);
 }
