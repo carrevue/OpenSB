@@ -29,12 +29,14 @@ class UploadQuery
             $whereClauses[] = $whereCondition;
         }
 
-        if (!empty($this->whereRatings)) {
-            $whereClauses[] = $this->whereRatings;
-        }
+        if (!$adminPanel) {
+            if (!empty($this->whereRatings)) {
+                $whereClauses[] = $this->whereRatings;
+            }
 
-        if (!empty($this->whereTagBlacklist)) {
-            $whereClauses[] = $this->whereTagBlacklist;
+            if (!empty($this->whereTagBlacklist)) {
+                $whereClauses[] = $this->whereTagBlacklist;
+            }
         }
 
         if (!empty($whereClauses)) {
