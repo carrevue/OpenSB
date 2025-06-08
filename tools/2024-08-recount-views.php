@@ -31,13 +31,9 @@ foreach ($uploads as $upload) {
     $loggedOutViews = $viewCountsResult[0]["logged_out_views"];
 
     // calculate a ratio as an attempt to estimate human views.
-    if ($loggedInViews == 0) {
-        $ratio = 4;
-    } elseif ($loggedInViews >= 10) {
-        $ratio = 2;
-    } else {
-        $ratio = 4 - (2 * ($loggedInViews - 1) / 8);
-    }
+    $ratio = ($loggedInViews == 0)
+        ? PHP_INT_MAX
+        : 1 + (10 / ($loggedInViews + 1));
 
     // updated view count
     $adjustedViewCount = $loggedInViews + ($loggedOutViews / $ratio);
