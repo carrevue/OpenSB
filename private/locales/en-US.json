@@ -4,7 +4,7 @@
   "browse": "Browse",
   "browse_more": "Browse more",
 
-  "welcome_logged_in": "Welcome back, %s",
+  "welcome_logged_in": "Welcome, %s",
   "welcome_logged_out": "Welcome to %s",
 
   "login": "Login",

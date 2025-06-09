@@ -18,6 +18,14 @@ function getOrderFromType($type): string
         case 'popular':
             $order = "views DESC";
             break;
+            /*
+        case 'discussed':
+            $order = "comments";
+            break;
+        case 'favorited':
+            $order = "favorites";
+            break;
+            */
         case 'random':
             $order = "RAND()";
             break;
