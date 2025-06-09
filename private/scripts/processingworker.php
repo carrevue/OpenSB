@@ -13,6 +13,7 @@ use FFMpeg\Coordinate;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use FFMpeg\Filters;
+// use FFMpeg\Filters\Video\CustomFilter;
 use FFMpeg\Format\Video\X264;
 use FFMpeg\Exception\RuntimeException;
 
@@ -49,6 +50,7 @@ function downscaleVideoForThumbnail($videoWidth, $videoHeight): array
 
 echo (new VersionNumber)->outputVersionBanner();
 
+// this is hardcoded, Fuck.
 $config = [
     'timeout' => 3600, // The timeout for the underlying process (1 hour)
     'ffmpeg.threads' => 12,   // The number of threads that FFmpeg should use
@@ -154,11 +156,24 @@ try {
         log("Taking thumbnail from first frame");
         $frame = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
     } else {
+        // this is fucked. look into this later. -chaziz 6/9/2025
+        /*
+        log("Figuring out thumbnail");
+        //$cloned_video_for_thumbnail = clone $video;
+        $cloned_video_for_thumbnail = $ffmpeg->open($target_file);
+        $cloned_video_for_thumbnail->addFilter(new CustomFilter(
+            'select=gt(scene\,0.1),' .
+            'thumbnail=n=50,' .
+            'blackframe=0'
+        ));
+        $frame = $cloned_video_for_thumbnail->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
+        */
+
         $thumbnailTime = $duration * 0.33;
         log("Taking thumbnail from frame " . $thumbnailTime);
+
         $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
     }
-
     $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
     log("Saving thumbnail");
     $frame->save(SB_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
@@ -198,10 +213,9 @@ try {
 
     debug_print_backtrace();
     unlink($target_file);
-    //delete_directory($preload_folder);
 
     if ($for_website) {
-        log("Updating database entry...");
+        log("Updating database...");
         $videoData = $database->fetch("SELECT v.* FROM uploads v WHERE v.video_id = ?", [$new]);
 
         // if we couldnt get length just fallback to 0 seconds.

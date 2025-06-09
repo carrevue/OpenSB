@@ -14,4 +14,5 @@ global $database;
 
 require_once SB_PRIVATE_PATH . '/common.php';
 
-$banned_users = $database->fetchArray($database->query("SELECT id, name, joined FROM users ORDER BY joined ASC"));
+// TODO
+$uploads = $database->fetchArray($database->query("SELECT * FROM uploads"));

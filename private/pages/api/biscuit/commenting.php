@@ -52,20 +52,6 @@ if (!$orange->isDebug()) {
     }
 }
 
-$comment = [
-    "id" => 0, // todo
-    "posted_id" => $post_data['id'],
-    "post" => $commentText,
-    "posted" => time(),
-    "author" => [
-        "id" => $auth->getUserID(),
-        "info" => $author->getUserArray(),
-    ],
-    "replies" => []
-];
-
-$html = $twig->render('components/_comment.twig', ['comment' => $comment]);
-
 $id = $post_data["id"];
 $replyTo = $post_data['reply_to'] ?? 0;
 
@@ -91,6 +77,20 @@ $database->query(
 
 // we need the insertid right before we call anything else to avoid a "trying to access array offset on false" warning.
 $insertID = $database->insertID();
+
+$comment = [
+    "id" => $insertID,
+    "posted_id" => $post_data['id'],
+    "post" => $commentText,
+    "posted" => time(),
+    "author" => [
+        "id" => $auth->getUserID(),
+        "info" => $author->getUserArray(),
+    ],
+    "replies" => []
+];
+
+$html = $twig->render('components/_comment.twig', ['comment' => $comment]);
 
 // not gonna put this code in the first switch case YET due to a weird ass hack i have to do with upload comments
 switch ($post_data['type']) {

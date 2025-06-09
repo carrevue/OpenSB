@@ -1,5 +1,5 @@
 function error(error) {
-    play('error');
+    //play('error');
     console.error("OpenSB Charla Frontend Error: " + error);
 }
 
@@ -146,14 +146,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function closeCommentForm() {
+        // kinda stupid but whatever
+        let new_comment_box = document.getElementById('new-comment-logged-out');
+        let new_comment_form = document.getElementById('new-comment-form');
+
+        new_comment_box.style.display = "block";
+        new_comment_form.style.display = "none";
+    }
+
     function submitComment(type, id, content, replyTo = 0) {
-        play('click');
+        //play('click');
         fetch("/api/biscuit/commenting", {
             method: "POST",
             body: JSON.stringify({
                 type: type,
                 id: id,
-                comment: content,
+                comment: content.value,
                 reply_to: replyTo
             }),
             headers: {
@@ -164,36 +173,79 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(json => {
                 if (json.error) {
                     error(json.error);
-                } else {
-                    play('comment');
+
                     if (replyTo !== 0) {
-                        const repliesContainer = document.getElementById(`replies-${replyTo}`);
+                        let reply_form_error = document.getElementById(`reply-form-error-${replyTo}`);
+
+                        if (reply_form_error) {
+                            reply_form_error.style.display = "inline";
+                            reply_form_error.innerHTML = json.error;
+                        }
+                    } else {
+                        let comment_form_error = (document.getElementById('comment-form-error'));
+
+                        if (comment_form_error) {
+                            comment_form_error.style.display = "inline";
+                            comment_form_error.innerHTML = json.error;
+                        }
+                    }
+                } else {
+                    //play('comment');
+                    if (replyTo !== 0) {
+                        let repliesContainer = document.getElementById(`replies-${replyTo}`);
                         if (repliesContainer) {
+                            let reply_form_error = document.getElementById(`reply-form-error-${replyTo}`);
+                            if (reply_form_error) {
+                                reply_form_error.style.display = "none";
+                            }
+
                             repliesContainer.insertAdjacentHTML("beforeend", json.html);
                         } else {
-                            error(`replies-${replyTo} doesn't exist. Biscuit fucked up.`);
+                            error(`replies-${replyTo} doesn't exist. Charla fucked up.`);
                         }
                     } else {
                         let comment_field = (document.getElementById('comment_field'));
 
                         if (comment_field) {
+                            let comment_form_error = (document.getElementById('comment-form-error'));
+
+                            if (comment_form_error) {
+                                comment_form_error.style.display = "none";
+                            }
+
                             comment_field.insertAdjacentHTML("afterend", json.html);
                         } else {
                             error(`Comments section doesn't exist????? Charla fucked up.`);
                         }
                     }
 
+                    closeCommentForm();
                     closeCommentReplyForm();
+                    content.value = '';
                 }
             });
     }
 
     let comment_field = (document.getElementById('comment_field'));
     if (comment_field) {
+        let new_comment_box = document.getElementById('new-comment-logged-out');
+        let new_comment_form = document.getElementById('new-comment-form');
+
+        new_comment_box.onclick = function() {
+            closeCommentReplyForm();
+
+            if (new_comment_form) {
+                new_comment_box.style.display = "none";
+                new_comment_form.style.display = "block";
+            } else {
+                error("where's the comment form???");
+            }
+        };
+
         let comment_button = document.getElementById('comment_button');
         let comment_contents = document.getElementById('comment_contents');
         comment_button.onclick = function() {
-            submitComment(comment_type, comment_id, comment_contents.value);
+            submitComment(comment_type, comment_id, comment_contents);
         };
     }
 
@@ -201,11 +253,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.target && event.target.classList.contains("reply-button")) {
             let commentId = event.target.getAttribute("data-comment-id");
 
+            closeCommentForm();
             closeCommentReplyForm();
 
             let replyForm = document.getElementById(`reply-form-${commentId}`);
             if (replyForm) {
-                replyForm.style.display = "block";
+                replyForm.style.display = "flex";
             }
         }
 
@@ -213,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let commentId = event.target.getAttribute("data-comment-id");
             let replyContents = document.getElementById(`reply_contents_${commentId}`);
             if (replyContents) {
-                submitComment(comment_type, comment_id, replyContents.value, commentId);
+                submitComment(comment_type, comment_id, replyContents, commentId);
             }
         }
     });
@@ -222,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (follow_button) {
         let follow_count = (document.getElementById('follower_count'));
         follow_button.onclick = function () {
-            play('click');
+            //play('click');
             fetch("/api/biscuit/user_interaction", {
                 method: "POST",
                 body: JSON.stringify({
@@ -246,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                             follow_button.textContent = json["text"];
                             if (json["followed"]) {
-                                play('subscribe');
+                                //play('subscribe');
                             }
                         }
                     }
@@ -293,9 +346,3 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
-function play(sound) {
-    if (JSON.parse(uiSounds) === true) {
-        console.warn("play() is deprecated and should be removed before OpenSB 1.3 final release! -Chaziz 12/31/2024")
-    }
-}
