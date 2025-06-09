@@ -36,8 +36,16 @@ class Templating
 
         $options = $orange->getLocalOptions();
 
-        $this->skin = $options["skin"] ?? "trinium";
-        $this->theme = $options["theme"] ?? "default";
+        $default_skin = "trinium";
+        $default_theme = "default";
+
+        if ($this->orange->isFulpTube()) {
+            $default_skin = "finalium";
+            $default_theme = "hitchhiker";
+        }
+
+        $this->skin = $options["skin"] ?? $default_skin;
+        $this->theme = $options["theme"] ?? $default_theme;
 
         //if ($this->skin === null || trim($this->skin) === '' || !is_dir('skins/' . $this->skin . '/templates')) {
         if ($this->skin === null || trim($this->skin) === '') {
@@ -103,7 +111,7 @@ class Templating
             }));
         }
 
-        $isFulpTube = Utilities::isFulpTube();
+        $isFulpTube = $orange->isFulpTube();
         $branding = $orange->getBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.

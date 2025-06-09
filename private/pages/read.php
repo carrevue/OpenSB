@@ -2,7 +2,7 @@
 
 namespace OpenSB;
 
-global $twig, $database, $auth;
+global $orange, $twig, $database, $auth;
 
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
@@ -23,7 +23,7 @@ if ($auth->getUserID() == $data["author"]) {
     $owner = false;
 }
 
-if (Utilities::isFulpTube() && $data["is_site_news"]) {
+if ($orange->isFulpTube() && $data["is_site_news"]) {
     $data["title"] = Utilities::replaceSquareBracketWithFulpTube($data["title"]);
     $data["post"] = Utilities::replaceSquareBracketWithFulpTube($data["post"]);
 }

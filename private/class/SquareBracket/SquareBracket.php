@@ -73,6 +73,20 @@ class SquareBracket {
         $this->enable_lockdown = (bool)($config["lockdown"] ?? false);
         //
 
+        // predefine these options
+        $defaultSkin = "trinium";
+        $defaultTheme = "default";
+
+        if ($this->isFulpTube()) {
+            $defaultSkin = "finalium";
+            $defaultTheme = "hitchhiker";
+        }
+
+        $this->options = [
+            "skin" => $defaultSkin,
+            "theme" => $defaultTheme,
+        ];
+
         if (isset($_COOKIE["SBOPTIONS"])) {
             $this->options = json_decode(base64_decode($_COOKIE["SBOPTIONS"]), true);
 
@@ -82,20 +96,6 @@ class SquareBracket {
                 setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);
             }
         } else {
-            $defaultSkin = "trinium";
-            if ($this->is_chaziz_squarebracket_instance) {
-                // if we're on fulptube, set the default frontend to finalium 1, since its close enough to
-                // early-hitchhiker youtube (which is what og fulptube used to be based on). otherwise,
-                // set the default to trinium. -chaziz 4/7/2025
-
-                $defaultSkin = Utilities::isFulpTube() ? "finalium" : "trinium";
-            }
-
-            $this->options = [
-                "skin" => $defaultSkin,
-                "theme" => "default",
-                "sounds" => false,
-            ];
             setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);
         }
 
@@ -109,7 +109,7 @@ class SquareBracket {
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
         // this fulptube branding is meant to look like the squarebracket branding on purpose, since
         // both squarebracket.pw and fulptube.rocks lead to the same site.
-        if (Utilities::isFulpTube($this->options)) {
+        if ($this->isFulpTube()) {
             //$isFulpTube = true;
             $this->branding_settings = [
                 "name" => "FulpTube",
@@ -232,12 +232,23 @@ class SquareBracket {
     }
 
     /**
-     * Returns boolean. (temporary)
+     * Returns boolean for FulpTube mode.
      *
      * @return bool
      */
     public function isFulpTube(): bool {
-        return Utilities::isFulpTube($this->options);
+        $isOnFulpTubeDomain = str_contains($_SERVER['HTTP_HOST'], 'fulptube.rocks');
+
+        $isHitchhikerTheme = ($this->getLocalOptions()['skin'] ?? '') === 'finalium'
+            && ($this->getLocalOptions()['theme'] ?? '') === 'hitchhiker';
+
+        $isDebugMode = ($this->getLocalOptions()['debug_fulptube_branding'] ?? false) && $this->isDebug();
+
+        if ($this->isChazizSquareBracketInstance() && ($isOnFulpTubeDomain || $isHitchhikerTheme || $isDebugMode)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

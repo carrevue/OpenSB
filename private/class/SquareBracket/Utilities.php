@@ -53,9 +53,11 @@ class Utilities
 
     public static function makeJournalArray($database, $journals): array
     {
+        global $orange;
+
         $journalsData = [];
         foreach ($journals as $journal) {
-            if (self::isFulpTube() && $journal["is_site_news"]) {
+            if ($orange->isFulpTube() && $journal["is_site_news"]) {
                 $journal["title"] = self::replaceSquareBracketWithFulpTube($journal["title"]);
                 $journal["post"] = self::replaceSquareBracketWithFulpTube($journal["post"]);
             }
@@ -341,27 +343,6 @@ class Utilities
         } else {
             return $ip;
         }
-    }
-
-    // ok so $optionsFallback exists because $debugFulpTube may not be fully initalized if this gets called
-    // too early. maybe this function should just be moved into the core SquareBracket class? -chaziz 5/7/2025
-    public static function isFulpTube(array $optionsFallback = []): bool
-    {
-        global $orange;
-
-        $localOptions = $orange?->getLocalOptions() ?? $optionsFallback;
-        $isDebugMode = ($localOptions['debug_fulptube_branding'] ?? false) && $orange?->isDebug();
-
-        if ($isDebugMode) {
-            return true;
-        }
-
-        $isHitchhikerTheme = ($localOptions['skin'] ?? '') === 'finalium'
-            && ($localOptions['theme'] ?? '') === 'hitchhiker';
-
-        $isFulpTubeDomain = isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'fulptube.rocks';
-
-        return $orange?->isChazizSquareBracketInstance() && ($isHitchhikerTheme || $isFulpTubeDomain);
     }
 
     public static function isLegacyFrontend()
