@@ -1,0 +1,142 @@
+{% if is_fulptube %}
+    {% if current_theme == "dark" %}
+        {% set logo = '/assets/sb_branding/fulp/logo-wordmark-dark.png' %}
+    {% else %}
+        {% set logo = '/assets/sb_branding/fulp/logo-wordmark.png' %}
+    {% endif %}
+{% else %}
+    {% if current_theme == "dark" %}
+        {% set logo = website_branding.assets_location ~ '/logo-dark.png' %}
+    {% else %}
+        {% set logo = website_branding.assets_location ~ '/logo.png' %}
+    {% endif %}
+{% endif %}
+<div class="header">
+    <div class="header-container {% if not is_user_logged_in %}logged-out{% endif %}">
+        <div class="header-button">
+            <div class="button button-secondary button-hamburger button-transparent" id="button-hamburger">
+                <i class="biscuit-icon hamburger size-32"></i>
+            </div>
+        </div>
+        {#
+        <div class="header-logo-squarebracket">
+            sb
+        </div>
+        #}
+        <div class="header-logo">
+            <a href="/">
+                <img alt="{{ website_branding.name }}" class="logo" src="{{ logo }}">
+            </a>
+        </div>
+        <form class="header-search" action="/search">
+            <input id="header-search-input" type="text" name="query" placeholder="{{ localize('search') }}...">
+            <button id="header-search-button">
+                <i class="biscuit-icon search"></i>
+            </button>
+        </form>
+        <div class="header-links">
+            {% if is_user_logged_in %}
+                {# create #}
+                <div class="user-menu-container">
+                    <div class="menu-button user-menu-button" data-menu-id="create-menu">
+                        <i class="biscuit-icon plus"></i>
+                    </div>
+                    <div class="menu" id="create-menu">
+                        <a class="menu-item-button" href="/upload">New upload</a>
+                        <a class="menu-item-button" href="/write">New journal</a>
+                    </div>
+                </div>
+                {# notifications #}
+                <div class="user-menu-container">
+                    <div class="menu-button user-menu-button" data-menu-id="notify-menu">
+                        <i class="biscuit-icon bell"></i>
+                    </div>
+                    <div class="menu" id="notify-menu">
+                        <a class="menu-item-button" href="/notifications">Notifications
+                            ({{ user_stat_data.notifications }})</a>
+                        {% if options.enable_incomplete_features %}
+                        <a class="menu-item-button" href="/my_messages">Messages
+                            (0)</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {# user #}
+                <div class="user-menu-container">
+                    <div class="menu-button user-menu-button" data-menu-id="user-menu">
+                        <div class="profile-picture user-menu-pfp">
+                            <img src="{{ profile_picture(user_data.name) }}" class="pfp" alt="{{ user_data.name }}">
+                        </div>
+                    </div>
+                    <div class="menu" id="user-menu">
+                            <div class="user-menu-intro">
+                                <div class="user-menu-intro-left">
+                                    <div class="profile-picture">
+                                        <img src="{{ profile_picture(user_data.name) }}" class="pfp"
+                                             alt="{{ user_data.name }}">
+                                    </div>
+                                </div>
+                                <div class="user-menu-intro-right">
+                                    <div class="user-menu-intro-name">{{ user_data.name }}</div>
+                                    <div class="user-menu-intro-stat">{{ truncate_number(user_stat_data.followers) }} followers</div>
+                                    <div class="user-menu-intro-stat">{{ truncate_number(user_stat_data.views) }} views</div>
+                                </div>
+                            </div>
+                            <hr>
+                        {% for link in header_user_links() %}
+                            <a class="menu-item-button" href="{{ link.url }}">{{ link.name }}</a>
+                        {% endfor %}
+                        <hr>
+                        {% for link in header_user_account_links() %}
+                            <a class="menu-item-button" href="/login/{{ link.username }}">
+                                <div class="menu-item-profile-picture profile-picture">
+                                    <img src="{{ profile_picture(link.username) }}" class="pfp"
+                                         alt="{{ link.username }}">
+                                </div>
+                                <span>{{ link.username }}</span>
+                            </a>
+                        {% endfor %}
+                        <a class="menu-item-button small" href="/login"><span>Add account</span></a>
+                    </div>
+                </div>
+            {% else %}
+                {% for link in header_user_links() %}
+                    <a class="menulink" href="{{ link.url }}">{{ link.name }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{#
+<div class="mobile-navigation-bar-container">
+    <div class="navigation-bar">
+        {% for link in header_main_links() %}
+            <a class="navigation-bar-button" href="{{ link.url }}">
+                <div class="biscuit-icon homepage-list size-24"></div>
+                {{ link.name }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+#}
+<div class="hamburger" id="hamburger">
+    <ul class="hamburger-list">
+        {% for link in header_main_links() %}
+            <li class="hamburger-link"><a href="{{ link.url }}">{{ link.name }}</a></li>
+        {% endfor %}
+        {% if is_user_logged_in %}
+            {% if sidebar_following_users() %}
+                <li class="hamburger-header">Following</li>
+                {% for link in sidebar_following_users() %}
+                    <li class="hamburger-link">
+                        <a href="/user/{{ link.username }}">
+                            <div class="hamburger-link-profile-picture profile-picture">
+                                <img src="{{ profile_picture(link.username) }}" class="pfp" alt="{{ link.username }}">
+                            </div>
+                            {{ link.username }}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </ul>
+</div>

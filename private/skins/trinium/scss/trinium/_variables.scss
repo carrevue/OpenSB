@@ -1,0 +1,108 @@
+$threshold: 50%; // contrast threshold
+
+// basic colors
+$text-color: black;
+$link-color: #0069B4; // #006FFF;
+$bg-color: #F2F2F2;
+$header-link-color: black;
+
+@if $color-scheme == "dark" {
+        $text-color: white;
+        $link-color: #2d89e8;
+        $bg-color: #111111;
+        $header-link-color: white;
+}
+
+// content boxes
+$content-box-background-color: #FFF;
+$content-box-border-color: #E0E0E0;
+@if $color-scheme == "dark" {
+        $content-box-background-color: #1a1a1a;
+        $content-box-border-color: #333333;
+}
+
+$content-box-padding: 1em;
+
+// content box grid entries
+$content-box-grid-entry-height: 220px;
+$content-box-grid-entry-width: 135px;
+
+// component colors
+$primary: #0069B4;
+$secondary: $content-box-border-color;
+$green: #00A651;
+$red: #CB122E;
+$yellow: #FFBB00;
+
+$color-map: (
+        "primary": $primary,
+        "secondary": $content-box-border-color,
+        "success": $green,
+        "danger": $red,
+        "warning": $yellow,
+);
+
+/*
+  @if $color-scheme == "dark" {
+    background: linear-gradient(to bottom, #333333, #222);
+  } @else {
+    background: linear-gradient(to bottom, #FFFFFF, #F1F1F1);
+  }
+*/
+
+// header/hamburger
+//$header-background: $content-box-background-color;
+
+$header-background: linear-gradient(to bottom, #FFFFFF, #F5F5F5);
+$header-border: $content-box-border-color;
+
+$header-link-hover: rgba($header-link-color, 0.05);
+$header-link-active: rgba($header-link-color, 0.1);
+$header-link-inactive-opacity: 0.75;
+$header-link-active-opacity: 1; // includes hover
+
+@if $color-scheme == "dark" {
+        $header-background: linear-gradient(to bottom, #222222, #111111);
+}
+
+// forms
+$form-bg-color: $content-box-background-color;
+$form-text-color: $text-color;
+$form-border-color: $content-box-border-color;
+
+// fonts
+//$font: Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+// https://medium.com/@jainbhavukspeaks/leveraging-scss-mixins-to-create-responsive-layouts-the-easy-way-5bbe4080cb15
+// breakpoints
+$breakpoints: (
+        "tiny": (
+                300px,
+        ),
+        "small": (
+                500px,
+        ),
+        "medium": (
+                950px,
+        ),
+        "large": (
+                1250px,
+        ),
+        "huge": (
+                1700px,
+        ),
+);
+
+// header
+$header-height: 48px;
+$header-logo-height: 32px;
+$header-pfp-width: 32px;
+
+// profile
+$pfp-width-profiles: 64px;
+$pfp-width-watch: 35px;
+$profile-intro-height: 90px;
+
+// menus
+$menu-item-padding: 0.4rem 0.8rem;

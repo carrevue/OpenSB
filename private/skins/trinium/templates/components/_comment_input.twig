@@ -1,0 +1,25 @@
+{% if is_user_logged_in %}
+<div class="new-comment" id="comment_field">
+    <div class="profile-picture">
+        <img src="{{ profile_picture(user_data.name) }}" class="pfp" alt="{{ user_data.name }}">
+    </div>
+    <div id="new-comment-logged-out">
+        {{ localize('write_comment') }}
+    </div>
+    <div id="new-comment-form">
+        <textarea class="form-submit" id="comment_contents" name="comment" maxlength="1000" rows="3"></textarea>
+        <div class="flex">
+            <div class="text-danger" id="comment-form-error" style="display:none;">
+                Comment Form Error
+            </div>
+            <button type="submit" id="comment_button" name="post" class="button button-primary">
+                {{ localize('post') }}
+            </button>
+        </div>
+    </div>
+</div>
+{% else %}
+<div id="new-comment-logged-out">
+    Please login to comment.
+</div>
+{% endif %}

@@ -1,0 +1,55 @@
+{% extends "_layout_profile.twig" %}
+
+{% set banner_picture = profile_banner(data.author.info.username) %}
+
+{% set title = data.title %}
+
+{% set opengraph_description = data.contents|u.truncate(125, '...') %}
+
+{% set opengraph_type = "article" %}
+{% set opengraph_published = data.published | date("c") %}
+{% set opengraph_author = domain ~ "user/" ~ data.author.info.username %}
+{% set metadata_author = data.author.info.username %}
+{% set opengraph_section = "SquareBracket post" %}
+
+{% block scripts %}
+    {{ include('submission_rating_script.twig') }}
+
+    <script>
+        user_id = '{{ data.author.id }}';
+        comment_type = 'journal';
+        comment_id = '{{ data.int_id }}';
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="content-box">
+            <div class="profile-box">
+                <div class="profile-box-pfp small">
+                    <div class="profile-picture">
+                        <img src="{{ profile_picture(data.author.info.username) }}" class="pfp"
+                             alt="{{ data.author.info.username }}">
+                    </div>
+                </div>
+                <div class="profile-box-info">
+                    <div class="profile-box-username">{{ data.title }}</div>
+                    <div class="profile-box-details">{{ user_link(data.author) }} {{ data.published | relative_time }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="content-box no-border-bottom-rounded">
+            {{ data.contents | markdown_user_written(true) }}
+        </div>
+        <div id="comments">
+            <div class="content-box no-border-top">
+                {{ include('/components/_comment_input.twig') }}
+                {% for comment in data.comments %}
+                    {{ include('/components/_comment.twig') }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

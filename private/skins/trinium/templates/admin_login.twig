@@ -1,0 +1,51 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Admin login" %}
+
+	{% block content %}
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Admin login</h1>
+            </div>
+            <div class="content-box">
+                <div class="login-currently-logged-in">
+                    <div class="login-pfp">
+                        <div class="profile-picture">
+                            <img src="{{ profile_picture(user_data.name) }}" class="pfp"
+                                 alt="{{ user_data.name }}">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="login-currently-logged-in-text">
+                            You are currently logged in as {{ user_data.name }}.
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="panel-body">
+                    <form method="post" name="loginForm" id="loginForm" action="/admin/login" class="form-signin">
+                        <div class="form-input">
+                            <label for="password">Admin password</label>
+                            <input type="password" name="password" class="form-submit">
+                        </div>
+
+                        {% if is_chaziz_sb %}
+                            <p class="text-danger">
+                                <strong>IMPORTANT</strong>: Your admin password is different than your normal password.
+                                If you lose it, please contact Chaziz privately.
+                            </p>
+                        {% else %}
+                            <p class="text-danger">
+                                <strong>IMPORTANT</strong>: Your admin password is different than your normal password.
+                                If you lose it, please contact an instance (co-)owner privately.
+                            </p>
+                        {% endif %}
+
+                        <div class="form-button-container">
+                            <input type="submit" class="button button-primary button-login" value="Login" name="loginsubmit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

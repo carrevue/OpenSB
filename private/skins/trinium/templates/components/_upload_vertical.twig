@@ -1,0 +1,58 @@
+{% if submission.views != 1 %}
+    {% set pluralViews = "s" %}
+{% endif %}
+
+{% if submission.type == 0 %}
+    {% set type = "Video" %}
+{% elseif submission.type == 2 %}
+    {% set type = "Image" %}
+{% else %}
+    {% set type = "Unknown" %}
+{% endif %}
+
+{% if submission.published_originally and submission.original_site %}
+    {% set time = submission.published_originally | relative_time %}
+{% else %}
+    {% set time = submission.published | relative_time %}
+{% endif %}
+
+<div class="content-entry">
+    <div class="content-thumbnail">
+        <a href="/view/{{ submission.id }}">
+            <img src="{{ thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) }}"
+                 alt="{{ submission.title }}" class="content-image thumbnail">
+        </a>
+    </div>
+    <div class="content-info">
+        <div class="content-title-upload">
+            <a href="/view/{{ submission.id }}" class="content-title-link">
+                {% if submission.title|trim is not empty %}
+                    {{ submission.title }}
+                {% else %}
+                    No title
+                {% endif %}
+            </a>
+            <div class="content-rating">
+                {{ show_ratings(submission.interactions.ratings) }}
+            </div>
+        </div>
+        <div class="content-description">
+            {{ user_link(submission.author) }}
+            <br>
+            {{ submission.views }} view{{ pluralViews }}
+            • {{ time }}
+            {% if submission.published_originally and submission.original_site %}
+                <span class="text-faded">on {{ submission.original_site }}</span>
+            {% endif %}
+            • {{ type }}
+            <br>
+            {% if submission.description|trim is not empty %}
+                <span>{{ submission.description }}</span>
+                <br>
+            {% endif %}
+            {% if submission.type == 0 %}
+            <div>{{ convert_time(submission.length) }}</div>
+            {% endif %}
+        </div>
+    </div>
+</div>

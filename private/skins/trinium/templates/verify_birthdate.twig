@@ -1,0 +1,54 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Verify your birthdate" %}
+
+	{% block content %}
+        <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">Verify your birthdate</h1>
+        </div>
+        <div class="content-box">
+            <div class="grid center">
+                <div class="col-6">
+                    <div class="panel-body">
+                        <p>
+                            Before you can continue using {{ website_branding.name }}, please specify your birthdate.
+                        </p>
+                        <form method="post" name="loginForm" id="loginForm" action="/verify_birthdate" class="form-signin">
+                            <div class="form-input">
+                                <label for="birthdate">Birthdate:</label>
+                                <input type="date" name="birthdate" required />
+                            </div>
+
+                            <div class="form-button-container">
+                                <input type="submit" class="button button-primary" value="Submit" name="birthdatesubmit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-6 col-login-info">
+                    <div class="login-currently-logged-in">
+                        <div class="login-pfp">
+                            <div class="profile-picture">
+                                <img src="{{ profile_picture(user_data.name) }}" class="pfp"
+                                     alt="{{ user_data.name }}">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="login-currently-logged-in-text">
+                                You are currently logged in as {{ user_data.name }}.
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <p>
+                            {{ website_branding.name }} requires all users to be over the age of 13. If you are under
+                            the age of 13, please log out immediately. Users who are caught lying about their age
+                            will be banned by {{ website_branding.name }} staff.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

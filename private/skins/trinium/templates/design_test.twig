@@ -1,0 +1,201 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Trinium!" %}
+
+{% set button_color_types = color_types %}
+
+{% set button_color_types = button_color_types|merge(['favorite']) %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
+    <script>
+        document.addEventListener( 'DOMContentLoaded', function() {
+            var elms = document.getElementsByClassName( 'splide' );
+
+            for ( var i = 0; i < elms.length; i++ ) {
+                new Splide( elms[ i ], {
+                    perPage: 2,
+                    rewind: true,
+                    pagination: false,
+                } ).mount();
+            }
+        } );
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="section">
+        {% for color in color_types %}
+            <div class="banner banner-{{ color }}">
+                <i class="{{ notification_icon(color) }} notification-icon"></i>
+                <span class="notification-text">
+                This is a {{ color }} banner. You may go back to the homepage <a href="/">here</a>.
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+    <hr>
+    <div class="grid">
+        <div class="col-6">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Text</h2>
+                </div>
+                {% for color in color_types %}
+                    <div class="text-{{ color }}">{{ color }} text!</div>
+                {% endfor %}
+            </div>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Buttons</h2>
+                </div>
+                {% for color in button_color_types %}
+                    <div class="button button-{{ color }} button-small">small {{ color }} button!</div>
+                {% endfor %}
+                <br>
+                {% for color in button_color_types %}
+                    <div class="button button-{{ color }}">{{ color }} button!</div>
+                {% endfor %}
+                <br>
+                {% for color in button_color_types %}
+                    <div class="button button-{{ color }} button-big">big {{ color }} button!</div>
+                {% endfor %}
+                <br>
+                {% for color in button_color_types %}
+                    <div class="button button-{{ color }} button-huge">huge {{ color }} button!</div>
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Menus</h2>
+                </div>
+                <div class="menu-container">
+                    <div class="menu-button button button-secondary" data-menu-id="test-menu">
+                        Toggle menu
+                        <div class="menu-caret-container">
+                            <i class="biscuit-icon caret-closed menu-caret"></i>
+                        </div>
+                    </div>
+                    <div class="menu" id="test-menu">
+                        <div class="menu-item-button">
+                            <span>A menu item button.</span>
+                        </div>
+                        <div class="menu-item-button">
+                            <span>A menu item button with a very long name.</span>
+                        </div>
+                        <hr>
+                        <div class="menu-item-button">
+                            <div class="menu-item-profile-picture profile-picture">
+                                <img src="/assets/profiledef.svg" class="pfp" alt="Profile picture">
+                            </div>
+                            <span>User</span>
+                        </div>
+                        <div class="menu-item-button">
+                            <div class="menu-item-profile-picture profile-picture">
+                                <img src="/assets/profiledef.svg" class="pfp" alt="Profile picture">
+                            </div>
+                            <span>UserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUserUser</span>
+                        </div>
+                        <div class="menu-item-button small">A small menu item button.</div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Tables</h2>
+                </div>
+                <table class="c1">
+                    <tr class="h">
+                        <th>Header</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Normal row
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <hr>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Icons</h2>
+                </div>
+                <table class="c1">
+                    <tr class="h">
+                        <th style="width:32px;padding:0;"></th>
+                        <th>Name</th>
+                    </tr>
+                    {% for icon in icons %}
+                        <tr>
+                            <td>
+                                <i class="biscuit-icon {{ icon }} size-32" style="vertical-align: middle;"></i>
+                            </td>
+                            <td class="a">{{ icon }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Upload vertical</h2>
+                </div>
+                <div class="content-box">
+                    {% for submission in uploads %}
+                        {{ include('/components/_upload_vertical.twig') }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Upload vertical small</h2>
+                </div>
+                <div class="content-box">
+                    {% for submission in uploads %}
+                        {{ include('/components/_upload_vertical_small.twig') }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Upload vertical edit</h2>
+                </div>
+                <div class="content-box">
+                    {% for submission in uploads %}
+                        {{ include('/components/_upload_vertical_edit.twig') }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Upload grid</h2>
+                </div>
+                <div class="content-box content-grid" style="grid-template-columns: repeat(2, 1fr);">
+                    {% for submission in uploads %}
+                        {{ include('/components/_upload_grid.twig') }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Upload splide</h2>
+                </div>
+                <div class="content-box">
+                    <section class="splide" id="splide1" aria-labelledby="carousel-heading">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                {% for submission in uploads %}
+                                    {{ include('/components/_upload_grid_splide.twig') }}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

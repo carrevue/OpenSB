@@ -1,0 +1,9 @@
+{% if session.notif_message %}
+    <div class="banner banner-{{ session.notif_color }}">
+        <i class="{{ notification_icon(session.notif_color) }} notification-icon"></i>
+        <span class="notification-text">
+        {{ session.notif_message }}
+        </span>
+    </div>
+    {{ remove_notification() }}
+{% endif %}

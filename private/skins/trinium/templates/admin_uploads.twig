@@ -1,0 +1,58 @@
+{% extends "_layout_admin.twig" %}
+
+{% if search %}
+    {% set le_url = '?page=%s&amount=' ~ amount  ~ "&search=" ~ search %}
+{% else %}
+    {% set le_url = '?page=%s&amount=' ~ amount %}
+{% endif %}
+
+{% set title = "Uploads" %}
+
+	{% block admincontent %}
+        {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
+        {% set current_page = page %}
+
+        <div class="form-flex">
+            <form action="/admin/uploads/" method="GET" id="num_change">
+                <select name="amount" onchange="this.form.submit()" style="height:30px;">
+                    {% for option in [8, 16, 32, 64, 128, 256] %}
+                        <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            <form method="GET" action="/admin/uploads/" style="margin-left: auto;">
+                <input type="hidden" name="amount" value="{{ amount }}">
+                <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
+                <button type="submit" class="button button-secondary">{{ localize('search') }}</button>
+            </form>
+        </div>
+        <hr>
+        {% for upload in uploads %}
+            <div class="content-entry">
+                <div class="content-thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, true) }}"
+                         width="120" alt="{{ upload.title }}" class="content-image thumbnail">
+                </div>
+                <div class="content-thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, false) }}"
+                         width="120" alt="{{ upload.title }}" class="content-image thumbnail">
+                </div>
+                <div class="content-info">
+                    <div class="content-title">
+                        {{ upload.title }}
+                    </div>
+                    <div class="content-description">
+                        TODO
+                    </div>
+                    <div>
+                        <a class="button button-secondary" href="/admin/uploads/{{ upload.id }}">
+                            Check
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {{ pagination(count, amount, le_url, current_page) }}
+    {% endblock %}

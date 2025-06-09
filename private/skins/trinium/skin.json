@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "id": "trinium",
+    "name": "Trinium",
+    "author": "OpenSB developers",
+    "description": "Our default and recommended frontend.",
+    "site": "squarebracket",
+    "themes": [
+      {
+        "id": "default",
+        "name": "Light",
+        "description": "The default user experience.",
+        "author": "OpenSB developers"
+      },
+      {
+        "id": "dark",
+        "name": "Dark",
+        "description": "A dark theme.",
+        "author": "OpenSB developers"
+      }
+    ]
+  }
+}

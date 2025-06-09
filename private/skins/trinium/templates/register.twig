@@ -1,0 +1,92 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Register" %}
+
+{% block scripts %}
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+{% endblock %}
+
+	{% block content %}
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">{{ localize('register') }}</h1>
+            </div>
+            <div class="content-box login">
+                <div class="grid center">
+                    <div class="col-6">
+                        <div class="panel-body">
+                            <form method="post" name="loginForm" id="loginForm" action="register" class="form-signin">
+                                <div class="form-input">
+                                    <label for="email">Email address</label>
+                                    <input type="email" name="email" class="form-submit" required>
+                                </div>
+
+                                <div class="form-input">
+                                    <label for="username">Username</label>
+                                    <input type="text" name="username" class="form-submit" required>
+                                </div>
+
+                                <div class="form-input">
+                                    <label for="pass1">Password</label>
+                                    <input type="password" name="pass1" class="form-submit" required>
+                                </div>
+
+                                <div class="form-input">
+                                    <label for="pass2">Password (confirm)</label>
+                                    <input type="password" name="pass2" class="form-submit" required>
+                                </div>
+
+                                {% if invite_keys_enabled %}
+                                    <div class="form-input">
+                                        <label for="invite">Invite key</label>
+                                        <input type="text" name="invite" class="form-submit" required>
+                                    </div>
+                                {% endif %}
+
+                                <div class="form-input">
+                                    <label for="birthdate">Birthdate:</label>
+                                    <input type="date" name="birthdate" required />
+                                </div>
+
+                                {% if captcha_public_token %}
+                                    <div class="form-input">
+                                        <label>Captcha:</label>
+                                        <div class="h-captcha" data-sitekey="{{ captcha_public_token }}"></div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="form-button-container">
+                                    <input type="submit" class="button button-primary button-login" value="Register" name="registersubmit">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-6 col-login-info">
+                        <div>
+                            {% if invite_keys_enabled %}
+                                <p>
+                                    {{ website_branding.name }} requires an invite key in order to register.
+                                    You will need to obtain this from someone.
+                                </p>
+                            {% endif %}
+                            <p>
+                                By registering on {{ website_branding.name }}, you agree to the
+                                <a href="/tos">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.
+                            </p>
+                            <p>
+                                <strong>TLDR</strong>:
+                            </p>
+                            <ul>
+                                <li>
+                                    You must be over the age of 13.
+                                </li>
+                                <li>
+                                    You may not register another account if you have been banned.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

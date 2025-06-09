@@ -1,0 +1,291 @@
+// yes starting with dart-sass 1.79/1.80 shits getting deprecated!
+
+@use "sass:color";
+
+//@import url("https://rsms.me/inter/inter.css");
+
+// caveat is used by the "its free!" text on logged out jumbotron
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+
+@import 'normalize';
+@import 'variables';
+
+@import 'mixins/bar_buttons';
+@import 'mixins/responsiveness';
+@import 'mixins/scrollbar';
+
+@function contrast-color($color, $dark, $light) {
+  @return if(color.channel($color, "lightness", $space: hsl) < $threshold, $light, $dark)
+}
+
+@import 'icons';
+
+@import 'page';
+@import 'grid_system';
+
+// misc unorganized shit
+:root {
+  font-family: $font;
+  --link-color: #{$link-color};
+}
+
+//@supports (font-variation-settings: normal) {
+//  :root { font-family: InterVariable, sans-serif; }
+//}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body
+{
+  background: $bg-color;
+  color: $text-color;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+a
+{
+  text-decoration: none;
+  color: var(--link-color);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+img
+{
+  border: 0;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+h5 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+h6 {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+img.img-responsive {
+  width: 100%;
+}
+
+.clear {
+  clear: both;
+}
+
+.bold {
+  font-weight: 500;
+}
+
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"] {
+  border: 1px solid color.adjust($content-box-border-color, $lightness: -1%);
+  background-color: 1px solid color.adjust($content-box-background-color, $lightness: -1%);
+  color: #000;
+  transition: border linear 0.3s;
+  border-radius: 3px;
+  padding: 6px;
+  font-family: $font;
+
+  &:focus {
+    border-color: var(--link-color);
+    outline: none;
+  }
+}
+
+code {
+  color: #a33a3a;
+}
+
+pre {
+  color: #a33a3a;
+  background-color: #ffe8e8;
+  border: 1px solid #eed1d1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 0;
+  overflow-x: auto;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+blockquote {
+  margin: 0 0 0.5em 0;
+  padding-left: 0.8em;
+  border-left: 4px solid $content-box-border-color;
+}
+
+.profile-picture {
+  @if $color-scheme == "dark" {
+    border: 1px solid #888;
+  } @else {
+    border: 1px solid #333;
+  }
+
+  display: block;
+  border-radius: 4px;
+  position: relative;
+  overflow: clip;
+
+  background: linear-gradient(#333, #050505);
+  box-shadow: 0 2px 2px rgba(black, 0.1);
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/trinium_pfp_gloss.svg');
+    background-size: cover;
+    position: absolute;
+    //z-index: 1; // shitty hack so pfp's filter property doesnt fuck this up
+  }
+  .pfp {
+    width: auto;
+    height: 100%;
+    //filter: drop-shadow(4px 8px 8px rgba(0,0,0,50%));
+
+    // a fix for legacy poktube profile pictures that aren't 1:1
+    aspect-ratio: 1 / 1;
+  }
+}
+
+hr {
+  border: 0;
+  border-bottom: 1px solid $content-box-border-color;
+  height: 0;
+  margin: 1em 0;
+}
+
+.fade {
+  color: #888;
+}
+
+.flex {
+  display: flex;
+}
+
+.emoji {
+  display: inline;
+  width: 24px;
+  vertical-align: middle;
+}
+
+.debug-dialog {
+  z-index: 50000;
+  width: 800px;
+
+  .tabcontent {
+    @include scrollbar();
+    height: 400px;
+  }
+}
+
+::backdrop {
+  background: black;
+  opacity: 0.6;
+}
+
+.userlink {
+  display: inline-flex;
+  text-wrap: auto;
+  flex-wrap: wrap;
+
+  // ok so if the userlink is in a "small content entry" then center that shit.
+  .content-entry-small & {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .userlink-displayname {
+    margin-right: 0.5ch;
+  }
+
+  .userlink-bullshit {
+    display: inline-flex;
+    flex-wrap: wrap;
+    //gap: 0.5ch; (fucks shit up???)
+    align-items: center;
+
+    .userlink-handle {
+      color: $text-color;
+      opacity: 50%;
+      text-decoration: none;
+    }
+
+    .biscuit-icon {
+      margin-left: 0.5ch;
+    }
+  }
+}
+
+ul.unstyled-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+@import 'header';
+@import 'footer';
+@import 'forms';
+@import 'content_box';
+@import 'banner';
+@import 'comments';
+@import 'sections';
+@import 'buttons';
+@import 'jumbotron';
+@import 'menus';
+@import 'tabs';
+@import 'table';
+@import 'pagination';
+@import 'hamburger';
+@import 'text';
+@import 'navigation_bar';
+
+@import 'watch_page';
+@import 'profile_page';
+@import 'notice_page';
+@import 'login_register_page';
+@import 'version_page';
+@import 'setting_page';
+@import 'change_theme_page';
+@import 'admin_page';

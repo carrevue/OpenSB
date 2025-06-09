@@ -1,0 +1,9 @@
+{% extends "_layout.twig" %}
+
+{% set title = pagetitle %}
+
+{% block content %}
+	<div class="content-box">
+		{{ source('markdown/' ~ file) | markdown_info_page }}
+	</div>
+{% endblock %}

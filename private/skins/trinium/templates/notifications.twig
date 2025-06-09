@@ -1,0 +1,42 @@
+{% extends "_layout_my_stuff.twig" %}
+
+{% set title = "Notifications" %}
+
+{% block mystuffcontent %}
+    <div class="section">
+        <div class="section-header flex">
+            <div class="section-header-left">
+                <h1 class="section-title">Notifications</h1>
+            </div>
+            <div class="section-header-right">
+                <a href="/notifications?action=clear_all">Clear all</a>
+            </div>
+        </div>
+        <div class="content-box">
+            {% for notice in data %}
+                <div class="content-entry">
+                    <div class="content-thumbnail">
+                        <div class="content-image profile-picture">
+                            <img src="{{ profile_picture(notice.sender.info.username) }}"
+                                 alt="{{ notice.sender.info.username }}" class="pfp">
+                        </div>
+                    </div>
+                    <div class="content-info">
+                        {{ notice.intro }} {{ user_link(notice.sender) }}
+                        {% if notice.detail.info %}
+                        <br>
+                        {{ notice.detail.info }}
+                        {% endif %}
+                        <br>
+                        <small>
+                            {{ notice.time | relative_time }}
+                            {% if notice.detail.origin %}on {{ notice.detail.origin }}{% endif %}
+                        </small>
+                    </div>
+                </div>
+            {% else %}
+                No notifications.
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

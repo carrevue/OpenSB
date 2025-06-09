@@ -1,0 +1,155 @@
+{% extends "_layout_admin.twig" %}
+
+{% set title = "Checking " ~ user.name %}
+
+	{% block admincontent %}
+        <div class="grid">
+            <div class="col-6">
+                <div class="content-box">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Information</h2>
+                        </div>
+                        <table class="c1">
+                            <tbody>
+                            <tr>
+                                <td>Username</td>
+                                <td>{{ user.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Profile name</td>
+                                <td>{{ user.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Power level</td>
+                                <td>
+                                    {% if user.powerlevel == 1 %}
+                                        User
+                                    {% elseif user.powerlevel == 2 %}
+                                        Moderator
+                                    {% elseif user.powerlevel == 3 %}
+                                        Admin
+                                    {% else %}
+                                        Owner
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Age/Birthday</td>
+                                <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | date("F jS Y") }}</td>
+                            </tr>
+                            <tr>
+                                <td>Registered</td>
+                                <td>{{ user.joined | date("F jS Y, h:i:s A") }}
+                                    ({{ user.birthdate | calculate_age_from(user.joined) }} years old)</td>
+                            </tr>
+                            <tr>
+                                <td>Last logged in</td>
+                                <td>{{ user.lastview | date("F jS Y, h:i:s A") }}</td>
+                            </tr>
+                            <tr>
+                                <td>Comfortable rating</td>
+                                <td>{{ user.comfortable_rating }}</td>
+                            </tr>
+                            <tr>
+                                <td>Color</td>
+                                <td style="background:{{ user.customcolor }};"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% if users_with_matching_ips %}
+                    <br>
+                    <div class="content-box">
+                        <div class="section">
+                            <div class="section-header">
+                                <h2 class="section-title">Other accounts with matching IP</h2>
+                            </div>
+                            <table class="c1">
+                                <tbody>
+                                {% for user in users_with_matching_ips %}
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/users/{{ user.name }}">{{ user.name }}</a>
+                                        </td>
+                                        <td>
+                                            {{ user.title }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if old_names %}
+                    <br>
+                    <div class="content-box">
+                        <div class="section">
+                            <div class="section-header">
+                                <h2 class="section-title">Previous usernames</h2>
+                            </div>
+                            <table class="c1">
+                                <tbody>
+                                {% for entry in old_names %}
+                                    <tr>
+                                        <td>
+                                            {{ entry.old_name }}
+                                        </td>
+                                        <td>
+                                            {{ entry.time | date("F jS Y, h:i:s A") }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                <div class="content-box">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Images</h2>
+                        </div>
+                        <table class="c1">
+                            <tbody>
+                            <tr class="h">
+                                <th style="width:50%;">Profile picture</th>
+                                <th style="width:50%;">Banner</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="{{ profile_picture_admin(user.name) }}" style="width:100%;" alt="{{ user.username }}">
+                                </td>
+                                <td>
+                                    <img src="{{ profile_banner(user.name) }}" style="width:100%;" alt="{{ user.username }}">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <div class="content-box">
+                        <div class="section">
+                            <div class="section-header">
+                                <h2 class="section-title">Notes</h2>
+                            </div>
+                            {% for note in notes %}
+                                <div class="content-box content-note">
+                                    <div>
+                                        By {{ user_link(note.author) }}, {{ note.time | relative_time }}
+                                    </div>
+                                    {{ note.content | markdown_user_written(true) }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

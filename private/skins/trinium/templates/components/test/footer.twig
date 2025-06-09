@@ -1,0 +1,8 @@
+<div class="footer">
+    <p>{{ localize('footer_copyright', '2021-' ~ ('now' | date('Y'))) }}.
+        | <a href="/privacy">Privacy Policy</a> · <a href="/theme">Customize theme</a></p>
+    <p>Running <a href="/version">OpenSB {{ opensb_version }}</a></p>
+    {% if is_debug %}
+        <p>{{ profiler_stats() }}</p>
+    {% endif %}
+</div>

@@ -1,0 +1,160 @@
+{% extends "_layout_admin.twig" %}
+
+{% set title = "Overview" %}
+
+	{% block admincontent %}
+        <div class="section">
+            <div class="section-header flex">
+                <div class="section-header-left">
+                    <h1 class="section-title">Over the years</h1>
+                    <div class="section-desc">Since {{ data.time.formatted_date }}
+                        ({{ data.time.relative_days }} days ago)
+                    </div>
+                </div>
+            </div>
+            <canvas id="cumulativeChart"></canvas>
+        </div>
+        <hr>
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Server details</h1>
+            </div>
+            {% if data.system.is_windows %}
+                <div class="text-danger">
+                    Windows is no longer officially supported. If you are using XAMPP, please switch to Windows
+                    Subsystem for Linux.
+                </div>
+            {% endif %}
+            <ul>
+                {% if is_opensb_v1_3 and data.system.os_name %}
+                    <li>Operating System: {{ data.system.os_name }}</li>
+                {% endif %}
+                <li>Uname: <code>{{ data.system.uname }}</code></li>
+                <li>Uptime: <code>{{ data.system.uptime }}</code></li>
+            </ul>
+        </div>
+        <hr>
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Statistics</h1>
+            </div>
+            <ul>
+                {% for item in data.numbers %}
+                    <li>{{ item.name }}: {{ item.value }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script>
+        const cumulativeChart = document.getElementById('cumulativeChart');
+        const viewChart = document.getElementById('viewChart');
+
+        /* todo: replace chart.js with anything else that can offer a zoom slider. */
+
+        new Chart(cumulativeChart, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'Uploads',
+                        data: [
+                            {% for graph in data.graph_data.submissions %}
+                            {
+                                x: "{{ graph.time }}",
+                                y: {{ graph.runningTotal }},
+                            },
+                            {% endfor %}
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Users',
+                        data: [
+                            {% for graph in data.graph_data.users %}
+                            {
+                                x: "{{ graph.joined }}",
+                                y: {{ graph.runningTotal }},
+                            },
+                            {% endfor %}
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Comments',
+                        data: [
+                            {% for graph in data.graph_data.comments %}
+                            {
+                                x: "{{ graph.date }}",
+                                y: {{ graph.runningTotal }},
+                            },
+                            {% endfor %}
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Journals',
+                        data: [
+                            {% for graph in data.graph_data.journals %}
+                            {
+                                x: "{{ graph.date }}",
+                                y: {{ graph.runningTotal }},
+                            },
+                            {% endfor %}
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Views (Logged in)',
+                        data: [
+                            {% for graph in data.graph_data.views %}
+                            {
+                                x: "{{ graph.date }}",
+                                y: {{ graph.user_views }},
+                            },
+                            {% endfor %}
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Views (Guests)',
+                        data: [
+                            {% for graph in data.graph_data.views %}
+                            {
+                                x: "{{ graph.date }}",
+                                y: {{ graph.guest_views }},
+                            },
+                            {% endfor %}
+                        ],
+                        borderWidth: 1
+                    },
+                ]
+            },
+            options: {
+                elements: {
+                    point: {
+                        radius: 2
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                    {% if is_chaziz_sb %}
+                    x: {
+                        type: 'time',
+                        min: '2021-01-30 00:00:00',
+                    }
+                    {% else %}
+                    x: {
+                        type: 'time',
+                    }
+                    {% endif %}
+                }
+            }
+        });
+    </script>
+{% endblock %}

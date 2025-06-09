@@ -1,0 +1,21 @@
+<li class="splide__slide">
+<div class="content-entry-small">
+    <div class="content-image-container">
+        <a href="/view/{{ submission.id }}" class="content-image-link">
+            <img src="{{ thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) }}"
+                 alt="{{ submission.title }}"
+                 title="{{ submission.title }} by {{ submission.author.info.username }}"
+                 class="content-image thumbnail">
+        </a>
+    </div>
+    <div class="content-title">
+        {{ submission.title }}
+    </div>
+    <div class="content-author">
+        {{ user_link(submission.author) }}
+    </div>
+    <div class="content-rating">
+        {{ show_ratings(submission.interactions.ratings) }}
+    </div>
+</div>
+</li>

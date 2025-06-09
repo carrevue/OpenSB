@@ -1,0 +1,56 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Version" %}
+
+{% block content %}
+    <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">Version</h1>
+        </div>
+        <div class="content-box">
+            <div class="grid">
+                <div class="col-4 col-version">
+                    <img src="/assets/chaz_opensb.png" class="img-version">
+                </div>
+                <div class="col-8">
+                    <p>
+                        This website is powered by OpenSB. © 2021-{{ 'now' | date('Y') }}
+                        {% for developer in data.developers %}
+                            {{ developer }}{{ not loop.last ? ',' }}
+                        {% endfor %} and other contributors.
+                    </p>
+                    <p>
+                        OpenSB is free software: you can redistribute it and/or modify
+                        it under the terms of the GNU Affero General Public License as
+                        published by the Free Software Foundation, either version 3 of the
+                        License, or (at your option) any later version.
+                    </p>
+                    <p>
+                        OpenSB is distributed in the hope that it will be useful,
+                        but WITHOUT ANY WARRANTY; without even the implied warranty of
+                        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+                        GNU Affero General Public License for more details.
+                    </p>
+                    <p>
+                        You should have received
+                        <a href="/license">a copy of the GNU Affero General Public License</a>
+                        along with this program. If not, see
+                        <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+                    </p>
+                    <p>
+                        The source code to OpenSB is available
+                        <a href="https://github.com/bluffingo/OpenSB">on GitHub</a>.
+                    </p>
+                    <hr>
+                    <ul class="unstyled-list">
+                        {% for thing in data.software %}
+                            <li>
+                                <span class="text-faded">{{ thing.title }}</span>: {{ thing.info }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

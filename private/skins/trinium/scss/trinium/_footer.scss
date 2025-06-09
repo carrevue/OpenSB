@@ -1,0 +1,23 @@
+.footer
+{
+  margin: 1rem 0;
+  line-height: 1.5rem;
+  .footer-container {
+    .footer-copyright {
+      font-size: 0.75rem;
+    }
+
+    span {
+      margin: 0 0.25em;
+    }
+
+    @if $color-scheme == "dark" {
+      color: white;
+    } @else {
+      color: #333;
+    }
+    margin: auto;
+    text-align: center;
+    @include maxwidths();
+  }
+}

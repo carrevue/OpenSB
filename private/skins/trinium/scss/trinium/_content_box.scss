@@ -1,0 +1,257 @@
+@mixin content-box-small-max-widths {
+    @include responsive('tiny') {
+        max-width: 140px;
+    }
+    @include responsive('small') {
+        max-width: 120px;
+    }
+    @include responsive('medium') {
+        max-width: 135px;
+    }
+    @include responsive('large') {
+        max-width: 150px;
+    }
+    @include responsive('huge') {
+        max-width: 160px;
+    }
+}
+
+@mixin content-box-small-info {
+    margin: auto;
+    font-weight: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap;
+    @include content-box-small-max-widths;
+}
+
+.thumbnail
+{
+    border-radius: 2px;
+    border: 1px solid $content-box-border-color;
+    box-shadow: 0 1px 2px rgba(black, 0.1);
+}
+
+.content-grid {
+    /* named like this to avoid conflicts with grid system */
+    display: grid;
+    gap: 5px;
+    grid-auto-rows: minmax($content-box-grid-entry-width, auto);
+    @include responsive('tiny') {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @include responsive('small') {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @include responsive('medium') {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    @include responsive('large') {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    &.content-grid-users {
+        grid-auto-rows: minmax(auto, auto);
+        @include responsive('tiny') {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include responsive('small') {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include responsive('medium') {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        @include responsive('large') {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .content-entry, .content-entry:first-child {
+            border: none;
+            padding: 0.5em 0;
+        }
+    }
+}
+
+.content-header
+{
+    background: $content-box-border-color;
+    padding: 0.3em 0.5em;
+    color: $text-color;
+    font-weight: bold;
+}
+
+.content-box
+{
+    border: 1px solid $content-box-border-color;
+    background: $content-box-background-color;
+    padding: $content-box-padding;
+    overflow: hidden;
+    word-break: break-word;
+
+    border-radius: 4px;
+
+    @include scrollbar();
+
+    &.no-border-top {
+        border-top: none;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    &.no-border-bottom-rounded {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    &.related-uploads {
+        max-height: 800px;
+        overflow-y: scroll;
+    }
+
+    &.carousel {
+        padding: $content-box-padding 0;
+    }
+
+    .section {
+        margin-bottom: 0;
+        .section-header {
+            margin-bottom: 1em;
+        }
+    }
+
+    .content-entry
+    {
+        display: flex;
+        padding: 1em 0;
+        gap: 0.8em;
+
+        border-bottom: 1px solid $content-box-border-color;
+
+        &:first-child {
+            padding-top: 0;
+        }
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        &.centered {
+            align-items: center;
+        }
+
+        &.journal {
+            .content-thumbnail .profile-picture {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        .content-info {
+            flex-grow: 1;
+
+            .content-title {
+                font-size: 1em;
+            }
+
+            .content-title-upload {
+                .content-title-link {
+                    flex-grow: 1;
+                    font-size: 1em;
+                }
+                .content-rating {
+                    min-width: 80px;
+                }
+                .content-upload-edit-button {
+                    direction: rtl;
+                    min-width: 40px;
+                }
+                display: flex;
+            }
+
+            .content-description {
+                font-size: 0.8em;
+            }
+        }
+
+        .content-image
+        {
+            min-width: 50px;
+            min-height: 50px;
+            display: block;
+
+            @include responsive('tiny') {
+                width: 140px;
+            }
+            @include responsive('small') {
+                width: 140px;
+            }
+            @include responsive('medium') {
+                width: 140px;
+            }
+            @include responsive('large') {
+                width: 160px;
+            }
+            @include responsive('huge') {
+                width: 175px;
+            }
+
+            &.small {
+                width: 100px;
+            }
+
+            &.profile-picture {
+                width: 60px;
+                height: 60px;
+            }
+
+            &:hover {
+                border-color: var(--link-color);
+            }
+        }
+    }
+
+    .content-entry-small
+    {
+        max-height: $content-box-grid-entry-height;
+        text-align: center;
+
+        .content-title {
+            font-size: 12px;
+            @include content-box-small-info;
+        }
+
+        .content-author {
+            font-size: 10px;
+            @include content-box-small-info;
+        }
+
+        .content-rating {
+            .biscuit-icon {
+                width: 12px;
+                height: 12px;
+                background-size: 12px;
+            }
+        }
+
+        .content-image-container {
+            /* Thumbnails used by grid thumbnails */
+            display: table;
+            text-align: center;
+            margin: auto;
+            height: $content-box-grid-entry-width;
+            .content-image-link {
+                display: table-cell;
+                vertical-align: middle;
+                .content-image {
+                    max-height: $content-box-grid-entry-width;
+                    margin: 2px auto;
+                    @include content-box-small-max-widths;
+                    &:hover {
+                        border-color: var(--link-color);
+                    }
+                }
+            }
+        }
+    }
+}

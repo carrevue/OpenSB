@@ -1,0 +1,43 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Members" %}
+
+	{% block content %}
+		{% set total_pages = (users.count / items_per_page) | round(0, 'ceil') %}
+		{% set current_page = page %}
+
+		<div class="section">
+			<div class="section-header flex">
+				<div class="section-header-left">
+					<h1 class="section-title">Members</h1>
+					<div class="section-desc">Page {{ current_page }} of {{ total_pages }}</div>
+				</div>
+			</div>
+			<div class="content-box content-grid content-grid-users">
+				{% for user in users.users %}
+					<div class="content-entry user-id-{{ user.id }}">
+						<div class="content-thumbnail">
+							<a href="/user/{{ user.info.username }}">
+								<div class="content-image profile-picture">
+									<img src="{{ profile_picture(user.info.username) }}"
+										 alt="{{ user.info.username }}" class="pfp">
+								</div>
+							</a>
+						</div>
+						<div class="content-info">
+							<div class="content-author">
+								{{ user_link(user) }}
+							</div>
+							<div class="content-description">
+								{{ user.submissions }} uploads<br>{{ user.journals }} journals
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		{% set le_url = 'users?page=%s' %}
+
+		{{ pagination(users.count, items_per_page, le_url, current_page) }}
+	{% endblock %}

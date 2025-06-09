@@ -1,0 +1,11 @@
+{% if user_ban_data %}
+    <div class="banner banner-danger">
+        Banned!
+    </div>
+{% endif %}
+{% if session.notif_message %}
+    <div class="banner banner-{{ session.notif_color }}">
+        {{ session.notif_message }}
+    </div>
+    {{ remove_notification() }}
+{% endif %}

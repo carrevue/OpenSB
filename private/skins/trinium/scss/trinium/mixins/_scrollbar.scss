@@ -1,0 +1,8 @@
+@use "sass:color";
+
+@mixin scrollbar() {
+  scrollbar-color: color.adjust($content-box-border-color, $lightness: -15%) $content-box-border-color;
+  scrollbar-width: thin;
+
+  overflow-y: auto;
+}

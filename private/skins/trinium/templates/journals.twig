@@ -1,0 +1,25 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Journals" %}
+
+{% block content %}
+    {% set total_pages = (count / items_per_page) | round(0, 'ceil') %}
+    {% set current_page = page %}
+
+    <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">Journals</h1>
+        </div>
+        <div class="content-box">
+            {% for journal in data %}
+                {{ include('/components/_journal.twig') }}
+            {% else %}
+                <p>No journals!</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% set le_url = '/journals/' ~ user ~ '?page=%s' %}
+
+    {{ pagination(count, items_per_page, le_url, current_page) }}
+{% endblock %}

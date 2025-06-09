@@ -1,0 +1,165 @@
+.biscuit-icon {
+  /* icons! */
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-size: 16px;
+
+  &.size-24 {
+    width: 24px;
+    height: 24px;
+    background-size: 24px;
+  }
+
+  &.size-32 {
+    width: 32px;
+    height: 32px;
+    background-size: 32px;
+  }
+
+  &.star-full {
+    background-image: url( '/assets/icons/star_full.svg' );
+  }
+
+  &.star-half {
+    background-image: url( '/assets/icons/star_half.svg' );
+  }
+
+  &.star-empty {
+    background-image: url( '/assets/icons/star_empty.svg' );
+  }
+
+  &.partner {
+    background-image: url( '/assets/icons/partner.svg' );
+  }
+
+  &.staff {
+    background-image: url( '/assets/icons/staff.svg' );
+  }
+
+  &.b-danger {
+    background-image: url( '/assets/icons/banner-danger.svg' );
+  }
+
+  /* yeah this is kinda fucked */
+  &.b-primary {
+    background-image: url( '/assets/icons/banner-primary.svg' );
+  }
+
+  &.b-secondary {
+    @if $color-scheme == "dark" {
+      background-image: url( '/assets/icons/banner-primary.svg' );
+    } @else {
+      background-image: url( '/assets/icons/banner-secondary.svg' );
+    }
+  }
+
+  &.b-success {
+    background-image: url( '/assets/icons/banner-success.svg' );
+  }
+
+  &.b-warning {
+    background-image: url( '/assets/icons/banner-warning.svg' );
+  }
+
+  &.search {
+    @if $color-scheme == "dark" {
+      background-image: url('/assets/icons/search-dark.svg');
+    } @else {
+      background-image: url('/assets/icons/search-light.svg');
+    }
+  }
+
+  &.hamburger {
+    @if $color-scheme == "dark" {
+      background-image: url('/assets/icons/hamburger-dark.svg');
+    } @else {
+      background-image: url('/assets/icons/hamburger-light.svg');
+    }
+  }
+
+  &.caret-closed {
+    @if $color-scheme == "dark" {
+      background-image: url( '/assets/icons/caret-closed-dark.svg' );
+    } @else {
+      background-image: url( '/assets/icons/caret-closed-light.svg' );
+    }
+  }
+
+  &.caret-open {
+    @if $color-scheme == "dark" {
+      background-image: url( '/assets/icons/caret-open-dark.svg' );
+    } @else {
+      background-image: url( '/assets/icons/caret-open-light.svg' );
+    }
+  }
+
+  &.caret-closed-header {
+    background-image: url( '/assets/icons/caret-closed-dark.svg' );
+  }
+
+  &.caret-open-header {
+    background-image: url( '/assets/icons/caret-open-dark.svg' );
+  }
+
+  &.mail {
+    @if $color-scheme == "dark" {
+      background-image: url('/assets/icons/mail-dark.svg');
+    } @else {
+      background-image: url('/assets/icons/mail-light.svg');
+    }
+  }
+
+  &.bell {
+    @if $color-scheme == "dark" {
+      background-image: url('/assets/icons/bell-dark.svg');
+    } @else {
+      background-image: url('/assets/icons/bell-light.svg');
+    }
+  }
+
+  &.plus {
+    @if $color-scheme == "dark" {
+      background-image: url('/assets/icons/plus-dark.svg');
+    } @else {
+      background-image: url('/assets/icons/plus-light.svg');
+    }
+  }
+
+  &.homepage-list {
+    @if $color-scheme == "dark" {
+      background-image: url( '/assets/icons/homepage-list-dark.svg' );
+    } @else {
+      background-image: url('/assets/icons/homepage-list-light.svg');
+    }
+  }
+
+  &.homepage-grid {
+    @if $color-scheme == "dark" {
+      background-image: url( '/assets/icons/homepage-grid-dark.svg' );
+    } @else {
+      background-image: url( '/assets/icons/homepage-grid-light.svg' );
+    }
+  }
+
+  &.next {
+    @if $color-scheme == "dark" {
+      background-image: url( '/assets/icons/placeholder.svg' );
+    } @else {
+      background-image: url( '/assets/icons/next-light.svg' );
+    }
+  }
+
+  &.previous {
+    @if $color-scheme == "dark" {
+      background-image: url( '/assets/icons/placeholder.svg' );
+    } @else {
+      background-image: url( '/assets/icons/previous-light.svg' );
+    }
+  }
+
+  &.placeholder {
+    background-image: url( '/assets/icons/placeholder.svg' );
+  }
+}

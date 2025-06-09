@@ -1,0 +1,25 @@
+.inviteKeyGenerationForm {
+  text-align: center;
+}
+
+.admin-user-buttons {
+  display: flex;
+  gap: 0.3333em;
+}
+
+.admin-form-select {
+  flex-grow: 1;
+}
+
+.admin-form-search {
+  display: flex;
+  gap: 0.35em;
+}
+
+.content-entry.admin-entry {
+  align-items: center;
+
+  .content-description {
+    margin-bottom: 0.75em;
+  }
+}

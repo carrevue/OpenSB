@@ -1,0 +1,17 @@
+<div class="header">
+    <h1>
+        <a href="/">{{ website_branding.name }}</a>
+    </h1>
+    {% for link in header_main_links() %}
+        <a href="{{ link.url }}">{{ link.name }}</a>
+    {% endfor %}
+    {% for link in header_user_links() %}
+        <a href="{{ link.url }}">{{ link.name }}</a>
+    {% endfor %}
+    <br>
+    {% if is_user_logged_in %}
+        {% for link in header_user_account_links() %}
+            <a href="/login/{{ link.username }}">Login as {{ link.username }}</a>
+        {% endfor %}
+    {% endif %}
+</div>

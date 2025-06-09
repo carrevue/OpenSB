@@ -1,0 +1,30 @@
+.section {
+  .section-header {
+    &.flex {
+      display: flex;
+      align-items: baseline;
+
+      .section-header-left {
+        flex-grow: 1;
+        display: flex;
+        align-items: baseline;
+        gap: 0.5em;
+
+        .section-desc {
+          @if $color-scheme == "dark" {
+            color: #ffffff80;
+          } @else {
+            color: #00000080;
+          }
+        }
+      }
+    }
+
+    .section-title {
+      font-size: 1.33em;
+    }
+
+    margin-bottom: 0.5em;
+  }
+  margin-bottom: 1em;
+}

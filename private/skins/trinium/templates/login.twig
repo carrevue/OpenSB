@@ -1,0 +1,77 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Login" %}
+
+{% set other_accs = header_user_account_links() %}
+
+	{% block content %}
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">{{ localize('login') }}</h1>
+            </div>
+            <div class="content-box">
+                <div class="grid center">
+                    <div class="col-6">
+                        <div class="panel-body">
+                            <form method="post" name="loginForm" id="loginForm" action="login" class="form-signin">
+                                <div class="form-input">
+                                    <label for="username">Username</label>
+                                    <input type="text" name="username" class="form-submit">
+                                </div>
+
+                                <div class="form-input">
+                                    <label for="password">Password</label>
+                                    <input type="password" name="password" class="form-submit">
+                                </div>
+
+                                <div class="login-bottom">
+                                    <div class="login-text">
+                                        Don't have an account? <a href="/register">{{ localize('register') }}</a>
+                                    </div>
+
+                                    <div class="form-button-container">
+                                        <input type="submit" class="button button-primary button-login" value="Login" name="loginsubmit">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-6 col-login-info">
+                        {% if is_user_logged_in %}
+                            <div class="login-currently-logged-in">
+                                <div class="login-pfp">
+                                    <div class="profile-picture">
+                                        <img src="{{ profile_picture(user_data.name) }}" class="pfp"
+                                             alt="{{ user_data.name }}">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="login-currently-logged-in-text">
+                                        You are currently logged in as {{ user_data.name }}.
+                                    </div>
+                                    <div class="login-currently-logged-in-other-accs">
+                                        {% if other_accs %}
+                                            <span>Other accounts:</span>
+                                            {% for link in other_accs %}
+                                                <a href="/login/{{ link.username }}">{{ link.username }}</a>{{ not loop.last ? ',' }}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        {% endif %}
+                        <div>
+                            <p>{{ website_branding.name }} is a multimedia sharing website. With an account, you can:</p>
+                            <ul>
+                                <li>Upload videos and images</li>
+                                <li>Interact and comment on uploads and user profiles</li>
+                                <li>Write journal entries on your profile</li>
+                                <li>and much more!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

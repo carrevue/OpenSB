@@ -1,0 +1,45 @@
+{% extends "_layout.twig" %}
+
+{% set title = localize('browse') %}
+
+{% block content %}
+    {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
+    {% set current_page = page %}
+
+    <div class="section">
+        <div class="section-header flex">
+            <div class="section-header-left">
+                <h1 class="section-title">{{ localize('browse') }}</h1>
+                <div class="section-desc">Page {{ current_page }} of {{ total_pages }}</div>
+            </div>
+        </div>
+        {% if not user %}
+            <div class="tabs">
+                <a class="tablink {% if type=='recent' %}active{% endif %}" href="/browse?type=recent">
+                    {{ localize('new') }}
+                </a>
+                <a class="tablink {% if type=='popular' %}active{% endif %}" href="/browse?type=popular">
+                    {{ localize('popular') }}
+                </a>
+                <a class="tablink {% if type=='random' %}active{% endif %}" href="/browse?type=random">
+                    {{ localize('random') }}
+                </a>
+            </div>
+        {% endif %}
+        <div class="content-box no-border-top">
+            {% for submission in data.submissions %}
+                {{ include('/components/_upload_vertical.twig') }}
+            {% endfor %}
+        </div>
+
+        {% if user %}
+            {% set le_url = 'browse?user=' ~ user ~ '&page=%s' %}
+        {% elseif type == 'recent' %}
+            {% set le_url = 'browse?page=%s' %}
+        {% else %}
+            {% set le_url = 'browse?type=' ~ type ~ '&page=%s' %}
+        {% endif %}
+
+        {{ pagination(data.count, items_per_page, le_url, current_page) }}
+    </div>
+{% endblock %}

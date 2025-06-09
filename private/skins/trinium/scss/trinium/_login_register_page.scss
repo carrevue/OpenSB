@@ -1,0 +1,67 @@
+.login-text {
+  font-size: 0.9em;
+}
+
+.login-bottom {
+  @include responsive('tiny') {
+    display: block;
+    .login-text {
+      margin: 1em 0;
+    }
+  }
+  @include responsive('medium') {
+    display: flex;
+    align-items: center;
+
+    .login-text {
+      margin: 0;
+      width: 100%;
+    }
+  }
+}
+
+// modified duplicate of col-version
+.col-login-info {
+  display: flex;
+  height: 100%;
+
+  @include responsive('tiny') {
+    flex-direction: column-reverse;
+
+    border-top: 1px solid $content-box-border-color;
+    border-left: 0;
+    padding-left: 0;
+    margin-top: 1em;
+  }
+  @include responsive('medium') {
+    flex-direction: column;
+
+    border-top: 0;
+    border-left: 1px solid $content-box-border-color;
+    padding-left: 2em;
+    margin-top: 0;
+  }
+}
+
+.login-currently-logged-in {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+
+  .login-currently-logged-in-text {
+    //margin-bottom: 1em;
+  }
+
+  .login-currently-logged-in-other-accs {
+    font-size: 0.9em;
+  }
+
+  .login-pfp {
+    width: 50px;
+    height: 50px;
+    .profile-picture {
+      width: 50px;
+      height: 50px;
+    }
+  }
+}

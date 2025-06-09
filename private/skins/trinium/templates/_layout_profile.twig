@@ -1,0 +1,45 @@
+{% extends "_layout.twig" %}
+
+{% block style %}
+    <style>
+        .jumbotron.profile-banner {
+            background-image: url('{{ banner_picture }}');
+        }
+
+        {% if data.customization %}
+        .page {
+            background: {{ data.customization.background_color }};
+            font-family: {{ data.customization.font | raw }};
+        }
+
+        .page a {
+            color: {{ data.customization.link_color }};
+        }
+
+        /* Titles */
+        .section-title {
+            color: {{ data.customization.title_color }};
+        }
+
+        /* Highlight box */
+        .content-box.highlight-box {
+            background-color: {{ data.customization.highlight_box_background_color }};
+            border-color: {{ data.customization.basic_box_border_color }};
+            color: {{ data.customization.highlight_box_text_color }};
+        }
+
+        /* Basic box */
+        .content-box.basic-box {
+            background-color: {{ data.customization.basic_box_background_color }};
+            border-color: {{ data.customization.basic_box_border_color }};
+            color: {{ data.customization.basic_box_text_color }};
+        }
+        {% endif %}
+    </style>
+{% endblock %}
+
+{% block precontent %}
+    <div class="jumbotron profile-banner"></div>
+{% endblock %}
+
+{% block content %}{% endblock %}

@@ -1,0 +1,31 @@
+#previewContainer {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+#themePreview {
+  width: 200px;
+}
+
+#skinName {
+  font-size: 1.25em;
+}
+
+#skinAuthor {
+  font-style: italic;
+  font-size: 0.85em;
+  opacity: 0.5;
+
+  margin-bottom: 1em;
+}
+
+#themeName {
+  font-size: 1.1em;
+}
+
+#themeAuthor {
+  font-style: italic;
+  font-size: 0.85em;
+  opacity: 0.5;
+}

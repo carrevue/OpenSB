@@ -1,0 +1,46 @@
+@use "sass:color";
+
+.pagination {
+  /* because pagination looks weird with normal buttons */
+  margin: 1em auto auto;
+  display: flex;
+  justify-content: center;
+
+  .pagination-ellipsis {
+    color: #999;
+    padding: 0 4px;
+  }
+
+  .pagination-item {
+    display: inline-block;
+    padding: 3px 10px;
+    border: 1px solid $content-box-border-color;
+    border-right: none;
+
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+
+    &:last-child {
+      border-right: 1px solid $content-box-border-color;
+      border-radius: 0 5px 5px 0;
+    }
+
+    background: $content-box-background-color;
+
+    a {
+      color: $text-color;
+    }
+
+    &.current {
+      background: $primary;
+      border: 1px solid color.adjust(color.adjust($primary, $lightness: -4%), $hue: 2deg);
+      border-right: none;
+      color: white;
+
+      &:last-child {
+        border-right: 1px solid color.adjust(color.adjust($primary, $lightness: -4%), $hue: 2deg);
+      }
+    }
+  }
+}

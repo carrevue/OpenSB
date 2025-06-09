@@ -1,0 +1,17 @@
+@mixin bar-button-hover {
+  @if $color-scheme == "dark" {
+    background: rgba(white, 0.075);
+    box-shadow: 0 6px 10px rgba(black, 0.25) inset;
+  } @else {
+    background: $header-link-hover;
+  }
+}
+
+@mixin bar-button-active {
+  @if $color-scheme == "dark" {
+    background: rgba(white, 0.025);
+    box-shadow: 0 6px 10px rgba(black, 0.6) inset;
+  } @else {
+    background: $header-link-active;
+  }
+}

@@ -1,0 +1,35 @@
+@use "sass:color";
+
+table.c1 {
+  width: 100%;
+  border: 1px solid $content-box-border-color;
+  border-spacing: 0;
+  border-collapse: collapse;
+
+  tbody {
+    margin: 0;
+  }
+
+  tr {
+    border: 1px solid $content-box-border-color;
+    background: $content-box-background-color;
+
+    &.h {
+      background-color: color.adjust($content-box-border-color, $lightness: 2.5%);
+      background-image: linear-gradient(color.adjust($content-box-border-color, $lightness: 10%),
+              color.adjust($content-box-border-color, $lightness: 5%));
+
+      th {
+        padding: 1px 4px;
+        text-align: left;
+        border: 1px solid $content-box-border-color;
+        font-weight: 500;
+      }
+    }
+  }
+
+  td {
+    border: 1px solid $content-box-border-color;
+    padding: 4px;
+  }
+}

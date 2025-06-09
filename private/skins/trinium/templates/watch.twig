@@ -1,0 +1,230 @@
+{% extends "_layout.twig" %}
+
+{% set title = submission.title %}
+
+{% if submission.description | trim is not empty %}
+    {% set opengraph_description = submission.description %}
+{% else %}
+    {% set opengraph_description = "No description." %}
+{% endif %}
+
+{% set opengraph_image = thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) %}
+
+{% set opengraph_type = "article" %}
+{% set opengraph_published = submission.published | date("c") %}
+{% set opengraph_author = domain ~ "user/" ~ submission.author.info.username %}
+{% set metadata_author = submission.author.info.username %}
+{% if submission.type == 0 %}
+    {% set opengraph_section = "SquareBracket video" %}
+{% elseif submission.type == 2 %}
+    {% set opengraph_section = "SquareBracket image" %}
+{% endif %}
+
+{% block scripts %}
+    {{ include('submission_rating_script.twig') }}
+
+    <script>
+        submission_id = '{{ submission.id }}';
+        submission_int_id = '{{ submission.int_id }}';
+        user_id = '{{ submission.author.id }}';
+        comment_type = 'submission';
+        comment_id = '{{ submission.id }}';
+    </script>
+{% endblock %}
+
+{% if submission.type == 2 %}
+    {% set type_text = "Image" %}
+{% elseif submission.type == 3 %}
+    {% set type_text = "Music" %}
+{% else %}
+    {% set type_text = "Video" %}
+{% endif %}
+
+{% if submission.rating == 'mature' %}
+    {% set rating_text = "Mature" %}
+{% else %}
+    {% set rating_text = "General" %}
+{% endif %}
+
+{% block content %}
+    {% if submission.takedown %}
+        <div class="banner banner-secondary">
+            This upload was taken down on {{ submission.takedown.sent }} by {{ submission.takedown.takedownee }}
+            on {{ submission.takedown.time | date("F jS Y, h:i:s A") }}, with the reason: {{ submission.takedown.reason }}
+        </div>
+    {% endif %}
+    {% if submission.author_banned %}
+        <div class="banner banner-secondary">
+            The author of this upload is banned.
+        </div>
+    {% endif %}
+    <div class="grid">
+        <div class="col-8">
+            <div class="section">
+                <div class="submission">
+                    {{ submission_view(submission) }}
+                </div>
+                <div class="watch-box">
+                    <div class="section watch-box-title">
+                        <div class="section-header flex">
+                            <div class="section-header-left">
+                                <h1 class="section-title">
+                                    {% if submission.title %}
+                                        {{ submission.title }}
+                                    {% else %}
+                                        No title
+                                    {% endif %}
+                                </h1>
+                            </div>
+                            {% if submission.is_owner %}
+                                <div class="section-header-right">
+                                    <a href="/edit?v={{ submission.id }}">Edit</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="watch-box-below-title">
+                            {{ type_text }} {% if not is_chaziz_sb %}• {{ rating_text }}{% endif %}
+                        </div>
+                        <hr>
+                        <div class="watch-box-row">
+                            <div class="watch-box-left">
+                                <a href="/user/{{ submission.author.info.username }}">
+                                    <div class="watch-box-profile-picture profile-picture user-id-{{ submission.author.id }}">
+                                        <img class="pfp" src="{{ profile_picture(submission.author.info.username) }}">
+                                    </div>
+                                </a>
+                                <div class="watch-box-author">
+                                    <div class="watch-box-author-userlink">
+                                        {{ user_link(submission.author) }}
+                                    </div>
+                                    <div class="watch-box-author-follow">
+                                        {% if not submission.is_owner and is_user_logged_in %}
+                                            <button class="button button-secondary" id="follow-user">
+                                                {% if submission.author.following %}
+                                                    Unfollow
+                                                {% else %}
+                                                    Follow
+                                                {% endif %}
+                                            </button>
+                                            <span id="follower_count">{{ submission.author.followers }}</span>
+                                        {% else %}
+                                            <span>{{ submission.author.followers }} followers</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="watch-box-right">
+                                {% if submission.interactions.ratings.total != 1 %}
+                                    {% set pluralRatings = "s" %}
+                                {% endif %}
+                                <div class="watch-box-views">
+                                    {{ submission.interactions.views }}
+                                </div>
+                                <div id="rater"></div>
+                                <div class="watch-box-ratings-number">
+                                    {{ submission.interactions.ratings.total }} rating{{ pluralRatings }}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="watch-box-description">
+                            <div class="watch-box-description-info">
+                                Uploaded on {{ submission.published | date('F jS Y') }}
+                                <span class="text-faded">{{ submission.published | date('H:i T') }}</span>
+                            </div>
+                            {% if submission.published_originally and submission.original_site %}
+                                <div class="watch-box-description-info-small">
+                                    First uploaded on {{ submission.original_site }} on {{ submission.published_originally | date('F j, Y') }}
+                                </div>
+                            {% elseif submission.original_site %}
+                                <div class="watch-box-description-info-small">
+                                    Originally uploaded on {{ submission.original_site }}
+                                </div>
+                            {% endif %}
+                            <div class="watch-box-description-contents">
+                                {% if submission.description | trim is not empty %}
+                                    {{ submission.description | markdown_user_written }}
+                                {% else %}
+                                    <span class="text-faded">This upload does not have a description.</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="watch-box-description">
+                            <div class="watch-box-description-info-small">
+                                <span class="text-faded">Tags:</span>
+                                {% for tag in submission.tags %}
+                                    <a href="/search?query={{ tag.name }}">{{ tag.name }}</a>{{ not loop.last ? ',' }}
+                                {% else %}
+                                    None
+                                {% endfor %}
+                                {# TODO:
+                                {% if is_user_logged_in %}
+                                    <form class="form-flex">
+                                        <input type="text" class="form-submit">
+                                        <input type="submit" value="Add" class="button button-secondary">
+                                    </form>
+                                {% endif %}
+                                #}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header flex">
+                    <div class="section-header-left">
+                        <h2 class="section-title">Comments</h2>
+                        <div class="section-desc">{{ submission.interactions.comments }}</div>
+                    </div>
+                </div>
+                <div id="comments">
+                    <div class="content-box">
+                        {{ include('/components/_comment_input.twig') }}
+                        {% for comment in submission.comments %}
+                            {{ include('/components/_comment.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            {% if submission.other_by_author %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <h2>From {{ submission.author.info.displayname }}</h2>
+                    </div>
+                    <div class="content-box related-uploads">
+                        {% for submission in submission.other_by_author %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if submission.recommended %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <h2>Related uploads</h2>
+                    </div>
+                    <div class="content-box related-uploads">
+                        {% for submission in submission.recommended %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if submission.random %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <h2>Random uploads</h2>
+                    </div>
+                    <div class="content-box related-uploads">
+                        {% for submission in submission.random %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
