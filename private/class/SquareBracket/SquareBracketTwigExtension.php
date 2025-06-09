@@ -66,6 +66,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('header_main_links', [$this, 'headerMainLinks']),
             new TwigFunction('header_user_links', [$this, 'headerUserLinks']),
             new TwigFunction('header_user_account_links', [$this, 'headerUserAccountLinks']),
+            new TwigFunction('footer_links', [$this, 'footerLinks']),
             new TwigFunction('sidebar_following_users', [$this, 'sidebarFollowingUsers']),
             new TwigFunction('get_css_file_date', [$this, 'getCSSFileDate']),
             new TwigFunction('submission_box', [$this, 'submissionBox'], ['is_safe' => ['html']]),
@@ -576,6 +577,56 @@ class SquareBracketTwigExtension extends AbstractExtension
             $array[] = [
                 "id" => $user["user"],
                 "username" => $data,
+            ];
+        }
+
+        return $array;
+    }
+
+    public function footerLinks() {
+        $array = [
+            "theme" => [
+                "name" => $this->localize("change_theme"),
+                "url" => "/theme",
+            ],
+            "help" => [
+                "name" => $this->localize("help"),
+                "url" => "/help",
+            ],
+            "guidelines" => [
+                "name" => $this->localize("community_guidelines"),
+                "url" => "/guidelines",
+            ],
+            "tos" => [
+                "name" => $this->localize("terms_of_service"),
+                "url" => "/tos",
+            ],
+            "privacy" => [
+                "name" => $this->localize("privacy_policy"),
+                "url" => "/privacy",
+            ],
+            "staff" => [
+                "name" => $this->localize("staff"),
+                "url" => "/staff",
+            ],
+        ];
+
+        if ($this->orange->getLocalOptions()["skin"] == "bootstrap") {
+            // Oops. Ugly!
+            $version_array = [
+                "version" => [
+                    "name" => $this->localize("version"),
+                    "url" => "/version",
+                ],
+            ];
+
+            $array = array_merge($version_array, $array);
+        }
+
+        if ($this->orange->isChazizSquareBracketInstance()) {
+            $array["discord"] = [
+                "name" => "Discord",
+                "url" => "https://discord.gg/tzkSpxpmSD",
             ];
         }
 

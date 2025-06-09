@@ -3,12 +3,9 @@
         <div>
             <span>{{ localize('powered_by') }} <a href="/version">OpenSB {{ opensb_version }}</a></span>
         </div>
-        <span><a href="/theme">{{ localize('change_theme') }}</a></span>
-        <span><a href="/help">{{ localize('help') }}</a></span>
-        <span><a href="/guidelines">{{ localize('community_guidelines') }}</a></span>
-        <span><a href="/tos">{{ localize('terms_of_service') }}</a></span>
-        <span><a href="/privacy">{{ localize('privacy_policy') }}</a></span>
-        <span><a href="/staff">{{ localize('staff') }}</a></span>
+        {% for link in footer_links() %}
+            <span><a href="{{ link.url }}">{{ link.name }}</a></span>
+        {% endfor %}
         {% if is_debug %}
             <div>
                 {{ profiler_stats() }}
