@@ -1,8 +1,0 @@
-<div class="footer">
-    <p>© 2021-{{ 'now' | date('Y') }} OpenSB contributors.
-        | <a href="/privacy">Privacy policy</a> · <a href="/theme">Customize theme</a></p>
-    <p>Running <a href="/version">OpenSB {{ opensb_version }}</a></p>
-    {% if is_debug %}
-        <p>{{ profiler_stats() }}</p>
-    {% endif %}
-</div>
