@@ -73,6 +73,8 @@ class SquareBracket {
         $this->enable_lockdown = (bool)($config["lockdown"] ?? false);
         //
 
+        $this->options = [];
+
         // predefine these options
         $defaultSkin = "trinium";
         $defaultTheme = "default";
