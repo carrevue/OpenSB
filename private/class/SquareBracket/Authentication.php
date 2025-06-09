@@ -36,7 +36,7 @@ class Authentication
 
                 $this->user_stat_data = [
                     "followers" => $followers,
-                    "views" => $views ?? 0, // hacky fix otherwise on charla if you have no views then it looks fucked
+                    "views" => $views ?? 0, // hacky fix otherwise on trinium if you have no views then it looks fucked
                     "notifications" => $notifications,
                 ];
                 // -------------------

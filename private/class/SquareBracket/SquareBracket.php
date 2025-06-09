@@ -75,14 +75,20 @@ class SquareBracket {
 
         if (isset($_COOKIE["SBOPTIONS"])) {
             $this->options = json_decode(base64_decode($_COOKIE["SBOPTIONS"]), true);
+
+            // the charla frontend is now called trinium
+            if ($this->options["skin"] == "charla") {
+                $this->options["skin"] = "trinium";
+                setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);
+            }
         } else {
-            $defaultSkin = "biscuit";
+            $defaultSkin = "trinium";
             if ($this->is_chaziz_squarebracket_instance) {
                 // if we're on fulptube, set the default frontend to finalium 1, since its close enough to
                 // early-hitchhiker youtube (which is what og fulptube used to be based on). otherwise,
-                // set the default to charla. -chaziz 4/7/2025
+                // set the default to trinium. -chaziz 4/7/2025
 
-                $defaultSkin = Utilities::isFulpTube() ? "finalium" : "charla";
+                $defaultSkin = Utilities::isFulpTube() ? "finalium" : "trinium";
             }
 
             $this->options = [

@@ -34,8 +34,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         if (isset($forceOldUserlink)) {
             // user preference
             $userlink_function_name = $forceOldUserlink ? "UserLinkOld" : "UserLink";
-        } elseif ($options["skin"] == "biscuit" || $options["skin"] == "charla") {
-            // default to new implementation on biscuit/charla (this logic should be swapped later)
+        } elseif ($options["skin"] == "biscuit" || $options["skin"] == "trinium") {
+            // default to new implementation on biscuit/trinium (this logic should be swapped later)
             $userlink_function_name = "UserLink";
         } else { // Utilities::isLegacyFrontend()
             // otherwise use the old implementation.
@@ -316,7 +316,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $data;
     }
 
-    // new userlink used on biscuit and charla
+    // new userlink used on biscuit and trinium
     public function UserLink($user): string
     {
         // get user info
@@ -507,13 +507,13 @@ class SquareBracketTwigExtension extends AbstractExtension
                 ],
             ];
 
-            // remove upload link on finalium 1, bootstrap and charla
-            if (Utilities::isLegacyFrontend() || $options["skin"] == "charla") {
+            // remove upload link on finalium 1, bootstrap and trinium
+            if (Utilities::isLegacyFrontend() || $options["skin"] == "trinium") {
                 unset($array["upload"]);
             }
 
-            // remove write link on charla
-            if ($options["skin"] == "charla") {
+            // remove write link on trinium
+            if ($options["skin"] == "trinium") {
                 unset($array["write"]);
             }
 
@@ -585,9 +585,9 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function getCSSFileDate()
     {
         // TODO: this should probably be changed to check the file date of the current theme, not just that of the
-        // default theme on biscuit (or charla if chaziz mode is enabled) -chaziz 1/13/2025.
+        // default theme on biscuit (or trinium if chaziz mode is enabled) -chaziz 1/13/2025.
         if ($this->orange->isChazizSquareBracketInstance()) {
-            return filemtime(SB_PUBLIC_PATH . "/assets/css/charla-default.css");
+            return filemtime(SB_PUBLIC_PATH . "/assets/css/trinium-default.css");
         } else {
             return filemtime(SB_PUBLIC_PATH . "/assets/css/default.css");
         }

@@ -1,6 +1,6 @@
 function error(error) {
     //play('error');
-    console.error("OpenSB Charla Frontend Error: " + error);
+    console.error("OpenSB Trinium Frontend Error: " + error);
 }
 
 let uiSounds = false;
@@ -24,14 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (indexListButton) {
         indexListButton.onclick = function () {
-            setConfig("charla_homepage_type", "list");
+            setConfig("trinium_homepage_type", "list");
             location.reload();
         }
     }
 
     if (indexGridButton) {
         indexGridButton.onclick = function () {
-            setConfig("charla_homepage_type", "grid");
+            setConfig("trinium_homepage_type", "grid");
             location.reload();
         }
     }
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             repliesContainer.insertAdjacentHTML("beforeend", json.html);
                         } else {
-                            error(`replies-${replyTo} doesn't exist. Charla fucked up.`);
+                            error(`replies-${replyTo} doesn't exist. Trinium fucked up.`);
                         }
                     } else {
                         let comment_field = (document.getElementById('comment_field'));
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             comment_field.insertAdjacentHTML("afterend", json.html);
                         } else {
-                            error(`Comments section doesn't exist????? Charla fucked up.`);
+                            error(`Comments section doesn't exist????? Trinium fucked up.`);
                         }
                     }
 

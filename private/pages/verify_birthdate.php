@@ -11,16 +11,12 @@ if (isset($auth->getUserData()['birthdate']) && !$orange->isDebug()) {
     header('Location: /index');
 }
 
-if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "charla") {
+if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "trinium") {
     if (isset($_COOKIE['SBOPTIONS'])) {
         $options = json_decode(base64_decode($_COOKIE['SBOPTIONS']), true);
     }
 
-    if ($orange->isChazizSquareBracketInstance()) {
-        $options["skin"] = "charla";
-    } else {
-        $options["skin"] = "biscuit";
-    }
+    $options["skin"] = "trinium";
 
     $options["theme"] = "default";
     setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);

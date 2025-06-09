@@ -36,13 +36,13 @@ class Templating
 
         $options = $orange->getLocalOptions();
 
-        $this->skin = $options["skin"] ?? "biscuit";
+        $this->skin = $options["skin"] ?? "trinium";
         $this->theme = $options["theme"] ?? "default";
 
         //if ($this->skin === null || trim($this->skin) === '' || !is_dir('skins/' . $this->skin . '/templates')) {
         if ($this->skin === null || trim($this->skin) === '') {
-            trigger_error("Currently selected skin is invalid", E_USER_WARNING);
-            $this->skin = "biscuit";
+            trigger_error("Current skin is invalid", E_USER_WARNING);
+            $this->skin = "trinium";
         }
 
         $skinPath = 'skins/' . $this->skin;
@@ -52,8 +52,8 @@ class Templating
 
         // if this skin is not meant for squarebracket, don't load.
         if ($metadata["metadata"]["site"] != "squarebracket") {
-            trigger_error("Currently selected skin is invalid", E_USER_WARNING);
-            $this->skin = "biscuit";
+            trigger_error("Current skin is invalid", E_USER_WARNING);
+            $this->skin = "trinium";
         }
 
         $templatePath = $skinPath . '/templates';
@@ -62,11 +62,11 @@ class Templating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            trigger_error("Currently selected skin is invalid", E_USER_WARNING);
+            trigger_error("Current skin is invalid", E_USER_WARNING);
 
-            $this->skin = "biscuit";
+            $this->skin = "trinium";
             $this->theme = "default";
-            $templatePath = "skins/biscuit/templates";
+            $templatePath = "skins/trinium/templates";
             $this->loader = new FilesystemLoader($templatePath);
         }
 

@@ -12,14 +12,14 @@ $submission_query = new UploadQuery($database);
 
 $options = $orange->getLocalOptions();
 
-if ($options["skin"] == "charla") {
-    $type = isset($options["charla_homepage_type"]) && $options["charla_homepage_type"] !== "list" ? $options["charla_homepage_type"] : "list";
+if ($options["skin"] == "trinium") {
+    $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
 } else {
     $type = "list";
 }
 
-if ($options["skin"] == "biscuit" || $options["skin"] == "charla") {
-    if ($options["skin"] == "charla" && $type == "grid") {
+if ($options["skin"] == "biscuit" || $options["skin"] == "trinium") {
+    if ($options["skin"] == "trinium" && $type == "grid") {
         $submissions_random_query_limit = 12;
     } else {
         $submissions_random_query_limit = 24;

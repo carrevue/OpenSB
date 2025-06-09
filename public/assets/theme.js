@@ -22,8 +22,8 @@ function updatePreview() {
     themeDescription.textContent = description || 'No description available.';
     themeAuthor.textContent = author ? `By ${author}` : '';
 
-    // only on charla frontend (for now)
-    if (weOnCharlaFrontendLmao ?? false) {
+    // only on trinium frontend (for now)
+    if (weOnTriniumFrontendLmao ?? false) {
         const skinName = selectedOption.getAttribute('data-skin-name');
         const skinDescription = selectedOption.getAttribute('data-skin-description');
         const skinAuthor = selectedOption.getAttribute('data-skin-author');

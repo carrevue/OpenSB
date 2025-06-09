@@ -8,12 +8,12 @@ sb_branding: squarebracket branding ONLY FOR SQUAREBRACKET.PW
 	- finalium: old 2022-2023 branding
 	- fulp: fulptube branding used on fulptube.rocks
 sounds: sounds, optional feature
-icons: biscuit/charla icons
+icons: biscuit/trinium icons
 css: compiled css
 
 ATTRIBUTION:
 
-biscuit/charla login page background by Jeremy Bishop on Unsplash: https://unsplash.com/photos/body-of-water-under-blue-sky-dUvBgzQEIag
+biscuit/trinium login page background by Jeremy Bishop on Unsplash: https://unsplash.com/photos/body-of-water-under-blue-sky-dUvBgzQEIag
 
 finalium "leaf droplet" login background by Min An on Pexels: https://www.pexels.com/photo/macro-shot-of-water-drop-on-green-textile-689326/
 
