@@ -10,7 +10,7 @@ if (!$auth->isUserAdmin()) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
-if ($orange->getLocalOptions()["skin"] != "biscuit" && $orange->getLocalOptions()["skin"] != "trinium") {
+if ($orange->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
 }
 
