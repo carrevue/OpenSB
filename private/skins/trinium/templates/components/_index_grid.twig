@@ -39,11 +39,9 @@
             <h2 class="section-title">{{ localize('site_news') }}</h2>
             <div class="section-desc">{{ localize('site_news_desc') }}</div>
         </div>
-        {% if is_opensb_v1_3 %}
-            <div class="section-header-right">
-                <a href="/journals/news">{{ localize('more') }}</a>
-            </div>
-        {% endif %}
+        <div class="section-header-right">
+            <a href="/journals/news">{{ localize('more') }}</a>
+        </div>
     </div>
     <div class="content-box">
         {% for journal in data.news_recent %}

@@ -8,18 +8,16 @@
     <a class="navigation-bar-button {% if page_name=='users' %}active{% endif %}" href="/admin/users">
         Users
     </a>
-    {% if is_opensb_v1_3 %}
-        <a class="navigation-bar-button {% if page_name=='uploads' %}active{% endif %}" href="/admin/uploads">
-            Uploads
+    <a class="navigation-bar-button {% if page_name=='uploads' %}active{% endif %}" href="/admin/uploads">
+        Uploads
+    </a>
+    <a class="navigation-bar-button {% if page_name=='interactions' %}active{% endif %}" href="/admin/interactions">
+        Interactions
+    </a>
+    {% if invite_keys_enabled %}
+        <a class="navigation-bar-button {% if page_name=='invitekeys' %}active{% endif %}" href="/admin/invitekeys">
+            Invite keys
         </a>
-        <a class="navigation-bar-button {% if page_name=='interactions' %}active{% endif %}" href="/admin/interactions">
-            Interactions
-        </a>
-        {% if invite_keys_enabled %}
-            <a class="navigation-bar-button {% if page_name=='invitekeys' %}active{% endif %}" href="/admin/invitekeys">
-                Invite keys
-            </a>
-        {% endif %}
     {% endif %}
 </div>
 {% endblock %}

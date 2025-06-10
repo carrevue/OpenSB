@@ -26,7 +26,7 @@
                 </div>
             {% endif %}
             <ul>
-                {% if is_opensb_v1_3 and data.system.os_name %}
+                {% if data.system.os_name %}
                     <li>Operating System: {{ data.system.os_name }}</li>
                 {% endif %}
                 <li>Uname: <code>{{ data.system.uname }}</code></li>
