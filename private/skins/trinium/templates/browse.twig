@@ -1,6 +1,10 @@
 {% extends "_layout.twig" %}
 
-{% set title = localize('browse') %}
+{% if user %}
+    {% set title = user ~ "'s uploads" %}
+{% else %}
+    {% set title = localize('browse') %}
+{% endif %}
 
 {% block content %}
     {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
@@ -9,7 +13,7 @@
     <div class="section">
         <div class="section-header flex">
             <div class="section-header-left">
-                <h1 class="section-title">{{ localize('browse') }}</h1>
+                <h1 class="section-title">{{ title }}</h1>
                 <div class="section-desc">Page {{ current_page }} of {{ total_pages }}</div>
             </div>
         </div>

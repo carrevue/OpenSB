@@ -46,9 +46,12 @@ $data["icons"] = [
     "caret-open-header",
     "mail",
     "bell",
+    "upload",
     "plus",
     "homepage-list",
     "homepage-grid",
+    "previous",
+    "next",
     "placeholder",
 ];
 

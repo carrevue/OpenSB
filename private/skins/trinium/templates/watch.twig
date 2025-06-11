@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="watch-box-author-follow">
                                         {% if not submission.is_owner and is_user_logged_in %}
-                                            <button class="button button-secondary" id="follow-user">
+                                            <button class="button button-secondary button-small" id="follow-user">
                                                 {% if submission.author.following %}
                                                     Unfollow
                                                 {% else %}
@@ -108,7 +108,9 @@
                                             </button>
                                             <span id="follower_count">{{ submission.author.followers }}</span>
                                         {% else %}
-                                            <span>{{ submission.author.followers }} followers</span>
+                                            <span class="watch-box-followers-logged-out">
+                                                {{ submission.author.followers }} followers
+                                            </span>
                                         {% endif %}
                                     </div>
                                 </div>

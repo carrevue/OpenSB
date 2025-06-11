@@ -117,4 +117,6 @@
   padding: 0.5rem;
   width: 100%;
   cursor: pointer;
+
+  flex: 1; // webkit hack
 }

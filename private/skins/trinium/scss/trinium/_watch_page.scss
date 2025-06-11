@@ -77,6 +77,20 @@
         .watch-box-author-userlink {
           font-size: 1.1em;
         }
+
+        #follower_count, .watch-box-followers-logged-out {
+          font-size: 0.9em;
+        }
+
+        .watch-box-followers-logged-out {
+          opacity: 50%;
+        }
+
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+
+        height: 50px;
       }
     }
   }

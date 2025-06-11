@@ -31,7 +31,7 @@ $author = new UserData($database, $auth->getUserID());
 $commentText = trim($post_data['comment']);
 
 if ($commentText === "") {
-    echo json_encode(["error" => "This comment is invalid."]);
+    echo json_encode(["error" => "Please write your comment."]);
     exit;
 }
 

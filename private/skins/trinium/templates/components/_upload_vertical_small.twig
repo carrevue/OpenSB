@@ -22,6 +22,16 @@
             <img src="{{ thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) }}"
                  alt="{{ submission.title }}" class="content-image thumbnail small">
         </a>
+        <div class="content-thumbnail-badge-container">
+            <div class="content-thumbnail-badge">
+                {{ type }}
+            </div>
+            {% if submission.type == 0 %}
+                <div class="content-thumbnail-badge">
+                    {{ convert_time(submission.length) }}
+                </div>
+            {% endif %}
+        </div>
     </div>
     <div class="content-info">
         <div class="content-title">
@@ -41,7 +51,6 @@
             {% if submission.published_originally and submission.original_site %}
                 <span class="text-faded">on {{ submission.original_site }}</span>
             {% endif %}
-            • {{ type }}
         </div>
         <div class="content-rating">
             {{ show_ratings(submission.interactions.ratings) }}

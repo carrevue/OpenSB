@@ -67,10 +67,8 @@ class Authentication
                     Utilities::logOutUser();
                 }
 
-                // update "last logged in" timestamp after 12 hours.
-                if ($database->result("SELECT COUNT(*) FROM users WHERE lastview < ? AND id = ?", [time() - (12 * 60 * 60), $this->user_id])) {
-                    $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
-                }
+                // NOTE: for any concern with "ip logging", ip addresses are encrypteed in the opensb database.
+                $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
 
                 // TODO: the content rating system is disabled on squarebracket, so if the user's "comfortable rating"
                 // isnt general, then reset it back to general.

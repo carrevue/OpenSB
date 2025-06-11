@@ -83,7 +83,7 @@
                             Joined: {{ data.joined | relative_time() }}
                         </li>
                         <li>
-                            Last login: {{ data.connected | relative_time() }}
+                            Last seen: {{ data.connected | relative_time() }}
                         </li>
                     </ul>
                 </div>
@@ -116,7 +116,7 @@
                                 <h2 class="section-title">{{ localize('uploads') }}</h2>
                             </div>
                             <div class="section-header-right">
-                                <a href="/browse?user?{{ data.username }}">{{ localize('more') }}</a>
+                                <a href="/browse?user={{ data.username }}">{{ localize('more') }}</a>
                             </div>
                         </div>
                         <div class="content-grid">

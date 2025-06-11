@@ -20,7 +20,7 @@
 
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide-core.min.css" integrity="sha256-ZAXImCY06SjVuIrJfWUETkyCctX5aGdL1AVEBX5CxZA=" crossorigin="anonymous">
     <script>
         document.addEventListener( 'DOMContentLoaded', function() {
             var elms = document.getElementsByClassName( 'splide' );
@@ -68,10 +68,22 @@
                 <div class="jumbotron-right-date">
                     {{ "now"|date("F jS Y") }}
                 </div>
+                {% if not empty_instance and options.trinium_index_enable_jumbotron_tabs %}
+                <div class="jumbotron-right-buttons">
+                    <div class="tabs homepage">
+                        <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
+                            <div class="biscuit-icon homepage-list {% if type=='list' %}active{% endif %} size-24"></div>
+                        </div>
+                        <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
+                            <div class="biscuit-icon homepage-grid {% if type=='grid' %}active{% endif %} size-24"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-    {% if not empty_instance %}
+    {% if not empty_instance and not options.trinium_index_enable_jumbotron_tabs %}
     <div class="navigation-bar">
         <a class="navigation-bar-button {% if type=='list' %}active{% endif %}" id="index-list-button">
             <div class="biscuit-icon homepage-list size-24"></div>

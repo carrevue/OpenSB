@@ -624,6 +624,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
 
         if ($this->orange->isChazizSquareBracketInstance()) {
+            $array["brickface"] = [
+                "name" => "Go to Quadium/Brickface",
+                "url" => "https://brickface.squarebracket.pw/",
+            ];
+
             $array["discord"] = [
                 "name" => "Discord",
                 "url" => "https://discord.gg/tzkSpxpmSD",

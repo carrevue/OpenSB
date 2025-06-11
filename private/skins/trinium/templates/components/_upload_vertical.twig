@@ -22,6 +22,16 @@
             <img src="{{ thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) }}"
                  alt="{{ submission.title }}" class="content-image thumbnail">
         </a>
+        <div class="content-thumbnail-badge-container">
+            <div class="content-thumbnail-badge">
+                {{ type }}
+            </div>
+            {% if submission.type == 0 %}
+            <div class="content-thumbnail-badge">
+                {{ convert_time(submission.length) }}
+            </div>
+            {% endif %}
+        </div>
     </div>
     <div class="content-info">
         <div class="content-title-upload">
@@ -44,14 +54,9 @@
             {% if submission.published_originally and submission.original_site %}
                 <span class="text-faded">on {{ submission.original_site }}</span>
             {% endif %}
-            • {{ type }}
             <br>
             {% if submission.description|trim is not empty %}
                 <span>{{ submission.description }}</span>
-                <br>
-            {% endif %}
-            {% if submission.type == 0 %}
-            <div>{{ convert_time(submission.length) }}</div>
             {% endif %}
         </div>
     </div>

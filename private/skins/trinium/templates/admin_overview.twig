@@ -69,7 +69,8 @@
                             },
                             {% endfor %}
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'n',
                     },
                     {
                         label: 'Users',
@@ -81,7 +82,8 @@
                             },
                             {% endfor %}
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'n',
                     },
                     {
                         label: 'Comments',
@@ -93,7 +95,8 @@
                             },
                             {% endfor %}
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'n',
                     },
                     {
                         label: 'Journals',
@@ -105,10 +108,11 @@
                             },
                             {% endfor %}
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'n',
                     },
                     {
-                        label: 'Views (Logged in)',
+                        label: 'Views (Users)',
                         data: [
                             {% for graph in data.graph_data.views %}
                             {
@@ -117,7 +121,8 @@
                             },
                             {% endfor %}
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'v',
                     },
                     {
                         label: 'Views (Guests)',
@@ -129,7 +134,8 @@
                             },
                             {% endfor %}
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        yAxisID: 'v',
                     },
                 ]
             },
@@ -147,12 +153,22 @@
                     x: {
                         type: 'time',
                         min: '2021-01-30 00:00:00',
-                    }
+                    },
                     {% else %}
                     x: {
                         type: 'time',
-                    }
+                    },
                     {% endif %}
+                    n: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                    },
+                    v: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                    }
                 }
             }
         });

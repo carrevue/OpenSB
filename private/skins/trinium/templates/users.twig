@@ -13,7 +13,20 @@
 					<div class="section-desc">Page {{ current_page }} of {{ total_pages }}</div>
 				</div>
 			</div>
-			<div class="content-box content-grid content-grid-users">
+			{% if options.enable_incomplete_features %}
+			<div class="tabs">
+				<a class="tablink {% if type=='recent' %}active{% endif %}" href="/browse?type=recent">
+					Recently seen
+				</a>
+				<a class="tablink {% if type=='popular' %}active{% endif %}" href="/browse?type=popular">
+					Most followed
+				</a>
+				<a class="tablink {% if type=='random' %}active{% endif %}" href="/browse?type=random">
+					{{ localize('random') }}
+				</a>
+			</div>
+			{% endif %}
+			<div class="content-box content-grid content-grid-users {# no-border-top #}">
 				{% for user in users.users %}
 					<div class="content-entry user-id-{{ user.id }}">
 						<div class="content-thumbnail">
@@ -29,7 +42,10 @@
 								{{ user_link(user) }}
 							</div>
 							<div class="content-description">
-								{{ user.submissions }} uploads<br>{{ user.journals }} journals
+								{{ user.submissions }} uploads
+							</div>
+							<div class="content-description">
+								{{ user.followers }} followers
 							</div>
 						</div>
 					</div>

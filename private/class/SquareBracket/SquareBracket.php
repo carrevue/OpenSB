@@ -239,6 +239,10 @@ class SquareBracket {
      * @return bool
      */
     public function isFulpTube(): bool {
+        if (!isset($_SERVER['HTTP_HOST'])) {
+            return false;
+        }
+
         $isOnFulpTubeDomain = str_contains($_SERVER['HTTP_HOST'], 'fulptube.rocks');
 
         $isHitchhikerTheme = ($this->getLocalOptions()['skin'] ?? '') === 'finalium'

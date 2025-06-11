@@ -10,8 +10,6 @@ if (!file_exists(SB_VENDOR_PATH . '/autoload.php')) {
     die('The required Composer packages are missing. Please read the setup instructions in the README file.');
 }
 
-// yes. you can call me stupid for this. but this is done because i don't want the new code to use the old shitty
-// configs. -chaziz 7/31/2024
 if (!file_exists(SB_PRIVATE_PATH . '/config/config.php')) {
     die('The configuration file could not be found. Please read the setup instructions in the README file.');
 }
