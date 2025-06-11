@@ -119,6 +119,14 @@
     }
   }
 
+  &.upload {
+    @if $color-scheme == "dark" {
+      background-image: url('/assets/icons/upload-dark.svg');
+    } @else {
+      background-image: url('/assets/icons/upload-light.svg');
+    }
+  }
+
   &.plus {
     @if $color-scheme == "dark" {
       background-image: url('/assets/icons/plus-dark.svg');
