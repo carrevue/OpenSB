@@ -85,6 +85,7 @@ class Database
                 'query' => $query['query'],
                 'time' => $query['execution_time'],
                 'params' => $query['params'],
+                'caller_info' => $query['caller_info'],
             ];
         }
 
@@ -111,11 +112,30 @@ class Database
         $executionTime = microtime(true) - $startTime;
 
         if ($this->profilingEnabled) {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            $immediateCaller = $backtrace[0] ?? [];
+            $actualCaller = $backtrace[1] ?? [];
+
+            // check if the caller isnt right here for queries done through fetch and fetchArray
+            $caller = (str_ends_with($immediateCaller['file'] ?? '', 'Database.php'))
+                ? $actualCaller
+                : $immediateCaller;
+
+            // remove root path so we have a shorter string
+            $file = str_replace(SB_ROOT_PATH, '', $caller['file'] ?? '');
+
+            $callerInfo = [
+                'file' => $file ?? 'unknown',
+                'line' => $caller['line'] ?? 'unknown',
+                'function' => $caller['function'] ?? 'unknown',
+            ];
+
             $this->queryLog[] = [
                 'query' => $query,
                 'params' => $params,
                 'execution_time' => $executionTime,
                 'timestamp' => microtime(true),
+                'caller_info' => $callerInfo,
             ];
         }
 

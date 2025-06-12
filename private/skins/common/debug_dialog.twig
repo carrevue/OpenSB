@@ -24,19 +24,23 @@
             Average time: {{ profiler.average_time }} seconds<br><br>
 
             <strong>Slowest query ({{ profiler.slowest_query.execution_time }}s):</strong><br>
-            {{ profiler.slowest_query.query }}<br>
-            Parameters: {{ profiler.slowest_query.params|json_encode }}<br><br>
+            <pre>{{ profiler.slowest_query.query }}</pre>
+            Parameters: {% for param in profiler.slowest_query.params %}<code>{{ param }}</code>{% if not loop.last %},{% endif %} {% endfor %}<br>
+            Location: {{ profiler.fastest_query.caller_info.file }} (line {{ profiler.fastest_query.caller_info.line }})<br><br>
 
             <strong>Fastest query ({{ profiler.fastest_query.execution_time }}s):</strong><br>
-            {{ profiler.fastest_query.query }}<br>
-            Parameters: {{ profiler.fastest_query.params|json_encode }}
+            <pre>{{ profiler.fastest_query.query }}</pre>
+            Parameters: {% for param in profiler.fastest_query.params %}<code>{{ param }}</code>{% if not loop.last %},{% endif %} {% endfor %}<br>
+            Location: {{ profiler.fastest_query.caller_info.file }} (line {{ profiler.fastest_query.caller_info.line }})
 
             <hr>
 
             <strong>All Queries:</strong><br>
             {% for query in profiler.queries %}
-                #{{ loop.index }} ({{ query.time }}s): {{ query.query }}<br>
-                Parameters: {{ query.params|json_encode }}<br><br>
+                #{{ loop.index }} ({{ query.time }}s):
+                <pre>{{ query.query }}</pre>
+                Parameters: {% for param in query.params %}<code>{{ param }}</code>{% if not loop.last %},{% endif %} {% endfor %}<br>
+                Location: {{ query.caller_info.file }} (line {{ query.caller_info.line }}, {{ query.caller_info.function }})<br><br>
             {% endfor %}
         </div>
         <div id="tab_twig" class="tabcontent">
