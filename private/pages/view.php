@@ -64,7 +64,7 @@ $followed = Utilities::isFollowingUser($data["author"]);
 // TODO: this feature is unused.
 //$favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
 
-$flags = $upload->bitmaskToArray();
+$flags = $upload->getUploadFlagsArray();
 
 if ($flags["block_guests"] && !$auth->isUserLoggedIn())
 {

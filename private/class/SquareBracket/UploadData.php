@@ -62,7 +62,7 @@ class UploadData
         return $this->ratings->calculateRatingData();
     }
 
-    public function bitmaskToArray()
+    public function getUploadFlagsArray()
     {
         return UploadFlags::toArray($this->data["flags"]);
     }

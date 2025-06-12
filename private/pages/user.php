@@ -37,9 +37,10 @@ if (!$data)
     }
 }
 
-if ($database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]]))
-{
-    Utilities::notifyBanner("This user is banned.", "/");
+if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
+    if (!$auth->isUserAdmin()) {
+        Utilities::notifyBanner("This user is banned.", "/");
+    }
 }
 
 $user_submissions_query_limit = 12;
@@ -55,7 +56,7 @@ $user_journals =
         $database->query("SELECT j.* FROM journals j WHERE
                          j.author = ? 
                          ORDER BY j.date 
-                         DESC LIMIT 20", [$data["id"]]));
+                         DESC LIMIT 8", [$data["id"]]));
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
@@ -95,6 +96,7 @@ $profile_data = [
     "views" => $views,
     "old_usernames" => $old_usernames,
     "customization" => $profile_color_data ?? false,
+    "ban_data" => $user_ban_data ?? [],
 ];
 
 // calculate the color used for profile banner on the bootstrap frontend

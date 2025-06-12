@@ -40,12 +40,14 @@
                             </tr>
                             <tr>
                                 <td>Registered</td>
-                                <td>{{ user.joined | date("F jS Y, h:i:s A") }}
-                                    ({{ user.birthdate | calculate_age_from(user.joined) }} years old)</td>
+                                <td>{{ user.joined | date("F jS Y h:i:s A") }}
+                                    <br>({{ user.birthdate | calculate_age_from(user.joined) }} years old)
+                                    {% if flags.fulptube_account %}<br><small>FulpTube account</small>{% endif %}
+                                </td>
                             </tr>
                             <tr>
                                 <td>Last logged in</td>
-                                <td>{{ user.lastview | date("F jS Y, h:i:s A") }}</td>
+                                <td>{{ user.lastview | date("F jS Y h:i:s A") }}</td>
                             </tr>
                             <tr>
                                 <td>Comfortable rating</td>
@@ -98,7 +100,7 @@
                                             {{ entry.old_name }}
                                         </td>
                                         <td>
-                                            {{ entry.time | date("F jS Y, h:i:s A") }}
+                                            {{ entry.time | date("F jS Y h:i:s A") }}
                                         </td>
                                     </tr>
                                 {% endfor %}

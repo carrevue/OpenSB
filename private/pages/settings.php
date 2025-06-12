@@ -22,7 +22,7 @@ $profile_color_data = $database->fetch("SELECT * FROM user_profile_customization
     [$auth->getUserData()["id"]]);
 
 if (isset($_POST['save'])) {
-    $flags = 0;
+    $flags = $auth->getUserFlags();
 
     $title = htmlspecialchars($_POST['title']) ?? null;
 

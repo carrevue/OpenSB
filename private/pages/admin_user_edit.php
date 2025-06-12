@@ -5,6 +5,7 @@ namespace OpenSB;
 global $auth, $twig, $database, $orange, $path;
 
 use SquareBracket\UserData;
+use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
 if (!$auth->isUserAdmin()) {
@@ -69,6 +70,7 @@ if ($user["ip"] != "999.999.999.999") {
 
 $old_username_data = $database->fetchArray($database->query("SELECT * FROM user_old_names WHERE user = ?", [$user["id"]]));
 
+// there is currently no way of posting staff notes on the site.
 $notes = $database->fetchArray($database->query("SELECT * FROM user_staff_notes WHERE user = ?", [$user["id"]]));
 
 $notes_proper = [];
@@ -85,8 +87,13 @@ foreach ($notes as $note) {
     ];
 }
 
+// unlike uploads, there is no proper implementation of getting user data that isnt intended for
+// simply getting basic user data via the UserData class.
+$flags = UserFlags::toArray($user["u_flags"]);
+
 echo $twig->render('admin_user_edit.twig', [
     'user' => $user,
+    'flags' => $flags,
     'users_with_matching_ips' => $users_with_matching_ips,
     'notes' => $notes_proper,
     'old_names' => $old_username_data

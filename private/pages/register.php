@@ -5,6 +5,7 @@ namespace OpenSB;
 global $orange, $twig, $database;
 
 use DateTime;
+use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
 if (!$orange->isAccountRegistrationEnabled()) {
@@ -100,11 +101,17 @@ if (isset($_POST['registersubmit'])) {
     }
 
     if(!$error) {
+        $flags = 0;
+
+        if ($orange->isFulpTube()) {
+            $flags |= UserFlags::FLAG_FULPTUBE_ACCOUNT->value;
+        }
+
         $token = bin2hex(random_bytes(32));
         $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
-        $database->query("INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate)
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [$username, $hashedPassword, $token, time(), time(), $username, $mail, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d')]);
+        $database->query("INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate, u_flags)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [$username, $hashedPassword, $token, time(), time(), $username, $mail, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags]);
         $userId = $database->insertId();
 
         if ($enableInviteKeys) {

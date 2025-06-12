@@ -163,11 +163,15 @@ class Authentication
     }
 
     /**
-     * Returns the instance's default tag blacklist.
+     * Returns the current user's list of flags.
      */
-    public function getUserFlags(): array
+    public function getUserFlags($array = false)
     {
-        return UserFlags::toArray($this->user_data['u_flags']);
+        if ($array) {
+            return UserFlags::toArray($this->user_data['u_flags']);
+        } else {
+            return $this->user_data['u_flags'];
+        }
     }
 
     /**

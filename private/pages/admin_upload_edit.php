@@ -31,7 +31,7 @@ if (!$data)
     Utilities::notifyBanner("This upload does not exist.", "/admin/");
 }
 
-$flags = $upload->bitmaskToArray();
+$flags = $upload->getUploadFlagsArray();
 
 // Update flags
 if (isset($_POST['flagsubmit'])) {

@@ -49,8 +49,8 @@
 {% block content %}
     {% if submission.takedown %}
         <div class="banner banner-secondary">
-            This upload was taken down on {{ submission.takedown.sent }} by {{ submission.takedown.takedownee }}
-            on {{ submission.takedown.time | date("F jS Y, h:i:s A") }}, with the reason: {{ submission.takedown.reason }}
+            This upload was taken down on {{ submission.takedown.time | date("F jS Y H:i:s T") }}
+            by {{ submission.takedown.takedownee }} for the following reason: {{ submission.takedown.reason }}
         </div>
     {% endif %}
     {% if submission.author_banned %}
@@ -66,6 +66,12 @@
                 </div>
                 <div class="watch-box">
                     <div class="section watch-box-title">
+                        {% if user_is_authenticated_admin %}
+                            <div class="watch-box-row">
+                                <a href="/admin/uploads/{{ submission.id }}">Admin Check</a>
+                            </div>
+                            <hr>
+                        {% endif %}
                         <div class="section-header flex">
                             <div class="section-header-left">
                                 <h1 class="section-title">
@@ -98,7 +104,7 @@
                                         {{ user_link(submission.author) }}
                                     </div>
                                     <div class="watch-box-author-follow">
-                                        {% if not submission.is_owner and is_user_logged_in %}
+                                        {% if not submission.is_owner and not submission.author_banned and is_user_logged_in %}
                                             <button class="button button-secondary button-small" id="follow-user">
                                                 {% if submission.author.following %}
                                                     Unfollow
@@ -136,7 +142,7 @@
                             </div>
                             {% if submission.published_originally and submission.original_site %}
                                 <div class="watch-box-description-info-small">
-                                    First uploaded on {{ submission.original_site }} on {{ submission.published_originally | date('F j, Y') }}
+                                    First uploaded on {{ submission.original_site }} on {{ submission.published_originally | date('F jS Y') }}
                                 </div>
                             {% elseif submission.original_site %}
                                 <div class="watch-box-description-info-small">
