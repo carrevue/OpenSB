@@ -5,7 +5,7 @@
 {% if submission.description | trim is not empty %}
     {% set opengraph_description = submission.description %}
 {% else %}
-    {% set opengraph_description = "No description." %}
+    {% set opengraph_description = "This upload does not have a description." %}
 {% endif %}
 
 {% set opengraph_image = thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) %}
@@ -14,10 +14,16 @@
 {% set opengraph_published = submission.published | date("c") %}
 {% set opengraph_author = domain ~ "user/" ~ submission.author.info.username %}
 {% set metadata_author = submission.author.info.username %}
-{% if submission.type == 0 %}
-    {% set opengraph_section = "SquareBracket video" %}
-{% elseif submission.type == 2 %}
+
+{% if submission.type == 2 %}
+    {% set type_text = "Image" %}
     {% set opengraph_section = "SquareBracket image" %}
+{% elseif submission.type == 3 %}
+    {% set type_text = "Music" %}
+    {% set opengraph_section = "SquareBracket music" %}
+{% else %}
+    {% set type_text = "Video" %}
+    {% set opengraph_section = "SquareBracket video" %}
 {% endif %}
 
 {% block scripts %}
@@ -31,14 +37,6 @@
         comment_id = '{{ submission.id }}';
     </script>
 {% endblock %}
-
-{% if submission.type == 2 %}
-    {% set type_text = "Image" %}
-{% elseif submission.type == 3 %}
-    {% set type_text = "Music" %}
-{% else %}
-    {% set type_text = "Video" %}
-{% endif %}
 
 {% if submission.rating == 'mature' %}
     {% set rating_text = "Mature" %}
