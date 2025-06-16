@@ -20,7 +20,7 @@ table.c1 {
               color.adjust($content-box-border-color, $lightness: 5%));
 
       th {
-        padding: 1px 4px;
+        padding: 0.2rem 0.4rem;
         text-align: left;
         border: 1px solid $content-box-border-color;
         font-weight: 500;
@@ -30,6 +30,6 @@ table.c1 {
 
   td {
     border: 1px solid $content-box-border-color;
-    padding: 4px;
+    padding: 0.4rem;
   }
 }

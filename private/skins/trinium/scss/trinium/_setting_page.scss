@@ -1,10 +1,10 @@
 #settings-banner-preview {
-  background: #111 center/cover;
+  background: #111 center no-repeat;
   border: 1px solid $content-box-border-color;
   padding: $content-box-padding;
-  height: 250px;
+  height: 300px;
   display: flex;
 
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }

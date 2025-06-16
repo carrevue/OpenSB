@@ -177,12 +177,10 @@ blockquote {
     background-image: url('/assets/trinium_pfp_gloss.svg');
     background-size: cover;
     position: absolute;
-    //z-index: 1; // shitty hack so pfp's filter property doesnt fuck this up
   }
   .pfp {
     width: auto;
     height: 100%;
-    //filter: drop-shadow(4px 8px 8px rgba(0,0,0,50%));
 
     // a fix for legacy poktube profile pictures that aren't 1:1
     aspect-ratio: 1 / 1;

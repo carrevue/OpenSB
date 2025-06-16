@@ -5,10 +5,10 @@
 	{% block admincontent %}
         <div class="grid">
             <div class="col-6">
-                <div class="content-box">
-                    <div class="section">
+                <div class="section">
+                    <div class="content-box">
                         <div class="section-header">
-                            <h2 class="section-title">Information</h2>
+                            <h2 class="section-title">Details</h2>
                         </div>
                         <table class="c1">
                             <tbody>
@@ -46,7 +46,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Last logged in</td>
+                                <td>Last seen</td>
                                 <td>{{ user.lastview | date("F jS Y h:i:s A") }}</td>
                             </tr>
                             <tr>
@@ -62,9 +62,8 @@
                     </div>
                 </div>
                 {% if users_with_matching_ips %}
-                    <br>
-                    <div class="content-box">
-                        <div class="section">
+                    <div class="section">
+                        <div class="content-box">
                             <div class="section-header">
                                 <h2 class="section-title">Other accounts with matching IP</h2>
                             </div>
@@ -86,9 +85,8 @@
                     </div>
                 {% endif %}
                 {% if old_names %}
-                    <br>
-                    <div class="content-box">
-                        <div class="section">
+                    <div class="section">
+                        <div class="content-box">
                             <div class="section-header">
                                 <h2 class="section-title">Previous usernames</h2>
                             </div>
@@ -111,10 +109,10 @@
                 {% endif %}
             </div>
             <div class="col-6">
-                <div class="content-box">
-                    <div class="section">
+                <div class="section">
+                    <div class="content-box">
                         <div class="section-header">
-                            <h2 class="section-title">Images</h2>
+                            <h2 class="section-title">Assets</h2>
                         </div>
                         <table class="c1">
                             <tbody>
@@ -134,24 +132,23 @@
                         </table>
                     </div>
                 </div>
-                <br>
-                <div>
+                {% if notes %}
+                <div class="section">
                     <div class="content-box">
-                        <div class="section">
-                            <div class="section-header">
-                                <h2 class="section-title">Notes</h2>
-                            </div>
-                            {% for note in notes %}
-                                <div class="content-box content-note">
-                                    <div>
-                                        By {{ user_link(note.author) }}, {{ note.time | relative_time }}
-                                    </div>
-                                    {{ note.content | markdown_user_written(true) }}
-                                </div>
-                            {% endfor %}
+                        <div class="section-header">
+                            <h2 class="section-title">Notes</h2>
                         </div>
+                        {% for note in notes %}
+                            <div class="content-box content-note">
+                                <div>
+                                    By {{ user_link(note.author) }}, {{ note.time | relative_time }}
+                                </div>
+                                {{ note.content | markdown_user_written(true) }}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     {% endblock %}

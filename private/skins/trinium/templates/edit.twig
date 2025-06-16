@@ -14,21 +14,21 @@
                     <input type="hidden" name="vid_id" value="{{ data.id }}">
 
                     <div class="form-input">
-                        Title:
+                        Title
                         <input type="text" class="form-submit" name="title"
                                value="{{ data.title }}">
                     </div>
 
                     <div class="form-input">
-                        Description:
+                        Description
                         <textarea class="form-submit" name="desc" maxlength="2000"
                                   form="uploadForm"
                                   style="overflow:hidden;resize:vertical" rows="3">{{ data.description }}</textarea>
                     </div>
 
-                    {% if is_debug %}
+                    {% if options.enable_incomplete_features %}
                         <div class="form-input">
-                            Visibility:
+                            Visibility
                             <select name="visibility" id="visibility">
                                 <option value="public">Public</option>
                                 <option value="scraps">Public (scraps)</option>
@@ -49,7 +49,7 @@
                     {% endif %}
 
                     <div class="form-input">
-                        <label for="thumbnail">Custom thumbnail:</label>
+                        <label for="thumbnail">Custom thumbnail</label>
                         <input type="file" name="thumbnail" id="thumbnail">
                     </div>
 

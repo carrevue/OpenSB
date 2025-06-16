@@ -1,5 +1,7 @@
 @use "sass:color";
 
+// TODO: make hovering consistent with those of buttons
+
 .pagination {
   /* because pagination looks weird with normal buttons */
   margin: 1em auto auto;
@@ -13,7 +15,7 @@
 
   .pagination-item {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 4px 10px;
     border: 1px solid $content-box-border-color;
     border-right: none;
 
@@ -30,16 +32,25 @@
 
     a {
       color: $text-color;
+      &:hover {
+        text-decoration: none;
+      }
     }
 
     &.current {
+      $border-color: color.adjust(color.adjust($primary, $lightness: -7.5%), $hue: 2deg);
+      @if $color-scheme == "dark" {
+        $border-color: color.adjust(color.adjust($primary, $lightness: 10%), $hue: 4deg);
+      }
+
       background: $primary;
-      border: 1px solid color.adjust(color.adjust($primary, $lightness: -4%), $hue: 2deg);
+      border: 1px solid $border-color;
       border-right: none;
       color: white;
+      text-shadow: 0 -1px 0 rgba(black, 0.4);
 
       &:last-child {
-        border-right: 1px solid color.adjust(color.adjust($primary, $lightness: -4%), $hue: 2deg);
+        border-right: $border-color;
       }
     }
   }

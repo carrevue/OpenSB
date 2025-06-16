@@ -1,4 +1,4 @@
-{% extends "_layout.twig" %}
+{% extends "_layout_my_stuff.twig" %}
 
 {% set title = "Account settings" %}
 
@@ -10,7 +10,7 @@
     </style>
 {% endblock %}
 
-	{% block content %}
+	{% block mystuffcontent %}
         {% if error %}
             <div class="banner banner-danger">{{ error }}</div>
         {% endif %}
@@ -18,9 +18,9 @@
             <div class="section-header">
                 <h1 class="section-title">Account settings</h1>
             </div>
-            <div class="content-box">
-                <form action="/settings" method="post" enctype="multipart/form-data">
-                    <div class="section">
+            <form action="/settings" method="post" enctype="multipart/form-data">
+                <div class="section">
+                    <div class="content-box">
                         <div class="section-header">
                             <h2 class="section-title">Profile</h2>
                         </div>
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        <hr>
                         <div class="form-input">
                             <label for="title">Profile name:</label>
                             <input class="form-submit" id="settings-display-name-input" type="text" name="title" maxlength="50" value="{{ user_data.title }}">
@@ -79,11 +79,11 @@
                         <hr>
 
                         <div class="section">
-                            <div class="section-header">
-                                <h2 class="section-title">Profile colors</h2>
-                            </div>
-                            <div>
-                                These will be shown to everyone on your profile.
+                            <div class="section-header flex">
+                                <div class="section-header-left">
+                                    <h2 class="section-title">Profile customization</h2>
+                                    <div class="section-desc">These will be shown to everyone on your profile.</div>
+                                </div>
                             </div>
 
                             <div class="form-submit">
@@ -147,94 +147,99 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <hr>
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="section">
+                            <div class="content-box">
+                                <div class="section-header">
+                                    <h2 class="section-title">Security</h2>
+                                </div>
 
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Security</h2>
-                        </div>
+                                <div class="form-input">
+                                    <label for="current_pass">Current password:</label>
+                                    <input class="form-submit" type="password" name="current_pass" size="30" maxlength="256"
+                                           placeholder="Current password">
+                                </div>
 
-                        <div class="form-input">
-                            <label for="current_pass">Current password:</label>
-                            <input class="form-submit" type="password" name="current_pass" size="30" maxlength="256"
-                                   placeholder="Current password">
-                        </div>
+                                <hr>
 
-                        <br>
-                        <div class="section-header">
-                            <h3 class="section-title">Change username</h3>
-                        </div>
+                                <div class="section-header">
+                                    <h3 class="section-title">Change password</h3>
+                                </div>
 
-                        <div class="form-input">
-                            <label for="current_pass">New username:</label>
-                            <input class="form-submit" type="text" name="new_username" size="30" maxlength="256"
-                                   placeholder="New username">
-                        </div>
+                                <div class="form-input">
+                                    <label for="pass">New password:</label>
+                                    <input class="form-submit" type="password" name="pass" size="30" maxlength="256" placeholder="New password"><br>
+                                </div>
 
-                        <br>
-                        <div class="section-header">
-                            <h3 class="section-title">Change password</h3>
-                        </div>
+                                <div class="form-input">
+                                    <label for="pass2">Confirm new password:</label>
+                                    <input class="form-submit" type="password" name="pass2" size="30" maxlength="256"
+                                           placeholder="Confirm new password">
+                                </div>
 
-                        <div class="form-input">
-                            <label for="pass">New password:</label>
-                            <input class="form-submit" type="password" name="pass" size="30" maxlength="256" placeholder="New password"><br>
-                        </div>
+                                <hr>
 
-                        <div class="form-input">
-                            <label for="pass2">Confirm new password:</label>
-                            <input class="form-submit" type="password" name="pass2" size="30" maxlength="256"
-                                   placeholder="Confirm new password">
-                        </div>
-                    </div>
+                                <div class="section-header">
+                                    <h3 class="section-title">Change username</h3>
+                                </div>
 
-                    <hr>
-
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Filtering</h2>
-                        </div>
-
-                        {% if not is_chaziz_sb %}
-                        {% if isUserOver18 %}
-                        <div class="form-submit">
-                            <input type="checkbox" name="rating" id="rating" value="true"
-                                   {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
-                            <label for="rating"> Enable adult content</label><br>
-                        </div>
-
-                        <div class="form-submit">
-                            <input type="checkbox" name="rating" id="rating" value="true">
-                            <label for="rating"> Block profile/upload access from people under 18</label><br>
-                        </div>
-                        {% else %}
-                            <div class="text-danger">
-                                Based on your account's birthdate, access to mature-rated content is restricted.
-                                If you entered an incorrect birthdate, please contact {{ website_branding.name }}
-                                administration.
+                                <div class="form-input">
+                                    <label for="current_pass">New username:</label>
+                                    <input class="form-submit" type="text" name="new_username" size="30" maxlength="256"
+                                           placeholder="New username">
+                                </div>
                             </div>
-                        {% endif %}
-                            <br>
-                        {% endif %}
-
-                        <div class="section-header">
-                            <h3 class="section-title">Blocked tags</h3>
-                        </div>
-
-                        <div class="form-submit">
-                            <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80" wrap="hard">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
-                        </div>
-
-                        <hr>
-
-                        <div class="form-button-container">
-                            <input type="submit" id="upload" name="save" class="button button-primary"
-                                   value="Save">
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="col-6">
+                        <div class="section">
+                            <div class="content-box">
+                                <div class="section-header">
+                                    <h2 class="section-title">Filtering</h2>
+                                </div>
+
+                                {% if not is_chaziz_sb %}
+                                    {% if isUserOver18 %}
+                                        <div class="form-submit">
+                                            <input type="checkbox" name="rating" id="rating" value="true"
+                                                   {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
+                                            <label for="rating"> Enable adult content</label><br>
+                                        </div>
+
+                                        <div class="form-submit">
+                                            <input type="checkbox" name="rating" id="rating" value="true">
+                                            <label for="rating"> Block profile/upload access from people under 18</label><br>
+                                        </div>
+                                    {% else %}
+                                        <div class="text-danger">
+                                            Based on your account's birthdate, access to mature-rated content
+                                            is restricted. If you have entered an incorrect birthdate,
+                                            please contact the {{ website_branding.name }} staff team.
+                                        </div>
+                                    {% endif %}
+                                    <br>
+                                {% endif %}
+
+                                <div class="section-header">
+                                    <h3 class="section-title">Blocked tags</h3>
+                                </div>
+
+                                <div class="form-submit">
+                                    <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80" wrap="hard">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-button-container">
+                    <input type="submit" id="upload" name="save" class="button button-primary"
+                           value="Save">
+                </div>
+            </form>
         </div>
     {% endblock %}
 

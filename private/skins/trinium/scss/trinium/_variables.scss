@@ -9,7 +9,7 @@ $header-link-color: black;
 @if $color-scheme == "dark" {
         $text-color: white;
         $link-color: #2d89e8;
-        $bg-color: #111111;
+        $bg-color: #000;
         $header-link-color: white;
 }
 
@@ -17,7 +17,7 @@ $header-link-color: black;
 $content-box-background-color: #FFF;
 $content-box-border-color: #E0E0E0;
 @if $color-scheme == "dark" {
-        $content-box-background-color: #1a1a1a;
+        $content-box-background-color: #111111;
         $content-box-border-color: #333333;
 }
 
@@ -42,14 +42,6 @@ $color-map: (
         "warning": $yellow,
 );
 
-/*
-  @if $color-scheme == "dark" {
-    background: linear-gradient(to bottom, #333333, #222);
-  } @else {
-    background: linear-gradient(to bottom, #FFFFFF, #F1F1F1);
-  }
-*/
-
 // header/hamburger
 //$header-background: $content-box-background-color;
 
@@ -62,7 +54,7 @@ $header-link-inactive-opacity: 0.75;
 $header-link-active-opacity: 1; // includes hover
 
 @if $color-scheme == "dark" {
-        $header-background: linear-gradient(to bottom, #222222, #111111);
+        $header-background: linear-gradient(to bottom, #171717, #111111);
 }
 
 // forms

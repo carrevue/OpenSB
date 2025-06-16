@@ -8,6 +8,7 @@
   border-bottom: 1px solid $content-box-border-color;
   display: flex;
 
+  // unused, but keep this here.
   &.homepage {
     justify-content: flex-end;
     border-bottom: none;
@@ -45,15 +46,15 @@
   text-align: center;
 
   @include responsive('tiny') {
-    padding: 7px 0;
+    padding: 6px 0;
     flex: 1;
   }
   @include responsive('small') {
-    padding: 7px 18px;
+    padding: 6px 16px;
     flex: none;
   }
   @include responsive('medium') {
-    padding: 7px 18px;
+    padding: 6px 16px;
     flex: none;
   }
 
