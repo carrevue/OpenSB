@@ -22,7 +22,7 @@ class UserData
         } else {
             // otherwise fetch the data from the db
             $this->data = $this->database->fetch(
-                "SELECT id, name, title, customcolor, joined, lastview, powerlevel FROM users WHERE id = ?",
+                "SELECT id, name, title, customcolor, joined, lastview, powerlevel, u_flags FROM users WHERE id = ?",
                 [$id]
             );
         }
@@ -61,6 +61,7 @@ class UserData
                 "joined" => $this->data["joined"],
                 "connected" => $this->data["lastview"],
                 "powerlevel" => $this->data["powerlevel"], // TODO: rename powerlevel to something better
+                "flags" => UserFlags::toArray($this->data["u_flags"]), // stupid i think
             ];
         } else {
             return [

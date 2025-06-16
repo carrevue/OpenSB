@@ -8,6 +8,7 @@ use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\ProfileLayoutEnum;
 use SquareBracket\UploadQuery;
+use SquareBracket\UserColorData;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
@@ -69,7 +70,9 @@ if ($is_own_profile || $auth->isUserAdmin()) {
 $flags = UserFlags::toArray($data["u_flags"]);
 
 if ($flags["profile_customization_enabled"]) {
-    $profile_color_data = $database->fetch("SELECT * FROM user_profile_customization WHERE user = ?", [$data["id"]]);
+    $profile_color_data = new UserColorData($database, $data["id"]);
+} else {
+    $profile_color_data = null;
 }
 
 $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
@@ -95,7 +98,7 @@ $profile_data = [
     "is_staff" => ($data["powerlevel"] > 1),
     "views" => $views,
     "old_usernames" => $old_usernames,
-    "customization" => $profile_color_data ?? false,
+    "customization" => $profile_color_data?->getData() ?? false,
     "ban_data" => $user_ban_data ?? [],
 ];
 

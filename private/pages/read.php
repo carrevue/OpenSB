@@ -6,7 +6,9 @@ global $orange, $twig, $database, $auth;
 
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
+use SquareBracket\UserColorData;
 use SquareBracket\UserData;
+use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
 $id = ($_GET['j'] ?? null);
@@ -29,7 +31,16 @@ if ($orange->isFulpTube() && $data["is_site_news"]) {
 }
 
 $author = new UserData($database, $data["author"]);
+
+$author_userdata_info = $author->getUserArray();
+
 $comments = new CommentData($database, CommentLocation::Journal, $id);
+
+if ($author_userdata_info["flags"]["profile_customization_enabled"]) {
+    $profile_color_data = new UserColorData($database, $data["author"]);
+} else {
+    $profile_color_data = null;
+}
 
 $data = [
     "is_owner" => $owner,
@@ -42,6 +53,7 @@ $data = [
         "info" => $author->getUserArray(),
     ],
     "comments" => $comments->getComments(),
+    "customization" => $profile_color_data?->getData() ?? false,
 ];
 
 echo $twig->render('read_journal.twig', [

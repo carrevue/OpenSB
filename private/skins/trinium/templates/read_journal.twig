@@ -24,7 +24,7 @@
 
 {% block content %}
     <div class="section">
-        <div class="content-box">
+        <div class="content-box highlight-box">
             <div class="profile-box">
                 <div class="profile-box-pfp small">
                     <div class="profile-picture">
@@ -40,11 +40,14 @@
         </div>
     </div>
     <div class="section">
-        <div class="content-box no-border-bottom-rounded">
+        <div class="content-box basic-box no-border-bottom-rounded">
             {{ data.contents | markdown_user_written(true) }}
         </div>
         <div id="comments">
-            <div class="content-box no-border-top">
+            <div class="content-box basic-box no-border-top">
+                <div class="section-header">
+                    <h2 class="section-title">{{ localize('comments') }}</h2>
+                </div>
                 {{ include('/components/_comment_input.twig') }}
                 {% for comment in data.comments %}
                     {{ include('/components/_comment.twig') }}

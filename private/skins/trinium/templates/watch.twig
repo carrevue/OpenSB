@@ -180,14 +180,14 @@
                 </div>
             </div>
             <div class="section">
-                <div class="section-header flex">
-                    <div class="section-header-left">
-                        <h2 class="section-title">Comments</h2>
-                        <div class="section-desc">{{ submission.interactions.comments }}</div>
-                    </div>
-                </div>
                 <div id="comments">
                     <div class="content-box">
+                        <div class="section-header flex">
+                            <div class="section-header-left">
+                                <h2 class="section-title">Comments</h2>
+                                <div class="section-desc">{{ submission.interactions.comments }}</div>
+                            </div>
+                        </div>
                         {{ include('/components/_comment_input.twig') }}
                         {% for comment in submission.comments %}
                             {{ include('/components/_comment.twig') }}

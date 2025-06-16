@@ -39,7 +39,12 @@
             color: {{ data.customization.basic_box_text_color }};
         }
 
-        .content-box.basic-box hr {
+        .content-box.basic-box hr,
+        .content-box.basic-box .content-entry,
+        .content-box.basic-box .comment,
+        .content-box.basic-box .replies,
+        .content-box.basic-box .new-comment,
+        .content-box.basic-box .reply-form {
             border-color: {{ data.customization.basic_box_border_color }};
         }
         {% endif %}
