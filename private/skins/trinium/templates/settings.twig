@@ -92,11 +92,13 @@
                                 <label for="enable_customization"> Enable profile customization</label><br>
                             </div>
 
+                            {#
                             <div>
                                 <div class="banner banner-secondary">
                                     TODO: FONTS (which should be a dropdown menu with hardcoded options)
                                 </div>
                             </div>
+                            #}
 
                             <div class="form-input">
                                 <label for="title_color">Title color:</label>
@@ -108,6 +110,12 @@
                                 <label for="link_color">Link color:</label>
                                 <input name="link_color" id="settings-link-color" type="text" data-coloris
                                        value="{{ profile_color_data.link_color | default('#0033cc') }}">
+                            </div>
+
+                            <div class="form-input">
+                                <label for="background_color">Background color:</label>
+                                <input name="background_color" id="settings-background-color" type="text" data-coloris
+                                       value="{{ profile_color_data.background_color | default('#ffffff') }}">
                             </div>
 
                             <div class="form-input">

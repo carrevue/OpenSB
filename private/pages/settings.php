@@ -212,6 +212,6 @@ if (isset($_POST['save'])) {
 
 echo $twig->render('settings.twig', [
     'isUserOver18' => $auth->isUserOver18(),
-    'flags' => $auth->getUserFlags(),
+    'flags' => $auth->getUserFlags(true),
     'profile_color_data' => $profile_color_data
 ]);
