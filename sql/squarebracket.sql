@@ -52,6 +52,18 @@ CREATE TABLE `journal_comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE IF EXISTS `private_messages`;
+CREATE TABLE `private_messages` (
+  `id` int(11) NOT NULL,
+  `reply_to_id` int(11) DEFAULT NULL,
+  `title` varchar(128) NOT NULL,
+  `contents` text NOT NULL,
+  `author` int(11) NOT NULL,
+  `recipient` int(11) NOT NULL,
+  `date` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+
 DROP TABLE IF EXISTS `suggestions`;
 CREATE TABLE `suggestions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -250,6 +262,23 @@ CREATE TABLE `user_profile_comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE IF EXISTS `user_profile_customization`;
+CREATE TABLE `user_profile_customization` (
+  `user` int(11) NOT NULL,
+  `font` text DEFAULT '',
+  `background_color` varchar(7) NOT NULL DEFAULT '#FFFFFF',
+  `title_color` varchar(7) NOT NULL DEFAULT '#333333',
+  `link_color` varchar(7) NOT NULL DEFAULT '#0033cc',
+  `basic_box_border_color` varchar(7) NOT NULL DEFAULT '#666666',
+  `basic_box_background_color` varchar(7) NOT NULL DEFAULT '#FFFFFF',
+  `basic_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
+  `highlight_box_border_color` varchar(7) NOT NULL DEFAULT '#666666',
+  `highlight_box_background_color` varchar(7) NOT NULL DEFAULT '#E6E6E6',
+  `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
+  PRIMARY KEY (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+
 DROP TABLE IF EXISTS `user_staff_notes`;
 CREATE TABLE `user_staff_notes` (
   `autoint` int(11) NOT NULL AUTO_INCREMENT,
@@ -261,4 +290,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2025-04-19 08:11:25 UTC
+-- 2025-06-18 04:15:25 UTC
