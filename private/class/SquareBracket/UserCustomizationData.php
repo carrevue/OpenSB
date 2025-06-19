@@ -2,7 +2,7 @@
 
 namespace SquareBracket;
 
-class UserColorData
+class UserCustomizationData
 {
     private Database $database;
     private $data;

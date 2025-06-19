@@ -1,8 +1,15 @@
 @use 'sass:math';
 
-.container {
+.container.has-profile-banner {
   &.user, &.read {
     margin-top: -5rem;
+  }
+}
+
+// add margin to make it feel more right.
+.container {
+  &.user, &.read {
+    margin-top: 1em;
   }
 }
 
@@ -40,24 +47,12 @@
 
   .profile-box-info {
     width: 100%;
-    //line-height: 2.25em;
-
     .profile-box-username {
       display: flex;
       gap: 0.25em;
       align-items: center;
-      font-size: 20px;
+      font-size: 1.1em;
       font-weight: 500;
     }
-
-    .profile-box-handle {
-      opacity: 50%;
-    }
-  }
-
-  .profile-box-follow {
-    min-width: 100px;
-    text-align: right;
-    align-self: start;
   }
 }

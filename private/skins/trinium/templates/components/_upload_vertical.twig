@@ -43,7 +43,7 @@
                 {% endif %}
             </a>
             <div class="content-rating">
-                {{ show_ratings(submission.interactions.ratings) }}
+                {{ show_ratings(submission.interactions.ratings ?? []) }}
             </div>
         </div>
         <div class="content-description">

@@ -53,6 +53,10 @@
                     <a class="menu-item-button" href="/edit?v={{ submission.id }}">
                         <span>Edit</span>
                     </a>
+                    <a class="menu-item-button" href="/feature?v={{ submission.id }}"
+                       onclick="return confirm('Are you sure you want to feature this upload?');">
+                        <span>Feature on profile</span>
+                    </a>
                     <a class="menu-item-button" href="/delete?v={{ submission.id }}"
                        onclick="return confirm('Are you sure you want to delete this upload?');">
                         <span>Delete</span>

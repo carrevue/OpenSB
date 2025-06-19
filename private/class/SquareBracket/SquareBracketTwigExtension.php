@@ -310,11 +310,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         $location = '/dynamic/banners/' . $id . '.png';
 
         if (file_exists('..' . $location)) {
-            $data = $location;
+            return $location;
         } else {
-            $data = "/assets/default_banner.svg";
+            //$data = "/assets/default_banner.svg"; this does not look good with profile customization
+            return false;
         }
-        return $data;
     }
 
     // new userlink used on biscuit and trinium

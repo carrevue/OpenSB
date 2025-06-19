@@ -4,6 +4,7 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/private/skins/biscuit" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/private/skins/bootstrap" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/private/skins/cubicle" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/private/skins/finalium" vcs="Git" />
   </component>
 </project>

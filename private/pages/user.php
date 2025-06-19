@@ -7,8 +7,9 @@ global $auth, $database, $twig, $orange;
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\ProfileLayoutEnum;
+use SquareBracket\UploadData;
 use SquareBracket\UploadQuery;
-use SquareBracket\UserColorData;
+use SquareBracket\UserCustomizationData;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
@@ -50,6 +51,60 @@ if ($options["skin"] == "bootstrap" && $options["theme"] == "alpha2") {
     $user_submissions_query_limit = 1;
 }
 
+// TODO: redo this
+function handleFeaturedSubmission($database, $data): false|array
+{
+    global $orange, $auth;
+
+    // handle featured submission
+    // if user hasn't specified anything, then use latest submission, if that doesn't exist, do not bother.
+    $featured_id = $database->fetch("SELECT video_id FROM uploads v WHERE v.id = ?", [$data["featured_submission"]]);
+
+    if ($featured_id == 0 || !$featured_id) {
+        $featured_id = $database->fetch(
+            "SELECT video_id FROM uploads v WHERE v.author = ? ORDER BY v.time DESC", [$data["id"]]);
+        if(!isset($featured_id["video_id"])) {
+            return false;
+        }
+        if ($featured_id == 0) {
+            return false;
+        }
+    }
+
+    $submission = new UploadData($database, $featured_id["video_id"]);
+    $submission_data = $submission->getData();
+    $bools = $submission->getUploadFlagsArray();
+
+    // IF:
+    // * The submission is taken down, and/or
+    // * The submission no longer exists and/or
+    // * The submission's author is not the user whose profile we're looking at and/or
+    // * The submission is not available to guests and the user isn't signed in and/or
+    // * TODO: The submission is privated...
+    // then simply just return false, so we don't show the featured submission.
+    if (
+        $submission->getTakedown()
+        || !$submission_data
+        || ($submission_data["author"] != $data["id"])
+        || ($bools["block_guests"] && !$auth->isUserLoggedIn())
+    )
+    {
+        return false;
+    } else {
+        if ($orange->getLocalOptions()["skin"] == "biscuit") {
+            return [
+                "title" => $submission_data["title"],
+                "id" => $submission_data["video_id"],
+                "type" => $submission_data["post_type"],
+            ];
+        } else {
+            // HACK: we have to use Utilities::makeUploadArray since there is somehow
+            // no standardized way to handle upload arrays.
+            return Utilities::makeUploadArray($database, [0 => $submission_data])[0];
+        }
+    }
+}
+
 $user_submissions = $submission_query->query("v.time desc", $user_submissions_query_limit, "v.author = ?", [$data["id"]]);
 
 $user_journals =
@@ -70,9 +125,9 @@ if ($is_own_profile || $auth->isUserAdmin()) {
 $flags = UserFlags::toArray($data["u_flags"]);
 
 if ($flags["profile_customization_enabled"]) {
-    $profile_color_data = new UserColorData($database, $data["id"]);
+    $profile_customization_data = new UserCustomizationData($database, $data["id"]);
 } else {
-    $profile_color_data = null;
+    $profile_customization_data = null;
 }
 
 $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
@@ -80,6 +135,8 @@ $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["id"]]);
 $followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
+
+$featured_submission = handleFeaturedSubmission($database, $data);
 
 $profile_data = [
     "id" => $data["id"],
@@ -90,6 +147,7 @@ $profile_data = [
     "joined" => $data["joined"],
     "connected" => $data["lastview"],
     "is_current" => $is_own_profile,
+    "featured_submission" => $featured_submission,
     "submissions" => Utilities::makeUploadArray($database, $user_submissions),
     "journals" => Utilities::makeJournalArray($database, $user_journals),
     "comments" => $comments->getComments(),
@@ -98,7 +156,7 @@ $profile_data = [
     "is_staff" => ($data["powerlevel"] > 1),
     "views" => $views,
     "old_usernames" => $old_usernames,
-    "customization" => $profile_color_data?->getData() ?? false,
+    "customization" => $profile_customization_data?->getData() ?? false,
     "ban_data" => $user_ban_data ?? [],
 ];
 

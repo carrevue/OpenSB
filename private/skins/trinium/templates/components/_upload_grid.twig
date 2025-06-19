@@ -10,9 +10,11 @@
     <div class="content-title">
         {{ submission.title }}
     </div>
+    {% if data.username != submission.author.info.username %}
     <div class="content-author">
         {{ user_link(submission.author) }}
     </div>
+    {% endif %}
     <div class="content-rating">
         {{ show_ratings(submission.interactions.ratings) }}
     </div>

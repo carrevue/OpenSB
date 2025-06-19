@@ -48,7 +48,7 @@ class ErrorTemplating
 
         $versionNumber = new VersionNumber;
 
-        $this->twig->addGlobal('is_chaziz_sb', $orange->isDebug());
+        $this->twig->addGlobal('is_chaziz_sb', $orange->isChazizSquareBracketInstance());
         $this->twig->addGlobal('is_fulptube', $orange->isFulpTube());
         $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
         $this->twig->addGlobal('website_branding', $orange->getBrandingSettings());

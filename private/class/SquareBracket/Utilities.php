@@ -19,8 +19,7 @@ class Utilities
 
         $uploadArray = [];
         foreach ($uploads as $upload) {
-
-            $flags = Utilities::uploadBitmaskToArray($upload["flags"]);
+            $flags = UploadFlags::toArray($upload["flags"]);
 
             $ratings = new UploadRatingData($database, $upload["id"]);
 
@@ -157,17 +156,6 @@ class Utilities
         global $orange, $database;
 
         return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $orange->getAuthenticationClass()->getUserID()]);
-    }
-
-    public static function uploadBitmaskToArray($bitmask): array
-    {
-        return [
-            "featured" => (bool)($bitmask & 1),
-            "unprocessed" => (bool)($bitmask & 2),
-            "block_guests" => (bool)($bitmask & 4),
-            "block_comments" => (bool)($bitmask & 8),
-            "custom_thumbnail" => (bool)($bitmask & 16),
-        ];
     }
 
     /**
