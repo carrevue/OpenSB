@@ -15,11 +15,15 @@ if (!$orange->isDebug()) {
 }
 
 if (isset($_POST["submit"])) {
-    Utilities::notifyUser($database,
-        $_POST["user_id"],
-        $_POST["location_id"],
-        $_POST["related_id"],
-        NotificationEnum::from($_POST["notification_type"]));
+    try {
+        Utilities::notifyUser($database,
+            $_POST["user_id"],
+            $_POST["location_id"],
+            $_POST["related_id"],
+            NotificationEnum::from($_POST["notification_type"]));
+    } catch (\Exception $e) {
+        die("You must login.");
+    }
 }
 
 ?>

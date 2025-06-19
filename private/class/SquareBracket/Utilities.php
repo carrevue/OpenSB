@@ -3,7 +3,7 @@
 namespace SquareBracket;
 
 use DateTime;
-
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use Random\Randomizer;
 
@@ -113,16 +113,6 @@ class Utilities
         return implode(' AND ', $conditions);
     }
 
-    // TODO: This should probably be an enum class.
-    public static function ratingToNumber($rating): int
-    {
-        return match ($rating) {
-            'general' => 0,
-            'questionable' => 1, // completely unused
-            'mature' => 2,
-        };
-    }
-
     /**
      * Not to be confused with notifyBanner, which makes a banner.
      */
@@ -131,7 +121,7 @@ class Utilities
         global $orange, $database;
 
         if (!$orange->getAuthenticationClass()->isUserLoggedIn()) {
-            throw new \Exception("NotifyUser should not be called if the current user is logged off.");
+            throw new Exception("NotifyUser should not be called if the current user is logged off.");
         }
 
         $dontNotify = false;
@@ -243,7 +233,10 @@ class Utilities
         }
     }
 
-    public static function calculateAge($birthdate)
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function calculateAge($birthdate): int
     {
         $birthDate = new DateTime($birthdate);
         $today = new DateTime('now');
@@ -251,7 +244,10 @@ class Utilities
         return $interval->y;
     }
 
-    public static function calculateAgeFrom($birthdate, $date)
+    /**
+     * @throws \DateMalformedStringException
+     */
+    public static function calculateAgeFrom($birthdate, $date): int
     {
         $birthDate = new DateTime($birthdate);
         $date_fuck = new DateTime();
@@ -285,26 +281,14 @@ class Utilities
             $qty = substr($value, 0, $value_length - 1);
             $unit = strtolower(substr($value, $value_length - 1));
 
-            switch ($unit) {
-                case 'k':
-                    $bytes = $qty * 1024;
-                    break;
-                case 'm':
-                    $bytes = $qty * 1048576; // 1024^2
-                    break;
-                case 'g':
-                    $bytes = $qty * 1073741824; // 1024^3
-                    break;
-                case 't':
-                    $bytes = $qty * 1099511627776; // 1024^4
-                    break;
-                case 'p':
-                    $bytes = $qty * 1125899906842624; // 1024^5
-                    break;
-                default:
-                    $bytes = $value;
-                    break;
-            }
+            $bytes = match ($unit) {
+                'k' => $qty * 1024,
+                'm' => $qty * 1048576,
+                'g' => $qty * 1073741824,
+                't' => $qty * 1099511627776,
+                'p' => $qty * 1125899906842624,
+                default => $value,
+            };
         }
 
         $sz = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
@@ -385,7 +369,7 @@ class Utilities
         return $output;
     }
 
-    public static function logOutUser() {
+    #[NoReturn] public static function logOutUser() {
         session_destroy();
         Utilities::redirect('./');
     }

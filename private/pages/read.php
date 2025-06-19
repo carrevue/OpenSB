@@ -8,7 +8,6 @@ use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\UserCustomizationData;
 use SquareBracket\UserData;
-use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
 $id = ($_GET['j'] ?? null);

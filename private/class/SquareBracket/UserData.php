@@ -4,13 +4,13 @@ namespace SquareBracket;
 
 class UserData
 {
-    private \SquareBracket\Database $database;
+    private Database $database;
     private $id;
     private $data;
 
     private static $userDataCache = [];
 
-    public function __construct(\SquareBracket\Database $database, $id)
+    public function __construct(Database $database, $id)
     {
         $this->database = $database;
         $this->id = $id;

@@ -20,15 +20,18 @@ if (strlen($_POST["comment"]) > 1000) {
 // apparantly this wasnt a thing in the legacy api? oops -chaziz 4/20/2025
 if (!$orange->isDebug()) {
     $timeLimit = time() - 15;
-    if ($database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
-        $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
-        $database->result("SELECT COUNT(*) FROM journal_comments WHERE date > ? AND author = ?", [$timeLimit, $userId])
+    if ($database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $auth->getUserID()]) ||
+        $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $auth->getUserID()]) ||
+        $database->result("SELECT COUNT(*) FROM journal_comments WHERE date > ? AND author = ?", [$timeLimit, $auth->getUserID()])
     ) {
         die("Please wait at least 15 seconds before commenting again.");
     }
 }
 
 $type = 0;
+
+$id = "";
+$reply_to = 0;
 
 if (isset($_POST['really'])) {
     switch ($_POST['type']) {

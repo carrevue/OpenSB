@@ -6,7 +6,6 @@ global $auth, $database, $twig, $orange;
 
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
-use SquareBracket\ProfileLayoutEnum;
 use SquareBracket\UploadData;
 use SquareBracket\UploadQuery;
 use SquareBracket\UserCustomizationData;

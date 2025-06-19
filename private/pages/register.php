@@ -4,7 +4,9 @@ namespace OpenSB;
 
 global $orange, $twig, $database;
 
+use DateMalformedStringException;
 use DateTime;
+use Random\RandomException;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
@@ -77,7 +79,7 @@ if (isset($_POST['registersubmit'])) {
 
     try {
         $dobDateTime = new DateTime($birthdate);
-    } catch (\DateMalformedStringException $e) {
+    } catch (DateMalformedStringException $e) {
         $error .= "You have an invalid birth date. ";
     } finally {
         $currentDate = new DateTime();
@@ -107,7 +109,12 @@ if (isset($_POST['registersubmit'])) {
             $flags |= UserFlags::FLAG_FULPTUBE_ACCOUNT->value;
         }
 
-        $token = bin2hex(random_bytes(32));
+        try {
+            $token = bin2hex(random_bytes(32));
+        } catch (RandomException $e) {
+            Utilities::notifyBanner("An error occurred while generating your token. Please try again.", "/register");
+        }
+
         $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
         $database->query("INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate, u_flags)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",

@@ -11,28 +11,12 @@ $submission_query = new UploadQuery($database);
 
 function getOrderFromType($type): string
 {
-    switch ($type) {
-        case 'recent':
-            $order = "v.time DESC";
-            break;
-        case 'popular':
-            $order = "views DESC";
-            break;
-            /*
-        case 'discussed':
-            $order = "comments";
-            break;
-        case 'favorited':
-            $order = "favorites";
-            break;
-            */
-        case 'random':
-            $order = "RAND()";
-            break;
-        default:
-            $order = "v.time DESC";
-            break;
-    }
+    $order = match ($type) {
+        'recent' => "v.time DESC",
+        'popular' => "views DESC",
+        'random' => "RAND()",
+        default => "v.time DESC",
+    };
     return $order;
 }
 

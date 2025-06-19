@@ -29,7 +29,7 @@ function follow($member): array
 
     if ($member == $auth->getUserID()) {
         return [
-            "error" => "User attempting to follow themself."
+            "error" => "You cannot follow yourself."
         ];
     }
 
@@ -63,7 +63,7 @@ if (isset($post_data['member'])) {
         $apiOutput = match ($post_data['action']) {
             'follow' => follow($post_data['member']),
             default => [
-                "error" => "This interaction type is invalid or has not yet been implemented."
+                "error" => "This interaction type is invalid or unimplemented."
             ],
         };
     }

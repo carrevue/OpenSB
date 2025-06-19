@@ -4,6 +4,7 @@ namespace OpenSB;
 
 global $orange, $twig, $auth, $database;
 
+use Random\RandomException;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
@@ -75,8 +76,14 @@ if (isset($_POST['save'])) {
     if ($currentPass && $pass && $pass2) {
         if (password_verify($currentPass, $password)) {
             if ($pass == $pass2) {
+                try {
+                    $new_token = bin2hex(random_bytes(32));
+                } catch (RandomException $e) {
+                    Utilities::notifyBanner("An error occurred while generating your token. Please try again.", "/settings");
+                }
+
                 $database->query("UPDATE users SET password = ?, token = ? WHERE id = ?",
-                    [password_hash($pass, PASSWORD_DEFAULT), bin2hex(random_bytes(32)), $auth->getUserID()]);
+                    [password_hash($pass, PASSWORD_DEFAULT), $new_token, $auth->getUserID()]);
 
                 Utilities::notifyBanner("Your password has been changed.", "/login");
             } else {

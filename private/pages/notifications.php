@@ -10,9 +10,10 @@ use SquareBracket\Utilities;
 
 function typeToIntro($type)
 {
-    $intro = NotificationEnum::from($type)->name . " Intro";
-
     switch (NotificationEnum::from($type)) {
+        default:
+            $intro = NotificationEnum::from($type)->name . " Intro";
+            break;
         case NotificationEnum::CommentProfile:
         case NotificationEnum::CommentJournal:
         case NotificationEnum::CommentUpload:

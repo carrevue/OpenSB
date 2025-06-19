@@ -2,6 +2,7 @@
 
 namespace SquareBracket;
 
+use Exception;
 use Parsedown;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -244,10 +245,13 @@ class SquareBracketTwigExtension extends AbstractExtension
         return 'just now';
     }
 
+    /**
+     * @throws Exception
+     */
     public function submissionView($submission_data)
     {
         if (!$submission_data) {
-            throw new \Exception('SubmissionView is null', 500);
+            throw new Exception('SubmissionView is missing data!');
         }
         if ($submission_data["type"] == 0) {
             echo $this->twig->render("player.twig", ['submission' => $submission_data]);

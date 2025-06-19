@@ -4,6 +4,7 @@ namespace OpenSB;
 
 global $twig, $database, $auth, $orange;
 
+use DateMalformedStringException;
 use DateTime;
 use SquareBracket\Utilities;
 
@@ -28,8 +29,7 @@ if ($orange->getLocalOptions()["skin"] != "trinium") {
         'samesite' => 'Lax'
     ]);
 
-    header(sprintf('Location: /verify_birthdate'));
-    die();
+    Utilities::redirect("/verify_birthdate");
 }
 
 if (isset($_POST['birthdatesubmit'])) {
@@ -37,7 +37,7 @@ if (isset($_POST['birthdatesubmit'])) {
 
     try {
         $dobDateTime = new DateTime($birthdate);
-    } catch (\DateMalformedStringException $e) {
+    } catch (DateMalformedStringException $e) {
         Utilities::notifyBanner("Failed to process birthdate, please verify again.", "/verify_birthdate");
     }
 

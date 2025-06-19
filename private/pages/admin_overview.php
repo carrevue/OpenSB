@@ -149,11 +149,7 @@ if (file_exists('/etc/os-release')) {
         $os_data[$key] = trim($value, '"');
     }
 
-    if (isset($os_data['PRETTY_NAME'])) {
-        $os_name = $os_data['PRETTY_NAME'];
-    } else {
-        $os_name = null;
-    }
+    $os_name = $os_data['PRETTY_NAME'] ?? null;
 } else {
     $os_name = null;
 }

@@ -2,12 +2,12 @@
 
 namespace SquareBracket;
 
+use Exception;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extension\DebugExtension;
-use Twig\Extra\String\StringExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
@@ -17,7 +17,7 @@ class ErrorTemplating
     private Environment $twig;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(SquareBracket $orange)
     {
@@ -33,7 +33,7 @@ class ErrorTemplating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            throw new \Exception("The error skin does not exist.");
+            throw new Exception("The error skin does not exist.");
         }
 
         $this->twig = new Environment($this->loader, ['debug' => $orange->isDebug(), 'cache' => false]);

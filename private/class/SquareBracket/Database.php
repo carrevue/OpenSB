@@ -2,8 +2,8 @@
 
 namespace SquareBracket;
 
+use Exception;
 use PDO;
-use PDOException;
 
 /**
  * PDO interface(?).
@@ -15,7 +15,7 @@ class Database
     private $profilingEnabled = false;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($host, $user, $pass, $db)
     {

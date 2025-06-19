@@ -46,7 +46,7 @@ class Profiler
 
         printf("Rendered in %1.6fs with %dKB memory used and a total of %s database queries. %s.",
             microtime(true) - $this->starttime,
-            memory_get_usage(false) / 1024,
+            memory_get_usage() / 1024,
             $this->database_profiling_report["total_queries"],
             $this->whoAmI());
     }

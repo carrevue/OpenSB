@@ -9,6 +9,7 @@ use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\UploadData;
 use SquareBracket\UploadQuery;
+use SquareBracket\UploadRatingEnum;
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
@@ -71,7 +72,11 @@ if ($flags["block_guests"] && !$auth->isUserLoggedIn())
     Utilities::notifyBanner("Please login to view this upload.", "/login");
 }
 
-if (Utilities::ratingToNumber($data["rating"]) > Utilities::ratingToNumber($auth->getUserData()["comfortable_rating"])) {
+// this is awkward
+$upload_rating = UploadRatingEnum::fromString($data["rating"]);
+$comfortable_rating = UploadRatingEnum::fromString($auth->getUserData()["comfortable_rating"]);
+
+if ($upload_rating->value > $comfortable_rating->value) {
     Utilities::notifyBanner("Access to mature-rated uploads is restricted.", "/");
 }
 

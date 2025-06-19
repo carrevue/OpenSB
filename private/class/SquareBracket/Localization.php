@@ -3,6 +3,7 @@
 namespace SquareBracket;
 
 use Arokettu\Pseudolocale\Pseudolocale;
+use Exception;
 
 class Localization {
     protected mixed $locale;
@@ -10,13 +11,16 @@ class Localization {
     protected array $messages_fallback = [];
     private bool $isPsuedo = false;
 
+    /**
+     * @throws Exception
+     */
     public function __construct($locale = 'en-US') {
         $this->locale = $locale;
         $this->loadLocalizationData();
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function loadLocalizationData(): void
     {
@@ -40,7 +44,7 @@ class Localization {
                 $json = file_get_contents($file_fallback);
                 $this->messages_fallback = json_decode($json, true);
             } else {
-                throw new \Exception("The default en-US locale is missing.");
+                throw new Exception("The default en-US locale is missing.");
             }
         }
     }

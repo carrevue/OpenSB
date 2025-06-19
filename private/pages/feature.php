@@ -11,6 +11,7 @@ global $database, $auth;
 
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025
 
+use SquareBracket\UploadData;
 use SquareBracket\Utilities;
 
 $id = ($_GET['v'] ?? null);
@@ -20,7 +21,7 @@ if (!$auth->isUserLoggedIn())
     Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
-$submission = new \SquareBracket\UploadData($database, $id);
+$submission = new UploadData($database, $id);
 
 if (!$id) {
     Utilities::notifyBanner("You have not specified the upload.", "/");

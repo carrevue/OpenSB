@@ -5,7 +5,6 @@ namespace OpenSB;
 global $database;
 
 use SquareBracket\UploadQuery;
-use SquareBracket\UserData;
 
 header('Content-Type: application/json');
 
