@@ -19,7 +19,15 @@ if ($orange->getLocalOptions()["skin"] != "trinium") {
     $options["skin"] = "trinium";
 
     $options["theme"] = "default";
-    setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);
+
+    setcookie("SBOPTIONS", base64_encode(json_encode($options)), [
+        'expires' => 2147483647,
+        'path' => '/',
+        'secure' => isset($_SERVER['HTTPS']),
+        'httponly' => false,
+        'samesite' => 'Lax'
+    ]);
+
     header(sprintf('Location: /verify_birthdate'));
     die();
 }

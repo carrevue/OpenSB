@@ -95,10 +95,22 @@ class SquareBracket {
             // the charla frontend is now called trinium
             if ($this->options["skin"] == "charla") {
                 $this->options["skin"] = "trinium";
-                setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);
+                setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), [
+                    'expires' => 2147483647,
+                    'path' => '/',
+                    'secure' => isset($_SERVER['HTTPS']),
+                    'httponly' => false,
+                    'samesite' => 'Lax'
+                ]);
             }
         } else {
-            setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), 2147483647);
+            setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), [
+                'expires' => 2147483647,
+                'path' => '/',
+                'secure' => isset($_SERVER['HTTPS']),
+                'httponly' => false,
+                'samesite' => 'Lax'
+            ]);
         }
 
         if (isset($_COOKIE["SBACCOUNTS"])) {

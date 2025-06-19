@@ -49,7 +49,13 @@ if (isset($_POST['apply'])) {
 
     $options["locale"] = $_POST['locale'];
 
-    setcookie("SBOPTIONS", base64_encode(json_encode($options)), 2147483647);
+    setcookie("SBOPTIONS", base64_encode(json_encode($options)), [
+        'expires' => 2147483647,
+        'path' => '/',
+        'secure' => isset($_SERVER['HTTPS']),
+        'httponly' => false,
+        'samesite' => 'Lax'
+    ]);
 
     Utilities::notifyBanner("Successfully changed your settings.", "/", "success");
 }
