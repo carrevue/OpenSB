@@ -56,7 +56,7 @@ function last_resort(): void
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
 }
 
-$uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$uri = parse_url(rawurldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
 $path = explode('/', $uri);
 
 // testing code
