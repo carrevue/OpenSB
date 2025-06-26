@@ -11,8 +11,15 @@
         {% set logo = website_branding.assets_location ~ '/logo.png' %}
     {% endif %}
 {% endif %}
+
+{% if actually_show_sidebar %}
+{% set header_container_class_name = "header-container-new" %}
+{% else %}
+{% set header_container_class_name = "header-container" %}
+{% endif %}
+
 <div class="header">
-    <div class="header-container {% if not is_user_logged_in %}logged-out{% endif %}">
+    <div class="{{ header_container_class_name }} {% if not is_user_logged_in %}logged-out{% endif %}">
         <div class="header-button">
             <div class="button button-secondary button-hamburger button-transparent" id="button-hamburger">
                 <i class="biscuit-icon hamburger size-32"></i>

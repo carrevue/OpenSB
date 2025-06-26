@@ -34,7 +34,29 @@
   }
 }
 
-.hamburger-list, .homepage-list {
+.col-sidebar {
+  @include responsive('tiny') {
+    display: none;
+  }
+  @include responsive('small') {
+    display: none;
+  }
+  @include responsive('medium') {
+    display: block;
+    width: 250px;
+  }
+  @include responsive('large') {
+    display: block;
+    width: 300px;
+  }
+}
+
+.grid-sidebar {
+  position: sticky;
+  top: 58px;
+}
+
+.hamburger-list, .sidebar-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -76,4 +98,9 @@
       }
     }
   }
+}
+
+.sidebar-following-users {
+  @include scrollbar();
+  max-height: 400px;
 }

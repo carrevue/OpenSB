@@ -83,6 +83,12 @@
     {% block style %}
     {% endblock %}
 </head>
+
+{# temporary #}
+{% if show_sidebar or not options.trinium_new_shit %}
+    {% set actually_show_sidebar = true %}
+{% endif %}
+
 <body>
 {% if is_debug %}
     {{ include(component('debug_dialog')) }}
@@ -108,13 +114,13 @@
     <div class="page-contents">
         <div class="container {{ page_name }} {% if banner_picture %}has-profile-banner{% endif %}">
             {{ include(component('banners')) }}
-            {% if not show_sidebar or not options.trinium_new_shit %}
+            {% if not actually_show_sidebar %}
                 {% block content %}{% endblock %}
-            {% elseif show_sidebar and options.trinium_new_shit %}
+            {% else %}
                 <div class="grid no-gap">
-                    <div class="col-3">
-                        <div class="grid-homepage">
-                            <ul class="homepage-list">
+                    <div class="col-sidebar">
+                        <div class="grid-sidebar">
+                            <ul class="sidebar-list">
                                 {% for link in header_main_links() %}
                                     <li class="hamburger-link">
                                         <a href="{{ link.url }}">{{ link.name }}</a>
@@ -122,7 +128,7 @@
                                 {% endfor %}
                             </ul>
                             <hr>
-                            <ul class="homepage-list">
+                            <ul class="sidebar-list sidebar-following-users">
                                 {% for link in sidebar_following_users() %}
                                     <li class="hamburger-link">
                                         <a href="/user/{{ link.username }}">
@@ -137,7 +143,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-9">
+                    <div class="col-11">
                         {{ block('content') }}
                     </div>
                 </div>

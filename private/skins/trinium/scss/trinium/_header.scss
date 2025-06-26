@@ -9,6 +9,38 @@
     width: 100%;
   }
 
+  .header-container-new {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    @include responsive('tiny') {
+      margin: 0 1rem;
+      width: 100%;
+    }
+    @include responsive('small') {
+      margin: 0 1rem;
+      width: 100%;
+    }
+    @include responsive('medium') {
+      margin: auto;
+      @include maxwidths();
+    }
+
+    .header-button {
+      @include responsive('tiny') {
+        display: block;
+      }
+      @include responsive('small') {
+        display: block;
+      }
+      @include responsive('medium') {
+        display: none;
+      }
+    }
+  }
+
   position: sticky;
   top: 0;
   z-index: 2000;
