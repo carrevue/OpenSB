@@ -23,6 +23,10 @@ if ($auth->getUserID() != $data["author"]) {
     Utilities::notifyBanner("This is not your upload.", "/");
 }
 
+if ($auth->getUserFlags(true)["funniest_shit_ever"]) {
+    Utilities::notifyBanner("Dum as 😂😂😂😂😂😂😂😂😂😂😂😂😂👎👎👎👎👎👎👎👎👎", "/");
+}
+
 $database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["time"], time()]);
 $database->query("DELETE FROM uploads WHERE video_id = ?", [$id]);
 
