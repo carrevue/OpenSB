@@ -111,7 +111,7 @@ if (isset($_POST['registersubmit'])) {
 
         try {
             $token = bin2hex(random_bytes(32));
-        } catch (RandomException $e) {
+        } catch (RandomException) {
             Utilities::notifyBanner("An error occurred while generating your token. Please try again.", "/register");
         }
 

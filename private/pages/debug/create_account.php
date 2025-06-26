@@ -2,11 +2,56 @@
 
 namespace OpenSB;
 
-global $orange;
+global $orange, $database;
+
+use DateMalformedStringException;
+use DateTime;
+use Random\RandomException;
+use SquareBracket\Utilities;
 
 if (!$orange->isDebug()) {
     http_response_code(403);
     die();
+}
+
+if (isset($_POST["submit"])) {
+    // dont validate shit (except already taken names and birthdates)
+
+    $username = trim($_POST['name'] ?? '');
+    $email = $_POST['email'] ?? ''; //filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $pass = $_POST['password'] ?? ''; //$pass2 = $_POST['pass2'] ?? '';
+    $title = trim($_POST['title']) === '' ? $username : $_POST['title'];
+    $birthdate = $_POST['birthdate'] ?? '';
+
+    // ok now process the shit
+    try {
+        $token = bin2hex(random_bytes(32));
+    } catch (RandomException $e) {
+       die("An error occurred while generating your token.");
+    }
+
+    if ($database->fetch("SELECT COUNT(*) FROM user_old_names WHERE old_name = ?", [$username])["COUNT(*)"] >= 1) {
+        die("Username already taken");
+    }
+
+    try {
+        $dobDateTime = new DateTime($birthdate);
+    } catch (DateMalformedStringException) {
+        die("Malformed birthdate");
+    } finally {
+        $currentDate = new DateTime();
+
+        $age = $currentDate->diff($dobDateTime)->y;
+
+        if ($age < 13) {
+            die("Under 13 birthdate");
+        }
+    }
+
+    $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
+    $database->query("INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [$username, $hashedPassword, $token, time(), time(), $username, $email, "ip", $dobDateTime->format('Y-m-d')]);
 }
 ?>
 <h1>Create account</h1>
@@ -26,29 +71,8 @@ if (!$orange->isDebug()) {
         <input type="text" id="title" name="title"><br><br>
 
         <label for="birthdate">Birthdate:</label>
-        <input type="date" id="birthdate" name="birthdate"><br><br>
-    </fieldset>
-    
-    <fieldset>
-        <legend>Profile Settings</legend>
-        <label for="about">Description</label><br>
-        <textarea id="about" name="about" rows="4" cols="50"></textarea><br><br>
-
-        <label for="customcolor">Profile Color:</label>
-        <input type="color" id="customcolor" name="customcolor" value="#523bb8"><br><br>
-
-        <label>Sensitive rating option:</label>
-        <select id="comfortable_rating" name="comfortable_rating">
-            <option value="general">General</option>
-            <option value="mature">Mature</option>
-        </select>
-        <br>
-        <smalL><span>Setting this option to Mature on Chaziz mode will have it fallback to General.</span></smalL>
-        <br><br>
-
-        <label for="blacklisted_tags">Blacklisted Tags (comma separated):</label><br>
-        <textarea id="blacklisted_tags" name="blacklisted_tags" rows="4" cols="50"></textarea><br><br>
+        <input type="date" id="birthdate" name="birthdate">
     </fieldset>
 
-    <input type="submit" value="Register">
+    <input type="submit" name="submit" value="Register">
 </form>

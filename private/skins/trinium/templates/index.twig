@@ -41,59 +41,61 @@
 {% endblock %}
 
 {% block precontent %}
-    <div class="jumbotron page-banner homepage">
-        <div class="jumbotron-container {{ jumbotronClassName }}">
-            <div class="jumbotron-welcome">
-                {% if is_user_logged_in %}
-                    <div class="profile-picture">
-                        <img src="{{ profile_picture(user_data.name) }}" class="pfp" alt="{{ user_data.name }}">
-                    </div>
-                    <div class="jumbotron-logged-in-text">
-                        <h1>{{ localize('welcome_logged_in', user_data.title) }}</h1>
-                        <div>@{{ user_data.name }} • {{ user_stat_data.followers }} follower{{ pluralSubscribers }}
-                            • {{  user_stat_data.views }} view{{ pluralViews }}</div>
-                    </div>
-                {% else %}
-                    <h1>{{ localize('welcome_logged_out', website_branding.name) }}</h1>
-                    {% if is_chaziz_sb %}
-                        <p>Your content, your narration, your niche on the web.</p>
+    {% if not options.trinium_new_shit %}
+        <div class="jumbotron page-banner homepage">
+            <div class="jumbotron-container {{ jumbotronClassName }}">
+                <div class="jumbotron-welcome">
+                    {% if is_user_logged_in %}
+                        <div class="profile-picture">
+                            <img src="{{ profile_picture(user_data.name) }}" class="pfp" alt="{{ user_data.name }}">
+                        </div>
+                        <div class="jumbotron-logged-in-text">
+                            <h1>{{ localize('welcome_logged_in', user_data.title) }}</h1>
+                            <div>@{{ user_data.name }} • {{ user_stat_data.followers }} follower{{ pluralSubscribers }}
+                                • {{  user_stat_data.views }} view{{ pluralViews }}</div>
+                        </div>
+                    {% else %}
+                        <h1>{{ localize('welcome_logged_out', website_branding.name) }}</h1>
+                        {% if is_chaziz_sb %}
+                            <p>Your content, your narration, your niche on the web.</p>
+                        {% endif %}
+                        <div class="jumbotron-get-started">
+                            <a href="/register" class="button button-warning">Get started</a>
+                            <span>← It's free!</span>
+                        </div>
                     {% endif %}
-                    <div class="jumbotron-get-started">
-                        <a href="/register" class="button button-warning">Get started</a>
-                        <span>← It's free!</span>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="jumbotron-right-container">
-                <div class="jumbotron-right-date">
-                    {{ "now"|date("F jS Y") }}
                 </div>
-                {% if not empty_instance and options.trinium_index_enable_jumbotron_tabs %}
-                <div class="jumbotron-right-buttons">
-                    <div class="tabs homepage">
-                        <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
-                            <div class="biscuit-icon homepage-list {% if type=='list' %}active{% endif %} size-24"></div>
-                        </div>
-                        <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
-                            <div class="biscuit-icon homepage-grid {% if type=='grid' %}active{% endif %} size-24"></div>
-                        </div>
+                <div class="jumbotron-right-container">
+                    <div class="jumbotron-right-date">
+                        {{ "now"|date("F jS Y") }}
                     </div>
+                    {% if not empty_instance and options.trinium_index_enable_jumbotron_tabs %}
+                        <div class="jumbotron-right-buttons">
+                            <div class="tabs homepage">
+                                <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
+                                    <div class="biscuit-icon homepage-list {% if type=='list' %}active{% endif %} size-24"></div>
+                                </div>
+                                <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
+                                    <div class="biscuit-icon homepage-grid {% if type=='grid' %}active{% endif %} size-24"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
-                {% endif %}
             </div>
         </div>
-    </div>
-    {% if not empty_instance and not options.trinium_index_enable_jumbotron_tabs %}
-    <div class="navigation-bar">
-        <a class="navigation-bar-button {% if type=='list' %}active{% endif %}" id="index-list-button">
-            <div class="biscuit-icon homepage-list size-24"></div>
-            {{ localize("list") }}
-        </a>
-        <a class="navigation-bar-button {% if type=='grid' %}active{% endif %}" id="index-grid-button">
-            <div class="biscuit-icon homepage-grid size-24"></div>
-            {{ localize("grid") }}
-        </a>
-    </div>
+        {% if not empty_instance and not options.trinium_index_enable_jumbotron_tabs %}
+            <div class="navigation-bar">
+                <a class="navigation-bar-button {% if type=='list' %}active{% endif %}" id="index-list-button">
+                    <div class="biscuit-icon homepage-list size-24"></div>
+                    {{ localize("list") }}
+                </a>
+                <a class="navigation-bar-button {% if type=='grid' %}active{% endif %}" id="index-grid-button">
+                    <div class="biscuit-icon homepage-grid size-24"></div>
+                    {{ localize("grid") }}
+                </a>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -102,11 +104,11 @@
         <div class="banner banner-secondary">
             This instance is currently empty.
         </div>
+    {% elseif type == "grid" %}
+        {{ include('/components/_index_grid.twig') }}
+    {% elseif options.trinium_new_shit %}
+        {{ include('/components/_index_new.twig') }}
     {% else %}
-        {% if type == "grid" %}
-            {{ include('/components/_index_grid.twig') }}
-        {% else %}
-            {{ include('/components/_index_list.twig') }}
-        {% endif %}
+        {{ include('/components/_index_list.twig') }}
     {% endif %}
 {% endblock %}
