@@ -30,7 +30,7 @@ if ($options["skin"] == "biscuit" || $options["skin"] == "trinium") {
     $submissions_recent_query_limit = 12;
 }
 
-$submissions_featured_query_limit = 3;
+$submissions_featured_query_limit = 4;
 
 if ($options["skin"] == "bootstrap") {
     // bootstrap frontend did not list random uploads.

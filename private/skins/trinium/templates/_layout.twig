@@ -85,7 +85,7 @@
 </head>
 
 {# temporary #}
-{% if show_sidebar or not options.trinium_new_shit %}
+{% if show_sidebar and options.trinium_new_shit %}
     {% set actually_show_sidebar = true %}
 {% endif %}
 
