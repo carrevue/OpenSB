@@ -15,6 +15,8 @@ class UploadQuery
     }
 
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false) {
+        global $auth;
+
         $query = "SELECT v.* FROM uploads v";
         $whereClauses = [];
 
@@ -23,6 +25,12 @@ class UploadQuery
             $whereClauses[] = "v.video_id NOT IN (SELECT submission FROM upload_takedowns)";
             // if upload does not belong to someone who has been banned
             $whereClauses[] = "v.author NOT IN (SELECT userid FROM user_bans)";
+        }
+
+        if (!$auth->isUserLoggedIn()) {
+            $blocked_guest_flag = UploadFlags::FLAG_BLOCK_GUESTS->value;
+
+            $whereClauses[] = "v.flags & $blocked_guest_flag != $blocked_guest_flag";
         }
 
         if (!empty($whereCondition)) {
