@@ -94,7 +94,11 @@
         {% if type == "grid" %}
             {{ include('/components/_index_grid.twig') }}
         {% else %}
-            {{ include('/components/_index_list.twig') }}
+            {% if options.trinium_new_shit %}
+                {{ include('/components/_index_new.twig') }}
+            {% else %}
+                {{ include('/components/_index_list.twig') }}
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

@@ -1,0 +1,23 @@
+{% set combined =
+    data.submissions_new|map(item => item|merge({ kind: 'upload' }))
+    | merge(
+    data.news_recent|map(item => item|merge({ kind: 'post' }))
+)
+    | sort((a, b) => a.published <=> b.published)
+    | reverse
+    | slice(0, 12)
+%}
+
+{% if combined %}
+    <div class="section">
+        <div class="content-box">
+            {% for shit in combined %}
+                {% if shit.kind == 'upload' %}
+                    {% include('/components/_upload_vertical.twig') with {'submission': shit} %}
+                {% elseif shit.kind == 'post' %}
+                    {% include('/components/_journal.twig') with {'journal': shit} %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
