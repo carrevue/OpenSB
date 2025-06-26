@@ -55,6 +55,9 @@ function parse_tags($tags, $upload_id, $database) {
     // parse tags from input
     $tagsID = [];
     foreach ($tags as $tag) {
+        // remove hashtags from tags.
+        $tag = preg_replace('/#(\w+)/', '$1', $tag);
+
         $tagId = $database->result("SELECT tag_id FROM upload_tag_meta WHERE name = ?", [$tag]);
 
         if ($tagId === false) {
