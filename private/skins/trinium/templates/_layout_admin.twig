@@ -22,14 +22,16 @@
 </div>
 {% endblock %}
 
-	{% block content %}
-        <div class="section">
-            <div class="section-header">
-                <h1 class="section-title">{{ title }}</h1>
-            </div>
+{% block content %}
+    <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">
+                {{ title }}
+            </h1>
         </div>
-        <div class="content-box">
+    </div>
+    <div class="content-box">
         {% block admincontent %}
         {% endblock %}
-        </div>
-    {% endblock %}
+    </div>
+{% endblock %}

@@ -83,7 +83,7 @@ class Templating
         $this->loader->addPath('skins/common/');
         $this->twig = new Environment($this->loader, ['debug' => $orange->isDebug(), 'cache' => $doCache]);
 
-        $this->twig->addFunction(new TwigFunction('component', function($component) use ($templatePath) {
+        $this->twig->addFunction(new TwigFunction('component', function ($component) use ($templatePath) {
             $path = '/components/' . $this->theme . '/' . $component . '.twig';
             $path_default = '/components/default/' . $component . '.twig';
             $path_common = 'skins/common/' . $component . '.twig';
@@ -105,7 +105,7 @@ class Templating
         if ($orange->isDebug()) {
             $this->twig->addExtension(new DebugExtension());
         } else {
-            $this->twig->addFunction(new TwigFunction('dump', function() {
+            $this->twig->addFunction(new TwigFunction('dump', function () {
                 trigger_error("Twig dump function called outside of debug mode!", E_USER_WARNING);
                 return "This function is not available outside of debug mode.";
             }));
@@ -227,7 +227,7 @@ class Templating
         $isDebug = $this->orange->isDebug();
 
         $skins = [];
-        foreach($this->getAllSkins() as $skin) {
+        foreach ($this->getAllSkins() as $skin) {
             $metadata = $this->getSkinMetadata($skin);
             $site = $metadata["metadata"]["site"] ?? "unknown";
             if ($site == "squarebracket") {
@@ -236,7 +236,7 @@ class Templating
                 if (!$incomplete) {
                     // dont show incomplete themes
                     if (isset($metadata["metadata"]["themes"]) && is_array($metadata["metadata"]["themes"])) {
-                        $metadata["metadata"]["themes"] = array_filter($metadata["metadata"]["themes"], function($theme)
+                        $metadata["metadata"]["themes"] = array_filter($metadata["metadata"]["themes"], function ($theme)
                         use ($isDebug) {
                             return $isDebug || !($theme["incomplete"] ?? false);
                         });
@@ -269,4 +269,3 @@ class Templating
         return $this->twig->render($template, $data);
     }
 }
-

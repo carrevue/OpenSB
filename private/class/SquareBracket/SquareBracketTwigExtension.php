@@ -124,7 +124,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $parsed_text = preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $parsed_text);
 
                 // Emojis
-                $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function($matches) {
+                $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function ($matches) {
                     $emoji_name = strtolower($matches[1]);
                     // check if emoji exists so we dont load nothing
                     if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
@@ -135,7 +135,6 @@ class SquareBracketTwigExtension extends AbstractExtension
                 }, $parsed_text);
 
                 return $parsed_text;
-
             }, ['is_safe' => ['html']]),
 
             // Markdown function for any journals.
@@ -153,7 +152,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $parsed_text = preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $parsed_text);
 
                 // Emojis
-                $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function($matches) {
+                $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function ($matches) {
                     $emoji_name = strtolower($matches[1]);
                     // check if emoji exists so we dont load nothing
                     if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
@@ -164,7 +163,6 @@ class SquareBracketTwigExtension extends AbstractExtension
                 }, $parsed_text);
 
                 return $parsed_text;
-
             }, ['is_safe' => ['html']]),
 
             // Markdown function for info pages. **NOT SANITIZED, DON'T LET IT EVER TOUCH USER INPUT**
@@ -220,7 +218,8 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * Relative time function.
      */
-    function relativeTime($time) {
+    function relativeTime($time)
+    {
         if ($time == 0) {
             return "unknown";
         }
@@ -344,7 +343,8 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         if (mb_strtolower($username) === mb_strtolower($displayName)) {
             // if username matches display name
-            $displayText = sprintf('
+            $displayText = sprintf(
+                '
 <div class="userlink-bullshit">
 <span style="%s">@%s</span>
 %s
@@ -370,11 +370,13 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
 
         // return link
-        return sprintf('<div class="userlink"><a class="%s" style="%s" href="%s">%s</a></div>',
+        return sprintf(
+            '<div class="userlink"><a class="%s" style="%s" href="%s">%s</a></div>',
             $class,
             $style,
             $href,
-            $displayText);
+            $displayText
+        );
     }
 
     // old userlink used on bootstrap and finalium
@@ -513,8 +515,10 @@ class SquareBracketTwigExtension extends AbstractExtension
             ];
 
             // remove upload link on finalium 1, bootstrap and trinium
-            if (Utilities::isLegacyFrontend() || $options["skin"] == "trinium") {
-                unset($array["upload"]);
+            if ($options["skin"] != "bootstrap" && $options["theme"] != "classic") {
+                if (Utilities::isLegacyFrontend() || $options["skin"] == "trinium") {
+                    unset($array["upload"]);
+                }
             }
 
             // remove write link on trinium
@@ -566,7 +570,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
-    public function sidebarFollowingUsers() {
+    public function sidebarFollowingUsers()
+    {
         $userid = $this->authentication->getUserID();
 
         $users = $this->database->fetchArray(
@@ -587,7 +592,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
-    public function footerLinks() {
+    public function footerLinks()
+    {
         $array = [
             "theme" => [
                 "name" => $this->localize("change_theme"),
@@ -653,7 +659,8 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     // legacy functions used by finalium and bootstrap frontend only.
 
-    public function legacyIcon($icon, $size) {
+    public function legacyIcon($icon, $size)
+    {
         if (!Utilities::isLegacyFrontend()) {
             trigger_error("legacyIcon function called outside of a legacy frontend.", E_USER_WARNING);
         }
