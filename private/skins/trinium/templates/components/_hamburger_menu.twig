@@ -1,0 +1,20 @@
+<ul class="list">
+    {% for link in header_main_links() %}
+        <li class="list-link"><a href="{{ link.url }}">{{ link.name }}</a></li>
+    {% endfor %}
+    {% if is_user_logged_in %}
+        {% if sidebar_following_users() %}
+            <li class="list-header">Following</li>
+            {% for link in sidebar_following_users() %}
+                <li class="list-link">
+                    <a href="/user/{{ link.username }}">
+                        <div class="list-link-profile-picture profile-picture">
+                            <img src="{{ profile_picture(link.username) }}" class="pfp" alt="{{ link.username }}">
+                        </div>
+                        {{ link.username }}
+                    </a>
+                </li>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+</ul>
