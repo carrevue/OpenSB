@@ -35,8 +35,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         if (isset($forceOldUserlink)) {
             // user preference
             $userlink_function_name = $forceOldUserlink ? "UserLinkOld" : "UserLink";
-        } elseif ($options["skin"] == "biscuit" || $options["skin"] == "trinium") {
-            // default to new implementation on biscuit/trinium (this logic should be swapped later)
+        } elseif ($options["skin"] == "trinium") {
+            // default to new implementation on trinium (this logic should be swapped later)
             $userlink_function_name = "UserLink";
         } else { // Utilities::isLegacyFrontend()
             // otherwise use the old implementation.
@@ -76,7 +76,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('truncate_number', [$this, 'truncateNumber']),
             new TwigFunction('convert_time', [$this, 'convertTime']),
             new TwigFunction('get_user_data_cache', [$this, 'getUserDataCache']),
-            // BOOTSTRAP/FINALIUM FRONTEND COMPATIBILITY (DO NOT USE THIS ON BISCUIT/CHARLA)
+            // BOOTSTRAP/FINALIUM FRONTEND COMPATIBILITY (DO NOT USE THIS ON TRINIUM)
             new TwigFunction('icon', [$this, 'legacyIcon'], ['is_safe' => ['html']]),
             // ---------------------------
         ];
@@ -321,7 +321,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
-    // new userlink used on biscuit and trinium
+    // new userlink used on trinium
     public function UserLink($user): string
     {
         // get user info
@@ -647,12 +647,8 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function getCSSFileDate()
     {
         // TODO: this should probably be changed to check the file date of the current theme, not just that of the
-        // default theme on biscuit (or trinium if chaziz mode is enabled) -chaziz 1/13/2025.
-        if ($this->orange->isChazizSquareBracketInstance()) {
-            return filemtime(SB_PUBLIC_PATH . "/assets/css/trinium-default.css");
-        } else {
-            return filemtime(SB_PUBLIC_PATH . "/assets/css/default.css");
-        }
+        // default theme on trinium -chaziz 1/13/2025.
+        return filemtime(SB_PUBLIC_PATH . "/assets/css/trinium-default.css");
     }
 
     // legacy functions used by finalium and bootstrap frontend only.

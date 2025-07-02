@@ -1,12 +1,13 @@
 <?php
+
 namespace SquareBracket;
 
 /**
  * The core OpenSB class.
  */
-class SquareBracket {
+class SquareBracket
+{
     private Database $database;
-    //private VersionNumber $version_number;
     private Profiler $profiler;
     private Storage $storage;
     private Authentication $authentication;
@@ -27,7 +28,8 @@ class SquareBracket {
      * Initialize core OpenSB classes. (this is fucking stupid)
      *
      */
-    public function __construct($config) {
+    public function __construct($config)
+    {
         // extract settings
         $host = $config["mysql"]["host"];
         $db = $config["mysql"]["database"];
@@ -46,9 +48,11 @@ class SquareBracket {
         $this->database = new Database($host, $user, $pass, $db);
         $this->authentication = new Authentication($this->database);
         // TEMPORARY. SHOULD BE REMOVED WHEN OPENSB 1.3 IS DONE
-        if ($this->is_chaziz_squarebracket_instance &&
+        if (
+            $this->is_chaziz_squarebracket_instance &&
             isset($this->authentication->getUserData()["name"]) &&
-            $this->authentication->getUserData()["name"] == "Chaziz") {
+            $this->authentication->getUserData()["name"] == "Chaziz"
+        ) {
             $this->is_debug = true;
         }
 
@@ -95,22 +99,22 @@ class SquareBracket {
             // the charla frontend is now called trinium
             if ($this->options["skin"] == "charla") {
                 $this->options["skin"] = "trinium";
-                setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), [
-                    'expires' => 2147483647,
-                    'path' => '/',
-                    'secure' => isset($_SERVER['HTTPS']),
-                    'httponly' => false,
-                    'samesite' => 'Lax'
-                ]);
+                $this->setOptionCookie();
+            }
+
+            // migrate biscuit users to trinium. the frontend has been retired.
+            if ($this->options["skin"] == "biscuit") {
+                $this->options["skin"] = "trinium";
+
+                if ($this->options["theme"] == "soretro") {
+                    $this->options["theme"] = "default";
+                }
+
+                $this->setOptionCookie();
+                Utilities::notifyBanner("The Biscuit frontend is no longer available.", null, "primary");
             }
         } else {
-            setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), [
-                'expires' => 2147483647,
-                'path' => '/',
-                'secure' => isset($_SERVER['HTTPS']),
-                'httponly' => false,
-                'samesite' => 'Lax'
-            ]);
+            $this->setOptionCookie();
         }
 
         if (isset($_COOKIE["SBACCOUNTS"])) {
@@ -150,24 +154,26 @@ class SquareBracket {
         }
     }
 
+    private function setOptionCookie()
+    {
+        setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), [
+            'expires' => 2147483647,
+            'path' => '/',
+            'secure' => isset($_SERVER['HTTPS']),
+            'httponly' => false,
+            'samesite' => 'Lax'
+        ]);
+    }
+
     /**
      * Returns the database class for other classes to use.
      *
      * @return Database
      */
-    public function getDatabaseClass(): Database {
+    public function getDatabaseClass(): Database
+    {
         return $this->database;
     }
-
-    ///**
-    // * Returns the version number class for other OpenSB classes to use.
-    // *
-    // * @return VersionNumber
-    // */
-    //public function getVersionNumberClass(): VersionNumber
-    //{
-    //    return $this->version_number;
-    //}
 
     /**
      * Returns the profiler class for other OpenSB classes to use.
@@ -204,7 +210,8 @@ class SquareBracket {
      *
      * @return array
      */
-    public function getLocalOptions(): array {
+    public function getLocalOptions(): array
+    {
         return $this->options;
     }
 
@@ -213,7 +220,8 @@ class SquareBracket {
      *
      * @return string
      */
-    public function getWarningString(): string {
+    public function getWarningString(): string
+    {
         return $this->accounts_cookie_warning;
     }
 
@@ -222,7 +230,8 @@ class SquareBracket {
      *
      * @return array|string
      */
-    public function getAccountsArray(): array|string {
+    public function getAccountsArray(): array|string
+    {
         return $this->accounts;
     }
 
@@ -231,7 +240,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isDebug(): bool {
+    public function isDebug(): bool
+    {
         return $this->is_debug;
     }
 
@@ -241,7 +251,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isIncompleteFeaturesEnabled(): bool {
+    public function isIncompleteFeaturesEnabled(): bool
+    {
         return $this->options["enable_incomplete_features"] ?? false;
     }
 
@@ -250,7 +261,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isFulpTube(): bool {
+    public function isFulpTube(): bool
+    {
         if (!isset($_SERVER['HTTP_HOST'])) {
             return false;
         }
@@ -274,7 +286,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isTemplateCachingEnabled(): bool {
+    public function isTemplateCachingEnabled(): bool
+    {
         return $this->template_caching_enabled;
     }
 
@@ -283,7 +296,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isAccountRegistrationEnabled(): bool {
+    public function isAccountRegistrationEnabled(): bool
+    {
         return $this->enable_account_registration;
     }
 
@@ -292,7 +306,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isInviteKeysEnabled(): bool {
+    public function isInviteKeysEnabled(): bool
+    {
         return $this->enable_invite_keys;
     }
 
@@ -301,7 +316,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isLockdownEnabled(): bool {
+    public function isLockdownEnabled(): bool
+    {
         return $this->enable_lockdown;
     }
 
@@ -310,7 +326,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isUnderMaintenance(): bool {
+    public function isUnderMaintenance(): bool
+    {
         return $this->under_maintenance;
     }
 
@@ -319,7 +336,8 @@ class SquareBracket {
      *
      * @return bool
      */
-    public function isChazizSquareBracketInstance(): bool {
+    public function isChazizSquareBracketInstance(): bool
+    {
         return  $this->is_chaziz_squarebracket_instance;
     }
 
@@ -328,7 +346,8 @@ class SquareBracket {
      *
      * @return array
      */
-    public function getBrandingSettings(): array {
+    public function getBrandingSettings(): array
+    {
         return $this->branding_settings;
     }
 
@@ -337,7 +356,8 @@ class SquareBracket {
      *
      * @return array
      */
-    public function returnCaptchaSettings(): array {
+    public function returnCaptchaSettings(): array
+    {
         return $this->captcha_settings;
     }
 }

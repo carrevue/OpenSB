@@ -90,17 +90,9 @@ function handleFeaturedSubmission($database, $data): false|array
     {
         return false;
     } else {
-        if ($orange->getLocalOptions()["skin"] == "biscuit") {
-            return [
-                "title" => $submission_data["title"],
-                "id" => $submission_data["video_id"],
-                "type" => $submission_data["post_type"],
-            ];
-        } else {
-            // HACK: we have to use Utilities::makeUploadArray since there is somehow
-            // no standardized way to handle upload arrays.
-            return Utilities::makeUploadArray($database, [0 => $submission_data])[0];
-        }
+        // HACK: we have to use Utilities::makeUploadArray since there is somehow
+        // no standardized way to handle upload arrays.
+        return Utilities::makeUploadArray($database, [0 => $submission_data])[0];
     }
 }
 

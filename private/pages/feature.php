@@ -4,11 +4,6 @@ namespace OpenSB;
 
 global $database, $auth;
 
-// NOTE: this page is unused and looks as if its doing nothing to the end-user.
-// originally, profiles on biscuit frontend used to show the user's "featured" upload, which was
-// removed around mid-2024 due to a redesign of profiles. this *may* comeback if i redesign profiles
-// on the trinium frontend. -chaziz 1/4/2025
-
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025
 
 use SquareBracket\UploadData;

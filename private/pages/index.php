@@ -16,18 +16,16 @@ $enable_new_trinium_feed = isset($options["trinium_new_shit"]) && $options["trin
 
 if ($options["skin"] == "trinium") {
     $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
-} else {
-    $type = "list";
-}
 
-if ($options["skin"] == "biscuit" || $options["skin"] == "trinium") {
-    if ($options["skin"] == "trinium" && $type == "grid") {
+    if ($type == "grid") {
         $submissions_random_query_limit = 12;
     } else {
         $submissions_random_query_limit = 24;
     }
     $submissions_recent_query_limit = 12;
 } else {
+    $type = "list";
+
     $submissions_random_query_limit = 12;
     $submissions_recent_query_limit = 12;
 }

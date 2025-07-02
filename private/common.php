@@ -18,12 +18,9 @@ $config = include_once(SB_PRIVATE_PATH . '/config/config.php');
 
 require_once(SB_VENDOR_PATH . '/autoload.php');
 
-use SquareBracket\Authentication;
 use SquareBracket\ErrorTemplating;
 use SquareBracket\Localization;
-use SquareBracket\Profiler;
 use SquareBracket\SquareBracket;
-use SquareBracket\Storage;
 use SquareBracket\Templating;
 use SquareBracket\Utilities;
 use SquareBracket\VersionNumber;
