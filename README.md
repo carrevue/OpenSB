@@ -1,11 +1,11 @@
-# OpenSB
-![Screen Shot 2024-10-25 at 18 18 35](https://github.com/user-attachments/assets/c1cde928-02b6-4b64-b551-5bac85ecee52)
+# OpenSB 1.2 (UNSUPPORTED)
+OpenSB 1.2 is no longer supported.
 
 ## Our official instance
 
 [SquareBracket.pw](https://squarebracket.pw/)
 
-Alternative domains: [squarebracket.bluffingo.net](https://squarebracket.bluffingo.net/), [FulpTube.rocks](https://fulptube.rocks)
+Alternative domains: [FulpTube.rocks](https://fulptube.rocks)
 
 ## How to setup an OpenSB instance.
 
