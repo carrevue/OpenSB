@@ -91,7 +91,7 @@
 
 <body>
 {% if is_debug %}
-    {{ include(component('debug_dialog')) }}
+    {% include("components/debug_dialog.twig") %}
 {% endif %}
 {{ include(component('header')) }}
 {% if user_ban_data %}
@@ -116,42 +116,23 @@
             {{ include(component('banners')) }}
             {% if not actually_show_sidebar %}
                 {% block content %}{% endblock %}
+                {{ include(component('footer')) }}
             {% else %}
                 <div class="grid no-gap">
                     <div class="col-sidebar">
-                        <div class="grid-sidebar">
-                            <ul class="sidebar-list">
-                                {% for link in header_main_links() %}
-                                    <li class="hamburger-link">
-                                        <a href="{{ link.url }}">{{ link.name }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                            <hr>
-                            <ul class="sidebar-list sidebar-following-users">
-                                {% for link in sidebar_following_users() %}
-                                    <li class="hamburger-link">
-                                        <a href="/user/{{ link.username }}">
-                                            <div class="hamburger-link-profile-picture profile-picture">
-                                                <img src="{{ profile_picture(link.username) }}" class="pfp"
-                                                     alt="{{ link.username }}">
-                                            </div>
-                                            {{ link.username }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                        <div class="sidebar">
+                            {% include("components/_hamburger_menu.twig") %}
                         </div>
                     </div>
                     <div class="col-11">
                         {{ block('content') }}
+                        {{ include(component('footer')) }}
                     </div>
                 </div>
             {% endif %}
         </div>
     </div>
 </div>
-{{ include(component('footer')) }}
 <script>
     opensb_version = '{{ opensb_version }}';
 </script>

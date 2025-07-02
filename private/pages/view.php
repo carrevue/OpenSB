@@ -13,6 +13,10 @@ use SquareBracket\UploadRatingEnum;
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
+$options = $orange->getLocalOptions();
+
+$trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new_shit"] == "true";
+
 $id = $path[2] ?? null;
 
 $upload = new UploadData($database, $id);
@@ -67,8 +71,7 @@ $followed = Utilities::isFollowingUser($data["author"]);
 
 $flags = $upload->getUploadFlagsArray();
 
-if ($flags["block_guests"] && !$auth->isUserLoggedIn())
-{
+if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("Please login to view this upload.", "/login");
 }
 
@@ -92,37 +95,52 @@ if (!$CrawlerDetect->isCrawler()) {
 
     // add a limit of one view per minute on guests. this is to deter other forms of crawlers/bots that may
     // not be properly caught by crawlerdetect.
-    if (!$auth->isUserLoggedIn() &&
-        $database->result("SELECT COUNT(*) FROM upload_views WHERE user=? AND timestamp > 60", [$ip])) {
+    if (
+        !$auth->isUserLoggedIn() &&
+        $database->result("SELECT COUNT(*) FROM upload_views WHERE user=? AND timestamp > 60", [$ip])
+    ) {
         $ratelimit = true;
     }
 
     // add a limit of one guest view per 10 minutes on uploads. this is to deter potential viewbots from
     // quickly botting an upload.
-    if (!$auth->isUserLoggedIn() &&
-        $database->result("SELECT COUNT(*) FROM upload_views WHERE video_id=? AND timestamp > 600", [$ip])) {
+    if (
+        !$auth->isUserLoggedIn() &&
+        $database->result("SELECT COUNT(*) FROM upload_views WHERE video_id=? AND timestamp > 600", [$ip])
+    ) {
         $ratelimit = true;
     }
 
-    if ($database->result("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip]) < 1
-        && !$ratelimit) {
-        $database->query("INSERT INTO upload_views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
-            [$id, $ip, time(), $type]);
+    if (
+        $database->result("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip]) < 1
+        && !$ratelimit
+    ) {
+        $database->query(
+            "INSERT INTO upload_views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
+            [$id, $ip, time(), $type]
+        );
 
         // increment the indexed view count. this might go out of sync eventually, but this can be fixed through
         // 2024-08-recount-views.php.
         $new_views = $data["views"] + 1;
-        $database->query("UPDATE uploads SET views = ? WHERE id = ?",
-            [$new_views, $data["id"]]);
+        $database->query(
+            "UPDATE uploads SET views = ? WHERE id = ?",
+            [$new_views, $data["id"]]
+        );
     }
 }
 
-$whereRatings = Utilities::whereRatings();
-$whereTagBlacklist = Utilities::whereTagBlacklist();
-$submission_query = new UploadQuery($database);
+if ($options["skin"] == "trinium" && $trinium_new_shit) {
+    $recommended_upload_array = [];
+    $uploads_by_author_array = [];
+    $random_uploads_array = [];
+} else {
+    $whereRatings = Utilities::whereRatings();
+    $whereTagBlacklist = Utilities::whereTagBlacklist();
+    $submission_query = new UploadQuery($database);
 
-// ported from poktwo, modified to accommodate for takedowns and relevancy.
-$recommendfields = "
+    // ported from poktwo, modified to accommodate for takedowns and relevancy.
+    $recommendfields = "
     jaccard.video_id,
     jaccard.flags,
     jaccard.intersect_count,
@@ -165,16 +183,16 @@ ORDER BY
     jaccard_index DESC
 LIMIT 24";
 
-$uploads_by_author = $submission_query->query("RAND()", 24, "v.author = ? AND v.video_id != ?", [$data["author"], $data["video_id"]]);
+    $uploads_by_author = $submission_query->query("RAND()", 24, "v.author = ? AND v.video_id != ?", [$data["author"], $data["video_id"]]);
 
-if ($tags === []) {
-    // if there are no tags, list the author's other uploads
-    $recommended = false;
-} else {
-    // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
-    // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
+    if ($tags === []) {
+        // if there are no tags, list the author's other uploads
+        $recommended = false;
+    } else {
+        // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
+        // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
 
-    $query = "SELECT v.* 
+        $query = "SELECT v.* 
     FROM uploads v
     INNER JOIN (
         SELECT $recommendfields
@@ -182,46 +200,47 @@ if ($tags === []) {
     ON v.video_id = recommended.video_id
     WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns)";
 
-    if (!empty($whereRatings)) {
-        $query .= "AND $whereRatings ";
-    }
+        if (!empty($whereRatings)) {
+            $query .= "AND $whereRatings ";
+        }
 
-    if (!empty($twhereTagBlacklist)) {
-        $query .= "AND $whereTagBlacklist ";
-    }
+        if (!empty($twhereTagBlacklist)) {
+            $query .= "AND $whereTagBlacklist ";
+        }
 
-    $query .= "AND v.author NOT IN (SELECT userid FROM user_bans)
+        $query .= "AND v.author NOT IN (SELECT userid FROM user_bans)
     ORDER BY RAND()";
 
-    $recommended = $database->fetchArray($database->query($query, [$data["id"]]));
+        $recommended = $database->fetchArray($database->query($query, [$data["id"]]));
 
-    // if no other uploads match, then fallback to listing the author's other uploads
-    if (empty($recommended)) {
-        $recommended = false;
+        // if no other uploads match, then fallback to listing the author's other uploads
+        if (empty($recommended)) {
+            $recommended = false;
+        }
     }
-}
 
-if ($recommended) {
-    $recommended_upload_array = Utilities::makeUploadArray($database, $recommended);
-} else {
-    $recommended_upload_array = [];
-}
+    if ($recommended) {
+        $recommended_upload_array = Utilities::makeUploadArray($database, $recommended);
+    } else {
+        $recommended_upload_array = [];
+    }
 
-if ($uploads_by_author) {
-    $uploads_by_author_array = Utilities::makeUploadArray($database, $uploads_by_author);
-} else {
-    $uploads_by_author_array = [];
-}
+    if ($uploads_by_author) {
+        $uploads_by_author_array = Utilities::makeUploadArray($database, $uploads_by_author);
+    } else {
+        $uploads_by_author_array = [];
+    }
 
-if (!$recommended && !$uploads_by_author) {
-    $random_uploads = $submission_query->query("RAND()", 24, "v.video_id != ?", [$data["video_id"]]);
-    if ($random_uploads) {
-        $random_uploads_array = Utilities::makeUploadArray($database, $random_uploads);
+    if (!$recommended && !$uploads_by_author) {
+        $random_uploads = $submission_query->query("RAND()", 24, "v.video_id != ?", [$data["video_id"]]);
+        if ($random_uploads) {
+            $random_uploads_array = Utilities::makeUploadArray($database, $random_uploads);
+        } else {
+            $random_uploads_array = [];
+        }
     } else {
         $random_uploads_array = [];
     }
-} else {
-    $random_uploads_array = [];
 }
 
 $owner = ($auth->getUserID() == $data["author"]);

@@ -1,16 +1,13 @@
 <footer class="footer">
     <div class="footer-container">
-        <div>
+        <div class="footer-powered-by">
             <span>{{ localize('powered_by') }} <a href="/version">OpenSB {{ opensb_version }}</a></span>
         </div>
-        {% for link in footer_links() %}
-            <span><a href="{{ link.url }}">{{ link.name }}</a></span>
-        {% endfor %}
-        {% if is_debug %}
-            <div>
-                {{ profiler_stats() }}
-            </div>
-        {% endif %}
+        <div class="footer-links">
+            {% for link in footer_links() %}
+                <span><a href="{{ link.url }}">{{ link.name }}</a></span>
+            {% endfor %}
+        </div>
         <div class="footer-copyright">
             <span>{{ localize('footer_copyright', '2021-' ~ ('now' | date('Y'))) }}</span>
         </div>

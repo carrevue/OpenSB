@@ -1,5 +1,7 @@
 {% extends "_layout.twig" %}
 
+{% set show_sidebar = true %}
+
 {% if user %}
     {% set title = user ~ "'s uploads" %}
 {% else %}

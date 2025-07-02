@@ -121,24 +121,5 @@
 </div>
 #}
 <div class="hamburger" id="hamburger">
-    <ul class="hamburger-list">
-        {% for link in header_main_links() %}
-            <li class="hamburger-link"><a href="{{ link.url }}">{{ link.name }}</a></li>
-        {% endfor %}
-        {% if is_user_logged_in %}
-            {% if sidebar_following_users() %}
-                <li class="hamburger-header">Following</li>
-                {% for link in sidebar_following_users() %}
-                    <li class="hamburger-link">
-                        <a href="/user/{{ link.username }}">
-                            <div class="hamburger-link-profile-picture profile-picture">
-                                <img src="{{ profile_picture(link.username) }}" class="pfp" alt="{{ link.username }}">
-                            </div>
-                            {{ link.username }}
-                        </a>
-                    </li>
-                {% endfor %}
-            {% endif %}
-        {% endif %}
-    </ul>
+    {% include("components/_hamburger_menu.twig") %}
 </div>

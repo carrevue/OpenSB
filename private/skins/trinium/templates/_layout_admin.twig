@@ -1,5 +1,7 @@
 {% extends "_layout.twig" %}
 
+{% set show_sidebar = true %}
+
 {% block precontent %}
 <div class="navigation-bar">
     <a class="navigation-bar-button {% if page_name=='overview' %}active{% endif %}" href="/admin/overview">

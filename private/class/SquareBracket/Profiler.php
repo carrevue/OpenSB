@@ -15,7 +15,8 @@ class Profiler
     private ?array $database_profiling_report;
     private bool $database_profiler_function_called = false;
 
-    public function __construct($database) {
+    public function __construct($database)
+    {
         $this->database = $database;
         $this->starttime = microtime(true);
     }
@@ -44,11 +45,12 @@ class Profiler
     {
         $this->getDatabaseProfilerInfo();
 
-        printf("Rendered in %1.6fs with %dKB memory used and a total of %s database queries. %s.",
+        printf(
+            "Rendered in %1.6fs with %dKB memory used. %s.",
             microtime(true) - $this->starttime,
             memory_get_usage() / 1024,
-            $this->database_profiling_report["total_queries"],
-            $this->whoAmI());
+            $this->whoAmI()
+        );
     }
 
     public function getDatabaseProfilingReport(): ?array
