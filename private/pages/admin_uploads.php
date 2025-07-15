@@ -44,8 +44,24 @@ $uploads_array = Utilities::makeUploadArray($database, $uploads);
 
 $new_fucking_array = [];
 
+$unique_author_ids = [];
+
 // now figure out the upload status
 // temporary for now
+
+// iterate the uploads array First so we can "cache" users
+foreach ($uploads_array as $upload) {
+    if (isset($upload['author']['id'])) {
+        $author_id = $upload['author']['id'];
+        if (!array_key_exists($author_id, $unique_author_ids)) {
+            // if user is banned then set that shit to true
+            $is_banned = (bool) $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$author_id]);
+            $unique_author_ids[$author_id] = $is_banned;
+        }
+    }
+}
+
+// iterate the uploads array again
 foreach ($uploads_array as $upload) {
     $is_taken_down = $database->fetchArray($database->query("SELECT * FROM upload_takedowns t WHERE t.submission = ?", [$upload["id"]]));
 
@@ -80,6 +96,17 @@ foreach ($uploads_array as $upload) {
             "text" => "Taken down",
             "color" => "danger",
         ];
+    }
+
+    if (isset($upload["author"]["id"]) && array_key_exists($upload["author"]["id"], $unique_author_ids)) {
+        $is_banned = $unique_author_ids[$upload["author"]["id"]];
+
+        if ($is_banned) {
+            $upload["status"] = [
+                "text" => "Author banned",
+                "color" => "danger",
+            ];
+        }
     }
 
     $new_fucking_array[] = $upload;
