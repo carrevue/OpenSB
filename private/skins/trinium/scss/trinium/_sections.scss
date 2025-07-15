@@ -11,13 +11,7 @@
                 gap: 0.5em;
 
                 .section-desc {
-                    @if $color-scheme =="dark" {
-                        color: #ffffff80;
-                    }
-
-                    @else {
-                        color: #00000080;
-                    }
+                    opacity: 50%;
                 }
             }
         }

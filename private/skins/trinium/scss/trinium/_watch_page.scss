@@ -6,7 +6,7 @@
 
     .img-submission {
         padding: 1rem;
-        filter: drop-shadow(0 0 2px rgba(black, 0.2));
+        filter: drop-shadow(0 2px 2px rgba(black, 0.25));
     }
 }
 
@@ -27,18 +27,19 @@
         }
 
         .watch-box-below-title {
-            opacity: 50%;
             font-size: 0.9em;
+
+            .watch-box-below-title-featured {
+                background-image: linear-gradient($yellow, (color.adjust(color.adjust($yellow, $lightness: -5%), $hue: -3.5deg)));
+                color: transparent;
+                background-clip: text;
+            }
         }
     }
 
     .watch-box-description {
         margin: 0 auto;
         word-wrap: break-word;
-
-        .watch-box-description-info {
-            //opacity: 50%;
-        }
 
         .watch-box-description-info-small {
             font-size: 0.9em;

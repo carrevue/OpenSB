@@ -91,7 +91,9 @@
                             {% endif %}
                         </div>
                         <div class="watch-box-below-title">
-                            {{ type_text }} {% if not is_chaziz_sb %}• {{ rating_text }}{% endif %}
+                            {{ type_text }} 
+                            {% if not is_chaziz_sb %}• {{ rating_text }}{% endif %}
+                            {% if submission.flags.featured %}• <span class="watch-box-below-title-featured">Featured</span>{% endif %}
                         </div>
                         <hr>
                         <div class="watch-box-row">
