@@ -6,19 +6,20 @@ $link-color: #0069B4; // #006FFF;
 $bg-color: #F2F2F2;
 $header-link-color: black;
 
-@if $color-scheme == "dark" {
-        $text-color: white;
-        $link-color: #2d89e8;
-        $bg-color: #000;
-        $header-link-color: white;
+@if $color-scheme =="dark" {
+    $text-color: white;
+    $link-color: #2d89e8;
+    $bg-color: #000;
+    $header-link-color: white;
 }
 
 // content boxes
 $content-box-background-color: #FFF;
 $content-box-border-color: #E0E0E0;
-@if $color-scheme == "dark" {
-        $content-box-background-color: #111111;
-        $content-box-border-color: #333333;
+
+@if $color-scheme =="dark" {
+    $content-box-background-color: #111111;
+    $content-box-border-color: #333333;
 }
 
 $content-box-padding: 1em;
@@ -35,11 +36,11 @@ $red: #CB122E;
 $yellow: #FFBB00;
 
 $color-map: (
-        "primary": $primary,
-        "secondary": $content-box-border-color,
-        "success": $green,
-        "danger": $red,
-        "warning": $yellow,
+    "primary": $primary,
+    "secondary": $content-box-border-color,
+    "success": $green,
+    "danger": $red,
+    "warning": $yellow,
 );
 
 // header/hamburger
@@ -53,8 +54,8 @@ $header-link-active: rgba($header-link-color, 0.1);
 $header-link-inactive-opacity: 0.75;
 $header-link-active-opacity: 1; // includes hover
 
-@if $color-scheme == "dark" {
-        $header-background: linear-gradient(to bottom, #171717, #111111);
+@if $color-scheme =="dark" {
+    $header-background: linear-gradient(to bottom, #171717, #111111);
 }
 
 // forms
@@ -69,21 +70,16 @@ $font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 // https://medium.com/@jainbhavukspeaks/leveraging-scss-mixins-to-create-responsive-layouts-the-easy-way-5bbe4080cb15
 // breakpoints
 $breakpoints: (
-        "tiny": (
-                300px,
-        ),
-        "small": (
-                500px,
-        ),
-        "medium": (
-                950px,
-        ),
-        "large": (
-                1250px,
-        ),
-        "huge": (
-                1700px,
-        ),
+    "tiny": (300px,
+    ),
+    "small": (500px,
+    ),
+    "medium": (950px,
+    ),
+    "large": (1250px,
+    ),
+    "huge": (1700px,
+    ),
 );
 
 // header

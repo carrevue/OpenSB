@@ -1,69 +1,69 @@
 .menu {
-  display: none;
-  position: absolute;
-  background-color: $content-box-background-color;
-  border: 1px solid $content-box-border-color;
-  padding: 3px 0;
-  min-width: 100px;
-  z-index: 1999;
-  width: 12rem;
-  box-shadow: 0 2px 5px rgba(black, 0.1);
+    display: none;
+    position: absolute;
+    background-color: $content-box-background-color;
+    border: 1px solid $content-box-border-color;
+    padding: 3px 0;
+    min-width: 100px;
+    z-index: 1999;
+    width: 12rem;
+    box-shadow: 0 2px 5px rgba(black, 0.1);
 
-  // hardcode text alignment and direction to left for header menus
-  text-align: left;
-  direction: ltr;
-
-  hr {
-    border-color: $content-box-border-color;
-    margin: 0;
-  }
-
-  .menu-item-button {
-    direction: ltr;
-    display: flex;
-    align-items: center;
+    // hardcode text alignment and direction to left for header menus
     text-align: left;
-    padding: $menu-item-padding;
-    color: rgba($text-color, $header-link-inactive-opacity);
-    gap: 5px;
+    direction: ltr;
 
-    span {
-      overflow: hidden;
-      text-overflow: ellipsis;
+    hr {
+        border-color: $content-box-border-color;
+        margin: 0;
     }
 
-    &.small {
-      font-size: 12px;
-    }
+    .menu-item-button {
+        direction: ltr;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        padding: $menu-item-padding;
+        color: rgba($text-color, $header-link-inactive-opacity);
+        gap: 5px;
 
-    &:hover {
-      background: $header-link-hover;
-      color: $text-color;
-      text-decoration: none;
-      cursor: pointer;
-    }
+        span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    &:active {
-      background: $header-link-active;
-      color: $text-color;
-      text-decoration: none;
-      cursor: pointer;
-    }
+        &.small {
+            font-size: 12px;
+        }
 
-    .menu-item-profile-picture {
-      width: 24px;
-      height: 24px;
+        &:hover {
+            background: $header-link-hover;
+            color: $text-color;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        &:active {
+            background: $header-link-active;
+            color: $text-color;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .menu-item-profile-picture {
+            width: 24px;
+            height: 24px;
+        }
     }
-  }
 }
 
 .menu-button {
-  .menu-caret-container {
-    display: inline;
-  }
+    .menu-caret-container {
+        display: inline;
+    }
 }
 
 .menu-upload-edit {
-  direction: rtl;
-  width: 150px;
+    direction: rtl;
+    width: 150px;
 }

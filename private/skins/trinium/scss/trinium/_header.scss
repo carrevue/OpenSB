@@ -1,301 +1,317 @@
-.header
-{
-  .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin: 0 1rem;
+.header {
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 0 1rem;
+        width: 100%;
+    }
+
+    .header-container-new {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        @include responsive('tiny') {
+            margin: 0 1rem;
+            width: 100%;
+        }
+
+        @include responsive('small') {
+            margin: 0 1rem;
+            width: 100%;
+        }
+
+        @include responsive('medium') {
+            margin: auto;
+            @include maxwidths();
+        }
+
+        .header-button {
+            @include responsive('tiny') {
+                display: block;
+            }
+
+            @include responsive('small') {
+                display: block;
+            }
+
+            @include responsive('medium') {
+                display: none;
+            }
+        }
+    }
+
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+
     width: 100%;
-  }
 
-  .header-container-new {
+    background: $header-background;
+    border-bottom: 1px solid $header-border;
+    box-shadow: 0 1px 10px rgba(black, 0.05);
+
+    height: $header-height;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-
-    @include responsive('tiny') {
-      margin: 0 1rem;
-      width: 100%;
-    }
-    @include responsive('small') {
-      margin: 0 1rem;
-      width: 100%;
-    }
-    @include responsive('medium') {
-      margin: auto;
-      @include maxwidths();
-    }
-
-    .header-button {
-      @include responsive('tiny') {
-        display: block;
-      }
-      @include responsive('small') {
-        display: block;
-      }
-      @include responsive('medium') {
-        display: none;
-      }
-    }
-  }
-
-  position: sticky;
-  top: 0;
-  z-index: 2000;
-
-  width: 100%;
-
-  background: $header-background;
-  border-bottom: 1px solid $header-border;
-  box-shadow: 0 1px 10px rgba(black, 0.05);
-
-  height: $header-height;
-  display: flex;
 }
 
 .header-main-links {
-  gap: 1em;
-  align-items: center;
-  @include responsive('tiny') {
-    display: none;
-  }
-  @include responsive('small') {
-    display: none;
-  }
-  @include responsive('medium') {
-    display: flex;
-  }
+    gap: 1em;
+    align-items: center;
+
+    @include responsive('tiny') {
+        display: none;
+    }
+
+    @include responsive('small') {
+        display: none;
+    }
+
+    @include responsive('medium') {
+        display: flex;
+    }
 }
 
-.header-links
-{
-  /* actually known as user links, but back in 2023 the main browse/members links were aligned to the right so
+.header-links {
+    /* actually known as user links, but back in 2023 the main browse/members links were aligned to the right so
   thats why this is called header-links. */
 
-  text-align: right;
-  margin-left: auto;
-  display: flex;
-  align-items: center;
+    text-align: right;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
 
-  .user-menu-container {
-    direction: rtl;
+    .user-menu-container {
+        direction: rtl;
 
-    .user-menu-button {
-      height: $header-height;
-      padding: 0 8px;
-      direction: ltr;
-      display: flex;
-      align-items: center;
+        .user-menu-button {
+            height: $header-height;
+            padding: 0 8px;
+            direction: ltr;
+            display: flex;
+            align-items: center;
 
-      .biscuit-icon:not(.menu-caret) {
-        width: 24px;
-        height: 24px;
-        background-size: 24px;
-      }
+            .biscuit-icon:not(.menu-caret) {
+                width: 24px;
+                height: 24px;
+                background-size: 24px;
+            }
 
-      &:hover, &.selected {
-        cursor: pointer;
-      }
+            &:hover,
+            &.selected {
+                cursor: pointer;
+            }
 
-      &:hover {
-        @include bar-button-hover;
-      }
+            &:hover {
+                @include bar-button-hover;
+            }
 
-      &:active, &.selected {
-        @include bar-button-active;
-      }
+            &:active,
+            &.selected {
+                @include bar-button-active;
+            }
 
-      .user-menu-pfp {
-        width: $header-pfp-width;
-        height: $header-pfp-width;
-      }
+            .user-menu-pfp {
+                width: $header-pfp-width;
+                height: $header-pfp-width;
+            }
 
-      .user-menu-caret-container {
-        display: inline-block;
-        opacity: 0.75;
-        width: 16px;
-        height: 16px;
-      }
+            .user-menu-caret-container {
+                display: inline-block;
+                opacity: 0.75;
+                width: 16px;
+                height: 16px;
+            }
+        }
     }
-  }
 }
 
-.header-logo
-{
-  margin-right: 0.6rem;
-  a {
-    display: block;
-    height: $header-logo-height;
+.header-logo {
+    margin-right: 0.6rem;
 
-    &:focus {
-      outline: none;
+    a {
+        display: block;
+        height: $header-logo-height;
+
+        &:focus {
+            outline: none;
+        }
     }
-  }
 
-  .logo {
-    height: $header-logo-height;
-  }
+    .logo {
+        height: $header-logo-height;
+    }
 }
 
-.header-search
-{
-  position: relative;
-  display: none;
+.header-search {
+    position: relative;
+    display: none;
 
-  #header-search-button {
-    position: absolute;
-    right: 0;
-    top: 1px; /* stupid hack */
+    #header-search-button {
+        position: absolute;
+        right: 0;
+        top: 1px;
+        /* stupid hack */
 
-    background: none;
-    border: none;
+        background: none;
+        border: none;
 
-    .biscuit-icon.search {
-      width: 16px;
-      height: 16px;
-      background-size: 16px;
+        .biscuit-icon.search {
+            width: 16px;
+            height: 16px;
+            background-size: 16px;
+        }
+
+        height: 32px;
+        width: 40px;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
-    height: 32px;
-    width: 40px;
+    #header-search-input {
+        padding: 6px 8px;
+        height: 32px;
+
+        &:focus {
+            border-color: var(--link-color);
+        }
+    }
+
+    @include responsive('tiny') {
+        display: block;
+        max-width: 130px;
+
+        #header-search-input {
+            max-width: 125px;
+        }
+    }
+
+    @include responsive('small') {
+        display: block;
+        max-width: 240px;
+
+        #header-search-input {
+            max-width: 220px;
+        }
+    }
+
+    @include responsive('medium') {
+        display: block;
+        max-width: 340px;
+
+        #header-search-input {
+            max-width: 320px;
+            width: 320px; // Shitty Hack
+        }
+    }
+
+    .form-button-container {
+        display: inline;
+    }
+}
+
+.menulink {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    color: $header-link-color;
+    opacity: $header-link-inactive-opacity;
+    height: $header-height;
+    padding: 0 0.5em;
+
+    @if $color-scheme =="dark" {
+        text-shadow: 0 1px 0 rgba(black, 0.25);
+    }
 
     &:hover {
-      cursor: pointer;
+        opacity: $header-link-active-opacity;
+        text-decoration: none;
+        background: $header-link-hover;
     }
-  }
 
-  #header-search-input {
-    padding: 6px 8px;
-    height: 32px;
-
-    &:focus {
-      border-color: var(--link-color);
+    &:active {
+        opacity: $header-link-active-opacity;
+        text-decoration: none;
+        background: $header-link-active;
     }
-  }
 
-  @include responsive('tiny') {
-    display: block;
-    max-width: 130px;
-    #header-search-input {
-      max-width: 125px;
+    .biscuit-icon {
+        width: 32px;
+        height: 32px;
+        background-size: 32px;
     }
-  }
-  @include responsive('small') {
-    display: block;
-    max-width: 240px;
-    #header-search-input {
-      max-width: 220px;
+
+    &.hide-small {
+        display: none;
+
+        @include responsive('tiny') {
+            display: none;
+        }
+
+        @include responsive('small') {
+            display: flex;
+        }
+
+        @include responsive('medium') {
+            display: flex;
+        }
     }
-  }
-  @include responsive('medium') {
-    display: block;
-    max-width: 340px;
-    #header-search-input {
-      max-width: 320px;
-      width: 320px; // Shitty Hack
+
+    &.username {
+        display: none;
+
+        @include responsive('medium') {
+            display: inline;
+        }
     }
-  }
-
-  .form-button-container {
-    display: inline;
-  }
-}
-
-.menulink
-{
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  color: $header-link-color;
-  opacity: $header-link-inactive-opacity;
-  height: $header-height;
-  padding: 0 0.5em;
-  @if $color-scheme == "dark" {
-    text-shadow: 0 1px 0 rgba(black, 0.25);
-  }
-
-  &:hover {
-    opacity: $header-link-active-opacity;
-    text-decoration: none;
-    background: $header-link-hover;
-  }
-
-  &:active {
-    opacity: $header-link-active-opacity;
-    text-decoration: none;
-    background: $header-link-active;
-  }
-
-  .biscuit-icon {
-    width: 32px;
-    height: 32px;
-    background-size: 32px;
-  }
-
-  &.hide-small {
-    display: none;
-    @include responsive('tiny') {
-      display: none;
-    }
-    @include responsive('small') {
-      display: flex;
-    }
-    @include responsive('medium') {
-      display: flex;
-    }
-  }
-
-  &.username {
-    display: none;
-
-    @include responsive('medium') {
-      display: inline;
-    }
-  }
 }
 
 .menu#user-menu {
-  border-top: none;
-  top: $header-height;
-  border-radius: 0 0 8px 8px;
-  min-width: 250px;
+    border-top: none;
+    top: $header-height;
+    border-radius: 0 0 8px 8px;
+    min-width: 250px;
 
-  .user-menu-intro {
-    padding: $menu-item-padding;
+    .user-menu-intro {
+        padding: $menu-item-padding;
 
-    display: flex;
-    align-items: center;
-    gap: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
 
-    .user-menu-intro-left {
-      .profile-picture {
-        width: 52px;
-        height: 52px;
-      }
+        .user-menu-intro-left {
+            .profile-picture {
+                width: 52px;
+                height: 52px;
+            }
+        }
+
+        .user-menu-intro-right {
+            overflow: hidden;
+
+            .user-menu-intro-name {
+                font-weight: 600;
+                font-size: 1.1em;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            .user-menu-intro-stat {
+                font-size: 0.9em;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
     }
-
-    .user-menu-intro-right {
-      overflow: hidden;
-
-      .user-menu-intro-name {
-        font-weight: 600;
-        font-size: 1.1em;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-
-      .user-menu-intro-stat {
-        font-size: 0.9em;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-    }
-  }
 }
 
 .header-button {
-  display: flex; /* stupid hack */
-  margin-right: 0.25rem;
+    display: flex;
+    /* stupid hack */
+    margin-right: 0.25rem;
 }

@@ -1,119 +1,123 @@
 @use "sass:color";
 
 @mixin button() {
-  padding: 8px 12px;
-  text-align: center;
-  border-radius: 4px;
-  color: white;
-  font-family: $font;
-  display: inline-block;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: normal;
-  background-repeat: repeat-x;
-  line-height: 1em;
-  user-select: none;
-  //transition: background-color 0.1s ease;
-  box-shadow: inset 0 1px 0 rgba(white, 0.2), 0 1px 2px rgba(black, 0.1);
+    padding: 8px 12px;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+    font-family: $font;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: normal;
+    background-repeat: repeat-x;
+    line-height: 1em;
+    user-select: none;
+    //transition: background-color 0.1s ease;
+    box-shadow: inset 0 1px 0 rgba(white, 0.2), 0 1px 2px rgba(black, 0.1);
 }
 
 @mixin button-variant($value) {
-  $text-color: contrast-color($value, black, white);
-  $shadow-color: contrast-color($value, white, black);
+    $text-color: contrast-color($value, black, white);
+    $shadow-color: contrast-color($value, white, black);
 
-  $border-color: color.adjust(color.adjust($value, $lightness: -7.5%), $hue: 2deg);
-  @if $color-scheme == "dark" {
-    $border-color: color.adjust(color.adjust($value, $lightness: 10%), $hue: 4deg);
-  }
+    $border-color: color.adjust(color.adjust($value, $lightness: -7.5%), $hue: 2deg);
 
-  border: 1px solid $border-color;
-  background-color: $value;
-  background-image: linear-gradient(color.adjust($value, $lightness: 5%),
-          color.adjust(color.adjust($value, $lightness: -4%), $hue: 1deg));
+    @if $color-scheme =="dark" {
+        $border-color: color.adjust(color.adjust($value, $lightness: 10%), $hue: 4deg);
+    }
 
-  color: $text-color;
-  text-shadow: 0 -1px 0 rgba($shadow-color, 0.4);
+    border: 1px solid $border-color;
+    background-color: $value;
+    background-image: linear-gradient(color.adjust($value, $lightness: 5%),
+        color.adjust(color.adjust($value, $lightness: -4%), $hue: 1deg));
 
-  &:hover {
-    background-color: color.adjust($value, $lightness: 10%);
-    background-image: linear-gradient(color.adjust(color.adjust($value, $lightness: 10%), $hue: 1deg),
-            color.adjust($value, $lightness: 2%));
-  }
+    color: $text-color;
+    text-shadow: 0 -1px 0 rgba($shadow-color, 0.4);
 
-  &:active {
-    background-color: color.adjust($value, $lightness: -5%);
-    background-image: linear-gradient($value, color.adjust(color.adjust($value, $lightness: -5%), $hue: 1.5deg));
-    box-shadow: inset 0 2px 4px rgba(black, 0.15), 0 1px 2px rgba(black, 0.05);
-  }
+    &:hover {
+        background-color: color.adjust($value, $lightness: 10%);
+        background-image: linear-gradient(color.adjust(color.adjust($value, $lightness: 10%), $hue: 1deg),
+                color.adjust($value, $lightness: 2%));
+    }
+
+    &:active {
+        background-color: color.adjust($value, $lightness: -5%);
+        background-image: linear-gradient($value, color.adjust(color.adjust($value, $lightness: -5%), $hue: 1.5deg));
+        box-shadow: inset 0 2px 4px rgba(black, 0.15), 0 1px 2px rgba(black, 0.05);
+    }
 }
 
 .button {
-  @include button();
+    @include button();
 
-  &:hover {
-    text-decoration: none;
-  }
-
-  &.button-hamburger {
-    padding: 0;
-    display: flex;
-  }
-
-  &.button-caret {
-    padding: 3px 4px;
-  }
-
-  &.button-transparent {
-    background: none;
-
-    &:not(:hover):not(:active) {
-      box-shadow: none;
-      border-color: #0000;
+    &:hover {
+        text-decoration: none;
     }
-  }
 
-  &.button-small {
-    font-size: 0.9em;
-    padding: 4px 8px;
-  }
-
-  &.button-big {
-    font-size: 15px;
-    padding: 9px 15px;
-    border-radius: 5px;
-  }
-
-  &.button-huge {
-    font-size: 24px;
-    padding: 1rem 1.5rem;
-    border-radius: 7px;
-  }
-
-  &.button-login {
-    @include responsive('tiny') {
-      width: 100%;
+    &.button-hamburger {
+        padding: 0;
+        display: flex;
     }
-    @include responsive('small') {
-      width: 100%;
+
+    &.button-caret {
+        padding: 3px 4px;
     }
-    @include responsive('medium') {
-      width: inherit;
+
+    &.button-transparent {
+        background: none;
+
+        &:not(:hover):not(:active) {
+            box-shadow: none;
+            border-color: #0000;
+        }
     }
-  }
+
+    &.button-small {
+        font-size: 0.9em;
+        padding: 4px 8px;
+    }
+
+    &.button-big {
+        font-size: 15px;
+        padding: 9px 15px;
+        border-radius: 5px;
+    }
+
+    &.button-huge {
+        font-size: 24px;
+        padding: 1rem 1.5rem;
+        border-radius: 7px;
+    }
+
+    &.button-login {
+        @include responsive('tiny') {
+            width: 100%;
+        }
+
+        @include responsive('small') {
+            width: 100%;
+        }
+
+        @include responsive('medium') {
+            width: inherit;
+        }
+    }
 }
 
 @each $color, $value in $color-map {
-  .button-#{$color} {
-    @include button-variant($value);
-  }
+    .button-#{$color} {
+        @include button-variant($value);
+    }
 }
 
-input[type=file]::file-selector-button, input[type=file]::-webkit-file-upload-button {
-  @include button();
-  @include button-variant($secondary);
+input[type=file]::file-selector-button,
+input[type=file]::-webkit-file-upload-button {
+    @include button();
+    @include button-variant($secondary);
 }
 
 //non standard buttons
 .button-favorite {
-  @include button-variant(#ffbecd);
+    @include button-variant(#ffbecd);
 }

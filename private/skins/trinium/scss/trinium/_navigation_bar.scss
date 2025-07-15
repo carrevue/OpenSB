@@ -22,37 +22,38 @@ TODO
 */
 
 .navigation-bar {
-  position: sticky;
-  top: $header-height;
-  z-index: 1999;
+    position: sticky;
+    top: $header-height;
+    z-index: 1999;
 
-  background: $header-background;
-  //border-top: 1px solid $header-border;
-  border-bottom: 1px solid $header-border;
-
-  display: flex;
-  justify-content: center;
-
-  .navigation-bar-button {
-    opacity: $header-link-inactive-opacity;
-    color: $header-link-color;
-    text-decoration: none;
-    padding: 0.3em 0.5em;
+    background: $header-background;
+    //border-top: 1px solid $header-border;
+    border-bottom: 1px solid $header-border;
 
     display: flex;
-    align-items: center;
-    gap: 0.2em;
+    justify-content: center;
 
-    &:hover {
-      opacity: $header-link-active-opacity;
-      cursor: pointer;
-      @include bar-button-hover;
-    }
+    .navigation-bar-button {
+        opacity: $header-link-inactive-opacity;
+        color: $header-link-color;
+        text-decoration: none;
+        padding: 0.3em 0.5em;
 
-    &:active, &.active {
-      opacity: $header-link-active-opacity;
-      background: $header-link-active;
-      @include bar-button-active;
+        display: flex;
+        align-items: center;
+        gap: 0.2em;
+
+        &:hover {
+            opacity: $header-link-active-opacity;
+            cursor: pointer;
+            @include bar-button-hover;
+        }
+
+        &:active,
+        &.active {
+            opacity: $header-link-active-opacity;
+            background: $header-link-active;
+            @include bar-button-active;
+        }
     }
-  }
 }

@@ -1,85 +1,96 @@
 @use "sass:color";
 
 .tabcontent {
-  display: none;
+    display: none;
 }
 
 .tabs {
-  border-bottom: 1px solid $content-box-border-color;
-  display: flex;
+    border-bottom: 1px solid $content-box-border-color;
+    display: flex;
 
-  // unused, but keep this here.
-  &.homepage {
-    justify-content: flex-end;
-    border-bottom: none;
+    // unused, but keep this here.
+    &.homepage {
+        justify-content: flex-end;
+        border-bottom: none;
 
-    .tablink {
-      color: white;
-      padding: 2px 4px;
-      display: flex;
+        .tablink {
+            color: white;
+            padding: 2px 4px;
+            display: flex;
 
-      &:hover {
-        @if $color-scheme == "dark" {
-          background-color: rgba(color.adjust($bg-color, $lightness: 2.5%), 50%);
-        } @else {
-          background-color: rgba(color.adjust($bg-color, $lightness: -3.5%), 10%);
+            &:hover {
+                @if $color-scheme =="dark" {
+                    background-color: rgba(color.adjust($bg-color, $lightness: 2.5%), 50%);
+                }
+
+                @else {
+                    background-color: rgba(color.adjust($bg-color, $lightness: -3.5%), 10%);
+                }
+            }
+
+            &.active {
+                box-shadow: inset 0 1px 2px rgba(black, 0.1);
+                background-color: $bg-color;
+            }
         }
-      }
-
-      &.active {
-        box-shadow: inset 0 1px 2px rgba(black, 0.1);
-        background-color: $bg-color;
-      }
     }
-  }
 }
 
 .tablink {
-  font-family: $font;
-  cursor: pointer;
-  background-color: #fff0;
-  margin-bottom: -1px;
-  border-radius: 4px 4px 0 0;
-  color: var(--link-color);
-  display: inline-block;
-  border: 1px solid #0000;
-  text-align: center;
+    font-family: $font;
+    cursor: pointer;
+    background-color: #fff0;
+    margin-bottom: -1px;
+    border-radius: 4px 4px 0 0;
+    color: var(--link-color);
+    display: inline-block;
+    border: 1px solid #0000;
+    text-align: center;
 
-  @include responsive('tiny') {
-    padding: 6px 0;
-    flex: 1;
-  }
-  @include responsive('small') {
-    padding: 6px 16px;
-    flex: none;
-  }
-  @include responsive('medium') {
-    padding: 6px 16px;
-    flex: none;
-  }
-
-  &:hover {
-    @if $color-scheme == "dark" {
-      background-color: color.adjust($bg-color, $lightness: 2.5%);
-    } @else {
-      background-color: color.adjust($bg-color, $lightness: -3.5%)
+    @include responsive('tiny') {
+        padding: 6px 0;
+        flex: 1;
     }
-    text-decoration: none;
-  }
 
-  &.active {
-    background-color: $content-box-background-color;
-    border: 1px solid $content-box-border-color;
-    border-bottom: 1px solid #fff0;
-    @if $color-scheme == "dark" {
-      color: white;
-    } @else {
-      color: black;
+    @include responsive('small') {
+        padding: 6px 16px;
+        flex: none;
     }
-    font-weight: bold;
-  }
 
-  &:focus {
-    outline: none;
-  }
+    @include responsive('medium') {
+        padding: 6px 16px;
+        flex: none;
+    }
+
+    &:hover {
+        @if $color-scheme =="dark" {
+            background-color: color.adjust($bg-color, $lightness: 2.5%);
+        }
+
+        @else {
+            background-color: color.adjust($bg-color, $lightness: -3.5%)
+        }
+
+        text-decoration: none;
+    }
+
+    &.active {
+        background-color: $content-box-background-color;
+        border: 1px solid $content-box-border-color;
+        border-bottom: 1px solid #fff0;
+
+        @if $color-scheme =="dark" {
+            color: white;
+        }
+
+        @else {
+            color: black;
+        }
+
+        font-weight: bold;
+    }
+
+    &:focus {
+        outline: none;
+    }
 }

@@ -1,10 +1,9 @@
-.page
-{
-  padding-top: 10px;
-  margin: auto;
-  .page-contents
-  {
+.page {
+    padding-top: 10px;
     margin: auto;
-    @include maxwidths();
-  }
+
+    .page-contents {
+        margin: auto;
+        @include maxwidths();
+    }
 }

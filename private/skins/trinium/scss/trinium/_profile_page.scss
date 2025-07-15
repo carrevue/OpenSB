@@ -1,58 +1,65 @@
 @use 'sass:math';
 
 .container.has-profile-banner {
-  &.user, &.read {
-    margin-top: -5rem;
-  }
+
+    &.user,
+    &.read {
+        margin-top: -5rem;
+    }
 }
 
 // add margin to make it feel more right.
 .container {
-  &.user, &.read {
-    margin-top: 1em;
-  }
+
+    &.user,
+    &.read {
+        margin-top: 1em;
+    }
 }
 
 .profile-box {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  &.centered {
-    text-align: center
-  }
-
-  h1 {
-    margin: 0;
-    font-size: 14px;
-  }
-
-  .profile-box-pfp {
-    width: $pfp-width-profiles;
-    height: $pfp-width-profiles;
-    margin-right: 0.75em;
-    &.small {
-      width: math.div($pfp-width-profiles, 1.5);
-      height: math.div($pfp-width-profiles, 1.5);
-      .profile-picture {
-        width: math.div($pfp-width-profiles, 1.5);
-        height: math.div($pfp-width-profiles, 1.5);
-      }
+    &.centered {
+        text-align: center
     }
 
-    .profile-picture {
-      width: $pfp-width-profiles;
-      height: $pfp-width-profiles;
+    h1 {
+        margin: 0;
+        font-size: 14px;
     }
-  }
 
-  .profile-box-info {
-    width: 100%;
-    .profile-box-username {
-      display: flex;
-      gap: 0.25em;
-      align-items: center;
-      font-size: 1.1em;
-      font-weight: 500;
+    .profile-box-pfp {
+        width: $pfp-width-profiles;
+        height: $pfp-width-profiles;
+        margin-right: 0.75em;
+
+        &.small {
+            width: math.div($pfp-width-profiles, 1.5);
+            height: math.div($pfp-width-profiles, 1.5);
+
+            .profile-picture {
+                width: math.div($pfp-width-profiles, 1.5);
+                height: math.div($pfp-width-profiles, 1.5);
+            }
+        }
+
+        .profile-picture {
+            width: $pfp-width-profiles;
+            height: $pfp-width-profiles;
+        }
     }
-  }
+
+    .profile-box-info {
+        width: 100%;
+
+        .profile-box-username {
+            display: flex;
+            gap: 0.25em;
+            align-items: center;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+    }
 }

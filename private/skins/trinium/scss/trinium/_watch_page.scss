@@ -1,97 +1,99 @@
 .submission {
-  text-align: center;
-  background: $content-box-background-color;
-  border: 1px solid $content-box-border-color;
-  border-bottom: none;
+    text-align: center;
+    background: $content-box-background-color;
+    border: 1px solid $content-box-border-color;
+    border-bottom: none;
 
-  .img-submission {
-    padding: 1rem;
-    filter: drop-shadow(0 0 2px rgba(black, 0.2));
-  }
+    .img-submission {
+        padding: 1rem;
+        filter: drop-shadow(0 0 2px rgba(black, 0.2));
+    }
 }
 
 .watch-box {
-  background: $content-box-background-color;
-  border: 1px solid $content-box-border-color;
-  padding: $content-box-padding;
-  overflow: hidden;
-  word-break: break-word;
+    background: $content-box-background-color;
+    border: 1px solid $content-box-border-color;
+    padding: $content-box-padding;
+    overflow: hidden;
+    word-break: break-word;
 
-  .section {
-    margin: 0;
-  }
-
-  .watch-box-title {
-    .section-header {
-      margin: 0;
-    }
-    .watch-box-below-title {
-      opacity: 50%;
-      font-size: 0.9em;
-    }
-  }
-
-  .watch-box-description {
-    margin: 0 auto;
-    word-wrap: break-word;
-
-    .watch-box-description-info {
-      //opacity: 50%;
+    .section {
+        margin: 0;
     }
 
-    .watch-box-description-info-small {
-      font-size: 0.9em;
-    }
-  }
-
-  .watch-box-row {
-    display: flex;
-    align-items: center;
-
-    .watch-box-right {
-      text-align: right;
-
-      .watch-box-views {
-        font-size: 1.25em;
-      }
-
-      .watch-box-ratings-number {
-        font-size: 0.8em;
-        opacity: 50%;
-      }
-    }
-
-    .watch-box-left {
-      /* author and upload date. */
-      display: flex;
-      align-items: center;
-      gap: 0.8em;
-      flex-grow: 1;
-
-      .watch-box-profile-picture {
-        width: 50px;
-        height: 50px;
-      }
-
-      .watch-box-author {
-        .watch-box-author-userlink {
-          font-size: 1.1em;
+    .watch-box-title {
+        .section-header {
+            margin: 0;
         }
 
-        #follower_count, .watch-box-followers-logged-out {
-          font-size: 0.9em;
+        .watch-box-below-title {
+            opacity: 50%;
+            font-size: 0.9em;
+        }
+    }
+
+    .watch-box-description {
+        margin: 0 auto;
+        word-wrap: break-word;
+
+        .watch-box-description-info {
+            //opacity: 50%;
         }
 
-        .watch-box-followers-logged-out {
-          opacity: 50%;
+        .watch-box-description-info-small {
+            font-size: 0.9em;
         }
+    }
 
+    .watch-box-row {
         display: flex;
-        justify-content: center;
-        flex-flow: column;
+        align-items: center;
 
-        height: 50px;
-      }
+        .watch-box-right {
+            text-align: right;
+
+            .watch-box-views {
+                font-size: 1.25em;
+            }
+
+            .watch-box-ratings-number {
+                font-size: 0.8em;
+                opacity: 50%;
+            }
+        }
+
+        .watch-box-left {
+            /* author and upload date. */
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+            flex-grow: 1;
+
+            .watch-box-profile-picture {
+                width: 50px;
+                height: 50px;
+            }
+
+            .watch-box-author {
+                .watch-box-author-userlink {
+                    font-size: 1.1em;
+                }
+
+                #follower_count,
+                .watch-box-followers-logged-out {
+                    font-size: 0.9em;
+                }
+
+                .watch-box-followers-logged-out {
+                    opacity: 50%;
+                }
+
+                display: flex;
+                justify-content: center;
+                flex-flow: column;
+
+                height: 50px;
+            }
+        }
     }
-  }
 }
