@@ -13,40 +13,50 @@
         {% set current_page = page %}
 
         <div class="form-flex">
-            <form action="/admin/uploads/" method="GET" id="num_change">
-                <select name="amount" onchange="this.form.submit()" style="height:30px;">
-                    {% for option in [8, 16, 32, 64, 128, 256] %}
+            <form action="/admin/uploads/" method="GET" id="num_change" class="admin-form-select">
+                <select name="amount" onchange="this.form.submit()">
+                    {% for option in [8, 16, 24, 32, 48, 64, 96, 128, 256] %}
                         <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
                     {% endfor %}
                 </select>
             </form>
 
-            <form method="GET" action="/admin/uploads/" style="margin-left: auto;">
+            <form method="GET" action="/admin/uploads/" class="admin-form-search">
                 <input type="hidden" name="amount" value="{{ amount }}">
                 <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
-                <button type="submit" class="button button-secondary">{{ localize('search') }}</button>
+                <button type="submit" class="button button-secondary">
+                    <div class="biscuit-icon search"></div>
+                </button>
             </form>
         </div>
         <hr>
         {% for upload in uploads %}
             <div class="content-entry">
                 <div class="content-thumbnail">
-                    <img src="{{ thumbnail(upload.id, upload.type, true) }}"
-                         width="120" alt="{{ upload.title }}" class="content-image thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, true) }}" alt="{{ upload.title }}" class="content-image thumbnail">
                 </div>
                 <div class="content-thumbnail">
-                    <img src="{{ thumbnail(upload.id, upload.type, false) }}"
-                         width="120" alt="{{ upload.title }}" class="content-image thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, false) }}" alt="{{ upload.title }}" class="content-image thumbnail">
                 </div>
                 <div class="content-info">
                     <div class="content-title">
                         {{ upload.title }}
                     </div>
                     <div class="content-description">
-                        TODO
+                        <div>
+                            Uploader: <a href="/admin/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a>
+                        </div>
+                        <div>
+                            Uploaded: {{ upload.published | date('F jS Y H:i T') }} ({{ upload.published | relative_time }})</a>
+                        </div>
+                        {% if upload.status %}
+                        <div>
+                            Status: <span class="text-{{ upload.status.color }}">{{ upload.status.text }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                     <div>
-                        <a class="button button-secondary" href="/admin/uploads/{{ upload.id }}">
+                        <a class="button button-secondary button-small" href="/admin/uploads/{{ upload.id }}">
                             Check
                         </a>
                     </div>

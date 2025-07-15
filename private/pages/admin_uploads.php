@@ -40,8 +40,53 @@ $count = $database->result("SELECT COUNT(*) FROM uploads u");
 // kinda fucking stupid i guess but whatever
 $uploads = $upload_query->query('v.time DESC', $limit, null, [], true);
 
+$uploads_array = Utilities::makeUploadArray($database, $uploads);
+
+$new_fucking_array = [];
+
+// now figure out the upload status
+// temporary for now
+foreach ($uploads_array as $upload) {
+    $is_taken_down = $database->fetchArray($database->query("SELECT * FROM upload_takedowns t WHERE t.submission = ?", [$upload["id"]]));
+
+    $upload["status"] = [
+        "text" => "Public",
+        "color" => "success",
+    ];
+
+    if ($upload["flags"]["unprocessed"]) {
+        $upload["status"] = [
+            "text" => "Unprocessed",
+            "color" => "danger",
+        ];
+    }
+
+    if ($upload["flags"]["block_guests"]) {
+        $upload["status"] = [
+            "text" => "Public (hidden to guests)",
+            "color" => "primary",
+        ];
+    }
+
+    if ($upload["flags"]["featured"]) {
+        $upload["status"] = [
+            "text" => "Featured",
+            "color" => "warning",
+        ];
+    }
+
+    if ($is_taken_down) {
+        $upload["status"] = [
+            "text" => "Taken down",
+            "color" => "danger",
+        ];
+    }
+
+    $new_fucking_array[] = $upload;
+};
+
 echo $twig->render("admin_uploads.twig", [
-    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "uploads" => $new_fucking_array,
     "amount" => $amount,
     "page" => $page,
     "count" => $count,

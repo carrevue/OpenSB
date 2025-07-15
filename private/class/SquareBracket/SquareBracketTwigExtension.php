@@ -636,7 +636,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         if ($this->orange->isChazizSquareBracketInstance()) {
             if (!$this->orange->isFulpTube()) {
                 $array["brickface"] = [
-                    "name" => "Go to Quadium/Brickface",
+                    "name" => "Go to Brickface/Quadium",
                     "url" => "https://brickface.squarebracket.pw/",
                 ];
             }

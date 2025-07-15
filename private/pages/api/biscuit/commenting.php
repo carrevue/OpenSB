@@ -5,6 +5,7 @@ namespace OpenSB;
 global $auth, $orange, $twig;
 
 use SquareBracket\NotificationEnum;
+use SquareBracket\UploadFlags;
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
@@ -42,11 +43,11 @@ if (strlen($commentText) > 1000) {
 
 if (!$orange->isDebug()) {
     $timeLimit = time() - 15;
-    if ($database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
+    if (
+        $database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
         $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
         $database->result("SELECT COUNT(*) FROM journal_comments WHERE date > ? AND author = ?", [$timeLimit, $userId])
     ) {
-        // TODO: display a ui notification
         echo json_encode(["error" => "Please wait at least 15 seconds before commenting again."]);
         exit;
     }
@@ -54,6 +55,15 @@ if (!$orange->isDebug()) {
 
 $id = $post_data["id"];
 $replyTo = $post_data['reply_to'] ?? 0;
+
+if ($post_data['type'] == 'submission') {
+    $upload_flags = UploadFlags::toArray($database->result("SELECT flags from uploads where video_id = ?", [$id]));
+
+    if ($upload_flags["block_comments"]) {
+        echo json_encode(["error" => "Commenting has been disabled on this upload."]);
+        exit;
+    }
+}
 
 switch ($post_data['type']) {
     case 'submission':

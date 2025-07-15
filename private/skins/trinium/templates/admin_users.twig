@@ -15,7 +15,7 @@
         <div class="form-flex">
             <form action="/admin/users/" method="GET" id="num_change" class="admin-form-select">
                 <select name="amount" onchange="this.form.submit()">
-                    {% for option in [8, 16, 32, 64, 128, 256] %}
+                    {% for option in [8, 16, 24, 32, 48, 64, 96, 128, 256] %}
                         <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
                     {% endfor %}
                 </select>

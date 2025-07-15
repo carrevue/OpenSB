@@ -192,7 +192,15 @@
                                 <div class="section-desc">{{ submission.interactions.comments }}</div>
                             </div>
                         </div>
-                        {{ include('/components/_comment_input.twig') }}
+                        {% if not submission.flags.block_comments %}
+                            {{ include('/components/_comment_input.twig') }}
+                        {% else %}
+                            <div>
+                                <div id="new-comment-logged-out">
+                                    Commenting has been disabled.
+                                </div>
+                            </div>
+                        {% endif %}
                         {% for comment in submission.comments %}
                             {{ include('/components/_comment.twig') }}
                         {% endfor %}
