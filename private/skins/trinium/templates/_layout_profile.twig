@@ -4,6 +4,9 @@
     <style>
         {% if banner_picture %}
         .jumbotron.profile-banner {
+        {% if data.customization %}
+            background-color: {{ data.customization.background_color }};
+        {% endif %}
             background-image: url('{{ banner_picture }}');
         }
         {% endif %}
