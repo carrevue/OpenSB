@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $twig, $database, $auth, $twig_error, $orange;
@@ -7,13 +26,12 @@ global $twig, $database, $auth, $twig_error, $orange;
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
-if(!$orange->isIncompleteFeaturesEnabled()) {
+if (!$orange->isIncompleteFeaturesEnabled()) {
     http_response_code(404);
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
 }
 
-if (!$auth->isUserLoggedIn())
-{
+if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("Please login to continue.", "/login");
 }
 

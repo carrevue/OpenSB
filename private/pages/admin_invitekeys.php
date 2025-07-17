@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2024-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $auth, $twig, $database, $orange;
@@ -37,8 +56,10 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == "generate_invite_key") {
         $random = strtoupper("SBA_" . Utilities::generateRandomString(32));
 
-        $database->query("INSERT INTO invite_keys (invite_key, generated_by, generated_time) VALUES (?,?,?)",
-            [$random, $auth->getUserID(), time()]);
+        $database->query(
+            "INSERT INTO invite_keys (invite_key, generated_by, generated_time) VALUES (?,?,?)",
+            [$random, $auth->getUserID(), time()]
+        );
 
         Utilities::notifyBanner("Generated key! ($random)", "/admin/invitekeys", "success");
     }

@@ -1,6 +1,26 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
+
 global $orange, $database, $auth;
 
 use SquareBracket\Utilities;
@@ -17,22 +37,24 @@ if (!$auth->isUserLoggedIn()) {
 if (isset($_POST["submit"])) {
     $random = strtoupper("SBU_" . Utilities::generateRandomString(32));
 
-    $database->query("INSERT INTO invite_keys (invite_key, generated_by, generated_time) VALUES (?,?,?)",
-        [$random, $auth->getUserID(), time()]);
+    $database->query(
+        "INSERT INTO invite_keys (invite_key, generated_by, generated_time) VALUES (?,?,?)",
+        [$random, $auth->getUserID(), time()]
+    );
 }
 
 $data = $database->fetchArray($database->query("SELECT * FROM invite_keys WHERE generated_by = ?", [$auth->getUserId()]));
 ?>
-    <h1>My Invite Keys</h1>
-    <p>This is the (prototype) implementation of managing invite keys meant for normal users.
-        Staff can manage invite keys through the admin panel.</p>
-    <div>
-        <form action="/debug/invite_keys" method="post">
-            <div>
-                <input type="submit" name="submit" value="Generate new key">
-            </div>
-        </form>
-    </div>
+<h1>My Invite Keys</h1>
+<p>This is the (prototype) implementation of managing invite keys meant for normal users.
+    Staff can manage invite keys through the admin panel.</p>
+<div>
+    <form action="/debug/invite_keys" method="post">
+        <div>
+            <input type="submit" name="submit" value="Generate new key">
+        </div>
+    </form>
+</div>
 <table border="1">
     <tr>
         <th>ID</th>

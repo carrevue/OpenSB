@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2023-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $auth, $database;
@@ -23,12 +42,11 @@ function rate($number, $submission): array
     global $database, $auth;
 
     // shouldn't this update instead?
-    if ($database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND user=?", [$submission, $auth->getUserID()]))
-    {
+    if ($database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND user=?", [$submission, $auth->getUserID()])) {
         $database->query("DELETE FROM upload_ratings WHERE video=? AND user=?", [$submission, $auth->getUserID()]);
     }
     $database->query("INSERT INTO upload_ratings (video, user, rating) VALUES (?,?,?)", [$submission, $auth->getUserID(), $number]);
-    return [ "rated" => true ];
+    return ["rated" => true];
 }
 
 if (isset($post_data['submission'])) {

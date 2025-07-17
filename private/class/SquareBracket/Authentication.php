@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2023-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace SquareBracket;
 
 /**
@@ -24,7 +43,7 @@ class Authentication
         $token = $_SESSION["SBTOKEN"] ?? null;
 
         if (isset($token)) {
-            if($this->user_id = $this->database->result("SELECT id FROM users WHERE token = ?", [$token])) {
+            if ($this->user_id = $this->database->result("SELECT id FROM users WHERE token = ?", [$token])) {
                 $this->is_logged_in = true;
                 $this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE id = ?", [$this->user_id]);
                 $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$this->user_id]);

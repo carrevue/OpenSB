@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2024-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $auth, $twig, $database, $orange, $path;
@@ -24,8 +43,7 @@ $username = $path[3] ?? null;
 
 $user = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
-if (!$user)
-{
+if (!$user) {
     // check if this username was used before and was changed out of.
     $old_username_data = $database->fetch("SELECT user FROM user_old_names WHERE old_name = ?", [$username]);
 
@@ -53,17 +71,21 @@ if (isset($_POST['ban_user'])) {
     $id = $database->fetch("SELECT u.id FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["id"];
     if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$id])) {
         $database->query("DELETE FROM user_bans WHERE userid = ?", [$id]);
-        Utilities::notifyBanner("Unbanned " . $_POST["ban_user"] . '.' , "/admin/users", "success");
+        Utilities::notifyBanner("Unbanned " . $_POST["ban_user"] . '.', "/admin/users", "success");
     } else {
-        $database->query("INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-            [$id, "Banned by " . $auth->getUserData()["name"], time()]);
+        $database->query(
+            "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
+            [$id, "Banned by " . $auth->getUserData()["name"], time()]
+        );
         Utilities::notifyBanner("Banned " . $_POST["ban_user"] . '.', "/admin/users", "success");
     }
 }
 
 if ($user["ip"] != "999.999.999.999") {
-    $users_with_matching_ips = $database->fetchArray($database->query("SELECT u.name, u.title FROM users u WHERE u.ip = ? AND id != ?",
-        [$user["ip"], $user["id"]]));
+    $users_with_matching_ips = $database->fetchArray($database->query(
+        "SELECT u.name, u.title FROM users u WHERE u.ip = ? AND id != ?",
+        [$user["ip"], $user["id"]]
+    ));
 } else {
     $users_with_matching_ips = [];
 }

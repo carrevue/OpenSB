@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $orange, $database;
@@ -27,7 +46,7 @@ if (isset($_POST["submit"])) {
     try {
         $token = bin2hex(random_bytes(32));
     } catch (RandomException $e) {
-       die("An error occurred while generating your token.");
+        die("An error occurred while generating your token.");
     }
 
     if ($database->fetch("SELECT COUNT(*) FROM user_old_names WHERE old_name = ?", [$username])["COUNT(*)"] >= 1) {
@@ -49,9 +68,11 @@ if (isset($_POST["submit"])) {
     }
 
     $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
-    $database->query("INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate)
+    $database->query(
+        "INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [$username, $hashedPassword, $token, time(), time(), $username, $email, "ip", $dobDateTime->format('Y-m-d')]);
+        [$username, $hashedPassword, $token, time(), time(), $username, $email, "ip", $dobDateTime->format('Y-m-d')]
+    );
 }
 ?>
 <h1>Create account</h1>

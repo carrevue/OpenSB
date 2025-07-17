@@ -1,5 +1,26 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021 ROllerozxa
+  Copyright (C) 2021-2022 icanttellyou
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $auth, $database, $twig, $orange;
@@ -22,8 +43,7 @@ if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name']);
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
-if (!$data)
-{
+if (!$data) {
     // check if this username was used before and was changed out of.
     $old_username_data = $database->fetch("SELECT user FROM user_old_names WHERE old_name = ?", [$username]);
 
@@ -61,8 +81,10 @@ function handleFeaturedSubmission($database, $data): false|array
 
     if ($featured_id == 0 || !$featured_id) {
         $featured_id = $database->fetch(
-            "SELECT video_id FROM uploads v WHERE v.author = ? ORDER BY v.time DESC", [$data["id"]]);
-        if(!isset($featured_id["video_id"])) {
+            "SELECT video_id FROM uploads v WHERE v.author = ? ORDER BY v.time DESC",
+            [$data["id"]]
+        );
+        if (!isset($featured_id["video_id"])) {
             return false;
         }
         if ($featured_id == 0) {
@@ -86,8 +108,7 @@ function handleFeaturedSubmission($database, $data): false|array
         || !$submission_data
         || ($submission_data["author"] != $data["id"])
         || ($bools["block_guests"] && !$auth->isUserLoggedIn())
-    )
-    {
+    ) {
         return false;
     } else {
         // HACK: we have to use Utilities::makeUploadArray since there is somehow
@@ -103,7 +124,8 @@ $user_journals =
         $database->query("SELECT j.* FROM journals j WHERE
                          j.author = ? 
                          ORDER BY j.date 
-                         DESC LIMIT 8", [$data["id"]]));
+                         DESC LIMIT 8", [$data["id"]])
+    );
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 

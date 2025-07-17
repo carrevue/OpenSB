@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2023-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace SquareBracket;
 
 use Intervention\Image\Drivers\Gd\Driver;
@@ -9,7 +28,8 @@ class Storage
 {
     private SquareBracket $orange;
     private Database $database;
-    public function __construct(SquareBracket $orange) {
+    public function __construct(SquareBracket $orange)
+    {
         $this->orange = $orange;
         $this->database = $orange->getDatabaseClass();
     }
@@ -19,17 +39,21 @@ class Storage
         // this uses the version of php on path. if processing worker errors out with "OpenSB is not compatible
         // with your PHP version.", then your path's php is too old.
         if (str_starts_with(php_uname(), "Windows")) {
-            pclose(popen(sprintf('start /B  php %s "%s" "%s" "video" "1" > %s',
+            pclose(popen(sprintf(
+                'start /B  php %s "%s" "%s" "video" "1" > %s',
                 SB_PRIVATE_PATH . '\scripts\processingworker.php',
                 $new,
                 $target_file,
-                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'), "r"));
+                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'
+            ), "r"));
         } else {
-            system(sprintf('php %s "%s" "%s" "video" "1" > %s 2>&1 &',
+            system(sprintf(
+                'php %s "%s" "%s" "video" "1" > %s 2>&1 &',
                 SB_PRIVATE_PATH . '/scripts/processingworker.php',
                 $new,
                 $target_file,
-                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'));
+                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'
+            ));
         }
     }
 

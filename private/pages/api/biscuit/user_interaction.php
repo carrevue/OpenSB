@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2023-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $auth, $orange;
@@ -40,7 +59,7 @@ function follow($member): array
         $database->query("INSERT INTO user_follows (id, user) VALUES (?,?)", [$member, $auth->getUserID()]);
         $result = true;
 
-        Utilities::notifyUser($database, $member, 0,0,NotificationEnum::Follow);
+        Utilities::notifyUser($database, $member, 0, 0, NotificationEnum::Follow);
     }
 
     $number = $database->fetch("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$member])['COUNT(user)'];

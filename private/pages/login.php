@@ -1,5 +1,26 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021 ROllerozxa
+  Copyright (C) 2021-2022 icanttellyou
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $twig, $database, $auth, $orange;
@@ -49,7 +70,7 @@ if (isset($path_username)) {
             'domain' => '',
             'secure' => false,
             'httponly' => false,
-            'samesite' =>'Lax',
+            'samesite' => 'Lax',
         ]);
         Utilities::notifyBanner("Successfully switched to $path_username.", '/', "success");
     } else {
@@ -118,10 +139,10 @@ if (isset($_POST["loginsubmit"])) {
 
                     $current_userid = $auth->getUserID();
 
-                    $duplicates = array_keys(array_combine(array_keys($decoded_accounts), array_column($decoded_accounts, 'userid')),$logindata["id"]);
+                    $duplicates = array_keys(array_combine(array_keys($decoded_accounts), array_column($decoded_accounts, 'userid')), $logindata["id"]);
 
                     foreach ($duplicates as $duplicate) {
-                        unset ($decoded_accounts[$duplicate]);
+                        unset($decoded_accounts[$duplicate]);
                     }
 
                     if ($current_userid != $logindata["id"]) {
@@ -140,7 +161,7 @@ if (isset($_POST["loginsubmit"])) {
                     'domain' => '',
                     'secure' => isset($_SERVER['HTTPS']),
                     'httponly' => true,
-                    'samesite' =>'Lax',
+                    'samesite' => 'Lax',
                 ]);
 
                 // null access to admin panel for security

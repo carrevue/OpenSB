@@ -1,5 +1,26 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021 ROllerozxa
+  Copyright (C) 2021-2022 icanttellyou
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $orange, $twig, $auth, $database;
@@ -8,8 +29,7 @@ use Random\RandomException;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
-if (!$auth->isUserLoggedIn())
-{
+if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("Please login to continue.", "/login");
 }
 
@@ -19,8 +39,10 @@ if ($auth->getUserBanData()) {
 }
 
 // check if this user has an entry in the profile customization table
-$profile_color_data = $database->fetch("SELECT * FROM user_profile_customization WHERE user = ?",
-    [$auth->getUserData()["id"]]);
+$profile_color_data = $database->fetch(
+    "SELECT * FROM user_profile_customization WHERE user = ?",
+    [$auth->getUserData()["id"]]
+);
 
 if (isset($_POST['save'])) {
     $flags = $auth->getUserFlags();
@@ -82,8 +104,10 @@ if (isset($_POST['save'])) {
                     Utilities::notifyBanner("An error occurred while generating your token. Please try again.", "/settings");
                 }
 
-                $database->query("UPDATE users SET password = ?, token = ? WHERE id = ?",
-                    [password_hash($pass, PASSWORD_DEFAULT), $new_token, $auth->getUserID()]);
+                $database->query(
+                    "UPDATE users SET password = ?, token = ? WHERE id = ?",
+                    [password_hash($pass, PASSWORD_DEFAULT), $new_token, $auth->getUserID()]
+                );
 
                 Utilities::notifyBanner("Your password has been changed.", "/login");
             } else {
@@ -111,8 +135,10 @@ if (isset($_POST['save'])) {
                     // still validate any old usernames because this code was actually broken and
                     // didn't validate anything (sql was sanitized tho), at all! -chaziz 6/28/2024
                     $error .= Utilities::validateUsername($new_username, $database, false);
-                    $database->query("INSERT INTO user_old_names (user, old_name, time) VALUES (?, ?, ?)",
-                        [$auth->getUserID(), $old_username, time()]);
+                    $database->query(
+                        "INSERT INTO user_old_names (user, old_name, time) VALUES (?, ?, ?)",
+                        [$auth->getUserID(), $old_username, time()]
+                    );
 
                     if (!$error) {
                         $database->query("UPDATE users SET name = ? WHERE id = ?", [$new_username, $auth->getUserID()]);
@@ -128,8 +154,10 @@ if (isset($_POST['save'])) {
                         $last_entry_time = $database->result("SELECT MAX(time) FROM user_old_names WHERE user = ?", [$auth->getUserID()]);
 
                         if (!$last_entry_time || (time() - $last_entry_time >= 2592000)) {
-                            $database->query("INSERT INTO user_old_names (user, old_name, time) VALUES (?, ?, ?)",
-                                [$auth->getUserID(), $old_username, time()]);
+                            $database->query(
+                                "INSERT INTO user_old_names (user, old_name, time) VALUES (?, ?, ?)",
+                                [$auth->getUserID(), $old_username, time()]
+                            );
                             $database->query("UPDATE users SET name = ? WHERE id = ?", [$new_username, $auth->getUserID()]);
                             $username_changed = true;
                         } else {
@@ -157,7 +185,8 @@ if (isset($_POST['save'])) {
     }
 
     if (!$error) {
-        $database->query("UPDATE users SET 
+        $database->query(
+            "UPDATE users SET 
                  title = ?, 
                  about = ?, 
                  comfortable_rating = ?, 
@@ -165,7 +194,8 @@ if (isset($_POST['save'])) {
                  u_flags = ?,
                  blacklisted_tags = ?
                  WHERE id = ?",
-            [$title, $about, $rating, $customcolor, $flags, json_encode($parsed_tags), $auth->getUserID()]);
+            [$title, $about, $rating, $customcolor, $flags, json_encode($parsed_tags), $auth->getUserID()]
+        );
 
         if ($profile_color_data) {
             // if so, update their customizations
@@ -183,9 +213,16 @@ if (isset($_POST['save'])) {
             highlight_box_text_color = ?
         WHERE user = ?
     ", [
-                $font, $background_color, $title_color, $link_color,
-                $basic_box_border_color, $basic_box_background_color, $basic_box_text_color,
-                $highlight_box_border_color, $highlight_box_background_color, $highlight_box_text_color,
+                $font,
+                $background_color,
+                $title_color,
+                $link_color,
+                $basic_box_border_color,
+                $basic_box_background_color,
+                $basic_box_text_color,
+                $highlight_box_border_color,
+                $highlight_box_background_color,
+                $highlight_box_text_color,
                 $auth->getUserID()
             ]);
         } else {
@@ -197,9 +234,17 @@ if (isset($_POST['save'])) {
             highlight_box_border_color, highlight_box_background_color, highlight_box_text_color
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ", [
-                $auth->getUserID(), $font, $background_color, $title_color, $link_color,
-                $basic_box_border_color, $basic_box_background_color, $basic_box_text_color,
-                $highlight_box_border_color, $highlight_box_background_color, $highlight_box_text_color
+                $auth->getUserID(),
+                $font,
+                $background_color,
+                $title_color,
+                $link_color,
+                $basic_box_border_color,
+                $basic_box_background_color,
+                $basic_box_text_color,
+                $highlight_box_border_color,
+                $highlight_box_background_color,
+                $highlight_box_text_color
             ]);
         }
 

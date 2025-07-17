@@ -1,5 +1,27 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021 ROllerozxa
+  Copyright (C) 2021-2022 icanttellyou
+  Copyright (C) 2024 OkayHush/COCKSOCK69
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $orange, $twig, $database;
@@ -64,8 +86,11 @@ if (isset($_POST['registersubmit'])) {
     if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
 
     $isLocalIp = (Utilities::getIpAddress(false) === "localhost"
-              || filter_var(Utilities::getIpAddress(false),
-            FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false);
+        || filter_var(
+            Utilities::getIpAddress(false),
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        ) === false);
 
     if (!$orange->isInviteKeysEnabled() || !$orange->isDebug()) {
         if (!$isLocalIp) {
@@ -102,7 +127,7 @@ if (isset($_POST['registersubmit'])) {
         }
     }
 
-    if(!$error) {
+    if (!$error) {
         $flags = 0;
 
         if ($orange->isFulpTube()) {
@@ -116,14 +141,18 @@ if (isset($_POST['registersubmit'])) {
         }
 
         $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
-        $database->query("INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate, u_flags)
+        $database->query(
+            "INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate, u_flags)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [$username, $hashedPassword, $token, time(), time(), $username, $mail, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags]);
+            [$username, $hashedPassword, $token, time(), time(), $username, $mail, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags]
+        );
         $userId = $database->insertId();
 
         if ($enableInviteKeys) {
-            $database->query("UPDATE invite_keys SET claimed_by = ?, claimed_time = ? WHERE invite_key = ?",
-                [$userId, time(), $invite]);
+            $database->query(
+                "UPDATE invite_keys SET claimed_by = ?, claimed_time = ? WHERE invite_key = ?",
+                [$userId, time(), $invite]
+            );
         }
 
         $_SESSION["SBTOKEN"] = $token;

@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2024-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 global $auth, $twig, $database, $orange;
@@ -36,7 +55,10 @@ $usersDataQuery = $database->fetchArray(
         FROM users u
         WHERE (u.name LIKE CONCAT('%', ?, '%'))
         ORDER BY u.id DESC $limit
-        ", [$search]));
+        ",
+        [$search]
+    )
+);
 
 foreach ($usersDataQuery as $user) {
     $userData = new UserData($database, $user["id"]);
@@ -52,10 +74,12 @@ foreach ($usersDataQuery as $user) {
 }
 
 $count = $database->result(
-        "SELECT COUNT(*)
+    "SELECT COUNT(*)
         FROM users u
         WHERE (u.name LIKE CONCAT('%', ?, '%'))
-        ", [$search]);
+        ",
+    [$search]
+);
 
 echo $twig->render("admin_users.twig", [
     "users" => $usersData,

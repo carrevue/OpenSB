@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace OpenSB;
 
 use SquareBracket\NotificationEnum;
@@ -16,11 +35,13 @@ if (!$orange->isDebug()) {
 
 if (isset($_POST["submit"])) {
     try {
-        Utilities::notifyUser($database,
+        Utilities::notifyUser(
+            $database,
             $_POST["user_id"],
             $_POST["location_id"],
             $_POST["related_id"],
-            NotificationEnum::from($_POST["notification_type"]));
+            NotificationEnum::from($_POST["notification_type"])
+        );
     } catch (\Exception $e) {
         die("You must login.");
     }
@@ -29,13 +50,13 @@ if (isset($_POST["submit"])) {
 ?>
 <h1>Notifications</h1>
 <div>
-<?php
+    <?php
     if ($auth->isUserLoggedIn()) {
         echo "Logged in";
     } else {
         echo "NOT LOGGED IN";
     }
-?>
+    ?>
 </div>
 <div>
     <h2>Create-a-Notification</h2>

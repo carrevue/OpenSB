@@ -1,5 +1,24 @@
 <?php
 
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2023-2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 namespace SquareBracket;
 
 /**
@@ -12,18 +31,21 @@ class CommentData
     private $id;
     private $count = 0; // stupid? maybe idfk
 
-    public function __construct(Database $database, $type, $id = null) {
+    public function __construct(Database $database, $type, $id = null)
+    {
         $this->database = $database;
         $this->type = $type;
         $this->id = $id;
     }
 
-    private function fetchComments($query, $params) {
+    private function fetchComments($query, $params)
+    {
         return $this->database->fetchArray($this->database->query($query, $params));
     }
 
     // probably stupid and should be part of getComments. -chaziz 8/26/2023
-    public function getReplies($comment_id) {
+    public function getReplies($comment_id)
+    {
         $database_data = null;
 
         switch ($this->type) {
@@ -57,11 +79,13 @@ class CommentData
         return $data;
     }
 
-    public function getCommentCount() {
+    public function getCommentCount()
+    {
         return $this->count;
     }
 
-    public function getComments() {
+    public function getComments()
+    {
         $database_data = null;
 
         switch ($this->type) {
