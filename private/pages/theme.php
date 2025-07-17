@@ -26,7 +26,7 @@ global $orange, $twig;
 use SquareBracket\Utilities;
 
 // scan for localizations
-$localesPath = SB_PRIVATE_PATH . "/locales/";
+$localesPath = BLUFF_PRIVATE_PATH . "/locales/";
 $locales = [];
 
 if (is_dir($localesPath)) {

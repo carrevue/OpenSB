@@ -41,7 +41,7 @@ class ErrorTemplating
      */
     public function __construct(SquareBracket $orange)
     {
-        chdir(SB_PRIVATE_PATH);
+        chdir(BLUFF_PRIVATE_PATH);
 
         $this->orange = $orange;
         //$options = $this->orange->getLocalOptions();

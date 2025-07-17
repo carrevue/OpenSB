@@ -327,7 +327,7 @@ class Utilities
     // if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
     public static function getIpAddress($encrypted = true)
     {
-        if (SB_CLI) return null;
+        if (BLUFF_CLI) return null;
 
         $ip = $_SERVER['REMOTE_ADDR'];
 

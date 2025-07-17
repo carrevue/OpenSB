@@ -38,10 +38,10 @@ class VersionNumber
      */
     private function makeVersionString(): string
     {
-        if (file_exists(SB_GIT_PATH)) {
-            $gitHead = file_get_contents(SB_GIT_PATH . '/HEAD');
+        if (file_exists(BLUFF_GIT_PATH)) {
+            $gitHead = file_get_contents(BLUFF_GIT_PATH . '/HEAD');
             $gitBranch = rtrim(preg_replace("/(.*?\/){2}/", '', $gitHead));
-            $commit = file_get_contents(SB_GIT_PATH . '/refs/heads/' . $gitBranch); // kind of bad but hey it works
+            $commit = file_get_contents(BLUFF_GIT_PATH . '/refs/heads/' . $gitBranch); // kind of bad but hey it works
 
             $hash = substr($commit, 0, 7);
 

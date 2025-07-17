@@ -40,7 +40,7 @@ $logindata = $database->fetch("SELECT admin_password FROM users WHERE name = ?",
 if (!isset($logindata["admin_password"])) {
     $new_pass = Utilities::generateRandomString(24);
     $database->query("UPDATE users SET admin_password = ? WHERE name = ?", [password_hash($new_pass, PASSWORD_DEFAULT), $auth->getUserData()["name"]]);
-    $_SESSION["SB_ADMIN_AUTHED"] = true;
+    $_SESSION["BLUFF_ADMIN_AUTHED"] = true;
     Utilities::notifyBanner("Welcome! Your admin password is " . $new_pass .
         ". Please note it down in a safe and secure place to avoid losing it.", "/admin/", "success");
 }
@@ -54,7 +54,7 @@ if (isset($_POST["loginsubmit"])) {
 
     if (!$error) {
         if ($logindata && password_verify($password, $logindata['admin_password'])) {
-            $_SESSION["SB_ADMIN_AUTHED"] = true;
+            $_SESSION["BLUFF_ADMIN_AUTHED"] = true;
             Utilities::notifyBanner("Welcome to the admin panel.", "/admin/", "success");
         } else {
             Utilities::notifyBanner("Incorrect admin password.", "/admin/login");

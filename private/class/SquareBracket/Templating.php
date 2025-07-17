@@ -50,7 +50,7 @@ class Templating
      */
     public function __construct(SquareBracket $orange)
     {
-        chdir(SB_PRIVATE_PATH);
+        chdir(BLUFF_PRIVATE_PATH);
 
         $this->orange = $orange;
         $this->authentication = $this->orange->getAuthenticationClass();
@@ -109,11 +109,11 @@ class Templating
             $path_default = '/components/default/' . $component . '.twig';
             $path_common = 'skins/common/' . $component . '.twig';
 
-            if (file_exists(SB_PRIVATE_PATH . '/' . $templatePath . $path)) {
+            if (file_exists(BLUFF_PRIVATE_PATH . '/' . $templatePath . $path)) {
                 return $path;
-            } elseif (file_exists(SB_PRIVATE_PATH . '/' . $templatePath . $path_default)) {
+            } elseif (file_exists(BLUFF_PRIVATE_PATH . '/' . $templatePath . $path_default)) {
                 return $path_default;
-            } elseif (file_exists(SB_PRIVATE_PATH . '/' . $path_common)) {
+            } elseif (file_exists(BLUFF_PRIVATE_PATH . '/' . $path_common)) {
                 return $component . '.twig'; // i guess???
             } else {
                 return '/missing_component.twig';

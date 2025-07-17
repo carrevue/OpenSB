@@ -23,16 +23,16 @@ namespace OpenSB;
 
 // INCOMPLETE
 
-define("SB_ROOT_PATH", dirname(__DIR__));
-define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
-define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
-define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
-define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
-define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("BLUFF_ROOT_PATH", dirname(__DIR__));
+define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
+define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
+define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
+define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 global $database;
 
-require_once SB_PRIVATE_PATH . '/common.php';
+require_once BLUFF_PRIVATE_PATH . '/common.php';
 
 // TODO
 $uploads = $database->fetchArray($database->query("SELECT * FROM uploads"));

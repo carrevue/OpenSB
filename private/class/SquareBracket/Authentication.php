@@ -107,7 +107,7 @@ class Authentication
                     Utilities::notifyBanner("Your content filtering settings have been reset to General.", false, "primary");
                 }
 
-                $this->has_authenticated_as_an_admin = $_SESSION["SB_ADMIN_AUTHED"] ?? null;
+                $this->has_authenticated_as_an_admin = $_SESSION["BLUFF_ADMIN_AUTHED"] ?? null;
             }
         }
     }

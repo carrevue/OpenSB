@@ -6,7 +6,7 @@
   Copyright (C) 2021-2025 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
-  Copyright (C) 2022 Jack Shiypc
+  Copyright (C) 2022 shiypc
   Copyright (C) 2024 OkayHush/COCKSOCK69
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
@@ -29,17 +29,17 @@ if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
     die('OpenSB is not compatible with your PHP version. OpenSB supports PHP 8.2 or newer.');
 }
 
-if (!file_exists(SB_VENDOR_PATH . '/autoload.php')) {
+if (!file_exists(BLUFF_VENDOR_PATH . '/autoload.php')) {
     die('The required Composer packages are missing. Please read the setup instructions in the README file.');
 }
 
-if (!file_exists(SB_PRIVATE_PATH . '/config/config.php')) {
+if (!file_exists(BLUFF_PRIVATE_PATH . '/config/config.php')) {
     die('The configuration file could not be found. Please read the setup instructions in the README file.');
 }
 
-$config = include_once(SB_PRIVATE_PATH . '/config/config.php');
+$config = include_once(BLUFF_PRIVATE_PATH . '/config/config.php');
 
-require_once(SB_VENDOR_PATH . '/autoload.php');
+require_once(BLUFF_VENDOR_PATH . '/autoload.php');
 
 use SquareBracket\ErrorTemplating;
 use SquareBracket\Localization;
@@ -49,10 +49,10 @@ use SquareBracket\Utilities;
 use SquareBracket\VersionNumber;
 
 // please use apache/nginx for production stuff.
-define('SB_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
-define('SB_CLI', php_sapi_name() === 'cli');
+define('BLUFF_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
+define('BLUFF_CLI', php_sapi_name() === 'cli');
 
-if (!SB_CLI) {
+if (!BLUFF_CLI) {
     $blacklisted_user_agents = [
         '/python-requests/i',
         '/curl/i',
@@ -90,8 +90,8 @@ if (!SB_CLI) {
 
 spl_autoload_register(function ($class_name) {
     $class_name = str_replace('\\', '/', $class_name);
-    if (file_exists(SB_PRIVATE_PATH . "/class/$class_name.php")) {
-        require SB_PRIVATE_PATH . "/class/$class_name.php";
+    if (file_exists(BLUFF_PRIVATE_PATH . "/class/$class_name.php")) {
+        require BLUFF_PRIVATE_PATH . "/class/$class_name.php";
     }
 });
 
@@ -99,7 +99,7 @@ set_exception_handler(function ($exception) {
     // kinda ugly imo
     $version_number = new VersionNumber();
 
-    if (SB_CLI) {
+    if (BLUFF_CLI) {
         $errorMsg = sprintf(
             "Error: %s" . PHP_EOL .
                 "Code: %s" . PHP_EOL .
@@ -149,7 +149,7 @@ set_exception_handler(function ($exception) {
 $orange = new SquareBracket($config);
 $database = $orange->getDatabaseClass();
 
-if (!SB_CLI) {
+if (!BLUFF_CLI) {
     $auth = $orange->getAuthenticationClass(); // temporary ig?
 
     // automatic stuff
@@ -198,7 +198,7 @@ if (!SB_CLI) {
         die();
     }
 
-    if ($orange->isUnderMaintenance() && !SB_PHP_BUILTINSERVER) {
+    if ($orange->isUnderMaintenance() && !BLUFF_PHP_BUILTINSERVER) {
         http_response_code(503);
         echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
         die();

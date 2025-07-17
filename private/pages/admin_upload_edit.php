@@ -83,8 +83,8 @@ if (isset($_POST['flagsubmit'])) {
 }
 
 
-if (file_exists(SB_DYNAMIC_PATH . "/videos/" . $id . ".log")) {
-    $log = file_get_contents(SB_DYNAMIC_PATH . "/videos/" . $id . ".log");
+if (file_exists(BLUFF_DYNAMIC_PATH . "/videos/" . $id . ".log")) {
+    $log = file_get_contents(BLUFF_DYNAMIC_PATH . "/videos/" . $id . ".log");
 } else {
     $log = null;
 }

@@ -43,18 +43,18 @@ class Storage
         if (str_starts_with(php_uname(), "Windows")) {
             pclose(popen(sprintf(
                 'start /B  php %s "%s" "%s" "video" "1" > %s',
-                SB_PRIVATE_PATH . '\scripts\processingworker.php',
+                BLUFF_PRIVATE_PATH . '\scripts\processingworker.php',
                 $new,
                 $target_file,
-                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'
+                BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
             ), "r"));
         } else {
             system(sprintf(
                 'php %s "%s" "%s" "video" "1" > %s 2>&1 &',
-                SB_PRIVATE_PATH . '/scripts/processingworker.php',
+                BLUFF_PRIVATE_PATH . '/scripts/processingworker.php',
                 $new,
                 $target_file,
-                SB_DYNAMIC_PATH . '/videos/' . $new . '.log'
+                BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
             ));
         }
     }
@@ -89,7 +89,7 @@ class Storage
     {
         $placeholder = $this->orange->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
-        $path = SB_DYNAMIC_PATH . '/pfp/' . $id . '.png';
+        $path = BLUFF_DYNAMIC_PATH . '/pfp/' . $id . '.png';
 
         if (file_exists($path)) {
             return '/dynamic/pfp/' . $id . '.png';
@@ -100,8 +100,8 @@ class Storage
 
     public function processImageUpload($temp_name, $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/art/' . $new . '.png';
-        $target_thumbnail = SB_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
+        $target_file = BLUFF_DYNAMIC_PATH . '/art/' . $new . '.png';
+        $target_thumbnail = BLUFF_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
 
         // image upload
         $manager = new ImageManager(Driver::class);
@@ -120,7 +120,7 @@ class Storage
 
     public function processProfilePicture($temp_name, $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/pfp/' . $new . '.png';
+        $target_file = BLUFF_DYNAMIC_PATH . '/pfp/' . $new . '.png';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -133,7 +133,7 @@ class Storage
 
     public function processCustomUploadThumbnail($temp_name, $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
+        $target_file = BLUFF_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -145,7 +145,7 @@ class Storage
 
     public function processProfileBanner($temp_name, $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/banners/' . $new . '.png';
+        $target_file = BLUFF_DYNAMIC_PATH . '/banners/' . $new . '.png';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -157,7 +157,7 @@ class Storage
 
     public function deleteUploadFile($data): void
     {
-        unlink(SB_ROOT_PATH . $data["videofile"]);
+        unlink(BLUFF_ROOT_PATH . $data["videofile"]);
     }
 
     private function getThumbnailPath(
@@ -167,8 +167,8 @@ class Storage
         string $defaultExtension,
         string $fallback
     ): string {
-        $customPath = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg';
-        $defaultPath = SB_DYNAMIC_PATH . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
+        $customPath = BLUFF_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg';
+        $defaultPath = BLUFF_DYNAMIC_PATH . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
 
         // if custom thumbnail exists then use that
         if ($custom && file_exists($customPath)) {

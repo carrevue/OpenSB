@@ -165,7 +165,7 @@ if (isset($_POST["loginsubmit"])) {
                 ]);
 
                 // null access to admin panel for security
-                $_SESSION["SB_ADMIN_AUTHED"] = null;
+                $_SESSION["BLUFF_ADMIN_AUTHED"] = null;
             }
 
             $_SESSION["SBTOKEN"] = $logindata['token'];

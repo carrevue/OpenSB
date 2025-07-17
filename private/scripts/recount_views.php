@@ -21,14 +21,14 @@
 
 namespace OpenSB;
 
-define("SB_ROOT_PATH", dirname(__DIR__));
-define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
-define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
-define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
-define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
-define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("BLUFF_ROOT_PATH", dirname(__DIR__));
+define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
+define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
+define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
+define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-require_once SB_PRIVATE_PATH . '/common.php';
+require_once BLUFF_PRIVATE_PATH . '/common.php';
 
 global $database;
 
@@ -36,9 +36,9 @@ $uploads = $database->fetchArray($database->query("SELECT * FROM uploads ORDER B
 
 // hardcoded shit from the sb db! wow!
 const POKTUBE_TIMESTAMP = 1619236800; // poktube from 2021 views were not properly counted and are fucked
-const SB_2022_TIMESTAMP = 1662664200; // sb views from 2021-2022 were not counted properly
+const BLUFF_2022_TIMESTAMP = 1662664200; // sb views from 2021-2022 were not counted properly
 const QTV_TIMESTAMP = 1709269200; // qtv views from 2023 were FUCKED and had a lot of botting.
-const SB_2024_TIMESTAMP = 1730782800; // qtv views from 2023 were FUCKED and had a lot of botting.
+const BLUFF_2024_TIMESTAMP = 1730782800; // qtv views from 2023 were FUCKED and had a lot of botting.
 
 // some of these view counts are a little too fishy
 // i cant actually get the code to fix these so just hardcode some of the shit
@@ -85,7 +85,7 @@ foreach ($uploads as $upload) {
                 $adjustedViews += 0.0333333;
             } elseif ($timestamp === QTV_TIMESTAMP) {
                 $adjustedViews += 0.05;
-            } elseif ($timestamp === SB_2022_TIMESTAMP) {
+            } elseif ($timestamp === BLUFF_2022_TIMESTAMP) {
                 $adjustedViews += 0.25;
             } else {
                 // penalize certain uploads
@@ -95,7 +95,7 @@ foreach ($uploads as $upload) {
                     $ratio_penalty = 10;
 
                     // crawlerdetect was kinda fucky during this time
-                    if ($timestamp > QTV_TIMESTAMP || $timestamp < SB_2024_TIMESTAMP) {
+                    if ($timestamp > QTV_TIMESTAMP || $timestamp < BLUFF_2024_TIMESTAMP) {
                         $ratio_penalty = 25;
                     }
 

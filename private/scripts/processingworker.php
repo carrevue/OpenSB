@@ -39,12 +39,12 @@ use FFMpeg\Filters;
 use FFMpeg\Format\Video\X264;
 use FFMpeg\Exception\RuntimeException;
 
-define("SB_DYNAMIC_PATH", dirname(__DIR__, 2) . '/dynamic');
-define("SB_PRIVATE_PATH", dirname(__DIR__, 2) . '/private');
-define("SB_VENDOR_PATH", dirname(__DIR__, 2) . '/vendor');
-define("SB_GIT_PATH", dirname(__DIR__, 2) . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("BLUFF_DYNAMIC_PATH", dirname(__DIR__, 2) . '/dynamic');
+define("BLUFF_PRIVATE_PATH", dirname(__DIR__, 2) . '/private');
+define("BLUFF_VENDOR_PATH", dirname(__DIR__, 2) . '/vendor');
+define("BLUFF_GIT_PATH", dirname(__DIR__, 2) . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-require_once SB_PRIVATE_PATH . '/common.php';
+require_once BLUFF_PRIVATE_PATH . '/common.php';
 
 function log(string $message): void
 {
@@ -198,7 +198,7 @@ try {
     }
     $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
     log("Saving thumbnail");
-    $frame->save(SB_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
+    $frame->save(BLUFF_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
     log("Thumbnail saved!");
 
     // Video
@@ -231,7 +231,7 @@ try {
     $video->filters()->custom('format=yuv420p');
 
     log("Converting video");
-    $video->save($h264, SB_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
+    $video->save($h264, BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
 
     debug_print_backtrace();
     unlink($target_file);

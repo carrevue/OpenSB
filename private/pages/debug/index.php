@@ -30,7 +30,7 @@ if (!$orange->isDebug()) {
 
 // lazy as fuck so im just gonna copy in the code from bluffingo.net
 //$files_directory = dirname(__DIR__) . '/dynamic/';
-$files_directory = SB_PRIVATE_PATH . '/pages/debug/';
+$files_directory = BLUFF_PRIVATE_PATH . '/pages/debug/';
 
 $files = glob($files_directory . "*");
 
