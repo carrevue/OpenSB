@@ -9,7 +9,7 @@
             {% endfor %}
         </div>
         <div class="footer-copyright">
-            <span>{{ localize('footer_copyright', '2021-' ~ ('now' | date('Y'))) }}</span>
+            <span>{{ localize('footer_copyright', ('now' | date('Y'))) }}</span>
         </div>
         {% if is_debug %}
             <div>

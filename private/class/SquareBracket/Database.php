@@ -162,7 +162,7 @@ class Database
         return $this->sql->lastInsertId();
     }
 
-    public function getVersion()
+    public function getServerVersion()
     {
         return $this->sql->getAttribute(PDO::ATTR_SERVER_VERSION);
     }

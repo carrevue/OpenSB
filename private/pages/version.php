@@ -6,14 +6,14 @@ global $twig, $database;
 
 use SquareBracket\VersionNumber;
 
-$database_version = $database->getVersion();
+$database_version = $database->getServerVersion();
 
 // instead of using "Database software", check if we're running on MariaDB or MySQL.
 // OpenSB is intended to be used with either one of these.
 if (str_contains(strtolower($database_version), "maria")) {
-    $database_software = "MariaDB";
+    $database_server = "MariaDB";
 } else {
-    $database_software = "MySQL";
+    $database_server = "MySQL";
 }
 
 $data = [
@@ -30,7 +30,7 @@ $data = [
             'info' => phpversion(),
         ],
         'dbVersion' => [
-            'title' => $database_software,
+            'title' => $database_server,
             'info' => $database_version,
         ],
     ],

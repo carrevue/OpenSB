@@ -1,61 +1,62 @@
 {
-  "search": "Search",
+    "search": "Search",
 
-  "browse": "Browse",
-  "browse_more": "Browse more",
+    "browse": "Browse",
+    "browse_more": "Browse more",
 
-  "welcome_logged_in": "Welcome, %s",
-  "welcome_logged_out": "Welcome to %s",
+    "welcome_logged_in": "Welcome, %s",
+    "welcome_logged_out": "Welcome to %s",
 
-  "login": "Login",
-  "register": "Register",
+    "login": "Login",
+    "register": "Register",
 
-  "list": "List",
-  "grid": "Grid",
+    "list": "List",
+    "grid": "Grid",
 
-  "random_uploads": "Random",
-  "random_uploads_desc": "Random selection of uploads",
+    "random_uploads": "Random",
+    "random_uploads_desc": "Random selection of uploads",
 
-  "recent_uploads": "Recent",
-  "recent_uploads_desc": "Most recent uploads",
+    "recent_uploads": "Recent",
+    "recent_uploads_desc": "Most recent uploads",
 
-  "following_uploads": "Following",
-  "following_uploads_desc": "From users you follow",
+    "following_uploads": "Following",
+    "following_uploads_desc": "From users you follow",
 
-  "featured_uploads": "Featured",
-  "featured_uploads_desc": "Curated by staff",
+    "featured_uploads": "Featured",
+    "featured_uploads_desc": "Curated by staff",
 
-  "recent_members": "Members",
-  "recent_members_desc": "Last 5 members online",
+    "recent_members": "Members",
+    "recent_members_desc": "Last 5 members online",
 
-  "site_news": "News",
-  "site_news_desc": "Site announcements",
+    "site_news": "News",
+    "site_news_desc": "Site announcements",
 
-  "more": "More",
+    "more": "More",
 
-  "new": "New",
-  "popular": "Popular",
-  "random": "Random",
-  "uploads": "Uploads",
-  "journals": "Journals",
-  "comments": "Comments",
-  "about": "About",
+    "new": "New",
+    "popular": "Popular",
+    "random": "Random",
+    "uploads": "Uploads",
+    "journals": "Journals",
+    "comments": "Comments",
+    "about": "About",
 
-  "write_comment": "Write your comment here.",
-  "write_reply": "Write your reply here.",
+    "write_comment": "Write your comment here.",
+    "write_reply": "Write your reply here.",
 
-  "comment": "Comment",
-  "reply": "Reply",
-  "post": "Post",
+    "comment": "Comment",
+    "reply": "Reply",
+    "post": "Post",
 
-  "powered_by": "Powered by",
-  "footer_copyright": "© %s OpenSB contributors",
+    "powered_by": "Powered by",
+    "footer_copyright": "© %s Bluffingo Development",
 
-  "change_theme": "Change theme",
-  "help": "Help",
-  "community_guidelines": "Community Guidelines",
-  "terms_of_service": "Terms of Service",
-  "privacy_policy": "Privacy Policy",
-  "staff": "Staff",
-  "debug": "Debug"
+    "version": "Version",
+    "change_theme": "Change theme",
+    "help": "Help",
+    "community_guidelines": "Community Guidelines",
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "staff": "Staff",
+    "debug": "Debug"
 }

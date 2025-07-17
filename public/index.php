@@ -1,4 +1,5 @@
 <?php
+
 namespace OpenSB;
 
 define("SB_ROOT_PATH", dirname(__DIR__));
@@ -17,7 +18,8 @@ require_once SB_PRIVATE_PATH . '/common.php';
 global $isChazizSB, $auth;
 
 // TODO: make this cachable
-#[NoReturn] function load_thumbnail_from_skin($path) {
+#[NoReturn] function load_thumbnail_from_skin($path)
+{
     $pathParts = explode('_', $path);
     $skin = $pathParts[0] ?? '';
     $theme = $pathParts[1] ?? 'default.png';
@@ -60,8 +62,7 @@ $uri = parse_url(rawurldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
 $path = explode('/', $uri);
 
 // testing code
-if ($isChazizSB)
-{
+if ($isChazizSB) {
     /*
     // if the user is still logged in but isnt an admin, log them out.
     if ($auth->isUserLoggedIn() && !$auth->isUserAdmin()) {
@@ -104,14 +105,14 @@ if (isset($path[1]) && $path[1] != '') {
         'admin' => match ($path[2] ?? null) {
             'login' => require(SB_PRIVATE_PATH . '/pages/admin_login.php'),
             'users' => match ($path[3] ?? null) {
-                    $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
+                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
                     ? require(SB_PRIVATE_PATH . '/pages/admin_user_edit.php')
                     : require(SB_PRIVATE_PATH . '/pages/admin_users.php'),
                 default => require(SB_PRIVATE_PATH . '/pages/admin_users.php'),
             },
             'overview' => require(SB_PRIVATE_PATH . '/pages/admin_overview.php'),
             'uploads' => match ($path[3] ?? null) {
-                    $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
+                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
                     ? require(SB_PRIVATE_PATH . '/pages/admin_upload_edit.php')
                     : require(SB_PRIVATE_PATH . '/pages/admin_uploads.php'),
                 default => require(SB_PRIVATE_PATH . '/pages/admin_uploads.php'),

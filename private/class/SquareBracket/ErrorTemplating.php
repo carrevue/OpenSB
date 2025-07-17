@@ -41,7 +41,7 @@ class ErrorTemplating
         if ($orange->isDebug()) {
             $this->twig->addExtension(new DebugExtension());
         } else {
-            $this->twig->addFunction(new TwigFunction('dump', function() {
+            $this->twig->addFunction(new TwigFunction('dump', function () {
                 return "This function is not available outside of debug mode.";
             }));
         }
