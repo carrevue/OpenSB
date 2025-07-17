@@ -97,9 +97,10 @@ class Utilities
         return $return_value;
     }
 
-    public static function whereTagBlacklist(): string {
+    public static function whereTagBlacklist(): string
+    {
         global $orange;
-        
+
         $tagBlacklist = $orange->getAuthenticationClass()->getUserTagBlacklist();
 
         // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
@@ -137,12 +138,15 @@ class Utilities
 
         if (!$dontNotify) {
             // Notify the user
-            $database->query("INSERT INTO user_notifications (type, level, recipient, sender, timestamp, related_id) VALUES (?,?,?,?,?,?);",
-                [$type->value, $location, $user, $orange->getAuthenticationClass()->getUserID(), time(), $related_id]);
+            $database->query(
+                "INSERT INTO user_notifications (type, level, recipient, sender, timestamp, related_id) VALUES (?,?,?,?,?,?);",
+                [$type->value, $location, $user, $orange->getAuthenticationClass()->getUserID(), time(), $related_id]
+            );
         }
     }
 
-    public static function isFollowingUser($user) {
+    public static function isFollowingUser($user)
+    {
         global $orange, $database;
 
         return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $orange->getAuthenticationClass()->getUserID()]);
@@ -184,7 +188,7 @@ class Utilities
         }
 
         if (version_compare(PHP_VERSION, '8.3.0', '<')) {
-            $new = substr(str_shuffle($string),0,$length);
+            $new = substr(str_shuffle($string), 0, $length);
         } else {
             // this feels cleaner imho
             $randomizer = new Randomizer();
@@ -351,7 +355,7 @@ class Utilities
 
         // de-fuck urls
         $urlReplacements = [
-            'fulptube.me' => 'squarebracket.me', // yeah its owned by sks but lets keep this here
+            'fulptube.me' => 'squarebracket.pw',
             'fulptube.pw' => 'squarebracket.pw',
             'fulptube.veselcraft.ru' => 'squarebracket.veselcraft.ru', // this domain still works lol
         ];
@@ -369,7 +373,8 @@ class Utilities
         return $output;
     }
 
-    #[NoReturn] public static function logOutUser() {
+    #[NoReturn] public static function logOutUser()
+    {
         session_destroy();
         Utilities::redirect('./');
     }

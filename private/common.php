@@ -79,11 +79,11 @@ set_exception_handler(function ($exception) {
     if (SB_CLI) {
         $errorMsg = sprintf(
             "Error: %s" . PHP_EOL .
-            "Code: %s" . PHP_EOL .
-            "File: %s" . PHP_EOL .
-            "Line: %s" . PHP_EOL .
-            "Version: %s" . PHP_EOL .
-            "Stack Trace:" . PHP_EOL . "%s" . PHP_EOL,
+                "Code: %s" . PHP_EOL .
+                "File: %s" . PHP_EOL .
+                "Line: %s" . PHP_EOL .
+                "Version: %s" . PHP_EOL .
+                "Stack Trace:" . PHP_EOL . "%s" . PHP_EOL,
             $exception->getMessage(),
             $exception->getCode(),
             $exception->getFile(),
@@ -98,11 +98,11 @@ set_exception_handler(function ($exception) {
     } else {
         $errorMsg = sprintf(
             '<b>Error:</b> %s<br>'
-            . '<b>Code:</b> %s<br>'
-            . '<b>File:</b> %s<br>'
-            . '<b>Line:</b> %s<br>'
-            . '<b>Version:</b> %s<br>'
-            . '<b>Stack Trace:</b><pre>%s</pre>',
+                . '<b>Code:</b> %s<br>'
+                . '<b>File:</b> %s<br>'
+                . '<b>Line:</b> %s<br>'
+                . '<b>Version:</b> %s<br>'
+                . '<b>Stack Trace:</b><pre>%s</pre>',
             $exception->getMessage(),
             $exception->getCode(),
             $exception->getFile(),
@@ -113,9 +113,9 @@ set_exception_handler(function ($exception) {
 
         echo sprintf(
             "<h1>An error has occurred</h1>" .
-            "<div style='padding: 1em; border: 1px solid red;'>" .
-            "<pre>%s</pre>" .
-            "</div>",
+                "<div style='padding: 1em; border: 1px solid red;'>" .
+                "<pre>%s</pre>" .
+                "</div>",
             $errorMsg,
         );
         die();
@@ -126,11 +126,8 @@ set_exception_handler(function ($exception) {
 $orange = new SquareBracket($config);
 $database = $orange->getDatabaseClass();
 
-$localization_setting = $orange->getLocalOptions()["locale"] ?? "en-US";
-
 if (!SB_CLI) {
     $auth = $orange->getAuthenticationClass(); // temporary ig?
-    $localization = new Localization($localization_setting);
 
     // automatic stuff
     // this should probably have a cooldown or something i don't fucking know
@@ -152,18 +149,22 @@ if (!SB_CLI) {
 
     $twig_error = new ErrorTemplating($orange);
 
-    $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()]);
-
-    // if theres no ipban, check again with the unencrypted ip address.
-    // this is temporary.
-    if (!$ipban) {
-        $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress(false)]);
-    }
+    $ipban = $database->fetch(
+        "SELECT * FROM ip_bans WHERE ? LIKE ip OR ? LIKE ip",
+        [Utilities::getIpAddress(), Utilities::getIpAddress(false)]
+    );
 
     if ($ipban) {
         $usersAssociatedWithIP = $database->fetchArray($database->query(
             "SELECT name FROM users WHERE ip LIKE ? OR ip LIKE ?",
-            [Utilities::getIpAddress(), Utilities::getIpAddress(false)]));
+            [Utilities::getIpAddress(), Utilities::getIpAddress(false)]
+        ));
+
+        if ($orange->isDebug() && (!$ipban)) {
+            $ipban = [
+                "ip" => Utilities::getIpAddress(false),
+            ];
+        }
 
         http_response_code(403);
         echo $twig_error->render("ip_banned.twig", [

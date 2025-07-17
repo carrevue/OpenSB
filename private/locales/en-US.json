@@ -48,6 +48,11 @@
     "reply": "Reply",
     "post": "Post",
 
+    "404_not_found": "404 Not Found",
+    "ip_banned_intro": "You have been IP banned from %s",
+    "ip_banned_filed": "Your ban was filed on %s, and won't expire.",
+    "ip_message": "Your IP is %s, and the account(s) linked to this IP are: %s",
+
     "powered_by": "Powered by",
     "footer_copyright": "© %s Bluffingo Development",
 

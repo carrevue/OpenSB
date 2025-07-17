@@ -11,6 +11,7 @@ class SquareBracket
     private Profiler $profiler;
     private Storage $storage;
     private Authentication $authentication;
+    private Localization $localization;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
     private bool $template_caching_enabled = false;
@@ -91,6 +92,7 @@ class SquareBracket
         $this->options = [
             "skin" => $defaultSkin,
             "theme" => $defaultTheme,
+            "locale" => "en-US",
         ];
 
         if (isset($_COOKIE["SBOPTIONS"])) {
@@ -116,6 +118,8 @@ class SquareBracket
         } else {
             $this->setOptionCookie();
         }
+
+        $this->localization = new Localization($this->options["locale"] ?? "en-US");
 
         if (isset($_COOKIE["SBACCOUNTS"])) {
             $stupid_fucking_bullshit = str_replace($this->accounts_cookie_warning, "", $_COOKIE["SBACCOUNTS"]);
@@ -203,6 +207,16 @@ class SquareBracket
     public function getAuthenticationClass(): Authentication
     {
         return $this->authentication;
+    }
+
+    /**
+     * Returns the localization class for other OpenSB classes to use.
+     *
+     * @return Localization
+     */
+    public function getLocalizationClass(): Localization
+    {
+        return $this->localization;
     }
 
     /**

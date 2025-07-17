@@ -42,13 +42,20 @@
     "reply": "Reponse",
     "post": "Publication",
 
+    "404_not_found": "404 Non Trouvé",
+    "ip_banned_intro": "Votre addresse IP a été bannie de %s",
+    "ip_banned_filed": "Vous êtes banni depuis le %s, cela n'expirera pas.",
+    "ip_message": "Votre adresse IP est %s, et le(s) compte(s) lié à cette addresse IP sont: %s",
+
     "powered_by": "Propulsé par",
     "footer_copyright": "© %s Bluffingo Development",
 
+    "version": "Version",
     "change_theme": "Thème",
     "help": "Aide",
     "community_guidelines": "Règles Communautaires",
     "terms_of_service": "Conditions de Service",
     "privacy_policy": "Politique de Confidentialité",
-    "staff": "Équipe"
+    "staff": "Personnel",
+    "debug": "Débogage"
 }

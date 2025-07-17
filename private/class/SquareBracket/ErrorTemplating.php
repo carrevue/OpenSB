@@ -13,6 +13,7 @@ use Twig\TwigFunction;
 
 class ErrorTemplating
 {
+    private SquareBracket $orange;
     private FilesystemLoader $loader;
     private Environment $twig;
 
@@ -23,7 +24,8 @@ class ErrorTemplating
     {
         chdir(SB_PRIVATE_PATH);
 
-        $options = $orange->getLocalOptions();
+        $this->orange = $orange;
+        //$options = $this->orange->getLocalOptions();
 
         $skinPath = 'skins/error';
 
@@ -52,6 +54,14 @@ class ErrorTemplating
         $this->twig->addGlobal('is_fulptube', $orange->isFulpTube());
         $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
         $this->twig->addGlobal('website_branding', $orange->getBrandingSettings());
+
+        $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));
+    }
+
+    // copied from squarebrackettwigextension
+    public function localize($key, ...$args)
+    {
+        return $this->orange->getLocalizationClass()->translate($key, ...$args);
     }
 
     /**

@@ -682,8 +682,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function localize($key, ...$args)
     {
-        global $localization;
-        return $localization->translate($key, ...$args);
+        return $this->orange->getLocalizationClass()->translate($key, ...$args);
     }
 
     public function getUserDataCache(): array
