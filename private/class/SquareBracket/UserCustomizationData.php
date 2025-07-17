@@ -21,6 +21,8 @@
 
 namespace SquareBracket;
 
+use BluffingoCore\Database;
+
 class UserCustomizationData
 {
     private Database $database;

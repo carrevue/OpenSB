@@ -21,6 +21,8 @@
 
 namespace SquareBracket;
 
+use BluffingoCore\Database;
+
 /**
  * uploads.
  */

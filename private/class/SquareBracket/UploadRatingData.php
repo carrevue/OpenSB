@@ -21,6 +21,8 @@
 
 namespace SquareBracket;
 
+// use BluffingoCore\Database;
+
 class UploadRatingData
 {
     private $upload_rating_data;

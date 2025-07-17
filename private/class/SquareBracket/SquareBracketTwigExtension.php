@@ -29,6 +29,9 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+use BluffingoCore\Database;
+use BluffingoCore\Profiler;
+
 class SquareBracketTwigExtension extends AbstractExtension
 {
     private SquareBracket $orange;

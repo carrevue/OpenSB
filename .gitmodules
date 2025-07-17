@@ -1,0 +1,3 @@
+[submodule "private/class/BluffingoCore"]
+	path = private/class/BluffingoCore
+	url = https://github.com/bluffingo/BluffingoCore

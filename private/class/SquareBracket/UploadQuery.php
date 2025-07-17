@@ -21,9 +21,11 @@
 
 namespace SquareBracket;
 
+use BluffingoCore\Database;
+
 class UploadQuery
 {
-    private $database;
+    private Database $database;
     private $whereRatings;
     private $whereTagBlacklist;
 

@@ -24,6 +24,8 @@ namespace SquareBracket;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
+use BluffingoCore\Database;
+
 class Storage
 {
     private SquareBracket $orange;

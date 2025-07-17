@@ -21,6 +21,9 @@
 
 namespace SquareBracket;
 
+use BluffingoCore\Database;
+use BluffingoCore\Profiler;
+
 /**
  * The core OpenSB class.
  */

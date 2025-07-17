@@ -46,3 +46,6 @@ Ocean_Sound_Theme_OpenSB.wav
 
 # weird ass file that shows up only on wsl
 *:Zone.Identifier
+
+# Doxygen
+doxygen
