@@ -68,7 +68,7 @@
             </div>
             <div class="jumbotron-right-container">
                 <div class="jumbotron-right-date">
-                    {{ "now"|date("F jS Y") }}
+                    {{ date() | localize_date('long', 'none') }}
                 </div>
                     <div class="jumbotron-right-buttons">
                         <div class="tabs homepage">

@@ -22,7 +22,7 @@
                     <div class="content-info">
                         <div class="content-author">
                             {{ user_link(message.author) }}
-                            <small title="{{ message.published | date('F jS Y') }}">
+                            <small title="{{ message.published | localize_date('long', 'none') }}">
                                 {{ message.published | relative_time }}
                             </small>
                         </div>

@@ -64,10 +64,10 @@
                                 Powerlevel: {{ user.powerlevel }}
                             </li>
                             <li>
-                                Joined: {{ user.joined | date('M d Y H:i T') }}
+                                Joined: {{ user.joined | localize_date('long', 'medium') }}
                             </li>
                             <li>
-                                Logged in: {{ user.lastview | date('M d Y H:i T') }}
+                                Logged in: {{ user.lastview | localize_date('long', 'medium') }}
                             </li>
                         </ul>
                     </td>

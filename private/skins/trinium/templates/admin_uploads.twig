@@ -47,7 +47,7 @@
                             Uploader: <a href="/admin/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a>
                         </div>
                         <div>
-                            Uploaded: {{ upload.published | date('F jS Y H:i T') }} ({{ upload.published | relative_time }})</a>
+                            Uploaded: {{ upload.published | localize_date('long', 'medium') }} ({{ upload.published | relative_time }})</a>
                         </div>
                         {% if upload.status %}
                         <div>

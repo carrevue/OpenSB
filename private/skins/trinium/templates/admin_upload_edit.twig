@@ -18,7 +18,7 @@
                             </tr>
                             <tr>
                                 <td>Published</td>
-                                <td>{{ upload.published | date("F j Y h:i:s A") }}</td>
+                                <td>{{ upload.published | localize_date('long', 'medium') }}</td>
                             </tr>
                             </tbody>
                         </table>

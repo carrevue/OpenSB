@@ -50,6 +50,43 @@
             </div>
             <div class="section">
                 <div class="section-header">
+                    <h2 class="section-title">Date formats</h2>
+                    <ul>
+                        <li>full/full: {{ date() | localize_date('full', 'full') }}</li>
+                        <li>full/long: {{ date() | localize_date('full', 'long') }}</li>
+                        <li>full/medium: {{ date() | localize_date('full', 'medium') }}</li>
+                        <li>full/short: {{ date() | localize_date('full', 'short') }}</li>
+                        <li>full/none: {{ date() | localize_date('full', 'none') }}</li>
+
+                        <li>long/full: {{ date() | localize_date('long', 'full') }}</li>
+                        <li>long/long: {{ date() | localize_date('long', 'long') }}</li>
+                        <li>long/medium: {{ date() | localize_date('long', 'medium') }}</li>
+                        <li>long/short: {{ date() | localize_date('long', 'short') }}</li>
+                        <li>long/none: {{ date() | localize_date('long', 'none') }}</li>
+
+                        <li>medium/full: {{ date() | localize_date('medium', 'full') }}</li>
+                        <li>medium/long: {{ date() | localize_date('medium', 'long') }}</li>
+                        <li>medium/medium: {{ date() | localize_date('medium', 'medium') }}</li>
+                        <li>medium/short: {{ date() | localize_date('medium', 'short') }}</li>
+                        <li>medium/none: {{ date() | localize_date('medium', 'none') }}</li>
+
+                        <li>short/full: {{ date() | localize_date('short', 'full') }}</li>
+                        <li>short/long: {{ date() | localize_date('short', 'long') }}</li>
+                        <li>short/medium: {{ date() | localize_date('short', 'medium') }}</li>
+                        <li>short/short: {{ date() | localize_date('short', 'short') }}</li>
+                        <li>short/none: {{ date() | localize_date('short', 'none') }}</li>
+
+                        <li>none/full: {{ date() | localize_date('none', 'full') }}</li>
+                        <li>none/long: {{ date() | localize_date('none', 'long') }}</li>
+                        <li>none/medium: {{ date() | localize_date('none', 'medium') }}</li>
+                        <li>none/short: {{ date() | localize_date('none', 'short') }}</li>
+                        <li>none/none: {{ date() | localize_date('none', 'none') }}</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="section">
+                <div class="section-header">
                     <h2 class="section-title">Buttons</h2>
                 </div>
                 {% for color in button_color_types %}

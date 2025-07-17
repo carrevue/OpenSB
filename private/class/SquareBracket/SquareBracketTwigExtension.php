@@ -90,6 +90,13 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFilter('calculate_age', [Utilities::class, 'calculateAge']),
             new TwigFilter('calculate_age_from', [Utilities::class, 'calculateAgeFrom']),
 
+            //new TwigFilter('localize_date', [Localization::class, 'formatDate']),
+
+            new TwigFilter('localize_date', function ($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null) {
+                $localization = $this->orange->getLocalizationClass();
+                return $localization->formatDate($date, $dateFormat, $timeFormat, $pattern);
+            }, ['is_safe' => ['html']]),
+
             // Markdown function for non-inline text, sanitized.
             new TwigFilter('markdown', function ($text) {
                 $markdown = new Parsedown();

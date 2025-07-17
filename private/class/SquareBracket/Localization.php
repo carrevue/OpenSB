@@ -4,8 +4,10 @@ namespace SquareBracket;
 
 use Arokettu\Pseudolocale\Pseudolocale;
 use Exception;
+use IntlDateFormatter;
 
-class Localization {
+class Localization
+{
     protected mixed $locale;
     protected array $messages = [];
     protected array $messages_fallback = [];
@@ -14,7 +16,8 @@ class Localization {
     /**
      * @throws Exception
      */
-    public function __construct($locale = 'en-US') {
+    public function __construct($locale = 'en-US')
+    {
         $this->locale = $locale;
         $this->loadLocalizationData();
     }
@@ -49,7 +52,45 @@ class Localization {
         }
     }
 
-    public function translate($key, ...$args) {
+    public function formatDate($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null)
+    {
+        if (!$date instanceof \DateTimeInterface) {
+            $date = is_numeric($date) ? new \DateTime('@' . $date) : new \DateTime($date);
+        }
+
+        $locale = $this->isPsuedo ? 'en-US' : $this->locale;
+        $formatter = new IntlDateFormatter(
+            $locale,
+            $this->convertPattern($dateFormat),
+            $this->convertPattern($timeFormat),
+            $date->getTimezone(),
+            IntlDateFormatter::GREGORIAN,
+            $pattern
+        );
+
+        return $formatter->format($date);
+    }
+
+    private function convertPattern($pattern)
+    {
+        if (is_int($pattern)) {
+            return $pattern;
+        }
+
+        $formats = [
+            'none' => IntlDateFormatter::NONE,
+            'short' => IntlDateFormatter::SHORT,
+            'medium' => IntlDateFormatter::MEDIUM,
+            'long' => IntlDateFormatter::LONG,
+            'full' => IntlDateFormatter::FULL,
+            //'relative' => IntlDateFormatter::RELATIVE_SHORT, IntlDateFormatter's relative time is fucking stupid
+        ];
+
+        return $formats[strtolower($pattern)] ?? IntlDateFormatter::MEDIUM;
+    }
+
+    public function translate($key, ...$args)
+    {
         if ($this->isPsuedo) {
             return $this->translatePsuedo($key, ...$args);
         } else {

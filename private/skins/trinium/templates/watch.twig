@@ -49,7 +49,7 @@
 {% block content %}
     {% if submission.takedown %}
         <div class="banner banner-secondary">
-            This upload was taken down on {{ submission.takedown.time | date("F jS Y H:i:s T") }}
+            This upload was taken down on {{ submission.takedown.time | localize_date('long', 'medium') }}
             by {{ submission.takedown.takedownee }} for the following reason: {{ submission.takedown.reason }}
         </div>
     {% endif %}
@@ -141,12 +141,12 @@
                         <hr>
                         <div class="watch-box-description">
                             <div class="watch-box-description-info">
-                                Uploaded on {{ submission.published | date('F jS Y') }}
-                                <span class="text-faded">{{ submission.published | date('H:i T') }}</span>
+                                Uploaded on {{ submission.published | localize_date('long', 'none') }}
+                                <span class="text-faded">{{ submission.published | localize_date('none', 'short') }}</span>
                             </div>
                             {% if submission.published_originally and submission.original_site %}
                                 <div class="watch-box-description-info-small">
-                                    First uploaded on {{ submission.original_site }} on {{ submission.published_originally | date('F jS Y') }}
+                                    First uploaded on {{ submission.original_site }} on {{ submission.published_originally | localize_date('long', 'none') }}
                                 </div>
                             {% elseif submission.original_site %}
                                 <div class="watch-box-description-info-small">
