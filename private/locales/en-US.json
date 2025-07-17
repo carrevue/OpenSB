@@ -1,14 +1,30 @@
 {
     "search": "Search",
 
+    "home": "Home",
+
     "browse": "Browse",
     "browse_more": "Browse more",
+
+    "members": "Members",
 
     "welcome_logged_in": "Welcome, %s",
     "welcome_logged_out": "Welcome to %s",
 
+    "stat_followers": "%s followers",
+    "stat_views": "%s views",
+
+    "admin_panel": "Admin",
+    "my_profile": "My profile",
+    "my_uploads": "My uploads",
+    "account_settings": "Account settings",
+    "new_upload": "New upload",
+    "new_journal": "New journal",
+    "add_account": "Add account",
+
     "login": "Login",
     "register": "Register",
+    "logout": "Logout",
 
     "list": "List",
     "grid": "Grid",
@@ -63,5 +79,6 @@
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy Policy",
     "staff": "Staff",
+    "kylarz_link": "Go to Brickface/Quadium",
     "debug": "Debug"
 }

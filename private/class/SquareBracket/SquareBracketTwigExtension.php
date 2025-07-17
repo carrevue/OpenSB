@@ -462,15 +462,15 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         $array = [
             "home" => [
-                "name" => "Home",
+                "name" => $this->localize("home"), // Home
                 "url" => "/",
             ],
             "browse" => [
-                "name" => "Browse",
+                "name" => $this->localize("browse"), // Browse
                 "url" => "/browse",
             ],
             "members" => [
-                "name" => "Members",
+                "name" => $this->localize("members"), // Members
                 "url" => "/users",
             ],
         ];
@@ -489,27 +489,27 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             $array = [
                 "profile" => [
-                    "name" => "My profile",
+                    "name" => $this->localize("my_profile"), // My profile
                     "url" => "/user/" . $username,
                 ],
                 "my_uploads" => [
-                    "name" => "My uploads",
+                    "name" => $this->localize("my_uploads"), // My uploads
                     "url" => "/my_uploads",
                 ],
                 "settings" => [
-                    "name" => "Account settings",
+                    "name" => $this->localize("account_settings"), // Account settings
                     "url" => "/settings",
                 ],
                 "upload" => [
-                    "name" => "Upload",
+                    "name" => $this->localize("new_upload"), // Upload (New upload)
                     "url" => "/upload",
                 ],
                 "write" => [
-                    "name" => "Write",
+                    "name" => $this->localize("new_journal"), // Write (New journal)
                     "url" => "/write",
                 ],
                 "logout" => [
-                    "name" => "Logout",
+                    "name" => $this->localize("logout"), // Logout
                     "url" => "/logout",
                 ],
             ];
@@ -529,7 +529,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             if ($this->authentication->isUserAdmin()) {
                 $arrayThatContainsOnlyTheLinkToTheAdminPanel = [
                     "admin" => [
-                        "name" => "Admin",
+                        "name" => $this->localize("admin_panel"), // Admin
                         "url" => "/admin",
                     ],
                 ];
@@ -539,11 +539,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         } else {
             $array = [
                 "login" => [
-                    "name" => "Login",
+                    "name" => $this->localize("login"), // Login
                     "url" => "/login",
                 ],
                 "register" => [
-                    "name" => "Register",
+                    "name" => $this->localize("register"), // Register
                     "url" => "/register",
                 ],
             ];
@@ -636,7 +636,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         if ($this->orange->isChazizSquareBracketInstance()) {
             if (!$this->orange->isFulpTube()) {
                 $array["brickface"] = [
-                    "name" => "Go to Brickface/Quadium",
+                    "name" => $this->localize("kylarz_link"),
                     "url" => "https://brickface.squarebracket.pw/",
                 ];
             }

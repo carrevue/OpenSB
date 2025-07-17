@@ -44,8 +44,8 @@
                         <i class="biscuit-icon upload"></i>
                     </div>
                     <div class="menu" id="create-menu">
-                        <a class="menu-item-button" href="/upload">New upload</a>
-                        <a class="menu-item-button" href="/write">New journal</a>
+                        <a class="menu-item-button" href="/upload">{{ localize('new_upload') }}</a>
+                        <a class="menu-item-button" href="/write">{{ localize('new_journal') }}</a>
                     </div>
                 </div>
                 {# notifications #}
@@ -54,11 +54,9 @@
                         <i class="biscuit-icon bell"></i>
                     </div>
                     <div class="menu" id="notify-menu">
-                        <a class="menu-item-button" href="/notifications">Notifications
-                            ({{ user_stat_data.notifications }})</a>
+                        <a class="menu-item-button" href="/notifications">Notifications ({{ user_stat_data.notifications }})</a>
                         {% if options.enable_incomplete_features %}
-                        <a class="menu-item-button" href="/my_messages">Messages
-                            (0)</a>
+                        <a class="menu-item-button" href="/my_messages">Messages (0)</a>
                         {% endif %}
                     </div>
                 </div>
@@ -78,9 +76,15 @@
                                     </div>
                                 </div>
                                 <div class="user-menu-intro-right">
-                                    <div class="user-menu-intro-name">{{ user_data.name }}</div>
-                                    <div class="user-menu-intro-stat">{{ truncate_number(user_stat_data.followers) }} followers</div>
-                                    <div class="user-menu-intro-stat">{{ truncate_number(user_stat_data.views) }} views</div>
+                                    <div class="user-menu-intro-name">
+                                        {{ user_data.name }}
+                                    </div>
+                                    <div class="user-menu-intro-stat">
+                                        {{ localize('stat_followers', (truncate_number(user_stat_data.followers))) }}
+                                    </div>
+                                    <div class="user-menu-intro-stat">
+                                        {{ localize('stat_views', (truncate_number(user_stat_data.views))) }}
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -97,7 +101,7 @@
                                 <span>{{ link.username }}</span>
                             </a>
                         {% endfor %}
-                        <a class="menu-item-button small" href="/login"><span>Add account</span></a>
+                        <a class="menu-item-button small" href="/login"><span>{{ localize('add_account') }}</span></a>
                     </div>
                 </div>
             {% else %}

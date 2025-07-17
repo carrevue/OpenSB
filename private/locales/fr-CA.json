@@ -1,11 +1,30 @@
 {
     "search": "Rechercher",
 
-    "browse": "Navigation",
+    "home": "Acceuil",
+
+    "browse": "Parcourir",
     "browse_more": "Plus",
+
+    "members": "Membres",
 
     "welcome_logged_in": "Bienvenue, %s",
     "welcome_logged_out": "Bienvenue sur %s",
+
+    "stat_followers": "%s abonnés",
+    "stat_views": "%s vues",
+
+    "admin_panel": "Administration",
+    "my_profile": "Mon profil",
+    "my_uploads": "Mes publications",
+    "account_settings": "Paramètres du compte",
+    "new_upload": "Nouveau publication",
+    "new_journal": "Nouvelle journal",
+    "add_account": "Ajouter un compte",
+
+    "login": "Connection",
+    "register": "Inscrire",
+    "logout": "Déconnexion",
 
     "list": "Liste",
     "grid": "Grille",
@@ -16,11 +35,11 @@
     "recent_uploads": "Nouveau",
     "recent_uploads_desc": "Les plus récents publications",
 
-    "following_uploads": "Suivis",
-    "following_uploads_desc": "Publications par les personnes que vous suivez",
+    "following_uploads": "Abonnements",
+    "following_uploads_desc": "Publications par les personnes que vous vous abonnez",
 
     "featured_uploads": "En vedette",
-    "featured_uploads_desc": "i have no idea for this LOL",
+    "featured_uploads_desc": "Le favori du personnel",
 
     "recent_members": "Members",
     "recent_members_desc": "Last 5 members online",
@@ -38,9 +57,12 @@
     "comments": "Commentaires",
     "about": "À propos",
 
+    "write_comment": "Ecrit votre commentaire.",
+    "write_reply": "Ecrit votre reponse.",
+
     "comment": "Commentaire",
-    "reply": "Reponse",
-    "post": "Publication",
+    "reply": "Repondre",
+    "post": "Publier",
 
     "404_not_found": "404 Non Trouvé",
     "ip_banned_intro": "Votre addresse IP a été bannie de %s",
@@ -57,5 +79,6 @@
     "terms_of_service": "Conditions de Service",
     "privacy_policy": "Politique de Confidentialité",
     "staff": "Personnel",
+    "kylarz_link": "Aller sur Brickface/Quadium",
     "debug": "Débogage"
 }
