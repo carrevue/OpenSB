@@ -42,10 +42,10 @@ function getOrderFromType($type): string
 
 $type = ($_GET['type'] ?? 'recent');
 $user = ($_GET['user'] ?? null);
-$page_number = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
+$page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
 $order = getOrderFromType($type);
-$limit = sprintf("%s,%s", (($page_number - 1) * 20), 20);
+$limit = $database->paginate($page, 20);
 
 if ($user) {
     // TODO: handle old names
@@ -68,6 +68,6 @@ $data = [
 echo $twig->render('browse.twig', [
     'user' => $user,
     'data' => $data,
-    'page' => $page_number,
+    'page' => $page,
     'type' => $type,
 ]);

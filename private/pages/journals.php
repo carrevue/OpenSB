@@ -30,8 +30,8 @@ $user = $path[2] ?? null;
 $journal_count = 0;
 $data = [];
 
-$page_number = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
-$limit = sprintf("%s,%s", (($page_number - 1) * 20), 20);
+$page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
+$limit = $database->paginate($page, pp: $20);
 
 if ($user) {
     if ($user == "news") {
@@ -67,6 +67,6 @@ if ($user) {
 echo $twig->render('journals.twig', [
     'user' => $user,
     'data' => $data,
-    'page' => $page_number,
+    'page' => $page,
     'count' => $journal_count
 ]);

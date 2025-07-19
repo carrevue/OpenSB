@@ -44,7 +44,7 @@ $amount = $_GET["amount"] ?? 16;
 $search = $_GET["search"] ?? "";
 $page = $_GET["page"] ?? 1;
 
-$limit = sprintf("LIMIT %s,%s", (($page - 1) * $amount), $amount);
+$limit = $database->paginate($page, $amount);
 
 $usersDataQuery = $database->fetchArray(
     $database->query(

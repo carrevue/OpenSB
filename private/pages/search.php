@@ -30,9 +30,9 @@ use SquareBracket\Utilities;
 $submission_query = new UploadQuery($database);
 
 $query = $_GET['query'] ?? null;
-$page_number = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
+$page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-$limit = sprintf("%s,%s", (($page_number - 1) * 20), 20);
+$limit = $database->paginate($page, pp: 20);
 
 $submissions = $submission_query->query(
     "v.time DESC",
@@ -54,5 +54,5 @@ $data = [
 
 echo $twig->render('search.twig', [
     'data' => $data,
-    'page' => $page_number,
+    'page' => $page,
 ]);

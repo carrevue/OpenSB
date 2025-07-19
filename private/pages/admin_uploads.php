@@ -44,7 +44,7 @@ $amount = $_GET["amount"] ?? 16;
 $search = $_GET["search"] ?? ""; //TODO
 $page = $_GET["page"] ?? 1;
 
-$limit = sprintf("%s,%s", (($page - 1) * $amount), $amount);
+$limit = $database->paginate($page, pp: $amount);
 
 /*
  $count = $database->result(

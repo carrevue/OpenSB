@@ -74,7 +74,12 @@ class UploadQuery
             $query .= " WHERE " . implode(" AND ", $whereClauses);
         }
 
-        $query .= " ORDER BY $order LIMIT $limit";
+        if (str_contains($limit, "LIMIT")) {
+            // compatibility with BluffingoCore\Database::paginate()
+            $query .= " ORDER BY $order $limit";
+        } else {
+            $query .= " ORDER BY $order LIMIT $limit";
+        }
 
         return $this->database->fetchArray($this->database->query($query, $params));
     }

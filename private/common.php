@@ -26,16 +26,31 @@
 namespace OpenSB;
 
 if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
-    die('OpenSB is not compatible with your PHP version. OpenSB supports PHP 8.2 or newer.');
+    die('OpenSB is not compatible with your PHP version. OpenSB requires PHP 8.2 or newer.');
 }
 
 if (!file_exists(BLUFF_VENDOR_PATH . '/autoload.php')) {
-    die('The required Composer packages are missing. Please read the setup instructions in the README file.');
+    die('The required Composer packages are missing.');
 }
 
 if (!file_exists(BLUFF_PRIVATE_PATH . '/config/config.php')) {
-    die('The configuration file could not be found. Please read the setup instructions in the README file.');
+    die('The configuration file could not be found.');
 }
+
+$required_extensions = ['gd', 'intl', 'pdo_mysql', 'curl'];
+$missing_extensions = [];
+
+foreach ($required_extensions as $ext) {
+    if (!extension_loaded($ext)) {
+        $missing_extensions[] = $ext;
+    }
+}
+
+if (!empty($missing_extensions)) {
+    die('The required PHP extensions are missing: ' . implode(', ', $missing_extensions));
+}
+
+// TODO: add check for BluffingoCore -chaziz 07/19/2025
 
 $config = include_once(BLUFF_PRIVATE_PATH . '/config/config.php');
 
@@ -75,7 +90,6 @@ if (!BLUFF_CLI) {
         session_set_cookie_params([
             'lifetime' => 0,
             'path' => '/',
-            //'domain' => $_SERVER['HTTP_HOST'],
             'secure' => $is_secure,
             'httponly' => true,
             'samesite' => 'Strict'
@@ -96,8 +110,7 @@ spl_autoload_register(function ($class_name) {
 });
 
 set_exception_handler(function ($exception) {
-    // kinda ugly imo
-    $version_number = new VersionNumber();
+    $version_number = new VersionNumber(); // kinda ugly imo
 
     if (BLUFF_CLI) {
         $errorMsg = sprintf(

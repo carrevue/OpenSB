@@ -28,8 +28,8 @@ global $twig, $database;
 
 use SquareBracket\UserData;
 
-$page_number = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
-$limit = sprintf("%s,%s", (($page_number - 1) * 20), 20);
+$page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
+$limit = $database->paginate($page, pp: 20);
 
 $queryData = $database->fetchArray(
     $database->query(
@@ -66,5 +66,5 @@ $data = [
 
 echo $twig->render('users.twig', [
     'users' => $data,
-    'page' => $page_number,
+    'page' => $page,
 ]);
