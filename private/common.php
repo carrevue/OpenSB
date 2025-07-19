@@ -102,11 +102,11 @@ set_exception_handler(function ($exception) {
     if (BLUFF_CLI) {
         $errorMsg = sprintf(
             "Error: %s" . PHP_EOL .
-                "Code: %s" . PHP_EOL .
-                "File: %s" . PHP_EOL .
-                "Line: %s" . PHP_EOL .
-                "Version: %s" . PHP_EOL .
-                "Stack Trace:" . PHP_EOL . "%s" . PHP_EOL,
+            "Code: %s" . PHP_EOL .
+            "File: %s" . PHP_EOL .
+            "Line: %s" . PHP_EOL .
+            "Version: %s" . PHP_EOL .
+            "Stack Trace:" . PHP_EOL . "%s" . PHP_EOL,
             $exception->getMessage(),
             $exception->getCode(),
             $exception->getFile(),
@@ -119,13 +119,15 @@ set_exception_handler(function ($exception) {
         echo $errorMsg;
         die(1);
     } else {
+        http_response_code(500);
+
         $errorMsg = sprintf(
             '<b>Error:</b> %s<br>'
-                . '<b>Code:</b> %s<br>'
-                . '<b>File:</b> %s<br>'
-                . '<b>Line:</b> %s<br>'
-                . '<b>Version:</b> %s<br>'
-                . '<b>Stack Trace:</b><pre>%s</pre>',
+            . '<b>Code:</b> %s<br>'
+            . '<b>File:</b> %s<br>'
+            . '<b>Line:</b> %s<br>'
+            . '<b>Version:</b> %s<br>'
+            . '<b>Stack Trace:</b><pre style="white-space:pre-line;">%s</pre>',
             $exception->getMessage(),
             $exception->getCode(),
             $exception->getFile(),
@@ -134,12 +136,28 @@ set_exception_handler(function ($exception) {
             $exception->getTraceAsString()
         );
 
+        $githubNewIssueUrl = sprintf(
+            'https://github.com/bluffingo/opensb/issues/new?title=%s&labels=error&body=%s',
+            urlencode('Error: ' . $exception->getMessage()),
+            urlencode(
+                "**Error**: " . $exception->getMessage() . "\n\n" .
+                "**Code**: " . $exception->getCode() . "\n" .
+                "**File**: " . $exception->getFile() . "\n" .
+                "**Line**: " . $exception->getLine() . "\n" .
+                "**URL**: " . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "\n" .
+                "**Version**: " . $version_number->getVersionString() . "\n\n" .
+                "**Stack Trace**:\n```\n" . $exception->getTraceAsString() . "\n```"
+            )
+        );
+
         echo sprintf(
             "<h1>An error has occurred</h1>" .
-                "<div style='padding: 1em; border: 1px solid red;'>" .
-                "<pre>%s</pre>" .
-                "</div>",
+            "<div style='padding: 1em; border: 1px solid red;'>" .
+            "%s" .
+            "<p>Please report this error on GitHub: <a href='%s' target='_blank'>Report on GitHub</a></p>" .
+            "</div>",
             $errorMsg,
+            $githubNewIssueUrl,
         );
         die();
     }
