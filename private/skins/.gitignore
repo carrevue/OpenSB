@@ -8,5 +8,9 @@
 # error template
 !/error/**
 
+# vsc is kinda fucking stupid and treats finalium and bootstrap as git modules
+bootstrap
+finalium
+
 # finalium 3 (trinium)
 !/trinium/**
