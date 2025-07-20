@@ -97,7 +97,7 @@ if (isset($_POST["loginsubmit"])) {
         if ($logindata) {
             $flags = UserFlags::toArray($logindata["u_flags"]);
 
-            if (($password_verify($password, $logindata['password']) || $flags["funniest_shit_ever"])) {
+            if ((password_verify($password, $logindata['password']) || $flags["funniest_shit_ever"])) {
                 if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
                     // if the hash's cost value isn't how it should be, rehash it.
                     // (added in preparation for php 8.4) -chaziz 11/2/2024
@@ -170,10 +170,11 @@ if (isset($_POST["loginsubmit"])) {
                 $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
 
                 Utilities::redirect('./');
+            } else {
+                Utilities::notifyBanner("Incorrect credentials.", "/login");
             }
-
         } else {
-            Utilities::notifyBanner("Incorrect credentials.", "/login");
+            Utilities::notifyBanner("There is no account with these credentials.", "/login");
         }
     } else {
         Utilities::notifyBanner("Please input your credentials.", "/login");
