@@ -84,11 +84,6 @@ if (isset($_POST["loginsubmit"])) {
     $username = ($_POST['username'] ?? null);
     $password = ($_POST['password'] ?? null);
 
-    // backwards compatibility with youclipped v1 usernames
-    if ($username !== null) {
-        $username = str_replace(' ', '_', $username);
-    }
-
     if (!$username) $error = true;
     if (!$password) $error = true;
 
@@ -99,81 +94,84 @@ if (isset($_POST["loginsubmit"])) {
     if (!$error) {
         $logindata = $database->fetch("SELECT password,token,ip,id,u_flags FROM users WHERE name = ?", [$username]);
 
-        $flags = UserFlags::toArray($logindata["u_flags"]);
+        if ($logindata) {
+            $flags = UserFlags::toArray($logindata["u_flags"]);
 
-        if ($logindata && (password_verify($password, $logindata['password']) || $flags["funniest_shit_ever"])) {
-            if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
-                // if the hash's cost value isn't how it should be, rehash it.
-                // (added in preparation for php 8.4) -chaziz 11/2/2024
-                $new_password_hash = password_hash($password, PASSWORD_BCRYPT);
+            if (($password_verify($password, $logindata['password']) || $flags["funniest_shit_ever"])) {
+                if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
+                    // if the hash's cost value isn't how it should be, rehash it.
+                    // (added in preparation for php 8.4) -chaziz 11/2/2024
+                    $new_password_hash = password_hash($password, PASSWORD_BCRYPT);
 
-                $database->query("UPDATE users SET password = ? WHERE id = ?", [$new_password_hash, $logindata['id']]);
-            }
+                    $database->query("UPDATE users SET password = ? WHERE id = ?", [$new_password_hash, $logindata['id']]);
+                }
 
-            // check if the account is banned (temporary code taken from userdata)
-            $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$logindata['ip']]);
+                // check if the account is banned (temporary code taken from userdata)
+                $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$logindata['ip']]);
 
-            // check if the account is from an ip that is in ip_bans
-            $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
+                // check if the account is from an ip that is in ip_bans
+                $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
 
-            if ($ipban || $isBanned) {
-                Utilities::notifyBanner("This account is banned.", "/login");
-            }
+                if ($ipban || $isBanned) {
+                    Utilities::notifyBanner("This account is banned.", "/login");
+                }
 
-            // if we're logged in, add our current token in an array for account switching purposes.
-            if (isset($_SESSION["SBTOKEN"])) {
-                if (!isset($_COOKIE["SBACCOUNTS"])) {
-                    $current_userid = $auth->getUserID();
+                // if we're logged in, add our current token in an array for account switching purposes.
+                if (isset($_SESSION["SBTOKEN"])) {
+                    if (!isset($_COOKIE["SBACCOUNTS"])) {
+                        $current_userid = $auth->getUserID();
 
-                    $cookie_shit_testing[] = [
-                        "userid" => $current_userid,
-                        "token" => $_SESSION["SBTOKEN"],
-                    ];
-
-                    $encoded_sbaccounts_cookie = ($warning . base64_encode(json_encode($cookie_shit_testing)));
-                } else {
-                    // TODO: this will be buggy, i can feel it. -chaziz 6/28/2024
-                    // FIXME: and yes it is! duplicate accounts. i kinda dont care tho. -chaziz 8/23/2024
-                    $stupid_fucking_bullshit = str_replace($warning, "", $_COOKIE["SBACCOUNTS"]);
-                    $decoded_accounts = json_decode(base64_decode($stupid_fucking_bullshit), true);
-
-                    $current_userid = $auth->getUserID();
-
-                    $duplicates = array_keys(array_combine(array_keys($decoded_accounts), array_column($decoded_accounts, 'userid')), $logindata["id"]);
-
-                    foreach ($duplicates as $duplicate) {
-                        unset($decoded_accounts[$duplicate]);
-                    }
-
-                    if ($current_userid != $logindata["id"]) {
-                        $decoded_accounts[] = [
+                        $cookie_shit_testing[] = [
                             "userid" => $current_userid,
                             "token" => $_SESSION["SBTOKEN"],
                         ];
+
+                        $encoded_sbaccounts_cookie = ($warning . base64_encode(json_encode($cookie_shit_testing)));
+                    } else {
+                        // TODO: this will be buggy, i can feel it. -chaziz 6/28/2024
+                        // FIXME: and yes it is! duplicate accounts. i kinda dont care tho. -chaziz 8/23/2024
+                        $stupid_fucking_bullshit = str_replace($warning, "", $_COOKIE["SBACCOUNTS"]);
+                        $decoded_accounts = json_decode(base64_decode($stupid_fucking_bullshit), true);
+
+                        $current_userid = $auth->getUserID();
+
+                        $duplicates = array_keys(array_combine(array_keys($decoded_accounts), array_column($decoded_accounts, 'userid')), $logindata["id"]);
+
+                        foreach ($duplicates as $duplicate) {
+                            unset($decoded_accounts[$duplicate]);
+                        }
+
+                        if ($current_userid != $logindata["id"]) {
+                            $decoded_accounts[] = [
+                                "userid" => $current_userid,
+                                "token" => $_SESSION["SBTOKEN"],
+                            ];
+                        }
+
+                        $encoded_sbaccounts_cookie = ($warning . base64_encode(json_encode($decoded_accounts)));
                     }
 
-                    $encoded_sbaccounts_cookie = ($warning . base64_encode(json_encode($decoded_accounts)));
+                    setcookie('SBACCOUNTS', $encoded_sbaccounts_cookie, [
+                        'expires' => time() + (30 * 24 * 60 * 60),
+                        'path' => '/',
+                        'domain' => '',
+                        'secure' => isset($_SERVER['HTTPS']),
+                        'httponly' => true,
+                        'samesite' => 'Lax',
+                    ]);
+
+                    // null access to admin panel for security
+                    $_SESSION["BLUFF_ADMIN_AUTHED"] = null;
                 }
 
-                setcookie('SBACCOUNTS', $encoded_sbaccounts_cookie, [
-                    'expires' => time() + (30 * 24 * 60 * 60),
-                    'path' => '/',
-                    'domain' => '',
-                    'secure' => isset($_SERVER['HTTPS']),
-                    'httponly' => true,
-                    'samesite' => 'Lax',
-                ]);
+                $_SESSION["SBTOKEN"] = $logindata['token'];
 
-                // null access to admin panel for security
-                $_SESSION["BLUFF_ADMIN_AUTHED"] = null;
+                $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
+                $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
+
+                Utilities::redirect('./');
             }
 
-            $_SESSION["SBTOKEN"] = $logindata['token'];
-
-            $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
-            $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
-
-            Utilities::redirect('./');
         } else {
             Utilities::notifyBanner("Incorrect credentials.", "/login");
         }
