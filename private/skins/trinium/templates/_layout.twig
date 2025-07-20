@@ -69,7 +69,7 @@
 
     {% set user_data_cache = get_user_data_cache() %}
 
-    {% if user_data_cache %}
+    {% if user_data_cache and not data.customization %}
         <style>
             {% for user in user_data_cache %}
             .content-entry.user-id-{{ user.id }} .content-thumbnail a .content-image.profile-picture:hover,

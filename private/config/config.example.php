@@ -17,11 +17,12 @@ return [
     "mode" => "PROD",
     "site" => "squarebracket",
     "maintenance" => false,
+    "lockdown" => false,
     "cache" => false,
+    "enable_registration" => true,
     "invite_keys" => false,
     "branding" => [
         "name" => "OpenSB Instance",
-        "slogan" => "Insert slogan here",
         "assets" => "/assets/placeholder",
     ],
 ];

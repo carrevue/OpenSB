@@ -39,7 +39,7 @@ $queryData = $database->fetchArray(
        (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
         FROM users u 
         WHERE u.id NOT IN (SELECT userid FROM user_bans)
-        ORDER BY u.lastview DESC LIMIT $limit"
+        ORDER BY u.lastview DESC $limit"
     )
 );
 

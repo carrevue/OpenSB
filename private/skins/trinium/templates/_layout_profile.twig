@@ -67,6 +67,20 @@
             color: {{ data.customization.basic_box_text_color }};
             border-top: 1px solid {{ data.customization.basic_box_border_color }};
         }
+
+        .footer .footer-container .footer-copyright {
+            opacity: 100%;
+        }
+
+        /* Comments/Userlink */
+        .comment .comment-body .comment-author .comment-timestamp {
+            color: {{ data.customization.basic_box_text_color }};
+            opacity: 100%;
+        }
+
+        .userlink .userlink-bullshit span {
+            color: {{ data.customization.basic_box_text_color }} !important;
+        }
         {% endif %}
     </style>
 {% endblock %}

@@ -31,12 +31,12 @@ $journal_count = 0;
 $data = [];
 
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
-$limit = $database->paginate($page, pp: $20);
+$limit = $database->paginate($page, 20);
 
 if ($user) {
     if ($user == "news") {
         $journal_array = $database->fetchArray($database->query(
-            "SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC LIMIT $limit"
+            "SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC $limit"
         ));
 
         $journal_count = $database->result(
@@ -49,7 +49,7 @@ if ($user) {
             Utilities::notifyBanner("This user does not exist.", "/");
         }
         $journal_array = $database->fetchArray($database->query(
-            "SELECT j.* FROM journals j WHERE j.author = ? ORDER BY j.date DESC LIMIT $limit",
+            "SELECT j.* FROM journals j WHERE j.author = ? ORDER BY j.date DESC $limit",
             [$id]
         ));
 
