@@ -1,10 +1,10 @@
 # Privacy Policy
 
-Last updated by Chaziz on July 4th 2025.
+Last updated by Chaziz on July 21st 2025.
 
 This is the privacy policy for this website SquareBracket, alternatively known as FulpTube.
 
-The only people who have full server and database access are Chaziz and Jack/shiypc, who are the website owners and server operators. Administrators do not have full server or database access and can only use administration tools provided within the OpenSB codebase.
+The only people who have full server and database access are Chaziz, Jack/shiypc and billygoat891, who are the website owners and server operators. Administrators do not have full server or database access and can only use administration tools provided within the OpenSB codebase.
 
 Currently, the website is hosted on a server provided by Endless Hosting in the United States. Periodic backups of the website are stored by Chaziz in Canada.
 
