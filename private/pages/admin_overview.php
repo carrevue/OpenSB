@@ -128,6 +128,8 @@ foreach ($thingsToCount as $table => $uiName) {
     ];
 }
 
+// fulptube accounts
+
 // unbanned-to-banned user ratio
 $totalUsers = $numbersOfThingsArray['users'];
 $bannedUsers = $numbersOfThingsArray['user_bans'];

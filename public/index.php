@@ -148,12 +148,13 @@ if (isset($path[1]) && $path[1] != '') {
                 default => last_resort(),
             },
             'legacy' => match ($path[3] ?? null) {
+                'ajax_watch' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/ajax_watch.php'),
                 'comment' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/comment.php'),
                 'rate' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/rate.php'),
                 'subscribe' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/subscribe.php'),
                 default => last_resort(),
             },
-            'v3' => match ($path[3] ?? null) { //TODO
+            'v3' => match ($path[3] ?? null) { //INCOMPLETE
                 'get_comments' => require(BLUFF_PRIVATE_PATH . '/pages/api/v3/get_comments.php'),
                 'get_instance_info' => require(BLUFF_PRIVATE_PATH . '/pages/api/v3/get_instance_info.php'),
                 'get_upload' => require(BLUFF_PRIVATE_PATH . '/pages/api/v3/get_upload.php'),
