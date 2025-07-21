@@ -96,7 +96,7 @@ class Storage
         // don't bother with userdata since that might slow shit down
         $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
 
-        if ($is_banned & !$isAdmin) {
+        if ($is_banned && !$isAdmin) {
             return '/assets/' . $placeholder;
         }
 
