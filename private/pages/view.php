@@ -44,7 +44,7 @@ $upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
 $takedown = $upload->getTakedown();
-if ($takedown && !$auth->isUserAdmin()) {
+if ($takedown && !$auth->isUserAdministrator()) {
     // go back to homepage with a notification
     Utilities::notifyBanner("This upload has been taken down.", "/");
 }
@@ -78,7 +78,7 @@ if (isset($data["tags"])) {
 $comments = new CommentData($database, CommentLocation::Upload, $id);
 $author = new UserData($database, $data["author"]);
 
-if ($author->isUserBanned() && !$auth->isUserAdmin()) {
+if ($author->isUserBanned() && !$auth->isUserAdministrator()) {
     Utilities::notifyBanner("This upload has been taken down.", "/");
 }
 
@@ -124,7 +124,7 @@ if (!$CrawlerDetect->isCrawler()) {
     }
 
     // add a limit of one guest view per 10 minutes on uploads. this is to deter potential viewbots from
-    // quickly botting an upload.
+    // quickly botting an upload's view count.
     if (
         !$auth->isUserLoggedIn() &&
         $database->result("SELECT COUNT(*) FROM upload_views WHERE video_id=? AND timestamp > 600", [$ip])
@@ -335,7 +335,7 @@ if (Utilities::isLegacyFrontend()) {
 }
 
 // TODO: this should be moved to admin_upload_edit -chaziz 1/4/2025
-if ($auth->isUserAdmin() && $takedown) {
+if ($auth->isUserAdministrator() && $takedown) {
     $page_data["takedown"] = $takedown[0];
     $page_data["takedown"]["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
     $page_data["author_banned"] = $author->isUserBanned();

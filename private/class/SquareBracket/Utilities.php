@@ -391,10 +391,4 @@ class Utilities
 
         return $output;
     }
-
-    #[NoReturn] public static function logOutUser()
-    {
-        session_destroy();
-        Utilities::redirect('./');
-    }
 }

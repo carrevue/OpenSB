@@ -34,9 +34,7 @@ class Authentication
     private array $user_data;
     private $user_ban_data;
     private $user_stat_data;
-    // TODO: make this default blacklist configurable per instance
-    private $default_tag_blacklist = [];
-    private $has_authenticated_as_an_admin = false;
+    private $has_authenticated_as_staff = false;
 
     public function __construct(Database $database)
     {
@@ -63,7 +61,7 @@ class Authentication
                 // -------------------
 
                 if (!isset($this->user_data['blacklisted_tags'])) {
-                    $this->user_data['blacklisted_tags'] = $this->default_tag_blacklist;
+                    $this->user_data['blacklisted_tags'] = [];
                 } else {
                     $this->user_data['blacklisted_tags'] = json_decode($this->user_data['blacklisted_tags']); // decode this shit on the fly
                 }
@@ -82,13 +80,11 @@ class Authentication
                     }
                 }
 
-                // check if the current logged-in user is IP banned from another address, if so, then log them out.
-                // this will prevent users from using IP banned accounts on other IPs.
-                if ($this->database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$this->user_data['ip']])) {
-                    Utilities::logOutUser();
+                // if the user is banned/ip banned, instantly log them out.
+                if ($this->user_ban_data || $this->database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$this->user_data['ip']])) {
+                    $this->logOut();
                 }
 
-                // NOTE: for any concern with "ip logging", ip addresses are encrypteed in the opensb database.
                 $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
 
                 // TODO: the content rating system is disabled on squarebracket, so if the user's "comfortable rating"
@@ -107,9 +103,17 @@ class Authentication
                     Utilities::notifyBanner("Your content filtering settings have been reset to General.", false, "primary");
                 }
 
-                $this->has_authenticated_as_an_admin = $_SESSION["BLUFF_ADMIN_AUTHED"] ?? null;
+                $this->has_authenticated_as_staff = $_SESSION["SB_STAFF_AUTHED"] ?? null;
             }
         }
+    }
+
+    /**
+     * Logs out the user.
+     */
+    public function logOut(): never {
+        session_destroy();
+        Utilities::redirect('./');
     }
 
     /**
@@ -137,7 +141,7 @@ class Authentication
             ? $this->user_data
             : [
                 'comfortable_rating' => 'general',
-                'blacklisted_tags' => $this->default_tag_blacklist,
+                'blacklisted_tags' => [],
             ];
     }
 
@@ -158,19 +162,38 @@ class Authentication
     }
 
     /**
-     * Checks if the logged-in user is an administrator.
+     * Checks if the logged-in user is a moderator (or of higher status).
      */
-    public function isUserAdmin(): bool
+    public function isUserModerator(): bool
     {
-        return $this->is_logged_in && ($this->user_data['powerlevel'] ?? 0) >= 3;
+        return $this->is_logged_in && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= UserRoleEnum::Moderator->value;
     }
 
     /**
-     * Checks if the logged-in user has authenticated as an administrator.
+     * Checks if the logged-in user is an administrator (or of higher status).
      */
-    public function hasUserAuthenticatedAsAnAdmin(): bool
+    public function isUserAdministrator(): bool
     {
-        return $this->isUserAdmin() && $this->has_authenticated_as_an_admin;
+        return $this->is_logged_in && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= UserRoleEnum::Administrator->value;
+    }
+
+    /**
+     * Checks if the logged-in user is an owner.
+     */
+    public function isUserOwner(): bool
+    {
+        return $this->is_logged_in 
+            && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= UserRoleEnum::Owner->value;
+    }
+
+    /**
+     * Checks if the logged-in user has authenticated as staff.
+     */
+    public function hasUserAuthenticatedAsStaff(): bool
+    {
+        return $this->is_logged_in 
+            && $this->has_authenticated_as_staff 
+            && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) > UserRoleEnum::Normal->value;
     }
 
     /**
@@ -178,9 +201,11 @@ class Authentication
      */
     public function getUserTagBlacklist(): array
     {
-        return $this->is_logged_in
-            ? $this->user_data['blacklisted_tags'] ?? $this->default_tag_blacklist
-            : $this->default_tag_blacklist;
+        if (!$this->is_logged_in) {
+            return [];
+        }
+        
+        return $this->user_data['blacklisted_tags'] ?? [];
     }
 
     /**
@@ -207,13 +232,5 @@ class Authentication
         } else {
             return false;
         }
-    }
-
-    /**
-     * Returns the instance's default tag blacklist.
-     */
-    public function getDefaultTagBlacklist(): array
-    {
-        return $this->default_tag_blacklist;
     }
 }

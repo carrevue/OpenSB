@@ -51,7 +51,7 @@ if ($orange->isLockdownEnabled()) {
     Utilities::notifyBanner("The ability to upload has been disabled.", "/");
 }
 
-if (!$auth->isUserAdmin()) {
+if (!$auth->isUserAdministrator()) {
     $joindate = $auth->getUserData()["joined"];
     $timeSinceJoin = time() - strtotime($joindate);
 

@@ -39,7 +39,7 @@ enum UploadFlags: int
     case FLAG_BLOCK_GUESTS = 4;
 
 /**
-     * 00001000: "Block users from commenting in this upload"
+     * 00001000: "Block users from commenting on this upload"
      */
     case FLAG_BLOCK_COMMENTS = 8;
 

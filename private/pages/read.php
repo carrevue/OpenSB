@@ -29,7 +29,11 @@ use SquareBracket\UserCustomizationData;
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
-$id = ($_GET['j'] ?? null);
+if ($_GET['j'] ?? null) {
+    Utilities::redirect('/read/' . $_GET['j']);
+}
+
+$id = $path[2] ?? null;
 
 $data = $database->fetch("SELECT j.* FROM journals j WHERE j.id = ?", [$id]);
 

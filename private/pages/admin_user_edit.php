@@ -27,11 +27,11 @@ use SquareBracket\UserData;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
-if (!$auth->isUserAdmin()) {
+if (!$auth->isUserAdministrator()) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
-if (!$auth->hasUserAuthenticatedAsAnAdmin()) {
+if (!$auth->hasUserAuthenticatedAsStaff()) {
     Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
 }
 

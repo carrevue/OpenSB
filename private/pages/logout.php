@@ -22,6 +22,6 @@
 
 namespace OpenSB;
 
-use SquareBracket\Utilities;
+global $orange;
 
-Utilities::logOutUser();
+$orange->getAuthenticationClass()->logOut();

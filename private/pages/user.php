@@ -59,7 +59,7 @@ if (!$data) {
 }
 
 if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
-    if (!$auth->isUserAdmin()) {
+    if (!$auth->isUserAdministrator()) {
         Utilities::notifyBanner("This user is banned.", "/");
     }
 }
@@ -129,7 +129,7 @@ $user_journals =
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-if ($is_own_profile || $auth->isUserAdmin()) {
+if ($is_own_profile || $auth->isUserAdministrator()) {
     $old_usernames = $database->fetchArray($database->query("SELECT * FROM user_old_names WHERE user = ?", [$data["id"]]));
 } else {
     $old_usernames = [];

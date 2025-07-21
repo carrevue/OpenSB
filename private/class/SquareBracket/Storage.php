@@ -85,9 +85,11 @@ class Storage
         );
     }
 
-    public function getUserProfilePicture($id, $isAdmin): string
+    public function getUserProfilePicture($username, $isAdmin): string
     {
         $placeholder = $this->orange->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+
+        $id = Utilities::usernameToUserID($this->database, $username);
 
         $path = BLUFF_DYNAMIC_PATH . '/pfp/' . $id . '.png';
 
@@ -103,6 +105,20 @@ class Storage
         }
 
         return '/assets/' . $placeholder;
+    }
+
+    public function getUserProfileBanner($username): bool|string
+    {
+        $id = Utilities::usernameToUserID($this->database, $username);
+
+        $path = BLUFF_DYNAMIC_PATH . '/banners/' . $id . '.png';
+
+        if (file_exists($path)) {
+            return '/dynamic/banners/' . $id . '.png';
+        } else {
+            //$data = "/assets/default_banner.svg"; this does not look good with profile customization
+            return false;
+        }
     }
 
     public function processImageUpload($temp_name, $new): void

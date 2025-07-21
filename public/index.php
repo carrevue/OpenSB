@@ -33,9 +33,6 @@ use SquareBracket\Utilities;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
-// very fucking ugly, temporary for now. -chaziz 4/11/2025
-global $isChazizSB, $auth;
-
 // TODO: make this cachable
 #[NoReturn] function load_thumbnail_from_skin($path)
 {
@@ -79,25 +76,6 @@ function last_resort(): void
 
 $uri = parse_url(rawurldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
 $path = explode('/', $uri);
-
-// testing code
-if ($isChazizSB) {
-    /*
-    // if the user is still logged in but isnt an admin, log them out.
-    if ($auth->isUserLoggedIn() && !$auth->isUserAdmin()) {
-    */
-
-    // if the user is still logged in despite being banned, log them out.
-    if ($auth->isUserLoggedIn() && $auth->getUserBanData()) {
-        Utilities::logOutUser();
-    }
-
-    /*
-    if (Utilities::getIpAddress() != "localhost" && !$auth->isUserLoggedIn() && $path[1] != "login") {
-        Utilities::redirect("/login");
-    }
-    */
-}
 
 // its dynamic shit because i cant be arsed
 function handle_debug_page_path(string $path): void

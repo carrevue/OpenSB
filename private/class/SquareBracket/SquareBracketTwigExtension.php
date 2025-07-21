@@ -58,22 +58,26 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         if (isset($forceOldUserlink)) {
             // user preference
-            $userlink_function_name = $forceOldUserlink ? "UserLinkOld" : "UserLink";
+            $userlink_function_name = $forceOldUserlink ? "userLinkLegacy" : "userLink";
         } elseif ($options["skin"] == "trinium") {
             // default to new implementation on trinium (this logic should be swapped later)
-            $userlink_function_name = "UserLink";
+            $userlink_function_name = "userLink";
         } else { // Utilities::isLegacyFrontend()
             // otherwise use the old implementation.
-            $userlink_function_name = "UserLinkOld";
+            $userlink_function_name = "userLinkLegacy";
         }
 
         // TODO: clean this up HOLY SHIT -chaziz 4/7/2025
         return [
-            new TwigFunction('submission_view', [$this, 'submissionView']),
-            new TwigFunction('thumbnail', [$this, 'thumbnail']),
+            new TwigFunction('submission_view', [$this, 'uploadView']),
+            new TwigFunction('thumbnail', [$this, 'getUploadThumbnail']),
             new TwigFunction('user_link', [$this, $userlink_function_name], ['is_safe' => ['html']]),
-            new TwigFunction('profile_picture', [$this, 'profilePicture']),
-            new TwigFunction('profile_banner', [$this, 'profileBanner']),
+            new TwigFunction('profile_picture', function ($username) {
+                return $this->storage->getUserProfilePicture($username, false);
+            }),
+            new TwigFunction('profile_banner', function ($username) {
+                return $this->storage->getUserProfileBanner($username);
+            }),
             new TwigFunction('profiler_stats', function () {
                 $this->profiler->getStats();
             }),
@@ -83,17 +87,22 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('version_banner', function () {
                 echo (new VersionNumber)->outputVersionBanner();
             }),
-            new TwigFunction('remove_notification', [$this, 'removeNotification']),
-            new TwigFunction('show_ratings', [$this, 'showRatings']),
-            new TwigFunction('notification_icon', [$this, 'notificationIcon']),
+            new TwigFunction('remove_notification', function () {
+                unset($_SESSION["notif_message"]);
+                unset($_SESSION["notif_color"]);
+            }),
+            new TwigFunction('show_ratings', [$this, 'displayUploadRatings']),
+            new TwigFunction('notification_icon', function ($type) {
+                return "biscuit-icon b-$type";
+            }),
             new TwigFunction('pagination', [$this, 'pagination'], ['is_safe' => ['html']]),
             new TwigFunction('header_main_links', [$this, 'headerMainLinks']),
             new TwigFunction('header_user_links', [$this, 'headerUserLinks']),
             new TwigFunction('header_user_account_links', [$this, 'headerUserAccountLinks']),
             new TwigFunction('footer_links', [$this, 'footerLinks']),
             new TwigFunction('sidebar_following_users', [$this, 'sidebarFollowingUsers']),
-            new TwigFunction('get_css_file_date', [$this, 'getCSSFileDate']),
-            new TwigFunction('submission_box', [$this, 'submissionBox'], ['is_safe' => ['html']]),
+            new TwigFunction('get_css_file_date', [$this, 'getCssFileDate']),
+            new TwigFunction('submission_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
             new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
             new TwigFunction('localize', [$this, 'localize']),
             new TwigFunction('truncate_number', [$this, 'truncateNumber']),
@@ -112,8 +121,6 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             new TwigFilter('calculate_age', [Utilities::class, 'calculateAge']),
             new TwigFilter('calculate_age_from', [Utilities::class, 'calculateAgeFrom']),
-
-            //new TwigFilter('localize_date', [Localization::class, 'formatDate']),
 
             new TwigFilter('localize_date', function ($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null) {
                 $localization = $this->orange->getLocalizationClass();
@@ -147,22 +154,9 @@ class SquareBracketTwigExtension extends AbstractExtension
 
                 $parsed_text = $markdown->text($text);
 
-                // Hashtags
-                $parsed_text = preg_replace('/(?<!=|\b|&)#([a-z0-9_]+)/i', '<a href="/search?tags=$1">#$1</a>', $parsed_text);
-
-                // Mentions
-                $parsed_text = preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $parsed_text);
-
-                // Emojis
-                $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function ($matches) {
-                    $emoji_name = strtolower($matches[1]);
-                    // check if emoji exists so we dont load nothing
-                    if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
-                        return '<img class="emoji" src="/dynamic/emojis/' . $emoji_name . '.png" alt=":' . $emoji_name . ':" />';
-                    } else {
-                        return ':' . $emoji_name . ':';
-                    }
-                }, $parsed_text);
+                $parsed_text = $this->parseHashtags($parsed_text);
+                $parsed_text = $this->parseUserMentions($parsed_text);
+                $parsed_text = $this->parseCustomEmojis($parsed_text);
 
                 return $parsed_text;
             }, ['is_safe' => ['html']]),
@@ -175,22 +169,9 @@ class SquareBracketTwigExtension extends AbstractExtension
 
                 $parsed_text = $markdown->text($text);
 
-                // Hashtags
-                $parsed_text = preg_replace('/(?<!=|\b|&)#([a-z0-9_]+)/i', '<a href="/search?tags=$1">#$1</a>', $parsed_text);
-
-                // Mentions
-                $parsed_text = preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $parsed_text);
-
-                // Emojis
-                $parsed_text = preg_replace_callback('/:([a-z0-9_]+):/i', function ($matches) {
-                    $emoji_name = strtolower($matches[1]);
-                    // check if emoji exists so we dont load nothing
-                    if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
-                        return '<img class="emoji" src="/dynamic/emojis/' . $emoji_name . '.png" alt=":' . $emoji_name . ':" />';
-                    } else {
-                        return ':' . $emoji_name . ':';
-                    }
-                }, $parsed_text);
+                $parsed_text = $this->parseHashtags($parsed_text);
+                $parsed_text = $this->parseUserMentions($parsed_text);
+                $parsed_text = $this->parseCustomEmojis($parsed_text);
 
                 return $parsed_text;
             }, ['is_safe' => ['html']]),
@@ -212,6 +193,26 @@ class SquareBracketTwigExtension extends AbstractExtension
                 return $markdown->text($text);
             }, ['is_safe' => ['html']]),
         ];
+    }
+
+    private function parseHashtags($string): array|string|null {
+        return preg_replace('/(?<!=|\b|&)#([a-z0-9_]+)/i', '<a href="/search?tags=$1">#$1</a>', $string);
+    }
+
+    private function parseUserMentions($string): array|string|null {
+        return preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $string);
+    }
+
+    private function parseCustomEmojis($string) {
+        return preg_replace_callback('/:([a-z0-9_]+):/i', function ($matches) {
+            $emoji_name = strtolower($matches[1]);
+            // check if emoji exists so we dont load nothing
+            if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
+                return '<img class="emoji" src="/dynamic/emojis/' . $emoji_name . '.png" alt=":' . $emoji_name . ':" />';
+            } else {
+                return ':' . $emoji_name . ':';
+            }
+        }, $string);
     }
 
     public function convertTime($seconds)
@@ -277,11 +278,12 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * @throws Exception
      */
-    public function submissionView($submission_data)
+    public function uploadView($submission_data)
     {
         if (!$submission_data) {
-            throw new Exception('SubmissionView is missing data!');
+            throw new Exception('uploadView is missing data!');
         }
+
         if ($submission_data["type"] == 0) {
             echo $this->twig->render("player.twig", ['submission' => $submission_data]);
         }
@@ -296,7 +298,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
-    public function thumbnail($id, $type, $custom)
+    public function getUploadThumbnail($id, $type, $custom)
     {
         $data = null;
 
@@ -310,28 +312,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $data;
     }
 
-    public function profilePicture($username)
-    {
-        $id = Utilities::usernameToUserID($this->database, $username);
-
-        return $this->storage->getUserProfilePicture($id, $this->authentication->isUserAdmin());
-    }
-
-    public function profileBanner($username)
-    {
-        $id = Utilities::usernameToUserID($this->database, $username);
-        $location = '/dynamic/banners/' . $id . '.png';
-
-        if (file_exists('..' . $location)) {
-            return $location;
-        } else {
-            //$data = "/assets/default_banner.svg"; this does not look good with profile customization
-            return false;
-        }
-    }
-
     // new userlink used on trinium
-    public function UserLink($user): string
+    public function userLink($user): string
     {
         // get user info
         $username = htmlspecialchars($user["info"]["username"]);
@@ -390,7 +372,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     // old userlink used on bootstrap and finalium
-    public function UserLinkOld($user): string
+    public function userLinkLegacy($user): string
     {
         $username = htmlspecialchars($user['info']['username']);
         $color = $user["info"]["color"];
@@ -418,13 +400,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
-    public function removeNotification()
-    {
-        unset($_SESSION["notif_message"]);
-        unset($_SESSION["notif_color"]);
-    }
-
-    public function showRatings(array $ratings): void
+    public function displayUploadRatings(array $ratings): void
     {
         $icons = [
             'full' => "biscuit-icon star-full",
@@ -458,11 +434,6 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
-    public function notificationIcon($type)
-    {
-        return "biscuit-icon b-$type";
-    }
-
     public function pagination($levels, $lpp, $url, $current)
     {
         return $this->twig->render('components/pagination.twig', ['levels' => $levels, 'lpp' => $lpp, 'url' => $url, 'current' => $current]);
@@ -490,8 +461,6 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function headerUserLinks()
     {
-
-
         $options = $this->orange->getLocalOptions();
 
         if ($this->authentication->isUserLoggedIn()) {
@@ -536,7 +505,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 unset($array["write"]);
             }
 
-            if ($this->authentication->isUserAdmin()) {
+            if ($this->authentication->isUserAdministrator()) {
                 $arrayThatContainsOnlyTheLinkToTheAdminPanel = [
                     "admin" => [
                         "name" => $this->localize("admin_panel"), // Admin
@@ -660,7 +629,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
-    public function getCSSFileDate()
+    public function getCssFileDate()
     {
         // TODO: this should probably be changed to check the file date of the current theme, not just that of the
         // default theme on trinium -chaziz 1/13/2025.
@@ -679,7 +648,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $this->twig->render('bootstrap_icon.twig', ['icon' => $icon, 'size' => $size]);
     }
 
-    public function submissionBox($submission)
+    // apparantly this is used on finalium for Some reason.
+    public function smallUploadBox($submission)
     {
         return $this->twig->render('components/smallvideobox.twig', ['data' => $submission]);
     }
