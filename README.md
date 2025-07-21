@@ -53,7 +53,7 @@ You will have to modify the directories to match your instance's location.
 
 ### NGINX config example
 Please note that this example uses `php-fpm`.
-You will have to modify the directories to match your instance's location.
+You will have to modify this to match your instance's location and/or distro.
 ```
 server {
     listen       80;
@@ -65,14 +65,13 @@ server {
     }
 
     location /dynamic/ {
-        root /var/www/opensb/dynamic/;
-        try_files $uri $uri/ =404;
+        alias /var/www/opensb/dynamic;
     }
 
     location ~ \.php$ {
         include fastcgi_params;
         fastcgi_index index.php;
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 }
