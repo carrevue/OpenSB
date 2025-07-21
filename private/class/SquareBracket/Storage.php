@@ -85,11 +85,18 @@ class Storage
         );
     }
 
-    public function getUserProfilePicture($id): string
+    public function getUserProfilePicture($id, $isAdmin): string
     {
         $placeholder = $this->orange->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
         $path = BLUFF_DYNAMIC_PATH . '/pfp/' . $id . '.png';
+
+        // don't bother with userdata since that might slow shit down
+        $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
+
+        if ($is_banned & !$isAdmin) {
+            return '/assets/' . $placeholder;
+        }
 
         if (file_exists($path)) {
             return '/dynamic/pfp/' . $id . '.png';

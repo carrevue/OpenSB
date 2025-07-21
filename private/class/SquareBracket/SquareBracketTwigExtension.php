@@ -73,7 +73,6 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('thumbnail', [$this, 'thumbnail']),
             new TwigFunction('user_link', [$this, $userlink_function_name], ['is_safe' => ['html']]),
             new TwigFunction('profile_picture', [$this, 'profilePicture']),
-            new TwigFunction('profile_picture_admin', [$this, 'profilePictureAdmin']),
             new TwigFunction('profile_banner', [$this, 'profileBanner']),
             new TwigFunction('profiler_stats', function () {
                 $this->profiler->getStats();
@@ -311,31 +310,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $data;
     }
 
-    // TODO: move parts of this to Storage
     public function profilePicture($username)
     {
         $id = Utilities::usernameToUserID($this->database, $username);
 
-        // don't bother with userdata since that might slow shit down
-        $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
-
-        if ($is_banned) {
-            $data = "/assets/profiledef.svg";
-        } else {
-            $data = $this->storage->getUserProfilePicture($id);
-        }
-
-        return $data;
-    }
-
-    // TODO: merge this into profilePicture()
-    public function profilePictureAdmin($username)
-    {
-        $id = Utilities::usernameToUserID($this->database, $username);
-
-        $data = $this->storage->getUserProfilePicture($id);
-
-        return $data;
+        return $this->storage->getUserProfilePicture($id, $this->authentication->isUserAdmin());
     }
 
     public function profileBanner($username)
