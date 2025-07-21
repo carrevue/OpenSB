@@ -1,0 +1,47 @@
+{% extends "_layout_admin.twig" %}
+
+{% if search %}
+    {% set le_url = '?page=%s&amount=' ~ amount  ~ "&search=" ~ search %}
+{% else %}
+    {% set le_url = '?page=%s&amount=' ~ amount %}
+{% endif %}
+
+{% set title = "IP bans" %}
+
+	{% block admincontent %}
+        {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
+        {% set current_page = page %}
+
+        <div class="form-flex">
+            <form action="/admin/ip/" method="GET" id="num_change" class="admin-form-select">
+                <select name="amount" onchange="this.form.submit()">
+                    {% for option in [8, 16, 24, 32, 48, 64, 96, 128, 256] %}
+                        <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+
+            <form method="GET" action="/admin/ip/" class="admin-form-search">
+                <input type="hidden" name="amount" value="{{ amount }}">
+                <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
+                <button type="submit" class="button button-secondary">
+                    <div class="biscuit-icon search"></div>
+                </button>
+            </form>
+        </div>
+        <hr>
+        {% for ip in ips %}
+            <div class="content-entry">
+                <div class="content-info">
+                    <div class="content-title">
+                        {{ ip.ip }}
+                    </div>
+                    <div class="content-description">
+                        <div>Time: {{ ip.time | relative_time() }} ({{ ip.time | localize_date('long', 'medium') }})</div>
+                        <div>Reason: {{ ip.reason }}</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {{ pagination(count, amount, le_url, current_page) }}
+    {% endblock %}

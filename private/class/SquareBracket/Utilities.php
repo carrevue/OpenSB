@@ -325,7 +325,7 @@ class Utilities
     }
 
     // if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
-    public static function getIpAddress($encrypted = true)
+    public static function getIpAddress()
     {
         if (BLUFF_CLI) return null;
 
@@ -333,11 +333,7 @@ class Utilities
 
         if ($ip == "127.0.0.1" | $ip == "::1" | $ip == "localhost") return "localhost";
 
-        if ($encrypted) {
-            return crypt($ip, $ip);
-        } else {
-            return $ip;
-        }
+        return $ip;
     }
 
     public static function isLegacyFrontend()

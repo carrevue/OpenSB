@@ -116,6 +116,7 @@ if (isset($path[1]) && $path[1] != '') {
             },
             'interactions' => require(BLUFF_PRIVATE_PATH . '/pages/admin_interactions.php'),
             'invitekeys' => require(BLUFF_PRIVATE_PATH . '/pages/admin_invitekeys.php'),
+            'ip' => require(BLUFF_PRIVATE_PATH . '/pages/admin_ip.php'),
             default => Utilities::redirect('/admin/overview/'),
         },
         'api' => match ($path[2] ?? null) {

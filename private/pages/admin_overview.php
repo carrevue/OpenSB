@@ -93,16 +93,17 @@ function countViews($database): array
 $date = $database->fetch("SELECT u.joined FROM users u ORDER BY u.joined ASC")["joined"];
 
 $thingsToCount = [
-    'upload_comments' => 'Comments on uploads',
-    'user_profile_comments' => 'Comments on profiles',
-    'journal_comments' => 'Comments on journals',
+    'upload_comments' => 'Upload comments',
+    'user_profile_comments' => 'Profile comments',
+    'journal_comments' => 'Journal comments',
     'users' => 'Users',
     'uploads' => 'Uploads',
     'upload_deleted' => 'Deleted uploads',
     'upload_takedowns' => 'Taken down uploads',
     'upload_views' => 'Views',
     'user_favorites' => 'Favorites',
-    'user_bans' => 'Bans',
+    'user_bans' => 'User bans',
+    'ip_bans' => 'IP bans',
     'journals' => 'Journals'
 ];
 

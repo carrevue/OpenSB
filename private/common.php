@@ -204,19 +204,17 @@ if (!BLUFF_CLI) {
     $twig_error = new ErrorTemplating($orange);
 
     $ipban = $database->fetch(
-        "SELECT * FROM ip_bans WHERE ? LIKE ip OR ? LIKE ip",
-        [Utilities::getIpAddress(), Utilities::getIpAddress(false)]
+        "SELECT * FROM ip_bans WHERE ? LIKE ip", [Utilities::getIpAddress()]
     );
 
     if ($ipban) {
         $usersAssociatedWithIP = $database->fetchArray($database->query(
-            "SELECT name FROM users WHERE ip LIKE ? OR ip LIKE ?",
-            [Utilities::getIpAddress(), Utilities::getIpAddress(false)]
+            "SELECT name FROM users WHERE ip LIKE ?", [Utilities::getIpAddress()]
         ));
 
         if ($orange->isDebug() && (!$ipban)) {
             $ipban = [
-                "ip" => Utilities::getIpAddress(false),
+                "ip" => Utilities::getIpAddress(),
             ];
         }
 

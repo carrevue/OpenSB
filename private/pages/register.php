@@ -43,7 +43,7 @@ $captcha = $orange->returnCaptchaSettings();
 // setsebool -P httpd_can_network_connect on
 // -chaziz 4/19/2025
 
-$ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress(false));
+$ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress());
 
 if (str_contains($ipcheck, "<appears>yes</appears>") && !$orange->isDebug()) {
     Utilities::notifyBanner("Your IP address appears to be suspicious.", "/");
@@ -85,9 +85,9 @@ if (isset($_POST['registersubmit'])) {
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
     if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
 
-    $isLocalIp = (Utilities::getIpAddress(false) === "localhost"
+    $isLocalIp = (Utilities::getIpAddress() === "localhost"
         || filter_var(
-            Utilities::getIpAddress(false),
+            Utilities::getIpAddress(),
             FILTER_VALIDATE_IP,
             FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
         ) === false);
