@@ -26,6 +26,7 @@ global $auth, $twig, $database, $orange, $path;
 use SquareBracket\UserData;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
