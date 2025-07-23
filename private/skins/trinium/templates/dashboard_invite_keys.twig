@@ -1,11 +1,11 @@
-{% extends "_layout_admin.twig" %}
+{% extends "_layout_dashboard.twig" %}
 
 {% set title = "Invite keys" %}
 
 	{% block admincontent %}
         <div class="inviteKeyGenerationForm">
         <form name="inviteKeyGenerationForm" id="inviteKeyGenerationForm" method="post"
-              action="/admin/invitekeys" enctype="multipart/form-data">
+              action="/dashboard/invitekeys" enctype="multipart/form-data">
             <input type="hidden" id="action" name="action" value="generate_invite_key"/>
             <input class="button button-primary button-huge" type="submit" id="generate" name="generate"
                    value="Generate invite key">

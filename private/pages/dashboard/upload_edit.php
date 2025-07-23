@@ -26,13 +26,14 @@ global $auth, $twig, $database, $orange, $path;
 use SquareBracket\UploadData;
 use SquareBracket\UploadFlags;
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
@@ -46,7 +47,7 @@ $upload = new UploadData($database, $id);
 $data = $upload->getData();
 
 if (!$data) {
-    Utilities::notifyBanner("This upload does not exist.", "/admin/");
+    Utilities::notifyBanner("This upload does not exist.", "/dashboard/");
 }
 
 $flags = $upload->getUploadFlagsArray();
@@ -77,7 +78,7 @@ if (isset($_POST['flagsubmit'])) {
     );
     Utilities::notifyBanner(
         "Your upload's details have been successfully modified.",
-        "/admin/uploads/" . $id,
+        "/dashboard/uploads/" . $id,
         "success"
     );
 }
@@ -121,6 +122,6 @@ $page_data = [
     "log" => $log,
 ];
 
-echo $twig->render('admin_upload_edit.twig', [
+echo $twig->render("dashboard_upload_edit.twig", [
     'upload' => $page_data,
 ]);

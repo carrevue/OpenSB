@@ -24,13 +24,14 @@ namespace OpenSB;
 global $auth, $twig, $database, $orange;
 
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
@@ -61,7 +62,7 @@ if (isset($_POST["action"])) {
             [$random, $auth->getUserID(), time()]
         );
 
-        Utilities::notifyBanner("Generated key! ($random)", "/admin/invitekeys", "success");
+        Utilities::notifyBanner("Generated key! ($random)", "/dashboard/invitekeys", "success");
     }
 }
 
@@ -69,6 +70,6 @@ $data = [
     "invites" => $inviteKeyData,
 ];
 
-echo $twig->render("admin_invite_keys.twig", [
+echo $twig->render("dashboard_invite_keys.twig", [
     'data' => $data
 ]);

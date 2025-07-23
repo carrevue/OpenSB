@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2024-2025 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -21,21 +21,25 @@
 
 namespace OpenSB;
 
-global $auth, $twig, $orange;
+global $auth, $twig, $database, $orange;
 
+use SquareBracket\UserData;
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
 }
+
+$usersData = [];
 
 $amount = $_GET["amount"] ?? 16;
 $search = $_GET["search"] ?? "";
@@ -43,27 +47,43 @@ $page = $_GET["page"] ?? 1;
 
 $limit = $database->paginate($page, $amount);
 
-$ipData = $database->fetchArray(
+$usersDataQuery = $database->fetchArray(
     $database->query(
-        "SELECT *
-        FROM ip_bans
-        WHERE (ip LIKE CONCAT('%', ?, '%'))
-        ORDER BY time DESC $limit
+        "SELECT u.id, u.title, u.powerlevel,
+       (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
+       (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
+       (SELECT COUNT(*) FROM user_bans WHERE userid = u.id) AS is_banned
+        FROM users u
+        WHERE (u.name LIKE CONCAT('%', ?, '%'))
+        ORDER BY u.id DESC $limit
         ",
         [$search]
     )
 );
 
+foreach ($usersDataQuery as $user) {
+    $userData = new UserData($database, $user["id"]);
+    $usersData[] =
+        [
+            "id" => $user["id"],
+            "info" => $userData->getUserArray(),
+            "submissions" => $user["s_num"],
+            "journals" => $user["j_num"],
+            "banned" => $user["is_banned"],
+            "powerlevel" => $user["powerlevel"],
+        ];
+}
+
 $count = $database->result(
     "SELECT COUNT(*)
-        FROM ip_bans
-        WHERE (ip LIKE CONCAT('%', ?, '%'))
+        FROM users u
+        WHERE (u.name LIKE CONCAT('%', ?, '%'))
         ",
     [$search]
 );
 
-echo $twig->render("admin_ip.twig", [
-    "ips" => $ipData,
+echo $twig->render("dashboard_users.twig", [
+    "users" => $usersData,
     "amount" => $amount,
     "page" => $page,
     "count" => $count,

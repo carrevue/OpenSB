@@ -1,4 +1,4 @@
-{% extends "_layout_admin.twig" %}
+{% extends "_layout_dashboard.twig" %}
 
 {% if search %}
     {% set le_url = '?page=%s&amount=' ~ amount  ~ "&search=" ~ search %}
@@ -13,7 +13,7 @@
         {% set current_page = page %}
 
         <div class="form-flex">
-            <form action="/admin/uploads/" method="GET" id="num_change" class="admin-form-select">
+            <form action="/dashboard/uploads/" method="GET" id="num_change" class="admin-form-select">
                 <select name="amount" onchange="this.form.submit()">
                     {% for option in [8, 16, 24, 32, 48, 64, 96, 128, 256] %}
                         <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
@@ -21,7 +21,7 @@
                 </select>
             </form>
 
-            <form method="GET" action="/admin/uploads/" class="admin-form-search">
+            <form method="GET" action="/dashboard/uploads/" class="admin-form-search">
                 <input type="hidden" name="amount" value="{{ amount }}">
                 <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
                 <button type="submit" class="button button-secondary">
@@ -44,7 +44,7 @@
                     </div>
                     <div class="content-description">
                         <div>
-                            Uploader: <a href="/admin/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a>
+                            Uploader: <a href="/dashboard/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a>
                         </div>
                         <div>
                             Uploaded: {{ upload.published | localize_date('long', 'medium') }} ({{ upload.published | relative_time }})</a>
@@ -56,7 +56,7 @@
                         {% endif %}
                     </div>
                     <div>
-                        <a class="button button-secondary button-small" href="/admin/uploads/{{ upload.id }}">
+                        <a class="button button-secondary button-small" href="/dashboard/uploads/{{ upload.id }}">
                             Check
                         </a>
                     </div>

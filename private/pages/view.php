@@ -32,6 +32,7 @@ use SquareBracket\UploadData;
 use SquareBracket\UploadQuery;
 use SquareBracket\UploadRatingEnum;
 use SquareBracket\UserData;
+use SquareBracket\UserRoleEnum;
 use SquareBracket\Utilities;
 
 $options = $orange->getLocalOptions();
@@ -44,7 +45,7 @@ $upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
 $takedown = $upload->getTakedown();
-if ($takedown && !$auth->isUserAdministrator()) {
+if ($takedown && !$auth->userHasRole(UserRoleEnum::Administrator)) {
     // go back to homepage with a notification
     Utilities::notifyBanner("This upload has been taken down.", "/");
 }
@@ -78,7 +79,7 @@ if (isset($data["tags"])) {
 $comments = new CommentData($database, CommentLocation::Upload, $id);
 $author = new UserData($database, $data["author"]);
 
-if ($author->isUserBanned() && !$auth->isUserAdministrator()) {
+if ($author->isUserBanned() && !$auth->userHasRole(UserRoleEnum::Administrator)) {
     Utilities::notifyBanner("This upload has been taken down.", "/");
 }
 
@@ -335,7 +336,7 @@ if (Utilities::isLegacyFrontend()) {
 }
 
 // TODO: this should be moved to admin_upload_edit -chaziz 1/4/2025
-if ($auth->isUserAdministrator() && $takedown) {
+if ($auth->userHasRole(UserRoleEnum::Administrator) && $takedown) {
     $page_data["takedown"] = $takedown[0];
     $page_data["takedown"]["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
     $page_data["author_banned"] = $author->isUserBanned();

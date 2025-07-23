@@ -1,4 +1,4 @@
-{% extends "_layout_admin.twig" %}
+{% extends "_layout_dashboard.twig" %}
 
 {% set title = "Checking " ~ upload.id %}
 
@@ -30,7 +30,7 @@
                         <div class="section-header">
                             <h2 class="section-title">Boolean flags</h2>
                         </div>
-                        <form method="post" name="booleanForm" id="booleanForm" action="/admin/uploads/{{ upload.id }}">
+                        <form method="post" name="booleanForm" id="booleanForm" action="/dashboard/uploads/{{ upload.id }}">
                             <div class="form-input">
                                 <input type="checkbox" id="flag_featured" name="flag_featured"
                                        {% if upload.flags.featured %}checked{% endif %}>

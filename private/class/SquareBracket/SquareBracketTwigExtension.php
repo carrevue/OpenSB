@@ -32,6 +32,8 @@ use Twig\TwigFunction;
 use BluffingoCore\Database;
 use BluffingoCore\Profiler;
 
+use SquareBracket\UserRoleEnum;
+
 class SquareBracketTwigExtension extends AbstractExtension
 {
     private SquareBracket $orange;
@@ -508,15 +510,15 @@ class SquareBracketTwigExtension extends AbstractExtension
                 unset($array["write"]);
             }
 
-            if ($this->authentication->isUserAdministrator()) {
-                $arrayThatContainsOnlyTheLinkToTheAdminPanel = [
-                    "admin" => [
-                        "name" => $this->localize("admin_panel"), // Admin
-                        "url" => "/admin",
+            if ($this->authentication->userHasRole(UserRoleEnum::Moderator)) {
+                $arrayThatContainsOnlyTheLinkToTheDashboard = [
+                    "dashboard" => [
+                        "name" => $this->localize("dashboard"), // Dashboard
+                        "url" => "/dashboard",
                     ],
                 ];
                 // Merge admin item with the rest of the array
-                $array = array_merge($arrayThatContainsOnlyTheLinkToTheAdminPanel, $array);
+                $array = array_merge($arrayThatContainsOnlyTheLinkToTheDashboard, $array);
             }
         } else {
             $array = [

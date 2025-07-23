@@ -24,13 +24,14 @@ namespace OpenSB;
 global $auth, $twig, $database, $orange;
 
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
@@ -211,6 +212,6 @@ $data = [
     ],
 ];
 
-echo $twig->render('admin_overview.twig', [
+echo $twig->render("dashboard_overview.twig", [
     'data' => $data
 ]);

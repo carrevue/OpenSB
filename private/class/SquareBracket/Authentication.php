@@ -168,7 +168,7 @@ class Authentication
     public function userHasRole(UserRoleEnum $role): bool
     {
         return $this->is_logged_in
-            && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= $role->value;
+            && ($this->user_data['powerlevel'] ?? UserRoleEnum::None->value) >= $role->value;
     }
 
     /**
@@ -188,7 +188,7 @@ class Authentication
     {
         return $this->is_logged_in
             && $this->has_authenticated_as_staff
-            && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) > UserRoleEnum::Normal->value;
+            && ($this->user_data['powerlevel'] ?? UserRoleEnum::None->value) > UserRoleEnum::Normal->value;
     }
 
     /**

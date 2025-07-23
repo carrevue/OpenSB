@@ -1,11 +1,11 @@
 {% extends "_layout.twig" %}
 
-{% set title = "Admin login" %}
+{% set title = "Dashboard login" %}
 
 	{% block content %}
         <div class="section">
             <div class="section-header">
-                <h1 class="section-title">Admin login</h1>
+                <h1 class="section-title">Dashboard login</h1>
             </div>
             <div class="content-box">
                 <div class="login-currently-logged-in">
@@ -23,20 +23,20 @@
                 </div>
                 <hr>
                 <div class="panel-body">
-                    <form method="post" name="loginForm" id="loginForm" action="/admin/login" class="form-signin">
+                    <form method="post" name="loginForm" id="loginForm" action="/dashboard/login" class="form-signin">
                         <div class="form-input">
-                            <label for="password">Admin password</label>
+                            <label for="password">Dashboard access password</label>
                             <input type="password" name="password" class="form-submit">
                         </div>
 
                         {% if is_chaziz_sb %}
                             <p class="text-danger">
-                                <strong>IMPORTANT</strong>: Your admin password is different than your normal password.
+                                <strong>IMPORTANT</strong>: Your dashboard access password is different from your normal password.
                                 If you lose it, please contact Chaziz privately.
                             </p>
                         {% else %}
                             <p class="text-danger">
-                                <strong>IMPORTANT</strong>: Your admin password is different than your normal password.
+                                <strong>IMPORTANT</strong>: Your dashboard access password is different from your normal password.
                                 If you lose it, please contact an instance (co-)owner privately.
                             </p>
                         {% endif %}

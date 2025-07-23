@@ -99,26 +99,7 @@ function handle_debug_page_path(string $path): void
 
 if (isset($path[1]) && $path[1] != '') {
     match ($path[1]) {
-        'admin' => match ($path[2] ?? null) {
-            'login' => require(BLUFF_PRIVATE_PATH . '/pages/admin_login.php'),
-            'users' => match ($path[3] ?? null) {
-                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
-                    ? require(BLUFF_PRIVATE_PATH . '/pages/admin_user_edit.php')
-                    : require(BLUFF_PRIVATE_PATH . '/pages/admin_users.php'),
-                default => require(BLUFF_PRIVATE_PATH . '/pages/admin_users.php'),
-            },
-            'overview' => require(BLUFF_PRIVATE_PATH . '/pages/admin_overview.php'),
-            'uploads' => match ($path[3] ?? null) {
-                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
-                    ? require(BLUFF_PRIVATE_PATH . '/pages/admin_upload_edit.php')
-                    : require(BLUFF_PRIVATE_PATH . '/pages/admin_uploads.php'),
-                default => require(BLUFF_PRIVATE_PATH . '/pages/admin_uploads.php'),
-            },
-            'interactions' => require(BLUFF_PRIVATE_PATH . '/pages/admin_interactions.php'),
-            'invitekeys' => require(BLUFF_PRIVATE_PATH . '/pages/admin_invitekeys.php'),
-            'ip' => require(BLUFF_PRIVATE_PATH . '/pages/admin_ip.php'),
-            default => Utilities::redirect('/admin/overview/'),
-        },
+        'admin' => Utilities::redirect('/dashboard/' . implode('/', array_slice($path, 2))),
         'api' => match ($path[2] ?? null) {
             'biscuit' => match ($path[3] ?? null) {
                 'commenting' => require(BLUFF_PRIVATE_PATH . '/pages/api/biscuit/commenting.php'),
@@ -148,6 +129,26 @@ if (isset($path[1]) && $path[1] != '') {
             default => last_resort(),
         },
         'browse' => require(BLUFF_PRIVATE_PATH . '/pages/browse.php'),
+        'dashboard' => match ($path[2] ?? null) {
+            'login' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/login.php'),
+            'users' => match ($path[3] ?? null) {
+                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
+                    ? require(BLUFF_PRIVATE_PATH . '/pages/dashboard/user_edit.php')
+                    : require(BLUFF_PRIVATE_PATH . '/pages/dashboard/users.php'),
+                default => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/users.php'),
+            },
+            'overview' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/overview.php'),
+            'uploads' => match ($path[3] ?? null) {
+                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
+                    ? require(BLUFF_PRIVATE_PATH . '/pages/dashboard/upload_edit.php')
+                    : require(BLUFF_PRIVATE_PATH . '/pages/dashboard/uploads.php'),
+                default => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/uploads.php'),
+            },
+            'interactions' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/interactions.php'),
+            'invite_keys' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/invite_keys.php'),
+            'ip_bans' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/ip_bans.php'),
+            default => Utilities::redirect('/admin/overview/'),
+        },
         'debug' => match ($path[2] ?? null) {
             //null, '', 'index' => require(BLUFF_PRIVATE_PATH . '/pages/debug/index.php'),
             //'notifications' => require(BLUFF_PRIVATE_PATH . '/pages/debug/notifications.php'),

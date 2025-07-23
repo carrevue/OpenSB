@@ -25,13 +25,14 @@ global $auth, $twig, $database, $orange;
 
 use SquareBracket\UploadQuery;
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
@@ -131,7 +132,7 @@ foreach ($uploads_array as $upload) {
     $new_fucking_array[] = $upload;
 };
 
-echo $twig->render("admin_uploads.twig", [
+echo $twig->render("dashboard_uploads.twig", [
     "uploads" => $new_fucking_array,
     "amount" => $amount,
     "page" => $page,

@@ -27,6 +27,7 @@ namespace OpenSB;
 global $orange, $database, $twig, $auth;
 
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
 // TODO: a more automated method to detect which file format the user is trying to upload.
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
@@ -51,7 +52,7 @@ if ($orange->isLockdownEnabled()) {
     Utilities::notifyBanner("The ability to upload has been disabled.", "/");
 }
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
     $joindate = $auth->getUserData()["joined"];
     $timeSinceJoin = time() - strtotime($joindate);
 

@@ -24,8 +24,9 @@ namespace OpenSB;
 global $auth, $twig, $database, $orange;
 
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
@@ -41,8 +42,8 @@ if (!isset($logindata["admin_password"])) {
     $new_pass = Utilities::generateRandomString(24);
     $database->query("UPDATE users SET admin_password = ? WHERE name = ?", [password_hash($new_pass, PASSWORD_DEFAULT), $auth->getUserData()["name"]]);
     $_SESSION["SB_STAFF_AUTHED"] = true;
-    Utilities::notifyBanner("Welcome! Your admin password is " . $new_pass .
-        ". Please note it down in a safe and secure place to avoid losing it.", "/admin/", "success");
+    Utilities::notifyBanner("Welcome! Your dashboard access password is " . $new_pass .
+        ". Please note it down in a safe and secure place to avoid losing it.", "/dashboard/", "success");
 }
 
 if (isset($_POST["loginsubmit"])) {
@@ -55,11 +56,11 @@ if (isset($_POST["loginsubmit"])) {
     if (!$error) {
         if ($logindata && password_verify($password, $logindata['admin_password'])) {
             $_SESSION["SB_STAFF_AUTHED"] = true;
-            Utilities::notifyBanner("Welcome to the admin panel.", "/admin/", "success");
+            Utilities::notifyBanner("Welcome to the dashboard.", "/dashboard/", "success");
         } else {
-            Utilities::notifyBanner("Incorrect admin password.", "/admin/login");
+            Utilities::notifyBanner("Incorrect dashboard access password.", "/dashboard/login");
         }
     }
 }
 
-echo $twig->render('admin_login.twig');
+echo $twig->render('dashboard_login.twig');

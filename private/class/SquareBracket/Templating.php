@@ -183,8 +183,8 @@ class Templating
 
             $uriParts = explode('/', trim($uri, '/'));
 
-            // fix for admin panel tabs
-            if (!empty($uriParts) && $uriParts[0] === 'admin') {
+            // fix for dashboard tabs
+            if (!empty($uriParts) && $uriParts[0] === 'dashboard') {
                 $pageName = $uriParts[1] ?? 'overview';
             } else {
                 $pageName = $uriParts[0] ?? 'index';

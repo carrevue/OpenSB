@@ -31,6 +31,7 @@ use SquareBracket\UploadData;
 use SquareBracket\UploadQuery;
 use SquareBracket\UserCustomizationData;
 use SquareBracket\UserFlags;
+use SquareBracket\UserRoleEnum;
 use SquareBracket\Utilities;
 
 $submission_query = new UploadQuery($database);
@@ -59,7 +60,7 @@ if (!$data) {
 }
 
 if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
-    if (!$auth->isUserAdministrator()) {
+    if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
         Utilities::notifyBanner("This user is banned.", "/");
     }
 }
@@ -129,7 +130,7 @@ $user_journals =
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-if ($is_own_profile || $auth->isUserAdministrator()) {
+if ($is_own_profile || $auth->userHasRole(UserRoleEnum::Administrator)) {
     $old_usernames = $database->fetchArray($database->query("SELECT * FROM user_old_names WHERE user = ?", [$data["id"]]));
 } else {
     $old_usernames = [];

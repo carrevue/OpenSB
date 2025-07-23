@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2025 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -24,17 +24,49 @@ namespace OpenSB;
 global $auth, $twig, $orange;
 
 use SquareBracket\Utilities;
+use SquareBracket\UserRoleEnum;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
 }
 
-echo $twig->render("admin_temporary.twig");
+$amount = $_GET["amount"] ?? 16;
+$search = $_GET["search"] ?? "";
+$page = $_GET["page"] ?? 1;
+
+$limit = $database->paginate($page, $amount);
+
+$ipData = $database->fetchArray(
+    $database->query(
+        "SELECT *
+        FROM ip_bans
+        WHERE (ip LIKE CONCAT('%', ?, '%'))
+        ORDER BY time DESC $limit
+        ",
+        [$search]
+    )
+);
+
+$count = $database->result(
+    "SELECT COUNT(*)
+        FROM ip_bans
+        WHERE (ip LIKE CONCAT('%', ?, '%'))
+        ",
+    [$search]
+);
+
+echo $twig->render("dashboard_ip_bans.twig", [
+    "ips" => $ipData,
+    "amount" => $amount,
+    "page" => $page,
+    "count" => $count,
+    "search" => $search,
+]);

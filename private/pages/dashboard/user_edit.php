@@ -27,12 +27,12 @@ use SquareBracket\UserData;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
-if (!$auth->isUserAdministrator()) {
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("You do not have permission to access this page.", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login with your admin password.", "/admin/login");
+    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
@@ -51,33 +51,33 @@ if (!$user) {
         // if so, redirect to the new profile.
         $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
         http_response_code(301);
-        header("Location: /admin/users/$new_username");
+        header("Location: /dashboard/users/$new_username");
         exit();
     } else {
-        Utilities::notifyBanner("This user does not exist.", "/admin/");
+        Utilities::notifyBanner("This user does not exist.", "/dashboard/");
     }
 }
 
 if (isset($_POST['ban_user'])) {
     // Don't ban non-existent users.
     if (!$database->fetch("SELECT u.name FROM users u WHERE u.name = ?", [$_POST["ban_user"]])) {
-        Utilities::notifyBanner("This user does not exist.", "/admin/users/");
+        Utilities::notifyBanner("This user does not exist.", "/dashboard/users/");
     }
-    // Don't ban mods/admins.
+    // Don't ban mods/dashboards.
     if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["powerlevel"] != 1) {
-        Utilities::notifyBanner("This user cannot be banned.", "/admin/users/");
+        Utilities::notifyBanner("This user cannot be banned.", "/dashboard/users/");
     }
     // Check if user is already banned, if not, then ban. Otherwise, unban.
     $id = $database->fetch("SELECT u.id FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["id"];
     if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$id])) {
         $database->query("DELETE FROM user_bans WHERE userid = ?", [$id]);
-        Utilities::notifyBanner("Unbanned " . $_POST["ban_user"] . '.', "/admin/users", "success");
+        Utilities::notifyBanner("Unbanned " . $_POST["ban_user"] . '.', "/dashboard/users", "success");
     } else {
         $database->query(
             "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
             [$id, "Banned by " . $auth->getUserData()["name"], time()]
         );
-        Utilities::notifyBanner("Banned " . $_POST["ban_user"] . '.', "/admin/users", "success");
+        Utilities::notifyBanner("Banned " . $_POST["ban_user"] . '.', "/dashboard/users", "success");
     }
 }
 
@@ -113,7 +113,7 @@ foreach ($notes as $note) {
 // simply getting basic user data via the UserData class.
 $flags = UserFlags::toArray($user["u_flags"]);
 
-echo $twig->render('admin_user_edit.twig', [
+echo $twig->render("dashboard_user_edit.twig", [
     'user' => $user,
     'flags' => $flags,
     'users_with_matching_ips' => $users_with_matching_ips,

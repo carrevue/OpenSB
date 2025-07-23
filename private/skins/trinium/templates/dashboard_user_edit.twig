@@ -1,4 +1,4 @@
-{% extends "_layout_admin.twig" %}
+{% extends "_layout_dashboard.twig" %}
 
 {% set title = user.name %}
 
@@ -7,6 +7,21 @@
             <div class="col-6">
                 <div class="section">
                     <div class="content-box">
+                        {#
+                        <div>
+                        <form id="banForm" method="post" action="/dashboard/users/{{ user.info.username }}" enctype="multipart/form-data">
+                            {% if user.powerlevel <= 1 %}
+                                {% if user.banned %}
+                                    <button name="ban_user" value="{{ user.info.username }}" class="button button-warning" onclick="if (!confirm('Are you sure you want to unban this user?')) { return false }">Unban</button>
+                                {% else %}
+                                    <button name="ban_user" value="{{ user.info.username }}" class="button button-danger" onclick="if (!confirm('Are you sure you want to ban this user?')) { return false }">Ban</button>
+                                {% endif %}
+                                <div name="ban_user" class="button button-danger" onclick="alert('Not implemented')">IP Ban</div>
+                            {% endif %}
+                        </form>
+                        </div>
+                        <hr>
+                        #}
                         <div class="section-header">
                             <h2 class="section-title">Details</h2>
                         </div>
@@ -20,12 +35,12 @@
                                 <td>Profile name</td>
                                 <td>{{ user.name }}</td>
                             </tr>
-                            <tr>
-                                <td>IP address</td>
-                                <td>
-                                    {{ user.ip }}
-                                </td>
-                            <tr>
+                            {% if user.powerlevel <= 1 %}
+                                <tr>
+                                    <td>IP address</td>
+                                    <td>{{ user.ip }}</td>
+                                <tr>
+                            {% endif %}
                             <tr>
                                 <td>Role</td>
                                 <td>
@@ -79,7 +94,7 @@
                                 {% for user in users_with_matching_ips %}
                                     <tr>
                                         <td>
-                                            <a href="/admin/users/{{ user.name }}">{{ user.name }}</a>
+                                            <a href="/dashboard/users/{{ user.name }}">{{ user.name }}</a>
                                         </td>
                                         <td>
                                             {{ user.title }}

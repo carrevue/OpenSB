@@ -1,0 +1,46 @@
+{% extends "_layout.twig" %}
+
+{% set show_sidebar = true %}
+
+{% block precontent %}
+<div class="navigation-bar">
+    <a class="navigation-bar-button {% if page_name=='overview' %}active{% endif %}" href="/dashboard/overview">
+        Overview
+    </a>
+    <a class="navigation-bar-button {% if page_name=='users' %}active{% endif %}" href="/dashboard/users">
+        Users
+    </a>
+    {% if user_data.powerlevel > 2 %}
+        <a class="navigation-bar-button {% if page_name=='ip_bans' %}active{% endif %}" href="/dashboard/ip_bans">
+            IP bans
+        </a>
+    {% endif %}
+    <a class="navigation-bar-button {% if page_name=='uploads' %}active{% endif %}" href="/dashboard/uploads">
+        Uploads
+    </a>
+        {% if options.enable_incomplete_features %}
+        <a class="navigation-bar-button {% if page_name=='interactions' %}active{% endif %}" href="/dashboard/interactions">
+            Interactions
+        </a>
+    {% endif %}
+    {% if invite_keys_enabled %}
+        <a class="navigation-bar-button {% if page_name=='invitekeys' %}active{% endif %}" href="/dashboard/invitekeys">
+            Invite keys
+        </a>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+    <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">
+                {{ title }}
+            </h1>
+        </div>
+    </div>
+    <div class="content-box">
+        {% block admincontent %}
+        {% endblock %}
+    </div>
+{% endblock %}
