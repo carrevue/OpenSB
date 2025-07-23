@@ -21,11 +21,37 @@
 
 namespace SquareBracket;
 
+use InvalidArgumentException;
+
 enum UserRoleEnum: int
 {
-    case NoPermissions = 0;
+    case None = 0;
     case Normal = 1;
     case Moderator = 2;
     case Administrator = 3;
     case Owner = 4;
+
+    public static function fromString(string $rating): self
+    {
+        return match (strtolower($rating)) {
+            'none' => self::None,
+            'normal' => self::Normal,
+            'moderator' => self::Moderator,
+            'administrator' => self::Administrator,
+            'owner' => self::Owner,
+            default => throw new InvalidArgumentException("invalid role $rating")
+        };
+    }
+
+    // for some reason the db uses sql enums and i forgot why i did it like this.
+    public function toString(): string
+    {
+        return match ($this) {
+            self::None => 'none',
+            self::Normal => 'normal',
+            self::Moderator => 'moderator',
+            self::Administrator => 'administrator',
+            self::Owner => 'owner'
+        };
+    }
 }

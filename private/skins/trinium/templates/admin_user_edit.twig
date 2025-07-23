@@ -1,6 +1,6 @@
 {% extends "_layout_admin.twig" %}
 
-{% set title = "Checking " ~ user.name %}
+{% set title = user.name %}
 
 	{% block admincontent %}
         <div class="grid">
@@ -21,17 +21,22 @@
                                 <td>{{ user.name }}</td>
                             </tr>
                             <tr>
-                                <td>Power level</td>
+                                <td>IP address</td>
                                 <td>
-                                    {% if user.powerlevel == 1 %}
-                                        User
-                                    {% elseif user.powerlevel == 2 %}
-                                        Moderator
-                                    {% elseif user.powerlevel == 3 %}
-                                        Admin
-                                    {% else %}
-                                        Owner
-                                    {% endif %}
+                                    {{ user.ip }}
+                                </td>
+                            <tr>
+                            <tr>
+                                <td>Role</td>
+                                <td>
+                                    {% set role = 
+                                        user.powerlevel == 1 ? 'User' :
+                                        user.powerlevel == 2 ? 'Moderator' :
+                                        user.powerlevel == 3 ? 'Administrator' :
+                                        user.powerlevel == 4 ? 'Owner' :
+                                        'Unknown (' ~ user.powerlevel ~ ')'
+                                    %}
+                                    {{ role }}
                                 </td>
                             </tr>
                             <tr>
@@ -49,12 +54,14 @@
                                 <td>Last seen</td>
                                 <td>{{ user.lastview | localize_date('long', 'medium') }}</td>
                             </tr>
+                            {% if not is_chaziz_sb %}
                             <tr>
                                 <td>Comfortable rating</td>
                                 <td>{{ user.comfortable_rating }}</td>
                             </tr>
+                            {% endif %}
                             <tr>
-                                <td>Color</td>
+                                <td>User link color</td>
                                 <td style="background:{{ user.customcolor }};"></td>
                             </tr>
                             </tbody>

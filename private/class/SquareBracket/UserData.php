@@ -81,7 +81,8 @@ class UserData
                 "color" => $this->data["customcolor"],
                 "joined" => $this->data["joined"],
                 "connected" => $this->data["lastview"],
-                "powerlevel" => $this->data["powerlevel"], // TODO: rename powerlevel to something better
+                // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
+                "powerlevel" => $this->data["powerlevel"],
                 "flags" => UserFlags::toArray($this->data["u_flags"]), // stupid i think
             ];
         } else {

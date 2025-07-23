@@ -172,7 +172,7 @@ class Storage
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
-        $img->resizeDown(height: 300);
+        $img->scale(height: 300);
         $img->toPng()->save($target_file);
 
         unlink($temp_name);

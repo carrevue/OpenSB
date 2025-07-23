@@ -111,7 +111,8 @@ class Authentication
     /**
      * Logs out the user.
      */
-    public function logOut(): never {
+    public function logOut(): never
+    {
         session_destroy();
         Utilities::redirect('./');
     }
@@ -162,28 +163,22 @@ class Authentication
     }
 
     /**
-     * Checks if the logged-in user is a moderator (or of higher status).
+     * Checks if the logged-in user has at least the specified role level.
      */
-    public function isUserModerator(): bool
+    public function userHasRole(UserRoleEnum $role): bool
     {
-        return $this->is_logged_in && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= UserRoleEnum::Moderator->value;
+        return $this->is_logged_in
+            && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= $role->value;
     }
 
     /**
      * Checks if the logged-in user is an administrator (or of higher status).
+     * 
+     * @deprecated
      */
     public function isUserAdministrator(): bool
     {
-        return $this->is_logged_in && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= UserRoleEnum::Administrator->value;
-    }
-
-    /**
-     * Checks if the logged-in user is an owner.
-     */
-    public function isUserOwner(): bool
-    {
-        return $this->is_logged_in 
-            && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) >= UserRoleEnum::Owner->value;
+        return $this->userHasRole(UserRoleEnum::Administrator);
     }
 
     /**
@@ -191,8 +186,8 @@ class Authentication
      */
     public function hasUserAuthenticatedAsStaff(): bool
     {
-        return $this->is_logged_in 
-            && $this->has_authenticated_as_staff 
+        return $this->is_logged_in
+            && $this->has_authenticated_as_staff
             && ($this->user_data['powerlevel'] ?? UserRoleEnum::NoPermissions->value) > UserRoleEnum::Normal->value;
     }
 
@@ -204,7 +199,7 @@ class Authentication
         if (!$this->is_logged_in) {
             return [];
         }
-        
+
         return $this->user_data['blacklisted_tags'] ?? [];
     }
 

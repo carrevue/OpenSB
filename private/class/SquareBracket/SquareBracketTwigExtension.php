@@ -195,15 +195,18 @@ class SquareBracketTwigExtension extends AbstractExtension
         ];
     }
 
-    private function parseHashtags($string): array|string|null {
+    private function parseHashtags($string): array|string|null
+    {
         return preg_replace('/(?<!=|\b|&)#([a-z0-9_]+)/i', '<a href="/search?tags=$1">#$1</a>', $string);
     }
 
-    private function parseUserMentions($string): array|string|null {
+    private function parseUserMentions($string): array|string|null
+    {
         return preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $string);
     }
 
-    private function parseCustomEmojis($string) {
+    private function parseCustomEmojis($string)
+    {
         return preg_replace_callback('/:([a-z0-9_]+):/i', function ($matches) {
             $emoji_name = strtolower($matches[1]);
             // check if emoji exists so we dont load nothing
@@ -377,7 +380,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $username = htmlspecialchars($user['info']['username']);
         $color = $user["info"]["color"];
         // the old userlink function used to show if someone was staff, this was implemented around april 2023.
-        $powerlevel =  $user["info"]["powerlevel"];
+        $powerlevel = $user["info"]["powerlevel"];
 
         $userlink = sprintf(
             '<a class="userlink userlink-%s" style="color:%s;" href="/user/%s">%s</a>',

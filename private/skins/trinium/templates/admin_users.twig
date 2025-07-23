@@ -46,16 +46,15 @@
                             {{ user.submissions }} uploads · {{ user.journals }} journals
                         </div>
                         <div>
-                            Power level:
-                            {% if user.powerlevel == 1 %}
-                                User
-                            {% elseif user.powerlevel == 2 %}
-                                Moderator
-                            {% elseif user.powerlevel == 3 %}
-                                Admin
-                            {% else %}
-                                Owner
-                            {% endif %}
+                            Role:
+                            {% set role = 
+                                user.powerlevel == 1 ? 'User' :
+                                user.powerlevel == 2 ? 'Moderator' :
+                                user.powerlevel == 3 ? 'Administrator' :
+                                user.powerlevel == 4 ? 'Owner' :
+                                'Unknown (' ~ user.powerlevel ~ ')'
+                            %}
+                            {{ role }}
                         </div>
                         <div>
                             Joined: {{ user.info.joined | relative_time() }}
