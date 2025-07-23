@@ -35,7 +35,7 @@
                                 <td>Profile name</td>
                                 <td>{{ user.name }}</td>
                             </tr>
-                            {% if user.powerlevel <= 1 %}
+                            {% if user_data.powerlevel > 2 %}
                                 <tr>
                                     <td>IP address</td>
                                     <td>{{ user.ip }}</td>
