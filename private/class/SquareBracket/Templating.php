@@ -23,6 +23,8 @@
 
 namespace SquareBracket;
 
+use BluffingoCore\CoreUtilities;
+
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -194,8 +196,8 @@ class Templating
         }
 
         if (isset($_SERVER['HTTP_HOST'])) {
-            $this->twig->addGlobal("page_url", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-            $this->twig->addGlobal("domain", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/");
+            $this->twig->addGlobal("page_url", CoreUtilities::getURL(true));
+            $this->twig->addGlobal("domain", CoreUtilities::getURL(false));
         }
     }
 

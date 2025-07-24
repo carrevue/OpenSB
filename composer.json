@@ -10,7 +10,8 @@
         "twbs/bootstrap": "5.3.7",
         "twbs/bootstrap-icons": "1.13.1",
         "jaybizzle/crawler-detect": "1.3.5",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "nopjmp/discord-webhooks": "^0.4.0"
     },
     "minimum-stability": "stable",
     "config": {

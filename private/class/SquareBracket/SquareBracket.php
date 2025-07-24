@@ -34,6 +34,7 @@ class SquareBracket
     private Storage $storage;
     private Authentication $authentication;
     private Localization $localization;
+    private DiscordWebhookLogging $discord;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
     private bool $template_caching_enabled = false;
@@ -178,6 +179,8 @@ class SquareBracket
                 }
             }
         }
+
+        $this->discord = new DiscordWebhookLogging($this);
     }
 
     private function setOptionCookie()
@@ -239,6 +242,17 @@ class SquareBracket
     public function getLocalizationClass(): Localization
     {
         return $this->localization;
+    }
+
+
+    /**
+     * Returns the Discord webhook logging class.
+     *
+     * @return Localization
+     */
+    public function getDiscordWebhookClass(): DiscordWebhookLogging
+    {
+        return $this->discord;
     }
 
     /**

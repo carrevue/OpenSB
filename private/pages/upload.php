@@ -28,6 +28,7 @@ global $orange, $database, $twig, $auth;
 
 use SquareBracket\Utilities;
 use SquareBracket\UserRoleEnum;
+use SquareBracket\DiscordWebhookLogging;
 
 // TODO: a more automated method to detect which file format the user is trying to upload.
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
@@ -150,6 +151,15 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             }
 
             parse_tags($tags2, $new, $database);
+
+            $webhookdata = [
+                'video_id' => $new,
+                'name' => $title,
+                'description' => $description,
+                'author' => $auth->getUserData()["name"]
+            ];
+
+            $orange->getDiscordWebhookClass()->newVideoHook($webhookdata);
 
             Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
         } else {
