@@ -1,17 +1,3 @@
-{% if is_fulptube %}
-    {% if current_theme == "dark" %}
-        {% set logo = '/assets/sb_branding/fulp/logo-wordmark-dark.png' %}
-    {% else %}
-        {% set logo = '/assets/sb_branding/fulp/logo-wordmark.png' %}
-    {% endif %}
-{% else %}
-    {% if current_theme == "dark" %}
-        {% set logo = website_branding.assets_location ~ '/logo-dark.png' %}
-    {% else %}
-        {% set logo = website_branding.assets_location ~ '/logo.png' %}
-    {% endif %}
-{% endif %}
-
 {% if actually_show_sidebar %}
 {% set header_container_class_name = "header-container-new" %}
 {% else %}

@@ -153,8 +153,6 @@ class SquareBracket
         }
 
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
-        // this fulptube branding is meant to look like the squarebracket branding on purpose, since
-        // both squarebracket.pw and fulptube.rocks lead to the same site.
         if ($this->isFulpTube()) {
             //$isFulpTube = true;
             $this->branding_settings = [
@@ -166,6 +164,8 @@ class SquareBracket
             $this->branding_settings = [
                 "name" => $config["branding"]["name"] ?? '',
                 "assets_location" => $config["branding"]["assets"] ?? '',
+                "is_vector" => $config["branding"]["is_vector"] ?? false,
+                "use_wordmark" => $config["branding"]["use_wordmark"] ?? false,
             ];
 
             // custom branding for themes. for that Extra Accuracy™.

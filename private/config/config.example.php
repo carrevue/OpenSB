@@ -27,6 +27,8 @@ return [
     "invite_keys" => false,
     "branding" => [
         "name" => "OpenSB Instance",
-        "assets" => "/assets/placeholder",
+        "assets" => "/assets/sb_branding",
+        "is_vector" => false,
+        "use_wordmark" => false,
     ],
 ];
