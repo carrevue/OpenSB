@@ -34,7 +34,7 @@ class SquareBracket
     private Storage $storage;
     private Authentication $authentication;
     private Localization $localization;
-    private DiscordWebhookLogging $discord;
+    private ?DiscordWebhookLogging $discord;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
     private bool $template_caching_enabled = false;
@@ -42,6 +42,7 @@ class SquareBracket
     private bool $enable_account_registration = true;
     private bool $enable_invite_keys = false;
     private bool $enable_lockdown = false;
+    private bool $enable_discord_webhook = false;
     private array $branding_settings;
     private array $captcha_settings;
     public array $options;
@@ -180,7 +181,13 @@ class SquareBracket
             }
         }
 
-        $this->discord = new DiscordWebhookLogging($this);
+        $this->enable_discord_webhook = $config["discord_webhook"]["enabled"];
+
+        if ($this->enable_discord_webhook) {
+            $this->discord = new DiscordWebhookLogging($this, $config["discord_webhook"]["url"]);
+        } else {
+            $this->discord = null;
+        }
     }
 
     private function setOptionCookie()
@@ -244,14 +251,26 @@ class SquareBracket
         return $this->localization;
     }
 
+    /**
+     * Returns the bool that toggles the Discord webhook logging class.
+     *
+     * @return bool
+     */
+    public function isDiscordWebhookEnabled(): bool
+    {
+        return $this->enable_discord_webhook;
+    }
 
     /**
      * Returns the Discord webhook logging class.
      *
-     * @return Localization
+     * @return DiscordWebhookLogging
      */
     public function getDiscordWebhookClass(): DiscordWebhookLogging
     {
+        if (!$this->discord || !$this->enable_discord_webhook) {
+            throw new \Exception("getDiscordWebhookClass() called while Discord webhook option is disabled.");
+        }
         return $this->discord;
     }
 

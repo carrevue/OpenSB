@@ -13,6 +13,10 @@ return [
         "secret" => "",
         "public" => ""
     ],
+    "discord_webhook" => [
+        "enabled" => false,
+        "url" => "",
+    ],
     // put "PROD" for production, put "DEV" for development
     "mode" => "PROD",
     "site" => "squarebracket",

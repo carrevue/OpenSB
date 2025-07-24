@@ -34,9 +34,9 @@ class DiscordWebhookLogging
     private string $domain;
     private ?Client $webhook = null;
 
-    public function __construct(SquareBracket $orange)
+    public function __construct(SquareBracket $orange, $url)
     {
-        $this->url = "fijohsfduhuidfuihfdsihpufsdahiupfsdihsphfshpusfdupdpfushpudfs";
+        $this->url = $url;
         $this->instance_name = $orange->getBrandingSettings()["name"];
         $this->domain = CoreUtilities::getURL(false);
     }
@@ -49,27 +49,31 @@ class DiscordWebhookLogging
     }
 
     /**
-     * Trigger the new video webhook.
+     * Trigger the new upload webhook.
      *
-     * @param array $video Video array with the necessary data.
+     * @param array $upload Upload array with the necessary data.
      */
-    public function newVideoHook($video)
+    public function newUploadHook($upload)
     {
         $this->initClient();
 
-        $description = $video['description'] ?? 'No description';
+        $title = $upload['name'] . ' (' . $upload['video_id'] . ')';
+
+        $description = $upload['description'] ?? 'No description';
         if (strlen($description) > 500) {
             $description = substr($description, 0, 497) . '...';
         }
 
-        $videoUrl = sprintf("%s/watch.php?v=%s", $this->domain, $video['video_id']);
+        $author = 'New upload by ' . $upload['author'];
+
+        $uploadUrl = sprintf("%s/view/%s", $this->domain, $upload['video_id']);
 
         $mbd = new Embed();
 
-        $mbd->title($video['name'])
+        $mbd->title($title)
             ->description($description)
-            ->url($videoUrl)
-            ->author('New upload by ' . $video['author'])
+            ->url($uploadUrl)
+            ->author($author)
             ->footer($this->instance_name);
 
         $this->webhook->embed($mbd)->send();

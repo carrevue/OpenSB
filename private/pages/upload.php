@@ -152,14 +152,16 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
             parse_tags($tags2, $new, $database);
 
-            $webhookdata = [
-                'video_id' => $new,
-                'name' => $title,
-                'description' => $description,
-                'author' => $auth->getUserData()["name"]
-            ];
+            if ($orange->isDiscordWebhookEnabled()) {
+                $webhookdata = [
+                    'video_id' => $new,
+                    'name' => $title,
+                    'description' => $description,
+                    'author' => $auth->getUserData()["name"]
+                ];
 
-            $orange->getDiscordWebhookClass()->newVideoHook($webhookdata);
+                $orange->getDiscordWebhookClass()->newUploadHook($webhookdata);
+            }
 
             Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
         } else {
