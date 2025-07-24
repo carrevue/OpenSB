@@ -258,6 +258,15 @@ class Utilities
 
     // this should probably be merged with the functions above because imho this is kinda fuckin ugly
     // -chaziz 7/24/2025
+    public static function uploadStringIDToUploadTitle($database, $uploadStringID)
+    {
+        if ($data = $database->fetch("SELECT title FROM uploads WHERE video_id = ?", [$uploadStringID])) {
+            return $data["title"];
+        } else {
+            return false;
+        }
+    }
+
     public static function uploadNumericIDToUploadTitle($database, $uploadNumericID)
     {
         if ($data = $database->fetch("SELECT title FROM uploads WHERE id = ?", [$uploadNumericID])) {

@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var guide_button = document.getElementById("guide-toggle");
 
     if (guide_button) {
-        guide_button.addEventListener("click", function() {
+        guide_button.addEventListener("click", function () {
             var guide = document.getElementById("guide");
             if (guide) {
                 toggleElementDisplay(guide);
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var masthead_user_button = document.getElementById("masthead-loggedin");
 
     if (masthead_user_button) {
-        masthead_user_button.addEventListener("click", function() {
+        masthead_user_button.addEventListener("click", function () {
             var masthead_user_menu = document.getElementById("masthead-below");
             if (masthead_user_menu) {
                 toggleElementDisplay(masthead_user_menu);
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // logged out error?
     const actionUnlogged = document.getElementById('action_unlogged');
     if (actionUnlogged) {
-        actionUnlogged.addEventListener('click', function() {
+        actionUnlogged.addEventListener('click', function () {
             alert('you must be logged in.');
         });
     }
@@ -50,11 +50,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // comments
     // NOTE: this references a bunch of leftovers from the bootstrap frontend.
     const commentContents = document.getElementById('commentContents');
+    // stupid: should be merged into one.
     const postButton = document.getElementById('post');
     const postUserButton = document.getElementById('post-user');
+    const postJournalButton = document.getElementById('post-journal');
+    //
     const commentPostingSpinner = document.getElementById('commentPostingSpinner');
     const commentSection = document.getElementById('comment');
 
+    /*
     if (commentContents) {
         let contents = commentContents.value.trim();
         if ((contents === null || contents === "") && !postButton.classList.contains('disabled')) {
@@ -62,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // slightly fucking stupid but this was in the jquery version
-        commentContents.addEventListener('keydown', function(e) {
+        commentContents.addEventListener('keydown', function (e) {
             let contents;
             if (e.key === "Backspace") {
                 contents = this.value.trim().slice(0, -1);
@@ -81,10 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+    */
 
     // post comment (upload)
     if (postButton) {
-        postButton.addEventListener('click', function() {
+        postButton.addEventListener('click', function () {
             if (commentPostingSpinner) {
                 commentPostingSpinner.classList.remove('d-none');
             }
@@ -101,26 +106,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: `comment=${encodeURIComponent(commentText)}&vidid=${submission_id}&really=ofcourse&type=video`
             })
-            .then(response => response.text())
-            .then(data => {
-                console.log("Commented " + commentText);
-                if (commentSection) {
-                    commentSection.insertAdjacentHTML('afterbegin', data);
-                }
-                if (commentContents) {
-                    commentContents.value = '';
-                }
-                postButton.classList.add('disabled');
-                if (commentPostingSpinner) {
-                    commentPostingSpinner.classList.add('d-none');
-                }
-            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log("Commented " + commentText);
+                    if (commentSection) {
+                        commentSection.insertAdjacentHTML('afterbegin', data);
+                    }
+                    if (commentContents) {
+                        commentContents.value = '';
+                    }
+                    postButton.classList.add('disabled');
+                    if (commentPostingSpinner) {
+                        commentPostingSpinner.classList.add('d-none');
+                    }
+                })
         });
     }
 
-    // post comment (upload)
+    // post comment (profile)
     if (postUserButton) {
-        postUserButton.addEventListener('click', function() {
+        postUserButton.addEventListener('click', function () {
             if (commentPostingSpinner) {
                 commentPostingSpinner.classList.remove('d-none');
             }
@@ -133,29 +138,63 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: `comment=${encodeURIComponent(commentText)}&uid=${user_id}&really=ofcourse&type=profile`
             })
-            .then(response => response.text())
-            .then(data => {
-                console.log("Commented " + commentText);
-                if (commentSection) {
-                    commentSection.insertAdjacentHTML('afterbegin', data);
-                }
-                if (commentContents) {
-                    commentContents.value = '';
-                }
-                if (postButton) {
-                    postButton.classList.add('disabled');
-                }
-                if (commentPostingSpinner) {
-                    commentPostingSpinner.classList.add('d-none');
-                }
+                .then(response => response.text())
+                .then(data => {
+                    console.log("Commented " + commentText);
+                    if (commentSection) {
+                        commentSection.insertAdjacentHTML('afterbegin', data);
+                    }
+                    if (commentContents) {
+                        commentContents.value = '';
+                    }
+                    if (postButton) {
+                        postButton.classList.add('disabled');
+                    }
+                    if (commentPostingSpinner) {
+                        commentPostingSpinner.classList.add('d-none');
+                    }
+                })
+        });
+    }
+
+    // post comment (journal)
+    if (postJournalButton) {
+        postJournalButton.addEventListener('click', function () {
+            if (commentPostingSpinner) {
+                commentPostingSpinner.classList.remove('d-none');
+            }
+
+            const commentText = commentContents ? commentContents.value.trim() : '';
+            fetch("/api/legacy/comment", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `comment=${encodeURIComponent(commentText)}&jid=${journal_id}&really=ofcourse&type=journal`
             })
+                .then(response => response.text())
+                .then(data => {
+                    console.log("Commented " + commentText);
+                    if (commentSection) {
+                        commentSection.insertAdjacentHTML('afterbegin', data);
+                    }
+                    if (commentContents) {
+                        commentContents.value = '';
+                    }
+                    if (postButton) {
+                        postButton.classList.add('disabled');
+                    }
+                    if (commentPostingSpinner) {
+                        commentPostingSpinner.classList.add('d-none');
+                    }
+                })
         });
     }
 
     // subscribe button (main)
     const subscribeBtn = document.getElementById('subscribe');
     if (subscribeBtn) {
-        subscribeBtn.addEventListener('click', function() {
+        subscribeBtn.addEventListener('click', function () {
             fetch("/api/legacy/subscribe", {
                 method: "POST",
                 headers: {
@@ -163,27 +202,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: `subscription=${user_id}`
             })
-            .then(response => response.text())
-            .then(data => {
-                if (data === subscribe_string) {
-                    subscribeBtn.textContent = subscribe_string;
-                    subscribeBtn.className = "button button-primary";
-                    console.log("Unsubscribed " + user_id);
-                } else if (data === unsubscribe_string) {
-                    subscribeBtn.textContent = unsubscribe_string;
-                    subscribeBtn.className = "button button-secondary";
-                    console.log("Subscribed " + user_id);
-                } else {
-                    alert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
-                }
-            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data === subscribe_string) {
+                        subscribeBtn.textContent = subscribe_string;
+                        subscribeBtn.className = "button button-primary";
+                        console.log("Unsubscribed " + user_id);
+                    } else if (data === unsubscribe_string) {
+                        subscribeBtn.textContent = unsubscribe_string;
+                        subscribeBtn.className = "button button-secondary";
+                        console.log("Subscribed " + user_id);
+                    } else {
+                        alert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
+                    }
+                })
         });
     }
 
     // subscribe button (watch page variant?)
     const subscribeWatchBtn = document.getElementById('subscribe-watch');
     if (subscribeWatchBtn) {
-        subscribeWatchBtn.addEventListener('click', function() {
+        subscribeWatchBtn.addEventListener('click', function () {
             fetch("/api/legacy/subscribe", {
                 method: "POST",
                 headers: {
@@ -191,20 +230,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: `subscription=${user_id}`
             })
-            .then(response => response.text())
-            .then(data => {
-                if (data === subscribe_string) {
-                    subscribeWatchBtn.textContent = subscribe_string;
-                    subscribeWatchBtn.className = "button button-primary button-small";
-                    console.log("Unsubscribed " + user_id);
-                } else if (data === unsubscribe_string) {
-                    subscribeWatchBtn.textContent = unsubscribe_string;
-                    subscribeWatchBtn.className = "button button-secondary button-small";
-                    console.log("Subscribed " + user_id);
-                } else {
-                    alert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
-                }
-            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data === subscribe_string) {
+                        subscribeWatchBtn.textContent = subscribe_string;
+                        subscribeWatchBtn.className = "button button-primary button-small";
+                        console.log("Unsubscribed " + user_id);
+                    } else if (data === unsubscribe_string) {
+                        subscribeWatchBtn.textContent = unsubscribe_string;
+                        subscribeWatchBtn.className = "button button-secondary button-small";
+                        console.log("Subscribed " + user_id);
+                    } else {
+                        alert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
+                    }
+                })
         });
     }
 
@@ -218,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let dislikeCount = document.getElementById('dislike-count');
 
     if (likeButton) {
-        likeButton.addEventListener('click', function() {
+        likeButton.addEventListener('click', function () {
             if (!this.classList.contains('button-toggled')) {
                 fetch("/api/legacy/rate", {
                     method: "POST",
@@ -227,25 +266,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     },
                     body: `rating=5&vidid=${submission_id}`
                 })
-                .then(response => response.text())
-                .then(data => {
-                    if (data == 1) {
-                        this.className = "button button-like button-secondary-invis button-toggled";
-                        likeCount.textContent = parseInt(likeCount.textContent) + 1;
-                        dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
-                        document.getElementById('dislike').className = "button button-dislike button-secondary-invis";
-                    } else if (data == 0) {
-                        this.click();
-                    } else {
-                        alert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
-                    }
-                })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data == 1) {
+                            this.className = "button button-like button-secondary-invis button-toggled";
+                            likeCount.textContent = parseInt(likeCount.textContent) + 1;
+                            dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
+                            document.getElementById('dislike').className = "button button-dislike button-secondary-invis";
+                        } else if (data == 0) {
+                            this.click();
+                        } else {
+                            alert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
+                        }
+                    })
             }
         });
     }
 
     if (dislikeButton) {
-        dislikeButton.addEventListener('click', function() {
+        dislikeButton.addEventListener('click', function () {
             if (!this.classList.contains('button-toggled')) {
                 fetch("/api/legacy/rate", {
                     method: "POST",
@@ -254,19 +293,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     },
                     body: `rating=1&vidid=${submission_id}`
                 })
-                .then(response => response.text())
-                .then(data => {
-                    if (data == 1) {
-                        this.className = "button button-dislike button-secondary-invis button-toggled";
-                        likeCount.textContent = parseInt(likeCount.textContent) - 1;
-                        dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
-                        document.getElementById('like').className = "button button-like button-secondary-invis";
-                    } else if (data == 0) {
-                        this.click();
-                    } else {
-                        lert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
-                    }
-                })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data == 1) {
+                            this.className = "button button-dislike button-secondary-invis button-toggled";
+                            likeCount.textContent = parseInt(likeCount.textContent) - 1;
+                            dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+                            document.getElementById('like').className = "button button-like button-secondary-invis";
+                        } else if (data == 0) {
+                            this.click();
+                        } else {
+                            lert('unexpected output! report to https://github.com/bluffingo/OpenSB/issues');
+                        }
+                    })
             }
         });
     }
@@ -274,9 +313,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // debug button
     const debugButton = document.getElementById('debug-button');
     const debugModal = document.getElementById('debugModal');
-    
+
     if (debugModal) {
-        debugButton.addEventListener('click', function() {
+        debugButton.addEventListener('click', function () {
             toggleElementDisplay(debugModal);
         });
     }
@@ -293,13 +332,13 @@ function showReplies(id) {
         },
         body: `comment_id=${id}`
     })
-    .then(response => response.text())
-    .then(data => {
-        const commentElement = document.getElementById(id);
-        if (commentElement) {
-            commentElement.insertAdjacentHTML('beforeend', data);
-        }
-    })
+        .then(response => response.text())
+        .then(data => {
+            const commentElement = document.getElementById(id);
+            if (commentElement) {
+                commentElement.insertAdjacentHTML('beforeend', data);
+            }
+        })
 }
 
 function showMoreVideos() {
@@ -314,17 +353,17 @@ function showMoreVideos() {
             },
             body: `from=${index}&limit=10`
         })
-        .then(response => response.text())
-        .then(data => {
-            index += 10;
-            fromUserVideoList.insertAdjacentHTML('beforeend', data);
-            fromUserVideoList.classList.remove("collapsed");
-            
-            const fromUserElement = document.getElementById('fromUser');
-            if (fromUserElement) {
-                fromUserElement.remove();
-            }
-        })
+            .then(response => response.text())
+            .then(data => {
+                index += 10;
+                fromUserVideoList.insertAdjacentHTML('beforeend', data);
+                fromUserVideoList.classList.remove("collapsed");
+
+                const fromUserElement = document.getElementById('fromUser');
+                if (fromUserElement) {
+                    fromUserElement.remove();
+                }
+            })
     } else {
         fromUserVideoList.innerHTML = '';
         fromUserVideoList.classList.add("collapsed");

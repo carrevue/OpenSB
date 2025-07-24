@@ -130,7 +130,7 @@ class DiscordWebhookLogging
      *
      * @param array $data Array with the necessary data.
      */
-    public function newCommentHook($data)
+    public function newCommentHook($data, $is_legacy_api = false)
     {
         $this->initClient();
 
@@ -140,8 +140,13 @@ class DiscordWebhookLogging
         }
 
         switch ($data['type']) {
+            case 'video': // legacy api
             case 'submission':
-                $title = Utilities::uploadNumericIDToUploadTitle($this->database, $data['name']);
+                if ($is_legacy_api) {
+                    $title = Utilities::uploadStringIDToUploadTitle($this->database, $data['name']);
+                } else {
+                    $title = Utilities::uploadNumericIDToUploadTitle($this->database, $data['name']);
+                }
                 $author = 'New upload comment by ' . $data['author'];
                 $uploadUrl = sprintf("%s/upload/%s", $this->domain, $data['name']);
                 break;

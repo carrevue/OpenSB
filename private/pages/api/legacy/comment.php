@@ -71,7 +71,7 @@ if (isset($_POST['really'])) {
         case "journal":
             $type = 2;
             $table = "journal_comments";
-            $id = ($_POST['uid'] ?? "");
+            $id = ($_POST['jid'] ?? "");
             $reply_to = ($_POST['reply_to'] ?? "0");
             break;
     }
@@ -79,26 +79,13 @@ if (isset($_POST['really'])) {
     die("this is invalid");
 }
 
-if ($post_data['type'] == 'video') {
+if ($_POST['type'] == 'video') {
     $upload_flags = UploadFlags::toArray($database->result("SELECT flags from uploads where video_id = ?", [$id]));
 
     if ($upload_flags["block_comments"]) {
         die("Commenting has been disabled on this upload.");
     }
 }
-
-$author = new UserData($database, $auth->getUserID());
-
-$comment = [
-    "id" => 123456789,
-    "posted_id" => 987654321,
-    "post" => $_POST['comment'],
-    "posted" => time(),
-    "author" => [
-        "id" => $auth->getUserID(),
-        "info" => $author->getUserArray(),
-    ],
-];
 
 if ($type == 0) {
     $database->query(
@@ -117,6 +104,34 @@ if ($type == 0) {
     );
 } else {
     die("this is still invalid");
+}
+
+$insertID = $database->insertID();
+
+$author = new UserData($database, $auth->getUserID());
+
+$comment = [
+    "id" => $insertID,
+    "posted_id" => $id,
+    "post" => $_POST['comment'],
+    "posted" => time(),
+    "author" => [
+        "id" => $auth->getUserID(),
+        "info" => $author->getUserArray(),
+    ],
+];
+
+if ($orange->isDiscordWebhookEnabled()) {
+    //$data = [
+    $webhook_data = [
+        'id' => $insertID,
+        'name' => $id,
+        'contents' => $_POST['comment'],
+        'author' => $auth->getUserData()["name"],
+        'type' => $_POST['type'],
+    ];
+
+    $orange->getDiscordWebhookClass()->newCommentHook($webhook_data, true);
 }
 
 echo $twig->render('components/comment.twig', [
