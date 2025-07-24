@@ -45,7 +45,7 @@ class DiscordWebhookLogging
         $this->url = $url;
 
         $this->footer_text = $orange->getBrandingSettings()["name"]
-            . ' / OpenSB ' . new VersionNumber()->getVersionString();
+            . ' / OpenSB ' . (new VersionNumber())->getVersionString();
 
         $this->domain = CoreUtilities::getURL(false);
     }
