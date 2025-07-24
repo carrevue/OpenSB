@@ -19,6 +19,6 @@ finalium "leaf droplet" login background by Min An on Pexels: https://www.pexels
 
 finalium homepage banner "droplets" background by Armennano on Pixabay: https://pixabay.com/photos/rain-drops-rainy-wet-droplets-4941771/
 
-FulpTube logo (originally vidshr.png) by evodesign.
+Vectorized FulpTube logo by shiypc.
 
 Chaz Craft (in chaz_opensb.png) by Chaziz.

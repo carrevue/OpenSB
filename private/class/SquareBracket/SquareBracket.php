@@ -155,10 +155,7 @@ class SquareBracket
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
         if ($this->isFulpTube()) {
             //$isFulpTube = true;
-            $this->branding_settings = [
-                "name" => "FulpTube",
-                "assets_location" => "/assets/sb_branding/fulp",
-            ];
+            $this->overrideBrandingWithFulpTube();
         } else {
             //$isFulpTube = false;
             $this->branding_settings = [
@@ -169,12 +166,10 @@ class SquareBracket
             ];
 
             // custom branding for themes. for that Extra Accuracy™.
+            // TODO: make finalium and bootstrap *actually* work with updated branding
             if ($this->is_chaziz_squarebracket_instance) {
                 if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker") {
-                    $this->branding_settings = [
-                        "name" => "FulpTube",
-                        "assets_location" => "/assets/sb_branding/fulp",
-                    ];
+                    $this->overrideBrandingWithFulpTube();
                 } elseif ($this->options["skin"] == "finalium" || $this->options["skin"] == "bootstrap") {
                     $this->branding_settings["name"] = "squareBracket";
                 }
@@ -188,6 +183,16 @@ class SquareBracket
         } else {
             $this->discord = null;
         }
+    }
+
+    private function overrideBrandingWithFulpTube()
+    {
+        $this->branding_settings = [
+            "name" => "FulpTube",
+            "assets_location" => "/assets/sb_branding/fulp",
+            "is_vector" => true,
+            "use_wordmark" => true,
+        ];
     }
 
     private function setOptionCookie()
