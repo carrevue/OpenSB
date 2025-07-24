@@ -73,6 +73,14 @@ if (isset($_POST["submit"])) {
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [$username, $hashedPassword, $token, time(), time(), $username, $email, "ip", $dobDateTime->format('Y-m-d')]
     );
+
+    if ($orange->isDiscordWebhookEnabled()) {
+        $data = [
+            "username" => $username,
+        ];
+
+        $orange->getDiscordWebhookClass()->newUserHook($data);
+    }
 }
 ?>
 <h1>Create account</h1>

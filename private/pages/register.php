@@ -157,6 +157,14 @@ if (isset($_POST['registersubmit'])) {
 
         $_SESSION["SBTOKEN"] = $token;
 
+        if ($orange->isDiscordWebhookEnabled()) {
+            $data = [
+                "username" => $username,
+            ];
+
+            $orange->getDiscordWebhookClass()->newUserHook($data);
+        }
+
         Utilities::redirect('./');
     } else {
         Utilities::notifyBanner($error, "/register");

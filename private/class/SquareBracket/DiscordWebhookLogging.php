@@ -22,26 +22,35 @@
 
 namespace SquareBracket;
 
+use BluffingoCore\Database;
 use BluffingoCore\CoreUtilities;
+
+use SquareBracket\Utilities;
 
 use \DiscordWebhooks\Client;
 use \DiscordWebhooks\Embed;
 
 class DiscordWebhookLogging
 {
+    private Database $database;
     private string $url;
-    private string $instance_name;
-    private string $domain;
+    private string $footer_text;
+    private ?string $domain;
     private ?Client $webhook = null;
 
     public function __construct(SquareBracket $orange, $url)
     {
+        $this->database = $orange->getDatabaseClass();
+
         $this->url = $url;
-        $this->instance_name = $orange->getBrandingSettings()["name"];
+
+        $this->footer_text = $orange->getBrandingSettings()["name"]
+            . ' / OpenSB ' . new VersionNumber()->getVersionString();
+
         $this->domain = CoreUtilities::getURL(false);
     }
 
-    private function initClient()
+    public function initClient()
     {
         if (!$this->webhook instanceof Client) {
             $this->webhook = new Client($this->url);
@@ -51,22 +60,22 @@ class DiscordWebhookLogging
     /**
      * Trigger the new upload webhook.
      *
-     * @param array $upload Upload array with the necessary data.
+     * @param array $data Array with the necessary data.
      */
-    public function newUploadHook($upload)
+    public function newUploadHook($data)
     {
         $this->initClient();
 
-        $title = $upload['name'] . ' (' . $upload['video_id'] . ')';
+        $title = $data['name'] . ' (' . $data['id'] . ')';
 
-        $description = $upload['description'] ?? 'No description';
+        $description = $data['description'] ?? 'No description';
         if (strlen($description) > 500) {
             $description = substr($description, 0, 497) . '...';
         }
 
-        $author = 'New upload by ' . $upload['author'];
+        $author = 'New upload by ' . $data['author'];
 
-        $uploadUrl = sprintf("%s/view/%s", $this->domain, $upload['video_id']);
+        $uploadUrl = sprintf("%s/view/%s", $this->domain, $data['id']);
 
         $mbd = new Embed();
 
@@ -74,13 +83,190 @@ class DiscordWebhookLogging
             ->description($description)
             ->url($uploadUrl)
             ->author($author)
-            ->footer($this->instance_name);
+            ->footer($this->footer_text)
+            ->color(Colors::PRIMARY_COLOR);
 
         $this->webhook->embed($mbd)->send();
     }
 
-    function newUserHook($user)
+    /**
+     * Trigger the new journal webhook.
+     *
+     * @param array $data Array with the necessary data.
+     */
+    public function newJournalHook($data)
     {
-        throw new \Exception('Not implemented');
+        $this->initClient();
+
+        $title = $data['name'] . ' (' . $data['id'] . ')';
+
+        $description = $data['description'] ?? 'No description';
+        if (strlen($description) > 500) {
+            $description = substr($description, 0, 497) . '...';
+        }
+
+        if ($data["is_news"]) {
+            $author = 'New announcement journal by ' . $data['author'];
+        } else {
+            $author = 'New journal by ' . $data['author'];
+        }
+
+        $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['id']);
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->description($description)
+            ->url($uploadUrl)
+            ->author($author)
+            ->footer($this->footer_text)
+            ->color(Colors::PRIMARY_COLOR);
+
+        $this->webhook->embed($mbd)->send();
+    }
+
+    /**
+     * Trigger the new comment webhook.
+     *
+     * @param array $data Array with the necessary data.
+     */
+    public function newCommentHook($data)
+    {
+        $this->initClient();
+
+        $description = $data['contents'] ?? 'No contents???';
+        if (strlen($description) > 500) {
+            $description = substr($description, 0, 497) . '...';
+        }
+
+        switch ($data['type']) {
+            case 'submission':
+                $title = Utilities::uploadNumericIDToUploadTitle($this->database, $data['name']);
+                $author = 'New upload comment by ' . $data['author'];
+                $uploadUrl = sprintf("%s/upload/%s", $this->domain, $data['name']);
+                break;
+            case 'profile':
+                $title = Utilities::userIDToUsername($this->database, $data['name']);
+                $author = 'New profile comment by ' . $data['author'];
+                $uploadUrl = sprintf("%s/user/%s", $this->domain, $data['name']);
+                break;
+            case 'journal':
+                $title = Utilities::journalIDtoJournalTitle($this->database, $data['name']);
+                $author = 'New journal comment by ' . $data['author'];
+                $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['name']);
+                break;
+            default:
+                exit;
+        }
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->description($description)
+            ->url($uploadUrl)
+            ->author($author)
+            ->footer($this->footer_text)
+            ->color(Colors::PRIMARY_COLOR);
+
+        $this->webhook->embed($mbd)->send();
+    }
+
+    /**
+     * Trigger the upload processing worker fail webhook.
+     *
+     * @param array $data Array with the necessary data.
+     */
+    public function uploadProcessingWorkerSuccessHook($data)
+    {
+        $this->initClient();
+
+        $title = $data['id'] . ' successfully processed.';
+
+        $author = 'Processing worker';
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->author($author)
+            ->footer($this->footer_text)
+            ->color(Colors::SUCCESS_COLOR);
+
+        $this->webhook->embed($mbd)->send();
+    }
+
+    /**
+     * Trigger the upload processing worker fail webhook.
+     *
+     * @param array $data Array with the necessary data.
+     */
+    public function uploadProcessingWorkerFailHook($data)
+    {
+        $this->initClient();
+
+        $title = $data['id'] . ' failed to process.';
+
+        $author = 'Processing worker';
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->author($author)
+            ->footer($this->footer_text)
+            ->color(Colors::DANGER_COLOR);
+
+        $this->webhook->embed($mbd)->send();
+    }
+
+
+    /**
+     * Trigger the new user webhook.
+     *
+     * @param array $data Array with the necessary data.
+     */
+    function newUserHook($data)
+    {
+        $this->initClient();
+
+        $title = 'New account created';
+
+        $author = $data['username'];
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->author($author)
+            ->footer($this->footer_text)
+            ->color(Colors::PRIMARY_COLOR);
+
+        $this->webhook->embed($mbd)->send();
+    }
+
+    /**
+     * Trigger the dashboard ban user webhook.
+     *
+     * @param array $data Array with the necessary data.
+     */
+    function dashboardBanUserHook($data)
+    {
+        $this->initClient();
+
+        if ($data['unbanned']) {
+            $author = 'User unbanned by ' . $data['author'];
+            $color = Colors::WARNING_COLOR;
+        } else {
+            $author = 'User banned by ' . $data['author'];
+            $color = Colors::DANGER_COLOR;
+        }
+
+        $title = $data['user']; //Utilities::userIDToUsername($this->database, $data['user']);
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->author($author)
+            ->footer($this->footer_text)
+            ->color($color);
+
+        $this->webhook->embed($mbd)->send();
     }
 }

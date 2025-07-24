@@ -11,7 +11,7 @@
         "twbs/bootstrap-icons": "1.13.1",
         "jaybizzle/crawler-detect": "1.3.5",
         "ext-curl": "*",
-        "nopjmp/discord-webhooks": "^0.4.0"
+        "nopjmp/discord-webhooks": "dev-master"
     },
     "minimum-stability": "stable",
     "config": {
@@ -24,6 +24,12 @@
             "OpenSB\\": "private/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/PF94/discord-webhooks"
+        }
+    ],
     "require-dev": {
         "arokettu/pseudolocale": "^1.1"
     }

@@ -53,8 +53,20 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         "INSERT INTO journals (title, post, author, date, is_site_news) VALUES (?,?,?,?,?)",
         [$title, $description, $uploader, time(), $isSiteNews]
     );
-    
+
     $journal_id = $database->insertId();
+
+    if ($orange->isDiscordWebhookEnabled()) {
+        $data = [
+            'id' => $journal_id,
+            'name' => $title,
+            'description' => $description,
+            'author' => $auth->getUserData()["name"],
+            'is_news' => $isSiteNews,
+        ];
+
+        $orange->getDiscordWebhookClass()->newJournalHook($data);
+    }
 
     Utilities::notifyBanner("Your journal has been posted.", "/read/" . $journal_id, "success");
 }

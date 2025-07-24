@@ -140,6 +140,18 @@ switch ($post_data['type']) {
         exit;
 }
 
+if ($orange->isDiscordWebhookEnabled()) {
+    $data = [
+        'id' => $insertID,
+        'name' => $post_data['id'],
+        'contents' => $commentText,
+        'author' => $auth->getUserData()["name"],
+        'type' => $post_data['type']
+    ];
+
+    $orange->getDiscordWebhookClass()->newCommentHook($data);
+}
+
 $apiOutput = [
     "comment" => $comment,
     "html" => $html,

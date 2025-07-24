@@ -39,10 +39,12 @@ use FFMpeg\Filters;
 use FFMpeg\Format\Video\X264;
 use FFMpeg\Exception\RuntimeException;
 
-define("BLUFF_DYNAMIC_PATH", dirname(__DIR__, 2) . '/dynamic');
-define("BLUFF_PRIVATE_PATH", dirname(__DIR__, 2) . '/private');
-define("BLUFF_VENDOR_PATH", dirname(__DIR__, 2) . '/vendor');
-define("BLUFF_GIT_PATH", dirname(__DIR__, 2) . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("BLUFF_ROOT_PATH", dirname(__DIR__, 2));
+define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
+define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
+define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
+define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
@@ -251,6 +253,14 @@ try {
             "UPDATE uploads SET videolength = ?, flags = ? WHERE video_id = ?",
             [$length, $videoData['flags'] ^ 0x2, $new]
         );
+
+        if ($orange->isDiscordWebhookEnabled()) {
+            $data = [
+                'id' => $new,
+            ];
+
+            $orange->getDiscordWebhookClass()->uploadProcessingWorkerSuccessHook($data);
+        }
     } else {
         log("Not a website video, skipping.");
     }
@@ -262,6 +272,14 @@ try {
 
     if ($previous instanceof ExecutionFailureException) {
         log($previous->getErrorOutput());
+    }
+
+    if ($orange->isDiscordWebhookEnabled()) {
+        $data = [
+            'id' => $new,
+        ];
+
+        $orange->getDiscordWebhookClass()->uploadProcessingWorkerFailHook($data);
     }
 
     clearstatcache();

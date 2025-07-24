@@ -30,6 +30,8 @@ use SquareBracket\Utilities;
 use SquareBracket\UserRoleEnum;
 use SquareBracket\DiscordWebhookLogging;
 
+use \DiscordWebhooks\Embed;
+
 // TODO: a more automated method to detect which file format the user is trying to upload.
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
 $supportedImageFormats = ["png", "jpg", "jpeg", "bmp", "webp"];
@@ -104,6 +106,18 @@ function parse_tags($tags, $upload_id, $database)
     }
 }
 
+function discord_webhook_notify($orange, $new, $title, $description, $auth)
+{
+    $data = [
+        'id' => $new,
+        'name' => $title,
+        'description' => $description,
+        'author' => $auth->getUserData()["name"]
+    ];
+
+    $orange->getDiscordWebhookClass()->newUploadHook($data);
+}
+
 if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLoggedIn()) {
     $new = Utilities::generateRandomString(11, true);
     $uploader = $auth->getUserID();
@@ -153,14 +167,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             parse_tags($tags2, $new, $database);
 
             if ($orange->isDiscordWebhookEnabled()) {
-                $webhookdata = [
-                    'video_id' => $new,
-                    'name' => $title,
-                    'description' => $description,
-                    'author' => $auth->getUserData()["name"]
-                ];
-
-                $orange->getDiscordWebhookClass()->newUploadHook($webhookdata);
+                discord_webhook_notify($orange, $new, $title, $description, $auth);
             }
 
             Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
@@ -176,6 +183,10 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         );
 
         parse_tags($tags2, $new, $database);
+
+        if ($orange->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($orange, $new, $title, $description, $auth);
+        }
 
         Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
     } elseif (in_array(strtolower($ext), $supportedAudioFormats, true)) { // MUSIC

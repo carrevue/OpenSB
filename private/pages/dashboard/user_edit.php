@@ -40,6 +40,17 @@ if ($orange->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
 }
 
+function discord_webhook_notify($orange, $auth, $ban_user, $unbanned)
+{
+    $data = [
+        'user' => $ban_user,
+        'author' => $auth->getUserData()["name"],
+        'unbanned' => $unbanned,
+    ];
+
+    $orange->getDiscordWebhookClass()->dashboardBanUserHook($data);
+}
+
 $username = $path[3] ?? null;
 
 $user = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
@@ -72,12 +83,18 @@ if (isset($_POST['ban_user'])) {
     $id = $database->fetch("SELECT u.id FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["id"];
     if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$id])) {
         $database->query("DELETE FROM user_bans WHERE userid = ?", [$id]);
+
+        discord_webhook_notify($orange, $auth, $_POST["ban_user"], true);
+
         Utilities::notifyBanner("Unbanned " . $_POST["ban_user"] . '.', "/dashboard/users", "success");
     } else {
         $database->query(
             "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
             [$id, "Banned by " . $auth->getUserData()["name"], time()]
         );
+
+        discord_webhook_notify($orange, $auth, $_POST["ban_user"], false);
+
         Utilities::notifyBanner("Banned " . $_POST["ban_user"] . '.', "/dashboard/users", "success");
     }
 }
