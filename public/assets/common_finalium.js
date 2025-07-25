@@ -11,6 +11,57 @@ function toggleElementDisplay(element) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // ported from trinium
+    // Get all menu buttons
+    const menuButtons = document.querySelectorAll('.menu-button');
+
+    // Add event listeners for each menu button
+    menuButtons.forEach(button => {
+        const menuId = button.getAttribute('data-menu-id');
+        const menu = document.getElementById(menuId);
+
+        // check if this menu button is the one in the header.
+        const isThisTheHeaderUserMenu = button.classList.contains("user-menu-button");
+
+        // get the caret if that exists. this is primarily for the one in the header.
+        const menuCaret = button.getElementsByClassName("menu-caret");
+
+        let menuCaretOff = "biscuit-icon caret-closed menu-caret";
+        let menuCaretOn = "biscuit-icon caret-open menu-caret";
+
+        let actualCaret;
+        if (menuCaret.length === 1) {
+            actualCaret = menuCaret.item(0);
+        } else if (menuCaret.length > 1) {
+            // this shouldn't happen. if it does then i fucked this up. -chaziz 6/28/2024
+            console.warn("There's a menu that has more than one caret? Huh?")
+            actualCaret = menuCaret.item(0);
+        }
+
+        // initialize all menus with "none"
+        menu.style.display = 'none';
+
+        button.addEventListener('mousedown', () => {
+            if (menu.style.display === 'none') {
+                if (actualCaret) {
+                    actualCaret.className = menuCaretOn;
+                }
+                if (isThisTheHeaderUserMenu) {
+                    button.classList.add("selected");
+                }
+                menu.style.display = 'block';
+            } else {
+                if (actualCaret) {
+                    actualCaret.className = menuCaretOff;
+                }
+                if (isThisTheHeaderUserMenu) {
+                    button.classList.remove("selected");
+                }
+                menu.style.display = 'none';
+            }
+        });
+    });
+
     // guide button
     var guide_button = document.getElementById("guide-toggle");
 
@@ -26,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // user button
+    /*
     var masthead_user_button = document.getElementById("masthead-loggedin");
 
     if (masthead_user_button) {
@@ -38,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+    */
 
     // logged out error?
     const actionUnlogged = document.getElementById('action_unlogged');
@@ -57,35 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //
     const commentPostingSpinner = document.getElementById('commentPostingSpinner');
     const commentSection = document.getElementById('comment');
-
-    /*
-    if (commentContents) {
-        let contents = commentContents.value.trim();
-        if ((contents === null || contents === "") && !postButton.classList.contains('disabled')) {
-            postButton.classList.add('disabled');
-        }
-
-        // slightly fucking stupid but this was in the jquery version
-        commentContents.addEventListener('keydown', function (e) {
-            let contents;
-            if (e.key === "Backspace") {
-                contents = this.value.trim().slice(0, -1);
-            } else if (e.key.length === 1) {
-                contents = this.value.trim() + e.key;
-            } else {
-                contents = this.value.trim();
-            }
-
-            if (postButton) {
-                if (contents === "") {
-                    postButton.classList.add('disabled');
-                } else {
-                    postButton.classList.remove('disabled');
-                }
-            }
-        });
-    }
-    */
 
     // post comment (upload)
     if (postButton) {
