@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-define("BLUFF_ROOT_PATH", dirname(__DIR__));
+define("BLUFF_ROOT_PATH", dirname(__DIR__, 2));
 define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
 define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
 define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
