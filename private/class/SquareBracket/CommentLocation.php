@@ -21,9 +21,21 @@
 
 namespace SquareBracket;
 
+use InvalidArgumentException;
+
 enum CommentLocation
 {
     case Upload;
     case Profile;
     case Journal;
+
+    public static function fromString(string $location): self
+    {
+        return match (strtolower(string: $location)) {
+            'upload' => self::Upload,
+            'profile' => self::Profile,
+            'journal' => self::Journal,
+            default => throw new InvalidArgumentException("invalid location $location")
+        };
+    }
 }

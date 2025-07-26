@@ -331,6 +331,18 @@ class SquareBracket
     }
 
     /**
+     * Returns boolean for if hitchhiker is enabled. 
+     * THIS IS SEPERATE FROM isFulpTube()
+     *
+     * @return bool
+     */
+    public function isHitchhiker(): bool
+    {
+        return ($this->getLocalOptions()['skin'] ?? '') === 'finalium'
+            && ($this->getLocalOptions()['theme'] ?? '') === 'hitchhiker';
+    }
+
+    /**
      * Returns boolean for FulpTube mode.
      *
      * @return bool
@@ -343,12 +355,9 @@ class SquareBracket
 
         $isOnFulpTubeDomain = str_contains($_SERVER['HTTP_HOST'], 'fulptube.rocks');
 
-        $isHitchhikerTheme = ($this->getLocalOptions()['skin'] ?? '') === 'finalium'
-            && ($this->getLocalOptions()['theme'] ?? '') === 'hitchhiker';
-
         $isDebugMode = ($this->getLocalOptions()['debug_fulptube_branding'] ?? false) && $this->isDebug();
 
-        if ($this->isChazizSquareBracketInstance() && ($isOnFulpTubeDomain || $isHitchhikerTheme || $isDebugMode)) {
+        if ($this->isChazizSquareBracketInstance() && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
             return true;
         } else {
             return false;

@@ -10,6 +10,40 @@ function toggleElementDisplay(element) {
     }
 }
 
+function handleCommentEvents() {
+    commentContents = document.getElementById('commentContents');
+    postButton = document.getElementById('post');
+    commentSection = document.getElementById('comment');
+
+    // post comment
+    if (postButton) {
+        postButton.addEventListener('click', function () {
+            const commentText = commentContents ? commentContents.value.trim() : '';
+            if (!commentText) {
+                return alert('you must put something to comment!');
+            }
+
+            fetch("/api/legacy/comment", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `comment=${encodeURIComponent(commentText)}&vidid=${submission_id}&really=ofcourse&type=video`
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log("Commented " + commentText);
+                    if (commentSection) {
+                        commentSection.insertAdjacentHTML('afterbegin', data);
+                    }
+                    if (commentContents) {
+                        commentContents.value = '';
+                    }
+                })
+        });
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // ported from trinium
     // Get all menu buttons
@@ -100,6 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    /*
     // comments
     // NOTE: this references a bunch of leftovers from the bootstrap frontend.
     const commentContents = document.getElementById('commentContents');
@@ -110,42 +145,30 @@ document.addEventListener("DOMContentLoaded", () => {
     //
     const commentPostingSpinner = document.getElementById('commentPostingSpinner');
     const commentSection = document.getElementById('comment');
+    */
 
-    // post comment (upload)
-    if (postButton) {
-        postButton.addEventListener('click', function () {
-            if (commentPostingSpinner) {
-                commentPostingSpinner.classList.remove('d-none');
-            }
+    // load comments
+    const comments = document.getElementById('comments');
 
-            const commentText = commentContents ? commentContents.value.trim() : '';
-            if (!commentText) {
-                return alert('you must put something to comment!');
-            }
-
-            fetch("/api/legacy/comment", {
-                method: "POST",
+    if (comments) {
+            fetch(`/api/frontend/comment_load?location=${encodeURIComponent(comment_location_type)}&id=${encodeURIComponent(comment_location_id)}`, {
+                method: "GET",
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `comment=${encodeURIComponent(commentText)}&vidid=${submission_id}&really=ofcourse&type=video`
+                    "Content-type": "application/json; charset=UTF-8"
+                }
             })
-                .then(response => response.text())
-                .then(data => {
-                    console.log("Commented " + commentText);
-                    if (commentSection) {
-                        commentSection.insertAdjacentHTML('afterbegin', data);
-                    }
-                    if (commentContents) {
-                        commentContents.value = '';
-                    }
-                    postButton.classList.add('disabled');
-                    if (commentPostingSpinner) {
-                        commentPostingSpinner.classList.add('d-none');
-                    }
-                })
-        });
-    }
+            .then(response => response.json())
+            .then(json => {
+                commentContents = document.getElementById('commentContents');
+                postButton = document.getElementById('post');
+                commentSection = document.getElementById('comment');
+
+                console.log("Loaded comments");
+                comments.innerHTML = json.html;
+
+                handleCommentEvents();
+            })
+        }
 
     // post comment (profile)
     if (postUserButton) {

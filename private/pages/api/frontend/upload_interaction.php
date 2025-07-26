@@ -52,7 +52,7 @@ function rate($number, $submission): array
 if (isset($post_data['submission'])) {
     if (isset($post_data['action'])) {
         $apiOutput = match ($post_data['action']) {
-            // favorites are still unimplemented FUCK (READD FAVORITES FOR OPENSB 1.3 BETA 3) -chaziz 10/31/2024
+            // favorites are still unimplemented FUCK -chaziz 10/31/2024
             'favorite' => [
                 "favorited" => true,
                 "number" => rand(0, 47101), // placeholder code (which is still placeholder even a year later since favorites were never implemented WHOOPS)

@@ -102,6 +102,7 @@ if (isset($path[1]) && $path[1] != '') {
         'admin' => Utilities::redirect('/dashboard/' . implode('/', array_slice($path, 2))),
         'api' => match ($path[2] ?? null) {
             'frontend' => match ($path[3] ?? null) {
+                'comment_load' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/comment_load.php'),
                 'comment_send' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/comment_send.php'),
                 'upload_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/upload_interaction.php'),
                 'user_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/user_interaction.php'),

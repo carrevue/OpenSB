@@ -1,0 +1,55 @@
+<?php
+
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2025 Chaziz
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+namespace OpenSB;
+
+use Exception;
+use SquareBracket\CommentData;
+use SquareBracket\CommentLocation;
+
+header('Content-Type: application/json');
+
+if ($orange->getLocalOptions()["skin"] != "finalium") {
+    $apiOutput = [
+        "error" => "Not supported here."
+    ];
+}
+
+try {
+    $location_type = CommentLocation::fromString($_GET['location'] ?? '');
+    $location_id = $_GET['id'] ?? '';
+
+    $comments = new CommentData($database, CommentLocation::Upload, $location_id);
+
+    $comment_data = $comments->getComments();
+    $comment_count = $comments->getCommentCount();
+} catch (Exception $e) {
+    $apiOutput = [
+        "error" => "An error has occurred."
+    ];
+}
+
+$html = $twig->render('/components/comments.twig', [
+    'count' => $comment_count,
+    'data' => $comment_data,
+]);
+
+echo json_encode(['html' => $html]);

@@ -387,7 +387,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $userlink = sprintf(
             '<a class="userlink userlink-%s" %shref="/user/%s">%s</a>',
             $username,
-            $this->orange->isFulpTube() ? '' : "style=\"color:{$color};\" ",
+            $this->orange->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
             $username,
             $username
         );

@@ -28,6 +28,8 @@ use SquareBracket\UploadFlags;
 use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
+header('Content-Type: application/json');
+
 $post_data = json_decode(file_get_contents('php://input'), true);
 
 $userId = $auth->getUserID();

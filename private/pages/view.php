@@ -76,7 +76,6 @@ if (isset($data["tags"])) {
     }
 }
 
-$comments = new CommentData($database, CommentLocation::Upload, $id);
 $author = new UserData($database, $data["author"]);
 
 if ($author->isUserBanned() && !$auth->userHasRole(UserRoleEnum::Administrator)) {
@@ -267,8 +266,15 @@ LIMIT 24";
 
 $owner = ($auth->getUserID() == $data["author"]);
 
-$comment_data = $comments->getComments();
-$comment_count = $comments->getCommentCount();
+if ($orange->getLocalOptions()["skin"] != "finalium") {
+    $comments = new CommentData($database, CommentLocation::Upload, $id);
+
+    $comment_data = $comments->getComments();
+    $comment_count = $comments->getCommentCount();
+} else {
+    $comment_data = [];
+    $comment_count = 0;
+}
 
 $page_data = [
     "is_owner" => $owner,
