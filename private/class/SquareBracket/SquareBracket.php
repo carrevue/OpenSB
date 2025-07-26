@@ -176,7 +176,7 @@ class SquareBracket
             }
         }
 
-        $this->enable_discord_webhook = $config["discord_webhook"]["enabled"];
+        $this->enable_discord_webhook = $config["discord_webhook"]["enabled"] ?? false;
 
         if ($this->enable_discord_webhook) {
             $this->discord = new DiscordWebhookLogging($this, $config["discord_webhook"]["url"]);

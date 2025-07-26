@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function submitComment(type, id, content, replyTo = 0) {
         //play('click');
-        fetch("/api/biscuit/commenting", {
+        fetch("/api/frontend/comment_send", {
             method: "POST",
             body: JSON.stringify({
                 type: type,
@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let follow_count = (document.getElementById('follower_count'));
         follow_button.onclick = function () {
             //play('click');
-            fetch("/api/biscuit/user_interaction", {
+            fetch("/api/frontend/user_interaction", {
                 method: "POST",
                 body: JSON.stringify({
                     action: "follow",
@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // SETTINGS
     let settings_display_name_input = (document.getElementById('settings-display-name-input'));
     let settings_display_name = (document.getElementById('settings-display-name'));
-    let settings_custom_color = (document.getElementById('settings-color'));
+    //let settings_custom_color = (document.getElementById('settings-color'));
 
     if (settings_display_name_input && settings_display_name) {
         settings_display_name_input.addEventListener("input", function () {
@@ -321,6 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    /*
     if (settings_custom_color) {
         if (settings_display_name) {
             settings_custom_color.addEventListener("input", function () {
@@ -331,6 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.documentElement.style.setProperty('--link-color', settings_custom_color.value);
         });
     }
+    */
 
     let debug_button = (document.getElementById('debug-button'));
     let debug_close_button = (document.getElementById('debug-close-button'));

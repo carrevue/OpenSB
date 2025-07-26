@@ -75,7 +75,7 @@
         .list-header {
             margin-top: 0.8rem;
             display: block;
-            padding: 5px 0.9rem;
+            padding: $menu-item-padding;
             color: rgba($header-link-color, 66%);
             font-weight: bold;
             text-transform: uppercase;

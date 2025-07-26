@@ -101,10 +101,10 @@ if (isset($path[1]) && $path[1] != '') {
     match ($path[1]) {
         'admin' => Utilities::redirect('/dashboard/' . implode('/', array_slice($path, 2))),
         'api' => match ($path[2] ?? null) {
-            'biscuit' => match ($path[3] ?? null) {
-                'commenting' => require(BLUFF_PRIVATE_PATH . '/pages/api/biscuit/commenting.php'),
-                'submission_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/biscuit/submission_interaction.php'),
-                'user_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/biscuit/user_interaction.php'),
+            'frontend' => match ($path[3] ?? null) {
+                'comment_send' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/comment_send.php'),
+                'upload_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/upload_interaction.php'),
+                'user_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/user_interaction.php'),
                 default => last_resort(),
             },
             'legacy' => match ($path[3] ?? null) {
