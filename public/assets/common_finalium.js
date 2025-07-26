@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const postUserButton = document.getElementById('post-user');
     const postJournalButton = document.getElementById('post-journal');
     const commentPostingSpinner = document.getElementById('commentPostingSpinner');
-    const commentSection = document.getElementById('comment');
+    const commentSection2 = document.getElementById('comment');
 
     const watch_not_available = document.getElementById('watch-not-available');
     const watch_not_available_close = document.getElementById('watch-not-available-close');
@@ -237,8 +237,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then(response => response.text())
                 .then(data => {
                     console.log("Commented " + commentText);
-                    if (commentSection) {
-                        commentSection.insertAdjacentHTML('afterbegin', data);
+                    if (commentSection2) {
+                        commentSection2.insertAdjacentHTML('afterbegin', data);
                     }
                     if (commentContents) {
                         commentContents.value = '';
@@ -271,8 +271,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then(response => response.text())
                 .then(data => {
                     console.log("Commented " + commentText);
-                    if (commentSection) {
-                        commentSection.insertAdjacentHTML('afterbegin', data);
+                    if (commentSection2) {
+                        commentSection2.insertAdjacentHTML('afterbegin', data);
                     }
                     if (commentContents) {
                         commentContents.value = '';
