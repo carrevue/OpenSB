@@ -128,15 +128,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 menu.style.display = 'block';
             } else {
-                if (actualCaret) {
-                    actualCaret.className = menuCaretOff;
-                }
-                if (isThisTheHeaderUserMenu) {
-                    button.classList.remove("selected");
-                }
-                menu.style.display = 'none';
+                closeMenu();
             }
         });
+
+        document.addEventListener('mousedown', (e) => {
+            if (!menu.contains(e.target) && !button.contains(e.target)) {
+                closeMenu();
+            }
+        });
+
+        document.querySelectorAll('[onclick]').forEach(element => {
+            element.addEventListener('click', () => {
+                closeMenu();
+            });
+        });
+
+        function closeMenu() {
+            if (actualCaret) {
+                actualCaret.className = menuCaretOff;
+            }
+            if (isThisTheHeaderUserMenu) {
+                button.classList.remove("selected");
+            }
+            menu.style.display = 'none';
+        }
     });
 
     function closeCommentReplyForm() {

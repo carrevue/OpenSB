@@ -44,6 +44,14 @@ function handleCommentEvents() {
     }
 }
 
+function toggleNotAvailable() {
+    const watch_not_available = document.getElementById('watch-not-available');
+    
+    if (watch_not_available) {
+       toggleElementDisplay(watch_not_available);
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // ported from trinium
     // Get all menu buttons
@@ -75,7 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // initialize all menus with "none"
         menu.style.display = 'none';
 
-        button.addEventListener('mousedown', () => {
+        button.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+
             if (menu.style.display === 'none') {
                 if (actualCaret) {
                     actualCaret.className = menuCaretOn;
@@ -85,15 +95,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 menu.style.display = 'block';
             } else {
-                if (actualCaret) {
-                    actualCaret.className = menuCaretOff;
-                }
-                if (isThisTheHeaderUserMenu) {
-                    button.classList.remove("selected");
-                }
-                menu.style.display = 'none';
+                closeMenu();
             }
         });
+
+        document.addEventListener('mousedown', (e) => {
+            if (!menu.contains(e.target) && !button.contains(e.target)) {
+                closeMenu();
+            }
+        });
+
+        document.querySelectorAll('[onclick]').forEach(element => {
+            element.addEventListener('click', () => {
+                closeMenu();
+            });
+        });
+
+        function closeMenu() {
+            if (actualCaret) {
+                actualCaret.className = menuCaretOff;
+            }
+            if (isThisTheHeaderUserMenu) {
+                button.classList.remove("selected");
+            }
+            menu.style.display = 'none';
+        }
+
+        /*
+        document.querySelectorAll('.menu-item-button').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeMenu();
+                
+                const action = item.dataset.action;
+                if (action && menuActions[action]) {
+                    menuActions[action]();
+                }
+            });
+        });
+        */
     });
 
     // guide button
@@ -140,12 +180,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const commentContents = document.getElementById('commentContents');
     // stupid: should be merged into one.
     const postButton = document.getElementById('post');
+    */
+
     const postUserButton = document.getElementById('post-user');
     const postJournalButton = document.getElementById('post-journal');
-    //
     const commentPostingSpinner = document.getElementById('commentPostingSpinner');
     const commentSection = document.getElementById('comment');
-    */
+
+    const watch_not_available = document.getElementById('watch-not-available');
+    const watch_not_available_close = document.getElementById('watch-not-available-close');
+    
+    if (watch_not_available) {
+        watch_not_available_close.addEventListener('click', function () {
+            toggleElementDisplay(watch_not_available);
+        });
+    }
 
     // load comments
     const comments = document.getElementById('comments');
