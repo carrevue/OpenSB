@@ -13,8 +13,6 @@
 {% set opengraph_section = "SquareBracket post" %}
 
 {% block scripts %}
-    {{ include('submission_rating_script.twig') }}
-
     <script>
         user_id = '{{ data.author.id }}';
         comment_type = 'journal';
