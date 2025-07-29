@@ -58,10 +58,8 @@
             The author of this upload is banned.
         </div>
     {% endif %}
-    {% if not options.trinium_new_shit %}
     <div class="grid">
         <div class="col-8">
-    {% endif %}
             <div class="section">
                 <div class="submission">
                     {{ submission_view(submission) }}
@@ -207,7 +205,6 @@
                     </div>
                 </div>
             </div>
-        {% if not options.trinium_new_shit %}
         </div>
             <div class="col-4">
                 {% if submission.other_by_author %}
@@ -248,5 +245,4 @@
                 {% endif %}
             </div>
         </div>
-        {% endif %}
 {% endblock %}

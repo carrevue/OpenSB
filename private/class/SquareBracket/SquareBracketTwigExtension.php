@@ -455,7 +455,8 @@ class SquareBracketTwigExtension extends AbstractExtension
                 "name" => $this->localize("browse"), // Browse
                 "url" => "/browse",
             ],
-            "members" => [
+            //"members" => [
+            "users" => [
                 "name" => $this->localize("members"), // Members
                 "url" => "/users",
             ],
@@ -558,9 +559,26 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         $userid = $this->authentication->getUserID();
 
-        $users = $this->database->fetchArray(
-            $this->database->query("SELECT s.* FROM user_follows s JOIN users u ON s.user = u.id WHERE s.user = ?", [$userid])
-        );
+        if ($this->authentication->isUserLoggedIn()) {
+            $users = $this->database->fetchArray(
+                $this->database->query(
+                    "SELECT s.* FROM user_follows s 
+                    JOIN users u ON s.user = u.id 
+                    WHERE s.user = ?
+                    AND s.id NOT IN (SELECT userid FROM user_bans)",
+                    [$userid]
+                )
+            );
+        } else {
+            $users = $this->database->fetchArray(
+                $this->database->query(
+                    "SELECT u.id
+                    FROM users u 
+                    WHERE u.powerlevel >= ?",
+                    [UserRoleEnum::Moderator->value]
+                )
+            );
+        }
 
         $array = [];
 
@@ -568,7 +586,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             $data = $this->database->result("SELECT name FROM users WHERE id = ?", [$user["id"]]);
 
             $array[] = [
-                "id" => $user["user"],
+                "id" => $user["id"],
                 "username" => $data,
             ];
         }

@@ -228,5 +228,4 @@ if ($orange->getLocalOptions()["skin"] == "bootstrap") {
 
 echo $twig->render("profile.twig", [
     'data' => $profile_data,
-    'page_name' => "user",
 ]);

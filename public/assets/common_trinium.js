@@ -1,15 +1,13 @@
 function error(error) {
-    //play('error');
     console.error("OpenSB Trinium Frontend Error: " + error);
 }
 
-let uiSounds = false;
 document.addEventListener("DOMContentLoaded", () => {
     let hamburgerButton = (document.getElementById('button-hamburger')); // TEMPORARY
     let hamburgerMenu = (document.getElementById('hamburger')); // TEMPORARY
 
     if (hamburgerButton) {
-        hamburgerButton.onclick = function() {
+        hamburgerButton.onclick = function () {
             if (hamburgerMenu) {
                 hamburgerMenu.classList.toggle("active");
             } else {
@@ -103,13 +101,13 @@ document.addEventListener("DOMContentLoaded", () => {
         // get the caret if that exists. this is primarily for the one in the header.
         const menuCaret = button.getElementsByClassName("menu-caret");
 
-        let menuCaretOff= "biscuit-icon caret-closed menu-caret";
+        let menuCaretOff = "biscuit-icon caret-closed menu-caret";
         let menuCaretOn = "biscuit-icon caret-open menu-caret";
 
         let actualCaret;
         if (menuCaret.length === 1) {
             actualCaret = menuCaret.item(0);
-        } else if(menuCaret.length > 1) {
+        } else if (menuCaret.length > 1) {
             // this shouldn't happen. if it does then i fucked this up. -chaziz 6/28/2024
             console.warn("There's a menu that has more than one caret? Huh?")
             actualCaret = menuCaret.item(0);
@@ -172,7 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function submitComment(type, id, content, replyTo = 0) {
-        //play('click');
         fetch("/api/frontend/comment_send", {
             method: "POST",
             body: JSON.stringify({
@@ -206,7 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     }
                 } else {
-                    //play('comment');
                     if (replyTo !== 0) {
                         let repliesContainer = document.getElementById(`replies-${replyTo}`);
                         if (repliesContainer) {
@@ -247,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let new_comment_box = document.getElementById('new-comment-logged-out');
         let new_comment_form = document.getElementById('new-comment-form');
 
-        new_comment_box.onclick = function() {
+        new_comment_box.onclick = function () {
             closeCommentReplyForm();
 
             if (new_comment_form) {
@@ -260,12 +256,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let comment_button = document.getElementById('comment_button');
         let comment_contents = document.getElementById('comment_contents');
-        comment_button.onclick = function() {
+        comment_button.onclick = function () {
             submitComment(comment_type, comment_id, comment_contents);
         };
     }
 
-    document.addEventListener("click", function(event) {
+    document.addEventListener("click", function (event) {
         if (event.target && event.target.classList.contains("reply-button")) {
             let commentId = event.target.getAttribute("data-comment-id");
 
@@ -291,7 +287,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (follow_button) {
         let follow_count = (document.getElementById('follower_count'));
         follow_button.onclick = function () {
-            //play('click');
             fetch("/api/frontend/user_interaction", {
                 method: "POST",
                 body: JSON.stringify({
@@ -304,23 +299,21 @@ document.addEventListener("DOMContentLoaded", () => {
             })
                 .then((response) => response.json())
                 .then((json) => {
-                        if(json["error"])
-                        {
-                            error(json["error"])
+                    if (json["error"]) {
+                        error(json["error"])
+                    }
+                    else {
+                        if (follow_count) {
+                            follow_count.textContent = json["number"];
                         }
-                        else
-                        {
-                            if (follow_count) {
-                                follow_count.textContent = json["number"];
-                            }
-                            follow_button.textContent = json["text"];
-                            if (json["followed"]) {
-                                //play('subscribe');
-                            }
+                        follow_button.textContent = json["text"];
+                        if (json["followed"]) {
+                            //play('subscribe');
                         }
                     }
+                }
                 )
-            ;
+                ;
 
         }
     }

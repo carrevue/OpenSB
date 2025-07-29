@@ -59,7 +59,7 @@ if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 5;
 }
 
-if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" && $trinium_new_shit && $type != "grid")) {
+if ($options["skin"] == "bootstrap") {
     $submissions_random = [];
 } else {
     $submissions_random = $submission_query->query("RAND()", $submissions_random_query_limit);
@@ -75,11 +75,7 @@ $submissions_featured = $submission_query->query(
     "v.flags & $featured_flag_bullshit = $featured_flag_bullshit"
 );
 
-if ($options["skin"] == "trinium" && $trinium_new_shit && $type != "grid") {
-    $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j ORDER BY j.date DESC LIMIT $news_recent_query_limit"));
-} else {
-    $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC LIMIT $news_recent_query_limit"));
-}
+$news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC LIMIT $news_recent_query_limit"));
 
 $data = [
     "submissions" => Utilities::makeUploadArray($database, $submissions_random),

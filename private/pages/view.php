@@ -37,8 +37,6 @@ use SquareBracket\Utilities;
 
 $options = $orange->getLocalOptions();
 
-$trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new_shit"] == "true";
-
 $id = $path[2] ?? null;
 
 if ($orange->isFulpTube()) {
@@ -157,17 +155,12 @@ if (!$CrawlerDetect->isCrawler()) {
     }
 }
 
-if ($options["skin"] == "trinium" && $trinium_new_shit) {
-    $recommended_upload_array = [];
-    $uploads_by_author_array = [];
-    $random_uploads_array = [];
-} else {
-    $whereRatings = Utilities::whereRatings();
-    $whereTagBlacklist = Utilities::whereTagBlacklist();
-    $submission_query = new UploadQuery($database);
+$whereRatings = Utilities::whereRatings();
+$whereTagBlacklist = Utilities::whereTagBlacklist();
+$submission_query = new UploadQuery($database);
 
-    // ported from poktwo, modified to accommodate for takedowns and relevancy.
-    $recommendfields = "
+// ported from poktwo, modified to accommodate for takedowns and relevancy.
+$recommendfields = "
     jaccard.video_id,
     jaccard.flags,
     jaccard.intersect_count,
@@ -210,16 +203,16 @@ ORDER BY
     jaccard_index DESC
 LIMIT 24";
 
-    $uploads_by_author = $submission_query->query("RAND()", 24, "v.author = ? AND v.video_id != ?", [$data["author"], $data["video_id"]]);
+$uploads_by_author = $submission_query->query("RAND()", 24, "v.author = ? AND v.video_id != ?", [$data["author"], $data["video_id"]]);
 
-    if ($tags === []) {
-        // if there are no tags, list the author's other uploads
-        $recommended = false;
-    } else {
-        // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
-        // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
+if ($tags === []) {
+    // if there are no tags, list the author's other uploads
+    $recommended = false;
+} else {
+    // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
+    // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
 
-        $query = "SELECT v.* 
+    $query = "SELECT v.* 
     FROM uploads v
     INNER JOIN (
         SELECT $recommendfields
@@ -227,47 +220,46 @@ LIMIT 24";
     ON v.video_id = recommended.video_id
     WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns)";
 
-        if (!empty($whereRatings)) {
-            $query .= "AND $whereRatings ";
-        }
+    if (!empty($whereRatings)) {
+        $query .= "AND $whereRatings ";
+    }
 
-        if (!empty($twhereTagBlacklist)) {
-            $query .= "AND $whereTagBlacklist ";
-        }
+    if (!empty($twhereTagBlacklist)) {
+        $query .= "AND $whereTagBlacklist ";
+    }
 
-        $query .= "AND v.author NOT IN (SELECT userid FROM user_bans)
+    $query .= "AND v.author NOT IN (SELECT userid FROM user_bans)
     ORDER BY RAND()";
 
-        $recommended = $database->fetchArray($database->query($query, [$data["id"]]));
+    $recommended = $database->fetchArray($database->query($query, [$data["id"]]));
 
-        // if no other uploads match, then fallback to listing the author's other uploads
-        if (empty($recommended)) {
-            $recommended = false;
-        }
+    // if no other uploads match, then fallback to listing the author's other uploads
+    if (empty($recommended)) {
+        $recommended = false;
     }
+}
 
-    if ($recommended) {
-        $recommended_upload_array = Utilities::makeUploadArray($database, $recommended);
-    } else {
-        $recommended_upload_array = [];
-    }
+if ($recommended) {
+    $recommended_upload_array = Utilities::makeUploadArray($database, $recommended);
+} else {
+    $recommended_upload_array = [];
+}
 
-    if ($uploads_by_author) {
-        $uploads_by_author_array = Utilities::makeUploadArray($database, $uploads_by_author);
-    } else {
-        $uploads_by_author_array = [];
-    }
+if ($uploads_by_author) {
+    $uploads_by_author_array = Utilities::makeUploadArray($database, $uploads_by_author);
+} else {
+    $uploads_by_author_array = [];
+}
 
-    if (!$recommended && !$uploads_by_author) {
-        $random_uploads = $submission_query->query("RAND()", 24, "v.video_id != ?", [$data["video_id"]]);
-        if ($random_uploads) {
-            $random_uploads_array = Utilities::makeUploadArray($database, $random_uploads);
-        } else {
-            $random_uploads_array = [];
-        }
+if (!$recommended && !$uploads_by_author) {
+    $random_uploads = $submission_query->query("RAND()", 24, "v.video_id != ?", [$data["video_id"]]);
+    if ($random_uploads) {
+        $random_uploads_array = Utilities::makeUploadArray($database, $random_uploads);
     } else {
         $random_uploads_array = [];
     }
+} else {
+    $random_uploads_array = [];
 }
 
 $owner = ($auth->getUserID() == $data["author"]);

@@ -181,16 +181,15 @@ class Templating
         $this->twig->addGlobal('options', $options);
 
         if (isset($_SERVER["REQUEST_URI"])) {
-            $uri = explode('?', $_SERVER["REQUEST_URI"])[0];
+            $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+            $uriParts = array_filter(explode('/', trim($uri, '/')));
 
-            $uriParts = explode('/', trim($uri, '/'));
-
-            // fix for dashboard tabs
-            if (!empty($uriParts) && $uriParts[0] === 'dashboard') {
-                $pageName = $uriParts[1] ?? 'overview';
-            } else {
-                $pageName = $uriParts[0] ?? 'index';
-            }
+            $pageName = match ($uriParts[0] ?? '') {
+                'user'      => 'user ' . ($uriParts[1] ?? ''),
+                'dashboard' => $uriParts[1] ?? 'overview',
+                'index', '' => 'home',
+                default     => $uriParts[0] ?? 'index'
+            };
 
             $this->twig->addGlobal('page_name', $pageName);
         }

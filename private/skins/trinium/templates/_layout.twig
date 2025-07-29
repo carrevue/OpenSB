@@ -126,7 +126,7 @@
             {% else %}
                 <div class="grid no-gap">
                     <div class="col-sidebar">
-                        <div class="sidebar">
+                        <div class="sidebar {% if page_name == "home" %}with-jumbotron{% endif %}">
                             {% include("components/_hamburger_menu.twig") %}
                         </div>
                     </div>

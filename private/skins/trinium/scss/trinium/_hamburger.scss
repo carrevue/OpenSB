@@ -53,7 +53,7 @@
 
     @include responsive('large') {
         display: block;
-        width: 300px;
+        width: 250px;
     }
 }
 
@@ -63,6 +63,11 @@
 
     position: sticky;
     top: 58px;
+    margin-right: 1em;
+
+    &.with-jumbotron {
+        top: 58px + 120px;
+    }
 }
 
 .hamburger,
@@ -102,7 +107,8 @@
                     text-decoration: none;
                 }
 
-                &:active {
+                &:active,
+                &.selected {
                     background: $header-link-active;
                     color: $header-link-color;
                     text-decoration: none;
