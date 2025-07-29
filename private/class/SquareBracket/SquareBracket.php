@@ -122,12 +122,12 @@ class SquareBracket
         ];
 
         if (isset($_COOKIE["SBOPTIONS"])) {
-            $this->options = json_decode(base64_decode($_COOKIE["SBOPTIONS"]), true);
+            $this->options = $this->getOptionsCookie();
 
             // the charla frontend is now called trinium
             if ($this->options["skin"] == "charla") {
                 $this->options["skin"] = "trinium";
-                $this->setOptionCookie();
+                $this->setOptionCookie($this->options);
             }
 
             // migrate biscuit users to trinium. the frontend has been retired.
@@ -138,11 +138,11 @@ class SquareBracket
                     $this->options["theme"] = "default";
                 }
 
-                $this->setOptionCookie();
+                $this->setOptionCookie($this->options);
                 Utilities::notifyBanner("The Biscuit frontend is no longer available.", null, "primary");
             }
         } else {
-            $this->setOptionCookie();
+            $this->setOptionCookie($this->options);
         }
 
         $this->localization = new Localization($this->options["locale"] ?? "en-US");
@@ -205,9 +205,18 @@ class SquareBracket
         ];
     }
 
-    private function setOptionCookie()
+    public function getOptionsCookie()
     {
-        setcookie("SBOPTIONS", base64_encode(json_encode($this->options)), [
+        if (isset($_COOKIE['SBOPTIONS'])) {
+            return json_decode(base64_decode($_COOKIE['SBOPTIONS']), true);
+        } else {
+            return [];
+        }
+    }
+
+    public function setOptionCookie($options)
+    {
+        setcookie("SBOPTIONS", base64_encode(json_encode($options)), [
             'expires' => 2147483647,
             'path' => '/',
             'secure' => isset($_SERVER['HTTPS']),

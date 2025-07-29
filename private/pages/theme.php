@@ -39,7 +39,7 @@ if (is_dir($localesPath)) {
             $id = pathinfo($filePath, PATHINFO_FILENAME);
             $locales[] = [
                 'id' => $id,
-                'name' => $id, // TODO
+                'name' => locale_get_display_name($id, $orange->getLocalOptions()["locale"]),
             ];
         }
     }
@@ -56,9 +56,7 @@ if (is_dir($localesPath)) {
 
 if (isset($_POST['apply'])) {
     $options = [];
-    if (isset($_COOKIE['SBOPTIONS'])) {
-        $options = json_decode(base64_decode($_COOKIE['SBOPTIONS']), true);
-    }
+    $options = $orange->getOptionsCookie();
 
     $new = explode(",", $_POST["theme"]);
 
@@ -68,13 +66,7 @@ if (isset($_POST['apply'])) {
 
     $options["locale"] = $_POST['locale'];
 
-    setcookie("SBOPTIONS", base64_encode(json_encode($options)), [
-        'expires' => 2147483647,
-        'path' => '/',
-        'secure' => isset($_SERVER['HTTPS']),
-        'httponly' => false,
-        'samesite' => 'Lax'
-    ]);
+    $orange->setOptionCookie($options);
 
     Utilities::notifyBanner("Successfully changed your settings.", "/", "success");
 }

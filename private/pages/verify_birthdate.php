@@ -32,21 +32,12 @@ if (isset($auth->getUserData()['birthdate']) && !$orange->isDebug()) {
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
-    if (isset($_COOKIE['SBOPTIONS'])) {
-        $options = json_decode(base64_decode($_COOKIE['SBOPTIONS']), true);
-    }
+    $options = $orange->getOptionsCookie();
 
     $options["skin"] = "trinium";
-
     $options["theme"] = "default";
 
-    setcookie("SBOPTIONS", base64_encode(json_encode($options)), [
-        'expires' => 2147483647,
-        'path' => '/',
-        'secure' => isset($_SERVER['HTTPS']),
-        'httponly' => false,
-        'samesite' => 'Lax'
-    ]);
+    $orange->setOptionCookie($options);
 
     Utilities::redirect("/verify_birthdate");
 }
