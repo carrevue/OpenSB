@@ -58,9 +58,9 @@ function log(string $message): void
 
 function downscaleVideoForThumbnail($videoWidth, $videoHeight): array
 {
-    $targetWidth = 512;
+    $targetWidth = 640;
 
-    // if video width smaller than 512, dont bother with downscaling.
+    // if video width smaller than 640, dont bother with downscaling.
     if ($videoWidth <= $targetWidth) {
         return ['width' => $videoWidth, 'height' => $videoHeight];
     }
@@ -207,22 +207,26 @@ try {
 
     // bitrate stuff
     $isHD = ($videoWidth >= 1280 || $videoHeight >= 720);
+    $isFullHD = ($videoWidth >= 1920 || $videoHeight >= 1080);
 
-    if ($isHD) {
-        $bitrate = 4000;
+    if ($isFullHD) {
+        $bitrate = 10000;
+    } elseif ($isHD) {
+        $videoScaleFactor = min($videoWidth / 1920, $videoHeight / 1080);
+        $bitrate = (int)max(5000, min(10000, 5000 + (5000 * $videoScaleFactor)));
     } else {
         // calculate bitrate for video based on the resolution.
         $videoScaleFactor = min($videoWidth / 1280, $videoHeight / 720);
-        $bitrate = (int)max(1000, 4000 * $videoScaleFactor);
+        $bitrate = (int)max(1000, 5000 * $videoScaleFactor);
     }
 
     log("Video bitrate: " . $bitrate);
 
-    // if the video is higher than 1280x720 then scale it down to 720p.
-    if ($videoWidth > 1280 || $videoHeight > 720) {
-        log("Scaling down video to 720p.");
+    // if the video is higher than 1920x1080 then scale it down to 1080p.
+    if ($videoWidth > 1920 || $videoHeight > 1080) {
+        log("Scaling down video to 1080p.");
         $video->filters()->resize(
-            new Coordinate\Dimension(1280, 720),
+            new Coordinate\Dimension(1920, 1080),
             Filters\Video\ResizeFilter::RESIZEMODE_INSET,
             true
         );

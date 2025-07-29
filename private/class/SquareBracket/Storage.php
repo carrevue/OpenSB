@@ -135,7 +135,7 @@ class Storage
         // thumbnail
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
-        $img->scaleDown(512);
+        $img->scaleDown(640);
         $img->toJpeg(90)->save($target_thumbnail);
 
         unlink($temp_name);
@@ -160,7 +160,7 @@ class Storage
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
-        $img->scaleDown(512);
+        $img->scaleDown(640);
         $img->toJpeg(90)->save($target_file);
 
         unlink($temp_name);
