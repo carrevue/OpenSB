@@ -222,6 +222,26 @@ class DiscordWebhookLogging
         $this->webhook->embed($mbd)->send();
     }
 
+    /**
+     * Trigger the recount views hook.
+     */
+    public function recountViewsHook()
+    {
+        $this->initClient();
+
+        $title = 'Views have been recounted.';
+
+        $author = 'OpenSB (automatic)';
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->author($author)
+            ->footer($this->footer_text)
+            ->color(Colors::SUCCESS_COLOR);
+
+        $this->webhook->embed($mbd)->send();
+    }
 
     /**
      * Trigger the new user webhook.

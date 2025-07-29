@@ -36,9 +36,9 @@ $uploads = $database->fetchArray($database->query("SELECT * FROM uploads ORDER B
 
 // hardcoded shit from the sb db! wow!
 const POKTUBE_TIMESTAMP = 1619236800; // poktube from 2021 views were not properly counted and are fucked
-const BLUFF_2022_TIMESTAMP = 1662664200; // sb views from 2021-2022 were not counted properly
+const SB_2022_TIMESTAMP = 1662664200; // sb views from 2021-2022 were not counted properly
 const QTV_TIMESTAMP = 1709269200; // qtv views from 2023 were FUCKED and had a lot of botting.
-const BLUFF_2024_TIMESTAMP = 1730782800; // qtv views from 2023 were FUCKED and had a lot of botting.
+const SB_2024_TIMESTAMP = 1730782800; // qtv views from 2023 were FUCKED and had a lot of botting.
 
 // some of these view counts are a little too fishy
 // i cant actually get the code to fix these so just hardcode some of the shit
@@ -85,7 +85,7 @@ foreach ($uploads as $upload) {
                 $adjustedViews += 0.0333333;
             } elseif ($timestamp === QTV_TIMESTAMP) {
                 $adjustedViews += 0.05;
-            } elseif ($timestamp === BLUFF_2022_TIMESTAMP) {
+            } elseif ($timestamp === SB_2022_TIMESTAMP) {
                 $adjustedViews += 0.25;
             } else {
                 // penalize certain uploads
@@ -95,7 +95,7 @@ foreach ($uploads as $upload) {
                     $ratio_penalty = 10;
 
                     // crawlerdetect was kinda fucky during this time
-                    if ($timestamp > QTV_TIMESTAMP || $timestamp < BLUFF_2024_TIMESTAMP) {
+                    if ($timestamp > QTV_TIMESTAMP || $timestamp < SB_2024_TIMESTAMP) {
                         $ratio_penalty = 25;
                     }
 
@@ -113,13 +113,21 @@ foreach ($uploads as $upload) {
         }
     }
 
-    // debug output shit
-    echo "ID: {$upload["video_id"]} ";
-    echo "Views (U/G/O/N): {$loggedIn}/{$loggedOut}/{$upload["views"]}/" . round($adjustedViews) . PHP_EOL;
+    if (BLUFF_CLI) {
+        if (getenv('TERM')) {
+            // debug output shit
+            echo "ID: {$upload["video_id"]} ";
+            echo "Views (U/G/O/N): {$loggedIn}/{$loggedOut}/{$upload["views"]}/" . round($adjustedViews) . PHP_EOL;
+        }
+    }
 
     // now push that shit to the database
     $database->query(
         "UPDATE uploads SET views = ? WHERE video_id = ?",
         [round($adjustedViews), $upload["video_id"]]
     );
+
+    if ($orange->isDiscordWebhookEnabled()) {
+        $orange->getDiscordWebhookClass()->recountViewsHook();
+    }
 }
