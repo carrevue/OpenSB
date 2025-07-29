@@ -2,5 +2,7 @@
 
 {% block content %}
     <h1>{{ localize('404_not_found') }}</h1>
-    <p>{{ localize('footer_copyright', ('now' | date('Y'))) }} • {{ localize('powered_by') }} OpenSB {{ opensb_version }}</p>
+    <p>The page could not be found.</p>
+    <footer>{{ localize('footer_copyright', ('now' | date('Y'))) }} 
+            • {{ localize('powered_by') }} OpenSB {{ opensb_version }}</footer>
 {% endblock %}

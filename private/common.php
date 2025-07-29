@@ -234,5 +234,14 @@ if (!BLUFF_CLI) {
         die();
     }
 
+    if (
+        $orange->isChazizSquareBracketInstance() &&
+        ($orange->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB")
+    ) {
+        http_response_code(451);
+        echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);
+        die();
+    }
+
     $twig = new Templating($orange);
 }

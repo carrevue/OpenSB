@@ -17,6 +17,10 @@ return [
         "enabled" => false,
         "url" => "",
     ],
+    "ip_lookup" => [
+        "enabled" => false,
+        "mmdb" => '', // place this in the config folder
+    ],
     // put "PROD" for production, put "DEV" for development
     "mode" => "PROD",
     "site" => "squarebracket",

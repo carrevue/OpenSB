@@ -83,6 +83,29 @@
                         </table>
                     </div>
                 </div>
+                {% if ip_info %}
+                    <div class="section">
+                        <div class="content-box">
+                            <div class="section-header">
+                                <h2 class="section-title">IP info</h2>
+                            </div>
+                            <table class="c1">
+                                <tbody>
+                                {% for key, info in ip_info %}
+                                    <tr>
+                                        <td>
+                                            {{ localize(key) }}
+                                        </td>
+                                        <td>
+                                            {{ info }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
                 {% if users_with_matching_ips %}
                     <div class="section">
                         <div class="content-box">

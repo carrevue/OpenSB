@@ -69,6 +69,14 @@
     "ip_banned_filed": "Your ban was filed on %s, and won't expire.",
     "ip_message": "Your IP is %s, and the account(s) linked to this IP are: %s",
 
+    "as_domain": "ISP Domain",
+    "as_name": "ISP",
+    "asn": "ASN",
+    "continent": "Continent",
+    "continent_code": "Continent code",
+    "country": "Country",
+    "country_code": "Country code",
+
     "powered_by": "Powered by",
     "footer_copyright": "© %s Bluffingo Development",
 

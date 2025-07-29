@@ -35,6 +35,7 @@ class SquareBracket
     private Authentication $authentication;
     private Localization $localization;
     private ?DiscordWebhookLogging $discord;
+    private ?IPLookup $ip_lookup;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
     private bool $template_caching_enabled = false;
@@ -43,6 +44,7 @@ class SquareBracket
     private bool $enable_invite_keys = false;
     private bool $enable_lockdown = false;
     private bool $enable_discord_webhook = false;
+    private bool $enable_ip_lookup = false;
     private array $branding_settings;
     private array $captcha_settings;
     public array $options;
@@ -183,6 +185,14 @@ class SquareBracket
         } else {
             $this->discord = null;
         }
+
+        $this->enable_ip_lookup = $config["ip_lookup"]["enabled"] ?? false;
+
+        if ($this->enable_ip_lookup) {
+            $this->ip_lookup = new IPLookup($config["ip_lookup"]["mmdb"]);
+        } else {
+            $this->ip_lookup = null;
+        }
     }
 
     private function overrideBrandingWithFulpTube()
@@ -274,9 +284,32 @@ class SquareBracket
     public function getDiscordWebhookClass(): DiscordWebhookLogging
     {
         if (!$this->discord || !$this->enable_discord_webhook) {
-            throw new \Exception("getDiscordWebhookClass() called while Discord webhook option is disabled.");
+            throw new \Exception("getDiscordWebhookClass() called while Discord webhook is disabled.");
         }
         return $this->discord;
+    }
+
+    /**
+     * Returns the bool that toggles the IP lookup class.
+     *
+     * @return bool
+     */
+    public function isIpLookupEnabled(): bool
+    {
+        return $this->enable_ip_lookup;
+    }
+
+    /**
+     * Returns the IP lookup class.
+     *
+     * @return IPLookup
+     */
+    public function getIpLookupClass(): IPLookup
+    {
+        if (!$this->ip_lookup || !$this->enable_ip_lookup) {
+            throw new \Exception("getIpLookupClass() called while IP reader is disabled.");
+        }
+        return $this->ip_lookup;
     }
 
     /**

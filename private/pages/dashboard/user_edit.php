@@ -131,10 +131,17 @@ foreach ($notes as $note) {
 // simply getting basic user data via the UserData class.
 $flags = UserFlags::toArray($user["u_flags"]);
 
+if ($orange->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Administrator)) {
+    $ip_info = $orange->getIpLookupClass()->getInfo($user["ip"]);
+} else {
+    $ip_info = [];
+}
+
 echo $twig->render("dashboard_user_edit.twig", [
     'user' => $user,
     'flags' => $flags,
     'users_with_matching_ips' => $users_with_matching_ips,
     'notes' => $notes_proper,
-    'old_names' => $old_username_data
+    'old_names' => $old_username_data,
+    'ip_info' => $ip_info,
 ]);

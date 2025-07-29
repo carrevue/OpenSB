@@ -3,5 +3,6 @@
 {% block content %}
     <h1>{{ website_branding.name }} is currently offline.</h1>
     <p>Please try again later.</p>
-    <p>{{ localize('footer_copyright', ('now' | date('Y'))) }} • Running OpenSB {{ opensb_version }}</p>
+    <footer>{{ localize('footer_copyright', ('now' | date('Y'))) }} 
+            • {{ localize('powered_by') }} OpenSB {{ opensb_version }}</footer>
 {% endblock %}

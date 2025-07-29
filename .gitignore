@@ -1,10 +1,9 @@
-## User-generated files
-private/logs/
-private/conf/config.php
+## Configs/cache
 private/config/config.php
-private/templates/cache/
-templates/cache/
-cache/
+private/config/*.mmdb
+private/skins/cache
+
+## User generated files
 dynamic/pfp/
 dynamic/thumbnails/
 dynamic/banners/

@@ -21,21 +21,43 @@
 
 namespace SquareBracket;
 
-use BluffingoCore\Database;
-
-// INCOMPLETE
+use MaxMind\Db\Reader;
 
 class IPLookup
 {
-    private Database $database;
-    private string $api = "http://ip-api.com/json/";
+    private Reader $reader;
 
-    public function __construct(Database $database)
+    public function __construct(string $config)
     {
-        $this->database = $database;
+        if ($config) {
+            $this->reader = new Reader(BLUFF_PRIVATE_PATH . '/config/' . $config);
+        }
+    }
 
-        // i'm going to use ip-api for the time being.
-        // there's a 45 queries per minute limit on the free tier,
-        // but that's fine for now. -chaziz 7/21/2025
+    public function getInfo($ip)
+    {
+        if (
+            $ip == "localhost"
+            || $ip == "999.999.999.999"
+            || !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE |
+                FILTER_FLAG_NO_RES_RANGE)
+        ) {
+            // made up bullshit so theres no bugs
+            return [
+                "as_domain" => "localhost",
+                "as_name" => "Loopback Network LLC",
+                "asn" => "AS00000",
+                "continent" => "Lemuria",
+                "continent_code" => "XX",
+                "country" => "Localhostia",
+                "country_code" => "XX",
+            ];
+        }
+        return $this->reader->get($ip);
+    }
+
+    public function getCountry($ip)
+    {
+        return $this->getInfo($ip)["country_code"];
     }
 }

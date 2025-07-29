@@ -1,0 +1,20 @@
+{% extends "_layout.twig" %}
+
+{% set logo_suffix = current_theme == "dark" ? '-dark' : '' %}
+{% set logo_extension = website_branding.is_vector ? '.svg' : '.png' %}
+{# {% set logo_type = website_branding.use_wordmark ? 'logo-wordmark' : 'logo' %} #}
+{% set logo_type = 'logo-wordmark' %}
+
+{% set logo = website_branding.assets_location ~ '/' ~ logo_type ~ logo_suffix ~ logo_extension %}
+
+
+{% block content %}
+    <img src="{{ logo }}"></img>
+    <h1>Service Unavailable</h1>
+    <p>
+    We're sorry, but due to regulations enacted by your nation's government, 
+    {{ website_branding.name }} is no longer available in your region.
+    </p>
+    <footer>{{ localize('footer_copyright', ('now' | date('Y'))) }} 
+    • {{ localize('powered_by') }} OpenSB {{ opensb_version }}</footer>
+{% endblock %}
