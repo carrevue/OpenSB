@@ -13,6 +13,11 @@
                 </div>
             </div>
             <canvas id="cumulativeChart"></canvas>
+            <center>
+                <div class="button button-secondary button-small" id="resetZoom">
+                    Reset zoom
+                </div>
+            <center>
         </div>
         <hr>
         <div class="section">
@@ -49,127 +54,16 @@
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>
     <script>
         const cumulativeChart = document.getElementById('cumulativeChart');
         const viewChart = document.getElementById('viewChart');
 
-        /* todo: replace chart.js with anything else that can offer a zoom slider. */
+        const chart = new Chart(cumulativeChart, {{ data.graph_data|json_encode()|raw }});
 
-        new Chart(cumulativeChart, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: 'Uploads',
-                        data: [
-                            {% for graph in data.graph_data.submissions %}
-                            {
-                                x: "{{ graph.time }}",
-                                y: {{ graph.runningTotal }},
-                            },
-                            {% endfor %}
-                        ],
-                        borderWidth: 1,
-                        yAxisID: 'n',
-                    },
-                    {
-                        label: 'Users',
-                        data: [
-                            {% for graph in data.graph_data.users %}
-                            {
-                                x: "{{ graph.joined }}",
-                                y: {{ graph.runningTotal }},
-                            },
-                            {% endfor %}
-                        ],
-                        borderWidth: 1,
-                        yAxisID: 'n',
-                    },
-                    {
-                        label: 'Comments',
-                        data: [
-                            {% for graph in data.graph_data.comments %}
-                            {
-                                x: "{{ graph.date }}",
-                                y: {{ graph.runningTotal }},
-                            },
-                            {% endfor %}
-                        ],
-                        borderWidth: 1,
-                        yAxisID: 'n',
-                    },
-                    {
-                        label: 'Journals',
-                        data: [
-                            {% for graph in data.graph_data.journals %}
-                            {
-                                x: "{{ graph.date }}",
-                                y: {{ graph.runningTotal }},
-                            },
-                            {% endfor %}
-                        ],
-                        borderWidth: 1,
-                        yAxisID: 'n',
-                    },
-                    {
-                        label: 'Views (Users)',
-                        data: [
-                            {% for graph in data.graph_data.views %}
-                            {
-                                x: "{{ graph.date }}",
-                                y: {{ graph.user_views }},
-                            },
-                            {% endfor %}
-                        ],
-                        borderWidth: 1,
-                        yAxisID: 'v',
-                    },
-                    {
-                        label: 'Views (Guests)',
-                        data: [
-                            {% for graph in data.graph_data.views %}
-                            {
-                                x: "{{ graph.date }}",
-                                y: {{ graph.guest_views }},
-                            },
-                            {% endfor %}
-                        ],
-                        borderWidth: 1,
-                        yAxisID: 'v',
-                    },
-                ]
-            },
-            options: {
-                elements: {
-                    point: {
-                        radius: 2
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    },
-                    {% if is_chaziz_sb %}
-                    x: {
-                        type: 'time',
-                        min: '2021-01-30 00:00:00',
-                    },
-                    {% else %}
-                    x: {
-                        type: 'time',
-                    },
-                    {% endif %}
-                    n: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                    },
-                    v: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                    }
-                }
+        document.getElementById('resetZoom').addEventListener('click', function() {
+            if (chart) {
+                chart.resetZoom(); // This is the correct method provided by the plugin
             }
         });
     </script>

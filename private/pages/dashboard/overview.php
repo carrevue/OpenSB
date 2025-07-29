@@ -130,6 +130,133 @@ foreach ($thingsToCount as $table => $uiName) {
     ];
 }
 
+$user_graph = makeRunningTotalGraph($database, 'users', 'joined');
+$upload_graph = makeRunningTotalGraph($database, 'uploads', 'time');
+$comment_graph = makeRunningTotalGraphFromMultipleCommentTables($database);
+$journal_graph = makeRunningTotalGraph($database, 'journals', 'date');
+$view_graph = countViews($database);
+
+// chart.js data
+$chartData = [
+    'type' => 'line',
+    'data' => [
+        'datasets' => [
+            [
+                'label' => 'Uploads',
+                'data' => array_map(function ($graph) {
+                    return [
+                        'x' => $graph['time'],
+                        'y' => $graph['runningTotal'],
+                    ];
+                }, $upload_graph),
+                'borderWidth' => 1,
+                'yAxisID' => 'n',
+            ],
+            [
+                'label' => 'Users',
+                'data' => array_map(function ($graph) {
+                    return [
+                        'x' => $graph['joined'],
+                        'y' => $graph['runningTotal'],
+                    ];
+                }, $user_graph),
+                'borderWidth' => 1,
+                'yAxisID' => 'n',
+            ],
+            [
+                'label' => 'Comments',
+                'data' => array_map(function ($graph) {
+                    return [
+                        'x' => $graph['date'],
+                        'y' => $graph['runningTotal'],
+                    ];
+                }, $comment_graph),
+                'borderWidth' => 1,
+                'yAxisID' => 'n',
+            ],
+            [
+                'label' => 'Journals',
+                'data' => array_map(function ($graph) {
+                    return [
+                        'x' => $graph['date'],
+                        'y' => $graph['runningTotal'],
+                    ];
+                }, $journal_graph),
+                'borderWidth' => 1,
+                'yAxisID' => 'n',
+            ],
+            [
+                'label' => 'Views (Users)',
+                'data' => array_map(function ($graph) {
+                    return [
+                        'x' => $graph['date'],
+                        'y' => $graph['user_views'],
+                    ];
+                }, $view_graph),
+                'borderWidth' => 1,
+                'yAxisID' => 'v',
+            ],
+            [
+                'label' => 'Views (Guests)',
+                'data' => array_map(function ($graph) {
+                    return [
+                        'x' => $graph['date'],
+                        'y' => $graph['guest_views'],
+                    ];
+                }, $view_graph),
+                'borderWidth' => 1,
+                'yAxisID' => 'v',
+            ],
+        ]
+    ],
+    'options' => [
+        'elements' => [
+            'point' => [
+                'radius' => 2
+            ]
+        ],
+        'plugins' => [
+            'zoom' => [
+                'zoom' => [
+                    'drag' => [
+                        'enabled' => true,
+                    ],
+                    'mode' => 'x',
+                    'speed' => 100,
+                ],
+                'pan' => [
+                    'enabled' => true,
+                    'mode' => 'x',
+                    'speed' => 0.5,
+                ],
+            ],
+        ],
+        'scales' => [
+            'x' => $orange->isChazizSquareBracketInstance()
+                ? [
+                    'type' => 'time',
+                    'min' => '2021-01-30 00:00:00',
+                ]
+                : [
+                    'type' => 'time',
+                ],
+            'y' => [
+                'beginAtZero' => true
+            ],
+            'n' => [
+                'type' => 'linear',
+                'display' => true,
+                'position' => 'left',
+            ],
+            'v' => [
+                'type' => 'linear',
+                'display' => true,
+                'position' => 'right',
+            ]
+        ],
+    ]
+];
+
 // fulptube accounts
 
 // unbanned-to-banned user ratio
@@ -198,13 +325,7 @@ $data = [
         "uptime" => $uptime,
         "is_windows" => $is_windows,
     ],
-    "graph_data" => [
-        "users" => makeRunningTotalGraph($database, 'users', 'joined'),
-        "submissions" => makeRunningTotalGraph($database, 'uploads', 'time'),
-        "comments" => makeRunningTotalGraphFromMultipleCommentTables($database),
-        "journals" => makeRunningTotalGraph($database, 'journals', 'date'),
-        "views" => countViews($database),
-    ],
+    "graph_data" => $chartData,
     "time" => [
         "formatted_date" => date("F j, Y", $date),
         "relative_days" => round((time() - $date) / 60 / 60 / 24), // we want the total number of days,

@@ -236,7 +236,7 @@ if (!BLUFF_CLI) {
 
     if (
         $orange->isChazizSquareBracketInstance() &&
-        ($orange->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB")
+        ($orange->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB") // online safety act
     ) {
         http_response_code(451);
         echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);

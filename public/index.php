@@ -148,7 +148,7 @@ if (isset($path[1]) && $path[1] != '') {
             'interactions' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/interactions.php'),
             'invite_keys' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/invite_keys.php'),
             'ip_bans' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/ip_bans.php'),
-            default => Utilities::redirect('/admin/overview/'),
+            default => Utilities::redirect('/dashboard/overview'),
         },
         'debug' => match ($path[2] ?? null) {
             //null, '', 'index' => require(BLUFF_PRIVATE_PATH . '/pages/debug/index.php'),
