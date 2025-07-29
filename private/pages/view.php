@@ -41,6 +41,12 @@ $trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new
 
 $id = $path[2] ?? null;
 
+if ($orange->isFulpTube()) {
+    if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
+        Utilities::notifyBanner("This original FulpTube video no longer exists.", "/");
+    }
+}
+
 $upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
