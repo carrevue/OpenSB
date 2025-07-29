@@ -324,7 +324,7 @@ class Utilities
         return $error;
     }
 
-    public static function convertBytes($value, $decimals = 0)
+    public static function formatBytes($value, $decimals = 0)
     {
         if (is_numeric($value)) {
             $bytes = $value;
@@ -374,15 +374,9 @@ class Utilities
         return ($localOptions["skin"] == "finalium" || $localOptions["skin"] == "bootstrap");
     }
 
-    public static function calculatePercentage($number, $percent, $total): float|int
+    public static function calculatePercentage(float $number, float $percent, float $total): string
     {
-        // if the upload has no "dislikes", return 100.
-        if ($total == 0 or $number == 0) {
-            return 100;
-        } else {
-            // return the like-to-dislike ratio.
-            return ($percent / $total) * $number * 100;
-        }
+        return $total == 0 ? '0%' : number_format(($percent / $total) * $number * 100, 2) . '%';
     }
 
     public static function replaceSquareBracketWithFulpTube($input)

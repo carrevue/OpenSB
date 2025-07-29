@@ -197,5 +197,5 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 }
 
 echo $twig->render('upload.twig', [
-    'limit' => (Utilities::convertBytes(ini_get('upload_max_filesize'))),
+    'limit' => (Utilities::formatBytes(ini_get('upload_max_filesize'))),
 ]);

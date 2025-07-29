@@ -35,7 +35,11 @@
                     <li>Operating System: {{ data.system.os_name }}</li>
                 {% endif %}
                 <li>Uname: <code>{{ data.system.uname }}</code></li>
+                {% if not data.system.is_windows %}
                 <li>Uptime: <code>{{ data.system.uptime }}</code></li>
+                <li>Storage: {{ data.system.disk.free }} free of {{ data.system.disk.total }} ({{ data.system.disk.percentage }} used)</li>
+                <li>Instance size: {{ data.system.disk.instance_size }}</li>
+                {% endif %}
             </ul>
         </div>
         <hr>

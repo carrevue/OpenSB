@@ -38,10 +38,18 @@ if ($orange->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
 }
 
+function get_folder_size($path)
+{
+    $path = escapeshellarg($path);
+    $command = "du -sb $path | cut -f1";
+    $size = shell_exec($command);
+    return (int)$size;
+}
+
 /**
  * Based on the implementation in principia-web. Originally, this was 5 slightly different duplicated functions.
  */
-function makeRunningTotalGraph($database, $table, $orderfield): array
+function make_running_total_graph($database, $table, $orderfield): array
 {
     $database->query("SET @runningTotal = 0;");
     return $database->fetchArray($database->query(
@@ -55,7 +63,7 @@ function makeRunningTotalGraph($database, $table, $orderfield): array
     ));
 }
 
-function makeRunningTotalGraphFromMultipleCommentTables($database): array
+function make_running_total_graph_from_comment_tables($database): array
 {
     $database->query("SET @runningTotal = 0;");
     return $database->fetchArray($database->query(
@@ -78,7 +86,7 @@ function makeRunningTotalGraphFromMultipleCommentTables($database): array
     ));
 }
 
-function countViews($database): array
+function make_running_total_graph_from_views($database): array
 {
     return $database->fetchArray($database->query(
         "SELECT 
@@ -130,11 +138,11 @@ foreach ($thingsToCount as $table => $uiName) {
     ];
 }
 
-$user_graph = makeRunningTotalGraph($database, 'users', 'joined');
-$upload_graph = makeRunningTotalGraph($database, 'uploads', 'time');
-$comment_graph = makeRunningTotalGraphFromMultipleCommentTables($database);
-$journal_graph = makeRunningTotalGraph($database, 'journals', 'date');
-$view_graph = countViews($database);
+$user_graph = make_running_total_graph($database, 'users', 'joined');
+$upload_graph = make_running_total_graph($database, 'uploads', 'time');
+$comment_graph = make_running_total_graph_from_comment_tables($database);
+$journal_graph = make_running_total_graph($database, 'journals', 'date');
+$view_graph = make_running_total_graph_from_views($database);
 
 // chart.js data
 $chartData = [
@@ -267,7 +275,7 @@ $unbannedRatio = Utilities::calculatePercentage(1, $unbannedUsers, $totalUsers);
 
 $results[] = [
     'name' => "Unbanned user percentage",
-    'value' => round($unbannedRatio) . "%",
+    'value' => $unbannedRatio,
 ];
 
 // undeleted-to-deleted upload ratio
@@ -282,7 +290,7 @@ $undeletedRatio = Utilities::calculatePercentage(1, $undeletedUploads, $totalUpl
 
 $results[] = [
     'name' => "Non-deleted upload percentage",
-    'value' => round($undeletedRatio) . "%",
+    'value' => $undeletedRatio,
 ];
 
 $is_windows = str_starts_with(php_uname(), "Windows") ?? false;
@@ -310,11 +318,30 @@ if (file_exists('/etc/os-release')) {
 // of getting the uptime of a windows system through php without relying on systemfo which is slow as shit or possibly
 // fucking around with winmgmts through the unholy com php class. i didnt even know it was possible to interface with
 // windows' ole api via php, what the fuck??? -chaziz 4/15/2025
-
 if (!$is_windows) {
     $uptime = shell_exec('uptime -p');
+
+    $system_directory = '/';
+
+    $disk_total = disk_total_space($system_directory);
+    $disk_free = disk_free_space($system_directory);
+    $disk_used = $disk_total - $disk_free;
+
+    $instance_size = get_folder_size(BLUFF_ROOT_PATH);
+
+    $disk_percentage = Utilities::calculatePercentage(1, $disk_used, $disk_total);
+
+    $disk = [
+        "total" => Utilities::formatBytes($disk_total, 2),
+        "free" => Utilities::formatBytes($disk_free, 2),
+        "used" => Utilities::formatBytes($disk_used, 2),
+        "percentage" => $disk_percentage,
+        "instance_size" => Utilities::formatBytes($instance_size),
+    ];
 } else {
     $uptime = "Unknown";
+
+    $disk = [];
 }
 
 $data = [
@@ -324,6 +351,7 @@ $data = [
         "os_name" => $os_name,
         "uptime" => $uptime,
         "is_windows" => $is_windows,
+        "disk" => $disk,
     ],
     "graph_data" => $chartData,
     "time" => [

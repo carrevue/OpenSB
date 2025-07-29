@@ -339,10 +339,14 @@ if (Utilities::isLegacyFrontend()) {
     $dislikes = $ratings["1"] + $ratings["2"];
     $total = $likes + $dislikes;
 
+    // calculate finalium likesaber
+    $ratio = ($total == 0 || $dislikes == 0)  ? 100
+        : Utilities::calculatePercentage($dislikes, $likes, $total);
+
     $page_data["interactions"]["legacy"] = [
         "likes" => $likes,
         "dislikes" => $dislikes,
-        "ratio" => Utilities::calculatePercentage($dislikes, $likes, $total),
+        "ratio" => $ratio,
         "current_rating" => $current_rating,
     ];
 }
