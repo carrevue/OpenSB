@@ -7,7 +7,7 @@
     <div class="comment-body">
         <div class="comment-author">
             {{ user_link(comment.author) }}
-            <span class="comment-timestamp" title="{{ comment.posted | localize_date('long', 'medium') }}">{{ comment.posted | relative_time }}</span>
+            <span class="comment-timestamp" title="{{ comment.posted | format_date('long', 'medium') }}">{{ comment.posted | relative_time }}</span>
         </div>
         <div class="comment-contents">
             {% if comment.post | trim is not empty %}

@@ -28,15 +28,15 @@
                         <table class="c1">
                             <tbody>
                             <tr>
-                                <td>ID</td>
+                                <td>{{ localize('user_id') }}</td>
                                 <td>{{ user.id }}</td>
                             </tr>
                             <tr>
-                                <td>Username</td>
+                                <td>{{ localize('username') }}</td>
                                 <td>{{ user.name }}</td>
                             </tr>
                             <tr>
-                                <td>Profile name</td>
+                                <td>{{ localize('profile_name') }}</td>
                                 <td>{{ user.name }}</td>
                             </tr>
                             {% if user_data.powerlevel > 2 %}
@@ -46,41 +46,43 @@
                                 <tr>
                             {% endif %}
                             <tr>
-                                <td>Role</td>
+                                <td>{{ localize('user_role') }}</td>
                                 <td>
                                     {% set role = 
-                                        user.powerlevel == 1 ? 'User' :
-                                        user.powerlevel == 2 ? 'Moderator' :
-                                        user.powerlevel == 3 ? 'Administrator' :
-                                        user.powerlevel == 4 ? 'Owner' :
-                                        'Unknown (' ~ user.powerlevel ~ ')'
+                                        user.powerlevel == 1 ? localize('user_role_normal') :
+                                        user.powerlevel == 2 ? localize('user_role_moderator') :
+                                        user.powerlevel == 3 ? localize('user_role_administrator') :
+                                        user.powerlevel == 4 ? localize('user_role_owner') :
+                                        localize('user_role_unknown') ~ ' (' ~ user.powerlevel ~ ')'
                                     %}
                                     {{ role }}
                                 </td>
                             </tr>
                             <tr>
-                                <td>Age/Birthday</td>
-                                <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | localize_date('long', 'none') }}</td>
+                                <td>{{ localize('age') }}/{{ localize('birth_date') }}</td>
+                                <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | format_date('long', 'none') }}</td>
                             </tr>
                             <tr>
-                                <td>Registered</td>
-                                <td>{{ user.joined | localize_date('long', 'medium') }}
+                                <td>{{ localize('registered') }}</td>
+                                <td>{{ user.joined | format_date('long', 'medium') }}
                                     <br>({{ user.birthdate | calculate_age_from(user.joined) }} years old)
-                                    {% if flags.fulptube_account %}<br><small>FulpTube account</small>{% endif %}
+                                    {% if flags.fulptube_account %}
+                                    <br><small>{{ localize('fulptube_account') }}</small>
+                                    {% endif %}
                                 </td>
                             </tr>
                             <tr>
-                                <td>Last seen</td>
-                                <td>{{ user.lastview | localize_date('long', 'medium') }}</td>
+                                <td>{{ localize('last_seen') }}</td>
+                                <td>{{ user.lastview | format_date('long', 'medium') }}</td>
                             </tr>
                             {% if not is_chaziz_sb %}
                             <tr>
-                                <td>Comfortable rating</td>
+                                <td>{{ localize('comfortable_rating') }}</td>
                                 <td>{{ user.comfortable_rating }}</td>
                             </tr>
                             {% endif %}
                             <tr>
-                                <td>User link color</td>
+                                <td>{{ localize('user_link_color') }}</td>
                                 <td style="background:{{ user.customcolor }};"></td>
                             </tr>
                             </tbody>
@@ -147,7 +149,7 @@
                                             {{ entry.old_name }}
                                         </td>
                                         <td>
-                                            {{ entry.time | localize_date('long', 'medium') }}
+                                            {{ entry.time | format_date('long', 'medium') }}
                                         </td>
                                     </tr>
                                 {% endfor %}

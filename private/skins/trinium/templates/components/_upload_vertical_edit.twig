@@ -1,7 +1,3 @@
-{% if submission.views != 1 %}
-    {% set pluralViews = "s" %}
-{% endif %}
-
 {% if submission.type == 0 %}
     {% set type = "Video" %}
 {% elseif submission.type == 2 %}
@@ -51,7 +47,7 @@
                 </div>
                 <div class="menu menu-upload-edit" id="upload-edit-{{ submission.id }}">
                     <a class="menu-item-button" href="/edit?v={{ submission.id }}">
-                        <span>Edit</span>
+                        <span>{{ localize('edit') }}</span>
                     </a>
                     <a class="menu-item-button" href="/feature?v={{ submission.id }}"
                        onclick="return confirm('Are you sure you want to feature this upload?');">
@@ -59,7 +55,7 @@
                     </a>
                     <a class="menu-item-button" href="/delete?v={{ submission.id }}"
                        onclick="return confirm('Are you sure you want to delete this upload?');">
-                        <span>Delete</span>
+                        <span>{{ localize('delete') }}</span>
                     </a>
                 </div>
             </div>
@@ -67,7 +63,7 @@
         <div class="content-description">
             {{ user_link(submission.author) }}
             <br>
-            {{ submission.views }} view{{ pluralViews }}
+            {{ localize('views', submission.views) }}
             {% if submission.published_originally and submission.original_site %}
                 <span class="text-faded">on {{ submission.original_site }}</span>
             {% endif %}

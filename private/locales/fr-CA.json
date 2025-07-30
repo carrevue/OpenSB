@@ -10,9 +10,13 @@
 
     "welcome_logged_in": "Bienvenue, %s",
     "welcome_logged_out": "Bienvenue sur %s",
+    "welcome_slogan": "Votre contenu, votre narration, votre place sur le Web.",
+    "welcome_its_free": "C'est simple!",
+    "welcome_get_started": "Commencez",
 
-    "stat_followers": "%s abonnés",
-    "stat_views": "%s vues",
+    "followers": "{count, plural, one {# abonné} other {# abonnés}}",
+    "views": "{count, plural, one {# vue} other {# vues}}",
+    "star_ratings": "{count, plural, one {# note} other {# notes}}",
 
     "dashboard": "Panel du personnel",
     "my_profile": "Mon profil",
@@ -35,8 +39,10 @@
     "recent_uploads": "Nouveau",
     "recent_uploads_desc": "Les plus récents publications",
 
-    "following_uploads": "Abonnements",
+    "following": "Abonnements",
     "following_uploads_desc": "Publications par les personnes que vous vous abonnez",
+
+    "best_of_site": "Le meilleur de %s",
 
     "featured_uploads": "En vedette",
     "featured_uploads_desc": "Le favori du personnel",
@@ -48,6 +54,8 @@
     "site_news_desc": "Les nouvelles du site",
 
     "more": "Plus",
+    "edit": "Modifier",
+    "delete": "Supprimer",
 
     "new": "Nouveau",
     "popular": "Populaire",
@@ -69,8 +77,50 @@
     "ip_banned_filed": "Vous êtes banni depuis le %s, cela n'expirera pas.",
     "ip_message": "Votre adresse IP est %s, et le(s) compte(s) lié à cette addresse IP sont: %s",
 
+    "dashboard_lookup": "Recherche (panel du personnel)",
+
+    "user_id": "Identifiant",
+    "username": "Nom d'utilisateur",
+    "profile_name": "Nom du profil",
+    "ip_address": "Adresse IP",
+    "user_role": "Rôle",
+    "age": "Âge",
+    "birth_date": "Date de naissance",
+    "registered": "Inscrit",
+    "fulptube_account": "Compte FulpTube",
+    "last_seen": "Dernièrement vue",
+    "comfortable_rating": "Mode de filtrage",
+    "user_link_color": "Couleur d'utilisateur",
+
+    "profile_featured": "Épinglé",
+
+    "user_role_unknown": "Inconnu",
+    "user_role_normal": "Normal",
+    "user_role_moderator": "Modérateur",
+    "user_role_administrator": "Administrateur",
+    "user_role_owner": "Propriétaire",
+
+    "as_domain": "Domaine du FAI",
+    "as_name": "FAI",
+    "asn": "NSA",
+    "continent": "Continent",
+    "continent_code": "Code du continent",
+    "country": "Pays",
+    "country_code": "Code du pays",
+
     "powered_by": "Propulsé par",
     "footer_copyright": "© %s Bluffingo Development",
+
+    "staff_title": "Le personnel de %s",
+    "staff_owners": "Les propriétaires",
+    "staff_administrators": "Les administrateurs",
+    "staff_moderators": "Les modérateurs",
+
+    "version_intro": "Ce site web est propulsé par OpenSB. © %s %s et autres contributeurs.",
+    "version_agpl": "OpenSB est un logiciel libre, vous pouvez le redsistribuer ou le modifier selon les termes de la Licence publique générale GNU Affero, telle que publiée par la Free Software Foundation; soit la version 3 de la Licence, ou (à votre convenance) toute version ultérieure.",
+    "version_no_warranty": "OpenSB est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de COMMERCIALISABILITÉ ou D'ADÉQUATION À UN USAGE PARTICULIER. Voir la Licence publique générale GNU Affero pour plus de détails.",
+    "version_license_notice": "Vous devriez avoir reçu <a href=\"%s\">une copie de la Licence publique générale GNU Affero</a> avec ce programme, sinon, <a href=\"%s\">lisez-la en ligne</a>.",
+    "version_github": "Le code source d'OpenSB est disponible <a href=\"%s\">sur GitHub</a>.",
 
     "version": "Version",
     "change_theme": "Thème",

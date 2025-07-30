@@ -1,7 +1,3 @@
-{% if submission.views != 1 %}
-    {% set pluralViews = "s" %}
-{% endif %}
-
 {% if submission.type == 0 %}
     {% set type = "Video" %}
 {% elseif submission.type == 2 %}
@@ -49,7 +45,7 @@
         <div class="content-description">
             {{ user_link(submission.author) }}
             <br>
-            {{ submission.views }} view{{ pluralViews }}
+            {{ localize('views', submission.views) }}
             • {{ time }}
             {% if submission.published_originally and submission.original_site %}
                 <span class="text-faded">on {{ submission.original_site }}</span>

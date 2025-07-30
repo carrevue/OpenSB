@@ -8,7 +8,13 @@
         </li>
     {% endfor %}
     {% if sidebar_following_users() %}
-        <li class="list-header">{% if is_user_logged_in %}Following{% else %}Best of {{ website_branding.name }}{% endif %}</li>
+        <li class="list-header">
+            {% if is_user_logged_in %}
+                {{ localize('following') }}
+            {% else %}
+                {{ localize('best_of_site', website_branding.name )}}
+            {% endif %}
+        </li>
         {% for key, link in sidebar_following_users() %}
             <li class="list-link">
                 <a href="/user/{{ link.username }}" {% if page_name == "user " ~ link.username %}class="selected"{%endif %}>

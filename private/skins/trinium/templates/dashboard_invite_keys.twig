@@ -32,13 +32,13 @@
                         </td>
                         <td>
                             {{ inviteKey.generated_by.name }}
-                            <small>({{ inviteKey.generated_time | localize_date('long', 'none') }}
+                            <small>({{ inviteKey.generated_time | format_date('long', 'none') }}
                                 / {{ inviteKey.generated_time | relative_time }})</small>
                         </td>
                         <td>
                             {% if inviteKey.claimed_by %}
                                 {{ inviteKey.claimed_by.name }}
-                                <small>({{ inviteKey.claimed_time | localize_date('long', 'none') }}
+                                <small>({{ inviteKey.claimed_time | format_date('long', 'none') }}
                                     /{{ inviteKey.claimed_time | relative_time }})</small>
                             {% else %}
                                 Unclaimed

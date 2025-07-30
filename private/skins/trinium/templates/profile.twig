@@ -24,7 +24,7 @@
 {% block content %}
     {% if data.ban_data %}
         <div class="banner banner-secondary">
-            This user was banned on {{ data.ban_data.time | localize_date('long', 'medium') }} for the following reason:
+            This user was banned on {{ data.ban_data.time | format_date('long', 'medium') }} for the following reason:
             {{ data.ban_data.reason }}
         </div>
     {% endif %}
@@ -49,7 +49,7 @@
                                         </button>
                                     {% else %}
                                         <a href="/settings">
-                                            Edit
+                                            {{ localize('edit') }}
                                         </a>
                                     {% endif %}
                                 {% endif %}
@@ -83,16 +83,16 @@
                     {% endif %}
                     <ul class="unstyled-list">
                         <li>
-                            Joined: {{ data.joined | relative_time() }}
+                            {{ localize('registered') }}: {{ data.joined | relative_time() }}
                         </li>
                         <li>
-                            Last seen: {{ data.connected | relative_time() }}
+                            {{ localize('last_seen') }}: {{ data.connected | relative_time() }}
                         </li>
                     </ul>
                     {% if user_is_authenticated_admin %}
                         <hr>
                         {#<div class="">#}
-                        <a href="/dashboard/users/{{ data.username }}">Admin Check</a>
+                        <a href="/dashboard/users/{{ data.username }}">{{ localize('dashboard_lookup') }}</a>
                         {#</div>#}
                     {% endif %}
                 </div>
@@ -121,7 +121,7 @@
             <div class="section">
                 <div class="content-box basic-box">
                     <div class="section-header">
-                        <h2 class="section-title">Featured</h2>
+                        <h2 class="section-title">{{ localize('profile_featured') }}</h2>
                     </div>
                     {% include('/components/_upload_vertical.twig') with {'submission': data.featured_submission} %}
                 </div>

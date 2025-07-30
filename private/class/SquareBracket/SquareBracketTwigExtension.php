@@ -107,7 +107,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('submission_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
             new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
             new TwigFunction('localize', [$this, 'localize']),
-            new TwigFunction('truncate_number', [$this, 'truncateNumber']),
+            //new TwigFunction('truncate_number', [$this, 'truncateNumber']),
             new TwigFunction('convert_time', [$this, 'convertTime']),
             new TwigFunction('get_user_data_cache', [$this, 'getUserDataCache']),
             // BOOTSTRAP/FINALIUM FRONTEND COMPATIBILITY (DO NOT USE THIS ON TRINIUM)
@@ -124,9 +124,14 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFilter('calculate_age', [Utilities::class, 'calculateAge']),
             new TwigFilter('calculate_age_from', [Utilities::class, 'calculateAgeFrom']),
 
-            new TwigFilter('localize_date', function ($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null) {
+            new TwigFilter('format_date', function ($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null) {
                 $localization = $this->orange->getLocalizationClass();
                 return $localization->formatDate($date, $dateFormat, $timeFormat, $pattern);
+            }, ['is_safe' => ['html']]),
+
+            new TwigFilter('format_number', function ($number) {
+                $localization = $this->orange->getLocalizationClass();
+                return $localization->formatNumber($number);
             }, ['is_safe' => ['html']]),
 
             // Markdown function for non-inline text, sanitized.
@@ -234,22 +239,13 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
+    /*
     function truncateNumber($number)
     {
-        if ($number < 1000) {
-            return (string)$number;
-        }
-
-        $suffixes = ['', 'k', 'm', 'b', 't'];
-        $suffixIndex = 0;
-
-        while ($number >= 1000 && $suffixIndex < count($suffixes) - 1) {
-            $number /= 1000;
-            $suffixIndex++;
-        }
-
-        return number_format($number, ($number >= 100 && $number < 1000) ? 0 : 2) . $suffixes[$suffixIndex];
+        $localization = $this->orange->getLocalizationClass();
+        return $localization->truncateNumber($number);
     }
+    */
 
     /**
      * Relative time function.

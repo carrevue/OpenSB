@@ -24,6 +24,8 @@ namespace SquareBracket;
 use Arokettu\Pseudolocale\Pseudolocale;
 use Exception;
 use IntlDateFormatter;
+use MessageFormatter;
+use NumberFormatter;
 
 class Localization
 {
@@ -80,8 +82,8 @@ class Localization
         $locale = $this->isPsuedo ? 'en-US' : $this->locale;
         $formatter = new IntlDateFormatter(
             $locale,
-            $this->convertPattern($dateFormat),
-            $this->convertPattern($timeFormat),
+            $this->convertDateFormatterPattern($dateFormat),
+            $this->convertDateFormatterPattern($timeFormat),
             $date->getTimezone(),
             IntlDateFormatter::GREGORIAN,
             $pattern
@@ -90,7 +92,56 @@ class Localization
         return $formatter->format($date);
     }
 
-    private function convertPattern($pattern)
+    public function formatNumber($number)
+    {
+        $formatter = new NumberFormatter($this->isPsuedo ? 'en-US' : $this->locale, NumberFormatter::DECIMAL);
+        return $formatter->format($number);
+    }
+
+    /*
+    public function truncateNumber($number)
+    {
+        $precision = 2;
+
+        if ($number < 1000) {
+            $formatter = new NumberFormatter($this->isPsuedo ? 'en-US' : $this->locale, NumberFormatter::DECIMAL);
+            return $formatter->format($number);
+        } else {
+            $suffixes = ['', 'k', 'm', 'b', 't'];
+            $suffixIndex = 0;
+
+            while ($number >= 1000 && $suffixIndex < count($suffixes) - 1) {
+                $number /= 1000;
+                $suffixIndex++;
+            }
+
+            $formatter = new NumberFormatter($this->isPsuedo ? 'en-US' : $this->locale, NumberFormatter::DECIMAL);
+
+            $should_show_decimals = $number >= 100 && $number < 1000;
+
+            $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $should_show_decimals ? 0 : $precision);
+
+            return $formatter->format($number) . $suffixes[$suffixIndex];
+        }
+    }
+    */
+
+    public function translate($key, ...$args)
+    {
+        if ($this->isPsuedo) {
+            return $this->translatePsuedo($key, ...$args);
+        }
+
+        $message = $this->messages[$key] ?? $this->messages_fallback[$key] ?? "[$key]";
+
+        if ($args && array_keys($args) === range(0, count($args) - 1)) {
+            $args = ['count' => $args[0]];
+        }
+
+        return $this->formatMessage($message, $args);
+    }
+
+    private function convertDateFormatterPattern($pattern)
     {
         if (is_int($pattern)) {
             return $pattern;
@@ -108,34 +159,6 @@ class Localization
         return $formats[strtolower($pattern)] ?? IntlDateFormatter::MEDIUM;
     }
 
-    public function translate($key, ...$args)
-    {
-        if ($this->isPsuedo) {
-            return $this->translatePsuedo($key, ...$args);
-        } else {
-            if (!isset($this->messages[$key]) && !isset($this->messages_fallback[$key])) {
-                if ($args) {
-                    return "[$key] (" . implode(', ', $args) . ")";
-                } else {
-                    return "[$key]";
-                }
-            }
-
-
-            if (isset($this->messages[$key]) && $this->messages[$key]) {
-                $message = $this->messages[$key];
-            } else {
-                $message = $this->messages_fallback[$key];
-            }
-
-            foreach ($args as $arg) {
-                $message = preg_replace('/%s/', $arg, $message, 1);
-            }
-
-            return $message;
-        }
-    }
-
     private function translatePsuedo($key, ...$args)
     {
         if (!isset($this->messages[$key])) {
@@ -149,6 +172,27 @@ class Localization
         $message = $this->messages[$key];
 
         // TODO: make this not use a dependency. -chaziz 1/16/2025
-        return Pseudolocale::pseudolocalize(vsprintf($message, $args));
+        return Pseudolocale::pseudolocalize($args ? vsprintf($message, $args) : $message);
+    }
+
+    private function formatMessage(string $message, array $args): string
+    {
+        if (empty($args)) {
+            return $message;
+        }
+
+        // if icu string, use MessageFormatter.
+        if (str_contains($message, '{')) {
+            $locale = $this->isPsuedo ? 'en-US' : $this->locale;
+            $formatter = new MessageFormatter($locale, $message);
+            $result = $formatter->format($args);
+            return $result !== false ? $result : $message;
+        }
+
+        foreach ($args as $arg) {
+            $message = preg_replace('/%s/', $arg, $message, 1);
+        }
+
+        return $message;
     }
 }

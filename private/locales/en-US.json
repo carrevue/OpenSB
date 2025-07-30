@@ -10,9 +10,13 @@
 
     "welcome_logged_in": "Welcome, %s",
     "welcome_logged_out": "Welcome to %s",
+    "welcome_slogan": "Your content, your narration, your niche on the web.",
+    "welcome_its_free": "It's free!",
+    "welcome_get_started": "Get started",
 
-    "stat_followers": "%s followers",
-    "stat_views": "%s views",
+    "followers": "{count, plural, one {# follower} other {# followers}}",
+    "views": "{count, plural, one {# view} other {# views}}",
+    "star_ratings": "{count, plural, one {# rating} other {# ratings}}",
 
     "dashboard": "Dashboard",
     "my_profile": "My profile",
@@ -35,8 +39,10 @@
     "recent_uploads": "Recent",
     "recent_uploads_desc": "Most recent uploads",
 
-    "following_uploads": "Following",
+    "following": "Following",
     "following_uploads_desc": "From users you follow",
+
+    "best_of_site": "Best of %s",
 
     "featured_uploads": "Featured",
     "featured_uploads_desc": "Curated by staff",
@@ -48,6 +54,8 @@
     "site_news_desc": "Site announcements",
 
     "more": "More",
+    "edit": "Edit",
+    "delete": "Delete",
 
     "new": "New",
     "popular": "Popular",
@@ -69,6 +77,29 @@
     "ip_banned_filed": "Your ban was filed on %s, and won't expire.",
     "ip_message": "Your IP is %s, and the account(s) linked to this IP are: %s",
 
+    "dashboard_lookup": "Lookup",
+
+    "user_id": "ID",
+    "username": "Username",
+    "profile_name": "Profile name",
+    "ip_address": "IP address",
+    "user_role": "Role",
+    "age": "Age",
+    "birth_date": "Birth date",
+    "registered": "Registered",
+    "fulptube_account": "FulpTube account",
+    "last_seen": "Last seen",
+    "comfortable_rating": "Comfortable rating",
+    "user_link_color": "User link color",
+
+    "profile_featured": "Featured",
+
+    "user_role_unknown": "Unknown",
+    "user_role_normal": "Normal",
+    "user_role_moderator": "Moderator",
+    "user_role_administrator": "Administrator",
+    "user_role_owner": "Owner",
+
     "as_domain": "ISP Domain",
     "as_name": "ISP",
     "asn": "ASN",
@@ -79,6 +110,17 @@
 
     "powered_by": "Powered by",
     "footer_copyright": "© %s Bluffingo Development",
+
+    "staff_title": "%s Staff",
+    "staff_owners": "Owners",
+    "staff_administrators": "Administrators",
+    "staff_moderators": "Moderators",
+
+    "version_intro": "This website is powered by OpenSB. © %s %s and other contributors.",
+    "version_agpl": "OpenSB is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.",
+    "version_no_warranty": "OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.",
+    "version_license_notice": "You should have received <a href=\"%s\">a copy of the GNU Affero General Public License</a> along with this program. If not, see <a href=\"%s\">http://www.gnu.org/licenses/</a>.",
+    "version_github": "The source code to OpenSB is available <a href=\"%s\">on GitHub</a>.",
 
     "version": "Version",
     "change_theme": "Change theme",

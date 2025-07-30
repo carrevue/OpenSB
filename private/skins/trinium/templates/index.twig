@@ -52,23 +52,23 @@
                     </div>
                     <div class="jumbotron-logged-in-text">
                         <h1>{{ localize('welcome_logged_in', user_data.title) }}</h1>
-                        <div>@{{ user_data.name }} • {{ user_stat_data.followers }} follower{{ pluralSubscribers }}
-                            • {{  user_stat_data.views }} view{{ pluralViews }}</div>
+                        <div>@{{ user_data.name }} • {{ localize('followers', user_stat_data.followers) }}
+                            • {{ localize('views', user_stat_data.views) }}</div>
                     </div>
                 {% else %}
                     <h1>{{ localize('welcome_logged_out', website_branding.name) }}</h1>
                     {% if is_chaziz_sb %}
-                        <p>Your content, your narration, your niche on the web.</p>
+                        <p>{{ localize('welcome_slogan') }}</p>
                     {% endif %}
                     <div class="jumbotron-get-started">
-                        <a href="/register" class="button button-warning">Get started</a>
-                        <span>← It's free!</span>
+                        <a href="/register" class="button button-warning">{{ localize('welcome_get_started') }}</a>
+                        <span>← {{ localize('welcome_its_free') }}</span>
                     </div>
                 {% endif %}
             </div>
             <div class="jumbotron-right-container">
                 <div class="jumbotron-right-date">
-                    {{ date() | localize_date('long', 'none') }}
+                    {{ date() | format_date('long', 'none') }}
                 </div>
                     <div class="jumbotron-right-buttons">
                         <div class="tabs homepage">
