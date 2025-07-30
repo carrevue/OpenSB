@@ -48,7 +48,7 @@
                         <select id="locale" name="locale" class="form-submit">
                             {% for locale in locales %}
                                 <option value="{{ locale.id }}"
-                                        {% if skin_theme_value == current_skin ~ "," ~ current_theme %} selected{% endif %}>
+                                        {% if options.locale == locale.id %} selected{% endif %}>
                                     {{ locale.name }}
                                 </option>
                             {% endfor %}
