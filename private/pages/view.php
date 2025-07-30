@@ -41,7 +41,7 @@ $id = $path[2] ?? null;
 
 if ($orange->isFulpTube()) {
     if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
-        Utilities::notifyBanner("This original FulpTube video no longer exists.", "/");
+        Utilities::notifyBanner("notify_original_fulptube_video", "/");
     }
 }
 
@@ -51,16 +51,16 @@ $upload = new UploadData($database, $id);
 $takedown = $upload->getTakedown();
 if ($takedown && !$auth->userHasRole(UserRoleEnum::Administrator)) {
     // go back to homepage with a notification
-    Utilities::notifyBanner("This upload has been taken down.", "/");
+    Utilities::notifyBanner("notify_taken_down_upload", "/");
 }
 
 if ($upload->isDeleted()) {
-    Utilities::notifyBanner("This upload has been deleted.", "/");
+    Utilities::notifyBanner("notify_deleted_upload", "/");
 }
 
 $data = $upload->getData();
 if (!$data) {
-    Utilities::notifyBanner("This upload does not exist.", "/");
+    Utilities::notifyBanner("notify_invalid_upload", "/");
 }
 
 $tagBlacklist = $auth->getUserTagBlacklist();
@@ -71,9 +71,9 @@ if (isset($data["tags"])) {
         foreach ($decodedTags as $tag) {
             if (in_array($tag, $tagBlacklist)) {
                 if ($auth->isUserLoggedIn()) {
-                    Utilities::notifyBanner("This upload contains tags you've blacklisted.", "/");
+                    Utilities::notifyBanner("notify_upload_tag_blacklist_logged_in", "/");
                 } else {
-                    Utilities::notifyBanner("This upload contains tags blacklisted by default.", "/");
+                    Utilities::notifyBanner("notify_upload_tag_blacklist_logged_out", "/");
                 }
             }
         }
@@ -83,7 +83,7 @@ if (isset($data["tags"])) {
 $author = new UserData($database, $data["author"]);
 
 if ($author->isUserBanned() && !$auth->userHasRole(UserRoleEnum::Administrator)) {
-    Utilities::notifyBanner("This upload has been taken down.", "/");
+    Utilities::notifyBanner("notify_taken_down_upload", "/");
 }
 
 $tags = $upload->getTags();
@@ -97,7 +97,7 @@ $followed = Utilities::isFollowingUser($data["author"]);
 $flags = $upload->getUploadFlagsArray();
 
 if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to view this upload.", "/login");
+    Utilities::notifyBanner("notify_login_required_view_upload", "/login");
 }
 
 // this is awkward
@@ -105,7 +105,7 @@ $upload_rating = UploadRatingEnum::fromString($data["rating"]);
 $comfortable_rating = UploadRatingEnum::fromString($auth->getUserData()["comfortable_rating"]);
 
 if ($upload_rating->value > $comfortable_rating->value) {
-    Utilities::notifyBanner("Access to mature-rated uploads is restricted.", "/");
+    Utilities::notifyBanner("notify_cannot_access_mature_upload", "/");
 }
 
 $ip = Utilities::getIpAddress();

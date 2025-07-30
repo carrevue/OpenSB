@@ -29,15 +29,15 @@ use SquareBracket\Utilities;
 use SquareBracket\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("You do not have permission to access this page.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
+    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
-    Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
+    Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
 $id = $path[3] ?? null;
@@ -47,7 +47,7 @@ $upload = new UploadData($database, $id);
 $data = $upload->getData();
 
 if (!$data) {
-    Utilities::notifyBanner("This upload does not exist.", "/dashboard/");
+    Utilities::notifyBanner("notify_invalid_upload", "/dashboard/");
 }
 
 $flags = $upload->getUploadFlagsArray();
@@ -77,7 +77,7 @@ if (isset($_POST['flagsubmit'])) {
         [$flags, $id]
     );
     Utilities::notifyBanner(
-        "Your upload's details have been successfully modified.",
+        "notify_successfully_modified_upload",
         "/dashboard/uploads/" . $id,
         "success"
     );

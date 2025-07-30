@@ -44,15 +44,15 @@ $supportedAudioFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"]; //
 // -chaziz 4/20/2025
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 if ($auth->getUserBanData()) {
-    Utilities::notifyBanner("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($orange->isLockdownEnabled()) {
-    Utilities::notifyBanner("The ability to upload has been disabled.", "/");
+    Utilities::notifyBanner("notify_upload_disabled", "/");
 }
 
 if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
@@ -72,7 +72,7 @@ if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
 
     if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$orange->isDebug()) {
         $waitTimeMinutes = $rateLimit / 60;
-        Utilities::notifyBanner("Please wait at least {$waitTimeMinutes} minutes before uploading again.", "/");
+        Utilities::notifyBanner("notify_upload_ratelimit", "/", "warning", [$waitTimeMinutes]);
     }
 }
 
@@ -170,9 +170,9 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
                 discord_webhook_notify($orange, $new, $title, $description, $auth);
             }
 
-            Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
+            Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
         } else {
-            Utilities::notifyBanner("There is a problem with file permissions and/or PHP on this instance.", "/upload");
+            Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
         }
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
         $orange->getStorageClass()->processImageUpload($temp_name, $new);
@@ -188,11 +188,11 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             discord_webhook_notify($orange, $new, $title, $description, $auth);
         }
 
-        Utilities::notifyBanner("Your upload has been posted.", "/view/" . $new, "success");
+        Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
     } elseif (in_array(strtolower($ext), $supportedAudioFormats, true)) { // MUSIC
-        Utilities::notifyBanner("Audio uploading will be implemented at a later date.", "/upload");
+        Utilities::notifyBanner("notify_upload_audio_unimplemented", "/upload");
     } else {
-        Utilities::notifyBanner("This file format is not supported.", "/upload");
+        Utilities::notifyBanner("notify_invalid_format", "/upload");
     }
 }
 

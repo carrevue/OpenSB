@@ -33,7 +33,7 @@ use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
 if (!$orange->isAccountRegistrationEnabled()) {
-    Utilities::notifyBanner("The ability to register has been disabled.", "/");
+    Utilities::notifyBanner("notify_register_disabled", "/");
 }
 
 $captcha = $orange->returnCaptchaSettings();
@@ -46,7 +46,7 @@ $captcha = $orange->returnCaptchaSettings();
 $ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress());
 
 if (str_contains($ipcheck, "<appears>yes</appears>") && !$orange->isDebug()) {
-    Utilities::notifyBanner("Your IP address appears to be suspicious.", "/");
+    Utilities::notifyBanner("notify_register_shady_ip", "/");
 }
 
 $enableInviteKeys = $orange->isInviteKeysEnabled();
@@ -137,7 +137,7 @@ if (isset($_POST['registersubmit'])) {
         try {
             $token = bin2hex(random_bytes(32));
         } catch (RandomException) {
-            Utilities::notifyBanner("An error occurred while generating your token. Please try again.", "/register");
+            Utilities::notifyBanner("notify_token_generation_fail", "/register");
         }
 
         $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);

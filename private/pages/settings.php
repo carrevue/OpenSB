@@ -30,12 +30,12 @@ use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 // we shouldn't let banned users change settings.
 if ($auth->getUserBanData()) {
-    Utilities::notifyBanner("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 // check if this user has an entry in the profile customization table
@@ -101,7 +101,7 @@ if (isset($_POST['save'])) {
                 try {
                     $new_token = bin2hex(random_bytes(32));
                 } catch (RandomException $e) {
-                    Utilities::notifyBanner("An error occurred while generating your token. Please try again.", "/settings");
+                    Utilities::notifyBanner("notify_token_generation_fail", "/settings");
                 }
 
                 $database->query(
@@ -109,7 +109,7 @@ if (isset($_POST['save'])) {
                     [password_hash($pass, PASSWORD_DEFAULT), $new_token, $auth->getUserID()]
                 );
 
-                Utilities::notifyBanner("Your password has been changed.", "/login");
+                Utilities::notifyBanner("notify_password_changed", "/login");
             } else {
                 $error .= " The new passwords aren't identical.";
             }
@@ -249,14 +249,14 @@ if (isset($_POST['save'])) {
         }
 
         if ($username_changed) {
-            // avoids "This user does not exist." error since $auth by this point still uses outdated data.
+            // avoids "notify_invalid_user" error since $auth by this point still uses outdated data.
             // poor design? pretty much, yea. -chaziz 6/18/2024
             $url = "/user/" . $new_username;
         } else {
             $url = "/user/" . $auth->getUserData()["name"];
         }
 
-        Utilities::notifyBanner("Your settings have been successfully updated.", $url, "success");
+        Utilities::notifyBanner("notify_successfully_updated_settings", $url, "success");
     } else {
         Utilities::notifyBanner($error, "/settings");
     }

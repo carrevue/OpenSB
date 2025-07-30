@@ -139,7 +139,7 @@ class SquareBracket
                 }
 
                 $this->setOptionCookie($this->options);
-                Utilities::notifyBanner("The Biscuit frontend is no longer available.", null, "primary");
+                Utilities::notifyBanner("notify_frontend_no_longer_available", null, "primary", ["Biscuit"]);
             }
         } else {
             $this->setOptionCookie($this->options);

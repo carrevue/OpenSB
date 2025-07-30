@@ -51,7 +51,7 @@ if ($user) {
     // TODO: handle old names
     $id = Utilities::usernameToUserID($database, $user);
     if (!$id) {
-        Utilities::notifyBanner("This user does not exist.", "/");
+        Utilities::notifyBanner("notify_invalid_user", "/");
     }
     $submissions = $submission_query->query($order, $limit, "v.author = ?", [$id]);
     $submission_count = $submission_query->count("v.author = ?", [$id]);

@@ -27,11 +27,11 @@ use SquareBracket\Utilities;
 use SquareBracket\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("You do not have permission to access this page.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
-    Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
+    Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
 // yes Stupid Shit!!!!!!!!!!!!!! Epic!!!!!!! -chaziz 8/23/2024
@@ -42,8 +42,7 @@ if (!isset($logindata["admin_password"])) {
     $new_pass = Utilities::generateRandomString(24);
     $database->query("UPDATE users SET admin_password = ? WHERE name = ?", [password_hash($new_pass, PASSWORD_DEFAULT), $auth->getUserData()["name"]]);
     $_SESSION["SB_STAFF_AUTHED"] = true;
-    Utilities::notifyBanner("Welcome! Your dashboard access password is " . $new_pass .
-        ". Please note it down in a safe and secure place to avoid losing it.", "/dashboard/", "success");
+    Utilities::notifyBanner("notify_dashboard_welcome_first_time", "/dashboard/", "success", [$new_pass]);
 }
 
 if (isset($_POST["loginsubmit"])) {
@@ -56,9 +55,9 @@ if (isset($_POST["loginsubmit"])) {
     if (!$error) {
         if ($logindata && password_verify($password, $logindata['admin_password'])) {
             $_SESSION["SB_STAFF_AUTHED"] = true;
-            Utilities::notifyBanner("Welcome to the dashboard.", "/dashboard/", "success");
+            Utilities::notifyBanner("notify_dashboard_welcome", "/dashboard/", "success");
         } else {
-            Utilities::notifyBanner("Incorrect dashboard access password.", "/dashboard/login");
+            Utilities::notifyBanner("notify_dashboard_login_incorrect", "/dashboard/login");
         }
     }
 }

@@ -31,7 +31,7 @@ use SquareBracket\Utilities;
 $id = ($_GET['v'] ?? null);
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 $submission = new UploadData($database, $id);
@@ -41,22 +41,22 @@ if (!$id) {
 }
 
 if ($auth->getUserBanData() || $submission->getTakedown()) {
-    Utilities::notifyBanner("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 $data = $submission->getData();
 
 if (!$data) {
-    Utilities::notifyBanner("This upload does not exist.", "/");
+    Utilities::notifyBanner("notify_invalid_upload", "/");
 }
 
 if (!$auth->getUserID() == $data["author"]) {
-    Utilities::notifyBanner("This is not your upload.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($database->query(
     "UPDATE users SET featured_submission = ? WHERE id = ?",
     [$data["id"], $auth->getUserID()]
 )) {
-    Utilities::notifyBanner("You have successfully changed your profile's featured upload.", "/user?name=" . $auth->getUserData()["name"], "success");
+    Utilities::notifyBanner("notify_updated_featured_upload", "/user?name=" . $auth->getUserData()["name"], "success");
 }

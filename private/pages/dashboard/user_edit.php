@@ -29,15 +29,15 @@ use SquareBracket\Utilities;
 use SquareBracket\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("You do not have permission to access this page.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
+    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
-    Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
+    Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
 function discord_webhook_notify($orange, $auth, $ban_user, $unbanned)
@@ -66,36 +66,40 @@ if (!$user) {
         header("Location: /dashboard/users/$new_username");
         exit();
     } else {
-        Utilities::notifyBanner("This user does not exist.", "/dashboard/");
+        Utilities::notifyBanner("notify_invalid_user", "/dashboard/");
     }
 }
 
 if (isset($_POST['ban_user'])) {
     // Don't ban non-existent users.
     if (!$database->fetch("SELECT u.name FROM users u WHERE u.name = ?", [$_POST["ban_user"]])) {
-        Utilities::notifyBanner("This user does not exist.", "/dashboard/users/");
+        Utilities::notifyBanner("notify_invalid_user", "/dashboard/users/");
     }
     // Don't ban mods/dashboards.
     if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["powerlevel"] != 1) {
-        Utilities::notifyBanner("This user cannot be banned.", "/dashboard/users/");
+        Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/users/");
     }
     // Check if user is already banned, if not, then ban. Otherwise, unban.
     $id = $database->fetch("SELECT u.id FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["id"];
     if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$id])) {
         $database->query("DELETE FROM user_bans WHERE userid = ?", [$id]);
 
-        discord_webhook_notify($orange, $auth, $_POST["ban_user"], true);
+        if ($orange->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($orange, $auth, $_POST["ban_user"], true);
+        }
 
-        Utilities::notifyBanner("Unbanned " . $_POST["ban_user"] . '.', "/dashboard/users", "success");
+        Utilities::notifyBanner("notify_dashboard_unban_success", "/dashboard/users", "success", [$_POST["ban_user"]]);
     } else {
         $database->query(
             "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
             [$id, "Banned by " . $auth->getUserData()["name"], time()]
         );
 
-        discord_webhook_notify($orange, $auth, $_POST["ban_user"], false);
+        if ($orange->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($orange, $auth, $_POST["ban_user"], false);
+        }
 
-        Utilities::notifyBanner("Banned " . $_POST["ban_user"] . '.', "/dashboard/users", "success");
+        Utilities::notifyBanner("notify_dashboard_ban_success", "/dashboard/users", "success", [$_POST["ban_user"]]);
     }
 }
 

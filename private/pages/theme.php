@@ -39,7 +39,7 @@ if (is_dir($localesPath)) {
             $id = pathinfo($filePath, PATHINFO_FILENAME);
             $locales[] = [
                 'id' => $id,
-                'name' => locale_get_display_name($id, $orange->getLocalOptions()["locale"]),
+                'name' => locale_get_display_name($id, $id),
             ];
         }
     }
@@ -68,7 +68,7 @@ if (isset($_POST['apply'])) {
 
     $orange->setOptionCookie($options);
 
-    Utilities::notifyBanner("Successfully changed your settings.", "/", "success");
+    Utilities::notifyBanner("notify_successfully_updated_options", "/", "success");
 }
 
 echo $twig->render('theme.twig', [

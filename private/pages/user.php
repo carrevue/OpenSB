@@ -55,13 +55,13 @@ if (!$data) {
         header("Location: /user/$new_username");
         exit();
     } else {
-        Utilities::notifyBanner("This user does not exist.", "/");
+        Utilities::notifyBanner("notify_invalid_user", "/");
     }
 }
 
 if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
     if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
-        Utilities::notifyBanner("This user is banned.", "/");
+        Utilities::notifyBanner("notify_banned_user", "/");
     }
 }
 

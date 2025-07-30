@@ -23,7 +23,6 @@ namespace SquareBracket;
 
 use DateTime;
 use Exception;
-use JetBrains\PhpStorm\NoReturn;
 use Random\Randomizer;
 
 /**
@@ -180,10 +179,15 @@ class Utilities
      * @param $message
      * @param $redirect
      * @param string $color
+     * @param array $arg
      */
-    public static function notifyBanner($message, $redirect, string $color = "danger"): void
+    public static function notifyBanner($message, $redirect, string $color = "danger", array $args = []): void
     {
-        $_SESSION["notif_message"] = $message;
+        global $orange;
+
+        $localization = $orange->getLocalizationClass();
+
+        $_SESSION["notif_message"] = $localization->translate($message, ...$args);
         $_SESSION["notif_color"] = $color;
 
         if ($redirect) {
@@ -192,7 +196,7 @@ class Utilities
         }
     }
 
-    #[NoReturn] public static function redirect($url, ...$args): void
+    public static function redirect($url, ...$args): void
     {
         header('Location: ' . sprintf($url, ...$args));
         die();

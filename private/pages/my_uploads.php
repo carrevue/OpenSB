@@ -30,7 +30,7 @@ $type = ($_GET['type'] ?? 'recent');
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 $limit = $database->paginate($page, 20);

@@ -26,19 +26,19 @@ global $orange, $twig, $database, $auth;
 use SquareBracket\Utilities;
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 if ($auth->getUserBanData()) {
-    Utilities::notifyBanner("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($orange->isLockdownEnabled()) {
-    Utilities::notifyBanner("The ability to write journals has been disabled.", "/");
+    Utilities::notifyBanner("notify_write_disabled", "/");
 }
 
 if ($database->result("SELECT COUNT(*) FROM journals WHERE date > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$orange->isDebug()) {
-    Utilities::notifyBanner("Please wait a minute before posting another journal.", "/");
+    Utilities::notifyBanner("notify_write_ratelimit", "/");
 }
 
 if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLoggedIn()) {
@@ -68,7 +68,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         $orange->getDiscordWebhookClass()->newJournalHook($data);
     }
 
-    Utilities::notifyBanner("Your journal has been posted.", "/read/" . $journal_id, "success");
+    Utilities::notifyBanner("notify_write_success", "/read/" . $journal_id, "success");
 }
 
 echo $twig->render('write_journal.twig');

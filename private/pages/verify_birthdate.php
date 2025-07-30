@@ -48,7 +48,7 @@ if (isset($_POST['birthdatesubmit'])) {
     try {
         $dobDateTime = new DateTime($birthdate);
     } catch (DateMalformedStringException $e) {
-        Utilities::notifyBanner("Failed to process birthdate, please verify again.", "/verify_birthdate");
+        Utilities::notifyBanner("notify_birthdate_fail", "/verify_birthdate");
     }
 
     $currentDate = new DateTime();
@@ -62,7 +62,7 @@ if (isset($_POST['birthdatesubmit'])) {
             [$auth->getUserData()["id"], "Failed birthdate verification check / Below 13", time()]
         );
     } else {
-        Utilities::notifyBanner("You have been successfully verified.", false, "success");
+        Utilities::notifyBanner("notify_birthdate_success", false, "success");
     }
     $database->query("UPDATE users SET birthdate = ? WHERE id = ?", [$dobDateTime->format('Y-m-d'), $auth->getUserData()["id"]]);
     header('Location: /index');

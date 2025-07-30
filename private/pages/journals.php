@@ -46,7 +46,7 @@ if ($user) {
         // TODO: handle old names
         $id = Utilities::usernameToUserID($database, $user);
         if (!$id) {
-            Utilities::notifyBanner("This user does not exist.", "/");
+            Utilities::notifyBanner("notify_invalid_user", "/");
         }
         $journal_array = $database->fetchArray($database->query(
             "SELECT j.* FROM journals j WHERE j.author = ? ORDER BY j.date DESC $limit",
@@ -61,7 +61,7 @@ if ($user) {
 
     $data = Utilities::makeJournalArray($database, $journal_array);
 } else {
-    Utilities::notifyBanner("This user does not exist.", "/");
+    Utilities::notifyBanner("notify_invalid_user", "/");
 }
 
 echo $twig->render('journals.twig', [

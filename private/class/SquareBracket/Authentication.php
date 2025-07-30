@@ -95,12 +95,12 @@ class Authentication
                 // old system is left there for compatibility. -chaziz 6/9/2024
                 if ($this->user_data["comfortable_rating"] == "questionable") {
                     $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
-                    Utilities::notifyBanner("Your content filtering settings have been reset to General.", false, "primary");
+                    Utilities::notifyBanner("notify_content_filtering_reset", false, "primary");
                 }
 
                 if ($this->user_data["comfortable_rating"] == "mature" && !$this->isUserOver18()) {
                     $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
-                    Utilities::notifyBanner("Your content filtering settings have been reset to General.", false, "primary");
+                    Utilities::notifyBanner("notify_content_filtering_reset", false, "primary");
                 }
 
                 $this->has_authenticated_as_staff = $_SESSION["SB_STAFF_AUTHED"] ?? null;

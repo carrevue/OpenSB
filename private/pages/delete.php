@@ -34,11 +34,11 @@ $submission = new UploadData($orange->getDatabaseClass(), $id);
 $data = $submission->getData();
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 if ($auth->getUserID() != $data["author"]) {
-    Utilities::notifyBanner("This is not your upload.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($auth->getUserFlags(true)["funniest_shit_ever"]) {
@@ -50,4 +50,4 @@ $database->query("DELETE FROM uploads WHERE video_id = ?", [$id]);
 
 $orange->getStorageClass()->deleteUploadFile($data);
 
-Utilities::notifyBanner("This upload has been successfully deleted.", "/my_uploads", "success");
+Utilities::notifyBanner("notify_successfully_deleted_upload", "/my_uploads", "success");

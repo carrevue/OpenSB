@@ -27,15 +27,15 @@ use SquareBracket\Utilities;
 use SquareBracket\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
-    Utilities::notifyBanner("You do not have permission to access this page.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("Please login using your dashboard access password.", "/dashboard/login");
+    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
-    Utilities::notifyBanner("Please change your skin to Trinium.", "/theme");
+    Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
 $amount = $_GET["amount"] ?? 16;

@@ -111,14 +111,14 @@ function getRequiredData($database, $notice)
 }
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 if (isset($_GET["action"])) {
     if ($_GET["action"] == "clear_all") {
         $database->query("DELETE FROM user_notifications WHERE recipient = ?;", [$auth->getUserID()]);
 
-        Utilities::notifyBanner("Cleared.", "/notices", "success");
+        Utilities::notifyBanner("notify_notifications_cleared", "/notices", "success");
     }
 }
 

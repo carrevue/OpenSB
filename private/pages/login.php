@@ -72,7 +72,7 @@ if (isset($path_username)) {
             'httponly' => false,
             'samesite' => 'Lax',
         ]);
-        Utilities::notifyBanner("Successfully switched to $path_username.", '/', "success");
+        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$path_username]);
     } else {
         Utilities::notifyBanner("You have not logged into this account.", '/');
     }
@@ -88,7 +88,7 @@ if (isset($_POST["loginsubmit"])) {
     if (!$password) $error = true;
 
     if ($auth->isUserLoggedIn() && $username == $auth->getUserData()["name"]) {
-        Utilities::notifyBanner("You've already logged into this account.", "/");
+        Utilities::notifyBanner("notify_login_same_account", "/");
     }
 
     if (!$error) {
@@ -113,7 +113,7 @@ if (isset($_POST["loginsubmit"])) {
                 $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
 
                 if ($ipban || $isBanned) {
-                    Utilities::notifyBanner("This account is banned.", "/login");
+                    Utilities::notifyBanner("notify_login_banned_account", "/login");
                 }
 
                 // if we're logged in, add our current token in an array for account switching purposes.
@@ -171,13 +171,13 @@ if (isset($_POST["loginsubmit"])) {
 
                 Utilities::redirect('./');
             } else {
-                Utilities::notifyBanner("Incorrect credentials.", "/login");
+                Utilities::notifyBanner("notify_login_incorrect", "/login");
             }
         } else {
             Utilities::notifyBanner("There is no account with these credentials.", "/login");
         }
     } else {
-        Utilities::notifyBanner("Please input your credentials.", "/login");
+        Utilities::notifyBanner("notify_login_invalid", "/login");
     }
 }
 

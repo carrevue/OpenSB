@@ -38,7 +38,7 @@ $id = $path[2] ?? null;
 $data = $database->fetch("SELECT j.* FROM journals j WHERE j.id = ?", [$id]);
 
 if (!$data) {
-    Utilities::notifyBanner("This journal does not exist.", "/");
+    Utilities::notifyBanner("notify_invalid_journal", "/");
 }
 
 if ($auth->getUserID() == $data["author"]) {

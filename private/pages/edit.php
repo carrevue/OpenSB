@@ -40,15 +40,15 @@ $data = $submission->getData();
 $flags = $data["flags"];
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 if ($auth->getUserBanData() || $submission->getTakedown()) {
-    Utilities::notifyBanner("You cannot proceed with this action.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($auth->getUserID() != $data["author"]) {
-    Utilities::notifyBanner("This is not your upload.", "/");
+    Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if (isset($_POST['upload'])) {
@@ -87,7 +87,7 @@ if (isset($_POST['upload'])) {
         "UPDATE uploads SET title = ?, description = ?, flags = ? WHERE video_id = ?",
         [$title, $desc, $flags, $id]
     );
-    Utilities::notifyBanner("Your upload's details have been successfully modified.", "/view/" . $id, "success");
+    Utilities::notifyBanner("notify_successfully_modified_upload", "/view/" . $id, "success");
 }
 
 $infoData = [

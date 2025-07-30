@@ -32,7 +32,7 @@ if (!$orange->isIncompleteFeaturesEnabled()) {
 }
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("Please login to continue.", "/login");
+    Utilities::notifyBanner("notify_login_required", "/login");
 }
 
 // fetch data from private_messages table
