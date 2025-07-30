@@ -4,7 +4,21 @@
 
     &.user,
     &.read {
-        margin-top: -5rem;
+        @include responsive('tiny') {
+            margin-top: -1.25rem;
+        }
+
+        @include responsive('small') {
+            margin-top: -2.5rem;
+        }
+
+        @include responsive('medium') {
+            margin-top: -5rem;
+        }
+
+        @include responsive('large') {
+            margin-top: -5rem;
+        }
     }
 }
 

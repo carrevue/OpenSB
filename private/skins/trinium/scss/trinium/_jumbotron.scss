@@ -101,8 +101,27 @@
     }
 
     &.profile-banner {
-        background: #111 center no-repeat;
-        height: 300px;
+        @include responsive('tiny') {
+            background: #111 center no-repeat;
+            background-size: cover;
+            height: 100px;
+        }
+
+        @include responsive('small') {
+            background: #111 center no-repeat;
+            background-size: cover;
+            height: 200px;
+        }
+
+        @include responsive('medium') {
+            background: #111 center no-repeat;
+            height: 300px;
+        }
+
+        @include responsive('large') {
+            background: #111 center no-repeat;
+            height: 300px;
+        }
 
         .jumbotron-container {
             padding-top: $header-height;

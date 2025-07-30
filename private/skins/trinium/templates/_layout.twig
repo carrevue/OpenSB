@@ -116,7 +116,7 @@
     </div>
 {% endif %}
 {% block precontent %}{% endblock %}
-<div class="page">
+<div class="page {% if data.customization %}customized-profile{% endif %}">
     <div class="page-contents">
         <div class="container {{ page_name }} {% if banner_picture %}has-profile-banner{% endif %}">
             {{ include(component('banners')) }}
