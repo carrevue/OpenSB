@@ -126,8 +126,8 @@ foreach ($uploads as $upload) {
         "UPDATE uploads SET views = ? WHERE video_id = ?",
         [round($adjustedViews), $upload["video_id"]]
     );
+}
 
-    if ($orange->isDiscordWebhookEnabled()) {
-        $orange->getDiscordWebhookClass()->recountViewsHook();
-    }
+if ($orange->isDiscordWebhookEnabled()) {
+    $orange->getDiscordWebhookClass()->recountViewsHook();
 }
