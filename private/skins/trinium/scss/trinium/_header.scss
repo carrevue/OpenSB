@@ -4,15 +4,6 @@
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
-        margin: 0 1rem;
-        width: 100%;
-    }
-
-    .header-container-new {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
 
         @include responsive('tiny') {
             margin: 0 1rem;
@@ -40,6 +31,22 @@
 
             @include responsive('medium') {
                 display: none;
+            }
+        }
+
+        .header-hidden-links {
+            margin-right: 0.5em;
+
+            @include responsive('tiny') {
+                display: none;
+            }
+
+            @include responsive('small') {
+                display: none;
+            }
+
+            @include responsive('medium') {
+                display: flex;
             }
         }
     }
@@ -202,11 +209,11 @@
 
     @include responsive('medium') {
         display: block;
-        max-width: 340px;
+        max-width: 320px;
 
         #header-search-input {
-            max-width: 320px;
-            width: 320px; // Shitty Hack
+            max-width: 300px;
+            width: 300px; // Shitty Hack
         }
     }
 

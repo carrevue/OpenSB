@@ -80,7 +80,7 @@ function getRequiredData($database, $notice)
             $journal = $database->fetch("SELECT title FROM journals WHERE id = ?", [$notice["level"]]);
 
             $data["info"] = $comment["comment"];
-            $data["origin"] = $journal["title"];
+            $data["origin"] = $journal["title"] ?? "Unknown journal";
             break;
 
         case NotificationEnum::CommentUpload:

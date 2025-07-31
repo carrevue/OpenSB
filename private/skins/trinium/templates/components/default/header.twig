@@ -1,11 +1,5 @@
-{% if actually_show_sidebar %}
-{% set header_container_class_name = "header-container-new" %}
-{% else %}
-{% set header_container_class_name = "header-container" %}
-{% endif %}
-
 <div class="header">
-    <div class="{{ header_container_class_name }} {% if not is_user_logged_in %}logged-out{% endif %}">
+    <div class="header-container {% if not is_user_logged_in %}logged-out{% endif %}">
         <div class="header-button">
             <div class="button button-secondary button-hamburger button-transparent" id="button-hamburger">
                 <i class="biscuit-icon hamburger size-32"></i>
@@ -16,6 +10,15 @@
                 <img alt="{{ website_branding.name }}" class="logo" src="{{ logo }}">
             </a>
         </div>
+        {% if not show_sidebar %}
+            <div class="header-hidden-links">
+            {% for key, link in header_main_links() %}
+                <a class="menulink" href="{{ link.url }}">
+                    {{ link.name }}
+                </a>
+            {% endfor %}
+            </div>
+        {% endif %}
         <form class="header-search" action="/search">
             <input id="header-search-input" type="text" name="query" placeholder="{{ localize('search') }}...">
             <button id="header-search-button">
