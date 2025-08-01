@@ -2,7 +2,7 @@
 
 {% set show_sidebar = true %}
 
-{% set title = "Members" %}
+{% set title = localize('members') %}
 
 	{% block content %}
 		{% set total_pages = (users.count / items_per_page) | round(0, 'ceil') %}
@@ -11,8 +11,8 @@
 		<div class="section">
 			<div class="section-header flex">
 				<div class="section-header-left">
-					<h1 class="section-title">Members</h1>
-					<div class="section-desc">Page {{ current_page }} of {{ total_pages }}</div>
+					<h1 class="section-title">{{ title }}</h1>
+					<div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
 				</div>
 			</div>
 			{% if options.enable_incomplete_features %}
@@ -44,10 +44,10 @@
 								{{ user_link(user) }}
 							</div>
 							<div class="content-description">
-								{{ user.submissions }} uploads
+								{{ localize('upload_count', user.submissions) }}
 							</div>
 							<div class="content-description">
-								{{ user.followers }} followers
+								{{ localize('followers', user.followers) }}
 							</div>
 						</div>
 					</div>

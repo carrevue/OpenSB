@@ -70,7 +70,7 @@
         }
 
         @include responsive('medium') {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
         }
 
         @include responsive('large') {

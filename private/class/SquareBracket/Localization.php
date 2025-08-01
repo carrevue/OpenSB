@@ -98,6 +98,47 @@ class Localization
         return $formatter->format($number);
     }
 
+
+    /**
+     * Relative time function.
+     */
+    public function formatRelativeTime($time)
+    {
+        if ($time === 0) {
+            return $this->translate('relative_unknown');
+        }
+
+        $diff = time() - $time;
+
+        if ($diff < 1) {
+            return $this->translate('relative_just_now');
+        }
+
+        $units = [
+            31536000 => ['relative_year', 'relative_years'],
+            2592000  => ['relative_month', 'relative_months'],
+            604800   => ['relative_week', 'relative_weeks'],
+            86400    => ['relative_day', 'relative_days'],
+            3600     => ['relative_hour', 'relative_hours'],
+            60       => ['relative_minute', 'relative_minutes'],
+            1        => ['relative_second', 'relative_seconds']
+        ];
+
+        foreach ($units as $seconds => $keys) {
+            if ($diff >= $seconds) {
+                $value = floor($diff / $seconds);
+                $key = $keys[$value == 1 ? 0 : 1];
+                return sprintf(
+                    $this->translate('relative_ago_format'),
+                    $value,
+                    $this->translate($key)
+                );
+            }
+        }
+
+        return $this->translate('relative_just_now');
+    }
+
     /*
     public function truncateNumber($number)
     {

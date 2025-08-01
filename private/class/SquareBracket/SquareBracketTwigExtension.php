@@ -119,7 +119,10 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('relative_time', [$this, 'relativeTime']),
+            new TwigFilter('relative_time', function ($time) {
+                $localization = $this->orange->getLocalizationClass();
+                return $localization->formatRelativeTime($time);
+            }, ['is_safe' => ['html']]),
 
             new TwigFilter('calculate_age', [Utilities::class, 'calculateAge']),
             new TwigFilter('calculate_age_from', [Utilities::class, 'calculateAgeFrom']),
@@ -246,35 +249,6 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $localization->truncateNumber($number);
     }
     */
-
-    /**
-     * Relative time function.
-     */
-    function relativeTime($time)
-    {
-        if ($time == 0) {
-            return "unknown";
-        }
-
-        $time_difference = time() - $time;
-        $units = [
-            31536000 => 'year',
-            2592000  => 'month',
-            604800   => 'week',
-            86400    => 'day',
-            3600     => 'hour',
-            60       => 'minute',
-            1        => 'second'
-        ];
-
-        foreach ($units as $unit => $text) {
-            if ($time_difference < $unit) continue;
-            $numberOfUnits = floor($time_difference / $unit);
-            return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '') . ' ago';
-        }
-
-        return 'just now';
-    }
 
     /**
      * @throws Exception

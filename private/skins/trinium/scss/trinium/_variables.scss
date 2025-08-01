@@ -70,16 +70,11 @@ $font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 // https://medium.com/@jainbhavukspeaks/leveraging-scss-mixins-to-create-responsive-layouts-the-easy-way-5bbe4080cb15
 // breakpoints
 $breakpoints: (
-    "tiny": (300px,
-    ),
-    "small": (500px,
-    ),
-    "medium": (950px,
-    ),
-    "large": (1250px,
-    ),
-    "huge": (1700px,
-    ),
+    "tiny": 300px,
+    "small": 500px,
+    "medium": 950px,
+    "large": 1250px,
+    "huge": 1700px,
 );
 
 // header
