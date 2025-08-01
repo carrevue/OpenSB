@@ -1,9 +1,9 @@
 {% if submission.type == 0 %}
-    {% set type = "Video" %}
+    {% set icon = "video" %}
 {% elseif submission.type == 2 %}
-    {% set type = "Image" %}
+    {% set icon = "image" %}
 {% else %}
-    {% set type = "Unknown" %}
+    {% set icon = "placeholder" %}
 {% endif %}
 
 {% if submission.published_originally and submission.original_site %}
@@ -20,12 +20,12 @@
         </a>
         <div class="content-thumbnail-badge-container">
             <div class="content-thumbnail-badge">
-                {{ type }}
+                <div class="biscuit-icon {{ icon }}"></div>
             </div>
             {% if submission.type == 0 %}
-            <div class="content-thumbnail-badge">
-                {{ convert_time(submission.length) }}
-            </div>
+                <div class="content-thumbnail-badge timestamp">
+                    {{ convert_time(submission.length) }}
+                </div>
             {% endif %}
         </div>
     </div>

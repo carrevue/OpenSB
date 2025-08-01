@@ -8,11 +8,11 @@
     }
 
     @include responsive('medium') {
-        max-width: 135px;
+        max-width: 120px;
     }
 
     @include responsive('large') {
-        max-width: 150px;
+        max-width: 140px;
     }
 
     @include responsive('huge') {
@@ -206,16 +206,19 @@
                 right: 4px;
                 gap: 2px;
 
-                font-size: 0.85em;
-
                 .content-thumbnail-badge {
                     background: rgba(black, 0.75);
                     backdrop-filter: blur(4px);
 
                     height: 18px;
+                    padding: 0 2px;
+                    font-size: 0.9em;
 
                     color: white;
-                    padding: 0 4px;
+
+                    &.timestamp {
+                        padding: 0 4px;
+                    }
                 }
             }
         }
@@ -226,15 +229,15 @@
             display: block;
 
             @include responsive('tiny') {
-                width: 140px;
+                width: 120px;
             }
 
             @include responsive('small') {
-                width: 140px;
+                width: 120px;
             }
 
             @include responsive('medium') {
-                width: 140px;
+                width: 120px;
             }
 
             @include responsive('large') {
@@ -246,7 +249,7 @@
             }
 
             &.small {
-                width: 120px;
+                width: 100px;
             }
 
             //

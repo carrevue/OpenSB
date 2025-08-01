@@ -48,7 +48,7 @@
 
     @include responsive('medium') {
         display: block;
-        width: 250px;
+        width: 180px;
     }
 
     @include responsive('large') {
@@ -90,8 +90,8 @@
         .list-link {
             .list-link-profile-picture {
                 display: inline-block;
-                width: 24px;
-                height: 24px;
+                width: 18px;
+                height: 18px;
             }
 
             a {

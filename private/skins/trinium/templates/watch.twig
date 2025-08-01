@@ -59,7 +59,7 @@
         </div>
     {% endif %}
     <div class="grid">
-        <div class="col-8">
+        <div class="col-medium-12 col-large-8 col-huge-9">
             <div class="section">
                 <div class="submission">
                     {{ submission_view(submission) }}
@@ -203,43 +203,43 @@
                 </div>
             </div>
         </div>
-            <div class="col-4">
-                {% if submission.other_by_author %}
-                    <div class="section">
-                        <div class="section-header flex">
-                            <h2>From {{ submission.author.info.displayname }}</h2>
-                        </div>
-                        <div class="content-box related-uploads">
-                            {% for submission in submission.other_by_author %}
-                                {{ include('/components/_upload_vertical_small.twig') }}
-                            {% endfor %}
-                        </div>
+        <div class="col-medium-12 col-large-4 col-huge-3">
+            {% if submission.other_by_author %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <h2>From {{ submission.author.info.displayname }}</h2>
                     </div>
-                {% endif %}
-                {% if submission.recommended %}
-                    <div class="section">
-                        <div class="section-header flex">
-                            <h2>Related uploads</h2>
-                        </div>
-                        <div class="content-box related-uploads">
-                            {% for submission in submission.recommended %}
-                                {{ include('/components/_upload_vertical_small.twig') }}
-                            {% endfor %}
-                        </div>
+                    <div class="content-box related-uploads">
+                        {% for submission in submission.other_by_author %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
                     </div>
-                {% endif %}
-                {% if submission.random %}
-                    <div class="section">
-                        <div class="section-header flex">
-                            <h2>Random uploads</h2>
-                        </div>
-                        <div class="content-box related-uploads">
-                            {% for submission in submission.random %}
-                                {{ include('/components/_upload_vertical_small.twig') }}
-                            {% endfor %}
-                        </div>
+                </div>
+            {% endif %}
+            {% if submission.recommended %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <h2>Related uploads</h2>
                     </div>
-                {% endif %}
-            </div>
+                    <div class="content-box related-uploads">
+                        {% for submission in submission.recommended %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if submission.random %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <h2>Random uploads</h2>
+                    </div>
+                    <div class="content-box related-uploads">
+                        {% for submission in submission.random %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         </div>
+    </div>
 {% endblock %}
