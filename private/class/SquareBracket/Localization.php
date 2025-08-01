@@ -132,13 +132,21 @@ class Localization
             return $this->translatePsuedo($key, ...$args);
         }
 
-        $message = $this->messages[$key] ?? $this->messages_fallback[$key] ?? "[$key]";
+        $message = $this->messages[$key] ?? $this->messages_fallback[$key] ?? $key;
 
-        if ($args && array_keys($args) === range(0, count($args) - 1)) {
-            $args = ['count' => $args[0]];
+        if (str_contains($message, '{')) {
+            // 
+            if ($args && array_keys($args) === range(0, count($args) - 1)) {
+                $args = ['count' => $args[0]];
+            }
+            return $this->translateICU($message, $args);
         }
 
-        return $this->formatMessage($message, $args);
+        foreach ($args as $arg) {
+            $message = preg_replace('/%s/', $arg, $message, 1);
+        }
+
+        return $message;
     }
 
     private function convertDateFormatterPattern($pattern)
@@ -175,24 +183,11 @@ class Localization
         return Pseudolocale::pseudolocalize($args ? vsprintf($message, $args) : $message);
     }
 
-    private function formatMessage(string $message, array $args): string
+    private function translateICU(string $message, array $args)
     {
-        if (empty($args)) {
-            return $message;
-        }
-
-        // if icu string, use MessageFormatter.
-        if (str_contains($message, '{')) {
-            $locale = $this->isPsuedo ? 'en-US' : $this->locale;
-            $formatter = new MessageFormatter($locale, $message);
-            $result = $formatter->format($args);
-            return $result !== false ? $result : $message;
-        }
-
-        foreach ($args as $arg) {
-            $message = preg_replace('/%s/', $arg, $message, 1);
-        }
-
-        return $message;
+        $locale = $this->isPsuedo ? 'en-US' : $this->locale;
+        $formatter = new MessageFormatter($locale, $message);
+        $result = $formatter->format($args);
+        return $result !== false ? $result : $message;
     }
 }
