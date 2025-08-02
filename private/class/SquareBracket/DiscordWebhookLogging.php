@@ -142,13 +142,9 @@ class DiscordWebhookLogging
         switch ($data['type']) {
             case 'video': // legacy api
             case 'submission':
-                if ($is_legacy_api) {
-                    $title = Utilities::uploadStringIDToUploadTitle($this->database, $data['name']);
-                } else {
-                    $title = Utilities::uploadNumericIDToUploadTitle($this->database, $data['name']);
-                }
+                $title = Utilities::uploadStringIDToUploadTitle($this->database, $data['name']);
                 $author = 'New upload comment by ' . $data['author'];
-                $uploadUrl = sprintf("%s/upload/%s", $this->domain, $data['name']);
+                $uploadUrl = sprintf("%s/view/%s", $this->domain, $data['name']);
                 break;
             case 'profile':
                 $title = Utilities::userIDToUsername($this->database, $data['name']);
