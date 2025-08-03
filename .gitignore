@@ -15,6 +15,10 @@ dynamic/custom_thumbnails/
 dynamic/music/
 dynamic/emojis/
 
+## Site-specific branding
+public/assets/*_branding/
+!public/assets/sb_branding/
+
 !*.txt
 
 ## CSS
