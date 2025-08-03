@@ -5,7 +5,7 @@
         }
 
         @else {
-            background: #0069B4 url("/assets/trinium_banner_background.jpg") center;
+            background: #0069B4 var(--jumbotron) center;
             color: white;
             text-shadow: 0 0.1em 0.25em rgba(black, 0.75);
         }

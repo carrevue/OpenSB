@@ -22,3 +22,5 @@ finalium homepage banner "droplets" background by Armennano on Pixabay: https://
 Vectorized FulpTube logo by shiypc.
 
 Chaz Craft (in chaz_opensb.png) by Chaziz.
+
+generic jumbotron background by Quino Al on Unsplash: https://unsplash.com/photos/body-of-water-and-seashore-JFeOy62yjXk
