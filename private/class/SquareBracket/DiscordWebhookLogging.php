@@ -275,15 +275,19 @@ class DiscordWebhookLogging
             case "banned":
                 $author = 'User banned by ' . $data['author'];
                 $color = Colors::DANGER_COLOR;
+                break;
             case "unbanned":
                 $author = 'User unbanned by ' . $data['author'];
                 $color = Colors::WARNING_COLOR;
+                break;
             case "verified":
                 $author = 'User verified by ' . $data['author'];
                 $color = Colors::SUCCESS_COLOR;
+                break;
             case "unverified":
                 $author = 'User unverified by ' . $data['author'];
                 $color = Colors::DANGER_COLOR;
+                break;
         }
 
         $title = $data['user']; //Utilities::userIDToUsername($this->database, $data['user']);
