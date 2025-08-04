@@ -69,7 +69,7 @@ foreach ($usersDataQuery as $user) {
             "info" => $userData->getUserArray(),
             "submissions" => $user["s_num"],
             "journals" => $user["j_num"],
-            "banned" => $user["is_banned"],
+            //"banned" => $user["is_banned"],
             "powerlevel" => $user["powerlevel"],
         ];
 }
