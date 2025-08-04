@@ -40,15 +40,15 @@ if ($orange->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
-function discord_webhook_notify($orange, $auth, $ban_user, $unbanned)
+function discord_webhook_notify($orange, $auth, $user, $action)
 {
     $data = [
-        'user' => $ban_user,
+        'user' => $user,
         'author' => $auth->getUserData()["name"],
-        'unbanned' => $unbanned,
+        'action' => $action,
     ];
 
-    $orange->getDiscordWebhookClass()->dashboardBanUserHook($data);
+    $orange->getDiscordWebhookClass()->dashboardUserHook($data);
 }
 
 $username = $path[3] ?? null;
@@ -70,6 +70,11 @@ if (!$user) {
     }
 }
 
+// unlike uploads, there is no proper implementation of getting user data that isnt intended for
+// simply getting basic user data via the UserData class.
+$flags = $user["u_flags"];
+$flags_array = UserFlags::toArray($user["u_flags"]);
+
 if (isset($_POST['ban_user'])) {
     // Don't ban non-existent users.
     if (!$database->fetch("SELECT u.name FROM users u WHERE u.name = ?", [$_POST["ban_user"]])) {
@@ -79,27 +84,65 @@ if (isset($_POST['ban_user'])) {
     if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["powerlevel"] != 1) {
         Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/user/{$username}");
     }
-    // Check if user is already banned, if not, then ban. Otherwise, unban.
-    $id = $database->fetch("SELECT u.id FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["id"];
-    if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$id])) {
-        $database->query("DELETE FROM user_bans WHERE userid = ?", [$id]);
+
+    if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$user["id"]])) {
+        $database->query("DELETE FROM user_bans WHERE userid = ?", [$user["id"]]);
 
         if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $auth, $_POST["ban_user"], true);
+            discord_webhook_notify($orange, $auth, $_POST["ban_user"], 'unbanned');
         }
 
         Utilities::notifyBanner("notify_dashboard_unban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
     } else {
         $database->query(
             "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-            [$id, "Banned by " . $auth->getUserData()["name"], time()]
+            [$user["id"], "Banned by " . $auth->getUserData()["name"], time()]
         );
 
         if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $auth, $_POST["ban_user"], false);
+            discord_webhook_notify($orange, $auth, $_POST["ban_user"], 'banned');
         }
 
         Utilities::notifyBanner("notify_dashboard_ban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
+    }
+}
+
+if (isset($_POST['verify_user'])) {
+    // Don't (un)verify non-existent users.
+    if (!$database->fetch("SELECT u.name FROM users u WHERE u.name = ?", [$_POST["verify_user"]])) {
+        Utilities::notifyBanner("notify_invalid_user", "/dashboard/users/");
+    }
+    // Don't (un)verify staff.
+    if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["verify_user"]])["powerlevel"] != 1) {
+        Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/user/{$username}");
+    }
+
+   if ($flags & UserFlags::FLAG_UNVERIFIED->value) {
+        $flags &= ~UserFlags::FLAG_UNVERIFIED->value;
+
+        $database->query(
+            "UPDATE users SET u_flags = ? WHERE id = ?",
+            [$flags, $user["id"]]
+        );
+
+        if ($orange->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($orange, $auth, $_POST["unverify_user"], 'verified');
+        }
+
+        Utilities::notifyBanner("notify_dashboard_verify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
+    } else {
+        $flags |= UserFlags::FLAG_UNVERIFIED->value;
+
+        $database->query(
+            "UPDATE users SET u_flags = ? WHERE id = ?",
+            [$flags, $user["id"]]
+        );
+
+        if ($orange->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($orange, $auth, $_POST["verify_user"], 'unverified');
+        }
+
+        Utilities::notifyBanner("notify_dashboard_unverify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
     }
 }
 
@@ -131,10 +174,6 @@ foreach ($notes as $note) {
     ];
 }
 
-// unlike uploads, there is no proper implementation of getting user data that isnt intended for
-// simply getting basic user data via the UserData class.
-$flags = UserFlags::toArray($user["u_flags"]);
-
 if ($orange->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Administrator)) {
     $ip_info = $orange->getIpLookupClass()->getInfo($user["ip"]);
 } else {
@@ -143,7 +182,7 @@ if ($orange->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Administrat
 
 echo $twig->render("dashboard_user_edit.twig", [
     'user' => $user,
-    'flags' => $flags,
+    'flags' => $flags_array,
     'users_with_matching_ips' => $users_with_matching_ips,
     'notes' => $notes_proper,
     'old_names' => $old_username_data,

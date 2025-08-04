@@ -37,6 +37,10 @@ if (strlen($_POST["comment"]) > 1000) {
     die("This comment is too long.");
 }
 
+if ($auth->getUserFlags(true)["unverified"]) {
+    die("Unverified user.");
+}
+
 // apparantly this wasnt a thing in the legacy api? oops -chaziz 4/20/2025
 if (!$orange->isDebug()) {
     $timeLimit = time() - 15;

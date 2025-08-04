@@ -37,6 +37,12 @@ if ($orange->isLockdownEnabled()) {
     Utilities::notifyBanner("notify_write_disabled", "/");
 }
 
+if ($auth->getUserFlags(true)["unverified"]) {
+    http_response_code(401);
+    echo $twig->render('unverified.twig');
+    die();
+}
+
 if ($database->result("SELECT COUNT(*) FROM journals WHERE date > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$orange->isDebug()) {
     Utilities::notifyBanner("notify_write_ratelimit", "/");
 }

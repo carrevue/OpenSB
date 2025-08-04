@@ -170,6 +170,7 @@
     "notify_original_fulptube_video": "This original FulpTube video no longer exists.",
     "notify_upload_tag_blacklist_logged_in": "This upload contains tags you've blacklisted.",
     "notify_upload_tag_blacklist_logged_out": "This upload contains tags that are blacklisted by default.",
+    "notify_upload_unverified": "This upload's author has not been verified.",
     "notify_updated_featured_upload": "You have successfully changed your profile's featured upload.",
     "notify_login_switched_account": "You have successfully switched to %s.",
     "notify_login_same_account": "You're currently logged into this account.",
@@ -203,5 +204,7 @@
     "notify_dashboard_welcome": "Welcome to the dashboard.",
     "notify_dashboard_ban_fail": "This user cannot be banned.",
     "notify_dashboard_ban_success": "Successfully banned %s.",
-    "notify_dashboard_unban_success": "Successfully unbanned %s."
+    "notify_dashboard_unban_success": "Successfully unbanned %s.",
+    "notify_dashboard_verify_success": "Successfully verified %s.",
+    "notify_dashboard_unverify_success": "Successfully unverified %s."
 }

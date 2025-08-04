@@ -49,7 +49,7 @@ $upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
 $takedown = $upload->getTakedown();
-if ($takedown && !$auth->userHasRole(UserRoleEnum::Administrator)) {
+if ($takedown && !$auth->userHasRole(UserRoleEnum::Moderator)) {
     // go back to homepage with a notification
     Utilities::notifyBanner("notify_taken_down_upload", "/");
 }
@@ -82,9 +82,21 @@ if (isset($data["tags"])) {
 
 $author = new UserData($database, $data["author"]);
 
-if ($author->isUserBanned() && !$auth->userHasRole(UserRoleEnum::Administrator)) {
+if ($author->isUserBanned() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_taken_down_upload", "/");
 }
+
+$owner = ($auth->getUserID() == $data["author"]);
+
+$author_info = $author->getUserArray();
+
+/*
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
+    if ($author_info["flags"]["unverified"] || !$owner) {
+        Utilities::notifyBanner("notify_upload_unverified", "/");
+    }
+}
+*/
 
 $tags = $upload->getTags();
 
@@ -262,8 +274,6 @@ if (!$recommended && !$uploads_by_author) {
     $random_uploads_array = [];
 }
 
-$owner = ($auth->getUserID() == $data["author"]);
-
 if ($orange->getLocalOptions()["skin"] != "finalium") {
     $comments = new CommentData($database, CommentLocation::Upload, $id);
 
@@ -287,7 +297,7 @@ $page_data = [
     "file" => $data["videofile"],
     "author" => [
         "id" => $data["author"],
-        "info" => $author->getUserArray(),
+        "info" => $author_info,
         "followers" => $followers,
         "following" => $followed,
     ],

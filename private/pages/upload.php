@@ -55,7 +55,13 @@ if ($orange->isLockdownEnabled()) {
     Utilities::notifyBanner("notify_upload_disabled", "/");
 }
 
-if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
+if ($auth->getUserFlags(true)["unverified"]) {
+    http_response_code(401);
+    echo $twig->render('unverified.twig');
+    die();
+}
+
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     $joindate = $auth->getUserData()["joined"];
     $timeSinceJoin = time() - strtotime($joindate);
 

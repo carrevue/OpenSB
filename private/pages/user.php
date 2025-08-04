@@ -60,7 +60,7 @@ if (!$data) {
 }
 
 if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
-    if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
+    if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
         Utilities::notifyBanner("notify_banned_user", "/");
     }
 }
@@ -130,11 +130,14 @@ $user_journals =
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-if ($is_own_profile || $auth->userHasRole(UserRoleEnum::Administrator)) {
+// unused
+/*
+if ($is_own_profile || $auth->userHasRole(UserRoleEnum::Moderator)) {
     $old_usernames = $database->fetchArray($database->query("SELECT * FROM user_old_names WHERE user = ?", [$data["id"]]));
 } else {
     $old_usernames = [];
 }
+*/
 
 $flags = UserFlags::toArray($data["u_flags"]);
 

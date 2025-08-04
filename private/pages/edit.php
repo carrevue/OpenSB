@@ -60,10 +60,6 @@ if (isset($_POST['upload'])) {
 
     if ($block_guests) {
         $flags |= UploadFlags::FLAG_BLOCK_GUESTS->value;
-    }
-
-    if ($block_guests) {
-        $flags |= UploadFlags::FLAG_BLOCK_GUESTS->value;
     } else {
         $flags &= ~UploadFlags::FLAG_BLOCK_GUESTS->value;
     }

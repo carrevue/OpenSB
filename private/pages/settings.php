@@ -38,6 +38,12 @@ if ($auth->getUserBanData()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
+if ($auth->getUserFlags(true)["unverified"]) {
+    http_response_code(401);
+    echo $twig->render('unverified.twig');
+    die();
+}
+
 // check if this user has an entry in the profile customization table
 $profile_color_data = $database->fetch(
     "SELECT * FROM user_profile_customization WHERE user = ?",

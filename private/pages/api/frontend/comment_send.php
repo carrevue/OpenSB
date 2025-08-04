@@ -43,6 +43,11 @@ if ($auth->getUserBanData()) {
     exit;
 }
 
+if ($auth->getUserFlags(true)["unverified"]) {
+    echo json_encode(["error" => "You have been not verified yet."]);
+    exit;
+}
+
 if (!isset($post_data['type']) || !isset($post_data['comment'])) {
     echo json_encode($apiOutput);
     exit;

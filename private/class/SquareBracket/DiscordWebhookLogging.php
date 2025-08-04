@@ -263,20 +263,27 @@ class DiscordWebhookLogging
     }
 
     /**
-     * Trigger the dashboard ban user webhook.
+     * Trigger the dashboard user webhook.
      *
      * @param array $data Array with the necessary data.
      */
-    function dashboardBanUserHook($data)
+    function dashboardUserHook($data)
     {
         $this->initClient();
 
-        if ($data['unbanned']) {
-            $author = 'User unbanned by ' . $data['author'];
-            $color = Colors::WARNING_COLOR;
-        } else {
-            $author = 'User banned by ' . $data['author'];
-            $color = Colors::DANGER_COLOR;
+        switch ($data['action']) {
+            case "banned":
+                $author = 'User banned by ' . $data['author'];
+                $color = Colors::DANGER_COLOR;
+            case "unbanned":
+                $author = 'User unbanned by ' . $data['author'];
+                $color = Colors::WARNING_COLOR;
+            case "verified":
+                $author = 'User verified by ' . $data['author'];
+                $color = Colors::SUCCESS_COLOR;
+            case "unverified":
+                $author = 'User unverified by ' . $data['author'];
+                $color = Colors::DANGER_COLOR;
         }
 
         $title = $data['user']; //Utilities::userIDToUsername($this->database, $data['user']);
