@@ -126,7 +126,7 @@ if (isset($_POST['verify_user'])) {
         );
 
         if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $auth, $_POST["unverify_user"], 'verified');
+            discord_webhook_notify($orange, $auth, $_POST["verify_user"], 'verified');
         }
 
         Utilities::notifyBanner("notify_dashboard_verify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
