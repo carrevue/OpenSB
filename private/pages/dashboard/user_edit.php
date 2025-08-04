@@ -53,7 +53,7 @@ function discord_webhook_notify($orange, $auth, $ban_user, $unbanned)
 
 $username = $path[3] ?? null;
 
-$user = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
+$user = $database->fetch("SELECT u.*, (SELECT COUNT(*) FROM user_bans WHERE userid = u.id) AS is_banned FROM users u WHERE u.name = ?", [$username]);
 
 if (!$user) {
     // check if this username was used before and was changed out of.
@@ -75,9 +75,9 @@ if (isset($_POST['ban_user'])) {
     if (!$database->fetch("SELECT u.name FROM users u WHERE u.name = ?", [$_POST["ban_user"]])) {
         Utilities::notifyBanner("notify_invalid_user", "/dashboard/users/");
     }
-    // Don't ban mods/dashboards.
+    // Don't ban staff.
     if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["powerlevel"] != 1) {
-        Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/users/");
+        Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/user/{$username}");
     }
     // Check if user is already banned, if not, then ban. Otherwise, unban.
     $id = $database->fetch("SELECT u.id FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["id"];
@@ -88,7 +88,7 @@ if (isset($_POST['ban_user'])) {
             discord_webhook_notify($orange, $auth, $_POST["ban_user"], true);
         }
 
-        Utilities::notifyBanner("notify_dashboard_unban_success", "/dashboard/users", "success", [$_POST["ban_user"]]);
+        Utilities::notifyBanner("notify_dashboard_unban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
     } else {
         $database->query(
             "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
@@ -99,7 +99,7 @@ if (isset($_POST['ban_user'])) {
             discord_webhook_notify($orange, $auth, $_POST["ban_user"], false);
         }
 
-        Utilities::notifyBanner("notify_dashboard_ban_success", "/dashboard/users", "success", [$_POST["ban_user"]]);
+        Utilities::notifyBanner("notify_dashboard_ban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
     }
 }
 

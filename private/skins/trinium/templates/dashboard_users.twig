@@ -65,20 +65,9 @@
                     </div>
                 </div>
                 <div class="admin-user-buttons">
-                    <a class="button button-secondary button-small" href="/dashboard/users/{{ user.info.username }}">
-                        Check
+                    <a class="button button-secondary" href="/dashboard/users/{{ user.info.username }}">
+                        Manage
                     </a>
-                    {% if user.powerlevel <= 1 %}
-                        {% if user.banned %}
-                            <form id="banForm" method="post" action="/dashboard/users/{{ user.info.username }}" enctype="multipart/form-data">
-                                <button name="ban_user" value="{{ user.info.username }}" class="button button-warning button-small" onclick="if (!confirm('Are you sure you want to unban this user?')) { return false }">Unban</button>
-                            </form>
-                        {% else %}
-                            <form id="banForm" method="post" action="/dashboard/users/{{ user.info.username }}" enctype="multipart/form-data">
-                                <button name="ban_user" value="{{ user.info.username }}" class="button button-danger button-small" onclick="if (!confirm('Are you sure you want to ban this user?')) { return false }">Ban</button>
-                            </form>
-                        {% endif %}
-                    {% endif %}
                 </div>
             </div>
         {% endfor %}

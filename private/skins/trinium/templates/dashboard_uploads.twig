@@ -30,6 +30,10 @@
             </form>
         </div>
         <hr>
+        <div class="banner banner-secondary">
+            For the time being, ban someone if they first upload something that breaks the rules.
+        </div>
+        <hr>
         {% for upload in uploads %}
             <div class="content-entry">
                 <div class="content-thumbnail">
@@ -57,7 +61,7 @@
                     </div>
                     <div>
                         <a class="button button-secondary button-small" href="/dashboard/uploads/{{ upload.id }}">
-                            Check
+                            Manage
                         </a>
                     </div>
                 </div>
