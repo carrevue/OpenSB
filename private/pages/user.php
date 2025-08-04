@@ -130,15 +130,6 @@ $user_journals =
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-// unused
-/*
-if ($is_own_profile || $auth->userHasRole(UserRoleEnum::Moderator)) {
-    $old_usernames = $database->fetchArray($database->query("SELECT * FROM user_old_names WHERE user = ?", [$data["id"]]));
-} else {
-    $old_usernames = [];
-}
-*/
-
 $flags = UserFlags::toArray($data["u_flags"]);
 
 if ($flags["profile_customization_enabled"]) {
@@ -172,7 +163,6 @@ $profile_data = [
     "following" => $followed,
     "is_staff" => ($data["powerlevel"] > 1),
     "views" => $views,
-    "old_usernames" => $old_usernames,
     "customization" => $profile_customization_data?->getData() ?? false,
     "ban_data" => $user_ban_data ?? [],
 ];
