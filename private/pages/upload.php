@@ -67,13 +67,13 @@ if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
 
     if ($timeSinceJoin < 2 * 24 * 60 * 60) {
         // if we have a new account, make the ratelimit longer as an antispam measure.
-        $rateLimit = 10 * 60;
+        $rateLimit = 3 * 60;
     } elseif ($timeSinceJoin < 7 * 24 * 60 * 60) {
         // if its 2-7 days old make the rate limit smaller.
-        $rateLimit = 5 * 60;
-    } else {
-        // if it is older than that, keep our usual ratelimit of two minutes.
         $rateLimit = 2 * 60;
+    } else {
+        // if it is older than that, keep our usual ratelimit of one minute.
+        $rateLimit = 1 * 60;
     }
 
     if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$orange->isDebug()) {
