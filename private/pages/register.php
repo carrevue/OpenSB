@@ -130,9 +130,11 @@ if (isset($_POST['registersubmit'])) {
     if (!$error) {
         $flags = 0;
 
+        /*
         if ($orange->isChazizSquareBracketInstance()) {
             $flags |= UserFlags::FLAG_UNVERIFIED->value;
         }
+        */
 
         if ($orange->isFulpTube()) {
             $flags |= UserFlags::FLAG_FULPTUBE_ACCOUNT->value;
