@@ -43,12 +43,6 @@ $captcha = $orange->returnCaptchaSettings();
 // setsebool -P httpd_can_network_connect on
 // -chaziz 4/19/2025
 
-$ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress());
-
-if (str_contains($ipcheck, "<appears>yes</appears>") && !$orange->isDebug()) {
-    Utilities::notifyBanner("notify_register_shady_ip", "/");
-}
-
 $enableInviteKeys = $orange->isInviteKeysEnabled();
 
 if (isset($_POST['registersubmit'])) {
