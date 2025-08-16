@@ -104,7 +104,7 @@ if (isset($_POST["loginsubmit"])) {
                 }
 
                 // check if the account is banned (temporary code taken from userdata)
-                $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$logindata['ip']]);
+                $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$logindata['id']]);
 
                 // check if the account is from an ip that is in ip_bans
                 $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
