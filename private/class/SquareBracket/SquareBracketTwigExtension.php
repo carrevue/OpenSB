@@ -615,7 +615,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             $array["discord"] = [
                 "name" => "Discord",
-                "url" => "https://discord.gg/tzkSpxpmSD",
+                "url" => "https://discord.gg/jG3DaRf6Rm",
             ];
         }
 
