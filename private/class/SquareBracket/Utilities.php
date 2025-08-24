@@ -187,6 +187,11 @@ class Utilities
 
         $localization = $orange->getLocalizationClass();
 
+        // awkward fix for if we use notifyBanner before localization is initialized
+        if (!$localization) {
+            $localization = new Localization($orange->getOptionsCookie()["locale"] ?? "en-US");
+        }
+
         $_SESSION["notif_message"] = $localization->translate($message, ...$args);
         $_SESSION["notif_color"] = $color;
 
