@@ -1,3 +1,4 @@
+{#
 {% if data.submissions %}
 <div class="section">
     <div class="section-header flex">
@@ -47,6 +48,7 @@
     {% endif %}
 </div>
 {% endif %}
+#}
 <div class="grid">
     <div class="col-medium-7 col-large-8">
         {% if data.submissions_new %}
@@ -105,21 +107,39 @@
             </div>
         </div>
         {% endif %}
-        {% if options.enable_incomplete_features %}
-            <div class="section">
-                <div class="section-header flex">
-                    <div class="section-header-left">
-                        <h2 class="section-title">{{ localize('recent_members') }}</h2>
-                        <div class="section-desc">{{ localize('recent_members_desc') }}</div>
-                    </div>
-                    <div class="section-header-right">
-                        <a href="/users">{{ localize('more') }}</a>
-                    </div>
+        <div class="section">
+            <div class="section-header flex">
+                <div class="section-header-left">
+                    <h2 class="section-title">{{ localize('recent_members') }}</h2>
+                    <div class="section-desc">{{ localize('recent_members_desc') }}</div>
                 </div>
-                <div class="content-box">
-                    TODO
+                <div class="section-header-right">
+                    <a href="/users">{{ localize('more') }}</a>
                 </div>
             </div>
-        {% endif %}
+            <div class="content-box">
+                {% for user in data.users_recent %}
+                    <div class="content-entry centered index-user user-id-{{ user.id }}">
+                        <div class="content-thumbnail">
+                            <a href="/user/{{ user.info.username }}">
+                                <div class="content-image profile-picture">
+                                    <img src="{{ profile_picture(user.info.username) }}" alt="{{ user.info.username }}" class="pfp">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="content-info">
+                            <div class="content-title">
+                                {{ user_link(user) }}
+                            </div>
+                            <div class="content-description">
+                                <div>
+                                    {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.submissions) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>

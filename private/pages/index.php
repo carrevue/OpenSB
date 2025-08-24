@@ -28,6 +28,7 @@ global $twig, $database, $orange;
 use SquareBracket\UploadFlags;
 use SquareBracket\UploadQuery;
 use SquareBracket\Utilities;
+use SquareBracket\UserData;
 
 $submission_query = new UploadQuery($database);
 
@@ -56,10 +57,10 @@ $submissions_featured_query_limit = 4;
 if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 1;
 } else {
-    $news_recent_query_limit = 5;
+    $news_recent_query_limit = 3;
 }
 
-if ($options["skin"] == "bootstrap") {
+if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type == "list")) {
     $submissions_random = [];
 } else {
     $submissions_random = $submission_query->query("RAND()", $submissions_random_query_limit);
@@ -77,11 +78,42 @@ $submissions_featured = $submission_query->query(
 
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC LIMIT $news_recent_query_limit"));
 
+if ($options["skin"] == "trinium") {
+    // TODO: maybe move this (and the equivalent code in users.php) into a "UsersQuery" class?
+    $users_recent_data = $database->fetchArray(
+        $database->query(
+            "SELECT u.id, 
+        (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
+        (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
+            FROM users u 
+            WHERE u.id NOT IN (SELECT userid FROM user_bans)
+            ORDER BY u.lastview DESC LIMIT 5"
+        )
+    );
+
+    $users_recent = [];
+    foreach ($users_recent_data as $user) {
+        $userData = new UserData($database, $user["id"]);
+        $users_recent[] =
+            [
+                "id" => $user["id"],
+                "info" => $userData->getUserArray(),
+                "submissions" => $user["s_num"],
+                //"journals" => $user["j_num"],
+                "followers" => $user["f_num"],
+                //"about" => $user["about"],
+            ];
+    }
+} else {
+    $users_recent = [];
+}
+
 $data = [
     "submissions" => Utilities::makeUploadArray($database, $submissions_random),
     "submissions_new" => Utilities::makeUploadArray($database, $submissions_recent),
     "submissions_featured" => Utilities::makeUploadArray($database, $submissions_featured),
     "news_recent" => Utilities::makeJournalArray($database, $news_recent),
+    "users_recent" => $users_recent,
 ];
 
 echo $twig->render('index.twig', [

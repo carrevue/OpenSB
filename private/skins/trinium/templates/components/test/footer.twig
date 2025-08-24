@@ -1,7 +1,10 @@
 <div class="footer">
-    <p>{{ localize('footer_copyright', ('now' | date('Y'))) }}.
-        | <a href="/privacy">Privacy Policy</a> · <a href="/theme">Customize theme</a></p>
-    <p>Running <a href="/version">OpenSB {{ opensb_version }}</a></p>
+    <p>{{ localize('footer_copyright', ('now' | date('Y'))) }} |
+        {% for link in footer_links() %}
+            <a href="{{ link.url }}">{{ link.name }}</a> 
+            {% if not loop.last %}·{% endif %}
+        {% endfor %}
+    <p>{{ localize('powered_by') }} <a href="/version">OpenSB {{ opensb_version }}</a></p>
     {% if is_debug %}
         <p>{{ profiler_stats() }}</p>
     {% endif %}

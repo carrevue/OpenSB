@@ -157,7 +157,7 @@
         background-image: url('/assets/icons/homepage-list-dark.svg');
 
         &.active {
-            @if $theme =="dark" {
+            @if $color-scheme =="dark" {
                 background-image: url('/assets/icons/homepage-list-dark.svg');
             }
 
@@ -171,7 +171,7 @@
         background-image: url('/assets/icons/homepage-grid-dark.svg');
 
         &.active {
-            @if $theme =="dark" {
+            @if $color-scheme =="dark" {
                 background-image: url('/assets/icons/homepage-grid-dark.svg');
             }
 
