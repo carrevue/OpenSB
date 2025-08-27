@@ -109,10 +109,12 @@ $for_website = $argv[4];
 
 log("Upload type: " .  $upload_type);
 
+/*
 if ($upload_type != "video" || $upload_type != "video_thumbnail_only") {
     log("Unsupported type.");
     die();
 }
+*/
 
 try {
     $ffmpeg = FFMpeg::create($config);
