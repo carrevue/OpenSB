@@ -31,7 +31,7 @@
     <div class="grid">
         <div class="col-4">
             <div class="section">
-                <div class="content-box highlight-box">
+                <div class="content-box highlight-box no-border-bottom-rounded">
                     <div class="section-header flex">
                         <div class="section-header-left">
                             <h2 class="section-title">{{ data.displayname }}</h2>
@@ -76,17 +76,22 @@
                         <div class="profile-box-follow">
                         </div>
                     </div>
-                    <hr>
+                </div>
+                <div class="content-box highlight-box no-border-top">
                     {% if data.about | trim is not empty %}
-                        {{ data.about | markdown_user_written }}
-                        <hr>
+                        <div class="profile-about">
+                            {{ data.about | markdown_user_written }}
+                            <hr>
+                        </div>
                     {% endif %}
-                    <ul class="unstyled-list">
-                        <li>
-                            {{ localize('registered') }}: {{ data.joined | relative_time() }}
+                    <ul class="profile-details-list">
+                        <li class="detail-item">
+                            <span class="detail-label">{{ localize('registered') }}:</span>
+                            <span class="detail-value">{{ data.joined | format_date('long', 'none') }}</span>
                         </li>
-                        <li>
-                            {{ localize('last_seen') }}: {{ data.connected | relative_time() }}
+                        <li class="detail-item">
+                            <span class="detail-label">{{ localize('last_seen') }}:</span>
+                            <span class="detail-value">{{ data.connected | relative_time() }}</span>
                         </li>
                     </ul>
                     {% if user_is_authenticated_admin %}
