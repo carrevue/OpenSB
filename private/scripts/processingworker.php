@@ -225,8 +225,8 @@ try {
     $frame->save(BLUFF_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
     log("Thumbnail saved!");
 
-    if ($upload_type != "video_thumbnail_only") {
-        log("Only processing thubmnail, exiting...");
+    if ($upload_type == "video_thumbnail_only") {
+        log("Only processing thumbnail, exiting...");
         log("OpenSB Video Processing Worker Success!");
         die();
     }
