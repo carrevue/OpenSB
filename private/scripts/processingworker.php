@@ -56,7 +56,18 @@ function log(string $message): void
     echo $timestamp . ": " . $message . PHP_EOL;
 }
 
-function downscaleVideoForThumbnail($videoWidth, $videoHeight): array
+function get_cpu_cores()
+{
+    if (PHP_OS_FAMILY == 'Windows') {
+        $cores = shell_exec('echo %NUMBER_OF_PROCESSORS%');
+    } else {
+        $cores = shell_exec('nproc');
+    }
+
+    return (int)$cores ?? 1;
+}
+
+function downscale_video_for_thumbnail($videoWidth, $videoHeight): array
 {
     $targetWidth = 640;
 
@@ -77,7 +88,7 @@ echo (new VersionNumber)->outputVersionBanner();
 // this is hardcoded, Fuck.
 $config = [
     'timeout' => 3600, // The timeout for the underlying process (1 hour)
-    'ffmpeg.threads' => 12,   // The number of threads that FFmpeg should use
+    'ffmpeg.threads' => get_cpu_cores(),   // The number of threads that FFmpeg should use
     'ffmpeg.binaries' => 'ffmpeg',
     'ffprobe.binaries' => 'ffprobe',
 ];
@@ -89,6 +100,8 @@ if (!isset($argv[1])) {
     log("No parameters have been specified.");
 }
 
+log("Threads: " . get_cpu_cores());
+
 $new = $argv[1];
 $target_file = $argv[2];
 $upload_type =  $argv[3];
@@ -96,12 +109,19 @@ $for_website = $argv[4];
 
 log("Upload type: " .  $upload_type);
 
+if ($upload_type != "video" | $upload_type != "video_thumbnail_only") {
+    log("Unsupported type.");
+    die();
+}
+
 try {
     $ffmpeg = FFMpeg::create($config);
     $ffprobe = FFProbe::create($config);
     $h264 = new X264();
 
     $h264->setAudioKiloBitrate(320)->setAdditionalParameters(array('-ar', '44100'));
+
+    log("File:" . $target_file);
 
     $video = $ffmpeg->open($target_file);
 
@@ -112,7 +132,7 @@ try {
     // case someone uploads one of those fuckass "1000000 hours" discord shitpost videos. -chaziz 12/28/2024
     $command = $config["ffprobe.binaries"] . " -v error -count_frames -select_streams v:0 -show_entries stream=nb_read_frames -of csv=p=0 " . $target_file;
 
-    log("Command: " . $command);
+    log("Attempting to get frame count...");
     $duration_command = shell_exec($command);
 
     $duration = trim($duration_command);
@@ -172,7 +192,7 @@ try {
     // Thumbnail
 
     // calculate thumbnail resolution in a way that wont fuck up the aspect ratio
-    $resolution = downscaleVideoForThumbnail($videoWidth, $videoHeight);
+    $resolution = downscale_video_for_thumbnail($videoWidth, $videoHeight);
 
     log("Resolution for thumbnail: " . $resolution["width"] . "x" . $resolution["height"]);
 
@@ -202,6 +222,12 @@ try {
     log("Saving thumbnail");
     $frame->save(BLUFF_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
     log("Thumbnail saved!");
+
+    if ($upload_type != "video_thumbnail_only") {
+        log("Only processing thubmnail, exiting...");
+        log("OpenSB Video Processing Worker Success!");
+        die();
+    }
 
     // Video
 
