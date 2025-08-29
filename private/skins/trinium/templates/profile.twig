@@ -84,22 +84,24 @@
                             <hr>
                         </div>
                     {% endif %}
-                    <ul class="profile-details-list">
-                        <li class="detail-item">
-                            <span class="detail-label">{{ localize('registered') }}:</span>
-                            <span class="detail-value">{{ data.joined | format_date('long', 'none') }}</span>
-                        </li>
-                        <li class="detail-item">
-                            <span class="detail-label">{{ localize('last_seen') }}:</span>
-                            <span class="detail-value">{{ data.connected | relative_time() }}</span>
-                        </li>
-                    </ul>
-                    {% if user_is_authenticated_admin %}
-                        <hr>
-                        {#<div class="">#}
-                        <a href="/dashboard/users/{{ data.username }}">{{ localize('dashboard_lookup') }}</a>
-                        {#</div>#}
-                    {% endif %}
+                    <div class="profile-details">
+                        <ul class="profile-details-list">
+                            <li class="detail-item">
+                                <span class="detail-label">{{ localize('registered') }}:</span>
+                                <span class="detail-value">{{ data.joined | format_date('long', 'none') }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">{{ localize('last_seen') }}:</span>
+                                <span class="detail-value">{{ data.connected | relative_time() }}</span>
+                            </li>
+                        </ul>
+                        {% if user_is_authenticated_admin %}
+                            <hr>
+                            {#<div class="">#}
+                            <a href="/dashboard/users/{{ data.username }}">{{ localize('dashboard_lookup') }}</a>
+                            {#</div>#}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
