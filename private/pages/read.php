@@ -34,8 +34,6 @@ if ($_GET['j'] ?? null) {
     CoreUtilities::redirect('/read/' . $_GET['j'], 301);
 }
 
-$id = $path[2] ?? null;
-
 $data = $database->fetch("SELECT j.* FROM journals j WHERE j.id = ?", [$id]);
 
 if (!$data) {
