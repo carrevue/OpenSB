@@ -96,33 +96,39 @@
     }
 }
 
-.profile-details-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    .detail-item {
-        display: flex;
-        justify-content: space-between;
-        border-bottom: 1px solid $content-box-border-color;
-        padding: 0.5em 0;
-
-        &:first-child {
-            padding-top: 0;
-        }
-
-        &:last-child {
-            padding-bottom: 0;
-            border-bottom: none;
-        }
+.profile-details {
+    hr {
+        margin: 0.5em 0;
     }
 
-    .detail-label {
-        font-weight: bold;
-    }
+    .profile-details-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
 
-    .detail-value {
-        text-align: right;
-        font-weight: 400;
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid $content-box-border-color;
+            padding: 0.5em 0;
+
+            &:first-child {
+                padding-top: 0;
+            }
+
+            &:last-child {
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+        }
+
+        .detail-label {
+            //font-weight: bold;
+        }
+
+        .detail-value {
+            text-align: right;
+            //font-weight: 400;
+        }
     }
 }
