@@ -109,10 +109,12 @@ $for_website = $argv[4];
 
 log("Upload type: " .  $upload_type);
 
-if ($upload_type != "video" | $upload_type != "video_thumbnail_only") {
+/*
+if ($upload_type != "video" || $upload_type != "video_thumbnail_only") {
     log("Unsupported type.");
     die();
 }
+*/
 
 try {
     $ffmpeg = FFMpeg::create($config);
@@ -223,8 +225,8 @@ try {
     $frame->save(BLUFF_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
     log("Thumbnail saved!");
 
-    if ($upload_type != "video_thumbnail_only") {
-        log("Only processing thubmnail, exiting...");
+    if ($upload_type == "video_thumbnail_only") {
+        log("Only processing thumbnail, exiting...");
         log("OpenSB Video Processing Worker Success!");
         die();
     }
