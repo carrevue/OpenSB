@@ -28,6 +28,7 @@ global $orange, $twig, $database;
 
 use DateMalformedStringException;
 use DateTime;
+use BluffingoCore\CoreUtilities;
 use Random\RandomException;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
@@ -163,7 +164,7 @@ if (isset($_POST['registersubmit'])) {
             $orange->getDiscordWebhookClass()->newUserHook($data);
         }
 
-        Utilities::redirect('./');
+        CoreUtilities::redirect('./');
     } else {
         Utilities::notifyBanner($error, "/register");
     }

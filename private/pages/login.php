@@ -166,7 +166,7 @@ if (isset($_POST["loginsubmit"])) {
                 $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
                 $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
 
-                Utilities::redirect('./');
+                CoreUtilities::redirect('./');
             } else {
                 Utilities::notifyBanner("notify_login_incorrect", "/login");
             }

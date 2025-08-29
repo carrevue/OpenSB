@@ -25,10 +25,10 @@ global $twig, $database, $auth, $orange;
 
 use DateMalformedStringException;
 use DateTime;
-use SquareBracket\Utilities;
+use BluffingoCore\CoreUtilities;
 
 if (isset($auth->getUserData()['birthdate']) && !$orange->isDebug()) {
-    header('Location: /index');
+    CoreUtilities::redirect("/");
 }
 
 if ($orange->getLocalOptions()["skin"] != "trinium") {
@@ -39,7 +39,7 @@ if ($orange->getLocalOptions()["skin"] != "trinium") {
 
     $orange->setOptionCookie($options);
 
-    Utilities::redirect("/verify_birthdate");
+    CoreUtilities::redirect("/verify_birthdate");
 }
 
 if (isset($_POST['birthdatesubmit'])) {

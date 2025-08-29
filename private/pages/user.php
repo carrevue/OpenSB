@@ -25,6 +25,7 @@ namespace OpenSB;
 
 global $auth, $database, $twig, $orange;
 
+use BluffingoCore\CoreUtilities
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\UploadData;
@@ -40,7 +41,7 @@ $options = $orange->getLocalOptions();
 
 $username = $path[2] ?? null;
 
-if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name']);
+if (isset($_GET['name'])) CoreUtilities::redirect('/user/' . $_GET['name'], 301);
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 

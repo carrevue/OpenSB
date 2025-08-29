@@ -23,6 +23,6 @@
 
 namespace OpenSB;
 
-use SquareBracket\Utilities;
+use BluffingoCore\CoreUtilities;
 
-if (isset($_GET['user'])) Utilities::redirect('/user/' . $_GET['user']);
+if (isset($_GET['user'])) CoreUtilities::redirect('/user/' . $_GET['user'], 301);

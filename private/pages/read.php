@@ -23,6 +23,7 @@ namespace OpenSB;
 
 global $orange, $twig, $database, $auth;
 
+use BluffingoCore\CoreUtilities;
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\UserCustomizationData;
@@ -30,7 +31,7 @@ use SquareBracket\UserData;
 use SquareBracket\Utilities;
 
 if ($_GET['j'] ?? null) {
-    Utilities::redirect('/read/' . $_GET['j']);
+    CoreUtilities::redirect('/read/' . $_GET['j'], 301);
 }
 
 $id = $path[2] ?? null;

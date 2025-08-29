@@ -29,6 +29,7 @@ define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
 define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 use JetBrains\PhpStorm\NoReturn;
+use BluffingoCore\CoreUtilities;
 use SquareBracket\Utilities;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
@@ -47,7 +48,7 @@ require_once BLUFF_PRIVATE_PATH . '/common.php';
         readfile($skinPath);
         exit;
     } else {
-        Utilities::redirect('/assets/unknown_theme.png');
+        CoreUtilities::redirect('/assets/unknown_theme.png', 404);
     }
 }
 
@@ -99,7 +100,7 @@ function handle_debug_page_path(string $path): void
 
 if (isset($path[1]) && $path[1] != '') {
     match ($path[1]) {
-        'admin' => Utilities::redirect('/dashboard/' . implode('/', array_slice($path, 2))),
+        'admin' => CoreUtilities::redirect('/dashboard/' . implode('/', array_slice($path, 2)), 301),
         'api' => match ($path[2] ?? null) {
             'frontend' => match ($path[3] ?? null) {
                 'comment_load' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/comment_load.php'),
@@ -148,7 +149,7 @@ if (isset($path[1]) && $path[1] != '') {
             'interactions' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/interactions.php'),
             'invite_keys' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/invite_keys.php'),
             'ip_bans' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/ip_bans.php'),
-            default => Utilities::redirect('/dashboard/overview'),
+            default => CoreUtilities::redirect('/dashboard/overview', 301),
         },
         'debug' => match ($path[2] ?? null) {
             //null, '', 'index' => require(BLUFF_PRIVATE_PATH . '/pages/debug/index.php'),
@@ -166,10 +167,10 @@ if (isset($path[1]) && $path[1] != '') {
         'license' => require(BLUFF_PRIVATE_PATH . '/pages/license.php'),
         'login' => require(BLUFF_PRIVATE_PATH . '/pages/login.php'),
         'logout' => require(BLUFF_PRIVATE_PATH . '/pages/logout.php'),
-        'my_submissions' => Utilities::redirect('/my_uploads'),
+        'my_submissions' => CoreUtilities::redirect('/my_uploads', 301),
         'my_messages' => require(BLUFF_PRIVATE_PATH . '/pages/my_messages.php'),
         'my_uploads' => require(BLUFF_PRIVATE_PATH . '/pages/my_uploads.php'),
-        'notices' => Utilities::redirect('/notifications'),
+        'notices' => CoreUtilities::redirect('/notifications', 301),
         'notifications' => require(BLUFF_PRIVATE_PATH . '/pages/notifications.php'),
         'privacy' => require(BLUFF_PRIVATE_PATH . '/pages/privacy.php'),
         'profile' => require(BLUFF_PRIVATE_PATH . '/pages/profile.php'),
@@ -188,7 +189,7 @@ if (isset($path[1]) && $path[1] != '') {
         'verify_birthdate' => require(BLUFF_PRIVATE_PATH . '/pages/verify_birthdate.php'),
         'version' => require(BLUFF_PRIVATE_PATH . '/pages/version.php'),
         'view' => require(BLUFF_PRIVATE_PATH . '/pages/view.php'),
-        'watch' => Utilities::redirect('/view/' . $_GET['v']),
+        'watch' => CoreUtilities::redirect('/view/' . $_GET['v'], 301),
         'write' => require(BLUFF_PRIVATE_PATH . '/pages/write.php'),
         default => last_resort()
     };

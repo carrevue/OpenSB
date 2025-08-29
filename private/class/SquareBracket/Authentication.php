@@ -22,6 +22,7 @@
 namespace SquareBracket;
 
 use BluffingoCore\Database;
+use BluffingoCore\CoreUtilities;
 
 /**
  * Authentication stuff.
@@ -111,10 +112,10 @@ class Authentication
     /**
      * Logs out the user.
      */
-    public function logOut(): never
+    public function logOut(): void
     {
         session_destroy();
-        Utilities::redirect('./');
+        CoreUtilities::redirect('./');
     }
 
     /**

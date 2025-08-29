@@ -196,15 +196,10 @@ class Utilities
         $_SESSION["notif_color"] = $color;
 
         if ($redirect) {
+            // this should most definitely use CoreUtilities::redirect
             header(sprintf('Location: %s', $redirect));
             die();
         }
-    }
-
-    public static function redirect($url, ...$args): void
-    {
-        header('Location: ' . sprintf($url, ...$args));
-        die();
     }
 
     public static function generateRandomString($length, $includeSymbols = false): string
@@ -311,9 +306,9 @@ class Utilities
     public static function calculateAgeFrom($birthdate, $date): int
     {
         $birthDate = new DateTime($birthdate);
-        $date_fuck = new DateTime();
-        $date_fuck->setTimestamp($date);
-        $interval = $date_fuck->diff($birthDate);
+        $targetDate = new DateTime();
+        $targetDate->setTimestamp($date);
+        $interval = $targetDate->diff($birthDate);
         return $interval->y;
     }
 
