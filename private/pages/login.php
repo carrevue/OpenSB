@@ -25,6 +25,7 @@ namespace OpenSB;
 
 global $twig, $database, $auth, $orange;
 
+use BluffingoCore\CoreUtilities;
 use SquareBracket\Utilities;
 
 $warning = $orange->getWarningString();

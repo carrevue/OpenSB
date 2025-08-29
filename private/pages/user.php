@@ -25,7 +25,7 @@ namespace OpenSB;
 
 global $auth, $database, $twig, $orange;
 
-use BluffingoCore\CoreUtilities
+use BluffingoCore\CoreUtilities;
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;
 use SquareBracket\UploadData;
@@ -121,12 +121,18 @@ function handleFeaturedSubmission($database, $data): false|array
 
 $user_submissions = $submission_query->query("v.time desc", $user_submissions_query_limit, "v.author = ?", [$data["id"]]);
 
+if ($options["skin"] == "bootstrap") {
+    $user_journal_limit = 3;
+} else {
+    $user_journal_limit = 8;
+}
+
 $user_journals =
     $database->fetchArray(
         $database->query("SELECT j.* FROM journals j WHERE
                          j.author = ? 
                          ORDER BY j.date 
-                         DESC LIMIT 8", [$data["id"]])
+                         DESC LIMIT ?", [$data["id"], $user_journal_limit])
     );
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
