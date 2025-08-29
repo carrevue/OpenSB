@@ -107,6 +107,7 @@ $router->add('/index', 'index.php');
 // standard pages
 $router->add('/browse', 'browse.php');
 $router->add('/login', 'login.php');
+$router->add('/login/{user}', 'login.php');
 $router->add('/register', 'register.php');
 $router->add('/edit', 'edit.php');
 $router->add('/feature', 'feature.php');

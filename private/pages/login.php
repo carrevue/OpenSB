@@ -30,15 +30,13 @@ use SquareBracket\Utilities;
 
 $warning = $orange->getWarningString();
 
-$path_username = $path[2] ?? null;
-
-if (isset($path_username)) {
+if (isset($user)) {
     if (isset($_POST["loginsubmit"])) {
         die("?????");
     }
 
     $is_the_account_in_the_accounts_array = false;
-    $id = Utilities::usernameToUserID($database, $path_username);
+    $id = Utilities::usernameToUserID($database, $user);
     $accounts = $orange->getAccountsArray();
     $new_array = [];
     $token = null;
@@ -72,7 +70,7 @@ if (isset($path_username)) {
             'httponly' => false,
             'samesite' => 'Lax',
         ]);
-        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$path_username]);
+        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$user]);
     } else {
         Utilities::notifyBanner("You have not logged into this account.", '/');
     }
