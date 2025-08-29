@@ -51,8 +51,6 @@ function discord_webhook_notify($orange, $auth, $user, $action)
     $orange->getDiscordWebhookClass()->dashboardUserHook($data);
 }
 
-$username = $path[3] ?? null;
-
 $user = $database->fetch("SELECT u.*, (SELECT COUNT(*) FROM user_bans WHERE userid = u.id) AS is_banned FROM users u WHERE u.name = ?", [$username]);
 
 if (!$user) {
@@ -66,7 +64,7 @@ if (!$user) {
         header("Location: /dashboard/users/$new_username");
         exit();
     } else {
-        Utilities::notifyBanner("notify_invalid_user", "/dashboard/");
+        Utilities::notifyBanner("notify_invalid_user", "/dashboard/users");
     }
 }
 
@@ -117,7 +115,7 @@ if (isset($_POST['verify_user'])) {
         Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/user/{$username}");
     }
 
-   if ($flags & UserFlags::FLAG_UNVERIFIED->value) {
+    if ($flags & UserFlags::FLAG_UNVERIFIED->value) {
         $flags &= ~UserFlags::FLAG_UNVERIFIED->value;
 
         $database->query(

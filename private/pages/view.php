@@ -37,8 +37,6 @@ use SquareBracket\Utilities;
 
 $options = $orange->getLocalOptions();
 
-$id = $path[2] ?? null;
-
 if ($orange->isFulpTube()) {
     if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
         Utilities::notifyBanner("notify_original_fulptube_video", "/");

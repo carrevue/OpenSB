@@ -166,7 +166,7 @@ set_exception_handler(function ($exception) {
             "<h1>An error has occurred</h1>" .
                 "<div style='padding: 1em; border: 1px solid red;'>" .
                 "%s" .
-                "<p>Please report this error on GitHub: <a href='%s' target='_blank'>Report on GitHub</a></p>" .
+                "<p>Please report this error on GitHub: <a href='%s' target='_blank'>Report</a></p>" .
                 "</div>",
             $errorMsg,
             $githubNewIssueUrl,
@@ -180,6 +180,9 @@ $orange = new SquareBracket($config);
 $database = $orange->getDatabaseClass();
 
 if (!BLUFF_CLI) {
+    $version_number = new VersionNumber(); // kinda ugly imo
+    header('X-Powered-By: OpenSB ' . $version_number->getVersionString());
+
     $auth = $orange->getAuthenticationClass(); // temporary ig?
 
     // automatic stuff

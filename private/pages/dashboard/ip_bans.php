@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-global $auth, $twig, $orange;
+global $auth, $twig, $database, $orange;
 
 use SquareBracket\Utilities;
 use SquareBracket\UserRoleEnum;

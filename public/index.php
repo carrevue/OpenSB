@@ -30,7 +30,7 @@ define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionStri
 
 use JetBrains\PhpStorm\NoReturn;
 use BluffingoCore\CoreUtilities;
-use SquareBracket\Utilities;
+use BluffingoCore\Router;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
@@ -75,6 +75,8 @@ function last_resort(): void
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
 }
 
+// TODO
+/*
 $uri = parse_url(rawurldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
 $path = explode('/', $uri);
 
@@ -94,105 +96,101 @@ function handle_debug_page_path(string $path): void
         last_resort();
     }
 }
+*/
 
-// Originally based on Rollerozxa's router implementation in Principia-Web.
-// https://github.com/principia-game/principia-web/blob/master/router.php
+$router = new Router();
 
-if (isset($path[1]) && $path[1] != '') {
-    match ($path[1]) {
-        'admin' => CoreUtilities::redirect('/dashboard/' . implode('/', array_slice($path, 2)), 301),
-        'api' => match ($path[2] ?? null) {
-            'frontend' => match ($path[3] ?? null) {
-                'comment_load' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/comment_load.php'),
-                'comment_send' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/comment_send.php'),
-                'upload_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/upload_interaction.php'),
-                'user_interaction' => require(BLUFF_PRIVATE_PATH . '/pages/api/frontend/user_interaction.php'),
-                default => last_resort(),
-            },
-            'legacy' => match ($path[3] ?? null) {
-                'ajax_watch' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/ajax_watch.php'),
-                'comment' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/comment.php'),
-                'rate' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/rate.php'),
-                'subscribe' => require(BLUFF_PRIVATE_PATH . '/pages/api/legacy/subscribe.php'),
-                default => last_resort(),
-            },
-            'v3' => match ($path[3] ?? null) { //INCOMPLETE
-                'get_comments' => require(BLUFF_PRIVATE_PATH . '/pages/api/v3/get_comments.php'),
-                'get_instance_info' => require(BLUFF_PRIVATE_PATH . '/pages/api/v3/get_instance_info.php'),
-                'get_upload' => require(BLUFF_PRIVATE_PATH . '/pages/api/v3/get_upload.php'),
-                'get_uploads' => require(BLUFF_PRIVATE_PATH . '/pages/api/v3/get_uploads.php'),
-                default => die(json_encode("Invalid API."))
-            },
-            default => last_resort(),
-        },
-        'assets' => match ($path[2] ?? null) {
-            'bootstrap-icons.svg' => load_file_from_vendor('/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml'),
-            'previews' => load_thumbnail_from_skin($path[3] ?? ''),
-            default => last_resort(),
-        },
-        'browse' => require(BLUFF_PRIVATE_PATH . '/pages/browse.php'),
-        'dashboard' => match ($path[2] ?? null) {
-            'login' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/login.php'),
-            'users' => match ($path[3] ?? null) {
-                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
-                    ? require(BLUFF_PRIVATE_PATH . '/pages/dashboard/user_edit.php')
-                    : require(BLUFF_PRIVATE_PATH . '/pages/dashboard/users.php'),
-                default => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/users.php'),
-            },
-            'overview' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/overview.php'),
-            'uploads' => match ($path[3] ?? null) {
-                $path[3] ?? null => (!empty($path[3]) && $path[3] !== '')
-                    ? require(BLUFF_PRIVATE_PATH . '/pages/dashboard/upload_edit.php')
-                    : require(BLUFF_PRIVATE_PATH . '/pages/dashboard/uploads.php'),
-                default => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/uploads.php'),
-            },
-            'interactions' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/interactions.php'),
-            'invite_keys' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/invite_keys.php'),
-            'ip_bans' => require(BLUFF_PRIVATE_PATH . '/pages/dashboard/ip_bans.php'),
-            default => CoreUtilities::redirect('/dashboard/overview', 301),
-        },
-        'debug' => match ($path[2] ?? null) {
-            //null, '', 'index' => require(BLUFF_PRIVATE_PATH . '/pages/debug/index.php'),
-            //'notifications' => require(BLUFF_PRIVATE_PATH . '/pages/debug/notifications.php'),
-            default => handle_debug_page_path($path[2] ?? ''),
-        },
-        'delete' => require(BLUFF_PRIVATE_PATH . '/pages/delete.php'),
-        'design_test' => require(BLUFF_PRIVATE_PATH . '/pages/design_test.php'),
-        'edit' => require(BLUFF_PRIVATE_PATH . '/pages/edit.php'),
-        'feature' => require(BLUFF_PRIVATE_PATH . '/pages/feature.php'),
-        'guidelines' => require(BLUFF_PRIVATE_PATH . '/pages/guidelines.php'),
-        'help' => require(BLUFF_PRIVATE_PATH . '/pages/help.php'),
-        'index' => require(BLUFF_PRIVATE_PATH . '/pages/index.php'),
-        'journals' => require(BLUFF_PRIVATE_PATH . '/pages/journals.php'),
-        'license' => require(BLUFF_PRIVATE_PATH . '/pages/license.php'),
-        'login' => require(BLUFF_PRIVATE_PATH . '/pages/login.php'),
-        'logout' => require(BLUFF_PRIVATE_PATH . '/pages/logout.php'),
-        'my_submissions' => CoreUtilities::redirect('/my_uploads', 301),
-        'my_messages' => require(BLUFF_PRIVATE_PATH . '/pages/my_messages.php'),
-        'my_uploads' => require(BLUFF_PRIVATE_PATH . '/pages/my_uploads.php'),
-        'notices' => CoreUtilities::redirect('/notifications', 301),
-        'notifications' => require(BLUFF_PRIVATE_PATH . '/pages/notifications.php'),
-        'privacy' => require(BLUFF_PRIVATE_PATH . '/pages/privacy.php'),
-        'profile' => require(BLUFF_PRIVATE_PATH . '/pages/profile.php'),
-        'read' => require(BLUFF_PRIVATE_PATH . '/pages/read.php'),
-        'register' => require(BLUFF_PRIVATE_PATH . '/pages/register.php'),
-        'search' => require(BLUFF_PRIVATE_PATH . '/pages/search.php'),
-        'settings' => require(BLUFF_PRIVATE_PATH . '/pages/settings.php'),
-        'staff' => require(BLUFF_PRIVATE_PATH . '/pages/staff.php'),
-        'theme' => require(BLUFF_PRIVATE_PATH . '/pages/theme.php'),
-        'tos' => require(BLUFF_PRIVATE_PATH . '/pages/tos.php'),
-        'upload' => require(BLUFF_PRIVATE_PATH . '/pages/upload.php'),
-        'user' => match ($_SERVER['HTTP_ACCEPT'] ?? null) {
-            default => require(BLUFF_PRIVATE_PATH . '/pages/user.php')
-        },
-        'users' => require(BLUFF_PRIVATE_PATH . '/pages/users.php'),
-        'verify_birthdate' => require(BLUFF_PRIVATE_PATH . '/pages/verify_birthdate.php'),
-        'version' => require(BLUFF_PRIVATE_PATH . '/pages/version.php'),
-        'view' => require(BLUFF_PRIVATE_PATH . '/pages/view.php'),
-        'watch' => CoreUtilities::redirect('/view/' . $_GET['v'], 301),
-        'write' => require(BLUFF_PRIVATE_PATH . '/pages/write.php'),
-        default => last_resort()
-    };
-} else {
-    require(BLUFF_PRIVATE_PATH . '/pages/index.php');
-}
+// homepage
+$router->add('/', 'index.php');
+$router->add('/index', 'index.php');
+
+// standard pages
+$router->add('/browse', 'browse.php');
+$router->add('/login', 'login.php');
+$router->add('/register', 'register.php');
+$router->add('/edit', 'edit.php');
+$router->add('/feature', 'feature.php');
+$router->add('/guidelines', 'guidelines.php');
+$router->add('/help', 'help.php');
+$router->add('/journals', 'journals.php');
+$router->add('/license', 'license.php');
+$router->add('/logout', 'logout.php');
+$router->add('/my_messages', 'my_messages.php');
+$router->add('/my_uploads', 'my_uploads.php');
+$router->add('/notifications', 'notifications.php');
+$router->add('/privacy', 'privacy.php');
+$router->add('/profile', function () {
+    if (isset($_GET['user'])) CoreUtilities::redirect('/user/' . $_GET['user'], 301);
+});
+$router->add('/read', 'read.php');
+$router->add('/search', 'search.php');
+$router->add('/settings', 'settings.php');
+$router->add('/staff', 'staff.php');
+$router->add('/theme', 'theme.php');
+$router->add('/tos', 'tos.php');
+$router->add('/upload', 'upload.php');
+$router->add('/user/{username}', 'user.php');
+$router->add('/users', 'users.php');
+$router->add('/verify_birthdate', 'verify_birthdate.php');
+$router->add('/version', 'version.php');
+$router->add('/watch/', function () {
+    if (isset($_GET['v'])) CoreUtilities::redirect('/view/' . $_GET['v'], 301);
+});
+$router->add('/view/{id}', 'view.php');
+$router->add('/write', 'write.php');
+
+// api
+$router->add('/api/frontend/comment_load', 'api/frontend/comment_load.php'); // finalium-only
+$router->add('/api/frontend/comment_send', 'api/frontend/comment_send.php'); // trinium-only
+$router->add('/api/frontend/upload_interaction', 'api/frontend/upload_interaction.php'); // trinium-only
+$router->add('/api/frontend/user_interaction', 'api/frontend/user_interaction.php'); // trinium-only
+
+// only used by bootstrap and finalium (old, trash and deprecated)
+$router->add('/api/legacy/ajax_watch', (function () {
+    // the old finalium ajax_watch implementation was fucked beyond repair
+    // so i'll wait until later on to reimplement this -chaziz 08/29/2025
+    die("This page intentionally left blank.");
+}));
+$router->add('/api/legacy/comment', 'api/legacy/comment.php');
+$router->add('/api/legacy/rate', 'api/legacy/rate.php');
+$router->add('/api/legacy/subscribe', 'api/legacy/subscribe.php');
+
+// json api (not fully complete and probably won't be for a while)
+$router->add('/api/v3/get_comments', 'api/v3/get_comments.php');
+$router->add('/api/v3/get_instance_info', 'api/v3/get_instance_info.php');
+$router->add('/api/v3/get_upload', 'api/v3/get_upload.php');
+$router->add('/api/v3/get_uploads', 'api/v3/get_uploads.php');
+
+// redirect to dashboard
+$router->redirect('/admin', '/dashboard');
+$router->redirect('/admin/{page}', '/dashboard'); // just redirect to /dashboard for now
+
+// dashboard routes
+$router->add('/dashboard/login', 'dashboard/login.php');
+$router->add('/dashboard/users', 'dashboard/users.php');
+$router->add('/dashboard/users/{username}', 'dashboard/user_edit.php');
+$router->add('/dashboard/overview', 'dashboard/overview.php');
+$router->add('/dashboard/uploads', 'dashboard/uploads.php');
+$router->add('/dashboard/uploads/{id}', 'dashboard/upload_edit.php');
+$router->add('/dashboard/interactions', 'dashboard/interactions.php');
+$router->add('/dashboard/invite_keys', 'dashboard/invite_keys.php');
+$router->add('/dashboard/ip_bans', 'dashboard/ip_bans.php');
+$router->redirect('/dashboard', '/dashboard/overview', 301);
+
+// bootstrap icons (used by bootstrap and finalium)
+$router->add('/assets/bootstrap-icons.svg', function () {
+    load_file_from_vendor('/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
+});
+
+// used by the theme page for images
+$router->add('/assets/previews/{image}', function (array $params) {
+    load_thumbnail_from_skin($params['image']);
+});
+
+// fallback
+$router->setFallback(function () {
+    last_resort();
+});
+
+// and now, the moment you've been waiting for...
+$router->dispatch();

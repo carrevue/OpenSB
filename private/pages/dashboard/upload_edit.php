@@ -40,14 +40,12 @@ if ($orange->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
-$id = $path[3] ?? null;
-
 $upload = new UploadData($database, $id);
 
 $data = $upload->getData();
 
 if (!$data) {
-    Utilities::notifyBanner("notify_invalid_upload", "/dashboard/");
+    Utilities::notifyBanner("notify_invalid_upload", "/dashboard/uploads");
 }
 
 $flags = $upload->getUploadFlagsArray();

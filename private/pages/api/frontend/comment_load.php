@@ -21,6 +21,8 @@
 
 namespace OpenSB;
 
+global $orange, $database, $twig;
+
 use Exception;
 use SquareBracket\CommentData;
 use SquareBracket\CommentLocation;

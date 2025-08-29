@@ -39,8 +39,6 @@ $submission_query = new UploadQuery($database);
 
 $options = $orange->getLocalOptions();
 
-$username = $path[2] ?? null;
-
 if (isset($_GET['name'])) CoreUtilities::redirect('/user/' . $_GET['name'], 301);
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
