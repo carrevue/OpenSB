@@ -168,8 +168,15 @@
 
             <div class="section">
                 <div class="content-box basic-box">
-                    <div class="section-header">
-                        <h2 class="section-title">{{ localize('comments') }}</h2>
+                    <div class="section-header flex">
+                        <div class="section-header-left">
+                            <h2 class="section-title">{{ localize('comments') }}</h2>
+                        </div>
+                        <div class="section-header-right">
+                            <a href="/user/{{ data.username }}/comments">
+                                {{ localize('more') }}
+                            </a>
+                        </div>
                     </div>
                     {{ include('/components/_comment_input.twig') }}
                     {% for comment in data.comments %}

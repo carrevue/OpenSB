@@ -66,10 +66,6 @@ if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?"
 
 $user_submissions_query_limit = 12;
 
-if ($options["skin"] == "bootstrap" && $options["theme"] == "alpha2") {
-    $user_submissions_query_limit = 1;
-}
-
 // TODO: redo this
 function handleFeaturedSubmission($database, $data): false|array
 {
@@ -97,12 +93,12 @@ function handleFeaturedSubmission($database, $data): false|array
     $bools = $submission->getUploadFlagsArray();
 
     // IF:
-    // * The submission is taken down, and/or
-    // * The submission no longer exists and/or
-    // * The submission's author is not the user whose profile we're looking at and/or
-    // * The submission is not available to guests and the user isn't signed in and/or
-    // * TODO: The submission is privated...
-    // then simply just return false, so we don't show the featured submission.
+    // * The upload is taken down, and/or
+    // * The upload no longer exists and/or
+    // * The upload's author is not the user whose profile we're looking at and/or
+    // * The upload is not available to guests and the user isn't signed in and/or
+    // * TODO: The upload is privated...
+    // then simply just return false, so we don't show the featured upload.
     if (
         $submission->getTakedown()
         || !$submission_data
@@ -143,7 +139,15 @@ if ($flags["profile_customization_enabled"]) {
     $profile_customization_data = null;
 }
 
-$comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
+if (
+    $orange->getLocalOptions()["skin"] != "bootstrap" &&
+    ($orange->getLocalOptions()["skin"] != "finalium" && $orange->getLocalOptions()["theme"] != "hitchhiker")
+) {
+    $comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
+    $comments = $comment_data->getComments(10);
+} else {
+    $comments = [];
+}
 
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["id"]]);
 $followed = Utilities::isFollowingUser($data["id"]);
@@ -163,7 +167,7 @@ $profile_data = [
     "featured_submission" => $featured_submission,
     "submissions" => Utilities::makeUploadArray($database, $user_submissions),
     "journals" => Utilities::makeJournalArray($database, $user_journals),
-    "comments" => $comments->getComments(),
+    "comments" => $comments,
     "followers" => $followers,
     "following" => $followed,
     "is_staff" => ($data["powerlevel"] > 1),

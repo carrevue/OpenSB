@@ -83,36 +83,46 @@ class CommentData
 
     public function getCommentCount()
     {
-        return $this->count;
+        return $this->count; // TODO: rework this completely
     }
 
-    public function getComments()
+    public function getComments($limit = 0)
     {
         $database_data = null;
+        $limit_clause = $limit > 0 ? "LIMIT ?" : "";
 
         switch ($this->type) {
             case CommentLocation::Upload:
-                $database_data = $this->fetchComments("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
-                                                  FROM upload_comments c 
-                                                  WHERE c.id = ? AND c.reply_to = 0
-                                                  AND c.author NOT IN (SELECT userid FROM user_bans)
-                                                  ORDER BY c.date DESC", [$this->id]);
+                $query = "SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
+                      FROM upload_comments c 
+                      WHERE c.id = ? AND c.reply_to = 0
+                      AND c.author NOT IN (SELECT userid FROM user_bans)
+                      ORDER BY c.date DESC " . $limit_clause;
+                $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
+                $database_data = $this->fetchComments($query, $params);
                 break;
+
             case CommentLocation::Profile:
-                $database_data = $this->fetchComments("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
-                                                  FROM user_profile_comments c 
-                                                  WHERE c.id = ? AND c.reply_to = 0
-                                                  AND c.author NOT IN (SELECT userid FROM user_bans)
-                                                  ORDER BY c.date DESC", [$this->id]);
+                $query = "SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
+                      FROM user_profile_comments c 
+                      WHERE c.id = ? AND c.reply_to = 0
+                      AND c.author NOT IN (SELECT userid FROM user_bans)
+                      ORDER BY c.date DESC " . $limit_clause;
+                $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
+                $database_data = $this->fetchComments($query, $params);
                 break;
+
             case CommentLocation::Journal:
-                $database_data = $this->fetchComments("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
-                                                  FROM journal_comments c 
-                                                  WHERE c.id = ? AND c.reply_to = 0
-                                                  AND c.author NOT IN (SELECT userid FROM user_bans)
-                                                  ORDER BY c.date DESC", [$this->id]);
+                $query = "SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
+                      FROM journal_comments c 
+                      WHERE c.id = ? AND c.reply_to = 0
+                      AND c.author NOT IN (SELECT userid FROM user_bans)
+                      ORDER BY c.date DESC " . $limit_clause;
+                $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
+                $database_data = $this->fetchComments($query, $params);
                 break;
         }
+
 
         $data = [];
         foreach ($database_data as $comment) {

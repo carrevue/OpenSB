@@ -132,7 +132,6 @@ $router->add('/staff', 'staff.php');
 $router->add('/theme', 'theme.php');
 $router->add('/tos', 'tos.php');
 $router->add('/upload', 'upload.php');
-$router->add('/user/{username}', 'user.php');
 $router->add('/users', 'users.php');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
 $router->add('/version', 'version.php');
@@ -141,6 +140,13 @@ $router->add('/watch/', function () {
 });
 $router->add('/view/{id}', 'view.php');
 $router->add('/write', 'write.php');
+
+// user profiles
+$router->add('/user/{username}', 'user.php'); // normal/overview
+$router->add('/user/{username}/uploads', 'user.php'); // uploads
+$router->add('/user/{username}/comments', 'user_comments.php'); // comments
+$router->add('/user/{username}/journals', 'user.php'); // journals
+$router->add('/user/{username}/about', 'user.php'); // about (mainly fulphiker-specific)
 
 // api
 $router->add('/api/frontend/comment_load', 'api/frontend/comment_load.php'); // finalium-only
