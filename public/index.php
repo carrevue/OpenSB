@@ -110,6 +110,7 @@ $router->add('/login', 'login.php');
 $router->add('/register', 'register.php');
 $router->add('/edit', 'edit.php');
 $router->add('/feature', 'feature.php');
+$router->add('/delete', 'delete.php');
 $router->add('/guidelines', 'guidelines.php');
 $router->add('/help', 'help.php');
 $router->add('/journals', 'journals.php');
