@@ -136,7 +136,7 @@ $router->add('/user/{username}', 'user.php');
 $router->add('/users', 'users.php');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
 $router->add('/version', 'version.php');
-$router->add('/watch/', function () {
+$router->add('/watch', function () {
     if (isset($_GET['v'])) CoreUtilities::redirect('/view/' . $_GET['v'], 301);
 });
 $router->add('/view/{id}', 'view.php');
