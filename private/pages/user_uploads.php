@@ -40,7 +40,7 @@ if (!$data) {
         // if so, redirect to the new profile.
         $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
         http_response_code(301);
-        header("Location: /user/$new_username/comments");
+        header("Location: /user/$new_username/uploads");
         exit();
     } else {
         Utilities::notifyBanner("notify_invalid_user", "/");
@@ -91,7 +91,6 @@ $data = [
     "color" => $data["customcolor"],
     "about" => ($data["about"] ?? null),
     "customization" => $profile_customization_data?->getData() ?? false,
-    "comments" => $comments,
     "submissions" => Utilities::makeUploadArray($database, $submissions),
     "count" => $submission_count,
 ];
