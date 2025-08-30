@@ -38,6 +38,7 @@ class SquareBracket
     private ?IPLookup $ip_lookup;
     private bool $is_debug = false;
     private bool $is_chaziz_squarebracket_instance = false;
+    private bool $is_sitetest_instance = false;
     private bool $template_caching_enabled = false;
     private bool $under_maintenance = false;
     private bool $enable_account_registration = true;
@@ -63,12 +64,13 @@ class SquareBracket
         $user = $config["mysql"]["username"];
         $pass = $config["mysql"]["password"];
 
-        $allowedSites = ['squarebracket', 'squarebracket_chaziz'];
+        $allowedSites = ['squarebracket', 'squarebracket_chaziz', 'sitetest'];
         if (!in_array($config["site"], $allowedSites)) {
             trigger_error("The site mode in the configuration file should be 
-            set either to squarebracket or squarebracket_chaziz.", E_USER_WARNING);
+            set either to squarebracket, squarebracket_chaziz or sitetest.", E_USER_WARNING);
         }
         $this->is_chaziz_squarebracket_instance = ($config["site"] === "squarebracket_chaziz");
+        $this->is_sitetest_instance = ($config["site"] === "sitetest");
 
         $this->is_debug = ($config["mode"] ?? '') === "DEV";
 
@@ -363,13 +365,17 @@ class SquareBracket
 
     /**
      * Returns boolean that indicates if incomplete features should be enabled.
-     * This is separate from isDebug.
+     * This is separate from isDebug, and is enabled by default on SiteTest.
      *
      * @return bool
      */
     public function isIncompleteFeaturesEnabled(): bool
     {
-        return $this->options["enable_incomplete_features"] ?? false;
+        if ($this->is_sitetest_instance) {
+            return true;
+        } else {
+            return $this->options["enable_incomplete_features"] ?? false;
+        }
     }
 
     /**
@@ -464,6 +470,16 @@ class SquareBracket
     public function isChazizSquareBracketInstance(): bool
     {
         return  $this->is_chaziz_squarebracket_instance;
+    }
+
+    /**
+     * Returns a bool that indicates if the instance is set to "SiteTest" mode.
+     *
+     * @return bool
+     */
+    public function isSiteTestInstance(): bool
+    {
+        return  $this->is_sitetest_instance;
     }
 
     /**

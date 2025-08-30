@@ -619,6 +619,13 @@ class SquareBracketTwigExtension extends AbstractExtension
             ];
         }
 
+        if ($this->orange->isSiteTestInstance()) {
+            $array["test"] = [
+                "name" => "Custom Footer Link",
+                "url" => "/",
+            ];
+        }
+
         return $array;
     }
 
