@@ -28,7 +28,7 @@ class VersionNumber
 
     public function __construct()
     {
-        $this->versionNumber = "1.3.0-beta.10.a";
+        $this->versionNumber = "1.3.0-beta.11-preview";
         $this->versionString = $this->makeVersionString();
     }
 
