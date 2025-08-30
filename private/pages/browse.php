@@ -24,6 +24,7 @@ namespace OpenSB;
 
 global $twig, $database;
 
+use BluffingoCore\CoreUtilities;
 use SquareBracket\UploadQuery;
 use SquareBracket\Utilities;
 
@@ -48,13 +49,7 @@ $order = getOrderFromType($type);
 $limit = $database->paginate($page, 20);
 
 if ($user) {
-    // TODO: handle old names
-    $id = Utilities::usernameToUserID($database, $user);
-    if (!$id) {
-        Utilities::notifyBanner("notify_invalid_user", "/");
-    }
-    $submissions = $submission_query->query($order, $limit, "v.author = ?", [$id]);
-    $submission_count = $submission_query->count("v.author = ?", [$id]);
+    CoreUtilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
 } else {
     $submissions = $submission_query->query($order, $limit);
     $submission_count = $submission_query->count();
