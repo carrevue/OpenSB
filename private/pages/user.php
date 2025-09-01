@@ -140,8 +140,7 @@ if ($flags["profile_customization_enabled"]) {
 }
 
 if (
-    $orange->getLocalOptions()["skin"] != "bootstrap" &&
-    ($orange->getLocalOptions()["skin"] != "finalium" && $orange->getLocalOptions()["theme"] != "hitchhiker")
+    $orange->getLocalOptions()["skin"] != "bootstrap" && $orange->getLocalOptions()["skin"] != "finalium"
 ) {
     $comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
     $comments = $comment_data->getComments(10);
@@ -176,56 +175,8 @@ $profile_data = [
     "ban_data" => $user_ban_data ?? [],
 ];
 
-// calculate the color used for profile banner on the bootstrap frontend
-// the original implementation for this used a scss php compiler library thing but that is fucking stupid and it'll
-// slow down the site, so lets just approximate this.
 if ($orange->getLocalOptions()["skin"] == "bootstrap") {
-    function adjustCssColorBrightness($hex, $percent): string
-    {
-        $hex = ltrim($hex, '#');
-        $r = hexdec(substr($hex, 0, 2));
-        $g = hexdec(substr($hex, 2, 2));
-        $b = hexdec(substr($hex, 4, 2));
-
-        // adjust brightness
-        $r = max(0, min(255, (int)round($r + $r * $percent / 100)));
-        $g = max(0, min(255, (int)round($g + $g * $percent / 100)));
-        $b = max(0, min(255, (int)round($b + $b * $percent / 100)));
-
-        // now convert this back into hex
-        return '#' . str_pad(dechex($r), 2, '0', STR_PAD_LEFT)
-            . str_pad(dechex($g), 2, '0', STR_PAD_LEFT)
-            . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
-    }
-
-    // approximate bootstrap's text-contrast scss function
-    $hex = ltrim($data["customcolor"], '#');
-    $r = hexdec(substr($hex, 0, 2));
-    $g = hexdec(substr($hex, 2, 2));
-    $b = hexdec(substr($hex, 4, 2));
-    $colorBrightness = round(($r * 299 + $g * 587 + $b * 114) / 1000);
-    $textColor = ($colorBrightness < 130) ? 'white' : 'black'; // 255/2 ≈ 130
-
-    // generate the gradient colors
-    $gradientStart = adjustCssColorBrightness($data["customcolor"], 0);
-    $gradientMid = adjustCssColorBrightness($data["customcolor"], -7);
-    $gradientEnd = adjustCssColorBrightness($data["customcolor"], -15);
-
-    $primaryStart = adjustCssColorBrightness($data["customcolor"], 8);
-    $primaryMid = $data["customcolor"];
-    $primaryEnd = adjustCssColorBrightness($data["customcolor"], -4);
-
-    // now turn this into css
-    $profile_data["bootstrap_profile_css"] = "
-.bg-custom-profile {
-    background-image: linear-gradient({$gradientStart}, {$gradientMid} 50%, {$gradientEnd});
-    color: {$textColor};
-}
-
-.bg-primary {
-    background-image: linear-gradient({$primaryStart}, {$primaryMid} 60%, {$primaryEnd});
-}
-";
+    $profile_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
 }
 
 echo $twig->render("profile.twig", [

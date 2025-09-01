@@ -414,4 +414,58 @@ class Utilities
 
         return $output;
     }
+
+    private static function adjustCssColorBrightness($hex, $percent): string
+    {
+        $hex = ltrim($hex, '#');
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+
+        // adjust brightness
+        $r = max(0, min(255, (int)round($r + $r * $percent / 100)));
+        $g = max(0, min(255, (int)round($g + $g * $percent / 100)));
+        $b = max(0, min(255, (int)round($b + $b * $percent / 100)));
+
+        // now convert this back into hex
+        return '#' . str_pad(dechex($r), 2, '0', STR_PAD_LEFT)
+            . str_pad(dechex($g), 2, '0', STR_PAD_LEFT)
+            . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
+    }
+
+    // calculate the color used for profile banner on the bootstrap frontend
+    // the original implementation for this used a scss php compiler library 
+    // thing but that is fucking stupid and it'll slow down the site, so lets
+    // just approximate this.
+    public static function makeBootstrapFrontendProfileGradient($userlink_color)
+    {
+        // approximate bootstrap's text-contrast scss function
+        $hex = ltrim($userlink_color, '#');
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+        $colorBrightness = round(($r * 299 + $g * 587 + $b * 114) / 1000);
+        $textColor = ($colorBrightness < 130) ? 'white' : 'black'; // 255/2 ≈ 130
+
+        // generate the gradient colors
+        $gradientStart = Utilities::adjustCssColorBrightness($userlink_color, 0);
+        $gradientMid = Utilities::adjustCssColorBrightness($userlink_color, -7);
+        $gradientEnd = Utilities::adjustCssColorBrightness($userlink_color, -15);
+
+        $primaryStart = Utilities::adjustCssColorBrightness($userlink_color, 8);
+        $primaryMid = $userlink_color;
+        $primaryEnd = Utilities::adjustCssColorBrightness($userlink_color, -4);
+
+        // now turn this into css (yes, this is fucking ugly)
+        return "
+        .bg-custom-profile {
+            background-image: linear-gradient({$gradientStart}, {$gradientMid} 50%, {$gradientEnd});
+            color: {$textColor};
+        }
+
+        .bg-primary {
+            background-image: linear-gradient({$primaryStart}, {$primaryMid} 60%, {$primaryEnd});
+        }
+        ";
+    }
 }
