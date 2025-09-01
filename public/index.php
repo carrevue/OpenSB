@@ -139,11 +139,11 @@ $router->add('/view/{id}', 'view.php');
 $router->add('/write', 'write.php');
 
 // user profiles
-$router->add('/user/{username}', 'user.php'); // normal/overview
-$router->add('/user/{username}/uploads', 'user_uploads.php'); // uploads
-$router->add('/user/{username}/comments', 'user_comments.php'); // comments
-$router->add('/user/{username}/journals', 'user.php'); // journals
-$router->add('/user/{username}/about', 'user.php'); // about (mainly fulphiker-specific)
+$router->add('/user/{username}', 'profile_overview.php'); // overview
+$router->add('/user/{username}/uploads', 'profile_uploads.php'); // uploads
+$router->add('/user/{username}/comments', 'profile_comments.php'); // comments
+$router->add('/user/{username}/journals', 'profile.php'); // journals
+$router->add('/user/{username}/about', 'profile.php'); // about (mainly fulphiker-specific)
 
 // api
 $router->add('/api/frontend/comment_load', 'api/frontend/comment_load.php'); // finalium-only
