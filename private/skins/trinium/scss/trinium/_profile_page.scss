@@ -34,6 +34,7 @@
 .profile-box {
     display: flex;
     align-items: center;
+    gap: 0.75em;
 
     &.centered {
         text-align: center
@@ -47,7 +48,6 @@
     .profile-box-pfp {
         width: $pfp-width-profiles;
         height: $pfp-width-profiles;
-        margin-right: 0.75em;
 
         &.small {
             width: math.div($pfp-width-profiles, 1.5);

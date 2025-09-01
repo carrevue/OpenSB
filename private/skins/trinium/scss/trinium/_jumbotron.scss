@@ -41,10 +41,9 @@
                     .jumbotron-welcome {
                         display: flex;
                         align-items: center;
+                        gap: 1em;
 
                         .profile-picture {
-                            margin-right: 1em;
-
                             @include responsive('tiny') {
                                 width: 48px;
                                 height: 48px;

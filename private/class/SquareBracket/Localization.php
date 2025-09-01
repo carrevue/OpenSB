@@ -190,6 +190,16 @@ class Localization
         return $message;
     }
 
+    public function getLanguageCode()
+    {
+        if ($this->locale === null) {
+            return 'en';
+        }
+
+        $parts = explode('-', $this->locale);
+        return strtolower($parts[0]);
+    }
+
     private function convertDateFormatterPattern($pattern)
     {
         if (is_int($pattern)) {

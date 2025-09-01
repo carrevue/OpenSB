@@ -179,6 +179,7 @@ class Templating
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('is_opensb_v1_3', true);
         $this->twig->addGlobal('options', $options);
+        $this->twig->addGlobal('language_code', $this->orange->getLocalizationClass()->getLanguageCode());
 
         if (isset($_SERVER["REQUEST_URI"])) {
             $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
