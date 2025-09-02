@@ -82,17 +82,22 @@
     }
 }
 
-.header-links {
-    /* actually known as user links, but back in 2023 the main browse/members links were aligned to the right so
-  thats why this is called header-links. */
+.header-main {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
 
-    text-align: right;
-    margin-left: auto;
+.header-links {
     display: flex;
     align-items: center;
 
     .user-menu-container {
         direction: rtl;
+
+        [dir="rtl"] & {
+            direction: ltr;
+        }
 
         .user-menu-button {
             height: $header-height;
@@ -139,6 +144,11 @@
 .header-logo {
     margin-right: 0.6rem;
 
+    [dir="rtl"] & {
+        margin-right: 0;
+        margin-left: 0.6rem;
+    }
+
     a {
         display: block;
         height: $header-logo-height;
@@ -162,6 +172,11 @@
         right: 0;
         top: 1px;
         /* stupid hack */
+
+        [dir="rtl"] & {
+            right: auto;
+            left: 0;
+        }
 
         background: none;
         border: none;
@@ -321,4 +336,9 @@
     display: flex;
     /* stupid hack */
     margin-right: 0.25rem;
+
+    [dir="rtl"] & {
+        margin-right: 0;
+        margin-left: 0.25rem;
+    }
 }

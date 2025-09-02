@@ -33,7 +33,7 @@ class VersionNumber
     }
 
     /**
-     * Make OpenSB's version number.
+     * Makes the version string.
      *
      */
     private function makeVersionString(): string
@@ -45,6 +45,17 @@ class VersionNumber
 
             $hash = substr($commit, 0, 7);
 
+            // if for example, the version number is opensb 1.3 and we're on 
+            // the opensb-1.3 branch, we don't need to show the git branch as 
+            // it would just repeat itself.
+            if (preg_match('/^(\d+\.\d+)/', $this->versionNumber, $matches)) {
+                $majorMinor = $matches[1];
+
+                if (str_starts_with($gitBranch, 'opensb-' . $majorMinor)) {
+                    return sprintf('%s-%s', $this->versionNumber, $hash);
+                }
+            }
+
             return sprintf('%s.%s-%s', $this->versionNumber, $gitBranch, $hash);
         } else {
             return $this->versionNumber;
@@ -52,7 +63,7 @@ class VersionNumber
     }
 
     /**
-     * Outputs a version banner.
+     * Outputs the version banner.
      *
      * @return string
      */

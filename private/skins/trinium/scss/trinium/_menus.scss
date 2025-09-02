@@ -14,13 +14,17 @@
     text-align: left;
     direction: ltr;
 
+    [dir="rtl"] & {
+        text-align: right;
+        direction: rtl;
+    }
+
     hr {
         border-color: $content-box-border-color;
         margin: 0;
     }
 
     .menu-item-button {
-        direction: ltr;
         display: flex;
         align-items: center;
         text-align: left;

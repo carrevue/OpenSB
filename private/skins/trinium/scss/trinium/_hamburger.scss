@@ -26,7 +26,8 @@
 
     @include scrollbar();
 
-    transition: left 0.25s cubic-bezier(0.33, 1, 0.68, 1);
+    transition: left 0.25s cubic-bezier(0.33, 1, 0.68, 1),
+    right 0.25s cubic-bezier(0.33, 1, 0.68, 1);
 
     @media (prefers-reduced-motion) {
         transition: none;
@@ -34,6 +35,15 @@
 
     &.active {
         left: 0;
+    }
+
+    [dir="rtl"] & {
+        left: auto;
+        right: -250px;
+
+        &.active {
+            right: 0;
+        }
     }
 }
 
