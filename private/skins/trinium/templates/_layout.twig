@@ -47,7 +47,7 @@
     {% if opengraph_image %}
         <meta property="og:image" content="{{ opengraph_image }}">
     {% else %}
-        <meta property="og:image" content="{{ website_branding.assets_location }}/logo_square_icon.{{ logo_extension }}">
+        <meta property="og:image" content="{{ website_branding.assets_location }}/logo_square_icon{{ logo_extension }}">
     {% endif %}
 
     {% if opengraph_author %}
