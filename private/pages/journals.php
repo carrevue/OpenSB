@@ -25,8 +25,6 @@ global $twig, $database, $auth, $orange;
 
 use SquareBracket\Utilities;
 
-$user = $path[2] ?? null;
-
 $journal_count = 0;
 $data = [];
 
