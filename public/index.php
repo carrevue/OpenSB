@@ -114,7 +114,7 @@ $router->add('/feature', 'feature.php');
 $router->add('/delete', 'delete.php');
 $router->add('/guidelines', 'guidelines.php');
 $router->add('/help', 'help.php');
-$router->add('/journals', 'journals.php');
+$router->add('/journals/{user}', 'journals.php');
 $router->add('/license', 'license.php');
 $router->add('/logout', 'logout.php');
 $router->add('/my_messages', 'my_messages.php');
