@@ -47,7 +47,25 @@
     }
 }
 
-.col-sidebar {
+/* this was gonna be flex-grid but i'm pretty sure this is only 
+    gonna be used as the sidebar container so whatever */
+.sidebar-page-grid {
+    @include responsive('small') {
+        display: block;
+    }
+
+    @include responsive('medium') {
+        display: flex;
+
+        .content {
+            flex-grow: 1;
+        }
+    }
+}
+
+.sidebar-container {
+    flex: 0 0 auto;
+
     @include responsive('tiny') {
         display: none;
     }
