@@ -126,13 +126,13 @@
                 {% block content %}{% endblock %}
                 {{ include(component('footer')) }}
             {% else %}
-                <div class="grid no-gap">
-                    <div class="col-sidebar">
+                <div class="sidebar-page-grid">
+                    <div class="sidebar-container">
                         <div class="sidebar {% if page_name == "home" %}with-jumbotron{% endif %}">
                             {% include("components/_hamburger_menu.twig") %}
                         </div>
                     </div>
-                    <div class="col-11">
+                    <div class="content">
                         {{ block('content') }}
                         {{ include(component('footer')) }}
                     </div>
