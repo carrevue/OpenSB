@@ -112,6 +112,7 @@ $router->add('/register', 'register.php');
 $router->add('/edit', 'edit.php');
 $router->add('/feature', 'feature.php');
 $router->add('/delete', 'delete.php');
+$router->add('/design_test', 'design_test.php');
 $router->add('/guidelines', 'guidelines.php');
 $router->add('/help', 'help.php');
 $router->add('/journals/{user}', 'journals.php');
