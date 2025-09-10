@@ -48,7 +48,7 @@ require_once BLUFF_PRIVATE_PATH . '/common.php';
         readfile($skinPath);
         exit;
     } else {
-        CoreUtilities::redirect('/assets/unknown_theme.png', 404);
+        CoreUtilities::redirect('/assets/unknown_theme.png');
     }
 }
 
@@ -112,6 +112,7 @@ $router->add('/register', 'register.php');
 $router->add('/edit', 'edit.php');
 $router->add('/feature', 'feature.php');
 $router->add('/delete', 'delete.php');
+$router->add('/design_test', 'design_test.php');
 $router->add('/guidelines', 'guidelines.php');
 $router->add('/help', 'help.php');
 $router->add('/journals/{user}', 'journals.php');
