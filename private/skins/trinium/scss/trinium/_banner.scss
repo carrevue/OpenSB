@@ -6,7 +6,10 @@
     align-items: center;
     border-radius: 4px;
     margin-bottom: 0.5em;
-    background-repeat: repeat-x;
+
+    @if $theme =="default" {
+        background-repeat: repeat-x;
+    }
 
     .notification-icon {
         margin-right: 0.66em;
@@ -33,11 +36,19 @@
             $border-color: color.adjust($value, $lightness: 10%);
         }
 
-        background-color: color.adjust($value, $lightness: 10%);
-        background-image: linear-gradient(color.adjust($value, $lightness: 3%),
-            color.adjust(color.adjust($value, $lightness: -2%), $hue: 1deg));
-        border: 1px solid $border-color;
         color: contrast-color($value, #000, #fff);
+
+        @if $theme =="default" {
+            background-color: color.adjust($value, $lightness: 10%);
+            background-image: linear-gradient(color.adjust($value, $lightness: 3%),
+                    color.adjust(color.adjust($value, $lightness: -2%), $hue: 1deg));
+            border: 1px solid $border-color;
+            border: none;
+        }
+
+        @else {
+            background-color: $value;
+        }
 
         a {
             text-decoration: underline;

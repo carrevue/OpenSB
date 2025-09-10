@@ -3,7 +3,9 @@
  * Made by Chaziz for OpenSB
  */
 
-$theme: "default";
+@import url("https://rsms.me/inter/inter.css");
+
+$theme: "flat";
 $color-scheme: "default";
 
 @import 'trinium/imports';

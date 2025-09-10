@@ -10,11 +10,18 @@
     cursor: pointer;
     text-decoration: none;
     font-weight: normal;
-    background-repeat: repeat-x;
     line-height: 1em;
     user-select: none;
     //transition: background-color 0.1s ease;
-    box-shadow: inset 0 1px 0 rgba(white, 0.2), 0 1px 2px rgba(black, 0.1);
+
+    @if $theme =="default" {
+        background-repeat: repeat-x;
+        box-shadow: inset 0 1px 0 rgba(white, 0.2), 0 1px 2px rgba(black, 0.1);
+    }
+
+    @else if $theme =="flat" {
+        border: none;
+    }
 }
 
 @mixin button-variant($value) {
@@ -27,24 +34,39 @@
         $border-color: color.adjust(color.adjust($value, $lightness: 10%), $hue: 4deg);
     }
 
-    border: 1px solid $border-color;
-    background-color: $value;
-    background-image: linear-gradient(color.adjust($value, $lightness: 5%),
-        color.adjust(color.adjust($value, $lightness: -4%), $hue: 1deg));
+    @if $theme =="default" {
+        border: 1px solid $border-color;
+        background-image: linear-gradient(color.adjust($value, $lightness: 5%),
+                color.adjust(color.adjust($value, $lightness: -4%), $hue: 1deg));
+        text-shadow: 0 -1px 0 rgba($shadow-color, 0.4);
+    }
 
+    background-color: $value;
     color: $text-color;
-    text-shadow: 0 -1px 0 rgba($shadow-color, 0.4);
 
     &:hover {
-        background-color: color.adjust($value, $lightness: 10%);
-        background-image: linear-gradient(color.adjust(color.adjust($value, $lightness: 10%), $hue: 1deg),
-                color.adjust($value, $lightness: 2%));
+        @if $theme =="default" {
+            background-color: color.adjust($value, $lightness: 10%);
+            background-image: linear-gradient(color.adjust(color.adjust($value, $lightness: 10%), $hue: 1deg),
+                    color.adjust($value, $lightness: 2%));
+        }
+
+        @else if $theme =="flat" {
+            background-color: color.adjust($value, $lightness: if(lightness($value) > 50%, -5%, 5%));
+        }
     }
 
     &:active {
-        background-color: color.adjust($value, $lightness: -5%);
-        background-image: linear-gradient($value, color.adjust(color.adjust($value, $lightness: -5%), $hue: 1.5deg));
-        box-shadow: inset 0 2px 4px rgba(black, 0.15), 0 1px 2px rgba(black, 0.05);
+        @if $theme =="default" {
+            background-color: color.adjust($value, $lightness: -5%);
+            background-image: linear-gradient(color.adjust(color.adjust($value, $lightness: -5%), $hue: 1deg),
+                    color.adjust($value, $lightness: -10%));
+            box-shadow: inset 0 2px 4px rgba(black, 0.15), 0 1px 2px rgba(black, 0.05);
+        }
+
+        @else if $theme =="flat" {
+            background-color: color.adjust($value, $lightness: if(lightness($value) > 50%, -10%, 10%));
+        }
     }
 }
 

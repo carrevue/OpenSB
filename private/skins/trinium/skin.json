@@ -8,25 +8,25 @@
         "themes": [
             {
                 "id": "default",
-                "name": "Light",
+                "name": "Light (Glossy)",
                 "description": "The default user experience.",
                 "author": "OpenSB developers"
             },
             {
                 "id": "dark",
-                "name": "Dark",
+                "name": "Dark (Glossy)",
                 "description": "A dark theme.",
                 "author": "OpenSB developers"
             },
             {
                 "id": "default-flat",
-                "name": "Light (Flat)",
+                "name": "Light (Matte)",
                 "description": "The default user experience.",
                 "author": "OpenSB developers"
             },
             {
                 "id": "dark-flat",
-                "name": "Dark (Flat)",
+                "name": "Dark (Matte)",
                 "description": "A dark theme.",
                 "author": "OpenSB developers"
             }

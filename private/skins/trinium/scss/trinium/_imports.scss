@@ -29,9 +29,13 @@
     --link-color: #{$link-color};
 }
 
-//@supports (font-variation-settings: normal) {
-//  :root { font-family: InterVariable, sans-serif; }
-//}
+@if $theme =="flat" {
+    @supports (font-variation-settings: normal) {
+        :root {
+            font-family: InterVariable, sans-serif;
+        }
+    }
+}
 
 *,
 *::before,
@@ -152,30 +156,37 @@ blockquote {
 }
 
 .profile-picture {
-    @if $color-scheme =="dark" {
-        border: 1px solid #888;
-    }
-
-    @else {
-        border: 1px solid #333;
-    }
-
     display: block;
-    border-radius: 4px;
     position: relative;
     overflow: clip;
 
-    background: linear-gradient(#333, #050505);
-    box-shadow: 0 2px 2px rgba(black, 0.1);
+    @if $theme =="default" {
+        @if $color-scheme =="dark" {
+            border: 1px solid #888;
+        }
 
-    &::before {
-        content: '';
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        background-image: url('/assets/trinium_pfp_gloss.svg');
-        background-size: cover;
-        position: absolute;
+        @else {
+            border: 1px solid #333;
+        }
+
+        background: linear-gradient(#333, #050505);
+        box-shadow: 0 2px 2px rgba(black, 0.1);
+
+        border-radius: 4px;
+
+        &::before {
+            content: '';
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            background-image: url('/assets/trinium_pfp_gloss.svg');
+            background-size: cover;
+            position: absolute;
+        }
+    }
+
+    @else {
+        border-radius: 50%;
     }
 
     .pfp {

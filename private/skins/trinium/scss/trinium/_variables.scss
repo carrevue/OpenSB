@@ -58,14 +58,22 @@ $header-link-active-opacity: 1; // includes hover
     $header-background: linear-gradient(to bottom, #171717, #111111);
 }
 
+@if $theme =="flat" {
+    $header-background: $content-box-background-color;
+    $header-border: $content-box-border-color;
+}
+
 // forms
 $form-bg-color: $content-box-background-color;
 $form-text-color: $text-color;
 $form-border-color: $content-box-border-color;
 
 // fonts
-//$font: Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+@if $theme =="flat" {
+    $font: Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
 
 // https://medium.com/@jainbhavukspeaks/leveraging-scss-mixins-to-create-responsive-layouts-the-easy-way-5bbe4080cb15
 // breakpoints
