@@ -48,7 +48,7 @@ require_once BLUFF_PRIVATE_PATH . '/common.php';
         readfile($skinPath);
         exit;
     } else {
-        CoreUtilities::redirect('/assets/unknown_theme.png', 404);
+        CoreUtilities::redirect('/assets/unknown_theme.png');
     }
 }
 
