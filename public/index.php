@@ -28,14 +28,13 @@ define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
 define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
 define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-use JetBrains\PhpStorm\NoReturn;
 use BluffingoCore\CoreUtilities;
 use BluffingoCore\Router;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
 // TODO: make this cachable
-#[NoReturn] function load_thumbnail_from_skin($path)
+function load_thumbnail_from_skin($path): never
 {
     $pathParts = explode('_', $path);
     $skin = $pathParts[0] ?? '';
@@ -54,7 +53,7 @@ require_once BLUFF_PRIVATE_PATH . '/common.php';
 
 
 // this is very ugly, i know.
-#[NoReturn] function load_file_from_vendor($path, $content_type): void
+function load_file_from_vendor($path, $content_type): never
 {
     header("Content-Type: $content_type");
     readfile(BLUFF_VENDOR_PATH . $path);
