@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    {% set le_url = '/journals/' ~ user ~ '?page=%s' %}
+    {% set le_url = '/user/' ~ user ~ '/journals?page=%s' %}
 
     {{ pagination(count, items_per_page, le_url, current_page) }}
 {% endblock %}
