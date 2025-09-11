@@ -64,7 +64,11 @@ if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?"
     }
 }
 
-$user_submissions_query_limit = 12;
+if ($options["skin"] == "finalium") {
+    $user_submissions_query_limit = 4;
+} else {
+    $user_submissions_query_limit = 12;
+}
 
 // TODO: redo this
 function handleFeaturedSubmission($database, $data): false|array
