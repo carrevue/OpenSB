@@ -1,7 +1,5 @@
 # SquareBracket Community Guidelines 
-Last updated by Chaziz on June 21st 2025.
-
-(DRAFT)
+Last updated by Chaziz on September 11th 2025.
 
 ## General rules
 This has been moved to the [Terms of Service](/tos).
