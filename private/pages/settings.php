@@ -29,6 +29,8 @@ use Random\RandomException;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
 
+$options = $orange->getLocalOptions();
+
 if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
@@ -44,11 +46,13 @@ if ($auth->getUserFlags(true)["unverified"]) {
     die();
 }
 
-// check if this user has an entry in the profile customization table
-$profile_color_data = $database->fetch(
-    "SELECT * FROM user_profile_customization WHERE user = ?",
-    [$auth->getUserData()["id"]]
-);
+if ($options["skin"] == "trinium") {
+    // check if this user has an entry in the profile customization table
+    $profile_color_data = $database->fetch(
+        "SELECT * FROM user_profile_customization WHERE user = ?",
+        [$auth->getUserData()["id"]]
+    );
+}
 
 if (isset($_POST['save'])) {
     $flags = $auth->getUserFlags();
@@ -65,20 +69,22 @@ if (isset($_POST['save'])) {
     $pass2 = ($_POST['pass2'] ?? null);
     $new_username = $_POST['new_username'] ?? null;
 
-    $enable_customization = $_POST['enable_customization'] ?? false;
+    if ($options["skin"] == "trinium") {
+        $enable_customization = $_POST['enable_customization'] ?? false;
 
-    // the colors
-    $customcolor = ($_POST['customcolor'] ?? '#523bb8');
-    $font = $_POST['font'] ?? '';
-    $background_color = $_POST['background_color'] ?? '#FFFFFF';
-    $title_color = $_POST['title_color'] ?? '#333333';
-    $link_color = $_POST['link_color'] ?? '#0033cc';
-    $basic_box_border_color = $_POST['basic_box_border_color'] ?? '#666666';
-    $basic_box_background_color = $_POST['basic_box_background_color'] ?? '#FFFFFF';
-    $basic_box_text_color = $_POST['basic_box_text_color'] ?? '#000000';
-    $highlight_box_border_color = $_POST['highlight_box_border_color'] ?? '#666666';
-    $highlight_box_background_color = $_POST['highlight_box_background_color'] ?? '#E6E6E6';
-    $highlight_box_text_color = $_POST['highlight_box_text_color'] ?? '#000000';
+        // the colors
+        $customcolor = ($_POST['customcolor'] ?? '#523bb8');
+        $font = $_POST['font'] ?? '';
+        $background_color = $_POST['background_color'] ?? '#FFFFFF';
+        $title_color = $_POST['title_color'] ?? '#333333';
+        $link_color = $_POST['link_color'] ?? '#0033cc';
+        $basic_box_border_color = $_POST['basic_box_border_color'] ?? '#666666';
+        $basic_box_background_color = $_POST['basic_box_background_color'] ?? '#FFFFFF';
+        $basic_box_text_color = $_POST['basic_box_text_color'] ?? '#000000';
+        $highlight_box_border_color = $_POST['highlight_box_border_color'] ?? '#666666';
+        $highlight_box_background_color = $_POST['highlight_box_background_color'] ?? '#E6E6E6';
+        $highlight_box_text_color = $_POST['highlight_box_text_color'] ?? '#000000';
+    }
 
     if ($auth->isUserOver18() && !$orange->isChazizSquareBracketInstance()) {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
@@ -203,55 +209,57 @@ if (isset($_POST['save'])) {
             [$title, $about, $rating, $customcolor, $flags, json_encode($parsed_tags), $auth->getUserID()]
         );
 
-        if ($profile_color_data) {
-            // if so, update their customizations
-            $database->query("
-        UPDATE user_profile_customization SET
-            font = ?,
-            background_color = ?,
-            title_color = ?,
-            link_color = ?,
-            basic_box_border_color = ?,
-            basic_box_background_color = ?,
-            basic_box_text_color = ?,
-            highlight_box_border_color = ?,
-            highlight_box_background_color = ?,
-            highlight_box_text_color = ?
-        WHERE user = ?
-    ", [
-                $font,
-                $background_color,
-                $title_color,
-                $link_color,
-                $basic_box_border_color,
-                $basic_box_background_color,
-                $basic_box_text_color,
-                $highlight_box_border_color,
-                $highlight_box_background_color,
-                $highlight_box_text_color,
-                $auth->getUserID()
-            ]);
-        } else {
-            // if not, initialize the shit.
-            $database->query("
-        INSERT INTO user_profile_customization (
-            user, font, background_color, title_color, link_color,
-            basic_box_border_color, basic_box_background_color, basic_box_text_color,
-            highlight_box_border_color, highlight_box_background_color, highlight_box_text_color
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ", [
-                $auth->getUserID(),
-                $font,
-                $background_color,
-                $title_color,
-                $link_color,
-                $basic_box_border_color,
-                $basic_box_background_color,
-                $basic_box_text_color,
-                $highlight_box_border_color,
-                $highlight_box_background_color,
-                $highlight_box_text_color
-            ]);
+        if ($options["skin"] == "trinium") {
+            if ($profile_color_data) {
+                // if so, update their customizations
+                $database->query("
+                    UPDATE user_profile_customization SET
+                        font = ?,
+                        background_color = ?,
+                        title_color = ?,
+                        link_color = ?,
+                        basic_box_border_color = ?,
+                        basic_box_background_color = ?,
+                        basic_box_text_color = ?,
+                        highlight_box_border_color = ?,
+                        highlight_box_background_color = ?,
+                        highlight_box_text_color = ?
+                    WHERE user = ?
+                ", [
+                    $font,
+                    $background_color,
+                    $title_color,
+                    $link_color,
+                    $basic_box_border_color,
+                    $basic_box_background_color,
+                    $basic_box_text_color,
+                    $highlight_box_border_color,
+                    $highlight_box_background_color,
+                    $highlight_box_text_color,
+                    $auth->getUserID()
+                ]);
+            } else {
+                // if not, initialize the shit.
+                $database->query("
+                    INSERT INTO user_profile_customization (
+                        user, font, background_color, title_color, link_color,
+                        basic_box_border_color, basic_box_background_color, basic_box_text_color,
+                        highlight_box_border_color, highlight_box_background_color, highlight_box_text_color
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ", [
+                    $auth->getUserID(),
+                    $font,
+                    $background_color,
+                    $title_color,
+                    $link_color,
+                    $basic_box_border_color,
+                    $basic_box_background_color,
+                    $basic_box_text_color,
+                    $highlight_box_border_color,
+                    $highlight_box_background_color,
+                    $highlight_box_text_color
+                ]);
+            }
         }
 
         if ($username_changed) {
@@ -271,5 +279,5 @@ if (isset($_POST['save'])) {
 echo $twig->render('settings.twig', [
     'isUserOver18' => $auth->isUserOver18(),
     'flags' => $auth->getUserFlags(true),
-    'profile_color_data' => $profile_color_data
+    'profile_color_data' => $profile_color_data ?? []
 ]);
