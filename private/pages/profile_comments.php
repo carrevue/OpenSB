@@ -67,7 +67,7 @@ if ($flags["profile_customization_enabled"]) {
 $comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
 $comments = $comment_data->getComments();
 
-$data = [
+$page_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
@@ -77,6 +77,10 @@ $data = [
     "comments" => $comments,
 ];
 
+if ($orange->getLocalOptions()["skin"] == "bootstrap") {
+    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
+}
+
 echo $twig->render("profile_comments.twig", [
-    'data' => $data,
+    'data' => $page_data,
 ]);

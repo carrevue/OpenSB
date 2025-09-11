@@ -84,7 +84,7 @@ $limit = $database->paginate($page, 20);
 $submissions = $submission_query->query($order, $limit, "v.author = ?", [$data["id"]]);
 $submission_count = $submission_query->count("v.author = ?", [$data["id"]]);
 
-$data = [
+$page_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
@@ -95,8 +95,12 @@ $data = [
     "count" => $submission_count,
 ];
 
+if ($orange->getLocalOptions()["skin"] == "bootstrap") {
+    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
+}
+
 echo $twig->render('profile_browse.twig', [
-    'data' => $data,
+    'data' => $page_data,
     'page' => $page,
     'type' => $type,
 ]);

@@ -79,7 +79,7 @@ $journal_count = $database->result(
 // this part is fucking ugly.
 $journal_data = Utilities::makeJournalArray($database, $journal_array);
 
-$data = [
+$page_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
@@ -88,8 +88,12 @@ $data = [
     "customization" => $profile_customization_data?->getData() ?? false,
 ];
 
+if ($orange->getLocalOptions()["skin"] == "bootstrap") {
+    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
+}
+
 echo $twig->render('profile_journals.twig', [
-    'data' => $data,
+    'data' => $page_data,
     'journals' => $journal_data,
     'page' => $page,
     'count' => $journal_count

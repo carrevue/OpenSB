@@ -37,8 +37,6 @@ $submission_query = new UploadQuery($database);
 
 $options = $orange->getLocalOptions();
 
-if (isset($_GET['name'])) CoreUtilities::redirect('/user/' . $_GET['name'], 301);
-
 // if we're not on finalium, redirect to the normal profile page.
 if ($orange->getLocalOptions()["skin"] != "finalium") {
     CoreUtilities::redirect("/user/$username");
@@ -99,7 +97,7 @@ $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = 
 $followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
 
-$data = [
+$profile_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
@@ -122,5 +120,5 @@ if ($orange->getLocalOptions()["skin"] == "bootstrap") {
 */
 
 echo $twig->render("profile_about.twig", [
-    'data' => $data,
+    'data' => $profile_data,
 ]);

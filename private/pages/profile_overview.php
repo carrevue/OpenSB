@@ -154,7 +154,7 @@ $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$
 
 $featured_submission = handleFeaturedSubmission($database, $data);
 
-$profile_data = [
+$page_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
@@ -176,9 +176,9 @@ $profile_data = [
 ];
 
 if ($orange->getLocalOptions()["skin"] == "bootstrap") {
-    $profile_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
+    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
 }
 
 echo $twig->render("profile.twig", [
-    'data' => $profile_data,
+    'data' => $page_data,
 ]);
