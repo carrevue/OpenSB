@@ -15,9 +15,15 @@ table.c1 {
         background: $content-box-background-color;
 
         &.h {
-            background-color: color.adjust($content-box-border-color, $lightness: 2.5%);
-            background-image: linear-gradient(color.adjust($content-box-border-color, $lightness: 10%),
-                    color.adjust($content-box-border-color, $lightness: 5%));
+            @if $theme =="default" {
+                background: color.adjust($content-box-border-color, $lightness: 2.5%);
+                background-image: linear-gradient(color.adjust($content-box-border-color, $lightness: 10%),
+                        color.adjust($content-box-border-color, $lightness: 5%));
+            }
+
+            @else {
+                background: color.adjust($content-box-border-color, $lightness: 5%);
+            }
 
             th {
                 padding: 0.2rem 0.4rem;

@@ -7,7 +7,10 @@
         @else {
             background: #0069B4 var(--jumbotron) center;
             color: white;
-            text-shadow: 0 0.1em 0.25em rgba(black, 0.75);
+
+            @if $theme =="default" {
+                text-shadow: 0 0.1em 0.25em rgba(black, 0.75);
+            }
         }
 
         h1,
