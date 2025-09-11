@@ -43,7 +43,6 @@
             background-image: linear-gradient(color.adjust($value, $lightness: 3%),
                     color.adjust(color.adjust($value, $lightness: -2%), $hue: 1deg));
             border: 1px solid $border-color;
-            border: none;
         }
 
         @else {
