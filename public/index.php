@@ -142,7 +142,7 @@ $router->add('/write', 'write.php');
 $router->add('/user/{username}', 'profile_overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile_uploads.php'); // uploads
 $router->add('/user/{username}/comments', 'profile_comments.php'); // comments
-$router->add('/user/{username}/journals', 'profile.php'); // journals
+$router->add('/user/{username}/journals', 'profile_journals.php'); // journals
 $router->add('/user/{username}/about', 'profile_about.php'); // about (mainly fulphiker-specific)
 
 // api

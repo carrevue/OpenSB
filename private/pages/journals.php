@@ -23,6 +23,7 @@ namespace OpenSB;
 
 global $twig, $database, $auth, $orange;
 
+use BluffingoCore\CoreUtilities;
 use SquareBracket\Utilities;
 
 $journal_count = 0;
@@ -41,20 +42,8 @@ if ($user) {
             "SELECT COUNT(*) FROM journals j WHERE j.is_site_news = 1"
         );
     } else {
-        // TODO: handle old names
-        $id = Utilities::usernameToUserID($database, $user);
-        if (!$id) {
-            Utilities::notifyBanner("notify_invalid_user", "/");
-        }
-        $journal_array = $database->fetchArray($database->query(
-            "SELECT j.* FROM journals j WHERE j.author = ? ORDER BY j.date DESC $limit",
-            [$id]
-        ));
-
-        $journal_count = $database->result(
-            "SELECT COUNT(*) FROM journals j WHERE j.author = ?",
-            [$id]
-        );
+        // just redirect to the new user-specific journals page
+        CoreUtilities::redirect('/user/' . $user . '/journals', 301);
     }
 
     $data = Utilities::makeJournalArray($database, $journal_array);
