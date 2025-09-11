@@ -59,9 +59,6 @@ $database->query("RENAME TABLE `takedowns` TO `upload_takedowns`");
 $database->query("RENAME TABLE `videos` TO `uploads`");
 $database->query("RENAME TABLE `views` TO `upload_views`");
 
-// profile layout (TODO: this should probably be removed)
-$database->query("ALTER TABLE `users` ADD `profile_layout` TINYINT NOT NULL AFTER `customcolor`");
-
 $database->query("CREATE TABLE `private_messages` (
   `id` int NOT NULL,
   `reply_to_id` int NULL,
@@ -89,3 +86,8 @@ $database->query("CREATE TABLE `user_profile_customization` (
   `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`user`)
 )");
+
+
+// remove group_id and language from users table
+$database->query("ALTER TABLE `users` DROP `group_id`");
+$database->query("ALTER TABLE `users` DROP `language`");

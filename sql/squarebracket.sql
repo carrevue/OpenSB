@@ -180,13 +180,10 @@ CREATE TABLE `users` (
   `title` text NOT NULL COMMENT 'Display Name',
   `about` text DEFAULT NULL COMMENT 'User''s description',
   `customcolor` varchar(7) DEFAULT '#523bb8' COMMENT 'The color that the user has set for their profile',
-  `profile_layout` tinyint(4) DEFAULT NULL,
-  `language` varchar(10) NOT NULL DEFAULT 'en-US' COMMENT 'Language (Defaults to English)',
   `avatar` tinyint(1) NOT NULL DEFAULT 0,
   `ip` varchar(48) DEFAULT '999.999.999.999',
   `u_flags` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '8 bools to determine certain user properties',
   `powerlevel` tinyint(3) unsigned NOT NULL DEFAULT 1 COMMENT '0 - banned. 1 - normal user. 2 - moderator. 3 - administrator',
-  `group_id` int(11) NOT NULL DEFAULT 3,
   `comfortable_rating` enum('general','questionable','mature') NOT NULL,
   `blacklisted_tags` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`blacklisted_tags`)),
   PRIMARY KEY (`id`)
