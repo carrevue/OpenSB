@@ -1,23 +1,35 @@
 {
-  "metadata": {
-    "id": "trinium",
-    "name": "Trinium",
-    "author": "OpenSB developers",
-    "description": "Our default and recommended frontend.",
-    "site": "squarebracket",
-    "themes": [
-      {
-        "id": "default",
-        "name": "Light",
-        "description": "The default user experience.",
-        "author": "OpenSB developers"
-      },
-      {
-        "id": "dark",
-        "name": "Dark",
-        "description": "A dark theme.",
-        "author": "OpenSB developers"
-      }
-    ]
-  }
+    "metadata": {
+        "id": "trinium",
+        "name": "Trinium",
+        "author": "OpenSB developers",
+        "description": "Our default and recommended frontend.",
+        "site": "squarebracket",
+        "themes": [
+            {
+                "id": "default",
+                "name": "Light (Glossy)",
+                "description": "The default user experience.",
+                "author": "OpenSB developers"
+            },
+            {
+                "id": "dark",
+                "name": "Dark (Glossy)",
+                "description": "A dark theme.",
+                "author": "OpenSB developers"
+            },
+            {
+                "id": "default-flat",
+                "name": "Light (Matte)",
+                "description": "The default user experience.",
+                "author": "OpenSB developers"
+            },
+            {
+                "id": "dark-flat",
+                "name": "Dark (Matte)",
+                "description": "A dark theme.",
+                "author": "OpenSB developers"
+            }
+        ]
+    }
 }

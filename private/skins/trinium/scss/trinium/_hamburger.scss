@@ -110,9 +110,16 @@
             display: block;
             padding: $menu-item-padding;
             color: rgba($header-link-color, 66%);
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.7rem;
+
+            @if $theme =="default" {
+                text-transform: uppercase;
+                font-size: 0.7rem;
+                font-weight: bold;
+            }
+
+            @else {
+                font-size: 0.8rem;
+            }
         }
 
         .list-link {
