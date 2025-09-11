@@ -1,0 +1,72 @@
+{% extends "_layout_dashboard.twig" %}
+
+{% set title = "Server details" %}
+
+	{% block admincontent %}
+            <div class="section">
+                <div class="section-header">
+                    <h1 class="section-title">Installed libraries</h1>
+                </div>
+                <table class="c1">
+                    <tr class="h">
+                        <th>Library</th>
+                        <th>Version</th>
+                        <th>License</th>
+                        <th>Description</th>
+                        <th>Authors</th>
+                    </tr>
+                    {% for key, package in data.packages %}
+                        <tr>
+                            <td class="a" width="200">{{ key }}</td>
+                            <td class="b" width="100">{{ package.version }}</td>
+                            <td class="b" width="90">
+                                {% for license in package.licenses %}
+                                    {{ license }}{{ not loop.last ? ',' }}
+                                {% endfor %}
+                            </td>
+                            <td class="b">
+                                {{ package.description }}
+                            </td>
+                            <td class="b">
+                                {% for author in package.authors %}
+                                    {% if author.homepage %}
+                                        <a href="{{ author.homepage }}">{{ author.name }}</a>{{ not loop.last ? ',' }}
+                                    {% else %}
+                                        {{ author.name }}{{ not loop.last ? ',' }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        <hr>
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Installed skins</h1>
+            </div>
+            <table class="c1">
+                <tr class="h">
+                    <th>Skin/Author</th>
+                    <th>Description</th>
+                </tr>
+                {% for skin in skins %}
+                    <tr>
+                        <td class="a">{{ skin.metadata.name }}<br><small>by {{ skin.metadata.author }}</small></td>
+                        <td class="b">
+                            <div>
+                            {{ skin.metadata.description }}
+                            </div>
+                            <div>
+                                <ul>
+                                    {% for theme in skin.metadata.themes %}
+                                        <li>{{ theme.name }}: {{ theme.description }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endblock %}

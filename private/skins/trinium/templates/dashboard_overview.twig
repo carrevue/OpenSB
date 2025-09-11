@@ -21,8 +21,13 @@
         </div>
         <hr>
         <div class="section">
-            <div class="section-header">
-                <h1 class="section-title">Server details</h1>
+            <div class="section-header flex">
+                <div class="section-header-left">
+                    <h1 class="section-title">Server details</h1>
+                </div>
+                <div class="section-header-right">
+                    <a href="/dashboard/server">{{ localize('more') }}</a>
+                </div>
             </div>
             {% if data.system.is_windows %}
                 <div class="text-danger">

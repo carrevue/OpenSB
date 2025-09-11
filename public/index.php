@@ -176,6 +176,7 @@ $router->add('/dashboard/uploads/{id}', 'dashboard/upload_edit.php');
 $router->add('/dashboard/interactions', 'dashboard/interactions.php');
 $router->add('/dashboard/invite_keys', 'dashboard/invite_keys.php');
 $router->add('/dashboard/ip_bans', 'dashboard/ip_bans.php');
+$router->add('/dashboard/server', 'dashboard/server.php');
 $router->redirect('/dashboard', '/dashboard/overview', 301);
 
 // bootstrap icons (used by bootstrap and finalium)
