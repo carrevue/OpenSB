@@ -114,25 +114,6 @@ img.img-responsive {
     font-weight: 500;
 }
 
-textarea,
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"] {
-    border: 1px solid color.adjust($content-box-border-color, $lightness: -1%);
-    background-color: 1px solid color.adjust($content-box-background-color, $lightness: -1%);
-    color: #000;
-    transition: border linear 0.3s;
-    border-radius: 3px;
-    padding: 6px;
-    font-family: $font;
-
-    &:focus {
-        border-color: var(--link-color);
-        outline: none;
-    }
-}
-
 code {
     color: #a33a3a;
 }

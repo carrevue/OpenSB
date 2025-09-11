@@ -97,7 +97,14 @@
 
     &.button-small {
         font-size: 0.9em;
-        padding: 4px 8px;
+
+        @if $theme =="flat" {
+            padding: 5px 9px;
+        }
+
+        @else {
+            padding: 4px 8px;
+        }
     }
 
     &.button-big {
