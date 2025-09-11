@@ -1,5 +1,7 @@
 {% extends "_layout_profile.twig" %}
 
+{% set banner_picture = profile_banner(data.username) %}
+
 {% set title = data.username ~ "'s uploads" %}
 
 {% set opengraph_type = "profile" %}
