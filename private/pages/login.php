@@ -35,6 +35,10 @@ if (isset($user)) {
         die("?????");
     }
 
+    if ($auth->isUserLoggedIn() && $user == $auth->getUserData()["name"]) {
+        Utilities::notifyBanner("notify_login_same_account", "/");
+    }
+
     $is_the_account_in_the_accounts_array = false;
     $id = Utilities::usernameToUserID($database, $user);
     $accounts = $orange->getAccountsArray();
@@ -72,7 +76,7 @@ if (isset($user)) {
         ]);
         Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$user]);
     } else {
-        Utilities::notifyBanner("You have not logged into this account.", '/');
+        Utilities::notifyBanner("You are not logged into this account.", '/login');
     }
 }
 
@@ -170,7 +174,7 @@ if (isset($_POST["loginsubmit"])) {
                 Utilities::notifyBanner("notify_login_incorrect", "/login");
             }
         } else {
-            Utilities::notifyBanner("There is no account with these credentials.", "/login");
+            Utilities::notifyBanner("notify_login_no_account", "/login");
         }
     } else {
         Utilities::notifyBanner("notify_login_invalid", "/login");
