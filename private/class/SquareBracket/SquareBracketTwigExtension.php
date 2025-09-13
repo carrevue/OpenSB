@@ -95,7 +95,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             }),
             new TwigFunction('show_ratings', [$this, 'displayUploadRatings']),
             new TwigFunction('notification_icon', function ($type) {
-                return "biscuit-icon b-$type";
+                return "icon b-$type";
             }),
             new TwigFunction('pagination', [$this, 'pagination'], ['is_safe' => ['html']]),
             new TwigFunction('header_main_links', [$this, 'headerMainLinks']),
@@ -303,7 +303,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         // if user is staff
         if ($powerlevel > 1) {
-            $staff_icon = '<div class="biscuit-icon staff"></div>';
+            $staff_icon = '<div class="icon staff"></div>';
         } else {
             $staff_icon = '';
         }
@@ -378,9 +378,9 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function displayUploadRatings(array $ratings): void
     {
         $icons = [
-            'full' => "biscuit-icon star-full",
-            'half' => "biscuit-icon star-half",
-            'empty' => "biscuit-icon star-empty"
+            'full' => "icon star-full",
+            'half' => "icon star-half",
+            'empty' => "icon star-empty"
         ];
 
         if (!isset($ratings['average']) || !is_numeric($ratings['average'])) {

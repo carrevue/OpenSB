@@ -68,8 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // get the caret if that exists. this is primarily for the one in the header.
         const menuCaret = button.getElementsByClassName("menu-caret");
 
-        let menuCaretOff = "biscuit-icon caret-closed menu-caret";
-        let menuCaretOn = "biscuit-icon caret-open menu-caret";
+        let menuCaretOff = "icon caret-closed menu-caret";
+        let menuCaretOn = "icon caret-open menu-caret";
 
         let actualCaret;
         if (menuCaret.length === 1) {
