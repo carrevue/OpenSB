@@ -1,11 +1,8 @@
 .icon {
     /* icons! */
     display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-repeat: no-repeat;
-    background-size: 16px;
-    background-color: currentColor;
+    color: currentColor;
+    //color: rebeccapurple;
 
     &.size-24 {
         width: 24px;

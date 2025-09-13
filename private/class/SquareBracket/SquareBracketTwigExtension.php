@@ -94,9 +94,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 unset($_SESSION["notif_color"]);
             }),
             new TwigFunction('show_ratings', [$this, 'displayUploadRatings']),
-            new TwigFunction('notification_icon', function ($type) {
-                return "icon b-$type";
-            }),
+            new TwigFunction('notification_icon', [$this, 'getNotificationIcon'], ['is_safe' => ['html']]),
             new TwigFunction('pagination', [$this, 'pagination'], ['is_safe' => ['html']]),
             new TwigFunction('header_main_links', [$this, 'headerMainLinks']),
             new TwigFunction('header_user_links', [$this, 'headerUserLinks']),
@@ -110,9 +108,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             //new TwigFunction('truncate_number', [$this, 'truncateNumber']),
             new TwigFunction('convert_time', [$this, 'convertTime']),
             new TwigFunction('get_user_data_cache', [$this, 'getUserDataCache']),
-            // BOOTSTRAP/FINALIUM FRONTEND COMPATIBILITY (DO NOT USE THIS ON TRINIUM)
-            new TwigFunction('icon', [$this, 'legacyIcon'], ['is_safe' => ['html']]),
-            // ---------------------------
+            new TwigFunction('icon', [$this, 'getIcon'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -303,7 +299,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         // if user is staff
         if ($powerlevel > 1) {
-            $staff_icon = '<div class="icon staff"></div>';
+            $staff_icon = $this->getIcon("staff");
         } else {
             $staff_icon = '';
         }
@@ -363,7 +359,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         );
 
         if ($powerlevel > 1) {
-            $staff_icon = $this->legacyIcon("shield", 14);
+            $staff_icon = $this->getIcon("shield", 14);
 
             return sprintf(
                 '%s %s',
@@ -636,18 +632,41 @@ class SquareBracketTwigExtension extends AbstractExtension
         return filemtime(BLUFF_PUBLIC_PATH . "/assets/css/trinium-default.css");
     }
 
-    // legacy functions used by finalium and bootstrap frontend only.
-
-    public function legacyIcon($icon, $size)
+    public function getIcon($icon, $size = "16")
     {
-        if (!Utilities::isLegacyFrontend()) {
-            trigger_error("legacyIcon function called outside of a legacy frontend.", E_USER_WARNING);
+        if (Utilities::isLegacyFrontend()) {
+            $class = "bi";
+            $svg = "bootstrap-icons.svg";
+        } else {
+            $class = "icon";
+            $svg = "icons.svg";
         }
 
-        // this should be in common
-        return $this->twig->render('bootstrap_icon.twig', ['icon' => $icon, 'size' => $size]);
+        return $this->twig->render(
+            'icon.twig',
+            [
+                'icon' => $icon,
+                'size' => $size,
+                'class' => $class,
+                'svg' => $svg,
+            ]
+        );
     }
 
+    public function getNotificationIcon($type, $size = "20")
+    {
+        $icon = match ($type) {
+            'primary' => 'info',
+            'secondary' => 'info',
+            'success' => 'success',
+            'warning' => 'warning',
+            'danger' => 'error',
+        };
+
+        return $this->getIcon($icon, $size);
+    }
+
+    // legacy functions used by finalium and bootstrap frontend only.
     // apparantly this is used on finalium for Some reason.
     public function smallUploadBox($submission)
     {

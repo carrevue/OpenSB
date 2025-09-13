@@ -20,7 +20,7 @@
         </a>
         <div class="content-thumbnail-badge-container">
             <div class="content-thumbnail-badge">
-                <div class="icon {{ icon }}"></div>
+                {{ icon(icon) }}
             </div>
             {% if submission.type == 0 %}
                 <div class="content-thumbnail-badge timestamp">

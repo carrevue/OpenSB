@@ -38,8 +38,8 @@
                                         <span style="color:{{ user_data.customcolor }}" id="settings-display-name">
                                             {{ user_data.title }}
                                         </span>
-                                        {% if user_data.powerlevel > 2 %}
-                                            <div class="icon size-24 staff"></div>
+                                        {% if user_data.powerlevel >= 2 %}
+                                            {{ icon("staff", 24) }}
                                         {% endif %}
                                     </div>
 

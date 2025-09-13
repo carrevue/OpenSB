@@ -6,23 +6,17 @@
     align-items: center;
     border-radius: 4px;
     margin-bottom: 0.5em;
+    gap: 0.75em;
 
     @if $theme =="default" {
         background-repeat: repeat-x;
-    }
-
-    .notification-icon {
-        margin-right: 0.66em;
-        min-width: 20px;
-        min-height: 20px;
-        background-size: 20px;
     }
 
     &.full-screen {
         margin: 0;
         border-radius: 0;
 
-        .notification-text {
+        .banner-text {
             margin: auto;
         }
     }

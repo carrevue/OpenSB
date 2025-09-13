@@ -30,8 +30,8 @@
     <div class="section">
         {% for color in color_types %}
             <div class="banner banner-{{ color }}">
-                <i class="{{ notification_icon(color) }} notification-icon"></i>
-                <span class="notification-text">
+                {{ notification_icon(color) }}
+                <span class="banner-text">
                 This is a {{ color }} banner. You may go back to the homepage <a href="/">here</a>.
                 </span>
             </div>
@@ -170,7 +170,7 @@
                     {% for icon in icons %}
                         <tr>
                             <td>
-                                <i class="icon {{ icon }} size-32" style="vertical-align: middle;"></i>
+                                {{ icon(icon, 32) }}
                             </td>
                             <td class="a">{{ icon }}</td>
                         </tr>
