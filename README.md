@@ -1,5 +1,7 @@
 # OpenSB
 
+NOTE: OpenSB 2.0 *is* 1.3, the feature freeze is still in effect. No new functionality will be added during this time.
+
 ## How to setup an OpenSB instance.
 
 I wouldn't recommend using this code unless if you ***really*** know what you're doing.
