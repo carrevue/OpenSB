@@ -84,7 +84,7 @@ class DiscordWebhookLogging
             ->url($uploadUrl)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY_COLOR);
+            ->color(Colors::PRIMARY);
 
         $this->webhook->embed($mbd)->send();
     }
@@ -120,7 +120,7 @@ class DiscordWebhookLogging
             ->url($uploadUrl)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY_COLOR);
+            ->color(Colors::PRIMARY);
 
         $this->webhook->embed($mbd)->send();
     }
@@ -167,7 +167,7 @@ class DiscordWebhookLogging
             ->url($uploadUrl)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY_COLOR);
+            ->color(Colors::PRIMARY);
 
         $this->webhook->embed($mbd)->send();
     }
@@ -190,7 +190,7 @@ class DiscordWebhookLogging
         $mbd->title($title)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::SUCCESS_COLOR);
+            ->color(Colors::SUCCESS);
 
         $this->webhook->embed($mbd)->send();
     }
@@ -213,7 +213,7 @@ class DiscordWebhookLogging
         $mbd->title($title)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::DANGER_COLOR);
+            ->color(Colors::DANGER);
 
         $this->webhook->embed($mbd)->send();
     }
@@ -234,7 +234,7 @@ class DiscordWebhookLogging
         $mbd->title($title)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::SUCCESS_COLOR);
+            ->color(Colors::SUCCESS);
 
         $this->webhook->embed($mbd)->send();
     }
@@ -257,7 +257,7 @@ class DiscordWebhookLogging
         $mbd->title($title)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY_COLOR);
+            ->color(Colors::PRIMARY);
 
         $this->webhook->embed($mbd)->send();
     }
@@ -274,19 +274,19 @@ class DiscordWebhookLogging
         switch ($data['action']) {
             case "banned":
                 $author = 'User banned by ' . $data['author'];
-                $color = Colors::DANGER_COLOR;
+                $color = Colors::DANGER;
                 break;
             case "unbanned":
                 $author = 'User unbanned by ' . $data['author'];
-                $color = Colors::WARNING_COLOR;
+                $color = Colors::WARNING;
                 break;
             case "verified":
                 $author = 'User verified by ' . $data['author'];
-                $color = Colors::SUCCESS_COLOR;
+                $color = Colors::SUCCESS;
                 break;
             case "unverified":
                 $author = 'User unverified by ' . $data['author'];
-                $color = Colors::DANGER_COLOR;
+                $color = Colors::DANGER;
                 break;
         }
 

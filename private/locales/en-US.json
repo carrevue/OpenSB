@@ -184,7 +184,7 @@
     "notify_register_disabled": "The ability to register has been disabled.",
     "notify_register_shady_ip": "Your IP address appears to be suspicious.",
     "notify_token_generation_fail": "An error occurred while generating your token. Please try again.",
-    "notify_password_changed": "Your password has been changed.",
+    "notify_password_changed": "Your password has been successfully changed. Please login again.",
     "notify_successfully_updated_settings": "Your settings have been successfully updated.",
     "notify_successfully_updated_options": "Your options have been successfully updated.",
     "notify_upload_disabled": "The ability to upload has been disabled.",

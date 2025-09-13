@@ -183,7 +183,7 @@
     "notify_register_disabled": "L'inscription d'un nouveau compte est présentement désactivé.",
     "notify_register_shady_ip": "Votre adresse IP a été signalée comme spam.",
     "notify_token_generation_fail": "Une erreur s'est produite lors de la génération de votre token. Veuillez réessayer.",
-    "notify_password_changed": "Votre mot de passe a été changé.",
+    "notify_password_changed": "Votre mot de passe a été changé. Veuillez vous reconnecter.",
     "notify_successfully_updated_settings": "Les paramètres de votre compte ont été mis à jour avec succès.",
     "notify_successfully_updated_options": "Vos options ont été mises à jour avec succès.",
     "notify_upload_disabled": "La publication est présentement désactivée.",

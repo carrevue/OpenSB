@@ -121,7 +121,7 @@ if (isset($_POST['save'])) {
                     [password_hash($pass, PASSWORD_DEFAULT), $new_token, $auth->getUserID()]
                 );
 
-                Utilities::notifyBanner("notify_password_changed", "/login");
+                Utilities::notifyBanner("notify_password_changed", "/login", "success");
             } else {
                 $error .= " The new passwords aren't identical.";
             }

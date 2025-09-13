@@ -21,12 +21,11 @@
 
 namespace SquareBracket;
 
-/* IMPORTANT: These should be kept in sync with the colors in the Trinium frontend. */
-
 final class Colors
 {
-    const PRIMARY_COLOR = '#0069B4';
-    const SUCCESS_COLOR = '#00A651';
-    const WARNING_COLOR = '#FFBB00';
-    const DANGER_COLOR  = '#CB122E';
+    /* IMPORTANT: These should be kept in sync with the colors in the Trinium frontend. */
+    const PRIMARY = '#0069B4';
+    const SUCCESS = '#00A651';
+    const WARNING = '#FFBB00';
+    const DANGER  = '#CB122E';
 }
