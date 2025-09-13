@@ -307,26 +307,15 @@ class SquareBracketTwigExtension extends AbstractExtension
         if (mb_strtolower($username) === mb_strtolower($displayName)) {
             // if username matches display name
             $displayText = sprintf(
-                '
-<div class="userlink-bullshit">
-<span style="%s">@%s</span>
-%s
-</div>',
-                $style,
+                '<div class="userlink"><span>@%s</span>%s</div>',
                 $username,
                 $staff_icon
             );
         } else {
             // if theyre different
             $displayText = sprintf(
-                '
-<div class="userlink-displayname">%s</div>
-<div class="userlink-bullshit">
-<a class="userlink-handle" style="text-decoration: none;" href="%s">@%s</a> %s
-</div>
-',
+                '<div class="userlink"><span>%s</span><span class="userlink-handle">@%s</span>%s</div>',
                 $displayName,
-                $href,
                 $username,
                 $staff_icon
             );
@@ -334,7 +323,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         // return link
         return sprintf(
-            '<div class="userlink"><a class="%s" style="%s" href="%s">%s</a></div>',
+            '<div class="userlink-container"><a class="%s" style="%s" href="%s">%s</a></div>',
             $class,
             $style,
             $href,
@@ -373,36 +362,9 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function displayUploadRatings(array $ratings): void
     {
-        $icons = [
-            'full' => "icon star-full",
-            'half' => "icon star-half",
-            'empty' => "icon star-empty"
-        ];
-
-        if (!isset($ratings['average']) || !is_numeric($ratings['average'])) {
-            echo str_repeat("<i class='{$icons['empty']}'></i>", 5);
-            return;
-        }
-
-        $average = (string)$ratings['average'];
-        $fullStars = (int)$average[0];
-        $halfStar = isset($average[2]) && $average[2] !== '0';
-        $totalStars = 0;
-
-        for ($i = 0; $i < $fullStars; $i++) {
-            echo "<i class='{$icons['full']}'></i>";
-            $totalStars++;
-        }
-
-        if ($halfStar) {
-            echo "<i class='{$icons['half']}'></i>";
-            $totalStars++;
-        }
-
-        while ($totalStars < 5) {
-            echo "<i class='{$icons['empty']}'></i>";
-            $totalStars++;
-        }
+        // TODO
+        $average = round($ratings['average'], 2);
+        echo "<div>$average stars</div>";
     }
 
     public function pagination($levels, $lpp, $url, $current)

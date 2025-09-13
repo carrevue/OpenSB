@@ -215,7 +215,7 @@ hr {
     opacity: 0.6;
 }
 
-.userlink {
+.userlink-container {
     display: inline-flex;
     text-wrap: auto;
     flex-wrap: wrap;
@@ -226,24 +226,16 @@ hr {
         justify-content: center;
     }
 
-    .userlink-displayname {
-        margin-right: 0.5ch;
-    }
-
-    .userlink-bullshit {
+    .userlink {
         display: inline-flex;
         flex-wrap: wrap;
-        //gap: 0.5ch; (fucks shit up???)
+        column-gap: 0.5ch;
         align-items: center;
 
         .userlink-handle {
             color: $text-color;
             opacity: 50%;
             text-decoration: none;
-        }
-
-        .icon {
-            margin-left: 0.5ch;
         }
     }
 }
