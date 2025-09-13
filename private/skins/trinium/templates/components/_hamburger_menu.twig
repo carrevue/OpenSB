@@ -2,7 +2,7 @@
     {% for key, link in header_main_links() %}
         <li class="list-link">
             <a href="{{ link.url }}" {% if page_name == key %}class="selected"{%endif %}>
-                {#<div class="biscuit-icon placeholder"></div>#}
+                {#<div class="icon placeholder"></div>#}
                 {{ link.name }}
             </a>
         </li>

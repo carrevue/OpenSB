@@ -53,10 +53,38 @@ function load_thumbnail_from_skin($path): never
 
 
 // this is very ugly, i know.
-function load_file_from_vendor($path, $content_type): never
+function load_file(string $path, string $content_type): never
 {
+    if (!file_exists($path)) {
+        http_response_code(404);
+        exit;
+    }
+
+    $last_modified = filemtime($path);
+    $etag = md5_file($path);
+
+    // caching shit
+    header("Last-Modified: " . gmdate('D, d M Y H:i:s', $last_modified) . ' GMT');
+    header("Etag: $etag");
+
+    if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) || isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+        $if_modified_since = strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? '');
+        $if_none_match = $_SERVER['HTTP_IF_NONE_MATCH'] ?? '';
+
+        if (($if_modified_since && $if_modified_since >= $last_modified) ||
+            ($if_none_match && $if_none_match === $etag)
+        ) {
+            http_response_code(304);
+            exit;
+        }
+    }
+
     header("Content-Type: $content_type");
-    readfile(BLUFF_VENDOR_PATH . $path);
+    header('Content-Length: ' . filesize($path));
+    header('Cache-Control: public, max-age=43200'); // 12 hours
+    header('Expires: ' . gmdate('D, d M Y H:i:s', time() + 43200) . ' GMT');
+
+    readfile($path);
     exit;
 }
 
@@ -184,9 +212,14 @@ $router->add('/dashboard/ip_bans', 'dashboard/ip_bans.php');
 $router->add('/dashboard/server', 'dashboard/server.php');
 $router->redirect('/dashboard', '/dashboard/overview', 301);
 
+// trinium icons (used by trinium)
+$router->add('/assets/icons.svg', function () {
+    load_file(BLUFF_PRIVATE_PATH . '/icons/sprite.svg', 'image/svg+xml');
+});
+
 // bootstrap icons (used by bootstrap and finalium)
 $router->add('/assets/bootstrap-icons.svg', function () {
-    load_file_from_vendor('/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
+    load_file(BLUFF_VENDOR_PATH . '/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
 });
 
 // used by the theme page for images

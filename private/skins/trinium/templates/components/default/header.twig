@@ -3,7 +3,7 @@
         <div class="header-main">
             <div class="header-button">
                 <div class="button button-secondary button-hamburger button-transparent" id="button-hamburger">
-                    <i class="biscuit-icon hamburger size-32"></i>
+                    <i class="icon hamburger size-32"></i>
                 </div>
             </div>
             <div class="header-logo">
@@ -23,7 +23,7 @@
             <form class="header-search" action="/search">
                 <input id="header-search-input" type="text" name="query" placeholder="{{ localize('search') }}...">
                 <button id="header-search-button">
-                    <i class="biscuit-icon search"></i>
+                    <i class="icon search"></i>
                 </button>
             </form>
         </div>
@@ -32,7 +32,7 @@
                 {# create #}
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="create-menu">
-                        <i class="biscuit-icon upload"></i>
+                        <i class="icon upload"></i>
                     </div>
                     <div class="menu" id="create-menu">
                         <a class="menu-item-button" href="/upload">{{ localize('new_upload') }}</a>
@@ -42,7 +42,7 @@
                 {# notifications #}
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="notify-menu">
-                        <i class="biscuit-icon bell"></i>
+                        <i class="icon bell"></i>
                     </div>
                     <div class="menu" id="notify-menu">
                         <a class="menu-item-button" href="/notifications">Notifications ({{ user_stat_data.notifications }})</a>
@@ -108,7 +108,7 @@
     <div class="navigation-bar">
         {% for link in header_main_links() %}
             <a class="navigation-bar-button" href="{{ link.url }}">
-                <div class="biscuit-icon homepage-list size-24"></div>
+                <div class="icon homepage-list size-24"></div>
                 {{ link.name }}
             </a>
         {% endfor %}
