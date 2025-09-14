@@ -62,6 +62,8 @@ use SquareBracket\Templating;
 use SquareBracket\Utilities;
 use SquareBracket\VersionNumber;
 
+ini_set('session.gc_maxlifetime', 86400);
+
 // please use apache/nginx for production stuff.
 define('BLUFF_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
 define('BLUFF_CLI', php_sapi_name() === 'cli');
@@ -87,7 +89,7 @@ if (!BLUFF_CLI) {
         $is_secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 
         session_set_cookie_params([
-            'lifetime' => 0,
+            'lifetime' => 86400,
             'path' => '/',
             'secure' => $is_secure,
             'httponly' => true,
@@ -95,8 +97,8 @@ if (!BLUFF_CLI) {
         ]);
 
         session_start([
-            "cookie_lifetime" => 1209600,
-            "gc_maxlifetime" => 1209600,
+            "cookie_lifetime" => 86400,
+            "gc_maxlifetime" => 86400,
         ]);
     }
 }
