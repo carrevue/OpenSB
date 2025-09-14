@@ -98,7 +98,7 @@
             {% else %}
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="login-menu">
-                        Have an account? Login
+                        {{ localize('have_an_account') }} {{ localize('login') }}
                         <div class="menu-caret-container">
                             {{ icon("caret-closed", 16, "menu-caret") }}
                         </div>
@@ -106,22 +106,22 @@
                     <div class="menu" id="login-menu">
                         <form method="post" name="loginForm" id="loginForm" action="login" class="form-login">
                             <div class="form-input">
-                                <label for="username">Username</label>
+                                <label for="username">{{ localize('username') }}</label>
                                 <input type="text" name="username" class="form-submit">
                             </div>
 
                             <div class="form-input">
-                                <label for="password">Password</label>
+                                <label for="password">{{ localize('password') }}</label>
                                 <input type="password" name="password" class="form-submit">
                             </div>
 
                             <div class="login-bottom">
                                 <div class="login-text">
-                                    Don't have an account? <a href="/register">{{ localize('register') }}</a>
+                                    {{ localize('dont_have_an_account') }} <a href="/register">{{ localize('register') }}</a>
                                 </div>
 
                                 <div class="form-button-container">
-                                    <input type="submit" class="button button-primary button-login" value="Login" name="loginsubmit">
+                                    <input type="submit" class="button button-primary button-login" value="{{ localize('login') }}" name="loginsubmit">
                                 </div>
                             </div>
                         </form>

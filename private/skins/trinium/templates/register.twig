@@ -2,7 +2,7 @@
 
 {% set show_sidebar = true %}
 
-{% set title = "Register" %}
+{% set title = localize('register') %}
 
 {% block scripts %}
     <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
@@ -24,17 +24,17 @@
                                 </div>
 
                                 <div class="form-input">
-                                    <label for="username">Username</label>
+                                    <label for="username">{{ localize('username') }}</label>
                                     <input type="text" name="username" class="form-submit" required>
                                 </div>
 
                                 <div class="form-input">
-                                    <label for="pass1">Password</label>
+                                    <label for="pass1">{{ localize('password') }}</label>
                                     <input type="password" name="pass1" class="form-submit" required>
                                 </div>
 
                                 <div class="form-input">
-                                    <label for="pass2">Password (confirm)</label>
+                                    <label for="pass2">{{ localize('password_again') }}</label>
                                     <input type="password" name="pass2" class="form-submit" required>
                                 </div>
 
@@ -46,8 +46,8 @@
                                 {% endif %}
 
                                 <div class="form-input">
-                                    <label for="birthdate">Birthdate:</label>
-                                    <input type="date" name="birthdate" required />
+                                    <label for="birthdate">{{ localize('birthdate') }}</label>
+                                    <input type="date" name="birthdate" class="form-submit" required />
                                 </div>
 
                                 {% if captcha_public_token %}
@@ -58,7 +58,7 @@
                                 {% endif %}
 
                                 <div class="form-button-container">
-                                    <input type="submit" class="button button-primary button-login" value="Register" name="registersubmit">
+                                    <input type="submit" class="button button-primary button-login" value="{{ localize('register') }}" name="registersubmit">
                                 </div>
                             </form>
                         </div>

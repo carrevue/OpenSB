@@ -51,6 +51,15 @@
     "register": "Register",
     "logout": "Logout",
 
+    "username": "Username",
+    "password": "Password",
+    "password_again": "Password (again)",
+    "birthdate": "Date of birth",
+    "invite_key": "Invite key",
+
+    "dont_have_an_account": "Don't have an account?",
+    "have_an_account": "Have an account?",
+
     "list": "List",
     "grid": "Grid",
 
@@ -101,7 +110,6 @@
     "dashboard_lookup": "Lookup",
 
     "user_id": "ID",
-    "username": "Username",
     "profile_name": "Profile name",
     "ip_address": "IP address",
     "user_role": "Role",
