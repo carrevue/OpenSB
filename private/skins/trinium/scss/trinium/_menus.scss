@@ -64,7 +64,10 @@
 
 .menu-button {
     .menu-caret-container {
-        display: inline;
+        display: inline-block;
+        opacity: 0.75;
+        width: 16px;
+        height: 16px;
     }
 }
 

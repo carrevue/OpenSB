@@ -101,8 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // get the caret if that exists. this is primarily for the one in the header.
         const menuCaret = button.getElementsByClassName("menu-caret");
 
-        let menuCaretOff = "icon caret-closed menu-caret";
-        let menuCaretOn = "icon caret-open menu-caret";
+        let menuCaretOff = "/assets/icons.svg#caret-closed";
+        let menuCaretOn = "/assets/icons.svg#caret-open";
 
         let actualCaret;
         if (menuCaret.length === 1) {
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener('mousedown', () => {
             if (menu.style.display === 'none') {
                 if (actualCaret) {
-                    actualCaret.className = menuCaretOn;
+                    actualCaret.querySelector('use').setAttribute('xlink:href', menuCaretOn);
                 }
                 if (isThisTheHeaderUserMenu) {
                     button.classList.add("selected");
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function closeMenu() {
             if (actualCaret) {
-                actualCaret.className = menuCaretOff;
+                actualCaret.querySelector('use').setAttribute('xlink:href', menuCaretOff);
             }
             if (isThisTheHeaderUserMenu) {
                 button.classList.remove("selected");

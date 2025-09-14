@@ -335,6 +335,14 @@
     }
 }
 
+.menu#login-menu {
+    border-top: none;
+    top: $header-height;
+    border-radius: 0 0 8px 8px;
+    min-width: 300px;
+    padding: 1em;
+}
+
 .header-button {
     display: flex;
     /* stupid hack */

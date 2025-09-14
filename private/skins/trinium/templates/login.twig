@@ -1,6 +1,6 @@
 {% extends "_layout.twig" %}
 
-{% set show_sidebar = true %}
+{% set show_sidebar = false %}
 
 {% set title = "Login" %}
 
@@ -15,7 +15,7 @@
                 <div class="grid center">
                     <div class="col-6">
                         <div class="panel-body">
-                            <form method="post" name="loginForm" id="loginForm" action="login" class="form-signin">
+                            <form method="post" name="loginForm" id="loginForm" action="login" class="form-login">
                                 <div class="form-input">
                                     <label for="username">Username</label>
                                     <input type="text" name="username" class="form-submit">

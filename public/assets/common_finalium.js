@@ -46,9 +46,9 @@ function handleCommentEvents() {
 
 function toggleNotAvailable() {
     const watch_not_available = document.getElementById('watch-not-available');
-    
+
     if (watch_not_available) {
-       toggleElementDisplay(watch_not_available);
+        toggleElementDisplay(watch_not_available);
     }
 }
 
@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // get the caret if that exists. this is primarily for the one in the header.
         const menuCaret = button.getElementsByClassName("menu-caret");
 
+        // TODO: make this use bootstrap icons or some shit i dont know
         let menuCaretOff = "icon caret-closed menu-caret";
         let menuCaretOn = "icon caret-open menu-caret";
 
@@ -189,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const watch_not_available = document.getElementById('watch-not-available');
     const watch_not_available_close = document.getElementById('watch-not-available-close');
-    
+
     if (watch_not_available) {
         watch_not_available_close.addEventListener('click', function () {
             toggleElementDisplay(watch_not_available);
@@ -200,12 +201,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const comments = document.getElementById('comments');
 
     if (comments) {
-            fetch(`/api/frontend/comment_load?location=${encodeURIComponent(comment_location_type)}&id=${encodeURIComponent(comment_location_id)}`, {
-                method: "GET",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
+        fetch(`/api/frontend/comment_load?location=${encodeURIComponent(comment_location_type)}&id=${encodeURIComponent(comment_location_id)}`, {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
             .then(response => response.json())
             .then(json => {
                 commentContents = document.getElementById('commentContents');
@@ -217,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 handleCommentEvents();
             })
-        }
+    }
 
     // post comment (profile)
     if (postUserButton) {

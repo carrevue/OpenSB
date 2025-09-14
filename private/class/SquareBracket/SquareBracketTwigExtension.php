@@ -594,13 +594,13 @@ class SquareBracketTwigExtension extends AbstractExtension
         return filemtime(BLUFF_PUBLIC_PATH . "/assets/css/trinium-default.css");
     }
 
-    public function getIcon($icon, $size = "16")
+    public function getIcon($icon, $size = "16", $class = null)
     {
         if (Utilities::isLegacyFrontend()) {
-            $class = "bi";
+            $root_class = "bi";
             $svg = "bootstrap-icons.svg";
         } else {
-            $class = "icon";
+            $root_class = "icon";
             $svg = "icons.svg";
         }
 
@@ -609,6 +609,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             [
                 'icon' => $icon,
                 'size' => $size,
+                'root_class' => $root_class,
                 'class' => $class,
                 'svg' => $svg,
             ]
