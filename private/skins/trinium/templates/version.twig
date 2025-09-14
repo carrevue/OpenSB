@@ -1,13 +1,13 @@
 {% extends "_layout.twig" %}
 
-{% set show_sidebar = true %}
+{% set show_sidebar = false %}
 
-{% set title = "Version" %}
+{% set title = localize("version") %}
 
 {% block content %}
     <div class="section">
         <div class="section-header">
-            <h1 class="section-title">Version</h1>
+            <h1 class="section-title">{{ localize("version") }}</h1>
         </div>
         <div class="content-box">
             <div class="grid">

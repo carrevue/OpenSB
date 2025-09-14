@@ -2,28 +2,6 @@
 
 {% set title = "Trinium!" %}
 
-{% set button_color_types = color_types %}
-
-{% set button_color_types = button_color_types|merge(['favorite']) %}
-
-{% block scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous">
-    <script>
-        document.addEventListener( 'DOMContentLoaded', function() {
-            var elms = document.getElementsByClassName( 'splide' );
-
-            for ( var i = 0; i < elms.length; i++ ) {
-                new Splide( elms[ i ], {
-                    perPage: 2,
-                    rewind: true,
-                    pagination: false,
-                } ).mount();
-            }
-        } );
-    </script>
-{% endblock %}
-
 {% set show_sidebar = true %}
 
 {% block content %}
@@ -89,19 +67,19 @@
                 <div class="section-header">
                     <h2 class="section-title">Buttons</h2>
                 </div>
-                {% for color in button_color_types %}
+                {% for color in color_types %}
                     <div class="button button-{{ color }} button-small">small {{ color }} button!</div>
                 {% endfor %}
                 <br>
-                {% for color in button_color_types %}
+                {% for color in color_types %}
                     <div class="button button-{{ color }}">{{ color }} button!</div>
                 {% endfor %}
                 <br>
-                {% for color in button_color_types %}
+                {% for color in color_types %}
                     <div class="button button-{{ color }} button-big">big {{ color }} button!</div>
                 {% endfor %}
                 <br>
-                {% for color in button_color_types %}
+                {% for color in color_types %}
                     <div class="button button-{{ color }} button-huge">huge {{ color }} button!</div>
                 {% endfor %}
             </div>
@@ -217,22 +195,6 @@
                     {% for submission in uploads %}
                         {{ include('/components/_upload_grid.twig') }}
                     {% endfor %}
-                </div>
-            </div>
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Upload splide</h2>
-                </div>
-                <div class="content-box">
-                    <section class="splide" id="splide1" aria-labelledby="carousel-heading">
-                        <div class="splide__track">
-                            <ul class="splide__list">
-                                {% for submission in uploads %}
-                                    {{ include('/components/_upload_grid_splide.twig') }}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </section>
                 </div>
             </div>
         </div>

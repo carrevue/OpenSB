@@ -25,13 +25,15 @@
     starRating.disable();
     {% endif %}
 </script>
+{% if current_skin == "trinium" %}
 <style>
     .star-rating {
-        background: url("/assets/icons/star_empty.svg") !important;
-        background-size: 16px !important;
+        mask: url(#stars-mask);
+        background: var(--secondary);
     }
      .star-rating .star-value{
-         background: url("/assets/icons/star_full.svg") !important;
-         background-size: 16px !important;
+        mask: url(#stars-mask);
+        background: var(--warning);
      }
 </style>
+{% endif %}

@@ -27,6 +27,10 @@
 :root {
     font-family: $font;
     --link-color: #{$link-color};
+
+    @each $color, $value in $color-map {
+        --#{$color}: #{$value};
+    }
 }
 
 @if $theme =="flat" {
@@ -244,6 +248,15 @@ ul.unstyled-list {
     padding: 0;
     margin: 0;
     list-style: none;
+}
+
+// #stars-mask is defined in _layout.twig
+// background: linear-gradient(to right, var(--warning) 66%, var(--secondary) 66%);
+.star-rating-container {
+    mask: url(#stars-mask);
+    -webkit-mask: url(#stars-mask);
+    height: 16px;
+    width: 80px;
 }
 
 @import 'header';

@@ -93,7 +93,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 unset($_SESSION["notif_message"]);
                 unset($_SESSION["notif_color"]);
             }),
-            new TwigFunction('show_ratings', [$this, 'displayUploadRatings']),
+            new TwigFunction('show_ratings', [$this, 'displayUploadRatings'], ['is_safe' => ['html']]),
             new TwigFunction('notification_icon', [$this, 'getNotificationIcon'], ['is_safe' => ['html']]),
             new TwigFunction('pagination', [$this, 'pagination'], ['is_safe' => ['html']]),
             new TwigFunction('header_main_links', [$this, 'headerMainLinks']),
@@ -360,11 +360,20 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
-    public function displayUploadRatings(array $ratings): void
+    public function displayUploadRatings(array $ratings)
     {
-        // TODO
-        $average = round($ratings['average'], 2);
-        echo "<div>$average stars</div>";
+        if (!isset($ratings['average']) || empty($ratings['average'])) {
+            return '<div class="star-rating-container" style="background: var(--secondary);"></div>';
+        }
+
+        $average = (float) $ratings['average'];
+        $percentage = round($average * 20, 4);
+        $percentage = max(0, min(100, $percentage));
+
+        return sprintf(
+            '<div class="star-rating-container" style="background: linear-gradient(to right, var(--warning) %1$s%%, var(--secondary) %1$s%%);"></div>',
+            $percentage
+        );
     }
 
     public function pagination($levels, $lpp, $url, $current)

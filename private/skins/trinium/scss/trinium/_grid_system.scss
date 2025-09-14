@@ -52,3 +52,20 @@ $gap: 1em;
         @include create-selectors($breakpoint);
     }
 }
+
+.fuck {
+    border: 1px solid $content-box-border-color;
+    background: $content-box-border-color;
+    gap: 1px;
+
+    >div {
+        background: $content-box-background-color;
+        padding: $content-box-padding;
+    }
+
+    .content-box {
+        background: none;
+        border: none;
+        padding: 0;
+    }
+}

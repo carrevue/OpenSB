@@ -98,6 +98,20 @@
     {% block style %}
     {% endblock %}
 </head>
+{# somewhat hacky #}
+<svg width="0" height="0" style="position:absolute">
+    <defs>
+        <mask id="stars-mask" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse">
+            <g fill="white">
+                <use href="/assets/icons.svg#star" x="0" y="0" width="16" height="16" />
+                <use href="/assets/icons.svg#star" x="16" y="0" width="16" height="16" />
+                <use href="/assets/icons.svg#star" x="32" y="0" width="16" height="16" />
+                <use href="/assets/icons.svg#star" x="48" y="0" width="16" height="16" />
+                <use href="/assets/icons.svg#star" x="64" y="0" width="16" height="16" />
+            </g>
+        </mask>
+    </defs>
+</svg>
 <body>
 {% if is_debug %}
     {% include("components/debug_dialog.twig") %}

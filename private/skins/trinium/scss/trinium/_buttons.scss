@@ -145,8 +145,3 @@ input[type=file]::-webkit-file-upload-button {
     @include button();
     @include button-variant($secondary);
 }
-
-//non standard buttons
-.button-favorite {
-    @include button-variant(#ffbecd);
-}
