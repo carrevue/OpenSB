@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener('mousedown', () => {
             if (menu.style.display === 'none') {
                 if (actualCaret) {
-                    actualCaret.querySelector('use').setAttribute('xlink:href', menuCaretOn);
+                    actualCaret.querySelector('use').setAttribute('href', menuCaretOn);
                 }
                 if (isThisTheHeaderUserMenu) {
                     button.classList.add("selected");
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function closeMenu() {
             if (actualCaret) {
-                actualCaret.querySelector('use').setAttribute('xlink:href', menuCaretOff);
+                actualCaret.querySelector('use').setAttribute('href', menuCaretOff);
             }
             if (isThisTheHeaderUserMenu) {
                 button.classList.remove("selected");
