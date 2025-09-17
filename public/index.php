@@ -102,12 +102,6 @@ function last_resort(): void
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
 }
 
-// TODO
-/*
-$uri = parse_url(rawurldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
-$path = explode('/', $uri);
-
-// its dynamic shit because i cant be arsed
 function handle_debug_page_path(string $path): void
 {
     $debug_pages_path = BLUFF_PRIVATE_PATH . '/pages/debug/';
@@ -123,7 +117,6 @@ function handle_debug_page_path(string $path): void
         last_resort();
     }
 }
-*/
 
 $router = new Router();
 
@@ -225,6 +218,14 @@ $router->add('/assets/bootstrap-icons.svg', function () {
 // used by the theme page for images
 $router->add('/assets/previews/{image}', function (array $params) {
     load_thumbnail_from_skin($params['image']);
+});
+
+// debug shit
+$router->add('/debug', function (array $params) {
+    handle_debug_page_path("index");
+});
+$router->add('/debug/{page}', function (array $params) {
+    handle_debug_page_path($params['page']);
 });
 
 // fallback
