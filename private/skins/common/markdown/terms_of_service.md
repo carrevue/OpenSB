@@ -10,7 +10,7 @@ By using the platform, you agree to these terms:
 
 * You must be over the age of 13 years old to use or register on the platform. This may be different depending on your 
   country.
-* * If you are caught lying about your date of birth in order to use the platform below the age of 13, you will be 
+    * If you are caught lying about your date of birth in order to use the platform below the age of 13, you will be 
   banned off the platform.
 * You must not evade account bans nor IP bans on the platform.
 * The platform is not responsible for the actions of its users outside of the platform.
