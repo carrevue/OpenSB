@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-// TODO: make this work with new opensb 1.3 table names -chaziz 1/6/2025
+// TODO: make this work with new opensb 2.0 table names -chaziz 1/6/2025
 
 define("BLUFF_ROOT_PATH", dirname(__DIR__));
 define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
@@ -93,7 +93,7 @@ foreach ($id_mapping as $old_id => $temp_id) {
     $database->query("UPDATE user_old_names SET user = ? WHERE user = ?", [$new_id, $temp_id]);
     $database->query("UPDATE videos SET author = ? WHERE author = ?", [$new_id, $temp_id]);
 
-    // TODO: fix this for opensb 1.3
+    // TODO: fix this for opensb 2.0
     $pfpOld = BLUFF_DYNAMIC_PATH . '/pfp/' . $user["name"] . '.png';
     $pfpNew = BLUFF_DYNAMIC_PATH . '/pfp/' . $new_id . '.png';
     $bannerOld = BLUFF_DYNAMIC_PATH . '/banners/' . $user["name"] . '.png';

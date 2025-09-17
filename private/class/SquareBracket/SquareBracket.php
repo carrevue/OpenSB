@@ -76,11 +76,15 @@ class SquareBracket
 
         $this->database = new Database($host, $user, $pass, $db);
         $this->authentication = new Authentication($this->database);
-        // TEMPORARY. SHOULD BE REMOVED WHEN OPENSB 1.3 IS DONE
+
+        // super dangerous if misused, but that site mode is only intended for
+        // squarebracket production so it doesnt really matter. -chaziz 09/17/2025
         if (
             $this->is_chaziz_squarebracket_instance &&
             isset($this->authentication->getUserData()["name"]) &&
-            $this->authentication->getUserData()["name"] == "Chaziz"
+            isset($this->authentication->getUserData()["id"]) &&
+            $this->authentication->getUserData()["name"] == "Chaziz" &&
+            $this->authentication->getUserData()["id"] == 1
         ) {
             $this->is_debug = true;
         }
@@ -150,8 +154,8 @@ class SquareBracket
         $this->localization = new Localization($this->options["locale"] ?? "en-US");
 
         if (isset($_COOKIE["SBACCOUNTS"])) {
-            $stupid_fucking_bullshit = str_replace($this->accounts_cookie_warning, "", $_COOKIE["SBACCOUNTS"]);
-            $this->accounts = json_decode(base64_decode($stupid_fucking_bullshit), true);
+            $accounts_cookie_without_warning = str_replace($this->accounts_cookie_warning, "", $_COOKIE["SBACCOUNTS"]);
+            $this->accounts = json_decode(base64_decode($accounts_cookie_without_warning), true);
         } else {
             $this->accounts = [];
         }

@@ -33,7 +33,7 @@ global $database;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
-// migrate from opensb 1.2 table schema to opensb 1.3 table schema
+// migrate from opensb 1.2 table schema to opensb 2.0 table schema
 
 $database->query("RENAME TABLE `bans` TO `user_bans`");
 $database->query("DROP TABLE `blacklisted_referer`"); // unused table from early opensb 1.2
