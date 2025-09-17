@@ -1,11 +1,13 @@
 #previewContainer {
     display: flex;
-    align-items: center;
     gap: 1em;
+    align-items: center;
 }
 
 #themePreview {
-    width: 200px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
 }
 
 #skinName {

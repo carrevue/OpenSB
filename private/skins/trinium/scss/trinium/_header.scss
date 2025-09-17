@@ -184,6 +184,10 @@
         background: none;
         border: none;
 
+        @if $color-scheme =="dark" {
+            color: white;
+        }
+
         .icon.search {
             width: 16px;
             height: 16px;

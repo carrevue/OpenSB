@@ -28,8 +28,11 @@ global $orange, $twig, $auth, $database;
 use Random\RandomException;
 use SquareBracket\UserFlags;
 use SquareBracket\Utilities;
+use SquareBracket\UserCustomizationFont;
 
 $options = $orange->getLocalOptions();
+
+$trinium_fonts_array = UserCustomizationFont::getAll();
 
 if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
@@ -84,6 +87,8 @@ if (isset($_POST['save'])) {
         $highlight_box_border_color = $_POST['highlight_box_border_color'] ?? '#666666';
         $highlight_box_background_color = $_POST['highlight_box_background_color'] ?? '#E6E6E6';
         $highlight_box_text_color = $_POST['highlight_box_text_color'] ?? '#000000';
+
+        $font = $_POST['font'] ?? "default";
     }
 
     if ($auth->isUserOver18() && !$orange->isChazizSquareBracketInstance()) {
@@ -279,5 +284,6 @@ if (isset($_POST['save'])) {
 echo $twig->render('settings.twig', [
     'isUserOver18' => $auth->isUserOver18(),
     'flags' => $auth->getUserFlags(true),
-    'profile_color_data' => $profile_color_data ?? []
+    'profile_color_data' => $profile_color_data ?? [],
+    'trinium_fonts' => $trinium_fonts_array,
 ]);

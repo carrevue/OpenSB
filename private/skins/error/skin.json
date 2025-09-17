@@ -1,9 +1,9 @@
 {
-  "metadata": {
-    "id": "error",
-    "name": "Error",
-    "author": "OpenSB developers",
-    "description": "Lorem ipsum",
-    "site": "squarebracket"
-  }
+    "metadata": {
+        "id": "error",
+        "name": "Error",
+        "author": "Bluffingo Development",
+        "description": "Lorem ipsum",
+        "site": "squarebracket"
+    }
 }

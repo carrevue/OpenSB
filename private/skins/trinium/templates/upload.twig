@@ -21,32 +21,34 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="form-input">
-                                <label for="title">Title (required):</label>
+                                <label for="title">Title <span>Required</span></label>
                                 <input type="text" class="form-submit" id="title" name="title" required>
                             </div>
 
                             <div class="form-input">
-                                <label for="desc">Description (optional):</label>
+                                <label for="desc">Description <span>Optional</span></label>
                                 <textarea class="form-submit" name="desc" maxlength="65500"
                                           form="uploadForm"
-                                          style="overflow:hidden;resize:vertical" rows="3"></textarea>
+                                          style="overflow:hidden;resize:vertical" rows="4"></textarea>
                             </div>
 
                             <div class="form-input">
-                                <label for="tags">Tags (optional):</label>
+                                <label for="tags">Tags <span>Optional</span></label>
                                 <input type="text" class="form-submit" name="tags">
                             </div>
 
                             {% if not is_chaziz_sb %}
                             <div class="form-input">
                                 <input type="checkbox" name="rating" id="rating" value="true">
-                                <label for="rating"> Mark sensitive</label><br>
+                                <label for="rating">Mark sensitive
+                                <span>Makes the upload only accessible to logged-in users over 18.</span>
+                                </label>
                             </div>
                             {% endif %}
 
                             <div class="form-input">
-                                <label for="fileToUpload">File (required):</label>
-                                <div>File limit: {{ limit }}</div>
+                                <label for="fileToUpload">File <span>Required</span></label>
+                                <div>Upload limit: {{ limit }}</div>
                                 <input class="form-submit" type="file" name="fileToUpload" id="fileToUpload" required>
                             </div>
 

@@ -294,6 +294,8 @@
     }
 
     .content-entry-small {
+        display: flex;
+        flex-direction: column;
         max-height: $content-box-grid-entry-height;
         text-align: center;
 
@@ -308,6 +310,8 @@
         }
 
         .content-rating {
+            align-self: center;
+
             .icon {
                 width: 12px;
                 height: 12px;

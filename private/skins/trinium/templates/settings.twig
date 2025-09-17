@@ -92,13 +92,16 @@
                                 <label for="enable_customization"> Enable profile customization</label><br>
                             </div>
 
-                            {#
-                            <div>
-                                <div class="banner banner-secondary">
-                                    TODO: FONTS (which should be a dropdown menu with hardcoded options)
-                                </div>
+                            <div class="form-input">
+                                <label for="font">Font:</label>
+                                <select id="font" name="font" class="form-submit">
+                                {% for key, font in trinium_fonts %}
+                                    <option value="{{ key }}" {% if profile_color_data.font == key %} selected{% endif %}>
+                                        {{ font.name }}
+                                    </option>
+                                {% endfor %}
+                                </select>
                             </div>
-                            #}
 
                             <div class="form-input">
                                 <label for="title_color">Title color:</label>

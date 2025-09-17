@@ -22,6 +22,7 @@
 namespace SquareBracket;
 
 use BluffingoCore\Database;
+use SquareBracket\UserCustomizationFont;
 
 class UserCustomizationData
 {
@@ -36,6 +37,10 @@ class UserCustomizationData
             "SELECT * FROM user_profile_customization WHERE user = ?",
             [$id]
         );
+
+        // kind of stupid but at this point i dont care
+        $font = UserCustomizationFont::tryFrom($this->data["font"]);
+        $this->data["font"] = $font->getCss();
     }
 
     // i'm not sure if this should be array|false or ?array

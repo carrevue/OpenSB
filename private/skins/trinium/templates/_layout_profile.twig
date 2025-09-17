@@ -82,6 +82,10 @@
         .userlink-container .userlink a {
             color: {{ data.customization.basic_box_text_color }} !important;
         }
+        {% else %}
+        .profile-box-username {
+            color: {{ data.color }}
+        }
         {% endif %}
     </style>
 {% endblock %}
