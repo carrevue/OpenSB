@@ -135,13 +135,41 @@ switch ($post_data['type']) {
         // this weird shit.
         $numericID = Utilities::uploadStringIDToUploadNumericID($database, $post_data["id"]);
 
-        Utilities::notifyUser($database, 1, $numericID, $insertID, NotificationEnum::CommentUpload);
+        if ($replyTo) {
+            // figure out this shit Lol
+            $recipient = 1;
+        } else {
+            // get author of the upload
+            $recipient = $database->result("SELECT author FROM uploads WHERE video_id = ?", [$post_data["id"]]);
+        }
+
+        if ($recipient != $auth->getUserID()) {
+            Utilities::notifyUser($database, $recipient, $numericID, $insertID, NotificationEnum::CommentUpload);
+        }
         break;
     case 'profile':
-        Utilities::notifyUser($database, 1, $id, $insertID, NotificationEnum::CommentProfile);
+        if ($replyTo) {
+            // figure out this shit Lol
+            $recipient = 1;
+        } else {
+            // get author of the upload
+            $recipient = $id;
+        }
+
+        if ($recipient != $auth->getUserID()) {
+            Utilities::notifyUser($database, $recipient, $id, $insertID, NotificationEnum::CommentProfile);
+        }
         break;
     case 'journal':
-        Utilities::notifyUser($database, 1, $id, $insertID, NotificationEnum::CommentJournal);
+        if ($replyTo) {
+            // figure out this shit Lol
+            $recipient = 1;
+        } else {
+            // get author of the upload
+            $recipient = $database->result("SELECT author FROM journals WHERE id = ?", [$post_data["id"]]);
+        }
+
+        Utilities::notifyUser($database, $recipient, $id, $insertID, NotificationEnum::CommentJournal);
         break;
     default:
         exit;

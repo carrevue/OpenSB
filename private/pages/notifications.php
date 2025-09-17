@@ -63,10 +63,17 @@ function getRequiredData($database, $notice)
             break;
 
         case NotificationEnum::CommentProfile:
+            // i'm pretty sure this should use result() rather than fetch()
             $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM user_profile_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
             $profile = $database->fetch("SELECT u.name FROM users u WHERE u.id = ?", [$notice["level"]]);
 
             $data["info"] = $comment["comment"];
+
+            if (!isset($profile["name"])) {
+                $profile = [
+                    "name" => "InvalidUser!"
+                ];
+            }
 
             if (str_ends_with($profile["name"], "s")) {
                 $data["origin"] = $profile["name"] . "' profile";
