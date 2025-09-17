@@ -1,5 +1,51 @@
+body.login {
+    background: #333 url("/assets/biscuit_login_background.jpg");
+    background-size: cover;
+    background-position: center;
+
+    .page {
+        display: flex;
+        align-items: center;
+        height: calc(100vh - $header-height);
+        justify-content: center;
+        padding: 0 5em;
+
+        .register,
+        .login {
+            min-width: 400px;
+            max-width: 900px;
+
+        }
+
+        .dashboard-login {
+            min-width: 400px;
+            max-width: 500px;
+        }
+    }
+
+    .section-header {
+        color: white;
+
+        @if $theme =="default" {
+            text-shadow: 0 0.1em 0.25em rgba(black, 0.75);
+        }
+    }
+}
+
 .login-text {
     font-size: 0.9em;
+
+    &.login-footer {
+        margin: 0.8em 0 0 0;
+        font-size: 0.9em;
+        text-align: center;
+        text-shadow: 0 0.1em 0.2em rgba(black, 0.5);
+        color: white;
+
+        a {
+            color: white;
+        }
+    }
 }
 
 .login-bottom {

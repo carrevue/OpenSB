@@ -187,7 +187,7 @@ class Templating
 
             $pageName = match ($uriParts[0] ?? '') {
                 'user'      => 'user ' . ($uriParts[1] ?? ''),
-                'dashboard' => $uriParts[1] ?? 'overview',
+                'dashboard' => 'dashboard-' . $uriParts[1] ?? 'dashboard-overview',
                 'index', '' => 'home',
                 default     => $uriParts[0] ?? 'index'
             };

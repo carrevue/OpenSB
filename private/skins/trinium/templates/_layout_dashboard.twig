@@ -3,27 +3,27 @@
 
 {% block precontent %}
 <div class="navigation-bar">
-    <a class="navigation-bar-button {% if page_name=='overview' %}active{% endif %}" href="/dashboard/overview">
+    <a class="navigation-bar-button {% if page_name=='dashboard-overview' %}active{% endif %}" href="/dashboard/overview">
         Overview
     </a>
-    <a class="navigation-bar-button {% if page_name=='users' %}active{% endif %}" href="/dashboard/users">
+    <a class="navigation-bar-button {% if page_name=='dashboard-users' %}active{% endif %}" href="/dashboard/users">
         Users
     </a>
     {% if user_data.powerlevel > 2 %}
-        <a class="navigation-bar-button {% if page_name=='ip_bans' %}active{% endif %}" href="/dashboard/ip_bans">
+        <a class="navigation-bar-button {% if page_name=='dashboard-ip_bans' %}active{% endif %}" href="/dashboard/ip_bans">
             IP bans
         </a>
     {% endif %}
-    <a class="navigation-bar-button {% if page_name=='uploads' %}active{% endif %}" href="/dashboard/uploads">
+    <a class="navigation-bar-button {% if page_name=='dashboard-uploads' %}active{% endif %}" href="/dashboard/uploads">
         Uploads
     </a>
         {% if options.enable_incomplete_features %}
-        <a class="navigation-bar-button {% if page_name=='interactions' %}active{% endif %}" href="/dashboard/interactions">
+        <a class="navigation-bar-button {% if page_name=='dashboard-interactions' %}active{% endif %}" href="/dashboard/interactions">
             Interactions
         </a>
     {% endif %}
     {% if invite_keys_enabled %}
-        <a class="navigation-bar-button {% if page_name=='invitekeys' %}active{% endif %}" href="/dashboard/invitekeys">
+        <a class="navigation-bar-button {% if page_name=='dashboard-invitekeys' %}active{% endif %}" href="/dashboard/invitekeys">
             Invite keys
         </a>
     {% endif %}
