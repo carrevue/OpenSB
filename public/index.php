@@ -138,7 +138,7 @@ $router->add('/help', 'help.php');
 $router->add('/journals/{user}', 'journals.php');
 $router->add('/license', 'license.php');
 $router->add('/logout', 'logout.php');
-$router->add('/my_messages', 'my_messages.php');
+$router->add('/my_messages', 'debug/inbox.php'); // load debugging page for now
 $router->add('/my_uploads', 'my_uploads.php');
 $router->add('/notifications', 'notifications.php');
 $router->add('/privacy', 'privacy.php');
