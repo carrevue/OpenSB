@@ -28,15 +28,15 @@ use BluffingoCore\CoreUtilities;
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 
-$submission_query = new UploadQuery($database);
+$upload_query = new UploadQuery($database);
 
 function getOrderFromType($type): string
 {
     $order = match ($type) {
-        'recent' => "v.time DESC",
+        'recent' => "v.timestamp DESC",
         'popular' => "views DESC",
         'random' => "RAND()",
-        default => "v.time DESC",
+        default => "v.timestamp DESC",
     };
     return $order;
 }
@@ -51,13 +51,13 @@ $limit = $database->paginate($page, 20);
 if ($user) {
     CoreUtilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
 } else {
-    $submissions = $submission_query->query($order, $limit);
-    $submission_count = $submission_query->count();
+    $uploads = $upload_query->query($order, $limit);
+    $upload_count = $upload_query->count();
 }
 
 $data = [
-    "submissions" => Utilities::makeUploadArray($database, $submissions),
-    "count" => $submission_count,
+    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "count" => $upload_count,
 ];
 
 echo $twig->render('browse.twig', [

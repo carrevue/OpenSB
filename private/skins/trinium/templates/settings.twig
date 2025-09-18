@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="profile-box-info">
                                     <div class="profile-box-username">
-                                        <span style="color:{{ user_data.customcolor }}" id="settings-display-name">
+                                        <span style="color:{{ user_data.userlink_color }}" id="settings-display-name">
                                             {{ user_data.title }}
                                         </span>
                                         {% if user_data.powerlevel >= 2 %}
@@ -71,9 +71,9 @@
                         </div>
 
                         <div class="form-input">
-                            <label for="customcolor">Username link color:</label>
-                            <input name="customcolor" id="settings-color" type="text" data-coloris
-                                   value="{{ user_data.customcolor | default('523bb8') }}">
+                            <label for="userlink_color">Username link color:</label>
+                            <input name="userlink_color" id="settings-color" type="text" data-coloris
+                                   value="{{ user_data.userlink_color | default('#0069B4') }}">
                         </div>
 
                         <hr>

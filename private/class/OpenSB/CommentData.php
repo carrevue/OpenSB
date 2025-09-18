@@ -46,19 +46,19 @@ class CommentData
     }
 
     // probably stupid and should be part of getComments. -chaziz 8/26/2023
-    public function getReplies($comment_id)
+    public function getReplies($id)
     {
         $database_data = null;
 
         switch ($this->type) {
             case CommentLocation::Upload:
-                $database_data = $this->fetchComments("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM upload_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT userid FROM user_bans) ORDER BY c.date ASC", [$comment_id]);
+                $database_data = $this->fetchComments("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM upload_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT user FROM user_bans) ORDER BY c.timestamp ASC", [$id]);
                 break;
             case CommentLocation::Profile:
-                $database_data = $this->fetchComments("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM user_profile_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT userid FROM user_bans) ORDER BY c.date ASC", [$comment_id]);
+                $database_data = $this->fetchComments("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM user_profile_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT user FROM user_bans) ORDER BY c.timestamp ASC", [$id]);
                 break;
             case CommentLocation::Journal:
-                $database_data = $this->fetchComments("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM journal_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT userid FROM user_bans) ORDER BY c.date ASC", [$comment_id]);
+                $database_data = $this->fetchComments("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM journal_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT user FROM user_bans) ORDER BY c.timestamp ASC", [$id]);
                 break;
         }
 
@@ -66,16 +66,16 @@ class CommentData
         foreach ($database_data as $comment) {
             $this->count++;
             $author = new UserData($this->database, $comment["author"]);
-            $data[$comment["comment_id"]] = [
-                "id" => $comment["comment_id"],
+            $data[$comment["id"]] = [
+                "id" => $comment["id"],
                 "posted_id" => $comment["id"],
                 "post" => $comment["comment"],
-                "posted" => $comment["date"],
+                "posted" => $comment["timestamp"],
                 "author" => [
                     "id" => $comment["author"],
                     "info" => $author->getUserArray(),
                 ],
-                "replies" => $this->getReplies($comment["comment_id"]) // recursive call to get nested replies
+                "replies" => $this->getReplies($comment["id"]) // recursive call to get nested replies
             ];
         }
         return $data;
@@ -93,31 +93,31 @@ class CommentData
 
         switch ($this->type) {
             case CommentLocation::Upload:
-                $query = "SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
+                $query = "SELECT c.id, c.location_id, c.comment, c.author, c.timestamp 
                       FROM upload_comments c 
-                      WHERE c.id = ? AND c.reply_to = 0
-                      AND c.author NOT IN (SELECT userid FROM user_bans)
-                      ORDER BY c.date DESC " . $limit_clause;
+                      WHERE c.location_id = ? AND c.reply_to = 0
+                      AND c.author NOT IN (SELECT user FROM user_bans)
+                      ORDER BY c.timestamp DESC " . $limit_clause;
                 $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
                 $database_data = $this->fetchComments($query, $params);
                 break;
 
             case CommentLocation::Profile:
-                $query = "SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
+                $query = "SELECT c.id, c.location_id, c.comment, c.author, c.timestamp 
                       FROM user_profile_comments c 
-                      WHERE c.id = ? AND c.reply_to = 0
-                      AND c.author NOT IN (SELECT userid FROM user_bans)
-                      ORDER BY c.date DESC " . $limit_clause;
+                      WHERE c.location_id = ? AND c.reply_to = 0
+                      AND c.author NOT IN (SELECT user FROM user_bans)
+                      ORDER BY c.timestamp DESC " . $limit_clause;
                 $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
                 $database_data = $this->fetchComments($query, $params);
                 break;
 
             case CommentLocation::Journal:
-                $query = "SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted 
+                $query = "SELECT c.id, c.location_id, c.comment, c.author, c.timestamp 
                       FROM journal_comments c 
-                      WHERE c.id = ? AND c.reply_to = 0
-                      AND c.author NOT IN (SELECT userid FROM user_bans)
-                      ORDER BY c.date DESC " . $limit_clause;
+                      WHERE c.location_id = ? AND c.reply_to = 0
+                      AND c.author NOT IN (SELECT user FROM user_bans)
+                      ORDER BY c.timestamp DESC " . $limit_clause;
                 $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
                 $database_data = $this->fetchComments($query, $params);
                 break;
@@ -128,16 +128,16 @@ class CommentData
         foreach ($database_data as $comment) {
             $this->count++;
             $author = new UserData($this->database, $comment["author"]);
-            $data[$comment["comment_id"]] = [
-                "id" => $comment["comment_id"],
+            $data[$comment["id"]] = [
+                "id" => $comment["id"],
                 "posted_id" => $comment["id"],
                 "post" => $comment["comment"],
-                "posted" => $comment["date"],
+                "posted" => $comment["timestamp"],
                 "author" => [
                     "id" => $comment["author"],
                     "info" => $author->getUserArray(),
                 ],
-                "replies" => $this->getReplies($comment["comment_id"]),
+                "replies" => $this->getReplies($comment["id"]),
             ];
         }
         return $data;

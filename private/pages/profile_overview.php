@@ -35,7 +35,7 @@ use OpenSB\UserFlags;
 use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
 
-$submission_query = new UploadQuery($database);
+$upload_query = new UploadQuery($database);
 
 $options = $sb->getLocalOptions();
 
@@ -58,33 +58,33 @@ if (!$data) {
     }
 }
 
-if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
+if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$data["id"]])) {
     if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
         Utilities::notifyBanner("notify_banned_user", "/");
     }
 }
 
 if ($options["skin"] == "finalium") {
-    $user_submissions_query_limit = 4;
+    $user_uploads_query_limit = 4;
 } else {
-    $user_submissions_query_limit = 12;
+    $user_uploads_query_limit = 12;
 }
 
 // TODO: redo this
-function handleFeaturedSubmission($database, $data): false|array
+function handleFeaturedupload($database, $data): false|array
 {
     global $sb, $auth;
 
-    // handle featured submission
-    // if user hasn't specified anything, then use latest submission, if that doesn't exist, do not bother.
-    $featured_id = $database->fetch("SELECT video_id FROM uploads v WHERE v.id = ?", [$data["featured_submission"]]);
+    // handle featured upload
+    // if user hasn't specified anything, then use latest upload, if that doesn't exist, do not bother.
+    $featured_id = $database->fetch("SELECT upload_id FROM uploads v WHERE v.id = ?", [$data["featured_upload"]]);
 
     if ($featured_id == 0 || !$featured_id) {
         $featured_id = $database->fetch(
-            "SELECT video_id FROM uploads v WHERE v.author = ? ORDER BY v.time DESC",
+            "SELECT upload_id FROM uploads v WHERE v.author = ? ORDER BY v.timestamp DESC",
             [$data["id"]]
         );
-        if (!isset($featured_id["video_id"])) {
+        if (!isset($featured_id["upload_id"])) {
             return false;
         }
         if ($featured_id == 0) {
@@ -92,9 +92,9 @@ function handleFeaturedSubmission($database, $data): false|array
         }
     }
 
-    $submission = new UploadData($database, $featured_id["video_id"]);
-    $submission_data = $submission->getData();
-    $bools = $submission->getUploadFlagsArray();
+    $upload = new UploadData($database, $featured_id["upload_id"]);
+    $upload_data = $upload->getData();
+    $bools = $upload->getUploadFlagsArray();
 
     // IF:
     // * The upload is taken down, and/or
@@ -104,20 +104,20 @@ function handleFeaturedSubmission($database, $data): false|array
     // * TODO: The upload is privated...
     // then simply just return false, so we don't show the featured upload.
     if (
-        $submission->getTakedown()
-        || !$submission_data
-        || ($submission_data["author"] != $data["id"])
+        $upload->getTakedown()
+        || !$upload_data
+        || ($upload_data["author"] != $data["id"])
         || ($bools["block_guests"] && !$auth->isUserLoggedIn())
     ) {
         return false;
     } else {
         // HACK: we have to use Utilities::makeUploadArray since there is somehow
         // no standardized way to handle upload arrays.
-        return Utilities::makeUploadArray($database, [0 => $submission_data])[0];
+        return Utilities::makeUploadArray($database, [0 => $upload_data])[0];
     }
 }
 
-$user_submissions = $submission_query->query("v.time desc", $user_submissions_query_limit, "v.author = ?", [$data["id"]]);
+$user_uploads = $upload_query->query("v.timestamp desc", $user_uploads_query_limit, "v.author = ?", [$data["id"]]);
 
 if ($options["skin"] == "bootstrap") {
     $user_journal_limit = 3;
@@ -129,13 +129,13 @@ $user_journals =
     $database->fetchArray(
         $database->query("SELECT j.* FROM journals j WHERE
                          j.author = ? 
-                         ORDER BY j.date 
+                         ORDER BY j.timestamp 
                          DESC LIMIT ?", [$data["id"], $user_journal_limit])
     );
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-$flags = UserFlags::toArray($data["u_flags"]);
+$flags = UserFlags::toArray($data["flags"]);
 
 if ($flags["profile_customization_enabled"]) {
     $profile_customization_data = new UserCustomizationData($database, $data["id"]);
@@ -156,19 +156,19 @@ $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = 
 $followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
 
-$featured_submission = handleFeaturedSubmission($database, $data);
+$featured_upload = handleFeaturedupload($database, $data);
 
 $page_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
-    "color" => $data["customcolor"],
+    "color" => $data["userlink_color"],
     "about" => ($data['about'] ?? false),
     "joined" => $data["joined"],
-    "connected" => $data["lastview"],
+    "connected" => $data["last_seen"],
     "is_current" => $is_own_profile,
-    "featured_submission" => $featured_submission,
-    "submissions" => Utilities::makeUploadArray($database, $user_submissions),
+    "featured_upload" => $featured_upload,
+    "uploads" => Utilities::makeUploadArray($database, $user_uploads),
     "journals" => Utilities::makeJournalArray($database, $user_journals),
     "comments" => $comments,
     "followers" => $followers,
@@ -180,7 +180,7 @@ $page_data = [
 ];
 
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
-    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
+    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["userlink_color"]);
 }
 
 echo $twig->render("profile.twig", [

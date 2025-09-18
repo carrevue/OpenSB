@@ -33,7 +33,7 @@
             </div>
         {% endif %}
         <div class="content-box no-border-top">
-            {% for submission in data.submissions %}
+            {% for upload in data.uploads %}
                 {{ include('/components/_upload_vertical.twig') }}
             {% endfor %}
         </div>

@@ -44,17 +44,17 @@ class Utilities
             $userData = new UserData($database, $upload["author"]);
             $uploadArray[] =
                 [
-                    "id" => $upload["video_id"],
+                    "id" => $upload["upload_id"],
                     "title" => $upload["title"],
                     "description" => $upload["description"],
-                    "published" => $upload["time"],
-                    "published_originally" => $upload["original_time"],
+                    "published" => $upload["timestamp"],
+                    "published_originally" => $upload["original_timestamp"],
                     "original_site" => $upload["original_site"],
-                    "type" => $upload["post_type"],
+                    "type" => $upload["type"],
                     "content_rating" => $upload["rating"],
                     "views" => $upload["views"],
                     "flags" => $flags,
-                    "length" => $upload["videolength"],
+                    "length" => $upload["video_length"],
                     "author" => [
                         "id" => $upload["author"],
                         "info" => $userData->getUserArray(),
@@ -74,7 +74,7 @@ class Utilities
 
         $journalsData = [];
         foreach ($journals as $journal) {
-            if ($sb->isFulpTube() && $journal["is_site_news"]) {
+            if ($sb->isFulpTube() && $journal["is_news"]) {
                 $journal["title"] = self::replaceSquareBracketWithFulpTube($journal["title"]);
                 $journal["post"] = self::replaceSquareBracketWithFulpTube($journal["post"]);
             }
@@ -85,7 +85,7 @@ class Utilities
                     "id" => $journal["id"],
                     "title" => $journal["title"],
                     "contents" => $journal["post"],
-                    "published" => $journal["date"],
+                    "published" => $journal["timestamp"],
                     "author" => [
                         "id" => $journal["author"],
                         "info" => $userData->getUserArray(),
@@ -122,7 +122,7 @@ class Utilities
         $tagBlacklist = $sb->getAuthenticationClass()->getUserTagBlacklist();
 
         // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
-        // submission-related queries into 20 fucking useless lines that slows the site down to a crawl.
+        // upload-related queries into 20 fucking useless lines that slows the site down to a crawl.
         // -chaziz 6/23/2024
         $conditions = [];
         foreach ($tagBlacklist as $tag) {
@@ -244,7 +244,7 @@ class Utilities
 
     public static function uploadStringIDToUploadNumericID($database, $uploadStringID)
     {
-        if ($data = $database->fetch("SELECT id FROM uploads WHERE video_id = ?", [$uploadStringID])) {
+        if ($data = $database->fetch("SELECT id FROM uploads WHERE upload_id = ?", [$uploadStringID])) {
             return $data["id"];
         } else {
             return false;
@@ -253,8 +253,8 @@ class Utilities
 
     public static function uploadNumericIDToUploadStringID($database, $uploadNumericID)
     {
-        if ($data = $database->fetch("SELECT video_id FROM uploads WHERE id = ?", [$uploadNumericID])) {
-            return $data["video_id"];
+        if ($data = $database->fetch("SELECT upload_id FROM uploads WHERE id = ?", [$uploadNumericID])) {
+            return $data["upload_id"];
         } else {
             return false;
         }
@@ -264,7 +264,7 @@ class Utilities
     // -chaziz 7/24/2025
     public static function uploadStringIDToUploadTitle($database, $uploadStringID)
     {
-        if ($data = $database->fetch("SELECT title FROM uploads WHERE video_id = ?", [$uploadStringID])) {
+        if ($data = $database->fetch("SELECT title FROM uploads WHERE upload_id = ?", [$uploadStringID])) {
             return $data["title"];
         } else {
             return false;

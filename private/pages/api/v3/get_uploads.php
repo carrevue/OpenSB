@@ -29,10 +29,10 @@ header('Content-Type: application/json');
 
 $upload_query = new UploadQuery($database);
 
-$submissions_random = $upload_query->query("RAND()", 8);
+$uploads_random = $upload_query->query("RAND()", 8);
 
 $apiOutput = [
-    'uploads' => $submissions_random,
+    'uploads' => $uploads_random,
 ];
 
 echo json_encode($apiOutput);

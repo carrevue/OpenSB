@@ -58,7 +58,7 @@ $limit = $database->paginate($page, pp: $amount);
 $count = $database->result("SELECT COUNT(*) FROM uploads u");
 
 // kinda fucking stupid i guess but whatever
-$uploads = $upload_query->query('v.time DESC', $limit, null, [], true);
+$uploads = $upload_query->query('v.timestamp DESC', $limit, null, [], true);
 
 $uploads_array = Utilities::makeUploadArray($database, $uploads);
 
@@ -75,7 +75,7 @@ foreach ($uploads_array as $upload) {
         $author_id = $upload['author']['id'];
         if (!array_key_exists($author_id, $unique_author_ids)) {
             // if user is banned then set that shit to true
-            $is_banned = (bool) $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$author_id]);
+            $is_banned = (bool) $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$author_id]);
             $unique_author_ids[$author_id] = $is_banned;
         }
     }
@@ -83,7 +83,7 @@ foreach ($uploads_array as $upload) {
 
 // iterate the uploads array again
 foreach ($uploads_array as $upload) {
-    $is_taken_down = $database->fetchArray($database->query("SELECT * FROM upload_takedowns t WHERE t.submission = ?", [$upload["id"]]));
+    $is_taken_down = $database->fetchArray($database->query("SELECT * FROM upload_takedowns t WHERE t.upload = ?", [$upload["id"]]));
 
     $upload["status"] = [
         "text" => "Public",

@@ -1,59 +1,59 @@
-{% if submission.type == 0 %}
+{% if upload.type == 0 %}
     {% set icon = "video" %}
-{% elseif submission.type == 2 %}
+{% elseif upload.type == 2 %}
     {% set icon = "image" %}
 {% else %}
     {% set icon = "placeholder" %}
 {% endif %}
 
-{% if submission.published_originally and submission.original_site %}
-    {% set time = submission.published_originally | relative_time %}
+{% if upload.published_originally and upload.original_site %}
+    {% set time = upload.published_originally | relative_time %}
 {% else %}
-    {% set time = submission.published | relative_time %}
+    {% set time = upload.published | relative_time %}
 {% endif %}
 
 <div class="content-entry">
     <div class="content-thumbnail">
-        <a href="/view/{{ submission.id }}">
-            <img src="{{ thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) }}"
-                 alt="{{ submission.title }}" class="content-image thumbnail">
+        <a href="/view/{{ upload.id }}">
+            <img src="{{ thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) }}"
+                 alt="{{ upload.title }}" class="content-image thumbnail">
         </a>
         <div class="content-thumbnail-badge-container">
             <div class="content-thumbnail-badge">
                 {{ icon(icon) }}
             </div>
-            {% if submission.type == 0 %}
+            {% if upload.type == 0 %}
                 <div class="content-thumbnail-badge timestamp">
-                    {{ convert_time(submission.length) }}
+                    {{ convert_time(upload.length) }}
                 </div>
             {% endif %}
         </div>
     </div>
     <div class="content-info">
         <div class="content-title-upload">
-            <a href="/view/{{ submission.id }}" class="content-title-link">
-                {% if submission.title|trim is not empty %}
-                    {{ submission.title }}
+            <a href="/view/{{ upload.id }}" class="content-title-link">
+                {% if upload.title|trim is not empty %}
+                    {{ upload.title }}
                 {% else %}
                     No title
                 {% endif %}
             </a>
             <div class="content-upload-edit-button">
                 <div class="menu-button button button-secondary button-transparent button-caret"
-                     data-menu-id="upload-edit-{{ submission.id }}">
+                     data-menu-id="upload-edit-{{ upload.id }}">
                     <div class="menu-caret-container">
                         {{ icon("caret-closed", 16, "menu-caret") }}
                     </div>
                 </div>
-                <div class="menu menu-upload-edit" id="upload-edit-{{ submission.id }}">
-                    <a class="menu-item-button" href="/edit?v={{ submission.id }}">
+                <div class="menu menu-upload-edit" id="upload-edit-{{ upload.id }}">
+                    <a class="menu-item-button" href="/edit?v={{ upload.id }}">
                         <span>{{ localize('edit') }}</span>
                     </a>
-                    <a class="menu-item-button" href="/feature?v={{ submission.id }}"
+                    <a class="menu-item-button" href="/feature?v={{ upload.id }}"
                        onclick="return confirm('Are you sure you want to feature this upload?');">
                         <span>Feature on profile</span>
                     </a>
-                    <a class="menu-item-button" href="/delete?v={{ submission.id }}"
+                    <a class="menu-item-button" href="/delete?v={{ upload.id }}"
                        onclick="return confirm('Are you sure you want to delete this upload?');">
                         <span>{{ localize('delete') }}</span>
                     </a>
@@ -61,15 +61,15 @@
             </div>
         </div>
         <div class="content-description">
-            {{ user_link(submission.author) }}
+            {{ user_link(upload.author) }}
             <br>
-            {{ localize('views', submission.views) }}
-            {% if submission.published_originally and submission.original_site %}
-                <span class="text-faded">on {{ submission.original_site }}</span>
+            {{ localize('views', upload.views) }}
+            {% if upload.published_originally and upload.original_site %}
+                <span class="text-faded">on {{ upload.original_site }}</span>
             {% endif %}
             <br>
-            {% if submission.description|trim is not empty %}
-                <span>{{ submission.description }}</span>
+            {% if upload.description|trim is not empty %}
+                <span>{{ upload.description }}</span>
             {% endif %}
         </div>
     </div>

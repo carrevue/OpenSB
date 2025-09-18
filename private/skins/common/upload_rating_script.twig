@@ -3,7 +3,7 @@
     var starRating = raterJs( {
         max:5,
         starSize:16,
-        rating:{{ submission.interactions.ratings.average }},
+        rating:{{ upload.interactions.ratings.average }},
         element:document.querySelector("#rater"),
         rateCallback:function rateCallback(rating, done) {
             fetch("/api/frontend/upload_interaction", {
@@ -11,7 +11,7 @@
                 body: JSON.stringify({
                     action: "rate",
                     number: rating,
-                    submission: submission_int_id,
+                    upload: upload_int_id,
                 }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"

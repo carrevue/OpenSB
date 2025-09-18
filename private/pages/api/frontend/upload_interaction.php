@@ -37,19 +37,19 @@ if ($auth->getUserBanData()) {
     ];
 }
 
-function rate($number, $submission): array
+function rate($number, $upload): array
 {
     global $database, $auth;
 
     // shouldn't this update instead?
-    if ($database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND user=?", [$submission, $auth->getUserID()])) {
-        $database->query("DELETE FROM upload_ratings WHERE video=? AND user=?", [$submission, $auth->getUserID()]);
+    if ($database->result("SELECT COUNT(rating) FROM upload_ratings WHERE video=? AND user=?", [$upload, $auth->getUserID()])) {
+        $database->query("DELETE FROM upload_ratings WHERE video=? AND user=?", [$upload, $auth->getUserID()]);
     }
-    $database->query("INSERT INTO upload_ratings (video, user, rating) VALUES (?,?,?)", [$submission, $auth->getUserID(), $number]);
+    $database->query("INSERT INTO upload_ratings (video, user, rating) VALUES (?,?,?)", [$upload, $auth->getUserID(), $number]);
     return ["rated" => true];
 }
 
-if (isset($post_data['submission'])) {
+if (isset($post_data['upload'])) {
     if (isset($post_data['action'])) {
         $apiOutput = match ($post_data['action']) {
             // favorites are still unimplemented FUCK -chaziz 10/31/2024
@@ -58,7 +58,7 @@ if (isset($post_data['submission'])) {
                 "number" => rand(0, 47101), // placeholder code (which is still placeholder even a year later since favorites were never implemented WHOOPS)
             ],
             'rate' => [
-                rate($post_data['number'], $post_data['submission']),
+                rate($post_data['number'], $post_data['upload']),
             ],
             default => [
                 "error" => "This interaction type is invalid or has not yet been implemented."

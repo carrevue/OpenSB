@@ -1,5 +1,5 @@
 {#
-{% if data.submissions %}
+{% if data.uploads %}
 <div class="section">
     <div class="section-header flex">
         {% if is_user_logged_in and options.enable_incomplete_features %}
@@ -38,7 +38,7 @@
 
                 <div class="splide__track">
                     <ul class="splide__list">
-                        {% for submission in data.submissions %}
+                        {% for upload in data.uploads %}
                             {{ include('/components/_upload_grid_splide.twig') }}
                         {% endfor %}
                     </ul>
@@ -51,7 +51,7 @@
 #}
 <div class="grid">
     <div class="col-medium-7 col-large-8">
-        {% if data.submissions_new %}
+        {% if data.uploads_new %}
         <div class="section">
             <div class="section-header flex">
                 <div class="section-header-left">
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="content-box">
-                {% for submission in data.submissions_new %}
+                {% for upload in data.uploads_new %}
                     {{ include('/components/_upload_vertical.twig') }}
                 {% endfor %}
             </div>
@@ -71,7 +71,7 @@
         {% endif %}
     </div>
     <div class="col-medium-5 col-large-4">
-        {% if data.submissions_featured %}
+        {% if data.uploads_featured %}
         <div class="section">
             <div class="section-header flex">
                 <div class="section-header-left">
@@ -83,7 +83,7 @@
                 </div>
             </div>
             <div class="content-box">
-                {% for submission in data.submissions_featured %}
+                {% for upload in data.uploads_featured %}
                     {{ include('/components/_upload_vertical_small.twig') }}
                 {% endfor %}
             </div>
@@ -133,7 +133,7 @@
                             </div>
                             <div class="content-description">
                                 <div>
-                                    {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.submissions) }}
+                                    {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.uploads) }}
                                 </div>
                             </div>
                         </div>

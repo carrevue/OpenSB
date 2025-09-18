@@ -46,7 +46,7 @@ if ($auth->getUserID() == $data["author"]) {
     $owner = false;
 }
 
-if ($sb->isFulpTube() && $data["is_site_news"]) {
+if ($sb->isFulpTube() && $data["is_news"]) {
     $data["title"] = Utilities::replaceSquareBracketWithFulpTube($data["title"]);
     $data["post"] = Utilities::replaceSquareBracketWithFulpTube($data["post"]);
 }
@@ -68,7 +68,7 @@ $data = [
     "int_id" => $data["id"],
     "title" => $data["title"],
     "contents" => $data["post"],
-    "published" => $data["date"],
+    "published" => $data["timestamp"],
     "author" => [
         "id" => $data["author"],
         "info" => $author->getUserArray(),

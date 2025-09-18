@@ -60,7 +60,7 @@
     {% if is_user_logged_in and options.trinium_link_coloring %}
         <style>
             :root {
-                --link-color: {{ user_data.customcolor }};
+                --link-color: {{ user_data.userlink_color }};
             }
         </style>
     {% endif %}
@@ -71,7 +71,7 @@
         <style>
             {% for user in user_data_cache %}
             .content-entry.user-id-{{ user.id }} .content-thumbnail a .content-image.profile-picture:hover {
-                border-color: {{ user.customcolor }};
+                border-color: {{ user.userlink_color }};
             }
             {% endfor %}
         </style>

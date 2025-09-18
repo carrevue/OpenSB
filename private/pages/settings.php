@@ -76,7 +76,7 @@ if (isset($_POST['save'])) {
         $enable_customization = $_POST['enable_customization'] ?? false;
 
         // the colors
-        $customcolor = ($_POST['customcolor'] ?? '#523bb8');
+        $userlink_color = ($_POST['userlink_color'] ?? '#0069B4');
         $font = $_POST['font'] ?? '';
         $background_color = $_POST['background_color'] ?? '#FFFFFF';
         $title_color = $_POST['title_color'] ?? '#333333';
@@ -207,11 +207,11 @@ if (isset($_POST['save'])) {
                  title = ?, 
                  about = ?, 
                  comfortable_rating = ?, 
-                 customcolor = ?, 
-                 u_flags = ?,
+                 userlink_color = ?, 
+                 flags = ?,
                  blacklisted_tags = ?
                  WHERE id = ?",
-            [$title, $about, $rating, $customcolor, $flags, json_encode($parsed_tags), $auth->getUserID()]
+            [$title, $about, $rating, $userlink_color, $flags, json_encode($parsed_tags), $auth->getUserID()]
         );
 
         if ($options["skin"] == "trinium") {

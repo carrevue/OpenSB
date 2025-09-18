@@ -71,7 +71,7 @@ if (isset($_POST['flagsubmit'])) {
     }
 
     $database->query(
-        "UPDATE uploads SET flags = ? WHERE video_id = ?",
+        "UPDATE uploads SET flags = ? WHERE upload_id = ?",
         [$flags, $id]
     );
     Utilities::notifyBanner(
@@ -90,14 +90,14 @@ if (file_exists(BLUFF_DYNAMIC_PATH . "/videos/" . $id . ".log")) {
 
 $page_data = [
     "int_id" => $data["id"],
-    "id" => $data["video_id"],
+    "id" => $data["upload_id"],
     "title" => $data["title"],
     "description" => $data["description"],
-    "published" => $data["time"],
+    "published" => $data["timestamp"],
     "original_site" => $data["original_site"],
-    "published_originally" => $data["original_time"],
-    "type" => $data["post_type"],
-    "file" => $data["videofile"],
+    "published_originally" => $data["original_timestamp"],
+    "type" => $data["type"],
+    "file" => $data["upload_file"],
     //"author" => [
     //    "id" => $data["author"],
     //    "info" => $author->getUserArray(),

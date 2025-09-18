@@ -35,11 +35,11 @@ $limit = $database->paginate($page, 20);
 if ($user) {
     if ($user == "news") {
         $journal_array = $database->fetchArray($database->query(
-            "SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC $limit"
+            "SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC $limit"
         ));
 
         $journal_count = $database->result(
-            "SELECT COUNT(*) FROM journals j WHERE j.is_site_news = 1"
+            "SELECT COUNT(*) FROM journals j WHERE j.is_news = 1"
         );
     } else {
         // just redirect to the new user-specific journals page

@@ -28,7 +28,7 @@ function handleCommentEvents() {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `comment=${encodeURIComponent(commentText)}&vidid=${submission_id}&really=ofcourse&type=video`
+                body: `comment=${encodeURIComponent(commentText)}&vidid=${upload_id}&really=ofcourse&type=video`
             })
                 .then(response => response.text())
                 .then(data => {
@@ -361,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: `rating=5&vidid=${submission_id}`
+                    body: `rating=5&vidid=${upload_id}`
                 })
                     .then(response => response.text())
                     .then(data => {
@@ -388,7 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: `rating=1&vidid=${submission_id}`
+                    body: `rating=1&vidid=${upload_id}`
                 })
                     .then(response => response.text())
                     .then(data => {

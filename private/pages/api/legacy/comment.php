@@ -84,7 +84,7 @@ if (isset($_POST['really'])) {
 }
 
 if ($_POST['type'] == 'video') {
-    $upload_flags = UploadFlags::toArray($database->result("SELECT flags from uploads where video_id = ?", [$id]));
+    $upload_flags = UploadFlags::toArray($database->result("SELECT flags from uploads where upload_id = ?", [$id]));
 
     if ($upload_flags["block_comments"]) {
         die("Commenting has been disabled on this upload.");

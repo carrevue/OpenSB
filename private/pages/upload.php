@@ -102,12 +102,12 @@ function parse_tags($tags, $upload_id, $database)
         $tagsID[] = $tagId;
     }
 
-    $upload_integer_id = $database->result("SELECT id from uploads WHERE video_id = ?", [$upload_id]);
+    $upload_integer_id = $database->result("SELECT id from uploads WHERE upload_id = ?", [$upload_id]);
 
     // link tags to the upload
     foreach ($tagsID as $tagID) {
-        if (!$database->result("SELECT tag_id FROM upload_tag_index WHERE tag_id = ? AND video_id = ?", [$tagID, $upload_integer_id])) {
-            $database->query("INSERT INTO upload_tag_index (video_id, tag_id) VALUES (?,?)", [$upload_integer_id, $tagID]);
+        if (!$database->result("SELECT tag_id FROM upload_tag_index WHERE tag_id = ? AND upload_id = ?", [$tagID, $upload_integer_id])) {
+            $database->query("INSERT INTO upload_tag_index (upload_id, tag_id) VALUES (?,?)", [$upload_integer_id, $tagID]);
         }
     }
 }
@@ -162,7 +162,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         }
         if (move_uploaded_file($temp_name, $target_file)) {
             $database->query(
-                "INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, rating) VALUES (?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags, rating) VALUES (?,?,?,?,?,?,?,?,?)",
                 [$new, $title, $description, $uploader, time(), json_encode($tags2), 'dynamic/videos/' . $new, $status, $rating]
             );
 
@@ -184,7 +184,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         $sb->getStorageClass()->processImageUpload($temp_name, $new);
         $status = 0x0;
         $database->query(
-            "INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, post_type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags, type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
             [$new, $title, $description, $uploader, time(), json_encode(explode(', ', $_POST['tags'])), '/dynamic/art/' . $new . '.png', $status, 2, $rating]
         );
 

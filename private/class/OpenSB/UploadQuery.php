@@ -45,9 +45,9 @@ class UploadQuery
 
         if (!$adminPanel) {
             // if upload isnt taken down
-            $whereClauses[] = "v.video_id NOT IN (SELECT submission FROM upload_takedowns)";
+            $whereClauses[] = "v.upload_id NOT IN (SELECT upload FROM upload_takedowns)";
             // if upload does not belong to someone who has been banned
-            $whereClauses[] = "v.author NOT IN (SELECT userid FROM user_bans)";
+            $whereClauses[] = "v.author NOT IN (SELECT user FROM user_bans)";
         }
 
         if (!$auth->isUserLoggedIn()) {
@@ -90,8 +90,8 @@ class UploadQuery
         $query = "
         SELECT COUNT(*)
         FROM uploads v
-        WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns)
-        AND v.author NOT IN (SELECT userid FROM user_bans)
+        WHERE v.upload_id NOT IN (SELECT upload FROM upload_takedowns)
+        AND v.author NOT IN (SELECT user FROM user_bans)
         ";
 
         if (!empty($whereCondition)) {

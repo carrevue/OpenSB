@@ -34,8 +34,8 @@ if (isset($_POST['upload'])) {
     $id = ($_GET['v'] ?? null);
 }
 
-$submission = new UploadData($database, $id);
-$data = $submission->getData();
+$upload = new UploadData($database, $id);
+$data = $upload->getData();
 
 $flags = $data["flags"];
 
@@ -43,7 +43,7 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
-if ($auth->getUserBanData() || $submission->getTakedown()) {
+if ($auth->getUserBanData() || $upload->getTakedown()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
@@ -74,13 +74,13 @@ if (isset($_POST['upload'])) {
         $name = $_FILES['thumbnail']['name'];
         $temp_name = $_FILES['thumbnail']['tmp_name'];
         $ext = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
-        $sb->getStorageClass()->processCustomUploadThumbnail($temp_name, $data["video_id"]);
+        $sb->getStorageClass()->processCustomUploadThumbnail($temp_name, $data["upload_id"]);
 
         $flags |= UploadFlags::FLAG_CUSTOM_THUMBNAIL->value;
     }
 
     $database->query(
-        "UPDATE uploads SET title = ?, description = ?, flags = ? WHERE video_id = ?",
+        "UPDATE uploads SET title = ?, description = ?, flags = ? WHERE upload_id = ?",
         [$title, $desc, $flags, $id]
     );
     Utilities::notifyBanner("notify_successfully_modified_upload", "/view/" . $id, "success");
@@ -88,11 +88,11 @@ if (isset($_POST['upload'])) {
 
 $infoData = [
     "int_id" => $data["id"],
-    "id" => $data["video_id"],
+    "id" => $data["upload_id"],
     "title" => $data["title"],
     "description" => $data["description"],
-    "published" => $data["time"],
-    "type" => $data["post_type"],
+    "published" => $data["timestamp"],
+    "type" => $data["type"],
 ];
 
 echo $twig->render('edit.twig', [

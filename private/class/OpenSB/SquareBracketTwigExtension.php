@@ -71,7 +71,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         // TODO: clean this up HOLY SHIT -chaziz 4/7/2025
         return [
-            new TwigFunction('submission_view', [$this, 'uploadView']),
+            new TwigFunction('upload_view', [$this, 'uploadView']),
             new TwigFunction('thumbnail', [$this, 'getUploadThumbnail']),
             new TwigFunction('user_link', [$this, $userlink_function_name], ['is_safe' => ['html']]),
             new TwigFunction('profile_picture', function ($username) {
@@ -102,7 +102,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('footer_links', [$this, 'footerLinks']),
             new TwigFunction('sidebar_following_users', [$this, 'sidebarFollowingUsers']),
             new TwigFunction('get_css_file_date', [$this, 'getCssFileDate']),
-            new TwigFunction('submission_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
+            new TwigFunction('upload_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
             new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
             new TwigFunction('localize', [$this, 'localize']),
             //new TwigFunction('truncate_number', [$this, 'truncateNumber']),
@@ -249,23 +249,23 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * @throws Exception
      */
-    public function uploadView($submission_data)
+    public function uploadView($upload_data)
     {
-        if (!$submission_data) {
+        if (!$upload_data) {
             throw new Exception('uploadView is missing data!');
         }
 
-        if ($submission_data["type"] == 0) {
-            echo $this->twig->render("player.twig", ['submission' => $submission_data]);
+        if ($upload_data["type"] == 0) {
+            echo $this->twig->render("player.twig", ['upload' => $upload_data]);
         }
 
-        if ($submission_data["type"] == 2) {
-            echo $this->twig->render("image.twig", ['submission' => $submission_data]);
+        if ($upload_data["type"] == 2) {
+            echo $this->twig->render("image.twig", ['upload' => $upload_data]);
         }
 
         // fyi: opensb still doesn't fully support music uploads.
-        if ($submission_data["type"] == 3) {
-            echo $this->twig->render("music.twig", ['submission' => $submission_data]);
+        if ($upload_data["type"] == 3) {
+            echo $this->twig->render("music.twig", ['upload' => $upload_data]);
         }
     }
 
@@ -502,7 +502,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "SELECT s.* FROM user_follows s 
                     JOIN users u ON s.user = u.id 
                     WHERE s.user = ?
-                    AND s.id NOT IN (SELECT userid FROM user_bans)",
+                    AND s.id NOT IN (SELECT user FROM user_bans)",
                     [$userid]
                 )
             );
@@ -640,9 +640,9 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     // legacy functions used by finalium and bootstrap frontend only.
     // apparantly this is used on finalium for Some reason.
-    public function smallUploadBox($submission)
+    public function smallUploadBox($upload)
     {
-        return $this->twig->render('components/smallvideobox.twig', ['data' => $submission]);
+        return $this->twig->render('components/smallvideobox.twig', ['data' => $upload]);
     }
 
     public function comment($comment)

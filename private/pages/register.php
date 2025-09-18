@@ -141,7 +141,7 @@ if (isset($_POST['registersubmit'])) {
 
         $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
         $database->query(
-            "INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate, u_flags)
+            "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate, flags)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [$username, $hashedPassword, $token, time(), time(), $username, $mail, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags]
         );

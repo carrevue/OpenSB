@@ -237,6 +237,7 @@ try {
     $isHD = ($videoWidth >= 1280 || $videoHeight >= 720);
     $isFullHD = ($videoWidth >= 1920 || $videoHeight >= 1080);
 
+    // this is fucked, look into this later. -chaziz 9/18/2025
     if ($isFullHD) {
         $bitrate = 10000;
     } elseif ($isHD) {
@@ -264,7 +265,7 @@ try {
 
     $video->filters()->custom('format=yuv420p');
 
-    log("Converting video");
+    log("Converting video...");
     $video->save($h264, BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
 
     debug_print_backtrace();
@@ -272,7 +273,7 @@ try {
 
     if ($for_website) {
         log("Updating database...");
-        $videoData = $database->fetch("SELECT v.* FROM uploads v WHERE v.video_id = ?", [$new]);
+        $videoData = $database->fetch("SELECT v.* FROM uploads v WHERE v.upload_id = ?", [$new]);
 
         // if we couldnt get length just fallback to 0 seconds.
         if ($fucked) {
@@ -282,7 +283,7 @@ try {
         }
 
         $database->query(
-            "UPDATE uploads SET videolength = ?, flags = ? WHERE video_id = ?",
+            "UPDATE uploads SET video_length = ?, flags = ? WHERE upload_id = ?",
             [$length, $videoData['flags'] ^ 0x2, $new]
         );
 

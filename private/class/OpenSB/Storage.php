@@ -94,7 +94,7 @@ class Storage
         $path = BLUFF_DYNAMIC_PATH . '/pfp/' . $id . '.png';
 
         // don't bother with userdata since that might slow shit down
-        $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$id]);
+        $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$id]);
 
         if ($is_banned && !$isAdmin) {
             return '/assets/' . $placeholder;
@@ -180,7 +180,7 @@ class Storage
 
     public function deleteUploadFile($data): void
     {
-        unlink(BLUFF_ROOT_PATH . $data["videofile"]);
+        unlink(BLUFF_ROOT_PATH . $data["upload_file"]);
     }
 
     private function getThumbnailPath(

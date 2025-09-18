@@ -56,7 +56,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $isSiteNews = ($auth->hasUserAuthenticatedAsStaff() && ($_POST['news'] ?? false)) ? 1 : 0;
 
     $database->query(
-        "INSERT INTO journals (title, post, author, date, is_site_news) VALUES (?,?,?,?,?)",
+        "INSERT INTO journals (title, post, author, date, is_news) VALUES (?,?,?,?,?)",
         [$title, $description, $uploader, time(), $isSiteNews]
     );
 

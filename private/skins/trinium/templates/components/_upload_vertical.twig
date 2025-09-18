@@ -1,58 +1,58 @@
-{% if submission.type == 0 %}
+{% if upload.type == 0 %}
     {% set icon = "video" %}
-{% elseif submission.type == 2 %}
+{% elseif upload.type == 2 %}
     {% set icon = "image" %}
 {% else %}
     {% set icon = "placeholder" %}
 {% endif %}
 
-{% if submission.published_originally and submission.original_site %}
-    {% set time = submission.published_originally | relative_time %}
+{% if upload.published_originally and upload.original_site %}
+    {% set time = upload.published_originally | relative_time %}
 {% else %}
-    {% set time = submission.published | relative_time %}
+    {% set time = upload.published | relative_time %}
 {% endif %}
 
 <div class="content-entry">
     <div class="content-thumbnail">
-        <a href="/view/{{ submission.id }}">
-            <img src="{{ thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) }}"
-                 alt="{{ submission.title }}" class="content-image thumbnail">
+        <a href="/view/{{ upload.id }}">
+            <img src="{{ thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) }}"
+                 alt="{{ upload.title }}" class="content-image thumbnail">
         </a>
         <div class="content-thumbnail-badge-container">
             <div class="content-thumbnail-badge">
                 {{ icon(icon) }}
             </div>
-            {% if submission.type == 0 %}
+            {% if upload.type == 0 %}
                 <div class="content-thumbnail-badge timestamp">
-                    {{ convert_time(submission.length) }}
+                    {{ convert_time(upload.length) }}
                 </div>
             {% endif %}
         </div>
     </div>
     <div class="content-info">
         <div class="content-title-upload">
-            <a href="/view/{{ submission.id }}" class="content-title-link">
-                {% if submission.title|trim is not empty %}
-                    {{ submission.title }}
+            <a href="/view/{{ upload.id }}" class="content-title-link">
+                {% if upload.title|trim is not empty %}
+                    {{ upload.title }}
                 {% else %}
                     No title
                 {% endif %}
             </a>
             <div class="content-rating">
-                {{ show_ratings(submission.interactions.ratings ?? []) }}
+                {{ show_ratings(upload.interactions.ratings ?? []) }}
             </div>
         </div>
         <div class="content-description">
-            {{ user_link(submission.author) }}
+            {{ user_link(upload.author) }}
             <br>
-            {{ localize('views', submission.views) }}
+            {{ localize('views', upload.views) }}
             • {{ time }}
-            {% if submission.published_originally and submission.original_site %}
-                <span class="text-faded">on {{ submission.original_site }}</span>
+            {% if upload.published_originally and upload.original_site %}
+                <span class="text-faded">on {{ upload.original_site }}</span>
             {% endif %}
             <br>
-            {% if submission.description|trim is not empty %}
-                <span>{{ submission.description }}</span>
+            {% if upload.description|trim is not empty %}
+                <span>{{ upload.description }}</span>
             {% endif %}
         </div>
     </div>

@@ -30,7 +30,7 @@ use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 use OpenSB\UserData;
 
-$submission_query = new UploadQuery($database);
+$upload_query = new UploadQuery($database);
 
 $options = $sb->getLocalOptions();
 
@@ -40,19 +40,19 @@ if ($options["skin"] == "trinium") {
     $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
 
     if ($type == "grid") {
-        $submissions_random_query_limit = 12;
+        $uploads_random_query_limit = 12;
     } else {
-        $submissions_random_query_limit = 24;
+        $uploads_random_query_limit = 24;
     }
-    $submissions_recent_query_limit = 12;
+    $uploads_recent_query_limit = 12;
 } else {
     $type = "list";
 
-    $submissions_random_query_limit = 12;
-    $submissions_recent_query_limit = 12;
+    $uploads_random_query_limit = 12;
+    $uploads_recent_query_limit = 12;
 }
 
-$submissions_featured_query_limit = 4;
+$uploads_featured_query_limit = 4;
 
 if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 1;
@@ -61,22 +61,20 @@ if ($options["skin"] == "bootstrap") {
 }
 
 if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type == "list")) {
-    $submissions_random = [];
+    $uploads_random = [];
 } else {
-    $submissions_random = $submission_query->query("RAND()", $submissions_random_query_limit);
+    $uploads_random = $upload_query->query("RAND()", $uploads_random_query_limit);
 }
 
-$submissions_recent = $submission_query->query("v.time DESC", $submissions_recent_query_limit);
+$uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
 
-$featured_flag_bullshit = UploadFlags::FLAG_FEATURED->value; // looks like shit -chaziz 1/3/2025
-
-$submissions_featured = $submission_query->query(
-    "v.time DESC",
-    $submissions_featured_query_limit,
-    "v.flags & $featured_flag_bullshit = $featured_flag_bullshit"
+$uploads_featured = $upload_query->query(
+    "v.timestamp DESC",
+    $uploads_featured_query_limit,
+    sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 );
 
-$news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_site_news = 1 ORDER BY j.date DESC LIMIT $news_recent_query_limit"));
+$news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
 
 if ($options["skin"] == "trinium") {
     // TODO: maybe move this (and the equivalent code in users.php) into a "UsersQuery" class?
@@ -86,8 +84,8 @@ if ($options["skin"] == "trinium") {
         (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
         (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
             FROM users u 
-            WHERE u.id NOT IN (SELECT userid FROM user_bans)
-            ORDER BY u.lastview DESC LIMIT 5"
+            WHERE u.id NOT IN (SELECT user FROM user_bans)
+            ORDER BY u.last_seen DESC LIMIT 5"
         )
     );
 
@@ -98,7 +96,7 @@ if ($options["skin"] == "trinium") {
             [
                 "id" => $user["id"],
                 "info" => $userData->getUserArray(),
-                "submissions" => $user["s_num"],
+                "uploads" => $user["s_num"],
                 //"journals" => $user["j_num"],
                 "followers" => $user["f_num"],
                 //"about" => $user["about"],
@@ -109,9 +107,9 @@ if ($options["skin"] == "trinium") {
 }
 
 $data = [
-    "submissions" => Utilities::makeUploadArray($database, $submissions_random),
-    "submissions_new" => Utilities::makeUploadArray($database, $submissions_recent),
-    "submissions_featured" => Utilities::makeUploadArray($database, $submissions_featured),
+    "uploads" => Utilities::makeUploadArray($database, $uploads_random),
+    "uploads_new" => Utilities::makeUploadArray($database, $uploads_recent),
+    "uploads_featured" => Utilities::makeUploadArray($database, $uploads_featured),
     "news_recent" => Utilities::makeJournalArray($database, $news_recent),
     "users_recent" => $users_recent,
 ];

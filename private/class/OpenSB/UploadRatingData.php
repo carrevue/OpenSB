@@ -33,7 +33,7 @@ class UploadRatingData
 
         $this->upload_rating_data = array_fill_keys(range(1, 5), 0);
         $ratings = $database->fetchArray(
-            $database->query("SELECT rating, COUNT(*) as count FROM upload_ratings WHERE video=? GROUP BY rating", [$upload_id])
+            $database->query("SELECT rating, COUNT(*) as count FROM upload_ratings WHERE upload=? GROUP BY rating", [$upload_id])
         );
 
         foreach ($ratings as $row) {

@@ -27,28 +27,28 @@ global $twig, $database;
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 
-$submission_query = new UploadQuery($database);
+$upload_query = new UploadQuery($database);
 
 $query = $_GET['query'] ?? null;
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
 $limit = $database->paginate($page, pp: 20);
 
-$submissions = $submission_query->query(
-    "v.time DESC",
+$uploads = $upload_query->query(
+    "v.timestamp DESC",
     $limit,
     "(v.tags LIKE CONCAT('%', ?, '%') 
     OR v.title LIKE CONCAT('%', ?, '%') 
     OR v.description LIKE CONCAT('%', ?, '%'))",
     [$query, $query, $query]
 );
-$submission_count = $submission_query->count("(v.tags LIKE CONCAT('%', ?, '%') 
+$upload_count = $upload_query->count("(v.tags LIKE CONCAT('%', ?, '%') 
     OR v.title LIKE CONCAT('%', ?, '%') 
     OR v.description LIKE CONCAT('%', ?, '%'))", [$query, $query, $query]);
 
 $data = [
-    "submissions" => Utilities::makeUploadArray($database, $submissions),
-    "count" => $submission_count,
+    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "count" => $upload_count,
     "query" => $query,
 ];
 

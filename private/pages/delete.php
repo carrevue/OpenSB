@@ -30,8 +30,8 @@ use OpenSB\Utilities;
 
 $id = ($_GET['v'] ?? null);
 
-$submission = new UploadData($sb->getDatabaseClass(), $id);
-$data = $submission->getData();
+$upload = new UploadData($sb->getDatabaseClass(), $id);
+$data = $upload->getData();
 
 if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
@@ -41,8 +41,8 @@ if ($auth->getUserID() != $data["author"]) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
-$database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["time"], time()]);
-$database->query("DELETE FROM uploads WHERE video_id = ?", [$id]);
+$database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["timestamp"], time()]);
+$database->query("DELETE FROM uploads WHERE upload_id = ?", [$id]);
 
 $sb->getStorageClass()->deleteUploadFile($data);
 

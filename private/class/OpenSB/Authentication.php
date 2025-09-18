@@ -39,7 +39,7 @@ class Authentication
 
     public function __construct(Database $database)
     {
-        $accountfields = "id, ip, name, title, email, token, about, powerlevel, joined, lastview, birthdate, comfortable_rating, customcolor, blacklisted_tags, u_flags";
+        $accountfields = "id, ip, name, title, email, token, about, powerlevel, joined, last_seen, birthdate, comfortable_rating, userlink_color, blacklisted_tags, flags";
         $this->database = $database;
         $token = $_SESSION["SBTOKEN"] ?? null;
 
@@ -47,7 +47,7 @@ class Authentication
             if ($this->user_id = $this->database->result("SELECT id FROM users WHERE token = ?", [$token])) {
                 $this->is_logged_in = true;
                 $this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE id = ?", [$this->user_id]);
-                $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$this->user_id]);
+                $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$this->user_id]);
 
                 // moved from homepage
                 $followers = $this->database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$this->user_id]);
@@ -86,7 +86,7 @@ class Authentication
                     $this->logOut();
                 }
 
-                $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
+                $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
 
                 // TODO: the content rating system is disabled on squarebracket, so if the user's "comfortable rating"
                 // isnt general, then reset it back to general.
@@ -200,9 +200,9 @@ class Authentication
     public function getUserFlags($array = false)
     {
         if ($array) {
-            return UserFlags::toArray($this->user_data['u_flags']);
+            return UserFlags::toArray($this->user_data['flags']);
         } else {
-            return $this->user_data['u_flags'];
+            return $this->user_data['flags'];
         }
     }
 

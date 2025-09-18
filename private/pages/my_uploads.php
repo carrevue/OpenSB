@@ -36,15 +36,15 @@ if (!$auth->isUserLoggedIn()) {
 $limit = $database->paginate($page, 20);
 
 $database = $sb->getDatabaseClass();
-$submissions = $database->fetchArray($database->query("SELECT v.* FROM uploads v WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns) AND v.author = ? ORDER BY v.id DESC $limit", [$auth->getUserID()]));
-$submission_count = $database->result("SELECT COUNT(*) FROM uploads u where u.author = ?", [$auth->getUserID()]);
+$uploads = $database->fetchArray($database->query("SELECT v.* FROM uploads v WHERE v.upload_id NOT IN (SELECT upload FROM upload_takedowns) AND v.author = ? ORDER BY v.id DESC $limit", [$auth->getUserID()]));
+$upload_count = $database->result("SELECT COUNT(*) FROM uploads u where u.author = ?", [$auth->getUserID()]);
 
 $data = [
-    "submissions" => Utilities::makeUploadArray($database, $submissions),
-    "count" => $submission_count,
+    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "count" => $upload_count,
 ];
 
-echo $twig->render('my_submissions.twig', [
+echo $twig->render('my_uploads.twig', [
     'data' => $data,
     'page' => $page,
 ]);

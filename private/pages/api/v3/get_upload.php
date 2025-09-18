@@ -67,19 +67,19 @@ foreach ($tags_from_upload as $tag) {
 }
 
 // shitty hack
-if ($data['post_type'] == 0) {
-    $data['videofile'] = $data['videofile'] . ".converted.mp4";
+if ($data['type'] == 0) {
+    $data['upload_file'] = $data['upload_file'] . ".converted.mp4";
 }
 
 $apiOutput = [
-    'id' => $data['video_id'],
+    'id' => $data['upload_id'],
     'title' => $data['title'],
     'description' => $data['description'],
     'author' => $author->getUserArray(),
     'uploaded' => $data['time'],
     'views' => $data['views'],
-    'file' => $data['videofile'],
-    'type' => $data['post_type'],
+    'file' => $data['upload_file'],
+    'type' => $data['type'],
     'tags' => $tags,
 ];
 

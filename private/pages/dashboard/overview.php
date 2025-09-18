@@ -47,7 +47,8 @@ function get_folder_size($path)
 }
 
 /**
- * Based on the implementation in principia-web. Originally, this was 5 slightly different duplicated functions.
+ * Based on the refactored implementation from principia-web. This was 
+ * originally 5 slightly different duplicated functions.
  */
 function make_running_total_graph($database, $table, $orderfield): array
 {
@@ -67,22 +68,22 @@ function make_running_total_graph_from_comment_tables($database): array
 {
     $database->query("SET @runningTotal = 0;");
     return $database->fetchArray($database->query(
-        "SELECT date, num_interactions,
+        "SELECT timestamp, num_interactions,
             @runningTotal := @runningTotal + num_interactions AS runningTotal
         FROM (
-            (SELECT FROM_UNIXTIME(date) AS date, COUNT(*) AS num_interactions
+            (SELECT FROM_UNIXTIME(timestamp) AS timestamp, COUNT(*) AS num_interactions
             FROM upload_comments
-            GROUP BY DATE(FROM_UNIXTIME(date)))
+            GROUP BY DATE(FROM_UNIXTIME(timestamp)))
             UNION ALL
-            (SELECT FROM_UNIXTIME(date) AS date, COUNT(*) AS num_interactions
+            (SELECT FROM_UNIXTIME(timestamp) AS timestamp, COUNT(*) AS num_interactions
             FROM user_profile_comments
-            GROUP BY DATE(FROM_UNIXTIME(date)))
+            GROUP BY DATE(FROM_UNIXTIME(timestamp)))
             UNION ALL
-            (SELECT FROM_UNIXTIME(date) AS date, COUNT(*) AS num_interactions
+            (SELECT FROM_UNIXTIME(timestamp) AS timestamp, COUNT(*) AS num_interactions
             FROM journal_comments
-            GROUP BY DATE(FROM_UNIXTIME(date)))
+            GROUP BY DATE(FROM_UNIXTIME(timestamp)))
         ) AS combined_data
-        ORDER BY date"
+        ORDER BY timestamp"
     ));
 }
 
@@ -90,7 +91,7 @@ function make_running_total_graph_from_views($database): array
 {
     return $database->fetchArray($database->query(
         "SELECT 
-            DATE(FROM_UNIXTIME(timestamp)) AS date, 
+            DATE(FROM_UNIXTIME(timestamp)) AS timestamp, 
             SUM(CASE WHEN type = 'user' THEN 1 ELSE 0 END) AS user_views,
             SUM(CASE WHEN type = 'guest' THEN 1 ELSE 0 END) AS guest_views
         FROM upload_views
@@ -139,9 +140,9 @@ foreach ($thingsToCount as $table => $uiName) {
 }
 
 $user_graph = make_running_total_graph($database, 'users', 'joined');
-$upload_graph = make_running_total_graph($database, 'uploads', 'time');
+$upload_graph = make_running_total_graph($database, 'uploads', 'timestamp');
 $comment_graph = make_running_total_graph_from_comment_tables($database);
-$journal_graph = make_running_total_graph($database, 'journals', 'date');
+$journal_graph = make_running_total_graph($database, 'journals', 'timestamp');
 $view_graph = make_running_total_graph_from_views($database);
 
 // chart.js data
@@ -153,7 +154,7 @@ $chartData = [
                 'label' => 'Uploads',
                 'data' => array_map(function ($graph) {
                     return [
-                        'x' => $graph['time'],
+                        'x' => $graph['timestamp'],
                         'y' => $graph['runningTotal'],
                     ];
                 }, $upload_graph),
@@ -175,7 +176,7 @@ $chartData = [
                 'label' => 'Comments',
                 'data' => array_map(function ($graph) {
                     return [
-                        'x' => $graph['date'],
+                        'x' => $graph['timestamp'],
                         'y' => $graph['runningTotal'],
                     ];
                 }, $comment_graph),
@@ -186,7 +187,7 @@ $chartData = [
                 'label' => 'Journals',
                 'data' => array_map(function ($graph) {
                     return [
-                        'x' => $graph['date'],
+                        'x' => $graph['timestamp'],
                         'y' => $graph['runningTotal'],
                     ];
                 }, $journal_graph),
@@ -197,7 +198,7 @@ $chartData = [
                 'label' => 'Views (Users)',
                 'data' => array_map(function ($graph) {
                     return [
-                        'x' => $graph['date'],
+                        'x' => $graph['timestamp'],
                         'y' => $graph['user_views'],
                     ];
                 }, $view_graph),
@@ -208,7 +209,7 @@ $chartData = [
                 'label' => 'Views (Guests)',
                 'data' => array_map(function ($graph) {
                     return [
-                        'x' => $graph['date'],
+                        'x' => $graph['timestamp'],
                         'y' => $graph['guest_views'],
                     ];
                 }, $view_graph),
@@ -243,7 +244,7 @@ $chartData = [
             'x' => $sb->isChazizSquareBracketInstance()
                 ? [
                     'type' => 'time',
-                    'min' => '2021-01-30 00:00:00',
+                    'min' => '2021-01-30T23:33:29-05:00', // sb was first launched shortly before 01/31/2021
                 ]
                 : [
                     'type' => 'time',

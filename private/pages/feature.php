@@ -34,17 +34,17 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
-$submission = new UploadData($database, $id);
+$upload = new UploadData($database, $id);
 
 if (!$id) {
     Utilities::notifyBanner("You have not specified the upload.", "/");
 }
 
-if ($auth->getUserBanData() || $submission->getTakedown()) {
+if ($auth->getUserBanData() || $upload->getTakedown()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
-$data = $submission->getData();
+$data = $upload->getData();
 
 if (!$data) {
     Utilities::notifyBanner("notify_invalid_upload", "/");
@@ -55,7 +55,7 @@ if (!$auth->getUserID() == $data["author"]) {
 }
 
 if ($database->query(
-    "UPDATE users SET featured_submission = ? WHERE id = ?",
+    "UPDATE users SET featured_upload = ? WHERE id = ?",
     [$data["id"], $auth->getUserID()]
 )) {
     Utilities::notifyBanner("notify_updated_featured_upload", "/user?name=" . $auth->getUserData()["name"], "success");

@@ -94,7 +94,7 @@ if (isset($_POST["loginsubmit"])) {
     }
 
     if (!$error) {
-        $logindata = $database->fetch("SELECT password,token,ip,id,u_flags FROM users WHERE name = ?", [$username]);
+        $logindata = $database->fetch("SELECT password,token,ip,id,flags FROM users WHERE name = ?", [$username]);
 
         if ($logindata) {
             if ((password_verify($password, $logindata['password']))) {
@@ -107,7 +107,7 @@ if (isset($_POST["loginsubmit"])) {
                 }
 
                 // check if the account is banned (temporary code taken from userdata)
-                $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$logindata['id']]);
+                $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE user = ?", [$logindata['id']]);
 
                 // check if the account is from an ip that is in ip_bans
                 $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
@@ -167,7 +167,7 @@ if (isset($_POST["loginsubmit"])) {
                 $_SESSION["SBTOKEN"] = $logindata['token'];
 
                 $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
-                $database->query("UPDATE users SET lastview = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
+                $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
 
                 CoreUtilities::redirect('./');
             } else {

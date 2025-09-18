@@ -67,11 +67,11 @@
                                 Joined: {{ user.joined | format_date('long', 'medium') }}
                             </li>
                             <li>
-                                Logged in: {{ user.lastview | format_date('long', 'medium') }}
+                                Last seen: {{ user.last_seen | format_date('long', 'medium') }}
                             </li>
                         </ul>
                     </td>
-                    <td style="background:{{ user.customcolor }}"></td>
+                    <td style="background:{{ user.userlink_color }}"></td>
                 </tr>
             {% endfor %}
             </table>

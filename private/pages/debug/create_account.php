@@ -69,7 +69,7 @@ if (isset($_POST["submit"])) {
 
     $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
     $database->query(
-        "INSERT INTO users (name, password, token, joined, lastview, title, email, ip, birthdate)
+        "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [$username, $hashedPassword, $token, time(), time(), $username, $email, "ip", $dobDateTime->format('Y-m-d')]
     );

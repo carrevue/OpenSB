@@ -70,9 +70,9 @@ if (strlen($commentText) > 1000) {
 if (!$sb->isDebug()) {
     $timeLimit = time() - 15;
     if (
-        $database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
-        $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
-        $database->result("SELECT COUNT(*) FROM journal_comments WHERE date > ? AND author = ?", [$timeLimit, $userId])
+        $database->result("SELECT COUNT(*) FROM upload_comments WHERE timestamp > ? AND author = ?", [$timeLimit, $userId]) ||
+        $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE timestamp > ? AND author = ?", [$timeLimit, $userId]) ||
+        $database->result("SELECT COUNT(*) FROM journal_comments WHERE timestamp > ? AND author = ?", [$timeLimit, $userId])
     ) {
         echo json_encode(["error" => "Please wait at least 15 seconds before commenting again."]);
         exit;
@@ -82,8 +82,8 @@ if (!$sb->isDebug()) {
 $id = $post_data["id"];
 $replyTo = $post_data['reply_to'] ?? 0;
 
-if ($post_data['type'] == 'submission') {
-    $upload_flags = UploadFlags::toArray($database->result("SELECT flags from uploads where video_id = ?", [$id]));
+if ($post_data['type'] == 'upload') {
+    $upload_flags = UploadFlags::toArray($database->result("SELECT flags from uploads where upload_id = ?", [$id]));
 
     if ($upload_flags["block_comments"]) {
         echo json_encode(["error" => "Commenting has been disabled on this upload."]);
@@ -92,7 +92,7 @@ if ($post_data['type'] == 'submission') {
 }
 
 switch ($post_data['type']) {
-    case 'submission':
+    case 'upload':
         $table = 'upload_comments';
         break;
     case 'profile':
@@ -107,8 +107,8 @@ switch ($post_data['type']) {
 }
 
 $database->query(
-    "INSERT INTO {$table} (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
-    [$id, $replyTo, $commentText, $userId, time(), 0]
+    "INSERT INTO {$table} (location_id, reply_to, comment, author, timestamp) VALUES (?,?,?,?,?)",
+    [$id, $replyTo, $commentText, $userId, time()]
 );
 
 // we need the insertid right before we call anything else to avoid a "trying to access array offset on false" warning.
@@ -133,17 +133,17 @@ $html = $twig->render('components/_comment.twig', ['comment' => $comment]);
 // for replies, this should most likely be recursive and notify everyone in a 
 // comment reply thread, but that's going to be for opensb 2.1. -chaziz 9/18/2025
 switch ($post_data['type']) {
-    case 'submission':
+    case 'upload':
         // comments use the upload's string id and not the numeric id as the location of an upload, so we have to do
         // this weird shit.
         $numericID = Utilities::uploadStringIDToUploadNumericID($database, $post_data["id"]);
 
         if ($replyTo) {
             // get author of the comment we're replying to
-            $recipient = $database->result("SELECT author FROM upload_comments WHERE comment_id = ?", [$replyTo]);
+            $recipient = $database->result("SELECT author FROM upload_comments WHERE id = ?", [$replyTo]);
         } else {
             // get author of the upload
-            $recipient = $database->result("SELECT author FROM uploads WHERE video_id = ?", [$post_data["id"]]);
+            $recipient = $database->result("SELECT author FROM uploads WHERE upload_id = ?", [$post_data["id"]]);
         }
 
         if ($recipient != $auth->getUserID()) {
@@ -153,7 +153,7 @@ switch ($post_data['type']) {
     case 'profile':
         if ($replyTo) {
             // get author of the comment we're replying to
-            $recipient = $database->result("SELECT author FROM user_profile_comments WHERE comment_id = ?", [$replyTo]);
+            $recipient = $database->result("SELECT author FROM user_profile_comments WHERE id = ?", [$replyTo]);
         } else {
             // get author of the upload
             $recipient = $id;
@@ -166,7 +166,7 @@ switch ($post_data['type']) {
     case 'journal':
         if ($replyTo) {
             // get author of the comment we're replying to
-            $recipient = $database->result("SELECT author FROM journal_comments WHERE comment_id = ?", [$replyTo]);
+            $recipient = $database->result("SELECT author FROM journal_comments WHERE id = ?", [$replyTo]);
         } else {
             // get author of the upload
             $recipient = $database->result("SELECT author FROM journals WHERE id = ?", [$post_data["id"]]);

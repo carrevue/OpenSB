@@ -38,12 +38,12 @@ $queryData = $database->fetchArray(
        (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
        (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
         FROM users u 
-        WHERE u.id NOT IN (SELECT userid FROM user_bans)
-        ORDER BY u.lastview DESC $limit"
+        WHERE u.id NOT IN (SELECT user FROM user_bans)
+        ORDER BY u.last_seen DESC $limit"
     )
 );
 
-$countData = $database->result("SELECT COUNT(*) FROM users u WHERE u.id NOT IN (SELECT userid FROM user_bans)");
+$countData = $database->result("SELECT COUNT(*) FROM users u WHERE u.id NOT IN (SELECT user FROM user_bans)");
 
 $usersData = [];
 foreach ($queryData as $user) {
@@ -52,7 +52,7 @@ foreach ($queryData as $user) {
         [
             "id" => $user["id"],
             "info" => $userData->getUserArray(),
-            "submissions" => $user["s_num"],
+            "uploads" => $user["s_num"],
             "journals" => $user["j_num"],
             "followers" => $user["f_num"],
             "about" => $user["about"],

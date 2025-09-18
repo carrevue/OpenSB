@@ -48,13 +48,13 @@ if (!$data) {
     }
 }
 
-if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
+if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$data["id"]])) {
     if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
         Utilities::notifyBanner("notify_banned_user", "/");
     }
 }
 
-$flags = UserFlags::toArray($data["u_flags"]);
+$flags = UserFlags::toArray($data["flags"]);
 
 if ($flags["profile_customization_enabled"]) {
     $profile_customization_data = new UserCustomizationData($database, $data["id"]);
@@ -71,14 +71,14 @@ $page_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
-    "color" => $data["customcolor"],
+    "color" => $data["userlink_color"],
     "about" => ($data["about"] ?? null),
     "customization" => $profile_customization_data?->getData() ?? false,
     "comments" => $comments,
 ];
 
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
-    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
+    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["userlink_color"]);
 }
 
 echo $twig->render("profile_comments.twig", [

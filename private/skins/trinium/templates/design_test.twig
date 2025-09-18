@@ -162,7 +162,7 @@
                     <h2 class="section-title">Upload vertical</h2>
                 </div>
                 <div class="content-box">
-                    {% for submission in uploads %}
+                    {% for upload in uploads %}
                         {{ include('/components/_upload_vertical.twig') }}
                     {% endfor %}
                 </div>
@@ -172,7 +172,7 @@
                     <h2 class="section-title">Upload vertical small</h2>
                 </div>
                 <div class="content-box">
-                    {% for submission in uploads %}
+                    {% for upload in uploads %}
                         {{ include('/components/_upload_vertical_small.twig') }}
                     {% endfor %}
                 </div>
@@ -182,7 +182,7 @@
                     <h2 class="section-title">Upload vertical edit</h2>
                 </div>
                 <div class="content-box">
-                    {% for submission in uploads %}
+                    {% for upload in uploads %}
                         {{ include('/components/_upload_vertical_edit.twig') }}
                     {% endfor %}
                 </div>
@@ -192,7 +192,7 @@
                     <h2 class="section-title">Upload grid</h2>
                 </div>
                 <div class="content-box content-grid" style="grid-template-columns: repeat(2, 1fr);">
-                    {% for submission in uploads %}
+                    {% for upload in uploads %}
                         {{ include('/components/_upload_grid.twig') }}
                     {% endfor %}
                 </div>

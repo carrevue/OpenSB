@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="content-box content-grid">
-        {% for submission in data.submissions %}
+        {% for upload in data.uploads %}
             {{ include('/components/_upload_grid.twig') }}
         {% endfor %}
     </div>
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="content-box content-grid">
-        {% for submission in data.submissions_new %}
+        {% for upload in data.uploads_new %}
             {{ include('/components/_upload_grid.twig') }}
         {% endfor %}
     </div>

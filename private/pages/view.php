@@ -102,7 +102,7 @@ $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = 
 $followed = Utilities::isFollowingUser($data["author"]);
 
 // TODO: this feature is unused.
-//$favorites = $database->result("SELECT COUNT(video_id) FROM user_favorites WHERE video_id=?", [$id]);
+//$favorites = $database->result("SELECT COUNT(upload_id) FROM user_favorites WHERE upload_id=?", [$id]);
 
 $flags = $upload->getUploadFlagsArray();
 
@@ -141,17 +141,17 @@ if (!$CrawlerDetect->isCrawler()) {
     // quickly botting an upload's view count.
     if (
         !$auth->isUserLoggedIn() &&
-        $database->result("SELECT COUNT(*) FROM upload_views WHERE video_id=? AND timestamp > 600", [$ip])
+        $database->result("SELECT COUNT(*) FROM upload_views WHERE upload_id=? AND timestamp > 600", [$ip])
     ) {
         $ratelimit = true;
     }
 
     if (
-        $database->result("SELECT COUNT(video_id) FROM upload_views WHERE video_id=? AND user=?", [$id, $ip]) < 1
+        $database->result("SELECT COUNT(upload_id) FROM upload_views WHERE upload_id=? AND user=?", [$id, $ip]) < 1
         && !$ratelimit
     ) {
         $database->query(
-            "INSERT INTO upload_views (video_id, user, timestamp, type) VALUES (?,?,?,?)",
+            "INSERT INTO upload_views (upload_id, user, timestamp, type) VALUES (?,?,?,?)",
             [$id, $ip, time(), $type]
         );
 
@@ -167,11 +167,11 @@ if (!$CrawlerDetect->isCrawler()) {
 
 $whereRatings = Utilities::whereRatings();
 $whereTagBlacklist = Utilities::whereTagBlacklist();
-$submission_query = new UploadQuery($database);
+$upload_query = new UploadQuery($database);
 
 // ported from poktwo, modified to accommodate for takedowns and relevancy.
 $recommendfields = "
-    jaccard.video_id,
+    jaccard.upload_id,
     jaccard.flags,
     jaccard.intersect_count,
     jaccard.union_count,
@@ -179,7 +179,7 @@ $recommendfields = "
 FROM
     (
     SELECT
-        c2.video_id AS video_id,
+        c2.upload_id AS upload_id,
         c2.flags AS flags,
         COUNT(ct2.tag_id) AS intersect_count,
         (
@@ -188,22 +188,22 @@ FROM
         FROM
             upload_tag_index ct3
         WHERE
-            ct3.video_id IN (c1.id, c2.id)
+            ct3.upload_id IN (c1.id, c2.id)
     ) AS union_count
     FROM
         uploads AS c1
     INNER JOIN uploads AS c2
         ON c1.id != c2.id
     LEFT JOIN upload_tag_index AS ct1
-        ON ct1.video_id = c1.id
+        ON ct1.upload_id = c1.id
     LEFT JOIN upload_tag_index AS ct2
-        ON ct2.video_id = c2.id AND ct1.tag_id = ct2.tag_id
+        ON ct2.upload_id = c2.id AND ct1.tag_id = ct2.tag_id
     WHERE
         c1.id = ?
         AND ct1.tag_id IS NOT NULL
         AND ct2.tag_id IS NOT NULL
     GROUP BY
-        c2.video_id, c2.flags
+        c2.upload_id, c2.flags
     HAVING
         intersect_count > 0
     ) AS jaccard
@@ -213,7 +213,7 @@ ORDER BY
     jaccard_index DESC
 LIMIT 24";
 
-$uploads_by_author = $submission_query->query("RAND()", 24, "v.author = ? AND v.video_id != ?", [$data["author"], $data["video_id"]]);
+$uploads_by_author = $upload_query->query("RAND()", 24, "v.author = ? AND v.upload_id != ?", [$data["author"], $data["upload_id"]]);
 
 if ($tags === []) {
     // if there are no tags, list the author's other uploads
@@ -227,8 +227,8 @@ if ($tags === []) {
     INNER JOIN (
         SELECT $recommendfields
     ) AS recommended
-    ON v.video_id = recommended.video_id
-    WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns)";
+    ON v.upload_id = recommended.upload_id
+    WHERE v.upload_id NOT IN (SELECT upload FROM upload_takedowns)";
 
     if (!empty($whereRatings)) {
         $query .= "AND $whereRatings ";
@@ -238,7 +238,7 @@ if ($tags === []) {
         $query .= "AND $whereTagBlacklist ";
     }
 
-    $query .= "AND v.author NOT IN (SELECT userid FROM user_bans)
+    $query .= "AND v.author NOT IN (SELECT user FROM user_bans)
     ORDER BY RAND()";
 
     $recommended = $database->fetchArray($database->query($query, [$data["id"]]));
@@ -262,7 +262,7 @@ if ($uploads_by_author) {
 }
 
 if (!$recommended && !$uploads_by_author) {
-    $random_uploads = $submission_query->query("RAND()", 24, "v.video_id != ?", [$data["video_id"]]);
+    $random_uploads = $upload_query->query("RAND()", 24, "v.upload_id != ?", [$data["upload_id"]]);
     if ($random_uploads) {
         $random_uploads_array = Utilities::makeUploadArray($database, $random_uploads);
     } else {
@@ -285,14 +285,14 @@ if ($sb->getLocalOptions()["skin"] != "finalium") {
 $page_data = [
     "is_owner" => $owner,
     "int_id" => $data["id"],
-    "id" => $data["video_id"],
+    "id" => $data["upload_id"],
     "title" => $data["title"],
     "description" => $data["description"],
-    "published" => $data["time"],
+    "published" => $data["timestamp"],
     "original_site" => $data["original_site"],
-    "published_originally" => $data["original_time"],
-    "type" => $data["post_type"],
-    "file" => $data["videofile"],
+    "published_originally" => $data["original_timestamp"],
+    "type" => $data["type"],
+    "file" => $data["upload_file"],
     "author" => [
         "id" => $data["author"],
         "info" => $author_info,
@@ -317,7 +317,7 @@ $page_data = [
 // if we are on bootstrap or on finalium 1, emulate the old like/dislike system.
 if (Utilities::isLegacyFrontend()) {
     if ($auth->isUserLoggedIn()) {
-        $current_rating_from_db = $database->result("SELECT rating FROM upload_ratings WHERE video=? AND user=?", [$data["id"], $auth->getUserID()]);
+        $current_rating_from_db = $database->result("SELECT rating FROM upload_ratings WHERE upload=? AND user=?", [$data["id"], $auth->getUserID()]);
 
         if (($current_rating_from_db == "4") || ($current_rating_from_db == "5")) {
             $current_rating = "like";
@@ -362,5 +362,5 @@ if ($auth->userHasRole(UserRoleEnum::Administrator) && $takedown) {
 }
 
 echo $twig->render('watch.twig', [
-    'submission' => $page_data,
+    'upload' => $page_data,
 ]);

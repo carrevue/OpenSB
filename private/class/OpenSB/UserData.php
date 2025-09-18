@@ -43,7 +43,7 @@ class UserData
         } else {
             // otherwise fetch the data from the db
             $this->data = $this->database->fetch(
-                "SELECT id, name, title, customcolor, joined, lastview, powerlevel, u_flags FROM users WHERE id = ?",
+                "SELECT id, name, title, userlink_color, joined, last_seen, powerlevel, flags FROM users WHERE id = ?",
                 [$id]
             );
         }
@@ -64,7 +64,7 @@ class UserData
         }
 
         $isBanned = (bool) $this->database->fetch(
-            "SELECT * FROM user_bans WHERE userid = ?",
+            "SELECT * FROM user_bans WHERE user = ?",
             [$this->id]
         );
 
@@ -78,12 +78,12 @@ class UserData
             return [
                 "username" => $this->data["name"],
                 "displayname" => $this->data["title"],
-                "color" => $this->data["customcolor"],
+                "color" => $this->data["userlink_color"],
                 "joined" => $this->data["joined"],
-                "connected" => $this->data["lastview"],
+                "connected" => $this->data["last_seen"],
                 // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
                 "powerlevel" => $this->data["powerlevel"],
-                "flags" => UserFlags::toArray($this->data["u_flags"]), // stupid i think
+                "flags" => UserFlags::toArray($this->data["flags"]), // stupid i think
             ];
         } else {
             return [

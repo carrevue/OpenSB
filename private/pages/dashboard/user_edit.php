@@ -51,7 +51,7 @@ function discord_webhook_notify($sb, $auth, $user, $action)
     $sb->getDiscordWebhookClass()->dashboardUserHook($data);
 }
 
-$user = $database->fetch("SELECT u.*, (SELECT COUNT(*) FROM user_bans WHERE userid = u.id) AS is_banned FROM users u WHERE u.name = ?", [$username]);
+$user = $database->fetch("SELECT u.*, (SELECT COUNT(*) FROM user_bans WHERE user = u.id) AS is_banned FROM users u WHERE u.name = ?", [$username]);
 
 if (!$user) {
     // check if this username was used before and was changed out of.
@@ -70,8 +70,8 @@ if (!$user) {
 
 // unlike uploads, there is no proper implementation of getting user data that isnt intended for
 // simply getting basic user data via the UserData class.
-$flags = $user["u_flags"];
-$flags_array = UserFlags::toArray($user["u_flags"]);
+$flags = $user["flags"];
+$flags_array = UserFlags::toArray($user["flags"]);
 
 if (isset($_POST['ban_user'])) {
     // Don't ban non-existent users.
@@ -83,8 +83,8 @@ if (isset($_POST['ban_user'])) {
         Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/user/{$username}");
     }
 
-    if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$user["id"]])) {
-        $database->query("DELETE FROM user_bans WHERE userid = ?", [$user["id"]]);
+    if ($database->fetch("SELECT b.user FROM user_bans b WHERE b.user = ?", [$user["id"]])) {
+        $database->query("DELETE FROM user_bans WHERE user = ?", [$user["id"]]);
 
         if ($sb->isDiscordWebhookEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["ban_user"], 'unbanned');
@@ -93,7 +93,7 @@ if (isset($_POST['ban_user'])) {
         Utilities::notifyBanner("notify_dashboard_unban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
     } else {
         $database->query(
-            "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
+            "INSERT INTO user_bans (user, reason, timestamp) VALUES (?,?,?)",
             [$user["id"], "Banned by " . $auth->getUserData()["name"], time()]
         );
 
@@ -119,7 +119,7 @@ if (isset($_POST['verify_user'])) {
         $flags &= ~UserFlags::FLAG_UNVERIFIED->value;
 
         $database->query(
-            "UPDATE users SET u_flags = ? WHERE id = ?",
+            "UPDATE users SET flags = ? WHERE id = ?",
             [$flags, $user["id"]]
         );
 
@@ -132,7 +132,7 @@ if (isset($_POST['verify_user'])) {
         $flags |= UserFlags::FLAG_UNVERIFIED->value;
 
         $database->query(
-            "UPDATE users SET u_flags = ? WHERE id = ?",
+            "UPDATE users SET flags = ? WHERE id = ?",
             [$flags, $user["id"]]
         );
 
@@ -164,7 +164,7 @@ foreach ($notes as $note) {
     $userData = new UserData($database, $note["author"]);
     $notes_proper[] = [
         "content" => $note["note"],
-        "time" => $note["time"],
+        "time" => $note["timestamp"],
         "author" => [
             "id" => $note["author"],
             "info" => $userData->getUserArray(),

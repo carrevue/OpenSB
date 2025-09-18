@@ -80,7 +80,7 @@
                             </tr>
                             <tr>
                                 <td>{{ localize('last_seen') }}</td>
-                                <td>{{ user.lastview | format_date('long', 'medium') }}</td>
+                                <td>{{ user.last_seen | format_date('long', 'medium') }}</td>
                             </tr>
                             {% if not is_chaziz_sb %}
                             <tr>
@@ -90,7 +90,7 @@
                             {% endif %}
                             <tr>
                                 <td>{{ localize('user_link_color') }}</td>
-                                <td style="background:{{ user.customcolor }};"></td>
+                                <td style="background:{{ user.userlink_color }};"></td>
                             </tr>
                             </tbody>
                         </table>

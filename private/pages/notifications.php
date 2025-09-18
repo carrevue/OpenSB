@@ -64,7 +64,7 @@ function getRequiredData($database, $notice)
 
         case NotificationEnum::CommentProfile:
             // i'm pretty sure this should use result() rather than fetch()
-            $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM user_profile_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
+            $comment = $database->fetch("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM user_profile_comments c WHERE c.id = ?", [$notice["related_id"]]);
             $profile = $database->fetch("SELECT u.name FROM users u WHERE u.id = ?", [$notice["level"]]);
 
             $data["info"] = $comment["comment"];
@@ -83,7 +83,7 @@ function getRequiredData($database, $notice)
             break;
 
         case NotificationEnum::CommentJournal:
-            $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM journal_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
+            $comment = $database->fetch("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM journal_comments c WHERE c.id = ?", [$notice["related_id"]]);
             $journal = $database->fetch("SELECT title FROM journals WHERE id = ?", [$notice["level"]]);
 
             $data["info"] = $comment["comment"];
@@ -91,8 +91,8 @@ function getRequiredData($database, $notice)
             break;
 
         case NotificationEnum::CommentUpload:
-            $comment = $database->fetch("SELECT c.comment_id, c.id, c.comment, c.author, c.date, c.deleted FROM upload_comments c WHERE c.comment_id = ?", [$notice["related_id"]]);
-            $upload = $database->fetch("SELECT v.video_id, v.author, v.title FROM uploads v WHERE v.id = ?", [$notice["level"]]);
+            $comment = $database->fetch("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM upload_comments c WHERE c.id = ?", [$notice["related_id"]]);
+            $upload = $database->fetch("SELECT v.upload_id, v.author, v.title FROM uploads v WHERE v.id = ?", [$notice["level"]]);
 
             $data["info"] = $comment["comment"];
             $data["origin"] = $upload["title"] ?? "Unknown upload";

@@ -122,18 +122,18 @@
             </div>
         </div>
         <div class="col-8">
-            {% if data.featured_submission %}
+            {% if data.featured_upload %}
             <div class="section">
                 <div class="content-box basic-box">
                     <div class="section-header">
                         <h2 class="section-title">{{ localize('profile_featured') }}</h2>
                     </div>
-                    {% include('/components/_upload_vertical.twig') with {'submission': data.featured_submission} %}
+                    {% include('/components/_upload_vertical.twig') with {'upload': data.featured_upload} %}
                 </div>
             </div>
             {% endif %}
 
-            {% if data.submissions %}
+            {% if data.uploads %}
                 <div class="section">
                     <div class="content-box basic-box">
                         <div class="section-header flex">
@@ -145,7 +145,7 @@
                             </div>
                         </div>
                         <div class="content-grid">
-                            {% for submission in data.submissions %}
+                            {% for upload in data.uploads %}
                                 {{ include('/components/_upload_grid.twig') }}
                             {% endfor %}
                         </div>

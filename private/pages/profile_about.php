@@ -33,7 +33,7 @@ use OpenSB\UserFlags;
 use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
 
-$submission_query = new UploadQuery($database);
+$upload_query = new UploadQuery($database);
 
 $options = $sb->getLocalOptions();
 
@@ -59,15 +59,15 @@ if (!$data) {
     }
 }
 
-if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE userid = ?", [$data["id"]])) {
+if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$data["id"]])) {
     if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
         Utilities::notifyBanner("notify_banned_user", "/");
     }
 }
 
-$user_submissions_query_limit = 12;
+$user_uploads_query_limit = 12;
 
-$user_submissions = $submission_query->query("v.time desc", $user_submissions_query_limit, "v.author = ?", [$data["id"]]);
+$user_uploads = $upload_query->query("v.timestamp desc", $user_uploads_query_limit, "v.author = ?", [$data["id"]]);
 
 if ($options["skin"] == "bootstrap") {
     $user_journal_limit = 3;
@@ -79,13 +79,13 @@ $user_journals =
     $database->fetchArray(
         $database->query("SELECT j.* FROM journals j WHERE
                          j.author = ? 
-                         ORDER BY j.date 
+                         ORDER BY j.timestamp 
                          DESC LIMIT ?", [$data["id"], $user_journal_limit])
     );
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-$flags = UserFlags::toArray($data["u_flags"]);
+$flags = UserFlags::toArray($data["flags"]);
 
 if ($flags["profile_customization_enabled"]) {
     $profile_customization_data = new UserCustomizationData($database, $data["id"]);
@@ -101,10 +101,10 @@ $profile_data = [
     "id" => $data["id"],
     "username" => $data["name"],
     "displayname" => $data["title"],
-    "color" => $data["customcolor"],
+    "color" => $data["userlink_color"],
     "about" => ($data['about'] ?? false),
     "joined" => $data["joined"],
-    "connected" => $data["lastview"],
+    "connected" => $data["last_seen"],
     "is_current" => $is_own_profile,
     "followers" => $followers,
     "following" => $followed,
@@ -115,7 +115,7 @@ $profile_data = [
 
 /*
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
-    $profile_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
+    $profile_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["userlink_color"]);
 }
 */
 

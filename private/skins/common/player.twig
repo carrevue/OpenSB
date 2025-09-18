@@ -1,6 +1,6 @@
 <link href="https://unpkg.com/plyr@3.7.8/dist/plyr.css" rel="stylesheet">
 <script src="https://unpkg.com/plyr@3.7.8/dist/plyr.min.js"></script>
-{% set video = "/dynamic/videos/" ~ submission.id ~ ".converted.mp4" %}
+{% set video = "/dynamic/videos/" ~ upload.id ~ ".converted.mp4" %}
 
 {% if current_skin == "finalium" and current_theme == "hitchhiker" %}
     {% set simulate_youtube_player = true %}
@@ -14,7 +14,7 @@
     {% set color = '#1d89dc' %}
 {% endif %}
 
-{% if submission.flags.unprocessed %}
+{% if upload.flags.unprocessed %}
     <style>
         .unprocessed-video-upload {
             background-color: black;
@@ -94,7 +94,7 @@
 
             player.source = {
                 type: 'video',
-                title: '{{ submission.title }}',
+                title: '{{ upload.title }}',
                 sources: [
                     {
                         src: '{{ video }}',
@@ -102,7 +102,7 @@
                         size: 720,
                     },
                 ],
-                poster: '{{ thumbnail(submission.id, submission.type, submission.flags.custom_thumbnail) }}',
+                poster: '{{ thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) }}',
                 {% if options.enable_incomplete_features %}
                 previewThumbnails: {
                     enabled: true,

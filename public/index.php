@@ -160,6 +160,9 @@ $router->add('/view/{id}', 'view.php');
 $router->add('/write', 'write.php');
 
 // user profiles
+$router->add('/user', function () {
+    if (isset($_GET['name'])) CoreUtilities::redirect('/user/' . $_GET['name'], 301);
+});
 $router->add('/user/{username}', 'profile_overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile_uploads.php'); // uploads
 $router->add('/user/{username}/comments', 'profile_comments.php'); // comments
