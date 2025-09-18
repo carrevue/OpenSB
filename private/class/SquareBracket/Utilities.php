@@ -316,6 +316,7 @@ class Utilities
     {
         $error = "";
 
+        // TODO: redo these errors in a way that theyre localizable with notifyBanner
         if (!isset($username)) $error .= "This username is blank. ";
         if ($checkIfTaken) {
             if ($database->result("SELECT COUNT(*) FROM users WHERE name = ?", [$username])) $error .= "This username has already been taken. ";
@@ -324,6 +325,7 @@ class Utilities
 
         // TODO: add blacklist for usernames
         if ($username == "news") $error .= "This is an invalid username. ";
+        if ($username == "InvalidUser!") $error .= "This is an invalid username. ";
 
         return $error;
     }

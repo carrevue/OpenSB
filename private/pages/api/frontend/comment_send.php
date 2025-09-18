@@ -129,6 +129,9 @@ $comment = [
 $html = $twig->render('components/_comment.twig', ['comment' => $comment]);
 
 // not gonna put this code in the first switch case YET due to a weird ass hack i have to do with upload comments
+
+// for replies, this should most likely be recursive and notify everyone in a 
+// comment reply thread, but that's going to be for opensb 2.1. -chaziz 9/18/2025
 switch ($post_data['type']) {
     case 'submission':
         // comments use the upload's string id and not the numeric id as the location of an upload, so we have to do
@@ -136,8 +139,8 @@ switch ($post_data['type']) {
         $numericID = Utilities::uploadStringIDToUploadNumericID($database, $post_data["id"]);
 
         if ($replyTo) {
-            // figure out this shit Lol
-            $recipient = 1;
+            // get author of the comment we're replying to
+            $recipient = $database->result("SELECT author FROM upload_comments WHERE comment_id = ?", [$replyTo]);
         } else {
             // get author of the upload
             $recipient = $database->result("SELECT author FROM uploads WHERE video_id = ?", [$post_data["id"]]);
@@ -149,8 +152,8 @@ switch ($post_data['type']) {
         break;
     case 'profile':
         if ($replyTo) {
-            // figure out this shit Lol
-            $recipient = 1;
+            // get author of the comment we're replying to
+            $recipient = $database->result("SELECT author FROM user_profile_comments WHERE comment_id = ?", [$replyTo]);
         } else {
             // get author of the upload
             $recipient = $id;
@@ -162,8 +165,8 @@ switch ($post_data['type']) {
         break;
     case 'journal':
         if ($replyTo) {
-            // figure out this shit Lol
-            $recipient = 1;
+            // get author of the comment we're replying to
+            $recipient = $database->result("SELECT author FROM journal_comments WHERE comment_id = ?", [$replyTo]);
         } else {
             // get author of the upload
             $recipient = $database->result("SELECT author FROM journals WHERE id = ?", [$post_data["id"]]);

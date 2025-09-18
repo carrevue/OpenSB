@@ -23,11 +23,13 @@ namespace SquareBracket;
 
 class VersionNumber
 {
+    private string $versionName;
     private string $versionNumber;
     private string $versionString;
 
     public function __construct()
     {
+        $this->versionName = "VersionName";
         $this->versionNumber = "1.3.0-beta.12";
         $this->versionString = $this->makeVersionString();
     }
@@ -45,8 +47,8 @@ class VersionNumber
 
             $hash = substr($commit, 0, 7);
 
-            // if for example, the version number is opensb 1.3 and we're on 
-            // the opensb-1.3 branch, we don't need to show the git branch as 
+            // if for example, the version number is opensb 2.0 and we're on 
+            // the opensb-2.0 branch, we don't need to show the git branch as 
             // it would just repeat itself.
             if (preg_match('/^(\d+\.\d+)/', $this->versionNumber, $matches)) {
                 $majorMinor = $matches[1];
@@ -70,6 +72,16 @@ class VersionNumber
     public function outputVersionBanner(): string
     {
         return sprintf("OpenSB %s - Executed on %s", $this->getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
+    }
+
+    /**
+     * Returns the version name.
+     *
+     * @return string
+     */
+    public function getVersionName(): string
+    {
+        return $this->versionName;
     }
 
     /**

@@ -38,14 +38,16 @@ if (str_contains(strtolower($database_version), "maria")) {
     $database_server = "MySQL";
 }
 
+$sbVersionNumber = new VersionNumber;
+
 $data = [
     "developers" => [
         'Chaziz'
     ],
     "software" => [
         'sbVersion' => [
-            'title' => "OpenSB",
-            'info' => (new VersionNumber)->getVersionString(),
+            'title' => "OpenSB " . $sbVersionNumber->getVersionName(),
+            'info' => $sbVersionNumber->getVersionString(),
         ],
         'coreVersion' => [
             'title' => "BluffingoCore",
