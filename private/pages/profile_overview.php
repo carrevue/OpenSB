@@ -71,7 +71,7 @@ if ($options["skin"] == "finalium") {
 }
 
 // TODO: redo this
-function handleFeaturedupload($database, $data): false|array
+function handleFeaturedUpload($database, $data): false|array
 {
     global $sb, $auth;
 
@@ -156,7 +156,7 @@ $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = 
 $followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
 
-$featured_upload = handleFeaturedupload($database, $data);
+$featured_upload = handleFeaturedUpload($database, $data);
 
 $page_data = [
     "id" => $data["id"],
