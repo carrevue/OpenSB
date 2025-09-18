@@ -82,7 +82,7 @@ if (!$sb->isDebug()) {
 $id = $post_data["id"];
 $replyTo = $post_data['reply_to'] ?? 0;
 
-if ($post_data['type'] == 'submission') {
+if ($post_data['type'] == 'upload') {
     $upload_flags = UploadFlags::toArray($database->result("SELECT flags from uploads where upload_id = ?", [$id]));
 
     if ($upload_flags["block_comments"]) {
@@ -92,7 +92,7 @@ if ($post_data['type'] == 'submission') {
 }
 
 switch ($post_data['type']) {
-    case 'submission':
+    case 'upload':
         $table = 'upload_comments';
         break;
     case 'profile':
@@ -133,7 +133,7 @@ $html = $twig->render('components/_comment.twig', ['comment' => $comment]);
 // for replies, this should most likely be recursive and notify everyone in a 
 // comment reply thread, but that's going to be for opensb 2.1. -chaziz 9/18/2025
 switch ($post_data['type']) {
-    case 'submission':
+    case 'upload':
         // comments use the upload's string id and not the numeric id as the location of an upload, so we have to do
         // this weird shit.
         $numericID = Utilities::uploadStringIDToUploadNumericID($database, $post_data["id"]);
