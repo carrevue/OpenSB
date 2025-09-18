@@ -166,10 +166,9 @@ class Templating
         $this->twig->addGlobal('user_data', $this->authentication->getUserData());
         $this->twig->addGlobal('user_ban_data', $this->authentication->getUserBanData());
         $this->twig->addGlobal('user_stat_data', $this->authentication->getUserStatData());
-        $this->twig->addGlobal('user_is_admin', $this->authentication->userHasRole(UserRoleEnum::Administrator));
         $this->twig->addGlobal('user_is_authenticated_admin', $this->authentication->hasUserAuthenticatedAsStaff());
         $this->twig->addGlobal('skins', $this->getAllSkinsMetadata());
-        $this->twig->addGlobal('opensb_version', $this->version_number->getVersionNumber());
+        $this->twig->addGlobal('opensb_version', $this->version_number->getVersionArray());
         $this->twig->addGlobal('session', $_SESSION);
         $this->twig->addGlobal('website_branding', $branding);
         $this->twig->addGlobal('current_theme', $this->theme); // not to be confused with skins

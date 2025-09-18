@@ -164,7 +164,7 @@ CREATE TABLE `users` (
   `featured_upload` bigint(20) unsigned NOT NULL DEFAULT 0,
   `title` text NOT NULL COMMENT 'Display Name',
   `about` text DEFAULT NULL COMMENT 'User''s description',
-  `userlink_color` varchar(7) DEFAULT '#523bb8' COMMENT 'The color that the user has set for their profile',
+  `userlink_color` varchar(7) DEFAULT '#0069B4' COMMENT 'The color that the user has set for their profile',
   `avatar` tinyint(1) NOT NULL DEFAULT 0,
   `ip` varchar(48) DEFAULT '999.999.999.999',
   `flags` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '8 bools to determine certain user properties',

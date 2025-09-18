@@ -72,7 +72,21 @@ class VersionNumber
      */
     public function outputVersionBanner(): string
     {
-        return sprintf("OpenSB %s - Executed on %s", $this->getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
+        return sprintf("OpenSB %s %s - Executed on %s", $this->getVersionName(), $this->getVersionString(), date("Y-m-d h:i:s")) . PHP_EOL;
+    }
+
+    /**
+     * Returns a version array intended for the frontend.
+     *
+     * @return array
+     */
+    public function getVersionArray(): array
+    {
+        return [
+            "name" => $this->versionName,
+            "number" => $this->versionNumber,
+            "string" => $this->versionString,
+        ];
     }
 
     /**

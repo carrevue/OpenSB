@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-powered-by">
-            <span>{{ localize('powered_by') }} <a href="/version">OpenSB {{ opensb_version }}</a></span>
+            <span>{{ localize('powered_by') }} <a href="/version">OpenSB {{ opensb_version.name }} {{ opensb_version.number }}</a></span>
         </div>
         <div class="footer-links">
             {% for link in footer_links() %}
@@ -13,7 +13,7 @@
         </div>
         {% if is_debug %}
             <div>
-                <a class="button button-danger button-small" title="Spicy!" id="debug-button">{{ localize('debug') }}</a>
+                <a class="button button-danger button-small" id="debug-button">{{ localize('debug') }}</a>
             </div>
         {% endif %}
     </div>
