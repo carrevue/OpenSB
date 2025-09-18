@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace OpenSB\Pages\Debug;
 
 global $sb;
 
@@ -45,7 +45,12 @@ foreach ($files as $file) {
 <img src="/assets/chaz_opensb.png" width="200">
 <h1>OpenSB Backend Debug</h1>
 <hr>
-<?php
-foreach ($fileUrls as $file) {
-    echo sprintf('<a href="/debug/%s">%s</a><br>', $file["filename"], $file["filename"]);
-}
+<ul>
+    <?php
+    foreach ($fileUrls as $file) {
+        $clean_name = ucwords(str_replace(["_", ".php"], [" ", ""], $file["filename"]));
+
+        echo sprintf('<li><a href="/debug/%s">%s</a></li>', $file["filename"], $clean_name);
+    }
+    ?>
+</ul>
