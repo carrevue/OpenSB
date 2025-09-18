@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use DateTime;
 use Exception;
@@ -70,11 +70,11 @@ class Utilities
 
     public static function makeJournalArray($database, $journals): array
     {
-        global $orange;
+        global $sb;
 
         $journalsData = [];
         foreach ($journals as $journal) {
-            if ($orange->isFulpTube() && $journal["is_site_news"]) {
+            if ($sb->isFulpTube() && $journal["is_site_news"]) {
                 $journal["title"] = self::replaceSquareBracketWithFulpTube($journal["title"]);
                 $journal["post"] = self::replaceSquareBracketWithFulpTube($journal["post"]);
             }
@@ -98,10 +98,10 @@ class Utilities
 
     public static function whereRatings(): string
     {
-        global $orange;
+        global $sb;
 
-        if ($orange->getAuthenticationClass()->isUserLoggedIn()) {
-            $rating = $orange->getAuthenticationClass()->getUserData()["comfortable_rating"];
+        if ($sb->getAuthenticationClass()->isUserLoggedIn()) {
+            $rating = $sb->getAuthenticationClass()->getUserData()["comfortable_rating"];
 
             $return_value = match ($rating) {
                 'general' => 'v.rating IN ("general")',
@@ -117,9 +117,9 @@ class Utilities
 
     public static function whereTagBlacklist(): string
     {
-        global $orange;
+        global $sb;
 
-        $tagBlacklist = $orange->getAuthenticationClass()->getUserTagBlacklist();
+        $tagBlacklist = $sb->getAuthenticationClass()->getUserTagBlacklist();
 
         // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
         // submission-related queries into 20 fucking useless lines that slows the site down to a crawl.
@@ -137,9 +137,9 @@ class Utilities
      */
     public static function notifyUser($database, $user, $location, $related_id, NotificationEnum $type): void
     {
-        global $orange, $database;
+        global $sb, $database;
 
-        if (!$orange->getAuthenticationClass()->isUserLoggedIn()) {
+        if (!$sb->getAuthenticationClass()->isUserLoggedIn()) {
             throw new Exception("NotifyUser should not be called if the current user is logged off.");
         }
 
@@ -149,7 +149,7 @@ class Utilities
         // followed that user
         if ($type == NotificationEnum::Follow) {
             if ($database->result("SELECT COUNT(*) FROM user_notifications WHERE timestamp > ? AND type = ?
-                AND recipient = ? AND sender = ?", [time() - 604800, $type->value, $user, $orange->getAuthenticationClass()->getUserID()])) {
+                AND recipient = ? AND sender = ?", [time() - 604800, $type->value, $user, $sb->getAuthenticationClass()->getUserID()])) {
                 $dontNotify = true;
             }
         }
@@ -158,16 +158,16 @@ class Utilities
             // Notify the user
             $database->query(
                 "INSERT INTO user_notifications (type, level, recipient, sender, timestamp, related_id) VALUES (?,?,?,?,?,?);",
-                [$type->value, $location, $user, $orange->getAuthenticationClass()->getUserID(), time(), $related_id]
+                [$type->value, $location, $user, $sb->getAuthenticationClass()->getUserID(), time(), $related_id]
             );
         }
     }
 
     public static function isFollowingUser($user)
     {
-        global $orange, $database;
+        global $sb, $database;
 
-        return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $orange->getAuthenticationClass()->getUserID()]);
+        return $database->result("SELECT COUNT(user) FROM user_follows WHERE id=? AND user=?", [$user, $sb->getAuthenticationClass()->getUserID()]);
     }
 
     /**
@@ -183,13 +183,13 @@ class Utilities
      */
     public static function notifyBanner($message, $redirect, string $color = "danger", array $args = []): void
     {
-        global $orange;
+        global $sb;
 
-        $localization = $orange->getLocalizationClass();
+        $localization = $sb->getLocalizationClass();
 
         // awkward fix for if we use notifyBanner before localization is initialized
         if (!$localization) {
-            $localization = new Localization($orange->getOptionsCookie()["locale"] ?? "en-US");
+            $localization = new Localization($sb->getOptionsCookie()["locale"] ?? "en-US");
         }
 
         $_SESSION["notif_message"] = $localization->translate($message, ...$args);
@@ -373,9 +373,9 @@ class Utilities
 
     public static function isLegacyFrontend()
     {
-        global $orange;
+        global $sb;
 
-        $localOptions = $orange?->getLocalOptions();
+        $localOptions = $sb?->getLocalOptions();
 
         return ($localOptions["skin"] == "finalium" || $localOptions["skin"] == "bootstrap");
     }

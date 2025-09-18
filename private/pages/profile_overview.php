@@ -21,23 +21,23 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $database, $twig, $orange;
+global $auth, $database, $twig, $sb;
 
 use BluffingoCore\CoreUtilities;
-use SquareBracket\CommentData;
-use SquareBracket\CommentLocation;
-use SquareBracket\UploadData;
-use SquareBracket\UploadQuery;
-use SquareBracket\UserCustomizationData;
-use SquareBracket\UserFlags;
-use SquareBracket\UserRoleEnum;
-use SquareBracket\Utilities;
+use OpenSB\CommentData;
+use OpenSB\CommentLocation;
+use OpenSB\UploadData;
+use OpenSB\UploadQuery;
+use OpenSB\UserCustomizationData;
+use OpenSB\UserFlags;
+use OpenSB\UserRoleEnum;
+use OpenSB\Utilities;
 
 $submission_query = new UploadQuery($database);
 
-$options = $orange->getLocalOptions();
+$options = $sb->getLocalOptions();
 
 if (isset($_GET['name'])) CoreUtilities::redirect('/user/' . $_GET['name'], 301);
 
@@ -73,7 +73,7 @@ if ($options["skin"] == "finalium") {
 // TODO: redo this
 function handleFeaturedSubmission($database, $data): false|array
 {
-    global $orange, $auth;
+    global $sb, $auth;
 
     // handle featured submission
     // if user hasn't specified anything, then use latest submission, if that doesn't exist, do not bother.
@@ -144,7 +144,7 @@ if ($flags["profile_customization_enabled"]) {
 }
 
 if (
-    $orange->getLocalOptions()["skin"] != "bootstrap" && $orange->getLocalOptions()["skin"] != "finalium"
+    $sb->getLocalOptions()["skin"] != "bootstrap" && $sb->getLocalOptions()["skin"] != "finalium"
 ) {
     $comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
     $comments = $comment_data->getComments(10);
@@ -179,7 +179,7 @@ $page_data = [
     "ban_data" => $user_ban_data ?? [],
 ];
 
-if ($orange->getLocalOptions()["skin"] == "bootstrap") {
+if ($sb->getLocalOptions()["skin"] == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
 }
 

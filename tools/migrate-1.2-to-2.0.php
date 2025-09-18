@@ -20,7 +20,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Tools;
 
 define("BLUFF_ROOT_PATH", dirname(__DIR__));
 define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');

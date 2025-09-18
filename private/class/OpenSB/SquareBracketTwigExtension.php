@@ -21,7 +21,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use Exception;
 use Parsedown;
@@ -32,30 +32,30 @@ use Twig\TwigFunction;
 use BluffingoCore\Database;
 use BluffingoCore\Profiler;
 
-use SquareBracket\UserRoleEnum;
+use OpenSB\UserRoleEnum;
 
 class SquareBracketTwigExtension extends AbstractExtension
 {
-    private SquareBracket $orange;
+    private SquareBracket $sb;
     private Database $database;
     private Profiler $profiler;
     private Storage $storage;
     private Authentication $authentication;
     private $twig;
 
-    public function __construct(SquareBracket $orange, $twig)
+    public function __construct(SquareBracket $sb, $twig)
     {
-        $this->orange = $orange;
-        $this->database = $this->orange->getDatabaseClass();
-        $this->profiler = $this->orange->getProfilerClass();
-        $this->storage = $this->orange->getStorageClass();
-        $this->authentication = $this->orange->getAuthenticationClass();
+        $this->sb = $sb;
+        $this->database = $this->sb->getDatabaseClass();
+        $this->profiler = $this->sb->getProfilerClass();
+        $this->storage = $this->sb->getStorageClass();
+        $this->authentication = $this->sb->getAuthenticationClass();
         $this->twig = $twig;
     }
 
     public function getFunctions(): array
     {
-        $options = $this->orange->getLocalOptions();
+        $options = $this->sb->getLocalOptions();
         $forceOldUserlink = $options['useOldUserlinkImplementation'] ?? null;
 
         if (isset($forceOldUserlink)) {
@@ -116,7 +116,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         return [
             new TwigFilter('relative_time', function ($time) {
-                $localization = $this->orange->getLocalizationClass();
+                $localization = $this->sb->getLocalizationClass();
                 return $localization->formatRelativeTime($time);
             }, ['is_safe' => ['html']]),
 
@@ -124,12 +124,12 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFilter('calculate_age_from', [Utilities::class, 'calculateAgeFrom']),
 
             new TwigFilter('format_date', function ($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null) {
-                $localization = $this->orange->getLocalizationClass();
+                $localization = $this->sb->getLocalizationClass();
                 return $localization->formatDate($date, $dateFormat, $timeFormat, $pattern);
             }, ['is_safe' => ['html']]),
 
             new TwigFilter('format_number', function ($number) {
-                $localization = $this->orange->getLocalizationClass();
+                $localization = $this->sb->getLocalizationClass();
                 return $localization->formatNumber($number);
             }, ['is_safe' => ['html']]),
 
@@ -184,7 +184,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             // Markdown function for info pages. **NOT SANITIZED, DON'T LET IT EVER TOUCH USER INPUT**
             new TwigFilter('markdown_info_page', function ($text) {
-                $branding = $this->orange->getBrandingSettings();
+                $branding = $this->sb->getBrandingSettings();
                 $markdown = new Parsedown();
 
                 // replace hardcoded dummy strings with proper strings
@@ -241,7 +241,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     /*
     function truncateNumber($number)
     {
-        $localization = $this->orange->getLocalizationClass();
+        $localization = $this->sb->getLocalizationClass();
         return $localization->truncateNumber($number);
     }
     */
@@ -342,7 +342,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $userlink = sprintf(
             '<a class="userlink userlink-%s" %shref="/user/%s">%s</a>',
             $username,
-            $this->orange->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
+            $this->sb->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
             $username,
             $username
         );
@@ -404,7 +404,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function headerUserLinks()
     {
-        $options = $this->orange->getLocalOptions();
+        $options = $this->sb->getLocalOptions();
 
         if ($this->authentication->isUserLoggedIn()) {
             $username = $this->authentication->getUserData()["name"];
@@ -476,7 +476,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function headerUserAccountLinks()
     {
-        $accountsArray = $this->orange->getAccountsArray();
+        $accountsArray = $this->sb->getAccountsArray();
 
         $array = [];
 
@@ -560,7 +560,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             ],
         ];
 
-        if ($this->orange->getLocalOptions()["skin"] == "bootstrap") {
+        if ($this->sb->getLocalOptions()["skin"] == "bootstrap") {
             // Oops. Ugly!
             $version_array = [
                 "version" => [
@@ -572,8 +572,8 @@ class SquareBracketTwigExtension extends AbstractExtension
             $array = array_merge($version_array, $array);
         }
 
-        if ($this->orange->isChazizSquareBracketInstance()) {
-            if (!$this->orange->isFulpTube()) {
+        if ($this->sb->isChazizSquareBracketInstance()) {
+            if (!$this->sb->isFulpTube()) {
                 $array["brickface"] = [
                     "name" => $this->localize("kylarz_link"),
                     "url" => "https://brickface.squarebracket.pw/",
@@ -586,7 +586,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             ];
         }
 
-        if ($this->orange->isSiteTestInstance()) {
+        if ($this->sb->isSiteTestInstance()) {
             $array["test"] = [
                 "name" => "Custom Footer Link",
                 "url" => "/",
@@ -653,7 +653,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     public function localize($key, ...$args)
     {
-        return $this->orange->getLocalizationClass()->translate($key, ...$args);
+        return $this->sb->getLocalizationClass()->translate($key, ...$args);
     }
 
     public function getUserDataCache(): array

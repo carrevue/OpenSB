@@ -19,13 +19,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $database, $auth;
+global $sb, $database, $auth;
 
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
-if (!$orange->isDebug()) {
+if (!$sb->isDebug()) {
     http_response_code(403);
     die();
 }

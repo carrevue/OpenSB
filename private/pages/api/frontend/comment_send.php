@@ -19,14 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $orange, $twig;
+global $auth, $sb, $twig;
 
-use SquareBracket\NotificationEnum;
-use SquareBracket\UploadFlags;
-use SquareBracket\UserData;
-use SquareBracket\Utilities;
+use OpenSB\NotificationEnum;
+use OpenSB\UploadFlags;
+use OpenSB\UserData;
+use OpenSB\Utilities;
 
 header('Content-Type: application/json');
 
@@ -53,7 +53,7 @@ if (!isset($post_data['type']) || !isset($post_data['comment'])) {
     exit;
 }
 
-$database = $orange->getDatabaseClass();
+$database = $sb->getDatabaseClass();
 $author = new UserData($database, $auth->getUserID());
 $commentText = trim($post_data['comment']);
 
@@ -67,7 +67,7 @@ if (strlen($commentText) > 1000) {
     exit;
 }
 
-if (!$orange->isDebug()) {
+if (!$sb->isDebug()) {
     $timeLimit = time() - 15;
     if (
         $database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $userId]) ||
@@ -178,7 +178,7 @@ switch ($post_data['type']) {
         exit;
 }
 
-if ($orange->isDiscordWebhookEnabled()) {
+if ($sb->isDiscordWebhookEnabled()) {
     $data = [
         'id' => $insertID,
         'name' => $post_data['id'],
@@ -187,7 +187,7 @@ if ($orange->isDiscordWebhookEnabled()) {
         'type' => $post_data['type']
     ];
 
-    $orange->getDiscordWebhookClass()->newCommentHook($data);
+    $sb->getDiscordWebhookClass()->newCommentHook($data);
 }
 
 $apiOutput = [

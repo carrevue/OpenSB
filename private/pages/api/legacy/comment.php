@@ -20,12 +20,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $database, $twig, $orange;
+global $auth, $database, $twig, $sb;
 
-use SquareBracket\UploadFlags;
-use SquareBracket\UserData;
+use OpenSB\UploadFlags;
+use OpenSB\UserData;
 
 // simple shit fix for shitty finalium bug that dates from 2021 -chaziz 4/12/2023
 if ($_POST["comment"] == "") {
@@ -42,7 +42,7 @@ if ($auth->getUserFlags(true)["unverified"]) {
 }
 
 // apparantly this wasnt a thing in the legacy api? oops -chaziz 4/20/2025
-if (!$orange->isDebug()) {
+if (!$sb->isDebug()) {
     $timeLimit = time() - 15;
     if (
         $database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $auth->getUserID()]) ||
@@ -125,7 +125,7 @@ $comment = [
     ],
 ];
 
-if ($orange->isDiscordWebhookEnabled()) {
+if ($sb->isDiscordWebhookEnabled()) {
     //$data = [
     $webhook_data = [
         'id' => $insertID,
@@ -135,7 +135,7 @@ if ($orange->isDiscordWebhookEnabled()) {
         'type' => $_POST['type'],
     ];
 
-    $orange->getDiscordWebhookClass()->newCommentHook($webhook_data, true);
+    $sb->getDiscordWebhookClass()->newCommentHook($webhook_data, true);
 }
 
 echo $twig->render('components/comment.twig', [

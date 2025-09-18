@@ -20,13 +20,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
 global $twig, $database;
 
 use BluffingoCore\CoreUtilities;
-use SquareBracket\UploadQuery;
-use SquareBracket\Utilities;
+use OpenSB\UploadQuery;
+use OpenSB\Utilities;
 
 $submission_query = new UploadQuery($database);
 

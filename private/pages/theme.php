@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $twig;
+global $sb, $twig;
 
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
 // scan for localizations
 $localesPath = BLUFF_PRIVATE_PATH . "/locales/";
@@ -44,7 +44,7 @@ if (is_dir($localesPath)) {
         }
     }
 
-    if ($orange->isDebug()) {
+    if ($sb->isDebug()) {
         $locales[] = [
             'id' => "psuedo",
             'name' => "Psuedolocale",
@@ -56,7 +56,7 @@ if (is_dir($localesPath)) {
 
 if (isset($_POST['apply'])) {
     $options = [];
-    $options = $orange->getOptionsCookie();
+    $options = $sb->getOptionsCookie();
 
     $new = explode(",", $_POST["theme"]);
 
@@ -66,7 +66,7 @@ if (isset($_POST['apply'])) {
 
     $options["locale"] = $_POST['locale'];
 
-    $orange->setOptionCookie($options);
+    $sb->setOptionCookie($options);
 
     Utilities::notifyBanner("notify_successfully_updated_options", "/", "success");
 }

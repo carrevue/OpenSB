@@ -19,17 +19,17 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $database, $twig;
+global $sb, $database, $twig;
 
 use Exception;
-use SquareBracket\CommentData;
-use SquareBracket\CommentLocation;
+use OpenSB\CommentData;
+use OpenSB\CommentLocation;
 
 header('Content-Type: application/json');
 
-if ($orange->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getLocalOptions()["skin"] != "finalium") {
     $apiOutput = [
         "error" => "Not supported here."
     ];

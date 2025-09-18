@@ -19,16 +19,16 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $database;
+global $sb, $database;
 
 use DateMalformedStringException;
 use DateTime;
 use Random\RandomException;
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
-if (!$orange->isDebug()) {
+if (!$sb->isDebug()) {
     http_response_code(403);
     die();
 }
@@ -74,12 +74,12 @@ if (isset($_POST["submit"])) {
         [$username, $hashedPassword, $token, time(), time(), $username, $email, "ip", $dobDateTime->format('Y-m-d')]
     );
 
-    if ($orange->isDiscordWebhookEnabled()) {
+    if ($sb->isDiscordWebhookEnabled()) {
         $data = [
             "username" => $username,
         ];
 
-        $orange->getDiscordWebhookClass()->newUserHook($data);
+        $sb->getDiscordWebhookClass()->newUserHook($data);
     }
 }
 ?>

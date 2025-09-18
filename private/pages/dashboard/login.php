@@ -19,18 +19,18 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $twig, $database, $orange;
+global $auth, $twig, $database, $sb;
 
-use SquareBracket\Utilities;
-use SquareBracket\UserRoleEnum;
+use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
-if ($orange->getLocalOptions()["skin"] != "trinium") {
+if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 

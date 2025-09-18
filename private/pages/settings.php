@@ -21,16 +21,16 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $twig, $auth, $database;
+global $sb, $twig, $auth, $database;
 
 use Random\RandomException;
-use SquareBracket\UserFlags;
-use SquareBracket\Utilities;
-use SquareBracket\UserCustomizationFont;
+use OpenSB\UserFlags;
+use OpenSB\Utilities;
+use OpenSB\UserCustomizationFont;
 
-$options = $orange->getLocalOptions();
+$options = $sb->getLocalOptions();
 
 $trinium_fonts_array = UserCustomizationFont::getAll();
 
@@ -91,7 +91,7 @@ if (isset($_POST['save'])) {
         $font = $_POST['font'] ?? "default";
     }
 
-    if ($auth->isUserOver18() && !$orange->isChazizSquareBracketInstance()) {
+    if ($auth->isUserOver18() && !$sb->isChazizSquareBracketInstance()) {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
     } else {
         $rating = 'general';
@@ -191,14 +191,14 @@ if (isset($_POST['save'])) {
         $name = $_FILES['profilePicture']['name'];
         $temp_name = $_FILES['profilePicture']['tmp_name'];
         $ext = pathinfo($_FILES['profilePicture']['name'], PATHINFO_EXTENSION);
-        $orange->getStorageClass()->processProfilePicture($temp_name, $auth->getUserData()["id"]);
+        $sb->getStorageClass()->processProfilePicture($temp_name, $auth->getUserData()["id"]);
     }
 
     if (!empty($_FILES['profileBanner']['name'])) {
         $name = $_FILES['profileBanner']['name'];
         $temp_name = $_FILES['profileBanner']['tmp_name'];
         $ext = pathinfo($_FILES['profileBanner']['name'], PATHINFO_EXTENSION);
-        $orange->getStorageClass()->processProfileBanner($temp_name, $auth->getUserData()["id"]);
+        $sb->getStorageClass()->processProfileBanner($temp_name, $auth->getUserData()["id"]);
     }
 
     if (!$error) {

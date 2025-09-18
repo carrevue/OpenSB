@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
 global $database;
 
-use SquareBracket\VersionNumber;
+use OpenSB\VersionNumber;
 
 header('Content-Type: application/json');
 

@@ -19,16 +19,16 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-use SquareBracket\NotificationEnum;
-use SquareBracket\Utilities;
+use OpenSB\NotificationEnum;
+use OpenSB\Utilities;
 
-global $orange, $database, $auth;
+global $sb, $database, $auth;
 // and nope, no twig here. this is a quick and dirty page meant to test out notifications.
 // its fucking ugly and shouldnt be used as a reference point for the opensb codebase
 
-if (!$orange->isDebug()) {
+if (!$sb->isDebug()) {
     http_response_code(403);
     die();
 }

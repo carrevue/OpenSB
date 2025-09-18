@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -28,12 +28,12 @@ use BluffingoCore\Database;
 
 class Storage
 {
-    private SquareBracket $orange;
+    private SquareBracket $sb;
     private Database $database;
-    public function __construct(SquareBracket $orange)
+    public function __construct(SquareBracket $sb)
     {
-        $this->orange = $orange;
-        $this->database = $orange->getDatabaseClass();
+        $this->sb = $sb;
+        $this->database = $sb->getDatabaseClass();
     }
 
     public function processVideoUpload($new, $target_file): void
@@ -61,7 +61,7 @@ class Storage
 
     public function getVideoUploadThumbnail($id, $custom): string
     {
-        $placeholder = $this->orange->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
+        $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
 
         return $this->getThumbnailPath(
             $id,
@@ -74,7 +74,7 @@ class Storage
 
     public function getImageUploadThumbnail($id, $custom): string
     {
-        $placeholder = $this->orange->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
+        $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
 
         return $this->getThumbnailPath(
             $id,
@@ -87,7 +87,7 @@ class Storage
 
     public function getUserProfilePicture($username, $isAdmin): string
     {
-        $placeholder = $this->orange->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+        $placeholder = $this->sb->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
         $id = Utilities::usernameToUserID($this->database, $username);
 

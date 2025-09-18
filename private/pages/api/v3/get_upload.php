@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
 global $database;
 
-use SquareBracket\UploadData;
-use SquareBracket\UserData;
+use OpenSB\UploadData;
+use OpenSB\UserData;
 
 header('Content-Type: application/json');
 

@@ -26,7 +26,7 @@ namespace OpenSB;
 
 global $database;
 
-use SquareBracket\VersionNumber;
+use OpenSB\VersionNumber;
 
 use DivisionByZeroError;
 use Alchemy\BinaryDriver\Exception\ExecutionFailureException;
@@ -286,12 +286,12 @@ try {
             [$length, $videoData['flags'] ^ 0x2, $new]
         );
 
-        if ($orange->isDiscordWebhookEnabled()) {
+        if ($sb->isDiscordWebhookEnabled()) {
             $data = [
                 'id' => $new,
             ];
 
-            $orange->getDiscordWebhookClass()->uploadProcessingWorkerSuccessHook($data);
+            $sb->getDiscordWebhookClass()->uploadProcessingWorkerSuccessHook($data);
         }
     } else {
         log("Not a website video, skipping.");
@@ -306,12 +306,12 @@ try {
         log($previous->getErrorOutput());
     }
 
-    if ($orange->isDiscordWebhookEnabled()) {
+    if ($sb->isDiscordWebhookEnabled()) {
         $data = [
             'id' => $new,
         ];
 
-        $orange->getDiscordWebhookClass()->uploadProcessingWorkerFailHook($data);
+        $sb->getDiscordWebhookClass()->uploadProcessingWorkerFailHook($data);
     }
 
     clearstatcache();

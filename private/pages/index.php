@@ -21,18 +21,18 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $orange;
+global $twig, $database, $sb;
 
-use SquareBracket\UploadFlags;
-use SquareBracket\UploadQuery;
-use SquareBracket\Utilities;
-use SquareBracket\UserData;
+use OpenSB\UploadFlags;
+use OpenSB\UploadQuery;
+use OpenSB\Utilities;
+use OpenSB\UserData;
 
 $submission_query = new UploadQuery($database);
 
-$options = $orange->getLocalOptions();
+$options = $sb->getLocalOptions();
 
 $trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new_shit"] == "true";
 

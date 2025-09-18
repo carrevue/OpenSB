@@ -20,13 +20,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $auth, $orange;
+global $twig, $database, $auth, $sb;
 
-use SquareBracket\UploadData;
-use SquareBracket\UploadFlags;
-use SquareBracket\Utilities;
+use OpenSB\UploadData;
+use OpenSB\UploadFlags;
+use OpenSB\Utilities;
 
 if (isset($_POST['upload'])) {
     $id = ($_POST['vid_id'] ?? null);
@@ -74,7 +74,7 @@ if (isset($_POST['upload'])) {
         $name = $_FILES['thumbnail']['name'];
         $temp_name = $_FILES['thumbnail']['tmp_name'];
         $ext = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
-        $orange->getStorageClass()->processCustomUploadThumbnail($temp_name, $data["video_id"]);
+        $sb->getStorageClass()->processCustomUploadThumbnail($temp_name, $data["video_id"]);
 
         $flags |= UploadFlags::FLAG_CUSTOM_THUMBNAIL->value;
     }

@@ -19,13 +19,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
 global $twig, $database, $auth;
 
-use SquareBracket\NotificationEnum;
-use SquareBracket\UserData;
-use SquareBracket\Utilities;
+use OpenSB\NotificationEnum;
+use OpenSB\UserData;
+use OpenSB\Utilities;
 
 function typeToIntro($type)
 {

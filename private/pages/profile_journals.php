@@ -19,14 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $auth, $orange;
+global $twig, $database, $auth, $sb;
 
-use SquareBracket\Utilities;
-use SquareBracket\UserRoleEnum;
-use SquareBracket\UserFlags;
-use SquareBracket\UserCustomizationData;
+use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
+use OpenSB\UserFlags;
+use OpenSB\UserCustomizationData;
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
@@ -88,7 +88,7 @@ $page_data = [
     "customization" => $profile_customization_data?->getData() ?? false,
 ];
 
-if ($orange->getLocalOptions()["skin"] == "bootstrap") {
+if ($sb->getLocalOptions()["skin"] == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
 }
 

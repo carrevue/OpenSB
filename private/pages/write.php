@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $twig, $database, $auth;
+global $sb, $twig, $database, $auth;
 
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
 if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
@@ -33,7 +33,7 @@ if ($auth->getUserBanData()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
-if ($orange->isLockdownEnabled()) {
+if ($sb->isLockdownEnabled()) {
     Utilities::notifyBanner("notify_write_disabled", "/");
 }
 
@@ -43,7 +43,7 @@ if ($auth->getUserFlags(true)["unverified"]) {
     die();
 }
 
-if ($database->result("SELECT COUNT(*) FROM journals WHERE date > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$orange->isDebug()) {
+if ($database->result("SELECT COUNT(*) FROM journals WHERE date > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$sb->isDebug()) {
     Utilities::notifyBanner("notify_write_ratelimit", "/");
 }
 
@@ -62,7 +62,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
     $journal_id = $database->insertId();
 
-    if ($orange->isDiscordWebhookEnabled()) {
+    if ($sb->isDiscordWebhookEnabled()) {
         $data = [
             'id' => $journal_id,
             'name' => $title,
@@ -71,7 +71,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             'is_news' => $isSiteNews,
         ];
 
-        $orange->getDiscordWebhookClass()->newJournalHook($data);
+        $sb->getDiscordWebhookClass()->newJournalHook($data);
     }
 
     Utilities::notifyBanner("notify_write_success", "/read/" . $journal_id, "success");

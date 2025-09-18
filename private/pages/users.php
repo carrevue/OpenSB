@@ -22,11 +22,11 @@
 
 // ported from principia-web by chaziz -4/20/2023
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
 global $twig, $database;
 
-use SquareBracket\UserData;
+use OpenSB\UserData;
 
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 $limit = $database->paginate($page, pp: 20);

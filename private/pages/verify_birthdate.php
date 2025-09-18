@@ -19,25 +19,25 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $auth, $orange;
+global $twig, $database, $auth, $sb;
 
 use DateMalformedStringException;
 use DateTime;
 use BluffingoCore\CoreUtilities;
 
-if (isset($auth->getUserData()['birthdate']) && !$orange->isDebug()) {
+if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {
     CoreUtilities::redirect("/");
 }
 
-if ($orange->getLocalOptions()["skin"] != "trinium") {
-    $options = $orange->getOptionsCookie();
+if ($sb->getLocalOptions()["skin"] != "trinium") {
+    $options = $sb->getOptionsCookie();
 
     $options["skin"] = "trinium";
     $options["theme"] = "default";
 
-    $orange->setOptionCookie($options);
+    $sb->setOptionCookie($options);
 
     CoreUtilities::redirect("/verify_birthdate");
 }

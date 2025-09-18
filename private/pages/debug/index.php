@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange;
+global $sb;
 
-if (!$orange->isDebug()) {
+if (!$sb->isDebug()) {
     http_response_code(403);
     die();
 }

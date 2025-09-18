@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use Exception;
 use Twig\Environment;
@@ -32,19 +32,19 @@ use Twig\TwigFunction;
 
 class ErrorTemplating
 {
-    private SquareBracket $orange;
+    private SquareBracket $sb;
     private FilesystemLoader $loader;
     private Environment $twig;
 
     /**
      * @throws Exception
      */
-    public function __construct(SquareBracket $orange)
+    public function __construct(SquareBracket $sb)
     {
         chdir(BLUFF_PRIVATE_PATH);
 
-        $this->orange = $orange;
-        //$options = $this->orange->getLocalOptions();
+        $this->sb = $sb;
+        //$options = $this->sb->getLocalOptions();
 
         $skinPath = 'skins/error';
 
@@ -57,9 +57,9 @@ class ErrorTemplating
             throw new Exception("The error skin does not exist.");
         }
 
-        $this->twig = new Environment($this->loader, ['debug' => $orange->isDebug(), 'cache' => false]);
+        $this->twig = new Environment($this->loader, ['debug' => $sb->isDebug(), 'cache' => false]);
 
-        if ($orange->isDebug()) {
+        if ($sb->isDebug()) {
             $this->twig->addExtension(new DebugExtension());
         } else {
             $this->twig->addFunction(new TwigFunction('dump', function () {
@@ -69,10 +69,10 @@ class ErrorTemplating
 
         $versionNumber = new VersionNumber;
 
-        $this->twig->addGlobal('is_chaziz_sb', $orange->isChazizSquareBracketInstance());
-        $this->twig->addGlobal('is_fulptube', $orange->isFulpTube());
+        $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizSquareBracketInstance());
+        $this->twig->addGlobal('is_fulptube', $sb->isFulpTube());
         $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
-        $this->twig->addGlobal('website_branding', $orange->getBrandingSettings());
+        $this->twig->addGlobal('website_branding', $sb->getBrandingSettings());
 
         $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));
     }
@@ -80,7 +80,7 @@ class ErrorTemplating
     // copied from squarebrackettwigextension
     public function localize($key, ...$args)
     {
-        return $this->orange->getLocalizationClass()->translate($key, ...$args);
+        return $this->sb->getLocalizationClass()->translate($key, ...$args);
     }
 
     /**

@@ -128,6 +128,6 @@ foreach ($uploads as $upload) {
     );
 }
 
-if ($orange->isDiscordWebhookEnabled()) {
-    $orange->getDiscordWebhookClass()->recountViewsHook();
+if ($sb->isDiscordWebhookEnabled()) {
+    $sb->getDiscordWebhookClass()->recountViewsHook();
 }

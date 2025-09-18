@@ -19,9 +19,9 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $orange;
+global $twig, $sb;
 
 echo $twig->render('_markdown.twig', [
     'pagetitle' => 'Guidelines',

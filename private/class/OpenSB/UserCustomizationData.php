@@ -19,10 +19,10 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use BluffingoCore\Database;
-use SquareBracket\UserCustomizationFont;
+use OpenSB\UserCustomizationFont;
 
 class UserCustomizationData
 {

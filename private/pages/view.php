@@ -21,23 +21,23 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $auth, $orange;
+global $twig, $database, $auth, $sb;
 
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
-use SquareBracket\CommentData;
-use SquareBracket\CommentLocation;
-use SquareBracket\UploadData;
-use SquareBracket\UploadQuery;
-use SquareBracket\UploadRatingEnum;
-use SquareBracket\UserData;
-use SquareBracket\UserRoleEnum;
-use SquareBracket\Utilities;
+use OpenSB\CommentData;
+use OpenSB\CommentLocation;
+use OpenSB\UploadData;
+use OpenSB\UploadQuery;
+use OpenSB\UploadRatingEnum;
+use OpenSB\UserData;
+use OpenSB\UserRoleEnum;
+use OpenSB\Utilities;
 
-$options = $orange->getLocalOptions();
+$options = $sb->getLocalOptions();
 
-if ($orange->isFulpTube()) {
+if ($sb->isFulpTube()) {
     if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
         Utilities::notifyBanner("notify_original_fulptube_video", "/");
     }
@@ -272,7 +272,7 @@ if (!$recommended && !$uploads_by_author) {
     $random_uploads_array = [];
 }
 
-if ($orange->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getLocalOptions()["skin"] != "finalium") {
     $comments = new CommentData($database, CommentLocation::Upload, $id);
 
     $comment_data = $comments->getComments();

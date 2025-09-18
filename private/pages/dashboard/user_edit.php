@@ -19,14 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $twig, $database, $orange, $path;
+global $auth, $twig, $database, $sb, $path;
 
-use SquareBracket\UserData;
-use SquareBracket\UserFlags;
-use SquareBracket\Utilities;
-use SquareBracket\UserRoleEnum;
+use OpenSB\UserData;
+use OpenSB\UserFlags;
+use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");
@@ -36,11 +36,11 @@ if (!$auth->hasUserAuthenticatedAsStaff()) {
     Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
 }
 
-if ($orange->getLocalOptions()["skin"] != "trinium") {
+if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
-function discord_webhook_notify($orange, $auth, $user, $action)
+function discord_webhook_notify($sb, $auth, $user, $action)
 {
     $data = [
         'user' => $user,
@@ -48,7 +48,7 @@ function discord_webhook_notify($orange, $auth, $user, $action)
         'action' => $action,
     ];
 
-    $orange->getDiscordWebhookClass()->dashboardUserHook($data);
+    $sb->getDiscordWebhookClass()->dashboardUserHook($data);
 }
 
 $user = $database->fetch("SELECT u.*, (SELECT COUNT(*) FROM user_bans WHERE userid = u.id) AS is_banned FROM users u WHERE u.name = ?", [$username]);
@@ -86,8 +86,8 @@ if (isset($_POST['ban_user'])) {
     if ($database->fetch("SELECT b.userid FROM user_bans b WHERE b.userid = ?", [$user["id"]])) {
         $database->query("DELETE FROM user_bans WHERE userid = ?", [$user["id"]]);
 
-        if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $auth, $_POST["ban_user"], 'unbanned');
+        if ($sb->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($sb, $auth, $_POST["ban_user"], 'unbanned');
         }
 
         Utilities::notifyBanner("notify_dashboard_unban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
@@ -97,8 +97,8 @@ if (isset($_POST['ban_user'])) {
             [$user["id"], "Banned by " . $auth->getUserData()["name"], time()]
         );
 
-        if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $auth, $_POST["ban_user"], 'banned');
+        if ($sb->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($sb, $auth, $_POST["ban_user"], 'banned');
         }
 
         Utilities::notifyBanner("notify_dashboard_ban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
@@ -123,8 +123,8 @@ if (isset($_POST['verify_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $auth, $_POST["verify_user"], 'verified');
+        if ($sb->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($sb, $auth, $_POST["verify_user"], 'verified');
         }
 
         Utilities::notifyBanner("notify_dashboard_verify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
@@ -136,8 +136,8 @@ if (isset($_POST['verify_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $auth, $_POST["verify_user"], 'unverified');
+        if ($sb->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($sb, $auth, $_POST["verify_user"], 'unverified');
         }
 
         Utilities::notifyBanner("notify_dashboard_unverify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
@@ -172,8 +172,8 @@ foreach ($notes as $note) {
     ];
 }
 
-if ($orange->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Administrator)) {
-    $ip_info = $orange->getIpLookupClass()->getInfo($user["ip"]);
+if ($sb->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Administrator)) {
+    $ip_info = $sb->getIpLookupClass()->getInfo($user["ip"]);
 } else {
     $ip_info = [];
 }

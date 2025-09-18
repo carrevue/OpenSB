@@ -56,11 +56,11 @@ $config = include_once(BLUFF_PRIVATE_PATH . '/config/config.php');
 
 require_once(BLUFF_VENDOR_PATH . '/autoload.php');
 
-use SquareBracket\ErrorTemplating;
-use SquareBracket\SquareBracket;
-use SquareBracket\Templating;
-use SquareBracket\Utilities;
-use SquareBracket\VersionNumber;
+use OpenSB\ErrorTemplating;
+use OpenSB\SquareBracket;
+use OpenSB\Templating;
+use OpenSB\Utilities;
+use OpenSB\VersionNumber;
 
 ini_set('session.gc_maxlifetime', 86400);
 
@@ -177,15 +177,15 @@ set_exception_handler(function ($exception) {
     }
 });
 
-// now initialize the orange classes
-$orange = new SquareBracket($config);
-$database = $orange->getDatabaseClass();
+// now initialize the sb classes
+$sb = new SquareBracket($config);
+$database = $sb->getDatabaseClass();
 
 if (!BLUFF_CLI) {
     $version_number = new VersionNumber(); // kinda ugly imo
     header('X-Powered-By: OpenSB ' . $version_number->getVersionString());
 
-    $auth = $orange->getAuthenticationClass(); // temporary ig?
+    $auth = $sb->getAuthenticationClass(); // temporary ig?
 
     // automatic stuff
     // this should probably have a cooldown or something i don't fucking know
@@ -205,7 +205,7 @@ if (!BLUFF_CLI) {
     }
     */
 
-    $twig_error = new ErrorTemplating($orange);
+    $twig_error = new ErrorTemplating($sb);
 
     $ipban = $database->fetch(
         "SELECT * FROM ip_bans WHERE ? LIKE ip",
@@ -218,7 +218,7 @@ if (!BLUFF_CLI) {
             [Utilities::getIpAddress()]
         ));
 
-        if ($orange->isDebug() && (!$ipban)) {
+        if ($sb->isDebug() && (!$ipban)) {
             $ipban = [
                 "ip" => Utilities::getIpAddress(),
             ];
@@ -233,21 +233,21 @@ if (!BLUFF_CLI) {
         die();
     }
 
-    if ($orange->isUnderMaintenance() && !BLUFF_PHP_BUILTINSERVER) {
+    if ($sb->isUnderMaintenance() && !BLUFF_PHP_BUILTINSERVER) {
         http_response_code(503);
         echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
         die();
     }
 
     if (
-        $orange->isChazizSquareBracketInstance() &&
-        $orange->isIpLookupEnabled() &&
-        $orange->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB" // online safety act
+        $sb->isChazizSquareBracketInstance() &&
+        $sb->isIpLookupEnabled() &&
+        $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB" // online safety act
     ) {
         http_response_code(451);
         echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);
         die();
     }
 
-    $twig = new Templating($orange);
+    $twig = new Templating($sb);
 }

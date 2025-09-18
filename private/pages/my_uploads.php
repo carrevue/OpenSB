@@ -20,11 +20,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $orange, $auth, $database;
+global $twig, $sb, $auth, $database;
 
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
 $type = ($_GET['type'] ?? 'recent');
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
@@ -35,7 +35,7 @@ if (!$auth->isUserLoggedIn()) {
 
 $limit = $database->paginate($page, 20);
 
-$database = $orange->getDatabaseClass();
+$database = $sb->getDatabaseClass();
 $submissions = $database->fetchArray($database->query("SELECT v.* FROM uploads v WHERE v.video_id NOT IN (SELECT submission FROM upload_takedowns) AND v.author = ? ORDER BY v.id DESC $limit", [$auth->getUserID()]));
 $submission_count = $database->result("SELECT COUNT(*) FROM uploads u where u.author = ?", [$auth->getUserID()]);
 

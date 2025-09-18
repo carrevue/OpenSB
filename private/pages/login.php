@@ -21,14 +21,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $auth, $orange;
+global $twig, $database, $auth, $sb;
 
 use BluffingoCore\CoreUtilities;
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
-$warning = $orange->getWarningString();
+$warning = $sb->getWarningString();
 
 if (isset($user)) {
     if (isset($_POST["loginsubmit"])) {
@@ -41,7 +41,7 @@ if (isset($user)) {
 
     $is_the_account_in_the_accounts_array = false;
     $id = Utilities::usernameToUserID($database, $user);
-    $accounts = $orange->getAccountsArray();
+    $accounts = $sb->getAccountsArray();
     $new_array = [];
     $token = null;
 

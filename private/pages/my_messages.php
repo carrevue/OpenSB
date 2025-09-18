@@ -19,14 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $auth, $twig_error, $orange;
+global $twig, $database, $auth, $twig_error, $sb;
 
-use SquareBracket\UserData;
-use SquareBracket\Utilities;
+use OpenSB\UserData;
+use OpenSB\Utilities;
 
-if (!$orange->isIncompleteFeaturesEnabled()) {
+if (!$sb->isIncompleteFeaturesEnabled()) {
     http_response_code(404);
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
 }

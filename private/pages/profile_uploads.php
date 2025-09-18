@@ -19,16 +19,16 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $database, $twig, $orange;
+global $auth, $database, $twig, $sb;
 
 use BluffingoCore\CoreUtilities;
-use SquareBracket\Utilities;
-use SquareBracket\UserRoleEnum;
-use SquareBracket\UserFlags;
-use SquareBracket\UserCustomizationData;
-use SquareBracket\UploadQuery;
+use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
+use OpenSB\UserFlags;
+use OpenSB\UserCustomizationData;
+use OpenSB\UploadQuery;
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
@@ -95,7 +95,7 @@ $page_data = [
     "count" => $submission_count,
 ];
 
-if ($orange->getLocalOptions()["skin"] == "bootstrap") {
+if ($sb->getLocalOptions()["skin"] == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
 }
 

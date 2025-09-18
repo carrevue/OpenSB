@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $orange;
+global $auth, $sb;
 
-use SquareBracket\NotificationEnum;
-use SquareBracket\Utilities;
+use OpenSB\NotificationEnum;
+use OpenSB\Utilities;
 
 header('Content-Type: application/json');
 
@@ -40,7 +40,7 @@ if ($auth->getUserBanData()) {
     ];
 }
 
-$database = $orange->getDatabaseClass();
+$database = $sb->getDatabaseClass();
 
 function follow($member): array
 {

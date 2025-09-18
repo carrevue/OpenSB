@@ -20,12 +20,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use BluffingoCore\Database;
 use BluffingoCore\CoreUtilities;
 
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
 use \DiscordWebhooks\Client;
 use \DiscordWebhooks\Embed;
@@ -38,13 +38,13 @@ class DiscordWebhookLogging
     private ?string $domain;
     private ?Client $webhook = null;
 
-    public function __construct(SquareBracket $orange, $url)
+    public function __construct(SquareBracket $sb, $url)
     {
-        $this->database = $orange->getDatabaseClass();
+        $this->database = $sb->getDatabaseClass();
 
         $this->url = $url;
 
-        $this->footer_text = $orange->getBrandingSettings()["name"]
+        $this->footer_text = $sb->getBrandingSettings()["name"]
             . ' / OpenSB ' . (new VersionNumber())->getVersionString();
 
         $this->domain = CoreUtilities::getURL(false);

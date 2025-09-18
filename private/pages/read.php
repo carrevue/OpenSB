@@ -19,16 +19,16 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $twig, $database, $auth;
+global $sb, $twig, $database, $auth;
 
 use BluffingoCore\CoreUtilities;
-use SquareBracket\CommentData;
-use SquareBracket\CommentLocation;
-use SquareBracket\UserCustomizationData;
-use SquareBracket\UserData;
-use SquareBracket\Utilities;
+use OpenSB\CommentData;
+use OpenSB\CommentLocation;
+use OpenSB\UserCustomizationData;
+use OpenSB\UserData;
+use OpenSB\Utilities;
 
 if ($_GET['j'] ?? null) {
     CoreUtilities::redirect('/read/' . $_GET['j'], 301);
@@ -46,7 +46,7 @@ if ($auth->getUserID() == $data["author"]) {
     $owner = false;
 }
 
-if ($orange->isFulpTube() && $data["is_site_news"]) {
+if ($sb->isFulpTube() && $data["is_site_news"]) {
     $data["title"] = Utilities::replaceSquareBracketWithFulpTube($data["title"]);
     $data["post"] = Utilities::replaceSquareBracketWithFulpTube($data["post"]);
 }

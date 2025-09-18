@@ -20,8 +20,8 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange;
+global $sb;
 
-$orange->getAuthenticationClass()->logOut();
+$sb->getAuthenticationClass()->logOut();

@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
 global $twig, $database;
 
-use SquareBracket\VersionNumber;
+use OpenSB\VersionNumber;
 use BluffingoCore\CoreVersionNumber;
 
 $database_version = $database->getServerVersion();

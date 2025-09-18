@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Tools;
 
 // TODO: make this work with new opensb 2.0 table names -chaziz 1/6/2025
 

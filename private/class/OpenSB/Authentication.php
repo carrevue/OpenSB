@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use BluffingoCore\Database;
 use BluffingoCore\CoreUtilities;
@@ -170,16 +170,6 @@ class Authentication
     {
         return $this->is_logged_in
             && ($this->user_data['powerlevel'] ?? UserRoleEnum::None->value) >= $role->value;
-    }
-
-    /**
-     * Checks if the logged-in user is an administrator (or of higher status).
-     * 
-     * @deprecated
-     */
-    public function isUserAdministrator(): bool
-    {
-        return $this->userHasRole(UserRoleEnum::Administrator);
     }
 
     /**

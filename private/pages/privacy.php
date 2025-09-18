@@ -22,7 +22,7 @@
 
 // ported from principia-web by chaziz -4/20/2023
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
 global $twig;
 

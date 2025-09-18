@@ -22,29 +22,29 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $twig, $database;
+global $sb, $twig, $database;
 
 use DateMalformedStringException;
 use DateTime;
 use BluffingoCore\CoreUtilities;
 use Random\RandomException;
-use SquareBracket\UserFlags;
-use SquareBracket\Utilities;
+use OpenSB\UserFlags;
+use OpenSB\Utilities;
 
-if (!$orange->isAccountRegistrationEnabled()) {
+if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
 }
 
-$captcha = $orange->returnCaptchaSettings();
+$captcha = $sb->returnCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
 // kind of access denied error. run this command as root/sudo:
 // setsebool -P httpd_can_network_connect on
 // -chaziz 4/19/2025
 
-$enableInviteKeys = $orange->isInviteKeysEnabled();
+$enableInviteKeys = $sb->isInviteKeysEnabled();
 
 if (isset($_POST['registersubmit'])) {
     $error = "";
@@ -87,7 +87,7 @@ if (isset($_POST['registersubmit'])) {
             FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
         ) === false);
 
-    if (!$orange->isInviteKeysEnabled() || !$orange->isDebug()) {
+    if (!$sb->isInviteKeysEnabled() || !$sb->isDebug()) {
         if (!$isLocalIp) {
             if ($database->result("SELECT COUNT(*) FROM users WHERE ip = ?", [Utilities::getIpAddress()]) >= 2)
                 $error .= "Your IP address has too many accounts associated with it. ";
@@ -125,11 +125,11 @@ if (isset($_POST['registersubmit'])) {
     if (!$error) {
         $flags = 0;
 
-        if ($orange->isChazizSquareBracketInstance()) {
+        if ($sb->isChazizSquareBracketInstance()) {
             $flags |= UserFlags::FLAG_UNVERIFIED->value;
         }
 
-        if ($orange->isFulpTube()) {
+        if ($sb->isFulpTube()) {
             $flags |= UserFlags::FLAG_FULPTUBE_ACCOUNT->value;
         }
 
@@ -156,12 +156,12 @@ if (isset($_POST['registersubmit'])) {
 
         $_SESSION["SBTOKEN"] = $token;
 
-        if ($orange->isDiscordWebhookEnabled()) {
+        if ($sb->isDiscordWebhookEnabled()) {
             $data = [
                 "username" => $username,
             ];
 
-            $orange->getDiscordWebhookClass()->newUserHook($data);
+            $sb->getDiscordWebhookClass()->newUserHook($data);
         }
 
         CoreUtilities::redirect('./');

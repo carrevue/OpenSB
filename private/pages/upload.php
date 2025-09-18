@@ -22,13 +22,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $orange, $database, $twig, $auth;
+global $sb, $database, $twig, $auth;
 
-use SquareBracket\Utilities;
-use SquareBracket\UserRoleEnum;
-use SquareBracket\DiscordWebhookLogging;
+use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
+use OpenSB\DiscordWebhookLogging;
 
 use \DiscordWebhooks\Embed;
 
@@ -51,7 +51,7 @@ if ($auth->getUserBanData()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
-if ($orange->isLockdownEnabled()) {
+if ($sb->isLockdownEnabled()) {
     Utilities::notifyBanner("notify_upload_disabled", "/");
 }
 
@@ -76,7 +76,7 @@ if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
         $rateLimit = 1 * 60;
     }
 
-    if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$orange->isDebug()) {
+    if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$sb->isDebug()) {
         $waitTimeMinutes = $rateLimit / 60;
         Utilities::notifyBanner("notify_upload_ratelimit", "/", "warning", [$waitTimeMinutes]);
     }
@@ -112,7 +112,7 @@ function parse_tags($tags, $upload_id, $database)
     }
 }
 
-function discord_webhook_notify($orange, $new, $title, $description, $auth)
+function discord_webhook_notify($sb, $new, $title, $description, $auth)
 {
     $data = [
         'id' => $new,
@@ -121,7 +121,7 @@ function discord_webhook_notify($orange, $new, $title, $description, $auth)
         'author' => $auth->getUserData()["name"]
     ];
 
-    $orange->getDiscordWebhookClass()->newUploadHook($data);
+    $sb->getDiscordWebhookClass()->newUploadHook($data);
 }
 
 if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLoggedIn()) {
@@ -131,7 +131,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $title = ($_POST['title'] ?? null);
     $description = ($_POST['desc'] ?? null);
 
-    if ($orange->isChazizSquareBracketInstance()) {
+    if ($sb->isChazizSquareBracketInstance()) {
         $rating = 'general';
     } else {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
@@ -144,7 +144,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         $tags2 = preg_split('/[\s,]+/', trim($tags, ","));
     }
 
-    if ($orange->isDebug()) {
+    if ($sb->isDebug()) {
         $noProcess = ($_POST['debugUploaderSkip'] ?? null);
     }
 
@@ -153,7 +153,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $ext = pathinfo($_FILES['fileToUpload']['name'], PATHINFO_EXTENSION);
 
     if (in_array(strtolower($ext), $supportedVideoFormats, true)) { // VIDEO
-        if (isset($noProcess) && $orange->isDebug()) {
+        if (isset($noProcess) && $sb->isDebug()) {
             $status = 0x0; // pretend that video has been successfully uploaded
             $target_file = BLUFF_DYNAMIC_PATH . '/dynamic/videos/' . $new . '.converted.' . $ext;
         } else {
@@ -167,13 +167,13 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             );
 
             if (!isset($noProcess)) {
-                $orange->getStorageClass()->processVideoUpload($new, $target_file);
+                $sb->getStorageClass()->processVideoUpload($new, $target_file);
             }
 
             parse_tags($tags2, $new, $database);
 
-            if ($orange->isDiscordWebhookEnabled()) {
-                discord_webhook_notify($orange, $new, $title, $description, $auth);
+            if ($sb->isDiscordWebhookEnabled()) {
+                discord_webhook_notify($sb, $new, $title, $description, $auth);
             }
 
             Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
@@ -181,7 +181,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
         }
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
-        $orange->getStorageClass()->processImageUpload($temp_name, $new);
+        $sb->getStorageClass()->processImageUpload($temp_name, $new);
         $status = 0x0;
         $database->query(
             "INSERT INTO uploads (video_id, title, description, author, time, tags, videofile, flags, post_type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
@@ -190,8 +190,8 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
         parse_tags($tags2, $new, $database);
 
-        if ($orange->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($orange, $new, $title, $description, $auth);
+        if ($sb->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($sb, $new, $title, $description, $auth);
         }
 
         Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");

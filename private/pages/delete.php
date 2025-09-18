@@ -19,18 +19,18 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $orange, $database;
+global $auth, $sb, $database;
 
-use SquareBracket\UploadData;
-use SquareBracket\Utilities;
+use OpenSB\UploadData;
+use OpenSB\Utilities;
 
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025
 
 $id = ($_GET['v'] ?? null);
 
-$submission = new UploadData($orange->getDatabaseClass(), $id);
+$submission = new UploadData($sb->getDatabaseClass(), $id);
 $data = $submission->getData();
 
 if (!$auth->isUserLoggedIn()) {
@@ -44,6 +44,6 @@ if ($auth->getUserID() != $data["author"]) {
 $database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["time"], time()]);
 $database->query("DELETE FROM uploads WHERE video_id = ?", [$id]);
 
-$orange->getStorageClass()->deleteUploadFile($data);
+$sb->getStorageClass()->deleteUploadFile($data);
 
 Utilities::notifyBanner("notify_successfully_deleted_upload", "/my_uploads", "success");

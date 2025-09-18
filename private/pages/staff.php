@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $orange;
+global $twig, $database, $sb;
 
-use SquareBracket\UserData;
-use SquareBracket\UserRoleEnum;
+use OpenSB\UserData;
+use OpenSB\UserRoleEnum;
 
 $staffQueryData = $database->fetchArray(
     $database->query(

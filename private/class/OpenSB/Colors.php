@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2025 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,15 +19,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
-use Parsedown;
-
-class ParsedownExtension extends Parsedown
+final class Colors
 {
-
-    // We don't need headers
-    protected function blockHeader($Line): void {}
-
-    protected function blockSetextHeader($Line, array|null $Block = []): void {}
+    /* IMPORTANT: These should be kept in sync with the colors in the Trinium frontend. */
+    const PRIMARY = '#0069B4';
+    const SUCCESS = '#00A651';
+    const WARNING = '#FFBB00';
+    const DANGER  = '#CB122E';
 }

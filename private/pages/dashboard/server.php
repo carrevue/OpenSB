@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $twig, $database, $orange, $path;
+global $auth, $twig, $database, $sb, $path;
 
-use SquareBracket\Utilities;
-use SquareBracket\UserRoleEnum;
+use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
 use BluffingoCore\Composer\ComposerInstalled;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
@@ -35,7 +35,7 @@ if (!$auth->hasUserAuthenticatedAsStaff()) {
     Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
 }
 
-if ($orange->getLocalOptions()["skin"] != "trinium") {
+if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 

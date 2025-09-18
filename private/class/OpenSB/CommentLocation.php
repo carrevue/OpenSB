@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2023-2025 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,31 +19,23 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
-enum UserFlags: int
+use InvalidArgumentException;
+
+enum CommentLocation
 {
-    /**
-     * 00000001: Enable profile customization
-     */
-    case FLAG_PROFILE_CUSTOMIZATION_ENABLED = 1;
+    case Upload;
+    case Profile;
+    case Journal;
 
-    /**
-     * 00000010: Lmao
-     */
-    case FLAG_UNVERIFIED = 2;
-
-    /**
-     * 10000000: Account was created on FulpTube.rocks
-     */
-    case FLAG_FULPTUBE_ACCOUNT = 80;
-
-    public static function toArray(int $flags): array
+    public static function fromString(string $location): self
     {
-        return [
-            'fulptube_account' => (bool)($flags & self::FLAG_FULPTUBE_ACCOUNT->value),
-            'unverified' => (bool)($flags & self::FLAG_UNVERIFIED->value),
-            'profile_customization_enabled' => (bool)($flags & self::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value),
-        ];
+        return match (strtolower(string: $location)) {
+            'upload' => self::Upload,
+            'profile' => self::Profile,
+            'journal' => self::Journal,
+            default => throw new InvalidArgumentException("invalid location $location")
+        };
     }
 }

@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2025 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,27 +19,23 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace SquareBracket;
+namespace OpenSB;
 
 use InvalidArgumentException;
 
-enum UserRoleEnum: int
+enum UploadRatingEnum: int
 {
-    case None = 0;
-    case Normal = 1;
-    case Moderator = 2;
-    case Administrator = 3;
-    case Owner = 4;
+    case General = 0;
+    case Questionable = 1; // unused
+    case Mature = 2;
 
     public static function fromString(string $rating): self
     {
         return match (strtolower($rating)) {
-            'none' => self::None,
-            'normal' => self::Normal,
-            'moderator' => self::Moderator,
-            'administrator' => self::Administrator,
-            'owner' => self::Owner,
-            default => throw new InvalidArgumentException("invalid role $rating")
+            'general' => self::General,
+            'questionable' => self::Questionable,
+            'mature' => self::Mature,
+            default => throw new InvalidArgumentException("invalid rating $rating")
         };
     }
 
@@ -47,11 +43,9 @@ enum UserRoleEnum: int
     public function toString(): string
     {
         return match ($this) {
-            self::None => 'none',
-            self::Normal => 'normal',
-            self::Moderator => 'moderator',
-            self::Administrator => 'administrator',
-            self::Owner => 'owner'
+            self::General => 'general',
+            self::Questionable => 'questionable',
+            self::Mature => 'mature',
         };
     }
 }

@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $twig, $database, $auth, $orange;
+global $twig, $database, $auth, $sb;
 
 use BluffingoCore\CoreUtilities;
-use SquareBracket\Utilities;
+use OpenSB\Utilities;
 
 $journal_count = 0;
 $data = [];

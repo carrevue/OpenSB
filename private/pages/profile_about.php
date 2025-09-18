@@ -19,26 +19,26 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace OpenSB\Pages;
 
-global $auth, $database, $twig, $orange;
+global $auth, $database, $twig, $sb;
 
 use BluffingoCore\CoreUtilities;
-use SquareBracket\CommentData;
-use SquareBracket\CommentLocation;
-use SquareBracket\UploadData;
-use SquareBracket\UploadQuery;
-use SquareBracket\UserCustomizationData;
-use SquareBracket\UserFlags;
-use SquareBracket\UserRoleEnum;
-use SquareBracket\Utilities;
+use OpenSB\CommentData;
+use OpenSB\CommentLocation;
+use OpenSB\UploadData;
+use OpenSB\UploadQuery;
+use OpenSB\UserCustomizationData;
+use OpenSB\UserFlags;
+use OpenSB\UserRoleEnum;
+use OpenSB\Utilities;
 
 $submission_query = new UploadQuery($database);
 
-$options = $orange->getLocalOptions();
+$options = $sb->getLocalOptions();
 
 // if we're not on finalium, redirect to the normal profile page.
-if ($orange->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getLocalOptions()["skin"] != "finalium") {
     CoreUtilities::redirect("/user/$username");
 }
 
@@ -114,7 +114,7 @@ $profile_data = [
 ];
 
 /*
-if ($orange->getLocalOptions()["skin"] == "bootstrap") {
+if ($sb->getLocalOptions()["skin"] == "bootstrap") {
     $profile_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["customcolor"]);
 }
 */
