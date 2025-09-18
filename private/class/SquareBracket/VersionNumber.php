@@ -21,6 +21,9 @@
 
 namespace SquareBracket;
 
+use BluffingoCore\GitInfo;
+use Exception;
+
 class VersionNumber
 {
     private string $versionName;
@@ -36,16 +39,14 @@ class VersionNumber
 
     /**
      * Makes the version string.
-     *
      */
     private function makeVersionString(): string
     {
-        if (file_exists(BLUFF_GIT_PATH)) {
-            $gitHead = file_get_contents(BLUFF_GIT_PATH . '/HEAD');
-            $gitBranch = rtrim(preg_replace("/(.*?\/){2}/", '', $gitHead));
-            $commit = file_get_contents(BLUFF_GIT_PATH . '/refs/heads/' . $gitBranch); // kind of bad but hey it works
+        try {
+            $gitInfo = new GitInfo();
 
-            $hash = substr($commit, 0, 7);
+            $branch = $gitInfo->getGitBranch();
+            $hash = $gitInfo->getGitCommitHash();
 
             // if for example, the version number is opensb 2.0 and we're on 
             // the opensb-2.0 branch, we don't need to show the git branch as 
@@ -53,13 +54,13 @@ class VersionNumber
             if (preg_match('/^(\d+\.\d+)/', $this->versionNumber, $matches)) {
                 $majorMinor = $matches[1];
 
-                if (str_starts_with($gitBranch, 'opensb-' . $majorMinor)) {
+                if (str_starts_with($branch, 'opensb-' . $majorMinor)) {
                     return sprintf('%s-%s', $this->versionNumber, $hash);
                 }
             }
 
-            return sprintf('%s.%s-%s', $this->versionNumber, $gitBranch, $hash);
-        } else {
+            return sprintf('%s.%s-%s', $this->versionNumber, $branch, $hash);
+        } catch (Exception) {
             return $this->versionNumber;
         }
     }

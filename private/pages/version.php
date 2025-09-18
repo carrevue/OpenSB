@@ -32,8 +32,6 @@ $database_version = $database->getServerVersion();
 // OpenSB is intended to be used with either one of these.
 if (str_contains(strtolower($database_version), "maria")) {
     $database_server = "MariaDB";
-    // remove "from Debian" portion and the likes
-    $database_version = preg_replace('/\s+from.*$/i', '', $database_version);
 } else {
     $database_server = "MySQL";
 }
