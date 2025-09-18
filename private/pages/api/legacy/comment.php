@@ -20,7 +20,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace OpenSB\Pages\LegacyFrontendAPI;
 
 global $auth, $database, $twig, $sb;
 
@@ -93,18 +93,18 @@ if ($_POST['type'] == 'video') {
 
 if ($type == 0) {
     $database->query(
-        "INSERT INTO upload_comments (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
-        [$id, $reply_to, $_POST['comment'], $auth->getUserID(), time(), 0]
+        "INSERT INTO upload_comments (location_id, reply_to, comment, author, timestamp) VALUES (?,?,?,?,?)",
+        [$id, $reply_to, $_POST['comment'], $auth->getUserID(), time()]
     );
 } elseif ($type == 1) {
     $database->query(
-        "INSERT INTO user_profile_comments (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
-        [$id, $reply_to, $_POST['comment'], $auth->getUserID(), time(), 0]
+        "INSERT INTO user_profile_comments (location_id, reply_to, comment, author, timestamp) VALUES (?,?,?,?,?)",
+        [$id, $reply_to, $_POST['comment'], $auth->getUserID(), time()]
     );
 } elseif ($type == 2) {
     $database->query(
-        "INSERT INTO journal_comments (id, reply_to, comment, author, date, deleted) VALUES (?,?,?,?,?,?)",
-        [$id, $reply_to, $_POST['comment'], $auth->getUserID(), time(), 0]
+        "INSERT INTO journal_comments (location_id, reply_to, comment, author, timestamp) VALUES (?,?,?,?,?)",
+        [$id, $reply_to, $_POST['comment'], $auth->getUserID(), time()]
     );
 } else {
     die("this is still invalid");

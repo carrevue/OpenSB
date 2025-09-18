@@ -25,6 +25,8 @@ global $twig, $database, $auth, $sb;
 
 use DateMalformedStringException;
 use DateTime;
+
+use OpenSB\Utilities;
 use BluffingoCore\CoreUtilities;
 
 if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {

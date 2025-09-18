@@ -43,7 +43,7 @@ if ($auth->getUserFlags(true)["unverified"]) {
     die();
 }
 
-if ($database->result("SELECT COUNT(*) FROM journals WHERE date > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$sb->isDebug()) {
+if ($database->result("SELECT COUNT(*) FROM journals WHERE timestamp > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$sb->isDebug()) {
     Utilities::notifyBanner("notify_write_ratelimit", "/");
 }
 
@@ -56,7 +56,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $isSiteNews = ($auth->hasUserAuthenticatedAsStaff() && ($_POST['news'] ?? false)) ? 1 : 0;
 
     $database->query(
-        "INSERT INTO journals (title, post, author, date, is_news) VALUES (?,?,?,?,?)",
+        "INSERT INTO journals (title, post, author, timestamp, is_news) VALUES (?,?,?,?,?)",
         [$title, $description, $uploader, time(), $isSiteNews]
     );
 
