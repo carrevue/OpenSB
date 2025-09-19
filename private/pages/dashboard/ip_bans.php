@@ -49,7 +49,7 @@ $ipData = $database->fetchArray(
         "SELECT *
         FROM ip_bans
         WHERE (ip LIKE CONCAT('%', ?, '%'))
-        ORDER BY time DESC $limit
+        ORDER BY timestamp DESC $limit
         ",
         [$search]
     )
