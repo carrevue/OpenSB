@@ -32,7 +32,7 @@ class VersionNumber
 
     public function __construct()
     {
-        $this->versionName = "Experimental";
+        $this->versionName = "Sunset Valley";
         $this->versionNumber = "2.1.0-dev";
         $this->versionString = $this->makeVersionString();
     }
