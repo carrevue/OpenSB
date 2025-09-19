@@ -24,13 +24,13 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Desktop (please complete the following information):**
-- OS: [e.g. Windows, Linux, macOS, SerenityOS, etc.]
+- OS: [e.g. Windows, Linux, macOS, etc.]
 - Browser [e.g. Firefox, Chromium-based, Safari]
 - Version [e.g. 22]
 
 **Smartphone (please complete the following information):**
-- Device: [e.g. Samsung Galaxy A50, iPhone 11]
-- OS: [e.g. Android 11, iOS 16]
+- Device: [e.g. Samsung Galaxy, iPhone]
+- OS: [e.g. Android, iOS]
 - Browser [e.g. Chromium-based, Firefox]
 - Version [e.g. 94]
 
