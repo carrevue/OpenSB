@@ -45,9 +45,9 @@ if ($auth->getUserFlags(true)["unverified"]) {
 if (!$sb->isDebug()) {
     $timeLimit = time() - 15;
     if (
-        $database->result("SELECT COUNT(*) FROM upload_comments WHERE date > ? AND author = ?", [$timeLimit, $auth->getUserID()]) ||
-        $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE date > ? AND author = ?", [$timeLimit, $auth->getUserID()]) ||
-        $database->result("SELECT COUNT(*) FROM journal_comments WHERE date > ? AND author = ?", [$timeLimit, $auth->getUserID()])
+        $database->result("SELECT COUNT(*) FROM upload_comments WHERE timestamp > ? AND author = ?", [$timeLimit, $auth->getUserID()]) ||
+        $database->result("SELECT COUNT(*) FROM user_profile_comments WHERE timestamp > ? AND author = ?", [$timeLimit, $auth->getUserID()]) ||
+        $database->result("SELECT COUNT(*) FROM journal_comments WHERE timestamp > ? AND author = ?", [$timeLimit, $auth->getUserID()])
     ) {
         die("Please wait at least 15 seconds before commenting again.");
     }
