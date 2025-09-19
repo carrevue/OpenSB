@@ -1,0 +1,47 @@
+{% extends "_layout.twig" %}
+
+{% set show_sidebar = false %}
+
+{% block content %}
+    <div class="tabs">
+        {% for tab_key, tab in page.tabs %}
+            <a class="tablink" href="#{{ tab_key }}">
+                {{ tab.name }}
+            </a>
+        {% endfor %}
+    </div>
+    <div class="content-box no-border-top">
+    {% for section in page.sections %}
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">{{ section.title }}</h1>
+            </div>
+            
+            <div class="box-contents">
+                {% if section.contents.texts is defined %}
+                    {% for text in section.contents.texts %}
+                        <p>{{ text }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {% if section.contents.list is defined %}
+                    <ul>
+                        {% for key, entry in section.contents.list %}
+                            <li>{{ key }}: {{ entry }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                
+                {% if section.contents.buttons is defined %}
+                    {% for button in section.contents.buttons %}
+                        <button class="button button-{{ button.color }}">
+                            {{ button.text }}
+                        </button>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        {% if not loop.last %}<hr>{% endif %}
+    {% endfor %}
+    </div>
+{% endblock %}
