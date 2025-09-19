@@ -76,7 +76,7 @@ if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
         $rateLimit = 1 * 60;
     }
 
-    if ($database->result("SELECT COUNT(*) FROM uploads WHERE time > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$sb->isDebug()) {
+    if ($database->result("SELECT COUNT(*) FROM uploads WHERE timestamp > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$sb->isDebug()) {
         $waitTimeMinutes = $rateLimit / 60;
         Utilities::notifyBanner("notify_upload_ratelimit", "/", "warning", [$waitTimeMinutes]);
     }
