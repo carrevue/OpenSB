@@ -93,10 +93,10 @@ function parse_tags($tags, $upload_id, $database)
         $tagId = $database->result("SELECT tag_id FROM upload_tag_meta WHERE name = ?", [$tag]);
 
         if ($tagId === false) {
-            $database->query("INSERT INTO upload_tag_meta (name, latestUse) VALUES (?,?)", [$tag, time()]);
+            $database->query("INSERT INTO upload_tag_meta (name, last_usage) VALUES (?,?)", [$tag, time()]);
             $tagId = $database->insertId(); // Get the ID of the newly inserted tag
         } else {
-            $database->query("UPDATE upload_tag_meta SET latestUse = ? WHERE name = ?", [time(), $tag]);
+            $database->query("UPDATE upload_tag_meta SET last_usage = ? WHERE name = ?", [time(), $tag]);
         }
 
         $tagsID[] = $tagId;
