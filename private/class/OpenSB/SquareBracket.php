@@ -81,7 +81,7 @@ class SquareBracket
             // if we are on debug mode
             $this->database->setProfiling(true);
         }
-        $this->authentication = new Authentication($this->database);
+        $this->authentication = new Authentication($this);
 
         // super dangerous if misused, but that site mode is only intended for
         // squarebracket production so it doesnt really matter. -chaziz 09/17/2025
