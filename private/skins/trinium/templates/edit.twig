@@ -1,11 +1,11 @@
 {% extends "_layout.twig" %}
 
-{% set title = "Modify upload" %}
+{% set title = localize('modify_upload') %}
 
 	{% block content %}
         <div class="section">
             <div class="section-header">
-                <h1 class="section-title">Modify upload</h1>
+                <h1 class="section-title">{{ localize('modify_upload') }}</h1>
             </div>
             <div class="content-box">
                 <form name="uploadForm" id="uploadForm" method="post" action="edit" enctype="multipart/form-data">
@@ -17,49 +17,47 @@
                         </div>
                         <div class="col-8">
                             <div class="form-input">
-                                Title
+                                {{ localize('title') }}
                                 <input type="text" class="form-submit" name="title"
                                     value="{{ data.title }}">
                             </div>
 
                             <div class="form-input">
-                                Description
-                                <textarea class="form-submit" name="desc" maxlength="2000"
+                                {{ localize('description') }}
+                                <textarea class="form-submit" name="desc" maxlength="65535"
                                         form="uploadForm"
-                                        style="overflow:hidden;resize:vertical" rows="3">{{ data.description }}</textarea>
+                                        style="overflow:hidden;resize:vertical" rows="8">{{ data.description }}</textarea>
                             </div>
 
                             {% if options.enable_incomplete_features %}
                                 <div class="form-input">
-                                    Visibility
+                                    {{ localize('visibility') }}
                                     <select name="visibility" id="visibility">
-                                        <option value="public">Public</option>
-                                        <option value="scraps">Public (scraps)</option>
-                                        <option value="unlisted">Unlisted</option>
-                                        <option value="private">Private</option>
+                                        <option value="public">{{ localize('public') }}</option>
+                                        <option value="unlisted">{{ localize('unlisted') }}</option>
+                                        <option value="private">{{ localize('private') }}</option>
                                     </select>
                                 </div>
                             {% endif %}
 
                             <div class="form-input">
+                                <label for="thumbnail">{{ localize('custom_thumbnail') }}</label>
+                                <input class="form-submit" type="file" name="thumbnail" id="thumbnail">
+                            </div>
+
+                            <div class="form-input">
                                 <input type="checkbox" id="block_guests" name="block_guests" value="yes">
-                                <label for="block_guests"> Block guests from viewing this upload</label><br>
+                                <label for="block_guests">{{ localize('block_guests_from_upload') }}</label><br>
                             </div>
 
                             <div class="form-input">
                                 <input type="checkbox" id="block_comments" name="block_comments" value="yes">
-                                <label for="block_comments"> Block users from commenting on this upload</label><br>
-                            </div>
-                        
-
-                            <div class="form-input">
-                                <label for="thumbnail">Custom thumbnail</label>
-                                <input type="file" name="thumbnail" id="thumbnail">
+                                <label for="block_comments">{{ localize('disable_comments_from_upload') }}</label>
                             </div>
 
                             <div class="form-button-container">
                                 <input type="submit" id="upload" name="upload" class="button button-primary"
-                                    value="Save">
+                                    value="{{ localize('save_action') }}">
                             </div>
                         </div>
                     </div>

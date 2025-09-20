@@ -106,7 +106,7 @@
     "ip_address": "Dirección IP",
     "user_role": "Rol",
     "age": "Edad",
-    "birth_date": "Fecha de nacimiento",
+    "birthdate": "Fecha de nacimiento",
     "registered": "Registrado",
     "fulptube_account": "Cuenta FulpTube",
     "last_seen": "Visto por última vez",
