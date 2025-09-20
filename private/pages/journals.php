@@ -32,6 +32,8 @@ $data = [];
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 $limit = $database->paginate($page, 20);
 
+$user = $user ?? "news"; // slightly awkward
+
 if ($user) {
     if ($user == "news") {
         $journal_array = $database->fetchArray($database->query(

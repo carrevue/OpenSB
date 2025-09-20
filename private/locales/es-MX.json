@@ -3,10 +3,10 @@
     "browse_more": "Ver más",
     "welcome_logged_in": "Bienvenido, %s",
     "welcome_logged_out": "Bienvenido a %s",
-    "random_uploads": "Al azar",
-    "random_uploads_desc": "Selección aleatoria de los contenidos cargados",
-    "recent_uploads": "Recientes",
-    "recent_uploads_desc": "Todas las últimas subidas",
+    "homepage_random_uploads": "Al azar",
+    "homepage_random_uploads_desc": "Selección aleatoria de los contenidos cargados",
+    "homepage_recent_uploads": "Recientes",
+    "homepage_recent_uploads_desc": "Todas las últimas subidas",
     "site_news": "Noticias",
     "site_news_desc": "Anuncios del sitio",
     "recent_tags": "Etiquetas",
@@ -14,6 +14,6 @@
     "more": "Más",
     "search": "Buscar",
     "write_comment": "Escriba aquí su comentario.",
-    "reply": "Respuesta",
+    "reply_action": "Respuesta",
     "post": "Publicar"
 }

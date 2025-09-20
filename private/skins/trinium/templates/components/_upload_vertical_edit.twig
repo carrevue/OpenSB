@@ -42,7 +42,7 @@
                 <div class="menu-button button button-secondary button-transparent button-caret"
                      data-menu-id="upload-edit-{{ upload.id }}">
                     <div class="menu-caret-container">
-                        {{ icon("caret-closed", 16, "menu-caret") }}
+                        {{ icon('caret-closed', 16, 'menu-caret') }}
                     </div>
                 </div>
                 <div class="menu menu-upload-edit" id="upload-edit-{{ upload.id }}">
@@ -50,11 +50,11 @@
                         <span>{{ localize('edit') }}</span>
                     </a>
                     <a class="menu-item-button" href="/feature?v={{ upload.id }}"
-                       onclick="return confirm('Are you sure you want to feature this upload?');">
-                        <span>Feature on profile</span>
+                       onclick="return confirm('{{ localize('feature_on_profile_confirm') }}');">
+                        <span>{{ localize('feature_on_profile') }}</span>
                     </a>
                     <a class="menu-item-button" href="/delete?v={{ upload.id }}"
-                       onclick="return confirm('Are you sure you want to delete this upload?');">
+                       onclick="return confirm('{{ localize('delete_upload_confirm') }}');">
                         <span>{{ localize('delete') }}</span>
                     </a>
                 </div>
@@ -64,9 +64,6 @@
             {{ user_link(upload.author) }}
             <br>
             {{ localize('views', upload.views) }}
-            {% if upload.published_originally and upload.original_site %}
-                <span class="text-faded">on {{ upload.original_site }}</span>
-            {% endif %}
             <br>
             {% if upload.description|trim is not empty %}
                 <span>{{ upload.description }}</span>

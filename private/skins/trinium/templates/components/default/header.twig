@@ -3,7 +3,7 @@
         <div class="header-main">
             <div class="header-button">
                 <div class="button button-secondary button-hamburger button-transparent" id="button-hamburger">
-                    {{ icon("hamburger", 32) }}
+                    {{ icon('hamburger', 32) }}
                 </div>
             </div>
             <div class="header-logo">
@@ -23,7 +23,7 @@
             <form class="header-search" action="/search">
                 <input id="header-search-input" type="text" name="query" placeholder="{{ localize('search') }}...">
                 <button id="header-search-button">
-                    {{ icon("search") }}
+                    {{ icon('search') }}
                 </button>
             </form>
         </div>
@@ -32,7 +32,7 @@
                 {# create #}
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="create-menu">
-                        {{ icon("upload") }}
+                        {{ icon('upload') }}
                     </div>
                     <div class="menu" id="create-menu">
                         <a class="menu-item-button" href="/upload">{{ localize('new_upload') }}</a>
@@ -42,10 +42,10 @@
                 {# notifications #}
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="notify-menu">
-                        {{ icon("bell") }}
+                        {{ icon('bell') }}
                     </div>
                     <div class="menu" id="notify-menu">
-                        <a class="menu-item-button" href="/notifications">Notifications ({{ user_stat_data.notifications }})</a>
+                        <a class="menu-item-button" href="/notifications">{{ localize('notifications') }} ({{ user_stat_data.notifications }})</a>
                         <a class="menu-item-button" href="/my_messages">Messages (0)</a>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                     <div class="menu-button user-menu-button" data-menu-id="login-menu">
                         {{ localize('have_an_account') }} {{ localize('login') }}
                         <div class="menu-caret-container">
-                            {{ icon("caret-closed", 16, "menu-caret") }}
+                            {{ icon('caret-closed', 16, 'menu-caret') }}
                         </div>
                     </div>
                     <div class="menu" id="login-menu">
@@ -147,5 +147,5 @@
 </div>
 #}
 <div class="hamburger" id="hamburger">
-    {% include("components/_hamburger_menu.twig") %}
+    {% include('components/_hamburger_menu.twig') %}
 </div>

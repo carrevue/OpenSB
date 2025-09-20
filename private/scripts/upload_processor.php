@@ -93,8 +93,8 @@ $config = [
     'ffprobe.binaries' => 'ffprobe',
 ];
 
-// Here's an example of the required parameters for the processing worker:
-// php private/scripts/processingworker.php "videoid" "dynamic/videos/videoid.mp4" "video" "0"
+// Here's an example of the required parameters for the upload processor:
+// php private/scripts/upload_processor.php "videoid" "dynamic/videos/videoid.mp4" "video" "0"
 
 if (!isset($argv[1])) {
     log("No parameters have been specified.");
@@ -123,7 +123,7 @@ try {
 
     $h264->setAudioKiloBitrate(320)->setAdditionalParameters(array('-ar', '44100'));
 
-    log("File:" . $target_file);
+    log("File: " . $target_file);
 
     $video = $ffmpeg->open($target_file);
 
@@ -227,7 +227,7 @@ try {
 
     if ($upload_type == "video_thumbnail_only") {
         log("Only processing thumbnail, exiting...");
-        log("OpenSB Video Processing Worker Success!");
+        log("OpenSB Video Upload Processor Success!");
         die();
     }
 
@@ -292,13 +292,13 @@ try {
                 'id' => $new,
             ];
 
-            $sb->getDiscordWebhookClass()->uploadProcessingWorkerSuccessHook($data);
+            $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
         }
     } else {
         log("Not a website video, skipping.");
     }
 } catch (RuntimeException $e) {
-    log("OpenSB Video Processing Worker Failure: " . $e->getMessage());
+    log("OpenSB Upload Processor Failure: " . $e->getMessage());
 
     // now try to get the ffmpeg error output
     $previous = $e->getPrevious();
@@ -312,13 +312,13 @@ try {
             'id' => $new,
         ];
 
-        $sb->getDiscordWebhookClass()->uploadProcessingWorkerFailHook($data);
+        $sb->getDiscordWebhookClass()->uploadProcessorFailHook($data);
     }
 
     clearstatcache();
     die();
 }
 
-log("OpenSB Video Processing Worker Success!");
+log("OpenSB Upload Processor Success!");
 
 clearstatcache();

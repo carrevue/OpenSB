@@ -13,13 +13,13 @@
                 Comment Form Error
             </div>
             <button type="submit" id="comment_button" name="post" class="button button-primary">
-                {{ localize('post') }}
+                {{ localize('post_action') }}
             </button>
         </div>
     </div>
 </div>
 {% else %}
 <div id="new-comment-logged-out">
-    Please login to comment.
+    {{ localize('please_login_to_comment') }}
 </div>
 {% endif %}

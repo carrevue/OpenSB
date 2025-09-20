@@ -8,6 +8,12 @@
 
     "members": "Members",
 
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+
+    "form_required": "Required",
+    "form_optional": "Optional",
+
     "welcome_logged_in": "Welcome, %s",
     "welcome_logged_out": "Welcome to %s",
     "welcome_slogan": "Your content, your narration, your niche on the web.",
@@ -51,23 +57,46 @@
     "register": "Register",
     "logout": "Logout",
 
+    "currently_logged_in_as": "You are currently logged in as %s.",
+    "other_accounts": "Other accounts:",
+
+    "login_what_is_site_1": "%s is a multimedia sharing website. With an account, you can:",
+    "login_what_is_site_2": "Upload videos and images",
+    "login_what_is_site_3": "Interact with people and comment on uploads and user profiles",
+    "login_what_is_site_4": "Write journal entries on your profile",
+    "login_what_is_site_5": "and much more!",
+
+    "register_invite_key_required": "%s requires an invite key in order to register. You will need to obtain this from someone.",
+    "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
+    "register_tldr_1": "TL;DR:",
+    "register_tldr_2": "You must be over the age of 13.",
+    "register_tldr_3": "You may not register another account if you have been banned.",
+
+    "email_address": "Email address",
     "username": "Username",
     "password": "Password",
     "password_again": "Password (again)",
-    "birthdate": "Date of birth",
+    "birthdate": "Birthdate",
     "invite_key": "Invite key",
+    "captcha": "Captcha",
 
     "dont_have_an_account": "Don't have an account?",
     "have_an_account": "Have an account?",
 
+    "birthdate_verify": "Verify your birthdate",
+    "birthdate_verify_intro": "Before you can continue using %s, please set your birthdate.",
+    "birthdate_verify_explaination": "To use %s, you must be 13 years of age or older. Please log out immediately if you are under 13. Users who are caught lying about their age will be banned.",
+
+    "submit_action": "Submit",
+
     "list": "List",
     "grid": "Grid",
 
-    "random_uploads": "Random",
-    "random_uploads_desc": "Random selection of uploads",
+    "homepage_random_uploads": "Random",
+    "homepage_random_uploads_desc": "Random selection of uploads",
 
-    "recent_uploads": "Recent",
-    "recent_uploads_desc": "Most recent uploads",
+    "homepage_recent_uploads": "Recent",
+    "homepage_recent_uploads_desc": "Most recent uploads",
 
     "following": "Following",
     "following_uploads_desc": "From users you follow",
@@ -83,9 +112,16 @@
     "site_news": "News",
     "site_news_desc": "Site announcements",
 
+    "no_journals": "There are currently no journals.",
+
     "more": "More",
     "edit": "Edit",
+    "feature_on_profile": "Feature on profile",
     "delete": "Delete",
+
+    "delete_upload_confirm": "Are you sure you want to delete this upload?",
+    "delete_journal_confirm": "Are you sure you want to delete this journal?",
+    "feature_on_profile_confirm": "Are you sure you want to feature this upload on your profile?",
 
     "new": "New",
     "popular": "Popular",
@@ -97,10 +133,33 @@
 
     "write_comment": "Write your comment here.",
     "write_reply": "Write your reply here.",
+    "comments_disabled": "Commenting has been disabled.",
+    "please_login_to_comment": "Please login to comment.",
 
     "comment": "Comment",
-    "reply": "Reply",
-    "post": "Post",
+
+    "reply_action": "Reply",
+    "post_action": "Post",
+
+    "upload_image": "Image",
+    "upload_music": "Music",
+    "upload_video": "Video",
+
+    "upload_no_title": "No title",
+    "upload_no_description": "This upload does not have a description.",
+
+    "uploaded_on": "Uploaded on %s",
+    "first_uploaded_on": "First uploaded on %s on %s",
+    "originally_uploaded_on": "Originally uploaded on %s on %s",
+
+    "uploads_from_user": "From %s",
+    "related_uploads": "Related uploads",
+    "random_uploads": "Random uploads",
+
+    "featured": "Featured",
+    "none": "None",
+    "general_rating": "General",
+    "sensitive_rating": "Sensitive",
 
     "404_not_found": "404 Not Found",
     "ip_banned_intro": "You have been IP banned from %s",
@@ -114,7 +173,6 @@
     "ip_address": "IP address",
     "user_role": "Role",
     "age": "Age",
-    "birth_date": "Birth date",
     "registered": "Registered",
     "fulptube_account": "FulpTube account",
     "last_seen": "Last seen",
@@ -122,6 +180,7 @@
     "user_link_color": "User link color",
 
     "profile_featured": "Featured",
+    "profile_no_description": "This user has not set a description.",
 
     "user_role_unknown": "Unknown",
     "user_role_normal": "Normal",
@@ -144,6 +203,44 @@
     "staff_owners": "Owners",
     "staff_administrators": "Administrators",
     "staff_moderators": "Moderators",
+
+    "new_upload_intro": "Make sure you have read the <a href=\"%s\">community guidelines</a> first. Failure to comply with the community guidelines will result in your upload being taken down.",
+    "reupload_warning": "Reminder: Do not reupload content that you have not made.",
+    "title": "Title",
+    "description": "Description",
+    "tags": "Tags",
+    "file": "File",
+    "mark_as_sensitive": "Mark as sensitive",
+    "mark_as_sensitive_description": "Makes the upload only accessible to logged-in users over 18.",
+    "upload_limit": "Upload limit: %s",
+    "supported_files": "Common video and image formats are supported.",
+    "upload_action": "Upload",
+    "new_journal_intro": "Write a new journal entry which will be shown on your profile. Markdown formatting is supported.",
+    "content": "Content",
+    "publish_as_news": "Publish as site announcement",
+
+    "modify_upload": "Modify upload",
+    "modify_journal": "Modify journal",
+
+    "visibility": "Visibility",
+    "public": "Public",
+    "unlisted": "Unlisted",
+    "private": "Private",
+    "custom_thumbnail": "Custom thumbnail",
+
+    "block_guests_from_upload": "Block guests from viewing this upload",
+    "disable_comments_from_upload": "Disable comments on this upload",
+    "block_guests_from_journal": "Block guests from reading this journal",
+    "disable_comments_from_journal": "Disable comments on this journal",
+
+    "save_action": "Save",
+
+    "notifications": "Notifications",
+    "clear_all": "Clear all",
+    "time_ago_on_origin": "%s on %s",
+    "no_notifications": "You currently have no notifications.",
+
+    "search_results_for": "Results for \"%s\"",
 
     "version_intro": "This website is powered by OpenSB. © %s %s and other contributors.",
     "version_agpl": "OpenSB is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.",
@@ -190,7 +287,6 @@
     "notify_notifications_cleared": "You have successfully cleared your notifications.",
     "notify_invalid_journal": "This journal does not exist.",
     "notify_register_disabled": "The ability to register has been disabled.",
-    "notify_register_shady_ip": "Your IP address appears to be suspicious.",
     "notify_token_generation_fail": "An error occurred while generating your token. Please try again.",
     "notify_password_changed": "Your password has been successfully changed. Please login again.",
     "notify_successfully_updated_settings": "Your settings have been successfully updated.",

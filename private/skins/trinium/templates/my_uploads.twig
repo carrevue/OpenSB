@@ -1,6 +1,6 @@
 {% extends "_layout_my_stuff.twig" %}
 
-{% set title = "My uploads" %}
+{% set title = localize('my_uploads') %}
 
 {% block mystuffcontent %}
     {% set items_per_page = 20 %}
@@ -10,7 +10,7 @@
     <div class="section">
         <div class="section-header flex">
             <div class="section-header-left">
-                <h1 class="section-title">My uploads</h1>
+                <h1 class="section-title">{{ localize('my_uploads') }}</h1>
                 <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
             </div>
         </div>

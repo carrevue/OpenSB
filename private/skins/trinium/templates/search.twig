@@ -1,6 +1,6 @@
 {% extends "_layout.twig" %}
 
-{% set title = 'Results for "' ~ data.query ~ '"' %}
+{% set title = localize('search_results_for', data.query) %}
 
 {% block content %}
     {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
@@ -9,7 +9,9 @@
     <div class="section">
         <div class="section-header flex">
             <div class="section-header-left">
-                <h1 class="section-title">Results for "{{ data.query }}"</h1>
+                <h1 class="section-title">
+                    {{ title }}
+                </h1>
                 <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
             </div>
         </div>

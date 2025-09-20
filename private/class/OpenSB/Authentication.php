@@ -37,16 +37,16 @@ class Authentication
     private $user_stat_data;
     private $has_authenticated_as_staff = false;
 
-    public function __construct(Database $database)
+    public function __construct(SquareBracket $sb)
     {
         $accountfields = "id, ip, name, title, email, token, about, powerlevel, joined, last_seen, birthdate, comfortable_rating, userlink_color, blacklisted_tags, flags";
-        $this->database = $database;
+        $this->database = $sb->getDatabaseClass();
         $token = $_SESSION["SBTOKEN"] ?? null;
 
         if (isset($token)) {
-            if ($this->user_id = $this->database->result("SELECT id FROM users WHERE token = ?", [$token])) {
+            if ($this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE token = ?", [$token])) {
                 $this->is_logged_in = true;
-                $this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE id = ?", [$this->user_id]);
+                $this->user_id = $this->user_data["id"];
                 $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$this->user_id]);
 
                 // moved from homepage
@@ -76,8 +76,7 @@ class Authentication
                     $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
                     $path = explode('/', $uri);
                     if ($path[1] != "verify_birthdate") {
-                        header('Location: /verify_birthdate');
-                        exit();
+                        CoreUtilities::redirect("/verify_birthdate");
                     }
                 }
 
@@ -86,20 +85,18 @@ class Authentication
                     $this->logOut();
                 }
 
-                $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
+                $this->database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
 
-                // TODO: the content rating system is disabled on squarebracket, so if the user's "comfortable rating"
-                // isnt general, then reset it back to general.
-
-                // if "comfortable rating" is questionable, reset it back to general. this is because the site now uses
+                // if "comfortable rating" is questionable, reset it back to general. this is because opensb now uses
                 // "general" and "sensitive" instead of the old "general", "questionable" and "mature" ratings, but the
-                // old system is left there for compatibility. -chaziz 6/9/2024
-                if ($this->user_data["comfortable_rating"] == "questionable") {
-                    $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
-                    Utilities::notifyBanner("notify_content_filtering_reset", false, "primary");
-                }
+                // old system is left there for compatibility, which will probably get removed around opensb 2.1.
+                // also, on sb, if the user has their "comfortable rating" still not set to general, it now will be reset 
+                // to general. this is due to guideline changes caused by a vps move around june 2024. -chaziz 09/19/2025
+                if (($sb->isChazizSquareBracketInstance() && $this->user_data["comfortable_rating"] != "general") ||
+                    $this->user_data["comfortable_rating"] == "questionable" ||
+                    ($this->user_data["comfortable_rating"] == "mature" && !$this->isUserOver18())
+                ) {
 
-                if ($this->user_data["comfortable_rating"] == "mature" && !$this->isUserOver18()) {
                     $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
                     Utilities::notifyBanner("notify_content_filtering_reset", false, "primary");
                 }

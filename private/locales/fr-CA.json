@@ -8,6 +8,12 @@
 
     "members": "Membres",
 
+    "follow": "S'abonner",
+    "unfollow": "Unfollow",
+
+    "form_required": "Required",
+    "form_optional": "Se désabonner",
+
     "welcome_logged_in": "Bienvenue, %s",
     "welcome_logged_out": "Bienvenue sur %s",
     "welcome_slogan": "Votre contenu, votre narration, votre place sur le Web.",
@@ -51,23 +57,46 @@
     "register": "Inscrire",
     "logout": "Déconnecter",
 
+    "currently_logged_in_as": "Vous êtes présentement connecté comme %s.",
+    "other_accounts": "Autres comptes :",
+
+    "login_what_is_site_1": "%s est un site web de partage multimédia. Avec un compte, vous pouvez :",
+    "login_what_is_site_2": "Publiez vos vidéos et images",
+    "login_what_is_site_3": "Interagir avec les gens et commenter sur leurs publications",
+    "login_what_is_site_4": "Écrivez des journaux sur votre profil",
+    "login_what_is_site_5": "et bien plus encore !",
+
+    "register_invite_key_required": "%s nécessite une code d'invitation pour s'inscrire. Vous devrez l'obtenir auprès d'une autre personne.",
+    "register_agreement": "En vous inscrivant sur %s, vous acceptez les <a href=\"%s\">Conditions de Service</a> and <a href=\"%s\">Politique de Confidentialité</a>.",
+    "register_tldr_1": "En gros :",
+    "register_tldr_2": "Vous devez avoir plus de 13 ans.",
+    "register_tldr_3": "Vous ne pouvez pas enregistrer un autre compte si vous avez été banni.",
+
+    "email_address": "Adresse courriel",
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",
     "password_again": "Mot de passe (encore)",
     "birthdate": "Date de naissance",
     "invite_key": "Code d'invitation",
+    "captcha": "Captcha",
 
     "dont_have_an_account": "Pas de compte ?",
     "have_an_account": "Avez-vous un compte ?",
 
+    "birthdate_verify": "Vérifiez votre date de naissance",
+    "birthdate_verify_intro": "Avant de continuer à utiliser %s, veuillez définir votre date de naissance.",
+    "birthdate_verify_explaination": "Pour utiliser %s, vous devez avoir au moins 13 ans. Veuillez vous déconnecter immédiatement si vous avez moins de 13 ans. Tous les utilisateurs qui mentent sur leur âge seront bannis.",
+
+    "submit_action": "Submit",
+
     "list": "Liste",
     "grid": "Grille",
 
-    "random_uploads": "Aléatoire",
-    "random_uploads_desc": "Une sélection aléatoire de publications",
+    "homepage_random_uploads": "Aléatoire",
+    "homepage_random_uploads_desc": "Une sélection aléatoire de publications",
 
-    "recent_uploads": "Nouveau",
-    "recent_uploads_desc": "Les plus récents publications",
+    "homepage_recent_uploads": "Nouveau",
+    "homepage_recent_uploads_desc": "Les plus récents publications",
 
     "following": "Abonnements",
     "following_uploads_desc": "Publications par les personnes que vous vous abonnez",
@@ -83,9 +112,16 @@
     "site_news": "Nouvelles",
     "site_news_desc": "Les nouvelles du site",
 
+    "no_journals": "Il n'y a pas de journaux.",
+
     "more": "Plus",
     "edit": "Modifier",
+    "feature_on_profile": "Épinglez sur votre profil",
     "delete": "Supprimer",
+
+    "delete_upload_confirm": "Êtes-vous sûr de vouloir supprimer cette publication ?",
+    "delete_journal_confirm": "Êtes-vous sûr de vouloir supprimer ce journal ?",
+    "feature_on_profile_confirm": "Êtes-vous sûr de vouloir épingler cette publication sur votre profil ?",
 
     "new": "Nouveau",
     "popular": "Populaire",
@@ -97,10 +133,33 @@
 
     "write_comment": "Ecrit votre commentaire.",
     "write_reply": "Ecrit votre reponse.",
+    "comments_disabled": "Les commentaires sont désactivés.",
+    "please_login_to_comment": "Connectez-vous pour commenter.",
 
     "comment": "Commentaire",
-    "reply": "Repondre",
+
+    "reply_action": "Repondre",
     "post": "Publier",
+
+    "upload_image": "Image",
+    "upload_music": "Musique",
+    "upload_video": "Vidéo",
+
+    "upload_no_title": "Aucun titre",
+    "upload_no_description": "Cette publication n'a pas de description.",
+
+    "uploaded_on": "Publié le %s",
+    "first_uploaded_on": "Initialement publié le %s",
+    "originally_uploaded_on": "Initialement publié sur %s le %s",
+
+    "uploads_from_user": "Plus de %s",
+    "related_uploads": "Publications similaires",
+    "random_uploads": "Publications aléatoires",
+
+    "featured": "En vedette",
+    "none": "Aucun",
+    "general_rating": "Générale",
+    "sensitive_rating": "Mature",
 
     "404_not_found": "404 Non Trouvé",
     "ip_banned_intro": "Votre addresse IP a été bannie de %s",
@@ -114,7 +173,6 @@
     "ip_address": "Adresse IP",
     "user_role": "Rôle",
     "age": "Âge",
-    "birth_date": "Date de naissance",
     "registered": "Inscrit",
     "fulptube_account": "Compte FulpTube",
     "last_seen": "Vu",
@@ -122,6 +180,7 @@
     "user_link_color": "Couleur d'utilisateur",
 
     "profile_featured": "Épinglé",
+    "profile_no_description": "Cet utilisateur n'a pas de description.",
 
     "user_role_unknown": "Inconnu",
     "user_role_normal": "Normal",
@@ -144,6 +203,44 @@
     "staff_owners": "Les propriétaires",
     "staff_administrators": "Les administrateurs",
     "staff_moderators": "Les modérateurs",
+
+    "new_upload_intro": "Assurez-vous d'avoir lu au moins une fois les <a href=\"%s\">règles de la communauté</a>. Le manque de respect de ces règles résultera en la suppression de votre publication.",
+    "reupload_warning": "Rappel : ne republiez pas de contenu qui ne vous appartient pas.",
+    "title": "Titre",
+    "description": "Description",
+    "tags": "Mots-clés",
+    "file": "Fichier",
+    "mark_as_sensitive": "Marquer comme mature",
+    "mark_as_sensitive_description": "Rendez votre publication accessible uniquement aux utilisateurs majeurs.",
+    "upload_limit": "Limite de taille du fichier : %s",
+    "supported_files": "Les formats vidéo et image commun sont compatibles.",
+    "upload_action": "Publier",
+    "new_journal_intro": "Écrivez un nouveau journal qui sera affiché sur votre profil. Le formatage du texte Markdown est compatible.",
+    "content": "Contenu",
+    "publish_as_news": "Publier comme nouvelles",
+
+    "modify_upload": "Modifier cette publication",
+    "modify_journal": "Modifier ce journal",
+
+    "visibility": "Visibilité",
+    "public": "Public",
+    "unlisted": "Caché",
+    "private": "Privé",
+    "custom_thumbnail": "Vignette",
+
+    "block_guests_from_upload": "Empêcher les utilisateurs déconnectés de voir cette publication",
+    "disable_comments_from_upload": "Désactiver les commentaires sur cette publication",
+    "block_guests_from_journal": "Empêcher les utilisateurs déconnectés de voir ce journal",
+    "disable_comments_from_journal": "Désactiver les commentaires sur ce journal",
+
+    "save_action": "Sauvegarder",
+
+    "notifications": "Notifications",
+    "clear_all": "Tout effacer",
+    "time_ago_on_origin": "%s sur %s",
+    "no_notifications": "Vous n'avez aucune notification.",
+
+    "search_results_for": "Results for \"%s\"",
 
     "version_intro": "Ce site web est propulsé par OpenSB. © %s %s et autres contributeurs.",
     "version_agpl": "OpenSB est un logiciel libre, vous pouvez le redsistribuer ou le modifier selon les termes de la Licence publique générale GNU Affero, telle que publiée par la Free Software Foundation; soit la version 3 de la Licence, ou (à votre convenance) toute version ultérieure.",
@@ -178,6 +275,7 @@
     "notify_original_fulptube_video": "Cette vidéo du FulpTube original n'existe plus.",
     "notify_upload_tag_blacklist_logged_in": "Cette publication n'est pas accessible.",
     "notify_upload_tag_blacklist_logged_out": "Cette publication n'est pas accessible.",
+    "notify_upload_unverified": "L'auteur de ce publication n'a pas été vérifié.",
     "notify_updated_featured_upload": "La publication épinglée de votre profil a été remplacée avec succès.",
     "notify_login_switched_account": "Vous êtes maintenant connecté à %s.",
     "notify_login_not_logged_in": "Vous n'êtes pas connecté à ce compte.",
@@ -189,7 +287,6 @@
     "notify_notifications_cleared": "Vos notifications ont été effacées avec succès.",
     "notify_invalid_journal": "Ce journal n'existe pas.",
     "notify_register_disabled": "L'inscription d'un nouveau compte est présentement désactivé.",
-    "notify_register_shady_ip": "Votre adresse IP a été signalée comme spam.",
     "notify_token_generation_fail": "Une erreur s'est produite lors de la génération de votre token. Veuillez réessayer.",
     "notify_password_changed": "Votre mot de passe a été changé. Veuillez vous reconnecter.",
     "notify_successfully_updated_settings": "Les paramètres de votre compte ont été mis à jour avec succès.",
@@ -212,5 +309,7 @@
     "notify_dashboard_welcome": "Bienvenue sur le panel du personnel",
     "notify_dashboard_ban_fail": "Cet utilisateur ne peut pas être banni.",
     "notify_dashboard_ban_success": "%s a été banni avec succès.",
-    "notify_dashboard_unban_success": "%s a été débanni avec succès."
+    "notify_dashboard_unban_success": "%s a été débanni avec succès.",
+    "notify_dashboard_verify_success": "%s a été verifié avec succès.",
+    "notify_dashboard_unverify_success": "%s a été déverifié avec succès."
 }

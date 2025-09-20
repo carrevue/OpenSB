@@ -1,32 +1,28 @@
-{% extends "_layout.twig" %}
+{% extends "_layout_login.twig" %}
 
-{% set show_sidebar = true %}
+{% set show_sidebar = false %}
 
-{% set title = "Verify your birthdate" %}
+{% set title = localize('birthdate_verify') %}
 
 	{% block content %}
         <div class="section">
         <div class="section-header">
-            <h1 class="section-title">Verify your birthdate</h1>
+            <h1 class="section-title">{{ localize('birthdate_verify') }}</h1>
         </div>
         <div class="content-box">
             <div class="grid center">
                 <div class="col-6">
-                    <div class="panel-body">
-                        <p>
-                            Before you can continue using {{ website_branding.name }}, please specify your birthdate.
-                        </p>
-                        <form method="post" name="loginForm" id="loginForm" action="/verify_birthdate" class="form-login">
-                            <div class="form-input">
-                                <label for="birthdate">Birthdate:</label>
-                                <input type="date" name="birthdate" required />
-                            </div>
+                    <p>{{ localize('birthdate_verify_intro', website_branding.name) }}</p>
+                    <form method="post" name="loginForm" id="loginForm" action="/verify_birthdate" class="form-login">
+                        <div class="form-input">
+                            <label for="birthdate">{{ localize('birthdate') }}</label>
+                            <input type="date" name="birthdate" required />
+                        </div>
 
-                            <div class="form-button-container">
-                                <input type="submit" class="button button-primary" value="Submit" name="birthdatesubmit">
-                            </div>
-                        </form>
-                    </div>
+                        <div class="form-button-container">
+                            <input type="submit" class="button button-primary" value="{{ localize('submit_action') }}" name="birthdatesubmit">
+                        </div>
+                    </form>
                 </div>
                 <div class="col-6 col-login-info">
                     <div class="login-currently-logged-in">
@@ -38,17 +34,13 @@
                         </div>
                         <div>
                             <div class="login-currently-logged-in-text">
-                                You are currently logged in as {{ user_data.name }}.
+                                {{ localize('currently_logged_in_as', user_data.name) }}
                             </div>
                         </div>
                     </div>
                     <hr>
                     <div>
-                        <p>
-                            {{ website_branding.name }} requires all users to be over the age of 13. If you are under
-                            the age of 13, please log out immediately. Users who are caught lying about their age
-                            will be banned by {{ website_branding.name }} staff.
-                        </p>
+                        <p>{{ localize('birthdate_verify_explaination', website_branding.name) }}
                     </div>
                 </div>
             </div>

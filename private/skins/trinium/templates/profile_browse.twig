@@ -9,7 +9,7 @@
 {% if data.about | trim is not empty %}
     {% set opengraph_description = data.about %}
 {% else %}
-    {% set opengraph_description = "This user has not set a description." %}
+    {% set opengraph_description = localize('profile_no_description') %}
 {% endif %}
 {% set opengraph_image = profile_picture(data.username) %}
 

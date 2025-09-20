@@ -54,11 +54,11 @@
     "list": "Lista",
     "grid": "Cuadrícula",
 
-    "random_uploads": "Aleatorio",
-    "random_uploads_desc": "Selección aleatoria de videos",
+    "homepage_random_uploads": "Aleatorio",
+    "homepage_random_uploads_desc": "Selección aleatoria de videos",
 
-    "recent_uploads": "Recientes",
-    "recent_uploads_desc": "Videos más recientes",
+    "homepage_recent_uploads": "Recientes",
+    "homepage_recent_uploads_desc": "Videos más recientes",
 
     "following": "Siguiendo",
     "following_uploads_desc": "De usuarios que sigues",
@@ -90,7 +90,7 @@
     "write_reply": "Escribe tu respuesta aquí.",
 
     "comment": "Comentar",
-    "reply": "Responder",
+    "reply_action": "Responder",
     "post": "Publicar",
 
     "404_not_found": "404 No encontrado",
@@ -106,7 +106,7 @@
     "ip_address": "Dirección IP",
     "user_role": "Rol",
     "age": "Edad",
-    "birth_date": "Fecha de nacimiento",
+    "birthdate": "Fecha de nacimiento",
     "registered": "Registrado",
     "fulptube_account": "Cuenta FulpTube",
     "last_seen": "Visto por última vez",

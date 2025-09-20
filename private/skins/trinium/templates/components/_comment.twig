@@ -17,7 +17,7 @@
             {% endif %}
 
             {% if comment.id and is_user_logged_in %}
-            <a class="reply-button" data-comment-id="{{ comment.id }}">{{ localize('reply') }}</a>
+            <a class="reply-button" data-comment-id="{{ comment.id }}">{{ localize('reply_action') }}</a>
             {% endif %}
 
             <div class="replies" id="replies-{{ comment.id }}">
@@ -33,7 +33,7 @@
                                     Reply Form Error
                                 </div>
                                 <button class="button button-primary submit-reply-button" data-comment-id="{{ comment.id }}">
-                                    {{ localize('reply') }}
+                                    {{ localize('reply_action') }}
                                 </button>
                             </div>
                         </div>

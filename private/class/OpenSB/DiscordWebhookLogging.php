@@ -130,7 +130,7 @@ class DiscordWebhookLogging
      *
      * @param array $data Array with the necessary data.
      */
-    public function newCommentHook($data, $is_legacy_api = false)
+    public function newCommentHook($data)
     {
         $this->initClient();
 
@@ -142,19 +142,19 @@ class DiscordWebhookLogging
         switch ($data['type']) {
             case 'video': // legacy api
             case 'upload':
-                $title = Utilities::uploadStringIDToUploadTitle($this->database, $data['name']);
+                $title = Utilities::uploadStringIDToUploadTitle($this->database, $data['location_id']);
                 $author = 'New upload comment by ' . $data['author'];
-                $uploadUrl = sprintf("%s/view/%s", $this->domain, $data['name']);
+                $uploadUrl = sprintf("%s/view/%s", $this->domain, $data['location_id']);
                 break;
             case 'profile':
-                $title = Utilities::userIDToUsername($this->database, $data['name']);
+                $title = Utilities::userIDToUsername($this->database, $data['location_id']);
                 $author = 'New profile comment by ' . $data['author'];
-                $uploadUrl = sprintf("%s/user/%s", $this->domain, $data['name']);
+                $uploadUrl = sprintf("%s/user/%s", $this->domain, $title);
                 break;
             case 'journal':
-                $title = Utilities::journalIDtoJournalTitle($this->database, $data['name']);
+                $title = Utilities::journalIDtoJournalTitle($this->database, $data['location_id']);
                 $author = 'New journal comment by ' . $data['author'];
-                $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['name']);
+                $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['location_id']);
                 break;
             default:
                 exit;
@@ -173,17 +173,17 @@ class DiscordWebhookLogging
     }
 
     /**
-     * Trigger the upload processing worker fail webhook.
+     * Trigger the upload processor fail webhook.
      *
      * @param array $data Array with the necessary data.
      */
-    public function uploadProcessingWorkerSuccessHook($data)
+    public function uploadProcessorSuccessHook($data)
     {
         $this->initClient();
 
         $title = $data['id'] . ' successfully processed.';
 
-        $author = 'Processing worker';
+        $author = 'Upload processor';
 
         $mbd = new Embed();
 
@@ -196,17 +196,17 @@ class DiscordWebhookLogging
     }
 
     /**
-     * Trigger the upload processing worker fail webhook.
+     * Trigger the upload processor fail webhook.
      *
      * @param array $data Array with the necessary data.
      */
-    public function uploadProcessingWorkerFailHook($data)
+    public function uploadProcessorFailHook($data)
     {
         $this->initClient();
 
         $title = $data['id'] . ' failed to process.';
 
-        $author = 'Processing worker';
+        $author = 'Upload processor';
 
         $mbd = new Embed();
 

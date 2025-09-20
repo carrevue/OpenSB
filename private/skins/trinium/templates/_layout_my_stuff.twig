@@ -3,13 +3,13 @@
 {% block precontent %}
     <div class="navigation-bar">
         <a class="navigation-bar-button {% if page_name=='my_uploads' %}active{% endif %}" href="/my_uploads">
-            Uploads
+            {{ localize('uploads') }}
         </a>
         <a class="navigation-bar-button {% if page_name=='my_messages' %}active{% endif %}" href="/my_messages">
             Messages
         </a>
         <a class="navigation-bar-button {% if page_name=='notifications' %}active{% endif %}" href="/notifications">
-            Notifications
+            {{ localize('notifications') }}
         </a>
         <a class="navigation-bar-button {% if page_name=='settings' %}active{% endif %}" href="/settings">
             Account settings

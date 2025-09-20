@@ -7,24 +7,24 @@
 {% if upload.description | trim is not empty %}
     {% set opengraph_description = upload.description %}
 {% else %}
-    {% set opengraph_description = "This upload does not have a description." %}
+    {% set opengraph_description = localize('upload_no_description') %}
 {% endif %}
 
 {% set opengraph_image = thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) %}
 
 {% set opengraph_type = "article" %}
-{% set opengraph_published = upload.published | date("c") %}
+{% set opengraph_published = upload.published | date('c') %}
 {% set opengraph_author = domain ~ "user/" ~ upload.author.info.username %}
 {% set metadata_author = upload.author.info.username %}
 
 {% if upload.type == 2 %}
-    {% set type_text = "Image" %}
+    {% set type_text = localize('upload_image') %}
     {% set opengraph_section = "SquareBracket image" %}
 {% elseif upload.type == 3 %}
-    {% set type_text = "Music" %}
+    {% set type_text = localize('upload_music') %}
     {% set opengraph_section = "SquareBracket music" %}
 {% else %}
-    {% set type_text = "Video" %}
+    {% set type_text = localize('upload_video') %}
     {% set opengraph_section = "SquareBracket video" %}
 {% endif %}
 
@@ -41,9 +41,9 @@
 {% endblock %}
 
 {% if upload.rating == 'mature' %}
-    {% set rating_text = "Mature" %}
+    {% set rating_text = localize('sensitive_rating') %}
 {% else %}
-    {% set rating_text = "General" %}
+    {% set rating_text = localize('general_rating') %}
 {% endif %}
 
 {% block content %}
@@ -78,7 +78,7 @@
                                     {% if upload.title %}
                                         {{ upload.title }}
                                     {% else %}
-                                        No title
+                                        {{ localize('upload_no_title') }}
                                     {% endif %}
                                 </h1>
                             </div>
@@ -91,7 +91,7 @@
                         <div class="watch-box-below-title">
                             {{ type_text }} 
                             {% if not is_chaziz_sb %}• {{ rating_text }}{% endif %}
-                            {% if upload.flags.featured %}• <span class="watch-box-below-title-featured">Featured</span>{% endif %}
+                            {% if upload.flags.featured %}• <span class="watch-box-below-title-featured">{{ localize('featured') }}</span>{% endif %}
                         </div>
                         <hr>
                         <div class="watch-box-row">
@@ -136,34 +136,33 @@
                         <hr>
                         <div class="watch-box-description">
                             <div class="watch-box-description-info">
-                                Uploaded on {{ upload.published | format_date('long', 'none') }}
-                                <span class="text-faded">{{ upload.published | format_date('none', 'short') }}</span>
+                                {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
                             </div>
                             {% if upload.published_originally and upload.original_site %}
                                 <div class="watch-box-description-info-small">
-                                    First uploaded on {{ upload.original_site }} on {{ upload.published_originally | format_date('long', 'none') }}
+                                    {{ localize('first_uploaded_on', upload.original_site, upload.published_originally | format_date('long', 'none')) }}
                                 </div>
                             {% elseif upload.original_site %}
                                 <div class="watch-box-description-info-small">
-                                    Originally uploaded on {{ upload.original_site }}
+                                    {{ localize('originally_uploaded_on', upload.original_site )}}
                                 </div>
                             {% endif %}
                             <div class="watch-box-description-contents">
                                 {% if upload.description | trim is not empty %}
                                     {{ upload.description | markdown_user_written }}
                                 {% else %}
-                                    <span class="text-faded">This upload does not have a description.</span>
+                                    <span class="text-faded">{{ localize('upload_no_description') }}</span>
                                 {% endif %}
                             </div>
                         </div>
                         <hr>
                         <div class="watch-box-description">
                             <div class="watch-box-description-info-small">
-                                <span class="text-faded">Tags:</span>
+                                <span class="text-faded">{{ localize('tags') }}</span>
                                 {% for tag in upload.tags %}
                                     <a href="/search?query={{ tag.name }}">{{ tag.name }}</a>{{ not loop.last ? ',' }}
                                 {% else %}
-                                    None
+                                    {{ localize('none') }}
                                 {% endfor %}
                                 {# TODO:
                                 {% if is_user_logged_in %}
@@ -183,7 +182,7 @@
                     <div class="content-box">
                         <div class="section-header flex">
                             <div class="section-header-left">
-                                <h2 class="section-title">Comments</h2>
+                                <h2 class="section-title">{{ localize('comments' )}}</h2>
                                 <div class="section-desc">{{ upload.interactions.comments }}</div>
                             </div>
                         </div>
@@ -192,7 +191,7 @@
                         {% else %}
                             <div>
                                 <div id="new-comment-logged-out">
-                                    Commenting has been disabled.
+                                    {{ localize('comments_disabled') }}
                                 </div>
                             </div>
                         {% endif %}
@@ -207,7 +206,7 @@
             {% if upload.other_by_author %}
                 <div class="section">
                     <div class="section-header flex">
-                        <h2>From {{ upload.author.info.displayname }}</h2>
+                        <h2>{{ localize('uploads_from_user', upload.author.info.displayname) }}</h2>
                     </div>
                     <div class="content-box related-uploads">
                         {% for upload in upload.other_by_author %}
@@ -219,7 +218,7 @@
             {% if upload.recommended %}
                 <div class="section">
                     <div class="section-header flex">
-                        <h2>Related uploads</h2>
+                        <h2>{{ localize('related_uploads') }}</h2>
                     </div>
                     <div class="content-box related-uploads">
                         {% for upload in upload.recommended %}
@@ -231,7 +230,7 @@
             {% if upload.random %}
                 <div class="section">
                     <div class="section-header flex">
-                        <h2>Random uploads</h2>
+                        <h2>{{ localize('random_uploads') }}</h2>
                     </div>
                     <div class="content-box related-uploads">
                         {% for upload in upload.random %}

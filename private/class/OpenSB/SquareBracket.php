@@ -75,7 +75,13 @@ class SquareBracket
         $this->is_debug = ($config["mode"] ?? '') === "DEV";
 
         $this->database = new Database($host, $user, $pass, $db);
-        $this->authentication = new Authentication($this->database);
+        $this->profiler = new Profiler($this->database);
+        if ($this->is_debug) {
+            // enable db profiler (not to be confused with the other profiler)
+            // if we are on debug mode
+            $this->database->setProfiling(true);
+        }
+        $this->authentication = new Authentication($this);
 
         // super dangerous if misused, but that site mode is only intended for
         // squarebracket production so it doesnt really matter. -chaziz 09/17/2025
@@ -87,15 +93,11 @@ class SquareBracket
             $this->authentication->getUserData()["id"] == 1
         ) {
             $this->is_debug = true;
+            // this doesnt show auth-related queries however, but it doesnt really matter.
+            $this->database->setProfiling(true);
         }
 
         //$this->version_number = new VersionNumber();
-        $this->profiler = new Profiler($this->database);
-        if ($this->is_debug) {
-            // enable db profiler (not to be confused with the other profiler)
-            // if we are on debug mode
-            $this->database->setProfiling(true);
-        }
 
         $this->storage = new Storage($this);
 

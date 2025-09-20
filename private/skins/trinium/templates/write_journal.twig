@@ -1,40 +1,43 @@
 {% extends "_layout.twig" %}
 
-{% set title = "Write" %}
+{% set title = localize('new_journal') %}
 
 {% set show_sidebar = true %}
 
 	{% block content %}
         <div class="section">
             <div class="section-header">
-                <h1 class="section-title">Write</h1>
+                <h1 class="section-title">{{ localize('new_journal')}}</h1>
+                <div>
+                    {{ localize('new_journal_intro') }}
+                </div>
             </div>
             <div class="content-box">
                 <form name="uploadForm" id="uploadForm" method="post" action="write" enctype="multipart/form-data">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="form-input">
-                                <label for="title">Title:</label>
+                                <label for="title">{{ localize('title') }} <span>{{ localize('form_required') }}</span></label>
                                 <input type="text" class="form-submit" id="title" name="title" required>
                             </div>
 
                             <div class="form-input">
-                                <label for="desc">Content:</label>
+                                <label for="desc">{{ localize('content') }} <span>{{ localize('form_required') }}</span></label>
                                 <textarea class="form-submit" name="desc" maxlength="65535"
                                           form="uploadForm"
-                                          style="overflow:hidden;resize:vertical" rows="10" required></textarea>
+                                          style="overflow-x:hidden;resize:vertical" rows="16" required></textarea>
                             </div>
 
                             {% if user_is_authenticated_admin %}
                                 <div class="form-input">
                                     <input type="checkbox" id="news" name="news" value="true">
-                                    <label for="news"> Publish as website announcement</label><br>
+                                    <label for="news">{{ localize('publish_as_news') }}</label><br>
                                 </div>
                             {% endif %}
 
                             <div class="form-button-container">
                                 <input class="button button-primary" type="submit" id="upload" name="upload"
-                                       value="Post">
+                                       value="{{ localize('post_action') }}">
                             </div>
                         </div>
                     </div>

@@ -27,6 +27,8 @@ use OpenSB\NotificationEnum;
 use OpenSB\UserData;
 use OpenSB\Utilities;
 
+// TODO: localize all of this shit
+
 function typeToIntro($type)
 {
     switch (NotificationEnum::from($type)) {
