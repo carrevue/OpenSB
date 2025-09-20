@@ -96,12 +96,12 @@
 </svg>
 <body>
 {% if is_debug %}
-    {% include("components/debug_dialog.twig") %}
+    {% include('components/debug_dialog.twig') %}
 {% endif %}
 {{ include(component('header')) }}
 {% if user_ban_data %}
     <div class="banner banner-danger full-screen">
-        {{ notification_icon("danger") }}
+        {{ notification_icon('danger') }}
         <span class="banner-text">
         You have been banned from {{ website_branding.name }}.
         </span>
@@ -126,7 +126,7 @@
                 <div class="sidebar-page-grid">
                     <div class="sidebar-container">
                         <div class="sidebar {% if page_name == "home" %}with-jumbotron{% endif %}">
-                            {% include("components/_hamburger_menu.twig") %}
+                            {% include('components/_hamburger_menu.twig') %}
                         </div>
                     </div>
                     <div class="content">

@@ -2,18 +2,17 @@
 
 {% set show_sidebar = true %}
 
-{% set title = localize("new_upload") %}
+{% set title = localize('new_upload') %}
 
 	{% block content %}
         <div class="section">
             <div class="section-header">
-                <h1 class="section-title">{{ localize("new_upload") }}</h1>
+                <h1 class="section-title">{{ localize('new_upload') }}</h1>
                 <div>
-                    Make sure you have read the <a href="/guidelines">community guidelines</a> first. Failure to comply
-                    with the community guidelines will result in your upload being taken down.
+                    {{ localize('new_upload_intro', '/guidelines') }}
                 </div>
                 <div class="text-danger">
-                    Reminder: Do not reupload content that you have not made.
+                    {{ localize('reupload_warning') }}
                 </div>
             </div>
             <div class="content-box">
@@ -21,41 +20,41 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="form-input">
-                                <label for="title">Title <span>Required</span></label>
+                                <label for="title">{{ localize('title') }} <span>{{ localize('form_required') }}</span></label>
                                 <input type="text" class="form-submit" id="title" name="title" required>
                             </div>
 
                             <div class="form-input">
-                                <label for="desc">Description <span>Optional</span></label>
+                                <label for="desc">{{ localize('description') }} <span>{{ localize('form_optional') }}</span></label>
                                 <textarea class="form-submit" name="desc" maxlength="65535"
                                           form="uploadForm"
                                           style="overflow-x:hidden;resize:vertical" rows="8"></textarea>
                             </div>
 
                             <div class="form-input">
-                                <label for="tags">Tags <span>Optional</span></label>
+                                <label for="tags">{{ localize('tags') }} <span>{{ localize('form_optional') }}</span></label>
                                 <input type="text" class="form-submit" name="tags">
                             </div>
 
                             {% if not is_chaziz_sb %}
                             <div class="form-input">
                                 <input type="checkbox" name="rating" id="rating" value="true">
-                                <label for="rating">Mark as sensitive
-                                <span>Makes the upload only accessible to logged-in users over 18.</span>
+                                <label for="rating">{{ localize('mark_as_sensitive') }}
+                                <span>{{ localize('mark_as_sensitive_description') }}</span>
                                 </label>
                             </div>
                             {% endif %}
 
                             <div class="form-input">
-                                <label for="fileToUpload">File <span>Required</span></label>
-                                <div>Upload limit: {{ limit }}</div>
-                                <div>Common video and image formats are supported.</div>
+                                <label for="fileToUpload">{{ localize('file') }} <span>{{ localize('form_required') }}</span></label>
+                                <div>{{ localize('upload_limit', limit) }}</div>
+                                <div>{{ localize('supported_files') }}</div>
                                 <input class="form-submit" type="file" name="fileToUpload" id="fileToUpload" required>
                             </div>
 
                             <div class="form-button-container">
                                 <input class="button button-primary" type="submit" id="upload" name="upload"
-                                       value="Upload">
+                                       value="{{ localize('upload_action') }}">
                             </div>
                         </div>
                     </div>

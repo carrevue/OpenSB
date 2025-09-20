@@ -19,7 +19,7 @@
                         <div class="panel-body">
                             <form method="post" name="loginForm" id="loginForm" action="register" class="form-login">
                                 <div class="form-input">
-                                    <label for="email">Email address</label>
+                                    <label for="email">{{ localize('email_address') }}</label>
                                     <input type="email" name="email" class="form-submit" required>
                                 </div>
 
@@ -40,7 +40,7 @@
 
                                 {% if invite_keys_enabled %}
                                     <div class="form-input">
-                                        <label for="invite">Invite key</label>
+                                        <label for="invite">{{ localize('invite_key') }}</label>
                                         <input type="text" name="invite" class="form-submit" required>
                                     </div>
                                 {% endif %}
@@ -52,7 +52,7 @@
 
                                 {% if captcha_public_token %}
                                     <div class="form-input">
-                                        <label>Captcha:</label>
+                                        <label>{{ localize('captcha') }}</label>
                                         <div class="h-captcha" data-sitekey="{{ captcha_public_token }}"></div>
                                     </div>
                                 {% endif %}
@@ -67,23 +67,21 @@
                         <div>
                             {% if invite_keys_enabled %}
                                 <p>
-                                    {{ website_branding.name }} requires an invite key in order to register.
-                                    You will need to obtain this from someone.
+                                    {{ localize('register_invite_key_required', website_branding.name) }}
                                 </p>
                             {% endif %}
                             <p>
-                                By registering on {{ website_branding.name }}, you agree to the
-                                <a href="/tos">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.
+                                {{ localize('register_agreement',  website_branding.name, '/tos', '/privacy') | raw }}
                             </p>
                             <p>
-                                <strong>TLDR</strong>:
+                                {{ localize('register_tldr_1') }}
                             </p>
                             <ul>
                                 <li>
-                                    You must be over the age of 13.
+                                    {{ localize('register_tldr_2') }}
                                 </li>
                                 <li>
-                                    You may not register another account if you have been banned.
+                                    {{ localize('register_tldr_3') }}
                                 </li>
                             </ul>
                         </div>

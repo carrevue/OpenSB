@@ -20,30 +20,6 @@
     {% set empty_instance = true %}
 {% endif %}
 
-{#
-{% block scripts %}
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js" integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide-core.min.css" integrity="sha256-ZAXImCY06SjVuIrJfWUETkyCctX5aGdL1AVEBX5CxZA=" crossorigin="anonymous">
-    <script>
-        document.addEventListener( 'DOMContentLoaded', function() {
-            var elms = document.getElementsByClassName( 'splide' );
-
-            for ( var i = 0; i < elms.length; i++ ) {
-                new Splide( elms[ i ], {
-                    perPage: 4,
-                    rewind: true,
-                    pagination: false,
-                    breakpoints: {
-                        1249 : { perPage: 3 },
-                        899 : { perPage: 2 },
-                    },
-                } ).mount();
-            }
-        } );
-    </script>
-{% endblock %}
-#}
-
 {% block precontent %}
     <div class="jumbotron page-banner homepage">
         <div class="jumbotron-container {{ jumbotronClassName }}">
@@ -72,16 +48,16 @@
                 <div class="jumbotron-right-date">
                     {{ date() | format_date('long', 'none') }}
                 </div>
-                    <div class="jumbotron-right-buttons">
-                        <div class="tabs homepage">
-                            <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
-                                {{ icon("homepage-list", 24) }}
-                            </div>
-                            <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
-                                {{ icon("homepage-grid", 24) }}
-                            </div>
+                <div class="jumbotron-right-buttons">
+                    <div class="tabs homepage">
+                        <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
+                            {{ icon('homepage-list', 24) }}
+                        </div>
+                        <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
+                            {{ icon('homepage-grid', 24) }}
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>

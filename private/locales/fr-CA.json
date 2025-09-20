@@ -63,11 +63,11 @@
     "list": "Liste",
     "grid": "Grille",
 
-    "random_uploads": "Aléatoire",
-    "random_uploads_desc": "Une sélection aléatoire de publications",
+    "homepage_random_uploads": "Aléatoire",
+    "homepage_random_uploads_desc": "Une sélection aléatoire de publications",
 
-    "recent_uploads": "Nouveau",
-    "recent_uploads_desc": "Les plus récents publications",
+    "homepage_recent_uploads": "Nouveau",
+    "homepage_recent_uploads_desc": "Les plus récents publications",
 
     "following": "Abonnements",
     "following_uploads_desc": "Publications par les personnes que vous vous abonnez",
@@ -99,7 +99,7 @@
     "write_reply": "Ecrit votre reponse.",
 
     "comment": "Commentaire",
-    "reply": "Repondre",
+    "reply_action": "Repondre",
     "post": "Publier",
 
     "404_not_found": "404 Non Trouvé",
