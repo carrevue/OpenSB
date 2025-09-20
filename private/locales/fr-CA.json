@@ -83,6 +83,12 @@
     "dont_have_an_account": "Pas de compte ?",
     "have_an_account": "Avez-vous un compte ?",
 
+    "birthdate_verify": "Vérifiez votre date de naissance",
+    "birthdate_verify_intro": "Avant de continuer à utiliser %s, veuillez définir votre date de naissance.",
+    "birthdate_verify_explaination": "Pour utiliser %s, vous devez avoir au moins 13 ans. Veuillez vous déconnecter immédiatement si vous avez moins de 13 ans. Tous les utilisateurs qui mentent sur leur âge seront bannis.",
+
+    "submit_action": "Submit",
+
     "list": "Liste",
     "grid": "Grille",
 
@@ -106,9 +112,16 @@
     "site_news": "Nouvelles",
     "site_news_desc": "Les nouvelles du site",
 
+    "no_journals": "Il n'y a pas de journaux.",
+
     "more": "Plus",
     "edit": "Modifier",
+    "feature_on_profile": "Épinglez sur votre profil",
     "delete": "Supprimer",
+
+    "delete_upload_confirm": "Êtes-vous sûr de vouloir supprimer cette publication ?",
+    "delete_journal_confirm": "Êtes-vous sûr de vouloir supprimer ce journal ?",
+    "feature_on_profile_confirm": "Êtes-vous sûr de vouloir épingler cette publication sur votre profil ?",
 
     "new": "Nouveau",
     "popular": "Populaire",
@@ -167,6 +180,7 @@
     "user_link_color": "Couleur d'utilisateur",
 
     "profile_featured": "Épinglé",
+    "profile_no_description": "Cet utilisateur n'a pas de description.",
 
     "user_role_unknown": "Inconnu",
     "user_role_normal": "Normal",
@@ -204,6 +218,22 @@
     "new_journal_intro": "Écrivez un nouveau journal qui sera affiché sur votre profil. Le formatage du texte Markdown est compatible.",
     "content": "Contenu",
     "publish_as_news": "Publier comme nouvelles",
+
+    "modify_upload": "Modifier cette publication",
+    "modify_journal": "Modifier ce journal",
+
+    "visibility": "Visibilité",
+    "public": "Public",
+    "unlisted": "Caché",
+    "private": "Privé",
+    "custom_thumbnail": "Vignette",
+
+    "block_guests_from_upload": "Empêcher les utilisateurs déconnectés de voir cette publication",
+    "disable_comments_from_upload": "Désactiver les commentaires sur cette publication",
+    "block_guests_from_journal": "Empêcher les utilisateurs déconnectés de voir ce journal",
+    "disable_comments_from_journal": "Désactiver les commentaires sur ce journal",
+
+    "save_action": "Sauvegarder",
 
     "notifications": "Notifications",
     "clear_all": "Tout effacer",

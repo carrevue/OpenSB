@@ -84,7 +84,7 @@
     "have_an_account": "Have an account?",
 
     "birthdate_verify": "Verify your birthdate",
-    "birthdate_verify_intro": "Before you can continue using %s, please specify your birthdate.",
+    "birthdate_verify_intro": "Before you can continue using %s, please set your birthdate.",
     "birthdate_verify_explaination": "To use %s, you must be 13 years of age or older. Please log out immediately if you are under 13. Users who are caught lying about their age will be banned.",
 
     "submit_action": "Submit",
