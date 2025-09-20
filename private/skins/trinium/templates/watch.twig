@@ -91,7 +91,7 @@
                         <div class="watch-box-below-title">
                             {{ type_text }} 
                             {% if not is_chaziz_sb %}• {{ rating_text }}{% endif %}
-                            {% if upload.flags.featured %}• <span class="watch-box-below-title-featured">{{ localize('featured" )}}</span>{% endif %}
+                            {% if upload.flags.featured %}• <span class="watch-box-below-title-featured">{{ localize('featured') }}</span>{% endif %}
                         </div>
                         <hr>
                         <div class="watch-box-row">
@@ -182,7 +182,7 @@
                     <div class="content-box">
                         <div class="section-header flex">
                             <div class="section-header-left">
-                                <h2 class="section-title">{{ localize('comments" )}}</h2>
+                                <h2 class="section-title">{{ localize('comments' )}}</h2>
                                 <div class="section-desc">{{ upload.interactions.comments }}</div>
                             </div>
                         </div>
@@ -191,7 +191,7 @@
                         {% else %}
                             <div>
                                 <div id="new-comment-logged-out">
-                                    {{ localize('comments_disabled" )}}
+                                    {{ localize('comments_disabled') }}
                                 </div>
                             </div>
                         {% endif %}
