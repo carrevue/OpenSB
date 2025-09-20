@@ -1,6 +1,6 @@
 # OpenSB
 
-NOTE: OpenSB 2.0 *is* 1.3, the feature freeze is still in effect. No new functionality will be added during this time.
+<img src="https://raw.githubusercontent.com/bluffingo/OpenSB/refs/heads/opensb-2.0/private/skins/trinium/default.png"></img>
 
 ## How to setup an OpenSB instance.
 
@@ -17,7 +17,7 @@ I wouldn't recommend using this code unless if you ***really*** know what you're
 
 1. Use Linux for anything related to production.
 1. Instead of installing dependencies using `composer update` you do `composer update --no-dev`
-1. Make the `dynamic/` and `templates/cache/` directories writable by your web server.
+1. Make the `dynamic/` and `private/skins/cache/` directories writable by your web server.
 1. Modify branding settings to replace the default OpenSB branding with your custom branding. Check the `public/assets/placeholder` directory for reference.
 
 ### Development specific
