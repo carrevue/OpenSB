@@ -151,7 +151,7 @@ set_exception_handler(function ($exception) {
         );
 
         $githubNewIssueUrl = sprintf(
-            'https://github.com/bluffingo/opensb/issues/new?title=%s&labels=error&body=%s',
+            'https://github.com/bluffingo/opensb/issues/new?title=%s&labels=bug&body=%s',
             urlencode('Error: ' . $exception->getMessage()),
             urlencode(
                 "**Error**: " . $exception->getMessage() . "\n\n" .
