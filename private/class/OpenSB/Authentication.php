@@ -32,7 +32,7 @@ class Authentication
     private Database $database;
     private bool $is_logged_in = false;
     private int $user_id;
-    private array $user_data;
+    private array|false $user_data;
     private $user_ban_data;
     private $user_stat_data;
     private $has_authenticated_as_staff = false;
@@ -44,7 +44,9 @@ class Authentication
         $token = $_SESSION["SBTOKEN"] ?? null;
 
         if (isset($token)) {
-            if ($this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE token = ?", [$token])) {
+            $this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE token = ?", [$token]);
+
+            if ($this->user_data) {
                 $this->is_logged_in = true;
                 $this->user_id = $this->user_data["id"];
                 $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$this->user_id]);
