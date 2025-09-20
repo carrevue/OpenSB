@@ -173,17 +173,17 @@ class DiscordWebhookLogging
     }
 
     /**
-     * Trigger the upload processing worker fail webhook.
+     * Trigger the upload processor fail webhook.
      *
      * @param array $data Array with the necessary data.
      */
-    public function uploadProcessingWorkerSuccessHook($data)
+    public function uploadProcessorSuccessHook($data)
     {
         $this->initClient();
 
         $title = $data['id'] . ' successfully processed.';
 
-        $author = 'Processing worker';
+        $author = 'Upload processor';
 
         $mbd = new Embed();
 
@@ -196,17 +196,17 @@ class DiscordWebhookLogging
     }
 
     /**
-     * Trigger the upload processing worker fail webhook.
+     * Trigger the upload processor fail webhook.
      *
      * @param array $data Array with the necessary data.
      */
-    public function uploadProcessingWorkerFailHook($data)
+    public function uploadProcessorFailHook($data)
     {
         $this->initClient();
 
         $title = $data['id'] . ' failed to process.';
 
-        $author = 'Processing worker';
+        $author = 'Upload processor';
 
         $mbd = new Embed();
 

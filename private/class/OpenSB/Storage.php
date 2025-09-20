@@ -38,12 +38,13 @@ class Storage
 
     public function processVideoUpload($new, $target_file): void
     {
-        // this uses the version of php on path. if processing worker errors out with "OpenSB is not compatible
-        // with your PHP version.", then your path's php is too old.
+        // this uses the version of php on path. if the upload processor errors
+        // out with "OpenSB is not compatible with your PHP version.", then 
+        // your path's php is too old.
         if (str_starts_with(php_uname(), "Windows")) {
             pclose(popen(sprintf(
                 'start /B  php %s "%s" "%s" "video" "1" > %s',
-                BLUFF_PRIVATE_PATH . '\scripts\processingworker.php',
+                BLUFF_PRIVATE_PATH . '\scripts\upload_processor.php',
                 $new,
                 $target_file,
                 BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
@@ -51,7 +52,7 @@ class Storage
         } else {
             system(sprintf(
                 'php %s "%s" "%s" "video" "1" > %s 2>&1 &',
-                BLUFF_PRIVATE_PATH . '/scripts/processingworker.php',
+                BLUFF_PRIVATE_PATH . '/scripts/upload_processor.php',
                 $new,
                 $target_file,
                 BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
