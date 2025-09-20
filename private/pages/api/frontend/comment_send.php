@@ -181,7 +181,7 @@ switch ($post_data['type']) {
 if ($sb->isDiscordWebhookEnabled()) {
     $data = [
         'id' => $insertID,
-        'name' => $post_data['id'],
+        'location_id' => $post_data['id'],
         'contents' => $commentText,
         'author' => $auth->getUserData()["name"],
         'type' => $post_data['type']

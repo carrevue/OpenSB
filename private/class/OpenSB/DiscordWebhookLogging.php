@@ -130,7 +130,7 @@ class DiscordWebhookLogging
      *
      * @param array $data Array with the necessary data.
      */
-    public function newCommentHook($data, $is_legacy_api = false)
+    public function newCommentHook($data)
     {
         $this->initClient();
 
@@ -142,19 +142,19 @@ class DiscordWebhookLogging
         switch ($data['type']) {
             case 'video': // legacy api
             case 'upload':
-                $title = Utilities::uploadStringIDToUploadTitle($this->database, $data['name']);
+                $title = Utilities::uploadStringIDToUploadTitle($this->database, $data['location_id']);
                 $author = 'New upload comment by ' . $data['author'];
-                $uploadUrl = sprintf("%s/view/%s", $this->domain, $data['name']);
+                $uploadUrl = sprintf("%s/view/%s", $this->domain, $data['location_id']);
                 break;
             case 'profile':
-                $title = Utilities::userIDToUsername($this->database, $data['name']);
+                $title = Utilities::userIDToUsername($this->database, $data['location_id']);
                 $author = 'New profile comment by ' . $data['author'];
-                $uploadUrl = sprintf("%s/user/%s", $this->domain, $data['name']);
+                $uploadUrl = sprintf("%s/user/%s", $this->domain, $title);
                 break;
             case 'journal':
-                $title = Utilities::journalIDtoJournalTitle($this->database, $data['name']);
+                $title = Utilities::journalIDtoJournalTitle($this->database, $data['location_id']);
                 $author = 'New journal comment by ' . $data['author'];
-                $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['name']);
+                $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['location_id']);
                 break;
             default:
                 exit;

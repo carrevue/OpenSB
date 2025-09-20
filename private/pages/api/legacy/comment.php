@@ -129,7 +129,7 @@ if ($sb->isDiscordWebhookEnabled()) {
     //$data = [
     $webhook_data = [
         'id' => $insertID,
-        'name' => $id,
+        'location_id' => $id,
         'contents' => $_POST['comment'],
         'author' => $auth->getUserData()["name"],
         'type' => $_POST['type'],
