@@ -165,9 +165,9 @@ if (!$CrawlerDetect->isCrawler()) {
     }
 }
 
-$whereRatings = Utilities::whereRatings();
-$whereTagBlacklist = Utilities::whereTagBlacklist();
-$upload_query = new UploadQuery($database);
+$whereRatings = $auth->databaseWhereRatingsHelper();
+$whereTagBlacklist = $auth->databaseWhereTagBlacklistHelper();
+$upload_query = new UploadQuery($sb);
 
 // ported from poktwo, modified to accommodate for takedowns and relevancy.
 $recommendfields = "

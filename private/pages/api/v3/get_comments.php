@@ -21,7 +21,7 @@
 
 namespace OpenSB\Pages\APIv3;
 
-global $database;
+global $sb, $database;
 
 use OpenSB\CommentData;
 use OpenSB\CommentLocation;

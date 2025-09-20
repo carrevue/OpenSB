@@ -26,16 +26,49 @@ use Intervention\Image\ImageManager;
 
 use BluffingoCore\Database;
 
+/**
+ * class Storage
+ * 
+ * Handles storage. This was originally written to accomodate BunnyCDN support
+ * while keeping filesystem support intact, however this was removed in OpenSB
+ * 1.2.5.
+ */
 class Storage
 {
+    /**
+     * @var SquareBracket The core OpenSB class.
+     */
     private SquareBracket $sb;
+
+    /**
+     * @var Database The database class.
+     */
     private Database $database;
+
+    /**
+     * function __construct
+     *
+     * @param SquareBracket $sb
+     *
+     * @return void
+     */
     public function __construct(SquareBracket $sb)
     {
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
     }
 
+    /**
+     * function processVideoUpload
+     * 
+     * Starts the upload processor script on another process, which wraps 
+     * around FFmpeg.
+     *
+     * @param mixed $new
+     * @param mixed $target_file
+     *
+     * @return void
+     */
     public function processVideoUpload($new, $target_file): void
     {
         // this uses the version of php on path. if the upload processor errors
@@ -60,6 +93,128 @@ class Storage
         }
     }
 
+    /**
+     * function processImageUpload
+     * 
+     * Downscales images to a width of 4096 pixels, and also downscales 
+     * it to 640 pixels for the thumbnail.
+     *
+     * @param mixed $temp_name
+     * @param mixed $new
+     *
+     * @return void
+     */
+    public function processImageUpload($temp_name, $new): void
+    {
+        $target_file = BLUFF_DYNAMIC_PATH . '/art/' . $new . '.png';
+        $target_thumbnail = BLUFF_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
+
+        // image upload
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->scaleDown(4096);
+        $img->toPng()->save($target_file);
+
+        // thumbnail
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->scaleDown(640);
+        $img->toJpeg(90)->save($target_thumbnail);
+
+        unlink($temp_name);
+    }
+
+    /**
+     * function processProfilePicture
+     * 
+     * Downscales profile pictures to a width and height of 512.
+     *
+     * @param mixed $temp_name
+     * @param mixed $new
+     *
+     * @return void
+     */
+    public function processProfilePicture($temp_name, $new): void
+    {
+        $target_file = BLUFF_DYNAMIC_PATH . '/pfp/' . $new . '.png';
+
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        // i have to do this otherwise non-1:1 images that are smaller than 512x512 won't be stretched
+        $img->resize(512, 512);
+        $img->toPng()->save($target_file);
+
+        unlink($temp_name);
+    }
+
+    /**
+     * function processCustomUploadThumbnail
+     * 
+     * Downscales thumbnails to a width of 640.
+     *
+     * @param mixed $temp_name
+     * @param mixed $new
+     *
+     * @return void
+     */
+    public function processCustomUploadThumbnail($temp_name, $new): void
+    {
+        $target_file = BLUFF_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
+
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->scaleDown(640);
+        $img->toJpeg(90)->save($target_file);
+
+        unlink($temp_name);
+    }
+
+    /**
+     * function processProfileBanner
+     * 
+     * Scales profile banners to a height of 300 pixels
+     *
+     * @param mixed $temp_name
+     * @param mixed $new
+     *
+     * @return void
+     */
+    public function processProfileBanner($temp_name, $new): void
+    {
+        $target_file = BLUFF_DYNAMIC_PATH . '/banners/' . $new . '.png';
+
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+        $img->scale(height: 300);
+        $img->toPng()->save($target_file);
+
+        unlink($temp_name);
+    }
+
+    /**
+     * function deleteUploadFile
+     * 
+     * Deletes the upload's file.
+     *
+     * @param mixed $data
+     *
+     * @return void
+     */
+    public function deleteUploadFile($data): void
+    {
+        unlink(BLUFF_ROOT_PATH . $data["upload_file"]);
+    }
+
+    /**
+     * function getVideoUploadThumbnail
+     * 
+     * Returns the video upload thumbnail.
+     *
+     * @param mixed $id
+     * @param mixed $custom
+     *
+     * @return string
+     */
     public function getVideoUploadThumbnail($id, $custom): string
     {
         $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
@@ -73,6 +228,16 @@ class Storage
         );
     }
 
+    /**
+     * function getImageUploadThumbnail
+     * 
+     * Returns the image upload thumbnail.
+     *
+     * @param mixed $id
+     * @param mixed $custom
+     *
+     * @return string
+     */
     public function getImageUploadThumbnail($id, $custom): string
     {
         $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
@@ -86,6 +251,16 @@ class Storage
         );
     }
 
+    /**
+     * function getUserProfilePicture
+     * 
+     * Return the user profile picture.
+     *
+     * @param mixed $username
+     * @param mixed $isAdmin
+     *
+     * @return string
+     */
     public function getUserProfilePicture($username, $isAdmin): string
     {
         $placeholder = $this->sb->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
@@ -108,6 +283,15 @@ class Storage
         return '/assets/' . $placeholder;
     }
 
+    /**
+     * function getUserProfileBanner
+     * 
+     * Returns the user profile banner.
+     *
+     * @param mixed $username
+     *
+     * @return bool|string
+     */
     public function getUserProfileBanner($username): bool|string
     {
         $id = Utilities::usernameToUserID($this->database, $username);
@@ -122,68 +306,17 @@ class Storage
         }
     }
 
-    public function processImageUpload($temp_name, $new): void
-    {
-        $target_file = BLUFF_DYNAMIC_PATH . '/art/' . $new . '.png';
-        $target_thumbnail = BLUFF_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
-
-        // image upload
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->scaleDown(4096);
-        $img->toPng()->save($target_file);
-
-        // thumbnail
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->scaleDown(640);
-        $img->toJpeg(90)->save($target_thumbnail);
-
-        unlink($temp_name);
-    }
-
-    public function processProfilePicture($temp_name, $new): void
-    {
-        $target_file = BLUFF_DYNAMIC_PATH . '/pfp/' . $new . '.png';
-
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        // i have to do this otherwise non-1:1 images that are smaller than 512x512 won't be stretched
-        $img->resize(512, 512);
-        $img->toPng()->save($target_file);
-
-        unlink($temp_name);
-    }
-
-    public function processCustomUploadThumbnail($temp_name, $new): void
-    {
-        $target_file = BLUFF_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
-
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->scaleDown(640);
-        $img->toJpeg(90)->save($target_file);
-
-        unlink($temp_name);
-    }
-
-    public function processProfileBanner($temp_name, $new): void
-    {
-        $target_file = BLUFF_DYNAMIC_PATH . '/banners/' . $new . '.png';
-
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read($temp_name);
-        $img->scale(height: 300);
-        $img->toPng()->save($target_file);
-
-        unlink($temp_name);
-    }
-
-    public function deleteUploadFile($data): void
-    {
-        unlink(BLUFF_ROOT_PATH . $data["upload_file"]);
-    }
-
+    /**
+     * function getThumbnailPath
+     *
+     * @param string $id
+     * @param bool $custom
+     * @param string $defaultFolder
+     * @param string $defaultExtension
+     * @param string $fallback
+     *
+     * @return string
+     */
     private function getThumbnailPath(
         string $id,
         ?bool $custom,

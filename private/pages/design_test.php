@@ -21,12 +21,12 @@
 
 namespace OpenSB\Pages;
 
-global $twig, $database;
+global $twig, $sb, $database;
 
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 $uploads = $upload_query->query("v.id DESC", 2);
 
 $data["color_types"] = [

@@ -27,15 +27,39 @@ use IntlDateFormatter;
 use MessageFormatter;
 use NumberFormatter;
 
+/**
+ * class Localization
+ * 
+ * This class handles translation.
+ */
 class Localization
 {
-    protected mixed $locale;
+    /**
+     * @var string The current locale.
+     */
+    protected string $locale;
+
+    /**
+     * @var array Strings from the currently selected locale.
+     */
     protected array $messages = [];
+
+    /**
+     * @var array Fallback strings from the American English locale.
+     */
     protected array $messages_fallback = [];
+
+    /**
+     * @var bool If psuedolocalization is enabled
+     */
     private bool $isPsuedo = false;
 
     /**
-     * @throws Exception
+     * function __construct
+     *
+     * @param mixed $locale
+     *
+     * @return void
      */
     public function __construct($locale = 'en-US')
     {
@@ -44,7 +68,9 @@ class Localization
     }
 
     /**
-     * @throws Exception
+     * function loadLocalizationData
+     *
+     * @return void
      */
     protected function loadLocalizationData(): void
     {
@@ -73,6 +99,18 @@ class Localization
         }
     }
 
+    /**
+     * function formatDate
+     * 
+     * Formats dates.
+     *
+     * @param mixed $date
+     * @param mixed $dateFormat
+     * @param mixed $timeFormat
+     * @param mixed $pattern
+     *
+     * @return mixed
+     */
     public function formatDate($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null)
     {
         if (!$date instanceof \DateTimeInterface) {
@@ -92,15 +130,29 @@ class Localization
         return $formatter->format($date);
     }
 
+    /**
+     * function formatNumber
+     * 
+     * Formats numbers.
+     *
+     * @param mixed $number
+     *
+     * @return mixed
+     */
     public function formatNumber($number)
     {
         $formatter = new NumberFormatter($this->isPsuedo ? 'en-US' : $this->locale, NumberFormatter::DECIMAL);
         return $formatter->format($number);
     }
 
-
     /**
+     * function formatRelativeTime
+     *
      * Relative time function.
+     *
+     * @param mixed $time
+     *
+     * @return mixed
      */
     public function formatRelativeTime($time)
     {
@@ -167,6 +219,16 @@ class Localization
     }
     */
 
+    /**
+     * function translate
+     * 
+     * Handles all translations.
+     *
+     * @param mixed $key
+     * @param mixed $args
+     *
+     * @return mixed
+     */
     public function translate($key, ...$args)
     {
         if ($this->isPsuedo) {
@@ -190,6 +252,13 @@ class Localization
         return $message;
     }
 
+    /**
+     * function getLanguageCode
+     * 
+     * Returns the language code.
+     *
+     * @return string|mixed
+     */
     public function getLanguageCode()
     {
         if ($this->locale === null) {
@@ -200,6 +269,15 @@ class Localization
         return strtolower($parts[0]);
     }
 
+    /**
+     * function convertDateFormatterPattern
+     * 
+     * Formats dates.
+     *
+     * @param mixed $pattern
+     *
+     * @return mixed
+     */
     private function convertDateFormatterPattern($pattern)
     {
         if (is_int($pattern)) {
@@ -218,6 +296,16 @@ class Localization
         return $formats[strtolower($pattern)] ?? IntlDateFormatter::MEDIUM;
     }
 
+    /**
+     * function translatePsuedo
+     * 
+     * Handle psuedo-localization.
+     *
+     * @param mixed $key
+     * @param mixed $args
+     *
+     * @return string|mixed
+     */
     private function translatePsuedo($key, ...$args)
     {
         if (!isset($this->messages[$key])) {
@@ -234,6 +322,16 @@ class Localization
         return Pseudolocale::pseudolocalize($args ? vsprintf($message, $args) : $message);
     }
 
+    /**
+     * function translateICU
+     * 
+     * Handles ICU translations for units.
+     *
+     * @param string $message
+     * @param array $args
+     *
+     * @return mixed
+     */
     private function translateICU(string $message, array $args)
     {
         $locale = $this->isPsuedo ? 'en-US' : $this->locale;

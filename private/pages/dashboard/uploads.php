@@ -39,7 +39,7 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 
 $amount = $_GET["amount"] ?? 16;
 $search = $_GET["search"] ?? ""; //TODO

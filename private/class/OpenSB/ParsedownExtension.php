@@ -23,11 +23,35 @@ namespace OpenSB;
 
 use Parsedown;
 
+/**
+ * class ParsedownExtension
+ * 
+ * This Parsedown extension is used by SquareBracketTwigExtension's 
+ * markdown_user_written function to remove the ability for users to
+ * add headers to their comments.
+ */
 class ParsedownExtension extends Parsedown
 {
-
-    // We don't need headers
+    /**
+     * function blockHeader
+     * 
+     * Disables headers.
+     *
+     * @param mixed $Line
+     *
+     * @return void
+     */
     protected function blockHeader($Line): void {}
 
+    /**
+     * function blockSetextHeader
+     * 
+     * Disables headers.
+     *
+     * @param mixed $Line
+     * @param mixed $Block
+     *
+     * @return void
+     */
     protected function blockSetextHeader($Line, array|null $Block = []): void {}
 }

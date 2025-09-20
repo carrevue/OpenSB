@@ -24,28 +24,74 @@ namespace OpenSB;
 use BluffingoCore\Database;
 
 /**
- * Commenting on uploads, profiles and journals.
+ * class CommentData
+ *
+ * Handles the comments on uploads, profiles and journals.
  */
 class CommentData
 {
+    /**
+     * @var Database The Database class
+     */
     private Database $database;
-    private CommentLocation $type;
-    private $id;
-    private $count = 0; // stupid? maybe idfk
 
-    public function __construct(Database $database, $type, $id = null)
+    /**
+     * @var CommentLocation The Comment location type.
+     */
+    private CommentLocation $type;
+
+    /**
+     * @var mixed
+     */
+    private mixed $id;
+
+    /**
+     * @var int 
+     */
+    private int $count = 0; // stupid? maybe idfk
+
+    /**
+     * function __construct
+     *
+     * @param Database $database
+     * @param CommentLocation $type
+     * @param int $id
+     *
+     * @return void
+     */
+    public function __construct(Database $database, CommentLocation $type, $id = null)
     {
         $this->database = $database;
         $this->type = $type;
         $this->id = $id;
     }
 
+    /**
+     * function fetchComments
+     * 
+     * wait what the fuck is this
+     *
+     * @param mixed $query
+     * @param mixed $params
+     *
+     * @return mixed
+     */
     private function fetchComments($query, $params)
     {
         return $this->database->fetchArray($this->database->query($query, $params));
     }
 
-    // probably stupid and should be part of getComments. -chaziz 8/26/2023
+    //
+
+    /**
+     * function getReplies
+     * 
+     * probably stupid and should be part of getComments. -chaziz 8/26/2023
+     *
+     * @param mixed $id
+     *
+     * @return mixed
+     */
     public function getReplies($id)
     {
         $database_data = null;
@@ -81,11 +127,27 @@ class CommentData
         return $data;
     }
 
+    /**
+     * function getCommentCount
+     * 
+     * @todo rework this completely
+     *
+     * @return mixed
+     */
     public function getCommentCount()
     {
-        return $this->count; // TODO: rework this completely
+        return $this->count;
     }
 
+    /**
+     * function getComments
+     * 
+     * Fetches all of the comments
+     *
+     * @param mixed $limit
+     *
+     * @return mixed
+     */
     public function getComments($limit = 0)
     {
         $database_data = null;

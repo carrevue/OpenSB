@@ -30,7 +30,7 @@ use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 use OpenSB\UserData;
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 

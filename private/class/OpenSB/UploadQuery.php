@@ -21,21 +21,57 @@
 
 namespace OpenSB;
 
+use OpenSB\SquareBracket;
 use BluffingoCore\Database;
 
+/**
+ * class UploadQuery
+ *
+ * UploadQuery
+ * This class allows for uniform upload-related queries within the codebase.
+ */
 class UploadQuery
 {
+    /**
+     * @var Database
+     */
     private Database $database;
-    private $whereRatings;
-    private $whereTagBlacklist;
 
-    public function __construct($database)
+    /**
+     * @var string
+     */
+    private string $whereRatings;
+
+    /**
+     * @var string
+     */
+    private string $whereTagBlacklist;
+
+    /**
+     * function __construct
+     *
+     * @param SquareBracket $sb
+     *
+     * @return void
+     */
+    public function __construct(SquareBracket $sb)
     {
-        $this->database = $database;
-        $this->whereRatings = Utilities::whereRatings();
-        $this->whereTagBlacklist = Utilities::whereTagBlacklist();
+        $this->database = $sb->getDatabaseClass();
+        $this->whereRatings = $sb->getAuthenticationClass()->databaseWhereRatingsHelper();
+        $this->whereTagBlacklist = $sb->getAuthenticationClass()->databaseWhereTagBlacklistHelper();
     }
 
+    /**
+     * function query
+     *
+     * @param mixed $order
+     * @param mixed $limit
+     * @param mixed $whereCondition
+     * @param mixed $params
+     * @param mixed $adminPanel
+     *
+     * @return mixed
+     */
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false)
     {
         global $auth;
@@ -85,6 +121,15 @@ class UploadQuery
     }
 
     // used in the browse page
+
+    /**
+     * function count
+     *
+     * @param mixed $whereCondition
+     * @param mixed $params
+     *
+     * @return mixed
+     */
     public function count($whereCondition = null, $params = [])
     {
         $query = "

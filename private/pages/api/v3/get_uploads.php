@@ -21,13 +21,13 @@
 
 namespace OpenSB\Pages\APIv3;
 
-global $database;
+global $sb, $database;
 
 use OpenSB\UploadQuery;
 
 header('Content-Type: application/json');
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 
 $uploads_random = $upload_query->query("RAND()", 8);
 

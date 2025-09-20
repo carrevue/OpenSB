@@ -23,14 +23,43 @@ namespace OpenSB;
 
 use BluffingoCore\Database;
 
+/**
+ * class UserData
+ * 
+ * This class handles user info data in an uniform and consistent way, which 
+ * can be reused on pages. It automatically caches every single user thats
+ * required by a page, preventing redudant database queries from being done.
+ */
 class UserData
 {
+    /**
+     * @var Database The database class
+     */
     private Database $database;
-    private $id;
-    private $data;
 
-    private static $userDataCache = [];
+    /**
+     * @var int The user's ID
+     */
+    private int $id;
 
+    /**
+     * @var array The user's data
+     */
+    private array $data;
+
+    /**
+     * @var mixed The user data cache
+     */
+    private static array $userDataCache = [];
+
+    /**
+     * function __construct
+     *
+     * @param Database $database
+     * @param mixed $id
+     *
+     * @return void
+     */
     public function __construct(Database $database, $id)
     {
         $this->database = $database;
@@ -56,6 +85,13 @@ class UserData
         }
     }
 
+    /**
+     * function isUserBanned
+     * 
+     * Checks if the user is banned.
+     *
+     * @return bool
+     */
     public function isUserBanned(): bool
     {
         // also cache if a user is banned (for later)
@@ -72,6 +108,13 @@ class UserData
         return $isBanned;
     }
 
+    /**
+     * function getUserArray
+     * 
+     * Returns the user data array.
+     *
+     * @return array
+     */
     public function getUserArray(): array
     {
         if ($this->data) {
@@ -97,6 +140,13 @@ class UserData
         }
     }
 
+    /**
+     * function getUserDataCache
+     * 
+     * Returns the user data caches for debugging purposes.
+     *
+     * @return array
+     */
     public static function getUserDataCache(): array
     {
         return self::$userDataCache;

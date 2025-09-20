@@ -63,7 +63,7 @@ if ($flags["profile_customization_enabled"]) {
 
 // page-specific shit Here.
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 
 function getOrderFromType($type): string
 {

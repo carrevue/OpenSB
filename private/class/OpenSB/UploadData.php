@@ -24,22 +24,49 @@ namespace OpenSB;
 use BluffingoCore\Database;
 
 /**
- * uploads.
+ * class UploadData
+ *
+ * This class handles upload data in an uniform and consistent way, which can 
+ * be reused on pages.
  */
 class UploadData
 {
+    /**
+     * @var Database The database class
+     */
     private Database $database;
-    private UploadRatingData $ratings;
-    private $takedown;
-    private $data;
-    private $tags;
-    private $deleted_data;
+
+
+    /**
+     * @var UploadRatingData|null The Upload rating data helper class.
+     */
+    private ?UploadRatingData $ratings = null;
+
+    /** 
+     * @var array|null Upload takndown data
+     */
+    private ?array $takedown = null;
+
+    /** 
+     * @var array|null Upload data 
+     */
+    private ?array $data = null;
+
+    /** 
+     * @var array|null Tags associated with this upload
+     */
+    private ?array $tags = null;
+
+    /** 
+     * @var bool Indicates if the upload was deleted as a failsafe measure
+     */
+    private bool $is_deleted = false;
 
     public function __construct(Database $database, $id)
     {
         $this->database = $database;
 
-        $this->deleted_data = $this->database->fetch("SELECT COUNT(*) FROM upload_deleted v WHERE id = ?", [$id])["COUNT(*)"];
+        $this->is_deleted = $this->database->fetch("SELECT COUNT(*) FROM upload_deleted v WHERE id = ?", [$id])["COUNT(*)"];
 
         // if we get the internal id instead of the string id, we correct $id after fetching the upload otherwise
         // stuff won't work.
@@ -58,31 +85,64 @@ class UploadData
         }
     }
 
+    /**
+     * Get takedown data for this upload.
+     *
+     * @return array|null Array containing takedown data, or null if not found.
+     */
     public function getTakedown()
     {
         return $this->takedown;
     }
 
+    /**
+     * Get the upload data.
+     *
+     * @return array|null Array containing upload data, or null if not found.
+     */
     public function getData()
     {
         return $this->data;
     }
 
+    /**
+     * Get the tags associated with the upload.
+     *
+     * @return array|null Array of tags, or null if none or upload not found.
+     */
     public function getTags()
     {
         return $this->tags;
     }
 
+    /**
+     * Check whether this upload has been deleted.
+     *
+     * @return bool True if the upload has been deleted.
+     */
     public function isDeleted()
     {
-        return $this->deleted_data;
+        return $this->is_deleted;
     }
 
+    /**
+     * Calculate rating data using the `UploadRatingData` class
+     *
+     * @return array|null Rating data or null.
+     */
     public function getRatingData()
     {
+        if ($this->ratings === null) {
+            return null;
+        }
         return $this->ratings->calculateRatingData();
     }
 
+    /**
+     * Returns of array of specific upload flags.
+     *
+     * @return array Upload flag array data.
+     */
     public function getUploadFlagsArray()
     {
         return UploadFlags::toArray($this->data["flags"]);

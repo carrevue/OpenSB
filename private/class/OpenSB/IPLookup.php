@@ -23,10 +23,25 @@ namespace OpenSB;
 
 use MaxMind\Db\Reader;
 
+/**
+ * class IPLookup
+ * 
+ * This class is a simplified interface for MaxMind's database reader class.
+ */
 class IPLookup
 {
+    /**
+     * @var Reader The MaxMind Database Reader class.
+     */
     private Reader $reader;
 
+    /**
+     * function __construct
+     *
+     * @param string $config
+     *
+     * @return void
+     */
     public function __construct(string $config)
     {
         if ($config) {
@@ -34,6 +49,16 @@ class IPLookup
         }
     }
 
+    /**
+     * function getInfo
+     * 
+     * Gets IP information, and falls back to generic placeholder data for
+     * localhost or invalid IPs.
+     *
+     * @param mixed $ip
+     *
+     * @return mixed
+     */
     public function getInfo($ip)
     {
         if (
@@ -56,6 +81,15 @@ class IPLookup
         return $this->reader->get($ip);
     }
 
+    /**
+     * function getCountry
+     * 
+     * Gets the IP's country.
+     *
+     * @param mixed $ip
+     *
+     * @return mixed
+     */
     public function getCountry($ip)
     {
         return $this->getInfo($ip)["country_code"];

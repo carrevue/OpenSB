@@ -33,7 +33,7 @@ use OpenSB\UserFlags;
 use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 

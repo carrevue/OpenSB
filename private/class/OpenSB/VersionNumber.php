@@ -24,21 +24,46 @@ namespace OpenSB;
 use BluffingoCore\GitInfo;
 use Exception;
 
+/**
+ * class VersionNumber
+ * 
+ * This class generates OpenSB's version number.
+ * 
+ * @since OpenSB 1.1
+ */
 class VersionNumber
 {
-    private string $versionName;
-    private string $versionNumber;
+    /**
+     * @var string The version name,
+     */
+    private string $versionName = "Brightney";
+
+    /**
+     * @var string The version number, which tries to follow Semantic versioning.
+     */
+    private string $versionNumber = "2.0.0-rc.3.a";
+
+    /**
+     * @var string The full complete version string.
+     */
     private string $versionString;
 
+    /**
+     * function __construct
+     *
+     * @return void
+     */
     public function __construct()
     {
-        $this->versionName = "Brightney";
-        $this->versionNumber = "2.0.0-rc.3.a";
         $this->versionString = $this->makeVersionString();
     }
 
     /**
+     * function makeVersionString
+     *
      * Makes the version string.
+     *
+     * @return string
      */
     private function makeVersionString(): string
     {
@@ -66,7 +91,9 @@ class VersionNumber
     }
 
     /**
-     * Outputs the version banner.
+     * function outputVersionBanner
+     *
+     * Outputs the version banner, typically used in logs.
      *
      * @return string
      */
@@ -76,6 +103,8 @@ class VersionNumber
     }
 
     /**
+     * function getVersionArray
+     *
      * Returns a version array intended for the frontend.
      *
      * @return array
@@ -90,6 +119,8 @@ class VersionNumber
     }
 
     /**
+     * function getVersionName
+     *
      * Returns the version name.
      *
      * @return string
@@ -100,6 +131,8 @@ class VersionNumber
     }
 
     /**
+     * function getVersionNumber
+     *
      * Returns the version number.
      *
      * @return string
@@ -110,6 +143,8 @@ class VersionNumber
     }
 
     /**
+     * function getVersionString
+     *
      * Returns the version string.
      *
      * @return string

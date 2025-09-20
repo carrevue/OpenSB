@@ -37,20 +37,53 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
 /**
- * A rewrite of openSB's /private/layout.php.
+ * class Templating
+ *
+ * The Twig wrapper
  */
 class Templating
 {
-    private $skin;
-    private $theme;
+    /**
+     * @var string The current user's skin
+     */
+    private string $skin;
+
+    /**
+     * @var string The current user's theme
+     */
+    private string $theme;
+
+    /**
+     * @var SquareBracket The core SquareBracket class
+     */
     private SquareBracket $sb;
+
+    /**
+     * @var Authentication The authentication class
+     */
     private Authentication $authentication;
+
+    /**
+     * @var FilesystemLoader Twig's Filesystem Loader
+     */
     private FilesystemLoader $loader;
+
+    /**
+     * @var Environment The Twig environment
+     */
     private Environment $twig;
+
+    /**
+     * @var VersionNumber The version number class
+     */
     private VersionNumber $version_number;
 
     /**
-     * @throws LoaderError
+     * function __construct
+     *
+     * @param SquareBracket $sb
+     *
+     * @return mixed|string
      */
     public function __construct(SquareBracket $sb)
     {
@@ -201,10 +234,11 @@ class Templating
     }
 
     /**
+     * function getAllSkins
+     *
      * Get all the available skins.
      *
-     *
-     * @return string[]
+     * @return array
      */
     public function getAllSkins(): array
     {
@@ -226,11 +260,13 @@ class Templating
     }
 
     /**
+     * function getSkinMetadata
+     *
      * Get the skin's JSON metadata.
      *
+     * @param mixed $skin
      *
-     * @param $skin
-     * @return array|null
+     * @return array
      */
     public function getSkinMetadata($skin): ?array
     {
@@ -243,6 +279,13 @@ class Templating
         return json_decode($metadata, true);
     }
 
+    /**
+     * function getAllSkinsMetadata
+     * 
+     * Get all installed skins' JSON metadata.
+     *
+     * @return array
+     */
     public function getAllSkinsMetadata(): array
     {
         // kinda ugly but if i dont do this then it fucks up
@@ -277,14 +320,12 @@ class Templating
     }
 
     /**
+     * function render
      *
-     * @param $template
+     * @param mixed $template
      * @param array $data
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      *
+     * @return string
      */
     public function render($template, array $data = []): string
     {

@@ -218,4 +218,42 @@ class Authentication
             return false;
         }
     }
+
+    /**
+     * Database helper for the user's comfortable rating.
+     */
+    public function databaseWhereRatingsHelper(): string
+    {
+        if ($this->isUserLoggedIn()) {
+            $rating = $this->user_data["comfortable_rating"];
+
+            $return_value = match ($rating) {
+                'general' => 'v.rating IN ("general")',
+                'questionable' => 'v.rating IN ("general","questionable")', // unused
+                'mature' => 'v.rating IN ("general","questionable","mature")',
+            };
+        } else {
+            $return_value = 'v.rating IN ("general")';
+        }
+
+        return $return_value;
+    }
+
+    /**
+     * Database helper for the user's tag blacklist.
+     */
+    public function databaseWhereTagBlacklistHelper(): string
+    {
+        $tagBlacklist = $this->getUserTagBlacklist();
+
+        // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
+        // upload-related queries into 20 fucking useless lines that slows the site down to a crawl.
+        // -chaziz 6/23/2024
+        $conditions = [];
+        foreach ($tagBlacklist as $tag) {
+            $conditions[] = "JSON_CONTAINS(v.tags, '\"$tag\"') = 0";
+        }
+
+        return implode(' AND ', $conditions);
+    }
 }
