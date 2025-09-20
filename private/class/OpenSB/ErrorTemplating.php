@@ -91,7 +91,7 @@ class ErrorTemplating
 
         $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizSquareBracketInstance());
         $this->twig->addGlobal('is_fulptube', $sb->isFulpTube());
-        $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
+        $this->twig->addGlobal('opensb_version', $versionNumber->getVersionArray());
         $this->twig->addGlobal('website_branding', $sb->getBrandingSettings());
 
         $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));

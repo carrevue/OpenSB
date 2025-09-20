@@ -10,71 +10,90 @@
     <div class="tabs">
         {# spaceless removes html whitespace causes unnecessary margins #}
         {% apply spaceless %}
-            <button class="tablink" data-tab="tab_db">Database Statistics</button>
-            <button class="tablink" data-tab="tab_twig">Twig Dump Info</button>
+            <button class="tablink" data-tab="tab_db">Database</button>
             <button class="tablink" data-tab="tab_user">User Data Cache</button>
         {% endapply %}
     </div>
     <div class="content-box no-border-top">
         <div id="tab_db" class="tabcontent">
-            Total queries: {{ profiler.total_queries }}<br>
-            Total query time: {{ profiler.total_time }} seconds<br>
-            Average time: {{ profiler.average_time }} seconds<br><br>
+            <div>
+                <strong>Query Statistics:</strong><br>
+                Total queries: {{ profiler.total_queries }}<br>
+                Total query time: {{ profiler.total_time }} seconds<br>
+                Average time: {{ profiler.average_time }} seconds
+            </div>
 
-            <strong>Slowest query ({{ profiler.slowest_query.execution_time }}s):</strong><br>
-            <pre>{{ profiler.slowest_query.query }}</pre>
-            Parameters: {% for param in profiler.slowest_query.params %}<code>{{ param }}</code>{% if not loop.last %},{% endif %} {% endfor %}<br>
-            Location: {{ profiler.fastest_query.caller_info.file }} (line {{ profiler.fastest_query.caller_info.line }})<br><br>
+            <div>
+                <strong>Slowest query ({{ profiler.slowest_query.execution_time }}s):</strong><br>
+                <pre>{{ profiler.slowest_query.query }}</pre>
+                Parameters: 
+                {% for param in profiler.slowest_query.params %}
+                    <code>{{ param }}</code>{% if not loop.last %},{% endif %}
+                {% endfor %}<br>
+                Location: {{ profiler.slowest_query.caller_info.file }} (line {{ profiler.slowest_query.caller_info.line }})
+            </div>
 
-            <strong>Fastest query ({{ profiler.fastest_query.execution_time }}s):</strong><br>
-            <pre>{{ profiler.fastest_query.query }}</pre>
-            Parameters: {% for param in profiler.fastest_query.params %}<code>{{ param }}</code>{% if not loop.last %},{% endif %} {% endfor %}<br>
-            Location: {{ profiler.fastest_query.caller_info.file }} (line {{ profiler.fastest_query.caller_info.line }})
+            <div>
+                <strong>Fastest query ({{ profiler.fastest_query.execution_time }}s):</strong><br>
+                <pre>{{ profiler.fastest_query.query }}</pre>
+                Parameters: 
+                {% for param in profiler.fastest_query.params %}
+                    <code>{{ param }}</code>{% if not loop.last %},{% endif %}
+                {% endfor %}<br>
+                Location: {{ profiler.fastest_query.caller_info.file }} (line {{ profiler.fastest_query.caller_info.line }})
+            </div>
 
             <hr>
 
-            <strong>All Queries:</strong><br>
-            {% for query in profiler.queries %}
-                #{{ loop.index }} ({{ query.time }}s):
-                <pre>{{ query.query }}</pre>
-                Parameters: {% for param in query.params %}<code>{{ param }}</code>{% if not loop.last %},{% endif %} {% endfor %}<br>
-                Location: {{ query.caller_info.file }} (line {{ query.caller_info.line }}, {{ query.caller_info.function }})<br><br>
-            {% endfor %}
-        </div>
-        <div id="tab_twig" class="tabcontent">
-    <pre>
-{{ dump() }}
-    </pre>
+            <div>
+                <strong>All Queries:</strong><br>
+                {% for query in profiler.queries %}
+                    <div>
+                        #{{ loop.index }} ({{ query.time }}s):
+                        <pre>{{ query.query }}</pre>
+                        Parameters: 
+                        {% for param in query.params %}
+                            <code>{{ param }}</code>{% if not loop.last %},{% endif %}
+                        {% endfor %}<br>
+                        Location: {{ query.caller_info.file }} (line {{ query.caller_info.line }}, {{ query.caller_info.function }})
+                    </div>
+                    {% if not loop.last %}<br>{% endif %}
+                {% endfor %}
+            </div>
         </div>
         <div id="tab_user" class="tabcontent">
-            <table class="styled">
-                <tr class="table-header">
-                    <th>ID</th>
-                    <th>Names</th>
-                    <th>Stats</th>
-                    <th>Color</th>
-                </tr>
-            {% for user in user_data_cache %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.name }}<br><small>{{ user.title }}</small></td>
-                    <td>
-                        <ul>
-                            <li>
-                                Powerlevel: {{ user.powerlevel }}
-                            </li>
-                            <li>
-                                Joined: {{ user.joined | format_date('long', 'medium') }}
-                            </li>
-                            <li>
-                                Last seen: {{ user.last_seen | format_date('long', 'medium') }}
-                            </li>
-                        </ul>
-                    </td>
-                    <td style="background:{{ user.userlink_color }}"></td>
-                </tr>
-            {% endfor %}
-            </table>
+            {% if user_data_cache %}
+                <table class="styled">
+                    <tr class="table-header">
+                        <th>ID</th>
+                        <th>Names</th>
+                        <th>Stats</th>
+                        <th>Color</th>
+                    </tr>
+                {% for user in user_data_cache %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}<br><small>{{ user.title }}</small></td>
+                        <td>
+                            <ul>
+                                <li>
+                                    Powerlevel: {{ user.powerlevel }}
+                                </li>
+                                <li>
+                                    Joined: {{ user.joined | format_date('long', 'medium') }}
+                                </li>
+                                <li>
+                                    Last seen: {{ user.last_seen | format_date('long', 'medium') }}
+                                </li>
+                            </ul>
+                        </td>
+                        <td style="background:{{ user.userlink_color }}"></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% else %}
+                <p>No users have been fetched.</p>
+            {% endif %}
         </div>
     </div>
     <br>

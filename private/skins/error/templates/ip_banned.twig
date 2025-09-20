@@ -1,8 +1,3 @@
-{% extends "_layout.twig" %}
-
-{% block content %}
-    <p>{{ localize('ip_banned_intro', website_branding.name) }}</p>
-    <p>{{ localize('ip_banned_filed', data.time | date("F jS Y H:i:s T")) }}</p>
-    <p>{{ localize('ip_message', data.ip, users|map(user => user.name)|join(', ')) }}</p>
-    <p>{{ localize('footer_copyright', ('now' | date('Y'))) }} • {{ localize('powered_by') }} OpenSB {{ opensb_version }}</p>
-{% endblock %}
+<p>{{ localize('ip_banned_intro', website_branding.name) }}.</p>
+<p>{{ localize('ip_banned_filed', data.time | date("F jS Y H:i:s T")) }}</p>
+<p>{{ localize('ip_message', data.ip, users|map(user => user.name)|join(', ')) }}.</p>

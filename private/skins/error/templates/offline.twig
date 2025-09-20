@@ -4,5 +4,5 @@
     <h1>{{ website_branding.name }} is currently offline.</h1>
     <p>Please try again later.</p>
     <footer>{{ localize('footer_copyright', ('now' | date('Y'))) }} 
-            • {{ localize('powered_by') }} OpenSB {{ opensb_version }}</footer>
+            • {{ localize('powered_by') }} OpenSB {{ opensb_version.name }} {{ opensb_version.number }}</footer>
 {% endblock %}

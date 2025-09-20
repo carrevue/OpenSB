@@ -11,10 +11,7 @@
 {% block content %}
     <img src="{{ logo }}"></img>
     <h1>Service Unavailable</h1>
-    <p>
-    We're sorry, but due to regulations enacted by your nation's government, 
-    {{ website_branding.name }} is no longer available in your region.
-    </p>
+    <p>{{ website_branding.name }} is currently not available in your region.</p>
     <footer>{{ localize('footer_copyright', ('now' | date('Y'))) }} 
-    • {{ localize('powered_by') }} OpenSB {{ opensb_version }}</footer>
+    • {{ localize('powered_by') }} OpenSB {{ opensb_version.name }} {{ opensb_version.number }}</footer>
 {% endblock %}
