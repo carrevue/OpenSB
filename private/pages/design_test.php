@@ -37,33 +37,14 @@ $data["color_types"] = [
     "warning",
 ];
 
-$data["icons"] = [
-    "star-full",
-    "star-half",
-    "star-empty",
-    "partner",
-    "staff",
-    "b-danger",
-    "b-primary",
-    "b-secondary",
-    "b-success",
-    "b-warning",
-    "search",
-    "hamburger",
-    "caret-closed",
-    "caret-open",
-    "caret-closed-header",
-    "caret-open-header",
-    "mail",
-    "bell",
-    "upload",
-    "plus",
-    "homepage-list",
-    "homepage-grid",
-    "previous",
-    "next",
-    "placeholder",
-];
+$iconPattern = BLUFF_PRIVATE_PATH . '/icons/icons/*.svg';
+$icons = [];
+
+foreach (glob($iconPattern) as $filePath) {
+    if (is_file($filePath)) {
+        $data["icons"][] = pathinfo($filePath, PATHINFO_FILENAME);
+    }
+}
 
 $data["uploads"] = Utilities::makeUploadArray($database, $uploads);
 

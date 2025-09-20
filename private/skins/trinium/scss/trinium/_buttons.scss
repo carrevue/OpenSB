@@ -86,6 +86,11 @@
         padding: 3px 4px;
     }
 
+    &.button-menu {
+        display: inline-flex;
+        gap: 0.5em;
+    }
+
     &.button-transparent {
         background: none;
 

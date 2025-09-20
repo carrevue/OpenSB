@@ -58,6 +58,7 @@
         .menu-item-profile-picture {
             width: 24px;
             height: 24px;
+            min-width: 24px; // webkit shit
         }
     }
 }
@@ -72,6 +73,5 @@
 }
 
 .menu-upload-edit {
-    direction: rtl;
-    width: 150px;
+    min-width: 100px;
 }

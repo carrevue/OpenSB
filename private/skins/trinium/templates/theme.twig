@@ -29,38 +29,33 @@
             <hr>
             <form name="uploadForm" id="uploadForm" method="post" action="theme">
                 <div class="form-input">
-                    <div class="form-input">
-                        <label for="theme">Theme:</label>
-                        <select id="theme" name="theme" class="form-submit" onchange="updatePreview()">
-                            {% for skin in skins %}
-                                {% for theme in skin.metadata.themes %}
-                                    {% set skin_theme_value = skin.metadata.id ~ ',' ~ theme.id %}
-                                    <option value="{{ skin_theme_value }}"
-                                            data-preview-url="/assets/previews/{{ skin.metadata.id }}_{{ theme.id }}.png"
-                                            data-skin-name="{{ skin.metadata.name }}"
-                                            data-skin-description="{{ skin.metadata.description }}"
-                                            data-skin-author="{{ skin.metadata.author }}"
-                                            data-name="{{ theme.name }}"
-                                            data-description="{{ theme.description }}"
-                                            data-author="{{ theme.author }}"
-                                            {% if skin_theme_value == current_skin ~ ',' ~ current_theme %} selected{% endif %}>
-                                        {{ skin.metadata.name }}: {{ theme.name }}
-                                    </option>
-                                {% endfor %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-input">
-                        <label for="locale">Locale:</label>
-                        <select id="locale" name="locale" class="form-submit">
-                            {% for locale in locales %}
-                                <option value="{{ locale.id }}"
-                                        {% if options.locale == locale.id %} selected{% endif %}>
-                                    {{ locale.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                    <label for="skin">Skin</label>
+                    <select id="skin" name="skin" class="form-submit" onchange="updateSkinThemes()">
+                        {% for skin in skins %}
+                            <option value="{{ skin.metadata.id }}" 
+                                    data-themes='{{ skin.metadata.themes|json_encode }}'
+                                    {% if skin.metadata.id == current_skin %} selected{% endif %}>
+                                {{ skin.metadata.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-input">
+                    <label for="theme">Theme</label>
+                    <select id="theme" name="theme" class="form-submit" onchange="updatePreview()">
+                    </select>
+                </div>
+                <hr>
+                <div class="form-input">
+                    <label for="locale">Locale</label>
+                    <select id="locale" name="locale" class="form-submit">
+                        {% for locale in locales %}
+                            <option value="{{ locale.id }}"
+                                    {% if options.locale == locale.id %} selected{% endif %}>
+                                {{ locale.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <br>
                 <div class="form-button-container">
@@ -73,7 +68,7 @@
 
 {% block scripts %}
     <script>
-        weOnTriniumFrontendLmao = true;
+        currentSkinAndTheme = '{{ current_skin }},{{ current_theme }}';
     </script>
     <script src="/assets/theme.js?r={{ get_css_file_date() }}"></script>
 {% endblock %}

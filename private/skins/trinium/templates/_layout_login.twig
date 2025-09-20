@@ -10,6 +10,13 @@
     {{ include('/components/_html_head.twig') }}
     <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_date() }}">
     <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <style>
+        {# this is done through twig because css does not support string addition or whatever the FUCK its called.
+            -chaziz 2025-08-03 #}
+        :root {
+            --background: url('{{ website_branding.assets_location }}/login_background.jpg');
+        }
+    </style>
 </head>
 <body class="login">
 <div class="headers">

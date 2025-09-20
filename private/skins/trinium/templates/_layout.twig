@@ -49,12 +49,11 @@
     {% endif %}
 
     <style>
-        /* this is done through twig because css does not support string addition or whatever the FUCK its called.
-            -chaziz 2025-08-03 */
+        {# this is done through twig because css does not support string addition or whatever the FUCK its called.
+            -chaziz 2025-08-03 #}
         :root {
             --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background.jpg');
         }
-
     </style>
 
     {% if is_user_logged_in and options.trinium_link_coloring %}

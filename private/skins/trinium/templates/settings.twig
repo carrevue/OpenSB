@@ -18,60 +18,56 @@
             <div class="section-header">
                 <h1 class="section-title">Account settings</h1>
             </div>
+            <div id="settings-banner-preview"></div>
+            <div class="content-box no-border-top">
+                <div class="profile-box">
+                    <div class="profile-box-pfp">
+                        <div class="profile-picture">
+                            <img src="{{ profile_picture(user_data.name) }}" class="pfp" alt="{{ user_data.name }}">
+                        </div>
+                    </div>
+                    <div class="profile-box-info">
+                        <div class="profile-box-username">
+                            <span style="color:{{ user_data.userlink_color }}" id="settings-display-name">
+                                {{ user_data.title }}
+                            </span>
+                        </div>
+
+                        <div class="profile-box-handle">
+                            @{{ user_data.name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             <form action="/settings" method="post" enctype="multipart/form-data">
                 <div class="section">
                     <div class="content-box">
                         <div class="section-header">
                             <h2 class="section-title">Profile</h2>
                         </div>
-
-                        <div id="settings-banner-preview"></div>
-                        <div class="content-box no-border-top">
-                            <div class="profile-box">
-                                <div class="profile-box-pfp">
-                                    <div class="profile-picture">
-                                        <img src="{{ profile_picture(user_data.name) }}" class="pfp" alt="{{ user_data.name }}">
-                                    </div>
-                                </div>
-                                <div class="profile-box-info">
-                                    <div class="profile-box-username">
-                                        <span style="color:{{ user_data.userlink_color }}" id="settings-display-name">
-                                            {{ user_data.title }}
-                                        </span>
-                                        {% if user_data.powerlevel >= 2 %}
-                                            {{ icon('staff', 24) }}
-                                        {% endif %}
-                                    </div>
-
-                                    <div class="profile-box-handle">
-                                        @{{ user_data.name }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
                         <div class="form-input">
-                            <label for="title">Profile name:</label>
+                            <label for="title">Profile name</label>
                             <input class="form-submit" id="settings-display-name-input" type="text" name="title" maxlength="50" value="{{ user_data.title }}">
                         </div>
 
                         <div class="form-input">
-                            <label for="about">Profile description:</label>
+                            <label for="about">Profile description</label>
                             <textarea class="form-submit" name="about" rows="4" wrap="hard">{{ user_data.about }}</textarea>
                         </div>
 
                         <div class="form-input">
-                            <label for="profilePicture">Profile picture:</label>
+                            <label for="profilePicture">Profile picture</label>
                             <input type="file" name="profilePicture" id="setting-pfp">
                         </div>
 
                         <div class="form-input">
-                            <label for="profileBanner">Profile banner:</label>
+                            <label for="profileBanner">Profile banner</label>
                             <input type="file" name="profileBanner" id="settings-banner">
                         </div>
 
                         <div class="form-input">
-                            <label for="userlink_color">Username link color:</label>
+                            <label for="userlink_color">Username link color</label>
                             <input name="userlink_color" id="settings-color" type="text" data-coloris
                                    value="{{ user_data.userlink_color | default('#0069B4') }}">
                         </div>
@@ -93,7 +89,7 @@
                             </div>
 
                             <div class="form-input">
-                                <label for="font">Font:</label>
+                                <label for="font">Font</label>
                                 <select id="font" name="font" class="form-submit">
                                 {% for key, font in trinium_fonts %}
                                     <option value="{{ key }}" {% if profile_color_data.font == key %} selected{% endif %}>
@@ -104,55 +100,55 @@
                             </div>
 
                             <div class="form-input">
-                                <label for="title_color">Title color:</label>
+                                <label for="title_color">Title color</label>
                                 <input name="title_color" id="settings-title-color" type="text" data-coloris
                                        value="{{ profile_color_data.title_color | default('#333333') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="link_color">Link color:</label>
+                                <label for="link_color">Link color</label>
                                 <input name="link_color" id="settings-link-color" type="text" data-coloris
                                        value="{{ profile_color_data.link_color | default('#0033cc') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="background_color">Background color:</label>
+                                <label for="background_color">Background color</label>
                                 <input name="background_color" id="settings-background-color" type="text" data-coloris
                                        value="{{ profile_color_data.background_color | default('#ffffff') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="basic_box_border_color">Basic box border color:</label>
+                                <label for="basic_box_border_color">Basic box border color</label>
                                 <input name="basic_box_border_color" id="settings-basic-box-border-color" type="text" data-coloris
                                        value="{{ profile_color_data.basic_box_border_color | default('#666666') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="basic_box_background_color">Basic box background color:</label>
+                                <label for="basic_box_background_color">Basic box background color</label>
                                 <input name="basic_box_background_color" id="settings-basic-box-background-color" type="text" data-coloris
                                        value="{{ profile_color_data.basic_box_background_color | default('#FFFFFF') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="basic_box_text_color">Basic box text color:</label>
+                                <label for="basic_box_text_color">Basic box text color</label>
                                 <input name="basic_box_text_color" id="settings-basic-box-text-color" type="text" data-coloris
                                        value="{{ profile_color_data.basic_box_text_color | default('#000000') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="highlight_box_border_color">Highlight box border color:</label>
+                                <label for="highlight_box_border_color">Highlight box border color</label>
                                 <input name="highlight_box_border_color" id="settings-highlight-box-border-color" type="text" data-coloris
                                        value="{{ profile_color_data.highlight_box_border_color | default('#666666') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="highlight_box_background_color">Highlight box background color:</label>
+                                <label for="highlight_box_background_color">Highlight box background color</label>
                                 <input name="highlight_box_background_color" id="settings-highlight-box-background-color" type="text" data-coloris
                                        value="{{ profile_color_data.highlight_box_background_color | default('#E6E6E6') }}">
                             </div>
 
                             <div class="form-input">
-                                <label for="highlight_box_text_color">Highlight box text color:</label>
+                                <label for="highlight_box_text_color">Highlight box text color</label>
                                 <input name="highlight_box_text_color" id="settings-highlight-box-text-color" type="text" data-coloris
                                        value="{{ profile_color_data.highlight_box_text_color | default('#000000') }}">
                             </div>
@@ -169,7 +165,7 @@
                                 </div>
 
                                 <div class="form-input">
-                                    <label for="current_pass">Current password:</label>
+                                    <label for="current_pass">Current password</label>
                                     <input class="form-submit" type="password" name="current_pass" size="30" maxlength="256"
                                            placeholder="Current password">
                                 </div>
@@ -181,12 +177,12 @@
                                 </div>
 
                                 <div class="form-input">
-                                    <label for="pass">New password:</label>
+                                    <label for="pass">New password</label>
                                     <input class="form-submit" type="password" name="pass" size="30" maxlength="256" placeholder="New password"><br>
                                 </div>
 
                                 <div class="form-input">
-                                    <label for="pass2">Confirm new password:</label>
+                                    <label for="pass2">Confirm new password</label>
                                     <input class="form-submit" type="password" name="pass2" size="30" maxlength="256"
                                            placeholder="Confirm new password">
                                 </div>
@@ -198,7 +194,7 @@
                                 </div>
 
                                 <div class="form-input">
-                                    <label for="current_pass">New username:</label>
+                                    <label for="current_pass">New username</label>
                                     <input class="form-submit" type="text" name="new_username" size="30" maxlength="256"
                                            placeholder="New username">
                                 </div>
@@ -234,12 +230,11 @@
                                     <br>
                                 {% endif %}
 
-                                <div class="section-header">
-                                    <h3 class="section-title">Blocked tags</h3>
-                                </div>
-
-                                <div class="form-submit">
-                                    <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80" wrap="hard">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
+                                <div class="form-input">
+                                    <label for="blacklisted_tags">Blocked tags</label>
+                                    <div class="form-submit">
+                                        <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80" wrap="hard">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,7 @@
 .jumbotron {
     &.page-banner {
         @if $color-scheme =="dark" {
-            background: #29292a;
+            background: #191919;
         }
 
         @else {
@@ -12,6 +12,8 @@
                 text-shadow: 0 0.1em 0.25em rgba(black, 0.75);
             }
         }
+
+        border-bottom: 1px solid $content-box-border-color;
 
         h1,
         p {
@@ -69,7 +71,17 @@
                     height: 120px;
 
                     .jumbotron-welcome {
-                        line-height: 2em;
+                        @include responsive('tiny') {
+                            line-height: 1.75rem;
+                        }
+
+                        @include responsive('small') {
+                            line-height: 2rem;
+                        }
+
+                        @include responsive('medium') {
+                            line-height: 2rem;
+                        }
 
                         .jumbotron-get-started {
                             @include responsive('tiny') {
@@ -77,7 +89,9 @@
                             }
 
                             @include responsive('small') {
-                                display: none;
+                                display: flex;
+                                align-items: center; // looks FUCKED with center
+                                gap: 0.65rem;
                             }
 
                             @include responsive('medium') {
@@ -159,7 +173,7 @@
         }
 
         .jumbotron-right-date {
-            margin-top: 0.66em;
+            margin-top: 0.5rem;
             font-weight: normal;
 
             @include responsive('tiny') {
