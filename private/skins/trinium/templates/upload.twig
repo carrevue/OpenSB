@@ -9,7 +9,7 @@
             <div class="section-header">
                 <h1 class="section-title">{{ localize('new_upload') }}</h1>
                 <div>
-                    {{ localize('new_upload_intro', '/guidelines') }}
+                    {{ localize('new_upload_intro', '/guidelines') | raw }}
                 </div>
                 <div class="text-danger">
                     {{ localize('reupload_warning') }}
