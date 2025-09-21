@@ -27,7 +27,6 @@ use BluffingoCore\Database;
 /**
  * class UploadQuery
  *
- * UploadQuery
  * This class allows for uniform upload-related queries within the codebase.
  */
 class UploadQuery
@@ -36,6 +35,11 @@ class UploadQuery
      * @var Database
      */
     private Database $database;
+
+    /**
+     * @var Authentication
+     */
+    private Authentication $auth;
 
     /**
      * @var string
@@ -57,6 +61,7 @@ class UploadQuery
     public function __construct(SquareBracket $sb)
     {
         $this->database = $sb->getDatabaseClass();
+        $this->auth = $sb->getAuthenticationClass();
         $this->whereRatings = $sb->getAuthenticationClass()->databaseWhereRatingsHelper();
         $this->whereTagBlacklist = $sb->getAuthenticationClass()->databaseWhereTagBlacklistHelper();
     }
@@ -74,8 +79,6 @@ class UploadQuery
      */
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false)
     {
-        global $auth;
-
         $query = "SELECT v.* FROM uploads v";
         $whereClauses = [];
 
@@ -86,7 +89,7 @@ class UploadQuery
             $whereClauses[] = "v.author NOT IN (SELECT user FROM user_bans)";
         }
 
-        if (!$auth->isUserLoggedIn()) {
+        if (!$this->auth->isUserLoggedIn()) {
             $blocked_guest_flag = UploadFlags::FLAG_BLOCK_GUESTS->value;
 
             $whereClauses[] = "v.flags & $blocked_guest_flag != $blocked_guest_flag";
@@ -120,10 +123,10 @@ class UploadQuery
         return $this->database->fetchArray($this->database->query($query, $params));
     }
 
-    // used in the browse page
-
     /**
      * function count
+     * 
+     * used in the browse page
      *
      * @param mixed $whereCondition
      * @param mixed $params
@@ -132,23 +135,36 @@ class UploadQuery
      */
     public function count($whereCondition = null, $params = [])
     {
-        $query = "
-        SELECT COUNT(*)
-        FROM uploads v
-        WHERE v.upload_id NOT IN (SELECT upload FROM upload_takedowns)
-        AND v.author NOT IN (SELECT user FROM user_bans)
-        ";
+        $query = "SELECT COUNT(*) FROM uploads v";
+        $whereClauses = [];
+
+        //if (!$adminPanel) {
+        // if upload isnt taken down
+        $whereClauses[] = "v.upload_id NOT IN (SELECT upload FROM upload_takedowns)";
+        // if upload does not belong to someone who has been banned
+        $whereClauses[] = "v.author NOT IN (SELECT user FROM user_bans)";
+        //}
+
+        if (!$this->auth->isUserLoggedIn()) {
+            $blocked_guest_flag = UploadFlags::FLAG_BLOCK_GUESTS->value;
+
+            $whereClauses[] = "v.flags & $blocked_guest_flag != $blocked_guest_flag";
+        }
 
         if (!empty($whereCondition)) {
-            $query .= "AND $whereCondition ";
+            $whereClauses[] = $whereCondition;
         }
 
         if (!empty($this->whereRatings)) {
-            $query .= "AND $this->whereRatings ";
+            $whereClauses[] = $this->whereRatings;
         }
 
         if (!empty($this->whereTagBlacklist)) {
-            $query .= "AND $this->whereTagBlacklist ";
+            $whereClauses[] = $this->whereTagBlacklist;
+        }
+
+        if (!empty($whereClauses)) {
+            $query .= " WHERE " . implode(" AND ", $whereClauses);
         }
 
         return $this->database->result($query, $params);
