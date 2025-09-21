@@ -47,4 +47,5 @@ foreach ($uploads as $upload) {
             "video_thumbnail_only"
         );
     }
+    sleep(5);
 }
