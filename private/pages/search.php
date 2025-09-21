@@ -22,7 +22,7 @@
 
 namespace OpenSB\Pages;
 
-global $twig, $db, $database;
+global $twig, $sb, $database;
 
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;

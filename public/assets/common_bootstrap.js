@@ -29,7 +29,9 @@ $(document).ready(function () {
         $.post("/api/legacy/comment",
             {
                 comment: $.trim($('#commentContents').val()),
-                vidid: video_id
+                vidid: video_id,
+                really: "ofcourse",
+                type: "video"
             },
             function (data, status) {
                 if (status == "success") {

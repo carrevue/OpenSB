@@ -831,7 +831,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function comment($comment)
     {
-        return $this->twig->render('components/comment.twig', ['data' => $comment]);
+        return $this->twig->render('components/comment.twig', ['comment' => $comment]);
     }
     //
 
