@@ -251,6 +251,25 @@ ul.unstyled-list {
     width: 80px;
 }
 
+//awkward clr overrides
+.clr-picker {
+    background-color: $content-box-background-color !important;
+    border: 1px solid $content-box-border-color;
+    box-shadow: 0 2px 5px rgba(black, 0.1) !important;
+    border-radius: 8px;
+
+    input.clr-color {
+        background-color: $form-bg-color !important;
+        color: $form-text-color !important;
+        border: 1px solid $form-border-color !important;
+        border-radius: 6px;
+
+        &:focus {
+            border-color: var(--link-color) !important;
+        }
+    }
+}
+
 @import 'header';
 @import 'footer';
 @import 'forms';

@@ -32,8 +32,14 @@ input[type="number"] {
 .form-input {
     margin-bottom: 1em;
 
-    label span {
-        opacity: 50%;
+    label {
+        display: flex;
+        column-gap: 0.333em;
+        flex-wrap: wrap;
+
+        span {
+            opacity: 50%;
+        }
     }
 }
 

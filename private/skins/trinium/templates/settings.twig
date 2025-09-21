@@ -1,6 +1,6 @@
 {% extends "_layout_my_stuff.twig" %}
 
-{% set title = "Account settings" %}
+{% set title = localize('account_settings') %}
 
 {% block mystuffcontent %}
 {% if error %}
@@ -8,7 +8,7 @@
 {% endif %}
 <div class="section">
     <div class="section-header">
-        <h1 class="section-title">Account settings</h1>
+        <h1 class="section-title">{{ localize('account_settings') }}</h1>
     </div>
     <div class="content-box">
         <div class="profile-box">
@@ -52,12 +52,12 @@
                 </div>
 
                 <div class="form-input">
-                    <label for="profilePicture">Profile picture</label>
+                    <label for="profilePicture">Profile picture <span>Recommended resolution: 512x512</span></label>
                     <input class="form-submit" type="file" name="profilePicture" id="setting-pfp">
                 </div>
 
                 <div class="form-input">
-                    <label for="profileBanner">Profile banner</label>
+                    <label for="profileBanner">Profile banner <span>Recommended resolution: 2500x300</span></label>
                     <input class="form-submit" type="file" name="profileBanner" id="settings-banner">
                 </div>
 
@@ -178,6 +178,8 @@
                     <label for="pass2">Confirm new password</label>
                     <input class="form-submit" type="password" name="pass2" size="30" maxlength="256">
                 </div>
+
+                <hr>
 
                 <div class="section-header">
                     <h3 class="section-title">Change username</h3>
