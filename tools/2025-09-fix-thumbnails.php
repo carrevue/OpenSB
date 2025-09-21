@@ -38,12 +38,13 @@ $uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE t
 $storage = $sb->getStorageClass();
 
 foreach ($uploads as $upload) {
+    $video_path = BLUFF_DYNAMIC_PATH . "/videos/" . $upload["upload_id"] . ".converted.mp4";
     $thumbnail_path = BLUFF_DYNAMIC_PATH . "/thumbnails/" . $upload["upload_id"] . ".png";
 
-    if (!file_exists($thumbnail_path)) {
+    if (!file_exists($thumbnail_path) && file_exists($video_path)) {
         $storage->processVideoUpload(
             $upload["upload_id"],
-            BLUFF_DYNAMIC_PATH . "/videos/" . $upload["upload_id"] . ".converted.mp4",
+            $video_path,
             "video_thumbnail_only"
         );
         sleep(5);
