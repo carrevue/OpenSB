@@ -226,6 +226,15 @@ try {
     if ($upload_type == "video_thumbnail_only") {
         log("Only processing thumbnail, exiting...");
         log("OpenSB Video Upload Processor Success!");
+
+        if ($sb->isDiscordWebhookEnabled()) {
+            $data = [
+                'id' => $new,
+            ];
+
+            $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+        }
+
         die();
     }
 
