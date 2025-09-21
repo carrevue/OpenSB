@@ -32,7 +32,7 @@ function updateSkinThemes() {
         themeSelect.appendChild(option);
     });
 
-    if (weOnTrinium) {
+    if (typeof weOnTrinium !== "undefined" && weOnTrinium) {
         const theWarning = document.getElementById('notFullySupported');
 
         if (selectedSkin.value == "finalium" || selectedSkin.value == "bootstrap") {
