@@ -64,30 +64,33 @@ class Storage
      * Starts the upload processor script on another process, which wraps 
      * around FFmpeg.
      *
-     * @param mixed $new
-     * @param mixed $target_file
+     * @param string $new The upload ID
+     * @param string $target_file The upload target file
+     * @param string $type The upload type
      *
      * @return void
      */
-    public function processVideoUpload($new, $target_file): void
+    public function processVideoUpload(string $new, string $target_file, $type = "video"): void
     {
         // this uses the version of php on path. if the upload processor errors
         // out with "OpenSB is not compatible with your PHP version.", then 
         // your path's php is too old.
         if (str_starts_with(php_uname(), "Windows")) {
             pclose(popen(sprintf(
-                'start /B  php %s "%s" "%s" "video" "1" > %s',
+                'start /B  php %s "%s" "%s" "$s" "1" > %s',
                 BLUFF_PRIVATE_PATH . '\scripts\upload_processor.php',
                 $new,
                 $target_file,
+                $type,
                 BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
             ), "r"));
         } else {
             system(sprintf(
-                'php %s "%s" "%s" "video" "1" > %s 2>&1 &',
+                'php %s "%s" "%s" "%s" "1" > %s 2>&1 &',
                 BLUFF_PRIVATE_PATH . '/scripts/upload_processor.php',
                 $new,
                 $target_file,
+                $type,
                 BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
             ));
         }

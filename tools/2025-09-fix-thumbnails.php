@@ -30,9 +30,21 @@ define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
 define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
 define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-global $database;
+global $database, $sb;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
-// TODO
 $uploads = $database->fetchArray($database->query("SELECT * FROM uploads"));
+$storage = $sb->getStorageClass();
+
+foreach ($uploads as $upload) {
+    $thumbnail_path = BLUFF_DYNAMIC_PATH . "/thumbnails/" . $upload["upload_id"] . ".png";
+
+    if (!file_exists($thumbnail_path)) {
+        $storage->processVideoUpload(
+            $upload["upload_id"],
+            BLUFF_DYNAMIC_PATH . "/videos/" . $upload["upload_id"] . ".converted.mp4",
+            "video_thumbnail_only"
+        );
+    }
+}
