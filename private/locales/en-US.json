@@ -80,6 +80,16 @@
     "invite_key": "Invite key",
     "captcha": "Captcha",
 
+    "security": "Security",
+    "security_desc": "Change your username or password here.",
+
+    "current_password": "Current password",
+    "change_password": "Change password",
+    "new_password": "New password",
+    "new_password_again": "New password (again)",
+    "change_username": "Change username",
+    "new_username": "New username",
+
     "dont_have_an_account": "Don't have an account?",
     "have_an_account": "Have an account?",
 
@@ -179,8 +189,29 @@
     "comfortable_rating": "Comfortable rating",
     "user_link_color": "User link color",
 
+    "profile": "Profile",
+    "profile_settings_header_desc": "These will be shown to everyone on your profile.",
+    "profile_description": "Profile description",
+    "profile_picture": "Profile picture",
+    "profile_banner": "Profile banner",
+    "userlink_color": "Username link color",
+    "profile_customization": "Profile customization",
+    "profile_customization_desc": "Set custom colors on your profile. These will only be shown to anyone using the Trinium skin.",
+    "enable_profile_customization": "Enable profile customization",
+
+    "profile_title_color": "Title color",
+    "profile_link_color": "Link color",
+    "profile_background_color": "Background color",
+    "profile_basic_box_border_color": "Basic box border color",
+    "profile_basic_box_background_color": "Basic box background color",
+    "profile_basic_box_text_color": "Basic box text color",
+    "profile_highlight_box_border_color": "Highlight box border color",
+    "profile_highlight_box_background_color": "Highlight box background color",
+    "profile_highlight_box_text_color": "Highlight box text color",
+
     "profile_featured": "Featured",
     "profile_no_description": "This user has not set a description.",
+    "recommended_resolution": "Recommended resolution: %s",
 
     "user_role_unknown": "Unknown",
     "user_role_normal": "Normal",
@@ -241,6 +272,11 @@
     "no_notifications": "You currently have no notifications.",
 
     "search_results_for": "Results for \"%s\"",
+
+    "filtering": "Filtering",
+    "enable_sensitive_content": "Enable sensitive content",
+    "restricted_sensitive_content": "Based on your account's birthdate, access to sensitive content is restricted. If you have entered an incorrect birthdate, please contact the %s staff team.",
+    "blocked_tags": "Blocked tags",
 
     "version_intro": "This website is powered by OpenSB. © %s %s and other contributors.",
     "version_agpl": "OpenSB is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.",
