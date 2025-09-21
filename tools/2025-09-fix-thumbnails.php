@@ -46,6 +46,6 @@ foreach ($uploads as $upload) {
             BLUFF_DYNAMIC_PATH . "/videos/" . $upload["upload_id"] . ".converted.mp4",
             "video_thumbnail_only"
         );
+        sleep(5);
     }
-    sleep(5);
 }
