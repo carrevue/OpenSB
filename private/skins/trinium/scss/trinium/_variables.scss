@@ -9,7 +9,7 @@ $header-link-color: black;
 @if $color-scheme =="dark" {
     $text-color: white;
     $link-color: #2d89e8;
-    $bg-color: #000;
+    $bg-color: #0d0d0d;
     $header-link-color: white;
 }
 
@@ -18,8 +18,8 @@ $content-box-background-color: #FFF;
 $content-box-border-color: #E0E0E0;
 
 @if $color-scheme =="dark" {
-    $content-box-background-color: #111111;
-    $content-box-border-color: #333333;
+    $content-box-background-color: #151515;
+    $content-box-border-color: #373737;
 }
 
 $content-box-padding: 1em;
@@ -46,7 +46,7 @@ $color-map: (
 // header/hamburger
 //$header-background: $content-box-background-color;
 
-$header-background: linear-gradient(to bottom, #FFFFFF, #F5F5F5);
+$header-background: linear-gradient(to bottom, #FFFFFF, #F3F3F3);
 $header-border: $content-box-border-color;
 
 $header-link-hover: rgba($header-link-color, 0.05);

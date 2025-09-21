@@ -26,11 +26,22 @@ use Exception;
 use Random\Randomizer;
 
 /**
+ * class Utilities
+ *
  * Static utilities.
  */
 class Utilities
 {
-    // TODO: i think this should be refactored into UploadQuery? i should look into this later. -chaziz 1/4/2025
+    /**
+     * function makeUploadArray
+     * 
+     * @todo i think this should be refactored into UploadQuery? i should look into this later. -chaziz 1/4/2025
+     *
+     * @param mixed $database
+     * @param mixed $uploads
+     *
+     * @return array
+     */
     public static function makeUploadArray($database, $uploads): array
     {
         if (!$uploads) return [];
@@ -68,6 +79,14 @@ class Utilities
         return $uploadArray;
     }
 
+    /**
+     * function makeJournalArray
+     *
+     * @param mixed $database
+     * @param mixed $journals
+     *
+     * @return array
+     */
     public static function makeJournalArray($database, $journals): array
     {
         global $sb;
@@ -96,44 +115,18 @@ class Utilities
         return $journalsData;
     }
 
-    public static function whereRatings(): string
-    {
-        global $sb;
-
-        if ($sb->getAuthenticationClass()->isUserLoggedIn()) {
-            $rating = $sb->getAuthenticationClass()->getUserData()["comfortable_rating"];
-
-            $return_value = match ($rating) {
-                'general' => 'v.rating IN ("general")',
-                'questionable' => 'v.rating IN ("general","questionable")', // unused
-                'mature' => 'v.rating IN ("general","questionable","mature")',
-            };
-        } else {
-            $return_value = 'v.rating IN ("general")';
-        }
-
-        return $return_value;
-    }
-
-    public static function whereTagBlacklist(): string
-    {
-        global $sb;
-
-        $tagBlacklist = $sb->getAuthenticationClass()->getUserTagBlacklist();
-
-        // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
-        // upload-related queries into 20 fucking useless lines that slows the site down to a crawl.
-        // -chaziz 6/23/2024
-        $conditions = [];
-        foreach ($tagBlacklist as $tag) {
-            $conditions[] = "JSON_CONTAINS(v.tags, '\"$tag\"') = 0";
-        }
-
-        return implode(' AND ', $conditions);
-    }
-
     /**
+     * function notifyUser
+     *
      * Not to be confused with notifyBanner, which makes a banner.
+     *
+     * @param mixed $database
+     * @param mixed $user
+     * @param mixed $location
+     * @param mixed $related_id
+     * @param NotificationEnum $type
+     *
+     * @return void
      */
     public static function notifyUser($database, $user, $location, $related_id, NotificationEnum $type): void
     {
@@ -163,6 +156,13 @@ class Utilities
         }
     }
 
+    /**
+     * function isFollowingUser
+     *
+     * @param mixed $user
+     *
+     * @return mixed
+     */
     public static function isFollowingUser($user)
     {
         global $sb, $database;
@@ -171,15 +171,18 @@ class Utilities
     }
 
     /**
-     * Notifies the current user with a banner.
+     * function notifyBanner
      *
+     * Notifies the current user with a banner.
      * This is not to be confused with NotifyUser, which is for the (still incomplete as of now)
      * notifications system.
      *
-     * @param $message
-     * @param $redirect
+     * @param mixed $message
+     * @param mixed $redirect
      * @param string $color
-     * @param array $arg
+     * @param array $args
+     *
+     * @return void
      */
     public static function notifyBanner($message, $redirect, string $color = "danger", array $args = []): void
     {
@@ -202,6 +205,14 @@ class Utilities
         }
     }
 
+    /**
+     * function generateRandomString
+     *
+     * @param mixed $length
+     * @param mixed $includeSymbols
+     *
+     * @return string
+     */
     public static function generateRandomString($length, $includeSymbols = false): string
     {
         if ($includeSymbols) {
@@ -224,6 +235,14 @@ class Utilities
         return $new;
     }
 
+    /**
+     * function usernameToUserID
+     *
+     * @param mixed $database
+     * @param mixed $username
+     *
+     * @return mixed|bool
+     */
     public static function usernameToUserID($database, $username)
     {
         if ($data = $database->fetch("SELECT id FROM users WHERE name = ?", [$username])) {
@@ -233,6 +252,14 @@ class Utilities
         }
     }
 
+    /**
+     * function userIDToUsername
+     *
+     * @param mixed $database
+     * @param mixed $id
+     *
+     * @return mixed|bool
+     */
     public static function userIDToUsername($database, $id)
     {
         if ($data = $database->fetch("SELECT name FROM users WHERE id = ?", [$id])) {
@@ -242,6 +269,14 @@ class Utilities
         }
     }
 
+    /**
+     * function uploadStringIDToUploadNumericID
+     *
+     * @param mixed $database
+     * @param mixed $uploadStringID
+     *
+     * @return mixed|bool
+     */
     public static function uploadStringIDToUploadNumericID($database, $uploadStringID)
     {
         if ($data = $database->fetch("SELECT id FROM uploads WHERE upload_id = ?", [$uploadStringID])) {
@@ -251,6 +286,14 @@ class Utilities
         }
     }
 
+    /**
+     * function uploadNumericIDToUploadStringID
+     *
+     * @param mixed $database
+     * @param mixed $uploadNumericID
+     *
+     * @return mixed|bool
+     */
     public static function uploadNumericIDToUploadStringID($database, $uploadNumericID)
     {
         if ($data = $database->fetch("SELECT upload_id FROM uploads WHERE id = ?", [$uploadNumericID])) {
@@ -260,8 +303,16 @@ class Utilities
         }
     }
 
-    // this should probably be merged with the functions above because imho this is kinda fuckin ugly
-    // -chaziz 7/24/2025
+    /**
+     * function uploadStringIDToUploadTitle
+     *
+     * @param mixed $database
+     * @param mixed $uploadStringID
+     *
+     * @return mixed|bool
+     *
+     * @todo this should probably be merged with the functions above because imho this is kinda fuckin ugly -chaziz 7/24/2025
+     */
     public static function uploadStringIDToUploadTitle($database, $uploadStringID)
     {
         if ($data = $database->fetch("SELECT title FROM uploads WHERE upload_id = ?", [$uploadStringID])) {
@@ -271,6 +322,14 @@ class Utilities
         }
     }
 
+    /**
+     * function uploadNumericIDToUploadTitle
+     *
+     * @param mixed $database
+     * @param mixed $uploadNumericID
+     *
+     * @return mixed|bool
+     */
     public static function uploadNumericIDToUploadTitle($database, $uploadNumericID)
     {
         if ($data = $database->fetch("SELECT title FROM uploads WHERE id = ?", [$uploadNumericID])) {
@@ -280,6 +339,14 @@ class Utilities
         }
     }
 
+    /**
+     * function journalIDtoJournalTitle
+     *
+     * @param mixed $database
+     * @param mixed $journalID
+     *
+     * @return mixed|bool
+     */
     public static function journalIDtoJournalTitle($database, $journalID)
     {
         if ($data = $database->fetch("SELECT title FROM journals WHERE id = ?", [$journalID])) {
@@ -290,7 +357,11 @@ class Utilities
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * function calculateAge
+     *
+     * @param mixed $birthdate
+     *
+     * @return int
      */
     public static function calculateAge($birthdate): int
     {
@@ -301,7 +372,12 @@ class Utilities
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * function calculateAgeFrom
+     *
+     * @param mixed $birthdate
+     * @param mixed $date
+     *
+     * @return int
      */
     public static function calculateAgeFrom($birthdate, $date): int
     {
@@ -312,6 +388,15 @@ class Utilities
         return $interval->y;
     }
 
+    /**
+     * function validateUsername
+     *
+     * @param mixed $username
+     * @param mixed $database
+     * @param mixed $checkIfTaken
+     *
+     * @return string
+     */
     public static function validateUsername($username, $database, $checkIfTaken = true): string
     {
         $error = "";
@@ -330,6 +415,14 @@ class Utilities
         return $error;
     }
 
+    /**
+     * function formatBytes
+     *
+     * @param mixed $value
+     * @param mixed $decimals
+     *
+     * @return mixed
+     */
     public static function formatBytes($value, $decimals = 0)
     {
         if (is_numeric($value)) {
@@ -359,7 +452,15 @@ class Utilities
         return sprintf("%.{$decimals}f %s", $converted, $sz[$factor]);
     }
 
-    // if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
+    /**
+     * function getIpAddress
+     * 
+     * if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
+     *
+     * @return mixed|string
+     *
+     * @deprecated This will be moved to BluffingoCore's CoreUtilties class around version 2.
+     */
     public static function getIpAddress()
     {
         if (BLUFF_CLI) return null;
@@ -371,6 +472,11 @@ class Utilities
         return $ip;
     }
 
+    /**
+     * function isLegacyFrontend
+     *
+     * @return mixed
+     */
     public static function isLegacyFrontend()
     {
         global $sb;
@@ -380,11 +486,27 @@ class Utilities
         return ($localOptions["skin"] == "finalium" || $localOptions["skin"] == "bootstrap");
     }
 
+    /**
+     * function calculatePercentage
+     *
+     * @param float $number
+     * @param float $percent
+     * @param float $total
+     *
+     * @return string
+     */
     public static function calculatePercentage(float $number, float $percent, float $total): string
     {
         return $total == 0 ? '0%' : number_format(($percent / $total) * $number * 100, 2) . '%';
     }
 
+    /**
+     * function replaceSquareBracketWithFulpTube
+     *
+     * @param mixed $input
+     *
+     * @return mixed
+     */
     public static function replaceSquareBracketWithFulpTube($input)
     {
         // replace "squarebracket" with "fulptube"
@@ -417,6 +539,14 @@ class Utilities
         return $output;
     }
 
+    /**
+     * function adjustCssColorBrightness
+     *
+     * @param mixed $hex
+     * @param mixed $percent
+     *
+     * @return string
+     */
     private static function adjustCssColorBrightness($hex, $percent): string
     {
         $hex = ltrim($hex, '#');
@@ -439,6 +569,14 @@ class Utilities
     // the original implementation for this used a scss php compiler library 
     // thing but that is fucking stupid and it'll slow down the site, so lets
     // just approximate this.
+
+    /**
+     * function makeBootstrapFrontendProfileGradient
+     *
+     * @param mixed $userlink_color
+     *
+     * @return mixed
+     */
     public static function makeBootstrapFrontendProfileGradient($userlink_color)
     {
         // approximate bootstrap's text-contrast scss function

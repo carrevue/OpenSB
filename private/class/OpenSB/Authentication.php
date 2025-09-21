@@ -32,7 +32,7 @@ class Authentication
     private Database $database;
     private bool $is_logged_in = false;
     private int $user_id;
-    private array $user_data;
+    private array|false $user_data;
     private $user_ban_data;
     private $user_stat_data;
     private $has_authenticated_as_staff = false;
@@ -44,7 +44,9 @@ class Authentication
         $token = $_SESSION["SBTOKEN"] ?? null;
 
         if (isset($token)) {
-            if ($this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE token = ?", [$token])) {
+            $this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE token = ?", [$token]);
+
+            if ($this->user_data) {
                 $this->is_logged_in = true;
                 $this->user_id = $this->user_data["id"];
                 $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$this->user_id]);
@@ -215,5 +217,43 @@ class Authentication
         } else {
             return false;
         }
+    }
+
+    /**
+     * Database helper for the user's comfortable rating.
+     */
+    public function databaseWhereRatingsHelper(): string
+    {
+        if ($this->isUserLoggedIn()) {
+            $rating = $this->user_data["comfortable_rating"];
+
+            $return_value = match ($rating) {
+                'general' => 'v.rating IN ("general")',
+                'questionable' => 'v.rating IN ("general","questionable")', // unused
+                'mature' => 'v.rating IN ("general","questionable","mature")',
+            };
+        } else {
+            $return_value = 'v.rating IN ("general")';
+        }
+
+        return $return_value;
+    }
+
+    /**
+     * Database helper for the user's tag blacklist.
+     */
+    public function databaseWhereTagBlacklistHelper(): string
+    {
+        $tagBlacklist = $this->getUserTagBlacklist();
+
+        // we use old-fashioned json tags instead of the "new" ported-from-poktwo tags so we don't have to bloat
+        // upload-related queries into 20 fucking useless lines that slows the site down to a crawl.
+        // -chaziz 6/23/2024
+        $conditions = [];
+        foreach ($tagBlacklist as $tag) {
+            $conditions[] = "JSON_CONTAINS(v.tags, '\"$tag\"') = 0";
+        }
+
+        return implode(' AND ', $conditions);
     }
 }

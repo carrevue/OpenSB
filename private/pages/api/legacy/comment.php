@@ -139,5 +139,5 @@ if ($sb->isDiscordWebhookEnabled()) {
 }
 
 echo $twig->render('components/comment.twig', [
-    'data' => $comment
+    'comment' => $comment
 ]);

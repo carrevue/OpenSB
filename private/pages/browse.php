@@ -22,13 +22,13 @@
 
 namespace OpenSB\Pages;
 
-global $twig, $database;
+global $twig, $sb, $database;
 
 use BluffingoCore\CoreUtilities;
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 
 function getOrderFromType($type): string
 {

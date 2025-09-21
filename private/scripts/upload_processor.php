@@ -105,16 +105,14 @@ log("Threads: " . get_cpu_cores());
 $new = $argv[1];
 $target_file = $argv[2];
 $upload_type =  $argv[3];
-$for_website = $argv[4];
+$for_website = $argv[4] ?? 0;
 
 log("Upload type: " .  $upload_type);
 
-/*
-if ($upload_type != "video" || $upload_type != "video_thumbnail_only") {
+if ($upload_type != "video" && $upload_type != "video_thumbnail_only") {
     log("Unsupported type.");
     die();
 }
-*/
 
 try {
     $ffmpeg = FFMpeg::create($config);
@@ -228,6 +226,15 @@ try {
     if ($upload_type == "video_thumbnail_only") {
         log("Only processing thumbnail, exiting...");
         log("OpenSB Video Upload Processor Success!");
+
+        if ($sb->isDiscordWebhookEnabled()) {
+            $data = [
+                'id' => $new,
+            ];
+
+            $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+        }
+
         die();
     }
 

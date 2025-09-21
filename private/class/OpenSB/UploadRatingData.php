@@ -23,10 +23,27 @@ namespace OpenSB;
 
 // use BluffingoCore\Database;
 
+/**
+ * class UploadRatingData
+ * 
+ * Helper class for an upload's rating. This is not to be confused with
+ * the general/sensitive upload rating system.
+ */
 class UploadRatingData
 {
+    /**
+     * @var mixed
+     */
     private $upload_rating_data;
 
+    /**
+     * function __construct
+     *
+     * @param mixed $database
+     * @param mixed $upload_id
+     *
+     * @return void
+     */
     public function __construct($database, $upload_id)
     {
         // we don't need $this->database nor $this->upload_id.
@@ -42,7 +59,11 @@ class UploadRatingData
     }
 
     /**
+     * function calculateRatingData
+     *
      * Calculate the upload's ratings.
+     *
+     * @return array
      */
     public function calculateRatingData(): array
     {

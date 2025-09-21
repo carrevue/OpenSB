@@ -30,14 +30,46 @@ use OpenSB\Utilities;
 use \DiscordWebhooks\Client;
 use \DiscordWebhooks\Embed;
 
+/**
+ * class DiscordWebhookLogging
+ * 
+ * The Discord Webhook Logging class.
+ */
 class DiscordWebhookLogging
 {
+    /**
+     * @var Database The database class.
+     */
     private Database $database;
+
+    /**
+     * @var string
+     */
     private string $url;
+
+    /**
+     * @var string
+     */
     private string $footer_text;
+
+    /**
+     * @var string
+     */
     private ?string $domain;
+
+    /**
+     * @var Client
+     */
     private ?Client $webhook = null;
 
+    /**
+     * function __construct
+     *
+     * @param SquareBracket $sb
+     * @param mixed $url
+     *
+     * @return void
+     */
     public function __construct(SquareBracket $sb, $url)
     {
         $this->database = $sb->getDatabaseClass();
@@ -50,6 +82,11 @@ class DiscordWebhookLogging
         $this->domain = CoreUtilities::getURL(false);
     }
 
+    /**
+     * function initClient
+     *
+     * @return void
+     */
     public function initClient()
     {
         if (!$this->webhook instanceof Client) {
@@ -58,9 +95,13 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function newUploadHook
+     *
      * Trigger the new upload webhook.
      *
-     * @param array $data Array with the necessary data.
+     * @param mixed $data
+     *
+     * @return void
      */
     public function newUploadHook($data)
     {
@@ -90,9 +131,13 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function newJournalHook
+     *
      * Trigger the new journal webhook.
      *
-     * @param array $data Array with the necessary data.
+     * @param mixed $data
+     *
+     * @return void
      */
     public function newJournalHook($data)
     {
@@ -126,9 +171,13 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function newCommentHook
+     *
      * Trigger the new comment webhook.
      *
-     * @param array $data Array with the necessary data.
+     * @param mixed $data
+     *
+     * @return void
      */
     public function newCommentHook($data)
     {
@@ -173,9 +222,13 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function uploadProcessorSuccessHook
+     *
      * Trigger the upload processor fail webhook.
      *
-     * @param array $data Array with the necessary data.
+     * @param mixed $data
+     *
+     * @return void
      */
     public function uploadProcessorSuccessHook($data)
     {
@@ -196,9 +249,13 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function uploadProcessorFailHook
+     *
      * Trigger the upload processor fail webhook.
      *
-     * @param array $data Array with the necessary data.
+     * @param mixed $data
+     *
+     * @return void
      */
     public function uploadProcessorFailHook($data)
     {
@@ -219,7 +276,11 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function recountViewsHook
+     *
      * Trigger the recount views hook.
+     *
+     * @return void
      */
     public function recountViewsHook()
     {
@@ -240,9 +301,13 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function newUserHook
+     *
      * Trigger the new user webhook.
      *
-     * @param array $data Array with the necessary data.
+     * @param mixed $data
+     *
+     * @return void
      */
     function newUserHook($data)
     {
@@ -263,9 +328,13 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function dashboardUserHook
+     *
      * Trigger the dashboard user webhook.
      *
-     * @param array $data Array with the necessary data.
+     * @param mixed $data
+     *
+     * @return void
      */
     function dashboardUserHook($data)
     {

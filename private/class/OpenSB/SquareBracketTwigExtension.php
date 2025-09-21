@@ -25,6 +25,7 @@ namespace OpenSB;
 
 use Exception;
 use Parsedown;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -34,15 +35,49 @@ use BluffingoCore\Profiler;
 
 use OpenSB\UserRoleEnum;
 
+/**
+ * class SquareBracketTwigExtension
+ */
 class SquareBracketTwigExtension extends AbstractExtension
 {
+    /**
+     * @var SquareBracket The core OpenSB class.
+     */
     private SquareBracket $sb;
-    private Database $database;
-    private Profiler $profiler;
-    private Storage $storage;
-    private Authentication $authentication;
-    private $twig;
 
+    /**
+     * @var Database The Database class.
+     */
+    private Database $database;
+
+    /**
+     * @var Profiler The Profiler class.
+     */
+    private Profiler $profiler;
+
+    /**
+     * @var Storage The Storage class.
+     */
+    private Storage $storage;
+
+    /**
+     * @var Authentication The authentication class.
+     */
+    private Authentication $authentication;
+
+    /**
+     * @var Environment The Twig environment.
+     */
+    private Environment $twig;
+
+    /**
+     * function __construct
+     *
+     * @param SquareBracket $sb
+     * @param mixed $twig
+     *
+     * @return void
+     */
     public function __construct(SquareBracket $sb, $twig)
     {
         $this->sb = $sb;
@@ -53,6 +88,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         $this->twig = $twig;
     }
 
+    /**
+     * function getFunctions
+     *
+     * @return array
+     */
     public function getFunctions(): array
     {
         $options = $this->sb->getLocalOptions();
@@ -112,6 +152,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * function getFilters
+     *
+     * @return mixed
+     */
     public function getFilters()
     {
         return [
@@ -147,7 +192,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 return $markdown->line($text);
             }, ['is_safe' => ['html']]),
 
-            // Markdown function for any posts.
+            // Markdown function for any comments.
             new TwigFilter('markdown_user_written', function ($text, $enableHeaders = false) {
                 if ($enableHeaders) {
                     $markdown = new Parsedown();
@@ -201,16 +246,37 @@ class SquareBracketTwigExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * function parseHashtags
+     *
+     * @param mixed $string
+     *
+     * @return array|string|null
+     */
     private function parseHashtags($string): array|string|null
     {
         return preg_replace('/(?<!=|\b|&)#([a-z0-9_]+)/i', '<a href="/search?tags=$1">#$1</a>', $string);
     }
 
+    /**
+     * function parseUserMentions
+     *
+     * @param mixed $string
+     *
+     * @return array|string|null
+     */
     private function parseUserMentions($string): array|string|null
     {
         return preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $string);
     }
 
+    /**
+     * function parseCustomEmojis
+     *
+     * @param mixed $string
+     *
+     * @return mixed|string
+     */
     private function parseCustomEmojis($string)
     {
         return preg_replace_callback('/:([a-z0-9_]+):/i', function ($matches) {
@@ -224,6 +290,13 @@ class SquareBracketTwigExtension extends AbstractExtension
         }, $string);
     }
 
+    /**
+     * function convertTime
+     *
+     * @param mixed $seconds
+     *
+     * @return mixed
+     */
     public function convertTime($seconds)
     {
         $hours = floor($seconds / 3600);
@@ -247,7 +320,11 @@ class SquareBracketTwigExtension extends AbstractExtension
     */
 
     /**
-     * @throws Exception
+     * function uploadView
+     *
+     * @param mixed $upload_data
+     *
+     * @return void
      */
     public function uploadView($upload_data)
     {
@@ -269,6 +346,15 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
+    /**
+     * function getUploadThumbnail
+     *
+     * @param mixed $id
+     * @param mixed $type
+     * @param mixed $custom
+     *
+     * @return mixed
+     */
     public function getUploadThumbnail($id, $type, $custom)
     {
         $data = null;
@@ -282,8 +368,15 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         return $data;
     }
-
-    // new userlink used on trinium
+    /**
+     * function userLink
+     * 
+     * new userlink used on trinium
+     *
+     * @param mixed $user
+     *
+     * @return string
+     */
     public function userLink($user): string
     {
         // get user info
@@ -331,7 +424,15 @@ class SquareBracketTwigExtension extends AbstractExtension
         );
     }
 
-    // old userlink used on bootstrap and finalium
+    /**
+     * function userLinkLegacy
+     * 
+     * old userlink used on bootstrap and finalium
+     *
+     * @param mixed $user
+     *
+     * @return string
+     */
     public function userLinkLegacy($user): string
     {
         $username = htmlspecialchars($user['info']['username']);
@@ -360,6 +461,13 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
     }
 
+    /**
+     * function displayUploadRatings
+     *
+     * @param array $ratings
+     *
+     * @return mixed
+     */
     public function displayUploadRatings(array $ratings)
     {
         if (!isset($ratings['average']) || empty($ratings['average'])) {
@@ -376,11 +484,26 @@ class SquareBracketTwigExtension extends AbstractExtension
         );
     }
 
+    /**
+     * function pagination
+     *
+     * @param mixed $levels
+     * @param mixed $lpp
+     * @param mixed $url
+     * @param mixed $current
+     *
+     * @return mixed
+     */
     public function pagination($levels, $lpp, $url, $current)
     {
         return $this->twig->render('components/pagination.twig', ['levels' => $levels, 'lpp' => $lpp, 'url' => $url, 'current' => $current]);
     }
 
+    /**
+     * function headerMainLinks
+     *
+     * @return mixed
+     */
     public function headerMainLinks()
     {
         $array = [
@@ -402,6 +525,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
+    /**
+     * function headerUserLinks
+     *
+     * @return mixed
+     */
     public function headerUserLinks()
     {
         $options = $this->sb->getLocalOptions();
@@ -474,6 +602,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
+    /**
+     * function headerUserAccountLinks
+     *
+     * @return mixed
+     */
     public function headerUserAccountLinks()
     {
         $accountsArray = $this->sb->getAccountsArray();
@@ -492,6 +625,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
+    /**
+     * function sidebarFollowingUsers
+     *
+     * @return mixed
+     */
     public function sidebarFollowingUsers()
     {
         $userid = $this->authentication->getUserID();
@@ -531,6 +669,11 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
+    /**
+     * function footerLinks
+     *
+     * @return mixed
+     */
     public function footerLinks()
     {
         $array = [
@@ -596,13 +739,28 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $array;
     }
 
+    /**
+     * function getCssFileDate
+     *
+     * @todo this should probably be changed to check the file date of the current theme, not just that of the
+     * default theme on trinium -chaziz 1/13/2025.
+     * 
+     * @return mixed
+     */
     public function getCssFileDate()
     {
-        // TODO: this should probably be changed to check the file date of the current theme, not just that of the
-        // default theme on trinium -chaziz 1/13/2025.
         return filemtime(BLUFF_PUBLIC_PATH . "/assets/css/trinium-default.css");
     }
 
+    /**
+     * function getIcon
+     *
+     * @param mixed $icon
+     * @param mixed $size
+     * @param mixed $class
+     *
+     * @return mixed
+     */
     public function getIcon($icon, $size = "16", $class = null)
     {
         if (Utilities::isLegacyFrontend()) {
@@ -625,6 +783,14 @@ class SquareBracketTwigExtension extends AbstractExtension
         );
     }
 
+    /**
+     * function getNotificationIcon
+     *
+     * @param mixed $type
+     * @param mixed $size
+     *
+     * @return mixed
+     */
     public function getNotificationIcon($type, $size = "20")
     {
         $icon = match ($type) {
@@ -638,24 +804,55 @@ class SquareBracketTwigExtension extends AbstractExtension
         return $this->getIcon($icon, $size);
     }
 
-    // legacy functions used by finalium and bootstrap frontend only.
-    // apparantly this is used on finalium for Some reason.
+    /**
+     * function smallUploadBox
+     * 
+     * legacy function used by finalium and bootstrap frontend only.
+     * apparantly this is used on finalium for Some reason.
+     *
+     * @param mixed $upload
+     *
+     * @return mixed
+     */
     public function smallUploadBox($upload)
     {
         return $this->twig->render('components/smallvideobox.twig', ['data' => $upload]);
     }
 
+    /**
+     * function comment
+     *
+     * legacy function used by finalium and bootstrap frontend only.
+     * apparantly this is used on finalium for Some reason.
+     * 
+     * @param mixed $comment
+     *
+     * @return mixed
+     */
     public function comment($comment)
     {
-        return $this->twig->render('components/comment.twig', ['data' => $comment]);
+        return $this->twig->render('components/comment.twig', ['comment' => $comment]);
     }
     //
 
+    /**
+     * function localize
+     *
+     * @param mixed $key
+     * @param mixed $args
+     *
+     * @return mixed
+     */
     public function localize($key, ...$args)
     {
         return $this->sb->getLocalizationClass()->translate($key, ...$args);
     }
 
+    /**
+     * function getUserDataCache
+     *
+     * @return array
+     */
     public function getUserDataCache(): array
     {
         return UserData::getUserDataCache();

@@ -22,12 +22,12 @@
 
 namespace OpenSB\Pages;
 
-global $twig, $database;
+global $twig, $sb, $database;
 
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 
-$upload_query = new UploadQuery($database);
+$upload_query = new UploadQuery($sb);
 
 $query = $_GET['query'] ?? null;
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);

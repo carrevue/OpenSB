@@ -1,4 +1,4 @@
-{% set logo_suffix = current_theme == "dark" ? '-dark' : '' %}
+{% set logo_suffix = current_theme starts with 'dark' ? '-dark' : '' %}
 {% set logo_extension = website_branding.is_vector ? '.svg' : '.png' %}
 {% set logo_type = website_branding.use_wordmark ? 'logo-wordmark' : 'logo' %}
 
@@ -49,12 +49,15 @@
     {% endif %}
 
     <style>
-        /* this is done through twig because css does not support string addition or whatever the FUCK its called.
-            -chaziz 2025-08-03 */
+        {# this is done through twig because css does not support string addition or whatever the FUCK its called.
+            -chaziz 2025-08-03 #}
         :root {
+            {% if current_theme starts with 'dark' %}
+            --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background_dark.jpg');
+            {% else %}
             --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background.jpg');
+            {% endif %}
         }
-
     </style>
 
     {% if is_user_logged_in and options.trinium_link_coloring %}

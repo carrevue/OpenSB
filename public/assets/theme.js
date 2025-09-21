@@ -1,45 +1,64 @@
-// TODO: merge this into common.js -chaziz 05/25/2025
+document.addEventListener('DOMContentLoaded', function () {
+    // init this shit
+    updateSkinThemes();
+    updatePreview();
+});
 
+
+function updateSkinThemes() {
+    const skinSelect = document.getElementById('skin');
+    const themeSelect = document.getElementById('theme');
+    const selectedSkin = skinSelect.options[skinSelect.selectedIndex];
+    const themes = JSON.parse(selectedSkin.getAttribute('data-themes'));
+
+    themeSelect.innerHTML = '';
+
+    // get all themes within skin
+    themes.forEach(theme => {
+        const option = document.createElement('option');
+        const skinThemeValue = `${selectedSkin.value},${theme.id}`;
+
+        option.value = skinThemeValue;
+        option.textContent = theme.name;
+        option.setAttribute('data-preview-url', `/assets/previews/${selectedSkin.value}_${theme.id}.png`);
+        option.setAttribute('data-name', theme.name);
+        option.setAttribute('data-description', theme.description);
+        option.setAttribute('data-author', theme.author);
+
+        if (skinThemeValue === currentSkinAndTheme) {
+            option.selected = true;
+        }
+
+        themeSelect.appendChild(option);
+    });
+
+    if (typeof weOnTrinium !== "undefined" && weOnTrinium) {
+        const theWarning = document.getElementById('notFullySupported');
+
+        if (selectedSkin.value == "finalium" || selectedSkin.value == "bootstrap") {
+            theWarning.style.display = "inline";
+        } else {
+            theWarning.style.display = "none";
+        }
+    }
+
+    // update skin/theme info
+    document.getElementById('skinName').textContent = selectedSkin.textContent;
+    document.getElementById('skinDescription').textContent = selectedSkin.getAttribute('data-description') || 'No description available.';
+    document.getElementById('skinAuthor').textContent = selectedSkin.getAttribute('data-author') ? `By ${selectedSkin.getAttribute('data-author')}` : '';
+    updatePreview();
+}
+
+// update theme preview and info
 function updatePreview() {
     const themeSelect = document.getElementById('theme');
     const selectedOption = themeSelect.options[themeSelect.selectedIndex];
     const previewUrl = selectedOption.getAttribute('data-preview-url');
-    const description = selectedOption.getAttribute('data-description');
-    const author = selectedOption.getAttribute('data-author');
-
     const themePreview = document.getElementById('themePreview');
 
-    const themeDescription = document.getElementById('themeDescription');
-    const themeAuthor = document.getElementById('themeAuthor');
+    document.getElementById('themeName').textContent = selectedOption.getAttribute('data-name') || 'No theme name specified';
+    document.getElementById('themeDescription').textContent = selectedOption.getAttribute('data-description') || 'No description available.';
+    document.getElementById('themeAuthor').textContent = selectedOption.getAttribute('data-author') ? `By ${selectedOption.getAttribute('data-author')}` : '';
 
-    if (previewUrl) {
-        themePreview.src = previewUrl;
-        themePreview.style.display = 'block';
-    } else {
-        themePreview.style.display = 'none';
-    }
-
-    themeDescription.textContent = description || 'No description available.';
-    themeAuthor.textContent = author ? `By ${author}` : '';
-
-    // only on trinium frontend (for now)
-    if (weOnTriniumFrontendLmao ?? false) {
-        const skinName = selectedOption.getAttribute('data-skin-name');
-        const skinDescription = selectedOption.getAttribute('data-skin-description');
-        const skinAuthor = selectedOption.getAttribute('data-skin-author');
-
-        const skinThemeName = selectedOption.getAttribute('data-name');
-
-        const skinNameElement = document.getElementById('skinName');
-        const skinDescriptionElement = document.getElementById('skinDescription');
-        const skinAuthorElement = document.getElementById('skinAuthor');
-        const skinThemeNameElement = document.getElementById('themeName');
-
-        skinNameElement.textContent = skinName || 'No skin name specified';
-        skinDescriptionElement.textContent = skinDescription || 'No description available.';
-        skinAuthorElement.textContent = skinAuthor ? `By ${skinAuthor}` : '';
-        skinThemeNameElement.textContent = skinThemeName || 'No theme name specified';
-    }
+    themePreview.src = previewUrl;
 }
-
-window.onload = updatePreview;

@@ -4,29 +4,48 @@
 
 {% block content %}
     <h1>Customize</h1>
-    <div id="previewContainer" style="margin-top: 20px;">
+    <div id="previewContainer">
         <h2>Preview</h2>
-        <img id="themePreview" src="" alt="Theme Preview" style="max-width: 300px; max-height: 200px; display: none;">
-        <p id="themeDescription"></p><p id="themeAuthor"></p>
+        <img id="themePreview" src="" alt="Theme Preview" style="max-width: 300px; max-height: 200px;">
+        <div id="skinThemeInfo">
+            <div id="skinName"></div>
+            <div id="skinDescription"></div>
+            <div id="skinAuthor"></div>
+            <div id="themeName"></div>
+            <div id="themeDescription"></div>
+            <div id="themeAuthor"></div>
+        </div>
     </div>
     <form name="uploadForm" id="uploadForm" method="post" action="theme">
-        <label for="theme">Skin:</label>
-        <select id="theme" name="theme" onchange="updatePreview()">
+        <label for="skin">Skin</label>
+        <select id="skin" name="skin" class="form-submit" onchange="updateSkinThemes()">
             {% for skin in skins %}
-                {% for theme in skin.metadata.themes %}
-                    {% set skin_theme_value = skin.metadata.id ~ ',' ~ theme.id %}
-                    <option value="{{ skin_theme_value }}"
-                            data-preview-url="/assets/previews/{{ skin.metadata.id }}_{{ theme.id }}.png"
-                            data-description="{{ theme.description }}"
-                            data-author="{{ theme.author }}"
-                            {% if skin_theme_value == current_skin ~ "," ~ current_theme %} selected{% endif %}>
-                        {{ skin.metadata.name }}: {{ theme.name }}
-                    </option>
-                {% endfor %}
+                <option value="{{ skin.metadata.id }}" 
+                        data-description='{{ skin.metadata.description }}' 
+                        data-author='{{ skin.metadata.author }}'
+                        data-themes='{{ skin.metadata.themes|json_encode }}'
+                        {% if skin.metadata.id == current_skin %} selected{% endif %}>
+                    {{ skin.metadata.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="theme">Theme</label>
+        <select id="theme" name="theme" onchange="updatePreview()">
+        </select>
+        <br>
+        <label for="locale">Locale</label>
+        <select id="locale" name="locale">
+            {% for locale in locales %}
+                <option value="{{ locale.id }}"
+                        {% if options.locale == locale.id %} selected{% endif %}>
+                    {{ locale.name }}
+                </option>
             {% endfor %}
         </select>
         <br>
         <input type="submit" id="apply" name="apply" value="Apply">
     </form>
+    <script>currentSkinAndTheme = '{{ current_skin }},{{ current_theme }}';</script>
     <script src="/assets/theme.js"></script>
 {% endblock %}

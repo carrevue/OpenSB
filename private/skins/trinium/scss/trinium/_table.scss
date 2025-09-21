@@ -1,6 +1,6 @@
 @use "sass:color";
 
-table.c1 {
+table.styled {
     width: 100%;
     border: 1px solid $content-box-border-color;
     border-spacing: 0;
@@ -14,11 +14,11 @@ table.c1 {
         border: 1px solid $content-box-border-color;
         background: $content-box-background-color;
 
-        &.h {
+        &.table-header {
             @if $theme =="default" {
-                background: color.adjust($content-box-border-color, $lightness: 2.5%);
-                background-image: linear-gradient(color.adjust($content-box-border-color, $lightness: 10%),
-                        color.adjust($content-box-border-color, $lightness: 5%));
+                background: color.adjust($content-box-border-color, $lightness: 5%);
+                background-image: linear-gradient(color.adjust($content-box-border-color, $lightness: 7.5%),
+                        color.adjust($content-box-border-color, $lightness: 2.5%));
             }
 
             @else {
@@ -26,7 +26,7 @@ table.c1 {
             }
 
             th {
-                padding: 0.2rem 0.4rem;
+                padding: 0.2rem 0.3rem;
                 text-align: left;
                 border: 1px solid $content-box-border-color;
                 font-weight: 500;
@@ -36,6 +36,6 @@ table.c1 {
 
     td {
         border: 1px solid $content-box-border-color;
-        padding: 0.4rem;
+        padding: 0.3rem;
     }
 }

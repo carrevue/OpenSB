@@ -25,36 +25,130 @@ use BluffingoCore\Database;
 use BluffingoCore\Profiler;
 
 /**
+ * class SquareBracket
+ *
  * The core OpenSB class.
  */
 class SquareBracket
 {
+    /**
+     * @var Database
+     */
     private Database $database;
+
+    /**
+     * @var Profiler
+     */
     private Profiler $profiler;
+
+    /**
+     * @var Storage
+     */
     private Storage $storage;
+
+    /**
+     * @var Authentication
+     */
     private Authentication $authentication;
+
+    /**
+     * @var Localization
+     */
     private Localization $localization;
+
+    /**
+     * @var DiscordWebhookLogging
+     */
     private ?DiscordWebhookLogging $discord;
+
+    /**
+     * @var IPLookup
+     */
     private ?IPLookup $ip_lookup;
+
+    /**
+     * @var bool
+     */
     private bool $is_debug = false;
+
+    /**
+     * @var bool
+     */
     private bool $is_chaziz_squarebracket_instance = false;
+
+    /**
+     * @var bool
+     */
     private bool $is_sitetest_instance = false;
+
+    /**
+     * @var bool
+     */
     private bool $template_caching_enabled = false;
+
+    /**
+     * @var bool
+     */
     private bool $under_maintenance = false;
+
+    /**
+     * @var bool
+     */
     private bool $enable_account_registration = true;
+
+    /**
+     * @var bool
+     */
     private bool $enable_invite_keys = false;
+
+    /**
+     * @var bool
+     */
     private bool $enable_lockdown = false;
+
+    /**
+     * @var bool
+     */
     private bool $enable_discord_webhook = false;
+
+    /**
+     * @var bool
+     */
     private bool $enable_ip_lookup = false;
+
+    /**
+     * @var array
+     */
     private array $branding_settings;
+
+    /**
+     * @var array
+     */
     private array $captcha_settings;
+
+    /**
+     * @var array
+     */
     public array $options;
+
+    /**
+     * @var array
+     */
     private array $accounts;
+
+    /**
+     * @var string
+     */
     private string $accounts_cookie_warning = "DO-NOT-SHARE-THIS-WITH-ANYONE-";
 
     /**
-     * Initialize core OpenSB classes. (this is fucking stupid)
+     * function __construct
      *
+     * Initialize the core OpenSB classes.
+     *
+     * @param mixed $config
+     *
+     * @return void
      */
     public function __construct($config)
     {
@@ -203,6 +297,11 @@ class SquareBracket
         }
     }
 
+    /**
+     * function overrideBrandingWithFulpTube
+     *
+     * @return void
+     */
     private function overrideBrandingWithFulpTube()
     {
         $this->branding_settings = [
@@ -213,6 +312,11 @@ class SquareBracket
         ];
     }
 
+    /**
+     * function getOptionsCookie
+     *
+     * @return mixed|array
+     */
     public function getOptionsCookie()
     {
         if (isset($_COOKIE['SBOPTIONS'])) {
@@ -222,6 +326,13 @@ class SquareBracket
         }
     }
 
+    /**
+     * function setOptionCookie
+     *
+     * @param mixed $options
+     *
+     * @return void
+     */
     public function setOptionCookie($options)
     {
         setcookie("SBOPTIONS", base64_encode(json_encode($options)), [
@@ -234,6 +345,8 @@ class SquareBracket
     }
 
     /**
+     * function getDatabaseClass
+     *
      * Returns the database class for other classes to use.
      *
      * @return Database
@@ -244,6 +357,8 @@ class SquareBracket
     }
 
     /**
+     * function getProfilerClass
+     *
      * Returns the profiler class for other OpenSB classes to use.
      *
      * @return Profiler
@@ -254,6 +369,8 @@ class SquareBracket
     }
 
     /**
+     * function getStorageClass
+     *
      * Returns the storage class for other OpenSB classes to use.
      *
      * @return Storage
@@ -264,6 +381,8 @@ class SquareBracket
     }
 
     /**
+     * function getAuthenticationClass
+     *
      * Returns the authentication class for other OpenSB classes to use.
      *
      * @return Authentication
@@ -274,6 +393,8 @@ class SquareBracket
     }
 
     /**
+     * function getLocalizationClass
+     *
      * Returns the localization class for other OpenSB classes to use.
      *
      * @return Localization
@@ -284,6 +405,8 @@ class SquareBracket
     }
 
     /**
+     * function isDiscordWebhookEnabled
+     *
      * Returns the bool that toggles the Discord webhook logging class.
      *
      * @return bool
@@ -294,6 +417,8 @@ class SquareBracket
     }
 
     /**
+     * function getDiscordWebhookClass
+     *
      * Returns the Discord webhook logging class.
      *
      * @return DiscordWebhookLogging
@@ -307,6 +432,8 @@ class SquareBracket
     }
 
     /**
+     * function isIpLookupEnabled
+     *
      * Returns the bool that toggles the IP lookup class.
      *
      * @return bool
@@ -317,6 +444,8 @@ class SquareBracket
     }
 
     /**
+     * function getIpLookupClass
+     *
      * Returns the IP lookup class.
      *
      * @return IPLookup
@@ -330,6 +459,8 @@ class SquareBracket
     }
 
     /**
+     * function getLocalOptions
+     *
      * Returns the user's local settings.
      *
      * @return array
@@ -340,6 +471,8 @@ class SquareBracket
     }
 
     /**
+     * function getWarningString
+     *
      * Returns warning string for accounts cookie.
      *
      * @return string
@@ -350,6 +483,8 @@ class SquareBracket
     }
 
     /**
+     * function getAccountsArray
+     *
      * Returns array for changing accounts.
      *
      * @return array|string
@@ -360,6 +495,8 @@ class SquareBracket
     }
 
     /**
+     * function isDebug
+     *
      * Returns boolean that indicates if debug is enabled.
      *
      * @return bool
@@ -370,6 +507,8 @@ class SquareBracket
     }
 
     /**
+     * function isIncompleteFeaturesEnabled
+     *
      * Returns boolean that indicates if incomplete features should be enabled.
      * This is separate from isDebug, and is enabled by default on SiteTest.
      *
@@ -385,7 +524,9 @@ class SquareBracket
     }
 
     /**
-     * Returns boolean for if hitchhiker is enabled. 
+     * function isHitchhiker
+     *
+     * Returns boolean for if hitchhiker is enabled.
      * THIS IS SEPERATE FROM isFulpTube()
      *
      * @return bool
@@ -397,6 +538,8 @@ class SquareBracket
     }
 
     /**
+     * function isFulpTube
+     *
      * Returns boolean for FulpTube mode.
      *
      * @return bool
@@ -419,6 +562,8 @@ class SquareBracket
     }
 
     /**
+     * function isTemplateCachingEnabled
+     *
      * Returns boolean for enabling template caching.
      *
      * @return bool
@@ -429,6 +574,8 @@ class SquareBracket
     }
 
     /**
+     * function isAccountRegistrationEnabled
+     *
      * Returns boolean for enabling account registration.
      *
      * @return bool
@@ -439,6 +586,8 @@ class SquareBracket
     }
 
     /**
+     * function isInviteKeysEnabled
+     *
      * Returns boolean for enabling invite keys for account registration.
      *
      * @return bool
@@ -449,6 +598,8 @@ class SquareBracket
     }
 
     /**
+     * function isLockdownEnabled
+     *
      * Returns boolean for enabling lockdown.
      *
      * @return bool
@@ -459,6 +610,8 @@ class SquareBracket
     }
 
     /**
+     * function isUnderMaintenance
+     *
      * Returns boolean for if the instance is under maintenance.
      *
      * @return bool
@@ -469,6 +622,8 @@ class SquareBracket
     }
 
     /**
+     * function isChazizSquareBracketInstance
+     *
      * Returns a bool that indicates if the instance is set to "Chaziz SquareBracket" mode.
      *
      * @return bool
@@ -479,6 +634,8 @@ class SquareBracket
     }
 
     /**
+     * function isSiteTestInstance
+     *
      * Returns a bool that indicates if the instance is set to "SiteTest" mode.
      *
      * @return bool
@@ -489,6 +646,8 @@ class SquareBracket
     }
 
     /**
+     * function getBrandingSettings
+     *
      * Returns array for the instance's branding.
      *
      * @return array
@@ -499,6 +658,8 @@ class SquareBracket
     }
 
     /**
+     * function returnCaptchaSettings
+     *
      * Returns array for the captcha settings.
      *
      * @return array

@@ -24,7 +24,7 @@
                     <ul class="unstyled-list">
                         {% for thing in data.software %}
                             <li>
-                                <span class="text-faded">{{ thing.title }}</span>: {{ thing.info }}
+                                {{ thing.title }}: {{ thing.info }}
                             </li>
                         {% endfor %}
                     </ul>

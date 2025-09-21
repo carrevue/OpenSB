@@ -106,28 +106,24 @@ h6 {
     font-weight: 600;
 }
 
-img.img-responsive {
-    width: 100%;
-}
-
-.clear {
-    clear: both;
-}
-
 .bold {
     font-weight: 500;
 }
 
 code {
     color: #a33a3a;
+    background-color: #ffe8e8;
+    border: 1px solid #eed1d1;
+    border-radius: 4px;
+    padding: 2px 4px;
 }
 
 pre {
     color: #a33a3a;
     background-color: #ffe8e8;
     border: 1px solid #eed1d1;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 4px;
+    padding: 0.5rem;
     margin: 0;
     overflow-x: auto;
     line-height: 1.5;
@@ -188,10 +184,6 @@ hr {
     border-bottom: 1px solid $content-box-border-color;
     height: 0;
     margin: 1em 0;
-}
-
-.fade {
-    color: #888;
 }
 
 .flex {
@@ -257,6 +249,25 @@ ul.unstyled-list {
     -webkit-mask: url(#stars-mask);
     height: 16px;
     width: 80px;
+}
+
+//awkward clr overrides
+.clr-picker {
+    background-color: $content-box-background-color !important;
+    border: 1px solid $content-box-border-color;
+    box-shadow: 0 2px 5px rgba(black, 0.1) !important;
+    border-radius: 8px;
+
+    input.clr-color {
+        background-color: $form-bg-color !important;
+        color: $form-text-color !important;
+        border: 1px solid $form-border-color !important;
+        border-radius: 6px;
+
+        &:focus {
+            border-color: var(--link-color) !important;
+        }
+    }
 }
 
 @import 'header';

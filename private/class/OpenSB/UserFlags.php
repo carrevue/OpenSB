@@ -29,7 +29,7 @@ enum UserFlags: int
     case FLAG_PROFILE_CUSTOMIZATION_ENABLED = 1;
 
 /**
-     * 00000010: Lmao
+     * 00000010: Unverified user (this is SquareBracket/FulpTube-specific behavior)
      */
     case FLAG_UNVERIFIED = 2;
 
@@ -38,6 +38,15 @@ enum UserFlags: int
      */
     case FLAG_FULPTUBE_ACCOUNT = 80;
 
+    /**
+     * function toArray
+     * 
+     * Returns the user flag array
+     *
+     * @param int $flags
+     *
+     * @return array
+     */
     public static function toArray(int $flags): array
     {
         return [

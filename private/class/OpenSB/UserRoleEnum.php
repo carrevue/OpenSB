@@ -31,6 +31,13 @@ enum UserRoleEnum: int
     case Administrator = 3;
     case Owner = 4;
 
+    /**
+     * function fromString
+     *
+     * @param string $rating
+     *
+     * @return self
+     */
     public static function fromString(string $rating): self
     {
         return match (strtolower($rating)) {
@@ -43,7 +50,13 @@ enum UserRoleEnum: int
         };
     }
 
-    // for some reason the db uses sql enums and i forgot why i did it like this.
+    /**
+     * function toString
+     * 
+     * for some reason the db uses sql enums and i forgot why i did it like this.
+     *
+     * @return string
+     */
     public function toString(): string
     {
         return match ($this) {

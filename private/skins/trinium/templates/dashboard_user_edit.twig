@@ -32,7 +32,7 @@
                         <div class="section-header">
                             <h2 class="section-title">Details</h2>
                         </div>
-                        <table class="c1">
+                        <table class="styled">
                             <tbody>
                             <tr>
                                 <td>{{ localize('user_id') }}</td>
@@ -102,7 +102,7 @@
                             <div class="section-header">
                                 <h2 class="section-title">IP info</h2>
                             </div>
-                            <table class="c1">
+                            <table class="styled">
                                 <tbody>
                                 {% for key, info in ip_info %}
                                     <tr>
@@ -125,7 +125,7 @@
                             <div class="section-header">
                                 <h2 class="section-title">Other accounts with matching IP</h2>
                             </div>
-                            <table class="c1">
+                            <table class="styled">
                                 <tbody>
                                 {% for user in users_with_matching_ips %}
                                     <tr>
@@ -148,7 +148,7 @@
                             <div class="section-header">
                                 <h2 class="section-title">Previous usernames</h2>
                             </div>
-                            <table class="c1">
+                            <table class="styled">
                                 <tbody>
                                 {% for entry in old_names %}
                                     <tr>
@@ -172,9 +172,9 @@
                         <div class="section-header">
                             <h2 class="section-title">Assets</h2>
                         </div>
-                        <table class="c1">
+                        <table class="styled">
                             <tbody>
-                            <tr class="h">
+                            <tr class="table-header">
                                 <th style="width:50%;">Profile picture</th>
                                 <th style="width:50%;">Banner</th>
                             </tr>

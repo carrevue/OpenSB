@@ -51,7 +51,7 @@ try {
 
 $html = $twig->render('/components/comments.twig', [
     'count' => $comment_count,
-    'data' => $comment_data,
+    'comments' => $comment_data,
 ]);
 
 echo json_encode(['html' => $html]);

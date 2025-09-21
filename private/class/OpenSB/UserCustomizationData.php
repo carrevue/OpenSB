@@ -24,11 +24,31 @@ namespace OpenSB;
 use BluffingoCore\Database;
 use OpenSB\UserCustomizationFont;
 
+/**
+ * class UserCustomizationData
+ * 
+ * Handles the user's Trinium profile customization data. 
+ */
 class UserCustomizationData
 {
+    /**
+     * @var Database The database class
+     */
     private Database $database;
+
+    /**
+     * @var mixed
+     */
     private $data;
 
+    /**
+     * function __construct
+     *
+     * @param Database $database
+     * @param mixed $id
+     *
+     * @return void
+     */
     public function __construct(Database $database, $id)
     {
         $this->database = $database;
@@ -44,6 +64,12 @@ class UserCustomizationData
     }
 
     // i'm not sure if this should be array|false or ?array
+
+    /**
+     * function getData
+     *
+     * @return array|false
+     */
     public function getData(): array|false
     {
         if ($this->data) {

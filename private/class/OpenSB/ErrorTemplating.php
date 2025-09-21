@@ -30,14 +30,34 @@ use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
+/**
+ * class ErrorTemplating
+ * 
+ * Alternate Twig wrapper for certain errors, like 404 or geoblocking.
+ */
 class ErrorTemplating
 {
+    /**
+     * @var SquareBracket The core SquareBracket class.
+     */
     private SquareBracket $sb;
+
+    /**
+     * @var FilesystemLoader Twig's Filesystem Loader
+     */
     private FilesystemLoader $loader;
+
+    /**
+     * @var Environment The Twig environment
+     */
     private Environment $twig;
 
     /**
-     * @throws Exception
+     * function __construct
+     *
+     * @param SquareBracket $sb
+     *
+     * @return string
      */
     public function __construct(SquareBracket $sb)
     {
@@ -71,27 +91,34 @@ class ErrorTemplating
 
         $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizSquareBracketInstance());
         $this->twig->addGlobal('is_fulptube', $sb->isFulpTube());
-        $this->twig->addGlobal('opensb_version', $versionNumber->getVersionNumber());
+        $this->twig->addGlobal('opensb_version', $versionNumber->getVersionArray());
         $this->twig->addGlobal('website_branding', $sb->getBrandingSettings());
 
         $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));
     }
 
     // copied from squarebrackettwigextension
+
+    /**
+     * function localize
+     *
+     * @param mixed $key
+     * @param mixed $args
+     *
+     * @return mixed
+     */
     public function localize($key, ...$args)
     {
         return $this->sb->getLocalizationClass()->translate($key, ...$args);
     }
 
     /**
+     * function render
      *
-     * @param $template
+     * @param mixed $template
      * @param array $data
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      *
+     * @return string
      */
     public function render($template, array $data = []): string
     {
