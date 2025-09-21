@@ -34,7 +34,7 @@ global $database, $sb;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
-$uploads = $database->fetchArray($database->query("SELECT * FROM uploads"));
+$uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE type = 0"));
 $storage = $sb->getStorageClass();
 
 foreach ($uploads as $upload) {
