@@ -1,16 +1,18 @@
 .jumbotron {
     &.page-banner {
         @if $color-scheme =="dark" {
-            background: #191919;
+            background: #191919 var(--jumbotron) center;
         }
 
         @else {
             background: #0069B4 var(--jumbotron) center;
             color: white;
+        }
 
-            @if $theme =="default" {
-                text-shadow: 0 0.1em 0.25em rgba(black, 0.75);
-            }
+        background-size: cover;
+
+        @if $theme =="default" {
+            text-shadow: 0 0.1em 0.25em rgba(black, 0.75);
         }
 
         border-bottom: 1px solid $content-box-border-color;

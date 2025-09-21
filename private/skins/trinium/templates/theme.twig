@@ -24,6 +24,7 @@
                     <div id="themeName"></div>
                     <div id="themeDescription"></div>
                     <div id="themeAuthor"></div>
+                    <div id="notFullySupported" class="text-danger" style="display:hidden;">This skin is not fully supported and may not be completely functional</div>
                 </div>
             </div>
             <hr>
@@ -33,6 +34,8 @@
                     <select id="skin" name="skin" class="form-submit" onchange="updateSkinThemes()">
                         {% for skin in skins %}
                             <option value="{{ skin.metadata.id }}" 
+                                    data-description='{{ skin.metadata.description }}' 
+                                    data-author='{{ skin.metadata.author }}'
                                     data-themes='{{ skin.metadata.themes|json_encode }}'
                                     {% if skin.metadata.id == current_skin %} selected{% endif %}>
                                 {{ skin.metadata.name }}
@@ -69,6 +72,7 @@
 {% block scripts %}
     <script>
         currentSkinAndTheme = '{{ current_skin }},{{ current_theme }}';
+        weOnTrinium = true;
     </script>
     <script src="/assets/theme.js?r={{ get_css_file_date() }}"></script>
 {% endblock %}

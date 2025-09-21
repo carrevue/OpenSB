@@ -32,6 +32,16 @@ function updateSkinThemes() {
         themeSelect.appendChild(option);
     });
 
+    if (weOnTrinium) {
+        const theWarning = document.getElementById('notFullySupported');
+
+        if (selectedSkin.value == "finalium" || selectedSkin.value == "bootstrap") {
+            theWarning.style.display = "inline";
+        } else {
+            theWarning.style.display = "none";
+        }
+    }
+
     // update skin/theme info
     document.getElementById('skinName').textContent = selectedSkin.textContent;
     document.getElementById('skinDescription').textContent = selectedSkin.getAttribute('data-description') || 'No description available.';

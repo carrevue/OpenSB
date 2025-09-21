@@ -55,7 +55,7 @@ $header-link-inactive-opacity: 0.75;
 $header-link-active-opacity: 1; // includes hover
 
 @if $color-scheme =="dark" {
-    $header-background: linear-gradient(to bottom, #202020, #111111);
+    $header-background: linear-gradient(to bottom, #171717, #111111);
 }
 
 @if $theme =="flat" {
