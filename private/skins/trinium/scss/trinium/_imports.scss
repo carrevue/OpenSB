@@ -106,14 +106,6 @@ h6 {
     font-weight: 600;
 }
 
-img.img-responsive {
-    width: 100%;
-}
-
-.clear {
-    clear: both;
-}
-
 .bold {
     font-weight: 500;
 }
@@ -123,7 +115,7 @@ code {
     background-color: #ffe8e8;
     border: 1px solid #eed1d1;
     border-radius: 4px;
-    padding: 0 2px;
+    padding: 2px 4px;
 }
 
 pre {
@@ -192,10 +184,6 @@ hr {
     border-bottom: 1px solid $content-box-border-color;
     height: 0;
     margin: 1em 0;
-}
-
-.fade {
-    color: #888;
 }
 
 .flex {
