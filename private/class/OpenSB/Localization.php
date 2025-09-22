@@ -114,7 +114,13 @@ class Localization
     public function formatDate($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null)
     {
         if (!$date instanceof \DateTimeInterface) {
-            $date = is_numeric($date) ? new \DateTime('@' . $date) : new \DateTime($date);
+            if ($date === null) {
+                return "unknown";
+            } elseif (is_numeric($date)) {
+                $date = new \DateTime('@' . $date);
+            } else {
+                $date = new \DateTime($date);
+            }
         }
 
         $locale = $this->isPsuedo ? 'en-US' : $this->locale;

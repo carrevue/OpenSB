@@ -197,11 +197,16 @@
                             <h2 class="section-title">Notes</h2>
                         </div>
                         {% for note in notes %}
-                            <div class="content-box content-note">
-                                <div>
-                                    By {{ user_link(note.author) }}, {{ note.time | relative_time }}
+                            <div class="content-box">
+                                <div class="content-info">
+                                    <div class="content-title">
+                                        {{ user_link(note.author) }}
+                                        {{ note.time | relative_time }}
+                                    </div>
                                 </div>
-                                {{ note.content | markdown_user_written(true) }}
+                                <div class="content-description">
+                                    {{ note.content | markdown_user_written(true) }}
+                                </div>
                             </div>
                         {% endfor %}
                     </div>

@@ -24,7 +24,7 @@
 {% block content %}
     {% if data.ban_data %}
         <div class="banner banner-secondary">
-            This user was banned on {{ data.ban_data.time | format_date('long', 'medium') }} for the following reason:
+            This user was banned on {{ data.ban_data.timestamp | format_date('long', 'medium') }} for the following reason:
             {{ data.ban_data.reason }}
         </div>
     {% endif %}
