@@ -3,15 +3,44 @@ function error(error) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // if the min-width breakpoints get changed, don't forgot to update this.
+    const mediaQueryList = window.matchMedia("(min-width: 950px)");
+
+    let isMobile = false;
+    let mediaQueryTest = (document.getElementById('media-query-test'));
+
+    function handleMediaQueryChange(event) {
+        if (event.matches) {
+            isMobile = false;
+            if (mediaQueryTest) {
+                mediaQueryTest.innerText = "Desktop";
+            }
+        } else {
+            isMobile = true;
+            if (mediaQueryTest) {
+                mediaQueryTest.innerText = "Mobile";
+            }
+        }
+    }
+
+    handleMediaQueryChange(mediaQueryList);
+    mediaQueryList.addEventListener("change", handleMediaQueryChange);
+    ///
+
     let hamburgerButton = (document.getElementById('button-hamburger')); // TEMPORARY
     let hamburgerMenu = (document.getElementById('hamburger')); // TEMPORARY
+    let sidebar = (document.getElementById('sidebar')); // TEMPORARY
 
     if (hamburgerButton) {
         hamburgerButton.onclick = function () {
-            if (hamburgerMenu) {
-                hamburgerMenu.classList.toggle("active");
+            if (hamburgerMenu && sidebar) {
+                if (isMobile) {
+                    hamburgerMenu.classList.toggle("active");
+                } else {
+                    sidebar.classList.toggle("active");
+                }
             } else {
-                console.error("where the fuck is the hamburger menu");
+                error("where the fuck is the hamburger menu");
             }
         }
     }
