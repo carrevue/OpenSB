@@ -43,16 +43,16 @@ const SB_2024_TIMESTAMP = 1730782800; // qtv views from 2023 were FUCKED and had
 // some of these view counts are a little too fishy
 // i cant actually get the code to fix these so just hardcode some of the shit
 const PENALIZED_UPLOADS = [
-    "kLTc06kfmmD" => 0.15, // Millions of players are doing the stupidest sh- on Roblox
-    "IHqkcCdlTNq" => 0.15, // Sparta Remix Tutorial #1: Pitch Patterns!
-    "HKMmeNcyiUI" => 0.1, // youtube whenever gamerappa uploads a video
+    "kLTc06kfmmD" => 0.10, // Millions of players are doing the stupidest sh- on Roblox
+    "IHqkcCdlTNq" => 0.10, // Sparta Remix Tutorial #1: Pitch Patterns!
+    "HKMmeNcyiUI" => 0.10, // youtube whenever gamerappa uploads a video
     "yoc7poNGzzp" => 0.08, // this site works on the wii
     "i0ygjnoOSIX" => 0.05, // Charla Serbia
     "SoESPPtBKym" => 0.05, // bluey dialer
-    "hfBv-jEq39y" => 0.035, // BANDIT AND PAT ARE GAY (PROOF)T
-    "VoFUj4A7lbW" => 0.025, // Genuine™ Chip Chilla™ Plushies™
-    "h5KVbDgrctS" => 0.025, // Woke™ Chip Chilla™ Plushies™
-    "07z4X_T-ZqA" => 0.015, // Chip Chilla Redraw Attempt
+    "hfBv-jEq39y" => 0.03, // BANDIT AND PAT ARE GAY (PROOF)T
+    "VoFUj4A7lbW" => 0.02, // Genuine™ Chip Chilla™ Plushies™
+    "h5KVbDgrctS" => 0.02, // Woke™ Chip Chilla™ Plushies™
+    "07z4X_T-ZqA" => 0.01, // Chip Chilla Redraw Attempt
     "qSvVjP2nx4w" => 0.01, // Alfie (Bluey) x Rocky (Several Robloxians)
     "d3F-g9LtnZI" => 0.01, // Chazgame2's Transformation
 ];
@@ -61,8 +61,8 @@ foreach ($uploads as $upload) {
     $views = $database->fetchArray($database->query("
         SELECT type, timestamp 
         FROM upload_views 
-        WHERE video_id = ?
-    ", [$upload["video_id"]]));
+        WHERE upload_id = ?
+    ", [$upload["upload_id"]]));
 
     $loggedIn = 0;
     $loggedOut = 0;
@@ -82,32 +82,40 @@ foreach ($uploads as $upload) {
             // these timestamps are hardcoded within the db.
             // sb did not count the exact timestamp of views until about april 2024.
             if ($timestamp === POKTUBE_TIMESTAMP) {
-                $adjustedViews += 0.0333333;
+                $adjustedViews += 0.1;
             } elseif ($timestamp === QTV_TIMESTAMP) {
                 $adjustedViews += 0.05;
             } elseif ($timestamp === SB_2022_TIMESTAMP) {
                 $adjustedViews += 0.25;
             } else {
                 // penalize certain uploads
-                if (array_key_exists($upload["video_id"], PENALIZED_UPLOADS)) {
-                    $adjustedViews += PENALIZED_UPLOADS[$upload["video_id"]];
+                if (array_key_exists($upload["upload_id"], PENALIZED_UPLOADS)) {
+                    $adjustedViews += PENALIZED_UPLOADS[$upload["upload_id"]];
                 } else {
-                    $ratio_penalty = 10;
+                    $ratio_penalty = 5;
 
                     // crawlerdetect was kinda fucky during this time
-                    if ($timestamp > QTV_TIMESTAMP || $timestamp < SB_2024_TIMESTAMP) {
+                    if ($timestamp == QTV_TIMESTAMP) {
                         $ratio_penalty = 25;
                     }
 
-                    // these videos were directly linked onto youtube, so most of the guest views are genuine.
-                    if ($upload["video_id"] === "rpdCM7mawrL" || $upload["video_id"] === "I6Dhqvit5rd") {
-                        $ratio_penalty = 7.5;
+                    // crawlerdetect was kinda fucky during this time
+                    if ($timestamp > QTV_TIMESTAMP || $timestamp < SB_2024_TIMESTAMP) {
+                        $ratio_penalty = 10;
                     }
 
-                    // ratio. PHP_INT_MAX is there to avoid division by zero errors.
-                    $ratio = $loggedIn ? (1 + ($ratio_penalty / ($loggedIn + 1))) : PHP_INT_MAX;
+                    // these videos were directly linked onto youtube, so most of the guest views are genuine.
+                    if ($upload["upload_id"] === "rpdCM7mawrL" || $upload["upload_id"] === "I6Dhqvit5rd") {
+                        $ratio_penalty = 5;
+                    }
 
-                    $adjustedViews += (1 / $ratio);
+                    if ($loggedIn > 0) {
+                        // ratio. PHP_INT_MAX is there to avoid division by zero errors.
+                        $ratio = $loggedIn ? (1 + ($ratio_penalty / ($loggedIn + 1))) : PHP_INT_MAX;
+                        $adjustedViews += (1 / $ratio);
+                    } else {
+                        $adjustedViews += 0.05;
+                    }
                 }
             }
         }
@@ -116,15 +124,15 @@ foreach ($uploads as $upload) {
     if (BLUFF_CLI) {
         if (getenv('TERM')) {
             // debug output shit
-            echo "ID: {$upload["video_id"]} ";
+            echo "ID: {$upload["upload_id"]} ";
             echo "Views (U/G/O/N): {$loggedIn}/{$loggedOut}/{$upload["views"]}/" . round($adjustedViews) . PHP_EOL;
         }
     }
 
     // now push that shit to the database
     $database->query(
-        "UPDATE uploads SET views = ? WHERE video_id = ?",
-        [round($adjustedViews), $upload["video_id"]]
+        "UPDATE uploads SET views = ? WHERE upload_id = ?",
+        [round($adjustedViews), $upload["upload_id"]]
     );
 }
 
