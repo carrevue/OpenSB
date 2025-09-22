@@ -361,6 +361,13 @@ if ($auth->userHasRole(UserRoleEnum::Administrator) && $takedown) {
     $page_data["author_banned"] = false;
 }
 
-echo $twig->render('watch.twig', [
+// dumb temporary shit for sunset valley
+if ($sb->getLocalOptions()["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled()) {
+    $template = 'watch_sv.twig';;
+} else {
+    $template = 'watch.twig';
+}
+
+echo $twig->render($template, [
     'upload' => $page_data,
 ]);
