@@ -1,1 +1,0 @@
-yt-dlp --batch-file video_urls.txt -o "%%(webpage_url)s.%%(ext)s" -S vcodec:h264 --restrict-filenames
