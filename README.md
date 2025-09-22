@@ -2,9 +2,10 @@
 
 <img src="https://raw.githubusercontent.com/bluffingo/OpenSB/refs/heads/opensb-2.0/private/skins/trinium/default.png"></img>
 
-## How to setup an OpenSB instance.
+## MAKE SURE YOU'RE GETTING OPENSB FROM THE BLUFFINGO DEVELOPMENT GITHUB!
+We've gotten reports about an unofficial malicious backdoored version of OpenSB originating from Eastern Europe. The only official source for OpenSB is and will always be the Bluffingo Development GitHub organization. We are not responsible for anything that happens using that unofficial backdoored version.
 
-I wouldn't recommend using this code unless if you ***really*** know what you're doing.
+## How to setup an OpenSB instance.
 
 1. Get a webserver (Apache or NGINX) with PHP and MariaDB or MySQL up and running, including Composer, the PHP GD library extension, and the PHP intl extension.
 1. Configure your webserver. Look below the steps for an example.
