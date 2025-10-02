@@ -67,7 +67,7 @@
     "login_what_is_site_5": "and much more!",
 
     "register_invite_key_required": "%s requires an invite key in order to register. You will need to obtain this from someone.",
-    "register_discord_requirement": "%s requires your account to be manually verified through Discord before you can upload.",
+    "register_discord_requirement": "%s currently requires your account to be manually verified through Discord before you can upload.",
     "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
     "register_tldr_1": "TL;DR:",
     "register_tldr_2": "You must be over the age of 13.",
