@@ -118,6 +118,22 @@ function handle_debug_page_path(string $path): void
     }
 }
 
+function automatic_ip_ban()
+{
+    global $database;
+
+    $ip = Utilities::getIpAddress();
+    if ($ip !== null) {
+        $database->query("INSERT INTO ip_bans (ip, reason, timestamp) VALUES (?, ?, ?)", [
+            $ip,
+            "Automated by OpenSB: Likely a bot.",
+            time()
+        ]);
+        http_response_code(403);
+        die();
+    }
+}
+
 $router = new Router();
 
 // homepage
@@ -231,6 +247,33 @@ $router->add('/debug', function (array $params) {
 $router->add('/debug/{page}', function (array $params) {
     handle_debug_page_path($params['page']);
 });
+
+// booby traps for spambots. DO NOT CHECK THESE YOURSELF. YOU WILL BE IP BANNED.
+$spam_paths = [
+    '/wp_login',
+    '/wp-admin',
+    '/wordpress',
+    '/wp',
+    '/wp-admin/{path}',
+    '/wordpress/{path}',
+    '/wp/{path}',
+    '/wp-content/{path}',
+    '/xmlrpc',
+    '/OA_HTML/{path}',
+    '/xwiki/{path}',
+    '/owa',
+    '/owa/{path}',
+    '/cpanel',
+    '/cpanel/{path}',
+];
+
+$ban = function () { // awkward as fuck but it works
+    automatic_ip_ban();
+};
+
+foreach ($spam_paths as $p) {
+    $router->add($p, $ban);
+}
 
 // fallback
 $router->setFallback(function () {
