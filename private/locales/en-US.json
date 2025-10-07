@@ -321,6 +321,8 @@
     "notify_login_incorrect": "Incorrect credentials.",
     "notify_login_no_account": "There is no account with these credentials.",
     "notify_login_invalid": "Please input your credentials.",
+    "notify_login_too_many_attempts": "Too many login attempts. Please wait a while before trying again.",
+    "notify_invalid_csrf": "The CSRF token is invalid. Please try again.",
     "notify_notifications_cleared": "You have successfully cleared your notifications.",
     "notify_invalid_journal": "This journal does not exist.",
     "notify_register_disabled": "The ability to register has been disabled.",

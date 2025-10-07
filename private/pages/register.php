@@ -155,6 +155,7 @@ if (isset($_POST['registersubmit'])) {
         }
 
         $_SESSION["SBTOKEN"] = $token;
+        $_SESSION["SB_STAFF_AUTHED"] = null; // just to be certain, clear this shit off.
 
         if ($sb->isDiscordWebhookEnabled()) {
             $data = [

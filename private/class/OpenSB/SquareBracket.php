@@ -134,7 +134,7 @@ class SquareBracket
     /**
      * @var array
      */
-    private array $accounts;
+    private array|null $accounts = [];
 
     /**
      * @var string
@@ -176,20 +176,6 @@ class SquareBracket
             $this->database->setProfiling(true);
         }
         $this->authentication = new Authentication($this);
-
-        // super dangerous if misused, but that site mode is only intended for
-        // squarebracket production so it doesnt really matter. -chaziz 09/17/2025
-        if (
-            $this->is_chaziz_squarebracket_instance &&
-            isset($this->authentication->getUserData()["name"]) &&
-            isset($this->authentication->getUserData()["id"]) &&
-            $this->authentication->getUserData()["name"] == "Chaziz" &&
-            $this->authentication->getUserData()["id"] == 1
-        ) {
-            $this->is_debug = true;
-            // this doesnt show auth-related queries however, but it doesnt really matter.
-            $this->database->setProfiling(true);
-        }
 
         //$this->version_number = new VersionNumber();
 
@@ -250,8 +236,26 @@ class SquareBracket
         $this->localization = new Localization($this->options["locale"] ?? "en-US");
 
         if (isset($_COOKIE["SBACCOUNTS"])) {
-            $accounts_cookie_without_warning = str_replace($this->accounts_cookie_warning, "", $_COOKIE["SBACCOUNTS"]);
-            $this->accounts = json_decode(base64_decode($accounts_cookie_without_warning), true);
+            $cookie_raw = $_COOKIE["SBACCOUNTS"];
+
+            // get rid of warning string
+            if (strpos($cookie_raw, $this->accounts_cookie_warning) === 0) {
+                $cookie_raw = substr($cookie_raw, strlen($this->accounts_cookie_warning));
+            }
+
+            $decoded = Utilities::verifySignedCookiePayload($cookie_raw);
+
+            if ($decoded !== false && is_array($decoded)) {
+                $this->accounts = $decoded;
+            } else {
+                // if invalid, reset to empty array
+                $this->accounts = [];
+                Utilities::setSafeCookie(
+                    'SBACCOUNTS',
+                    $this->accounts_cookie_warning . Utilities::makeSignedCookiePayload([]),
+                    time() + (30 * 24 * 60 * 60)
+                );
+            }
         } else {
             $this->accounts = [];
         }
@@ -491,7 +495,7 @@ class SquareBracket
      */
     public function getAccountsArray(): array|string
     {
-        return $this->accounts;
+        return $this->accounts ?? [];
     }
 
     /**
