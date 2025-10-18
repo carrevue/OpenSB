@@ -5,11 +5,9 @@
         <a class="navigation-bar-button {% if page_name=='my_uploads' %}active{% endif %}" href="/my_uploads">
             {{ localize('uploads') }}
         </a>
-        {% if options.enable_incomplete_features %}
         <a class="navigation-bar-button {% if page_name=='my_messages' %}active{% endif %}" href="/my_messages">
             Messages
         </a>
-        {% endif %}
         <a class="navigation-bar-button {% if page_name=='notifications' %}active{% endif %}" href="/notifications">
             {{ localize('notifications') }}
         </a>

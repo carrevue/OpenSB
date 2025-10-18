@@ -64,24 +64,29 @@
 }
 
 .sidebar-container {
+    display: none;
     flex: 0 0 auto;
 
     @include responsive('tiny') {
-        display: none;
+        //display: none;
     }
 
     @include responsive('small') {
-        display: none;
+        //display: none;
     }
 
     @include responsive('medium') {
-        display: block;
+        //display: block;
         width: 180px;
     }
 
     @include responsive('large') {
-        display: block;
+        //display: block;
         width: 250px;
+    }
+
+    &.active {
+        display: block;
     }
 }
 
@@ -94,7 +99,7 @@
     margin-right: 1em;
 
     &.with-jumbotron {
-        margin-bottom: -148px;
+        margin-bottom: -149px;
     }
 }
 

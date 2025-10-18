@@ -20,6 +20,7 @@
             @include maxwidths();
         }
 
+        /*
         .header-button {
             @include responsive('tiny') {
                 display: block;
@@ -33,6 +34,7 @@
                 display: none;
             }
         }
+        */
 
         .header-hidden-links {
             margin-right: 0.5em;
