@@ -16,6 +16,8 @@
                     <div class="col-6">
                         <div class="panel-body">
                             <form method="post" name="loginForm" id="loginForm" action="/login" class="form-login">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            
                                 <div class="form-input">
                                     <label for="username">{{ localize('username') }}</label>
                                     <input type="text" name="username" class="form-submit">

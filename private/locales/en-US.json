@@ -67,6 +67,7 @@
     "login_what_is_site_5": "and much more!",
 
     "register_invite_key_required": "%s requires an invite key in order to register. You will need to obtain this from someone.",
+    "register_discord_requirement": "%s currently requires your account to be manually verified through Discord before you can upload.",
     "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
     "register_tldr_1": "TL;DR:",
     "register_tldr_2": "You must be over the age of 13.",
@@ -320,6 +321,8 @@
     "notify_login_incorrect": "Incorrect credentials.",
     "notify_login_no_account": "There is no account with these credentials.",
     "notify_login_invalid": "Please input your credentials.",
+    "notify_login_too_many_attempts": "Too many login attempts. Please wait a while before trying again.",
+    "notify_invalid_csrf": "The CSRF token is invalid. Please try again.",
     "notify_notifications_cleared": "You have successfully cleared your notifications.",
     "notify_invalid_journal": "This journal does not exist.",
     "notify_register_disabled": "The ability to register has been disabled.",

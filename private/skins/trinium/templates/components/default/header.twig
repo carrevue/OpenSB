@@ -96,6 +96,10 @@
                     </div>
                 </div>
             {% else %}
+                {% for link in header_user_links() %}
+                    <a class="menulink" href="{{ link.url }}">{{ link.name }}</a>
+                {% endfor %}
+                {# disabled due to opensb 2.0.4 csrf update, look back into this for opensb 2.1 -chaziz 10/07/2025
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="login-menu">
                         <span class="have-an-account">{{ localize('have_an_account') }}</span> {{ localize('login') }}
@@ -105,6 +109,8 @@
                     </div>
                     <div class="menu" id="login-menu">
                         <form method="post" name="loginForm" id="loginForm" action="/login" class="form-login">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
                             <div class="form-input">
                                 <label for="username">{{ localize('username') }}</label>
                                 <input type="text" name="username" class="form-submit">
@@ -127,10 +133,6 @@
                         </form>
                     </div>
                 </div>
-                {#
-                {% for link in header_user_links() %}
-                    <a class="menulink" href="{{ link.url }}">{{ link.name }}</a>
-                {% endfor %}
                 #}
             {% endif %}
         </div>

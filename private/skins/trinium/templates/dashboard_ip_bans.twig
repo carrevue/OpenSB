@@ -37,7 +37,7 @@
                         {{ ip.ip }}
                     </div>
                     <div class="content-description">
-                        <div>Time: {{ ip.time | relative_time() }} ({{ ip.time | format_date('long', 'medium') }})</div>
+                        <div>Time: {{ ip.timestamp | format_date('long', 'medium') }} ({{ ip.timestamp | relative_time() }})</div>
                         <div>Reason: {{ ip.reason }}</div>
                     </div>
                 </div>

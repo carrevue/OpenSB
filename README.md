@@ -2,16 +2,18 @@
 
 <img src="https://raw.githubusercontent.com/bluffingo/OpenSB/refs/heads/opensb-2.0/private/skins/trinium/default.png"></img>
 
-## How to setup an OpenSB instance.
+## MAKE SURE YOU'RE GETTING OPENSB FROM THE BLUFFINGO DEVELOPMENT GITHUB!
+We've gotten reports about an unofficial malicious backdoored version of OpenSB originating from Eastern Europe. The only official source for OpenSB is and will always be the Bluffingo Development GitHub organization. We are not responsible for anything that happens using that unofficial backdoored version.
 
-I wouldn't recommend using this code unless if you ***really*** know what you're doing.
+## How to setup an OpenSB instance.
 
 1. Get a webserver (Apache or NGINX) with PHP and MariaDB or MySQL up and running, including Composer, the PHP GD library extension, and the PHP intl extension.
 1. Configure your webserver. Look below the steps for an example.
+1. Run `git submodule init` and `git submodule update` from the terminal.
 1. Run `composer update` from the terminal.
 1. Copy `config.sample.php` in `private/config`, rename it to `config.php` and fill in your database credentials.
 1. Import the database template found in `sql/` into the database you want to use.
-1. Run the `compile-scss` script available in the tools directory to generate the required stylesheets. You may find Dart-Sass here at https://sass-lang.com/install. Ruby Sass is deprecated, do not use it. You MUST use a specific Dart-Sass, or it won't work. You can find it [here](https://github.com/sass/dart-sass/releases/).
+1. Run the `compile-scss` shell script available in the tools directory to generate the required stylesheets. You may find Dart-Sass here at https://github.com/sass/dart-sass/releases/. Ruby Sass is deprecated, do not use it.
 
 ### Production specific
 

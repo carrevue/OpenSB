@@ -21,6 +21,7 @@
 
 namespace OpenSB;
 
+use BluffingoCore\CoreUtilities;
 use DateTime;
 use Exception;
 use Random\Randomizer;
@@ -607,5 +608,47 @@ class Utilities
             background-image: linear-gradient({$primaryStart}, {$primaryMid} 60%, {$primaryEnd});
         }
         ";
+    }
+
+    // (hmac-sha256)
+    private static function getCookieSecret()
+    {
+        // the env should be set to a long, random value in production
+        $env = getenv('APP_SECRET');
+        if (!empty($env)) return $env;
+
+        // fallback: derive from server name, php version and file path (not secure but its fine for dev)
+        $serverName = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
+        return hash('sha256', $serverName . '|' . PHP_VERSION . '|' . __FILE__);
+    }
+
+    public static function makeSignedCookiePayload(array $data): string
+    {
+        $payload = base64_encode(json_encode($data));
+        $sig = hash_hmac('sha256', $payload, self::getCookieSecret());
+        return $sig . ':' . $payload;
+    }
+
+    public static function verifySignedCookiePayload(string $signed)
+    {
+        if (strpos($signed, ':') === false) return false;
+        list($sig, $payload) = explode(':', $signed, 2);
+        $expected = hash_hmac('sha256', $payload, self::getCookieSecret());
+        if (!hash_equals($expected, $sig)) return false;
+        $decoded = json_decode(base64_decode($payload), true);
+        return is_array($decoded) ? $decoded : false;
+    }
+
+    public static function setSafeCookie(string $name, string $value, int $expire = 0)
+    {
+        $secure = CoreUtilities::isThisHttps();
+        setcookie($name, $value, [
+            'expires' => $expire,
+            'path' => '/',
+            'domain' => '',
+            'secure' => $secure,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
     }
 }

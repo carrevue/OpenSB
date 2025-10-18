@@ -41,9 +41,9 @@
         </div>
 
         {% if type == 'recent' %}
-            {% set le_url = 'user/' ~ data.username ~ '?page=%s' %}
+            {% set le_url = '/user/' ~ data.username ~ '/uploads?page=%s' %}
         {% else %}
-            {% set le_url = 'user/' ~ data.username ~ '?type=' ~ type ~ '&page=%s' %}
+            {% set le_url = '/user/' ~ data.username ~ '/uploads?type=' ~ type ~ '&page=%s' %}
         {% endif %}
 
         {{ pagination(data.count, items_per_page, le_url, current_page) }}

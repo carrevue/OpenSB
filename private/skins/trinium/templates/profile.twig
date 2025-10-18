@@ -24,7 +24,7 @@
 {% block content %}
     {% if data.ban_data %}
         <div class="banner banner-secondary">
-            This user was banned on {{ data.ban_data.time | format_date('long', 'medium') }} for the following reason:
+            This user was banned on {{ data.ban_data.timestamp | format_date('long', 'medium') }} for the following reason:
             {{ data.ban_data.reason }}
         </div>
     {% endif %}
@@ -141,7 +141,7 @@
                                 <h2 class="section-title">{{ localize('uploads') }}</h2>
                             </div>
                             <div class="section-header-right">
-                                <a href="/browse?user={{ data.username }}">{{ localize('more') }}</a>
+                                <a href="/user/{{ data.username }}/uploads">{{ localize('more') }}</a>
                             </div>
                         </div>
                         <div class="content-grid">

@@ -43,19 +43,19 @@ class UploadData
     private ?UploadRatingData $ratings = null;
 
     /** 
-     * @var array|null Upload takndown data
+     * @var array|false|null Upload takedown data
      */
-    private ?array $takedown = null;
+    private array|null $takedown = null;
 
     /** 
-     * @var array|null Upload data 
+     * @var array|false|null Upload data 
      */
-    private ?array $data = null;
+    private array|false|null $data = null;
 
     /** 
-     * @var array|null Tags associated with this upload
+     * @var array|false|null Tags associated with this upload
      */
-    private ?array $tags = null;
+    private array|false|null $tags = null;
 
     /** 
      * @var bool Indicates if the upload was deleted as a failsafe measure
@@ -78,6 +78,7 @@ class UploadData
         } else {
             $this->data = $this->database->fetch("SELECT v.* FROM uploads v WHERE v.upload_id = ?", [$id]);
         }
+
         if ($this->data != []) {
             $this->takedown = $this->database->fetchArray($this->database->query("SELECT * FROM upload_takedowns t WHERE t.upload = ?", [$id]));
             $this->tags = $this->database->fetchArray($this->database->query("SELECT * FROM `upload_tag_index` ti JOIN upload_tag_meta t ON (t.tag_id = ti.tag_id) WHERE ti.upload_id = ?", [$this->data["id"]]));

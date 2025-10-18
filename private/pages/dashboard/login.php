@@ -34,27 +34,39 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
+}
+$csrf_token_for_template = $_SESSION['csrf_token'];
+
 // yes Stupid Shit!!!!!!!!!!!!!! Epic!!!!!!! -chaziz 8/23/2024
 $logindata = $database->fetch("SELECT admin_password FROM users WHERE name = ?", [$auth->getUserData()["name"]]);
 
 // if this password does not exist. generate it automatically.
-if (!isset($logindata["admin_password"])) {
+if (empty($logindata) || !isset($logindata["admin_password"])) {
     $new_pass = Utilities::generateRandomString(24);
     $database->query("UPDATE users SET admin_password = ? WHERE name = ?", [password_hash($new_pass, PASSWORD_DEFAULT), $auth->getUserData()["name"]]);
+    session_regenerate_id(true);
     $_SESSION["SB_STAFF_AUTHED"] = true;
     Utilities::notifyBanner("notify_dashboard_welcome_first_time", "/dashboard/", "success", [$new_pass]);
 }
 
 if (isset($_POST["loginsubmit"])) {
+    $password = trim($_POST['password'] ?? '');
+    $csrf = $_POST['csrf_token'] ?? '';
     $error = false;
 
-    $password = ($_POST['password'] ?? null);
+    if (empty($csrf) || !hash_equals($_SESSION['csrf_token'], $csrf)) {
+        Utilities::notifyBanner("notify_invalid_csrf", "/dashboard/login");
+    }
 
     if (!$password) $error = true;
 
     if (!$error) {
         if ($logindata && password_verify($password, $logindata['admin_password'])) {
+            session_regenerate_id(true);
             $_SESSION["SB_STAFF_AUTHED"] = true;
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
             Utilities::notifyBanner("notify_dashboard_welcome", "/dashboard/", "success");
         } else {
             Utilities::notifyBanner("notify_dashboard_login_incorrect", "/dashboard/login");
@@ -62,4 +74,6 @@ if (isset($_POST["loginsubmit"])) {
     }
 }
 
-echo $twig->render('dashboard_login.twig');
+echo $twig->render('dashboard_login.twig', [
+    'csrf_token' => $csrf_token_for_template
+]);

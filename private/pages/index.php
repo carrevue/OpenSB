@@ -114,6 +114,16 @@ $data = [
     "users_recent" => $users_recent,
 ];
 
+
+/*
+if ($options["skin"] == "trinium" && !$sb->getAuthenticationClass()->isUserLoggedIn()) {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
+    }
+    $data['csrf_token'] = $_SESSION['csrf_token'];
+}
+*/
+
 echo $twig->render('index.twig', [
     'data' => $data,
     'type' => $type,
