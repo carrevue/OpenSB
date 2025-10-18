@@ -168,7 +168,7 @@ set_exception_handler(function ($exception) {
             "<h1>An error has occurred</h1>" .
                 "<div style='padding: 1em; border: 1px solid red;'>" .
                 "%s" .
-                "<p>Please report this error on GitHub: <a href='%s' target='_blank'>Report</a></p>" .
+                "<p><a href='%s' target='_blank'>Report on GitHub</a></p>" .
                 "</div>",
             $errorMsg,
             $githubNewIssueUrl,
