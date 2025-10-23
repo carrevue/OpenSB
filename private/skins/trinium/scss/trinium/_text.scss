@@ -1,9 +1,0 @@
-@each $color, $value in $color-map {
-    .text-#{$color} {
-        color: $value;
-    }
-}
-
-.text-faded {
-    opacity: 50%
-}
