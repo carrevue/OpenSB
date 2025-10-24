@@ -21,28 +21,15 @@
 
 namespace OpenSB;
 
-use BluffingoCore\Database;
-use BluffingoCore\Profiler;
-use BluffingoCore\IPLookup;
-use BluffingoCore\Localization;
+use BluffingoCore\Site;
 
 /**
  * class SquareBracket
  *
  * The core OpenSB class.
  */
-class SquareBracket
+class SquareBracket extends Site
 {
-    /**
-     * @var Database
-     */
-    private Database $database;
-
-    /**
-     * @var Profiler
-     */
-    private Profiler $profiler;
-
     /**
      * @var Storage
      */
@@ -54,24 +41,9 @@ class SquareBracket
     private Authentication $authentication;
 
     /**
-     * @var Localization
-     */
-    private Localization $localization;
-
-    /**
      * @var DiscordWebhookLogging
      */
     private ?DiscordWebhookLogging $discord;
-
-    /**
-     * @var IPLookup
-     */
-    private ?IPLookup $ip_lookup;
-
-    /**
-     * @var bool
-     */
-    private bool $is_debug = false;
 
     /**
      * @var bool
@@ -114,11 +86,6 @@ class SquareBracket
     private bool $enable_discord_webhook = false;
 
     /**
-     * @var bool
-     */
-    private bool $enable_ip_lookup = false;
-
-    /**
      * @var array
      */
     private array $branding_settings;
@@ -154,12 +121,9 @@ class SquareBracket
      */
     public function __construct($config)
     {
-        // extract settings
-        $host = $config["mysql"]["host"];
-        $db = $config["mysql"]["database"];
-        $user = $config["mysql"]["username"];
-        $pass = $config["mysql"]["password"];
+        parent::__construct($config);
 
+        // extract settings
         $allowedSites = ['squarebracket', 'squarebracket_chaziz', 'sitetest'];
         if (!in_array($config["site"], $allowedSites)) {
             trigger_error("The site mode in the configuration file should be 
@@ -168,15 +132,6 @@ class SquareBracket
         $this->is_chaziz_squarebracket_instance = ($config["site"] === "squarebracket_chaziz");
         $this->is_sitetest_instance = ($config["site"] === "sitetest");
 
-        $this->is_debug = ($config["mode"] ?? '') === "DEV";
-
-        $this->database = new Database($host, $user, $pass, $db);
-        $this->profiler = new Profiler($this->database);
-        if ($this->is_debug) {
-            // enable db profiler (not to be confused with the other profiler)
-            // if we are on debug mode
-            $this->database->setProfiling(true);
-        }
         $this->authentication = new Authentication($this);
 
         //$this->version_number = new VersionNumber();
@@ -235,8 +190,6 @@ class SquareBracket
             $this->setOptionCookie($this->options);
         }
 
-        $this->localization = new Localization($this->options["locale"] ?? "en-US");
-
         if (isset($_COOKIE["SBACCOUNTS"])) {
             $cookie_raw = $_COOKIE["SBACCOUNTS"];
 
@@ -293,14 +246,6 @@ class SquareBracket
         } else {
             $this->discord = null;
         }
-
-        $this->enable_ip_lookup = $config["ip_lookup"]["enabled"] ?? false;
-
-        if ($this->enable_ip_lookup) {
-            $this->ip_lookup = new IPLookup($config["ip_lookup"]["mmdb"]);
-        } else {
-            $this->ip_lookup = null;
-        }
     }
 
     /**
@@ -351,30 +296,6 @@ class SquareBracket
     }
 
     /**
-     * function getDatabaseClass
-     *
-     * Returns the database class for other classes to use.
-     *
-     * @return Database
-     */
-    public function getDatabaseClass(): Database
-    {
-        return $this->database;
-    }
-
-    /**
-     * function getProfilerClass
-     *
-     * Returns the profiler class for other classes to use.
-     *
-     * @return Profiler
-     */
-    public function getProfilerClass(): Profiler
-    {
-        return $this->profiler;
-    }
-
-    /**
      * function getStorageClass
      *
      * Returns the storage class for other classes to use.
@@ -396,18 +317,6 @@ class SquareBracket
     public function getAuthenticationClass(): Authentication
     {
         return $this->authentication;
-    }
-
-    /**
-     * function getLocalizationClass
-     *
-     * Returns the localization class for other classes to use.
-     *
-     * @return Localization
-     */
-    public function getLocalizationClass(): Localization
-    {
-        return $this->localization;
     }
 
     /**
@@ -435,33 +344,6 @@ class SquareBracket
             throw new \Exception("getDiscordWebhookClass() called while Discord webhook is disabled.");
         }
         return $this->discord;
-    }
-
-    /**
-     * function isIpLookupEnabled
-     *
-     * Returns the bool that toggles the IP lookup class.
-     *
-     * @return bool
-     */
-    public function isIpLookupEnabled(): bool
-    {
-        return $this->enable_ip_lookup;
-    }
-
-    /**
-     * function getIpLookupClass
-     *
-     * Returns the IP lookup class.
-     *
-     * @return IPLookup
-     */
-    public function getIpLookupClass(): IPLookup
-    {
-        if (!$this->ip_lookup || !$this->enable_ip_lookup) {
-            throw new \Exception("getIpLookupClass() called while IP reader is disabled.");
-        }
-        return $this->ip_lookup;
     }
 
     /**
@@ -498,18 +380,6 @@ class SquareBracket
     public function getAccountsArray(): array|string
     {
         return $this->accounts ?? [];
-    }
-
-    /**
-     * function isDebug
-     *
-     * Returns boolean that indicates if debug is enabled.
-     *
-     * @return bool
-     */
-    public function isDebug(): bool
-    {
-        return $this->is_debug;
     }
 
     /**
