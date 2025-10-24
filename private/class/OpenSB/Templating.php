@@ -32,6 +32,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extension\DebugExtension;
+use Twig\Extra\String\StringExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
@@ -140,7 +141,6 @@ class Templating
         $this->loader->addPath('skins/common/');
         $this->twig = new Environment($this->loader, ['debug' => $sb->isDebug(), 'cache' => $doCache]);
 
-        // this is unused?
         $this->twig->addFunction(new TwigFunction('component', function ($component) use ($templatePath) {
             $path = '/components/' . $this->theme . '/' . $component . '.twig';
             $path_default = '/components/default/' . $component . '.twig';
@@ -158,6 +158,7 @@ class Templating
         }));
 
         $this->twig->addExtension(new SquareBracketTwigExtension($sb, $this->twig));
+        $this->twig->addExtension(new StringExtension());
 
         if ($sb->isDebug()) {
             $this->twig->addExtension(new DebugExtension());
