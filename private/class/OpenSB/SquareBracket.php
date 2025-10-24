@@ -23,6 +23,8 @@ namespace OpenSB;
 
 use BluffingoCore\Database;
 use BluffingoCore\Profiler;
+use BluffingoCore\IPLookup;
+use BluffingoCore\Localization;
 
 /**
  * class SquareBracket
@@ -363,7 +365,7 @@ class SquareBracket
     /**
      * function getProfilerClass
      *
-     * Returns the profiler class for other OpenSB classes to use.
+     * Returns the profiler class for other classes to use.
      *
      * @return Profiler
      */
@@ -375,7 +377,7 @@ class SquareBracket
     /**
      * function getStorageClass
      *
-     * Returns the storage class for other OpenSB classes to use.
+     * Returns the storage class for other classes to use.
      *
      * @return Storage
      */
@@ -387,7 +389,7 @@ class SquareBracket
     /**
      * function getAuthenticationClass
      *
-     * Returns the authentication class for other OpenSB classes to use.
+     * Returns the authentication class for other classes to use.
      *
      * @return Authentication
      */
@@ -399,7 +401,7 @@ class SquareBracket
     /**
      * function getLocalizationClass
      *
-     * Returns the localization class for other OpenSB classes to use.
+     * Returns the localization class for other classes to use.
      *
      * @return Localization
      */
