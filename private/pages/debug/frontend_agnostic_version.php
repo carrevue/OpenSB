@@ -51,23 +51,23 @@ $page = [
         [
             "title" => "Version",
             "contents" => [
-                "texts" => [
-                    $localization->translate("version_intro", "2021-" . date("Y"), "Chaziz"),
-                    $localization->translate("version_agpl"),
-                    $localization->translate("version_no_warranty"),
-                    $localization->translate("version_license_notice", "/license", "http://www.gnu.org/licenses/"),
-                    $localization->translate("version_github", "https://github.com/bluffingo/OpenSB"),
-                ],
+                ["text" => $localization->translate("version_intro", "2021-" . date("Y"), "Chaziz")],
+                ["text" => $localization->translate("version_agpl")],
+                ["text" => $localization->translate("version_no_warranty")],
+                ["text" => $localization->translate("version_license_notice", "/license", "http://www.gnu.org/licenses/"), "raw" => true],
+                ["text" => $localization->translate("version_github", "https://github.com/bluffingo/OpenSB"), "raw" => true],
             ],
         ],
         [
             "contents" => [
+                ["text" => "Before list"],
                 "list" => [
                     "OpenSB " . $sbVersionNumber->getVersionName() => $sbVersionNumber->getVersionString(),
                     "BluffingoCore" => (new CoreVersionNumber)->getVersionString(),
                     "PHP" => phpversion(),
                     $database_server => $database_version,
-                ]
+                ],
+                ["text" => "After list"],
             ],
         ],
     ],
