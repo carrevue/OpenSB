@@ -168,11 +168,11 @@ if (isset($_POST['save'])) {
                     }
 
                     if (!$error) {
-                        $last_entry_time = $database->result("SELECT MAX(time) FROM user_old_names WHERE user = ?", [$auth->getUserID()]);
+                        $last_entry_time = $database->result("SELECT MAX(timestamp) FROM user_old_names WHERE user = ?", [$auth->getUserID()]);
 
                         if (!$last_entry_time || (time() - $last_entry_time >= 2592000)) {
                             $database->query(
-                                "INSERT INTO user_old_names (user, old_name, time) VALUES (?, ?, ?)",
+                                "INSERT INTO user_old_names (user, old_name, timestamp) VALUES (?, ?, ?)",
                                 [$auth->getUserID(), $old_username, time()]
                             );
                             $database->query("UPDATE users SET name = ? WHERE id = ?", [$new_username, $auth->getUserID()]);

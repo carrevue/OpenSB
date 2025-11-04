@@ -1,9 +1,9 @@
 # Terms of Service
-Last updated by Chaziz on October 7th 2025.
+Last updated by Chaziz on October 25th 2025.
 
 ## Glossary
 
-The term "platform" refers to the SquareBracket website which also goes by FulpTube, which are currently accessible on the domains ``squarebracket.pw`` and ``fulptube.rocks``. This does not refer to the original FulpTube from 2020-2021, nor the website known as squareBracket which previously went by Brickface. This additionally does not refer to any websites that may appear on former domains/names previously used by the platform.
+The term "platform" refers to the FulpTube website which also goes by SquareBracket, which are currently accessible on the domains ``fulptube.rocks`` and ``squarebracket.pw``. This does not refer to the original FulpTube from 2020-2021, nor the website known as squareBracket which previously went by Brickface. This additionally does not refer to any websites that may appear on former domains/names previously used by the platform.
 
 ## Agreement
 
