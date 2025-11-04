@@ -146,6 +146,7 @@ $config = include_once(BLUFF_PRIVATE_PATH . '/config/config.php');
 
 require_once(BLUFF_VENDOR_PATH . '/autoload.php');
 
+use BluffingoCore\CoreUtilities;
 use OpenSB\ErrorTemplating;
 use OpenSB\SquareBracket;
 use OpenSB\Templating;
@@ -221,18 +222,18 @@ if (!BLUFF_CLI) {
 
     $ipban = $database->fetch(
         "SELECT * FROM ip_bans WHERE ? LIKE ip",
-        [Utilities::getIpAddress()]
+        [CoreUtilities::getIpAddress()]
     );
 
     if ($ipban) {
         $usersAssociatedWithIP = $database->fetchArray($database->query(
             "SELECT name FROM users WHERE ip LIKE ?",
-            [Utilities::getIpAddress()]
+            [CoreUtilities::getIpAddress()]
         ));
 
         if ($sb->isDebug() && (!$ipban)) {
             $ipban = [
-                "ip" => Utilities::getIpAddress(),
+                "ip" => CoreUtilities::getIpAddress(),
             ];
         }
 
@@ -254,7 +255,7 @@ if (!BLUFF_CLI) {
     if (
         $sb->isChazizSquareBracketInstance() &&
         $sb->isIpLookupEnabled() &&
-        $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB" // online safety act
+        $sb->getIpLookupClass()->getCountry(CoreUtilities::getIpAddress()) == "GB" // online safety act
     ) {
         http_response_code(451);
         echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);

@@ -122,7 +122,7 @@ function automatic_ip_ban()
 {
     global $database;
 
-    $ip = Utilities::getIpAddress();
+    $ip = CoreUtilities::getIpAddress();
     if ($ip !== null) {
         $database->query("INSERT INTO ip_bans (ip, reason, timestamp) VALUES (?, ?, ?)", [
             $ip,

@@ -118,7 +118,7 @@ if ($upload_rating->value > $comfortable_rating->value) {
     Utilities::notifyBanner("notify_cannot_access_mature_upload", "/");
 }
 
-$ip = Utilities::getIpAddress();
+$ip = CoreUtilities::getIpAddress();
 
 $CrawlerDetect = new CrawlerDetect;
 

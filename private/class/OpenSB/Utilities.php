@@ -454,26 +454,6 @@ class Utilities
     }
 
     /**
-     * function getIpAddress
-     * 
-     * if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
-     *
-     * @return mixed|string
-     *
-     * @deprecated This will be moved to BluffingoCore's CoreUtilties class around version 2.
-     */
-    public static function getIpAddress()
-    {
-        if (BLUFF_CLI) return null;
-
-        $ip = $_SERVER['REMOTE_ADDR'];
-
-        if ($ip == "127.0.0.1" | $ip == "::1" | $ip == "localhost") return "localhost";
-
-        return $ip;
-    }
-
-    /**
      * function isLegacyFrontend
      *
      * @return mixed

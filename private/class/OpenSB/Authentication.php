@@ -87,7 +87,7 @@ class Authentication
                     $this->logOut();
                 }
 
-                $this->database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
+                $this->database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), CoreUtilities::getIpAddress(), $this->user_id]);
 
                 // if "comfortable rating" is questionable, reset it back to general. this is because opensb now uses
                 // "general" and "sensitive" instead of the old "general", "questionable" and "mature" ratings, but the

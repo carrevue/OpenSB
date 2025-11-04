@@ -32,6 +32,7 @@ use BluffingoCore\CoreUtilities;
 use Random\RandomException;
 use OpenSB\UserFlags;
 use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
 
 if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
@@ -45,6 +46,8 @@ $captcha = $sb->returnCaptchaSettings();
 // -chaziz 4/19/2025
 
 $enableInviteKeys = $sb->isInviteKeysEnabled();
+
+$isThereAnyUser = $database->result("SELECT EXISTS (SELECT 1 FROM users);");
 
 if (isset($_POST['registersubmit'])) {
     $error = "";
@@ -80,16 +83,16 @@ if (isset($_POST['registersubmit'])) {
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
     if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
 
-    $isLocalIp = (Utilities::getIpAddress() === "localhost"
+    $isLocalIp = (CoreUtilities::getIpAddress() === "localhost"
         || filter_var(
-            Utilities::getIpAddress(),
+            CoreUtilities::getIpAddress(),
             FILTER_VALIDATE_IP,
             FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
         ) === false);
 
     if (!$sb->isInviteKeysEnabled() || !$sb->isDebug()) {
         if (!$isLocalIp) {
-            if ($database->result("SELECT COUNT(*) FROM users WHERE ip = ?", [Utilities::getIpAddress()]) >= 2)
+            if ($database->result("SELECT COUNT(*) FROM users WHERE ip = ?", [CoreUtilities::getIpAddress()]) >= 2)
                 $error .= "Your IP address has too many accounts associated with it. ";
         }
     }
@@ -133,6 +136,13 @@ if (isset($_POST['registersubmit'])) {
             $flags |= UserFlags::FLAG_FULPTUBE_ACCOUNT->value;
         }
 
+        if (!$isThereAnyUser) {
+            // first user to register is considered owner.
+            $role = UserRoleEnum::Owner;
+        } else {
+            $role = UserRoleEnum::Normal;
+        }
+
         try {
             $token = bin2hex(random_bytes(32));
         } catch (RandomException) {
@@ -141,9 +151,9 @@ if (isset($_POST['registersubmit'])) {
 
         $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
         $database->query(
-            "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate, flags)
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [$username, $hashedPassword, $token, time(), time(), $username, $mail, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags]
+            "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate, flags, powerlevel)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [$username, $hashedPassword, $token, time(), time(), $username, $mail, CoreUtilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags, $role->value]
         );
         $userId = $database->insertId();
 

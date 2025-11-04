@@ -133,7 +133,7 @@ if (isset($_POST["loginsubmit"])) {
                     $_SESSION["SB_STAFF_AUTHED"] = null;
 
                     $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
-                    $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
+                    $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), CoreUtilities::getIpAddress(), $nid]);
 
                     if (isset($_COOKIE['SBACCOUNTS'])) {
                         $raw = $_COOKIE['SBACCOUNTS'];
