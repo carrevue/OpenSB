@@ -24,83 +24,11 @@
 
 namespace OpenSB;
 
-if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
-    die('OpenSB is not compatible with your PHP version. OpenSB requires PHP 8.2 or newer.');
-}
-
-if (!file_exists(BLUFF_VENDOR_PATH . '/autoload.php')) {
-    die('The required Composer packages are missing.');
-}
-
-if (!file_exists(BLUFF_PRIVATE_PATH . '/config/config.php')) {
-    die('The configuration file could not be found.');
-}
-
-$required_extensions = ['gd', 'intl', 'pdo_mysql', 'curl'];
-$missing_extensions = [];
-
-foreach ($required_extensions as $ext) {
-    if (!extension_loaded($ext)) {
-        $missing_extensions[] = $ext;
-    }
-}
-
-if (!empty($missing_extensions)) {
-    die('The required PHP extensions are missing: ' . implode(', ', $missing_extensions));
-}
-
-// TODO: add check for BluffingoCore -chaziz 07/19/2025
-
-$config = include_once(BLUFF_PRIVATE_PATH . '/config/config.php');
-
-require_once(BLUFF_VENDOR_PATH . '/autoload.php');
-
-use OpenSB\ErrorTemplating;
-use OpenSB\SquareBracket;
-use OpenSB\Templating;
-use OpenSB\Utilities;
-use OpenSB\VersionNumber;
-
-ini_set('session.gc_maxlifetime', 86400);
-
 // please use apache/nginx for production stuff.
 define('BLUFF_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
 define('BLUFF_CLI', php_sapi_name() === 'cli');
 
-if (!BLUFF_CLI) {
-    $blacklisted_user_agents = [
-        '/python-requests/i',
-        '/curl/i',
-    ];
-
-    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-
-    foreach ($blacklisted_user_agents as $pattern) {
-        if (preg_match($pattern, $user_agent)) {
-            http_response_code(403);
-            exit;
-        }
-    }
-
-    if (session_status() === PHP_SESSION_NONE) {
-        session_name("sb_session");
-
-        $is_secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-
-        session_set_cookie_params([
-            'lifetime' => 86400,
-            'path' => '/',
-            'secure' => $is_secure,
-            'httponly' => true,
-            'samesite' => 'Strict'
-        ]);
-
-        session_start([
-            "cookie_lifetime" => 86400,
-            "gc_maxlifetime" => 86400,
-        ]);
-    }
-}
+define('BLUFF_USE_SETUP_PAGE', true);
 
 spl_autoload_register(function ($class_name) {
     $class_name = str_replace('\\', '/', $class_name);
@@ -175,6 +103,85 @@ set_exception_handler(function ($exception) {
         die();
     }
 });
+
+if (BLUFF_USE_SETUP_PAGE && !BLUFF_CLI) {
+    require_once(BLUFF_PRIVATE_PATH . '/pages/setup/index.php');
+    die(); // don't run the rest
+} else {
+    if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
+        die('OpenSB is not compatible with your PHP version. OpenSB requires PHP 8.2 or newer.');
+    }
+
+    if (!file_exists(BLUFF_VENDOR_PATH . '/autoload.php')) {
+        die('The required Composer packages are missing.');
+    }
+
+    if (!file_exists(BLUFF_PRIVATE_PATH . '/config/config.php')) {
+        die('The configuration file could not be found.');
+    }
+
+    $required_extensions = ['gd', 'intl', 'pdo_mysql', 'curl'];
+    $missing_extensions = [];
+
+    foreach ($required_extensions as $ext) {
+        if (!extension_loaded($ext)) {
+            $missing_extensions[] = $ext;
+        }
+    }
+
+    if (!empty($missing_extensions)) {
+        die('The required PHP extensions are missing: ' . implode(', ', $missing_extensions));
+    }
+
+    // TODO: add check for BluffingoCore -chaziz 07/19/2025
+}
+
+$config = include_once(BLUFF_PRIVATE_PATH . '/config/config.php');
+
+require_once(BLUFF_VENDOR_PATH . '/autoload.php');
+
+use OpenSB\ErrorTemplating;
+use OpenSB\SquareBracket;
+use OpenSB\Templating;
+use OpenSB\Utilities;
+use OpenSB\VersionNumber;
+
+ini_set('session.gc_maxlifetime', 86400);
+
+if (!BLUFF_CLI) {
+    $blacklisted_user_agents = [
+        '/python-requests/i',
+        '/curl/i',
+    ];
+
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+    foreach ($blacklisted_user_agents as $pattern) {
+        if (preg_match($pattern, $user_agent)) {
+            http_response_code(403);
+            exit;
+        }
+    }
+
+    if (session_status() === PHP_SESSION_NONE) {
+        session_name("sb_session");
+
+        $is_secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+        session_set_cookie_params([
+            'lifetime' => 86400,
+            'path' => '/',
+            'secure' => $is_secure,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]);
+
+        session_start([
+            "cookie_lifetime" => 86400,
+            "gc_maxlifetime" => 86400,
+        ]);
+    }
+}
 
 // now initialize the sb classes
 $sb = new SquareBracket($config);
