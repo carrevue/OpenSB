@@ -28,7 +28,8 @@ namespace OpenSB;
 define('BLUFF_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
 define('BLUFF_CLI', php_sapi_name() === 'cli');
 
-define('BLUFF_USE_SETUP_PAGE', true);
+define('BLUFF_NOT_CONFIGURED', false);
+define('BLUFF_USE_SETUP_PAGE', false); // temporary
 
 spl_autoload_register(function ($class_name) {
     $class_name = str_replace('\\', '/', $class_name);
@@ -104,7 +105,12 @@ set_exception_handler(function ($exception) {
     }
 });
 
-if (BLUFF_USE_SETUP_PAGE && !BLUFF_CLI) {
+// do the checks
+if (!file_exists(BLUFF_PRIVATE_PATH . '/config/config.php')) {
+    define('BLUFF_NOT_CONFIGURED', true);
+}
+
+if (BLUFF_USE_SETUP_PAGE && BLUFF_NOT_CONFIGURED && !BLUFF_CLI) {
     require_once(BLUFF_PRIVATE_PATH . '/pages/setup/index.php');
     die(); // don't run the rest
 } else {

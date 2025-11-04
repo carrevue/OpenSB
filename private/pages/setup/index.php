@@ -28,6 +28,5 @@ $version_number = new VersionNumber();
 <!DOCTYPE html>
     <body>
         <h1>OpenSB <?php echo $version_number->getVersionString(); ?></h1>
-
     </body>
 </html>
