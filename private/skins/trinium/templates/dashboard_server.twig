@@ -5,6 +5,35 @@
 	{% block admincontent %}
             <div class="section">
                 <div class="section-header">
+                    <h1 class="section-title">Installed skins</h1>
+                </div>
+                <table class="styled">
+                    <tr class="table-header">
+                        <th>Skin/Author</th>
+                        <th>Description</th>
+                    </tr>
+                    {% for skin in skins %}
+                        <tr>
+                            <td class="a">{{ skin.metadata.name }}<br><small>by {{ skin.metadata.author }}</small></td>
+                            <td class="b">
+                                <div>
+                                {{ skin.metadata.description }}
+                                </div>
+                                <div>
+                                    <ul>
+                                        {% for theme in skin.metadata.themes %}
+                                            <li>{{ theme.name }}: {{ theme.description }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <hr>
+            <div class="section">
+                <div class="section-header">
                     <h1 class="section-title">Installed libraries</h1>
                 </div>
                 <table class="styled">
@@ -40,33 +69,4 @@
                     {% endfor %}
                 </table>
             </div>
-        <hr>
-        <div class="section">
-            <div class="section-header">
-                <h1 class="section-title">Installed skins</h1>
-            </div>
-            <table class="styled">
-                <tr class="table-header">
-                    <th>Skin/Author</th>
-                    <th>Description</th>
-                </tr>
-                {% for skin in skins %}
-                    <tr>
-                        <td class="a">{{ skin.metadata.name }}<br><small>by {{ skin.metadata.author }}</small></td>
-                        <td class="b">
-                            <div>
-                            {{ skin.metadata.description }}
-                            </div>
-                            <div>
-                                <ul>
-                                    {% for theme in skin.metadata.themes %}
-                                        <li>{{ theme.name }}: {{ theme.description }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
     {% endblock %}
