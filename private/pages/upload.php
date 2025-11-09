@@ -154,7 +154,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
     if (in_array(strtolower($ext), $supportedVideoFormats, true)) { // VIDEO
         if (isset($noProcess) && $sb->isDebug()) {
-            $status = 0x0; // pretend that video has been successfully uploaded
+            $status = 0x0; // pretend that video has been successfully uploaded (does this still work???)
             $target_file = BLUFF_DYNAMIC_PATH . '/dynamic/videos/' . $new . '.converted.' . $ext;
         } else {
             $status = 0x2;
@@ -181,7 +181,12 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
         }
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
+        try {
         $sb->getStorageClass()->processImageUpload($temp_name, $new);
+        } catch (\Exception $e) {
+            Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
+        }
+        
         $status = 0x0;
         $database->query(
             "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags, type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
@@ -195,7 +200,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         }
 
         Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
-    } elseif (in_array(strtolower($ext), $supportedAudioFormats, true)) { // MUSIC
+    } elseif (in_array(strtolower($ext), $supportedAudioFormats, true)) { // AUDIO
         Utilities::notifyBanner("notify_upload_audio_unimplemented", "/upload");
     } else {
         Utilities::notifyBanner("notify_invalid_format", "/upload");
