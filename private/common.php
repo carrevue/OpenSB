@@ -242,7 +242,8 @@ if (!BLUFF_CLI) {
     if (
         $sb->isChazizSquareBracketInstance() &&
         $sb->isIpLookupEnabled() &&
-        $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB" // online safety act
+        $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "GB" && // online safety act
+        $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()) == "AZ"
     ) {
         http_response_code(451);
         echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);
