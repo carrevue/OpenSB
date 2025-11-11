@@ -220,7 +220,7 @@ class Storage
      */
     public function getVideoUploadThumbnail($id, $custom): string
     {
-        $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
+        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
 
         return $this->getThumbnailPath(
             $id,
@@ -243,7 +243,7 @@ class Storage
      */
     public function getImageUploadThumbnail($id, $custom): string
     {
-        $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
+        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
 
         return $this->getThumbnailPath(
             $id,
@@ -266,7 +266,7 @@ class Storage
      */
     public function getUserProfilePicture($username, $isAdmin): string
     {
-        $placeholder = $this->sb->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+        $placeholder = $this->sb->isHitchhiker() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
         $id = Utilities::usernameToUserID($this->database, $username);
 
@@ -304,8 +304,7 @@ class Storage
         if (file_exists($path)) {
             return '/dynamic/banners/' . $id . '.png';
         } else {
-            //$data = "/assets/default_banner.svg"; this does not look good with profile customization
-            return false;
+            return $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
         }
     }
 
