@@ -4,20 +4,8 @@
 
 {% if is_user_logged_in %}
     {% set jumbotronClassName = "homepage-logged-in" %}
-
-    {% if user_stat_data.followers != 1 %}
-        {% set pluralSubscribers = "s" %}
-    {% endif %}
-
-    {% if user_stat_data.views != 1 %}
-        {% set pluralViews = "s" %}
-    {% endif %}
 {% else %}
     {% set jumbotronClassName = "homepage-logged-out" %}
-{% endif %}
-
-{% if not data.uploads and not data.upload_new and not data.news_recent %}
-    {% set empty_instance = true %}
 {% endif %}
 
 {% block precontent %}
@@ -64,7 +52,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if empty_instance %}
+    {% if not data.uploads_new  %}
         <div class="banner banner-secondary">
             This instance is currently empty.
         </div>
