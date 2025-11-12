@@ -392,9 +392,9 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         // if user is staff
         if ($powerlevel > 1) {
-            $staff_icon = $this->getIcon("staff");
+            $icon = $this->getIcon("staff");
         } else {
-            $staff_icon = '';
+            $icon = '';
         }
 
         if (mb_strtolower($username) === mb_strtolower($displayName)) {
@@ -402,7 +402,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             $displayText = sprintf(
                 '<div class="userlink"><span>@%s</span>%s</div>',
                 $username,
-                $staff_icon
+                $icon
             );
         } else {
             // if theyre different
@@ -410,7 +410,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 '<div class="userlink"><span>%s</span><span class="userlink-handle">@%s</span>%s</div>',
                 $displayName,
                 $username,
-                $staff_icon
+                $icon
             );
         }
 
@@ -635,6 +635,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $userid = $this->authentication->getUserID();
 
         if ($this->authentication->isUserLoggedIn()) {
+            // logged in: following
             $users = $this->database->fetchArray(
                 $this->database->query(
                     "SELECT s.* FROM user_follows s 
@@ -645,12 +646,13 @@ class SquareBracketTwigExtension extends AbstractExtension
                 )
             );
         } else {
+            // logged out: featured
             $users = $this->database->fetchArray(
                 $this->database->query(
                     "SELECT u.id
                     FROM users u 
-                    WHERE u.powerlevel >= ?",
-                    [UserRoleEnum::Moderator->value]
+                    WHERE u.flags & ? = ?",
+                    [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
                 )
             );
         }
