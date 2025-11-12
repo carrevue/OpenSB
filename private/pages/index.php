@@ -34,6 +34,12 @@ $upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 
+// on finalium, use new fulptube index page.
+if ($options["skin"] == "finalium") {
+    include_once "index_new.php";
+    die();
+}
+
 $trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new_shit"] == "true";
 
 if ($options["skin"] == "trinium") {

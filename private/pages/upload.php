@@ -179,7 +179,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
             Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
         } else {
             if ($sb->isDebug()) {
-                die("DEBUG: Unable to move $temp_name to $target_file, check your permissions!", E_USER_WARNING);
+                die("DEBUG: Unable to move $temp_name to $target_file, check your permissions!");
             } else {
                 Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
             }
@@ -189,7 +189,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         $sb->getStorageClass()->processImageUpload($temp_name, $new);
         } catch (\Exception $e) {
             if ($sb->isDebug()) {
-                die("DEBUG: Unable to process image upload. The exception's message is {$e->getMessage()}.", E_USER_WARNING);
+                die("DEBUG: Unable to process image upload. The exception's message is {$e->getMessage()}.");
             } else {
                 Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
             }

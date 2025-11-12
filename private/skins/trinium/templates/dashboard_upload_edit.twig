@@ -8,7 +8,7 @@
                 <div class="content-box">
                     <div class="section">
                         <div class="section-header">
-                            <h2 class="section-title">Information</h2>
+                            <h2 class="section-title">Details</h2>
                         </div>
                         <table class="styled">
                             <tbody>
@@ -28,7 +28,7 @@
                 <div class="content-box">
                     <div class="section">
                         <div class="section-header">
-                            <h2 class="section-title">Boolean flags</h2>
+                            <h2 class="section-title">Flags</h2>
                         </div>
                         <form method="post" name="booleanForm" id="booleanForm" action="/dashboard/uploads/{{ upload.id }}">
                             <div class="form-input">
@@ -62,7 +62,7 @@
                             </div>
 
                             <div class="form-button-container">
-                                <input type="submit" class="button button-primary" value="Update flags" name="flagsubmit">
+                                <input type="submit" class="button button-primary" value="{{ localize('save_action') }}" name="flagsubmit">
                             </div>
                         </form>
                     </div>

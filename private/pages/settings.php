@@ -211,7 +211,7 @@ if (isset($_POST['save'])) {
                  flags = ?,
                  blacklisted_tags = ?
                  WHERE id = ?",
-            [$title, $about, $rating, ($userlink_color ?? $auth->getUserData()["userlink_color"]), $flags, json_encode($parsed_tags), $auth->getUserID()]
+            [$title, $about, $rating, ($userlink_color ?? ($auth->getUserData()["userlink_color"] ?? '#0069B4')), $flags, json_encode($parsed_tags), $auth->getUserID()]
         );
 
         if ($options["skin"] == "trinium") {
