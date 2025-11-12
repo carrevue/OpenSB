@@ -308,7 +308,6 @@
     "notify_dashboard_key_generated": "Une nouvelle clé d'invitation a été générée. (%s)",
     "notify_dashboard_welcome_first_time": "Bienvenue. Votre mot de passe personnel est %s. Gardez-le en lieu sûr pour éviter de le perdre.",
     "notify_dashboard_welcome": "Bienvenue sur le panel du personnel",
-    "notify_dashboard_ban_fail": "Cet utilisateur ne peut pas être banni.",
     "notify_dashboard_ban_success": "%s a été banni avec succès.",
     "notify_dashboard_unban_success": "%s a été débanni avec succès.",
     "notify_dashboard_verify_success": "%s a été verifié avec succès.",

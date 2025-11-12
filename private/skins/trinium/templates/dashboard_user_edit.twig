@@ -18,8 +18,11 @@
                         {% else %}
                             <button name="verify_user" value="{{ user.name }}" class="button button-success" onclick="if (!confirm('Are you sure you want to verify this user?')) { return false }">Verify</button>
                         {% endif %}
+                    {% endif %}
+                    {% if flags.featured %}
+                        <button name="feature_user" value="{{ user.name }}" class="button button-secondary" onclick="if (!confirm('Are you sure you want to unfeature this user?')) { return false }">Unfeature</button>
                     {% else %}
-                        This space intentionally left blank.
+                        <button name="feature_user" value="{{ user.name }}" class="button button-primary" onclick="if (!confirm('Are you sure you want to feature this user?')) { return false }">Feature</button>
                     {% endif %}
                 </form>
             </div>

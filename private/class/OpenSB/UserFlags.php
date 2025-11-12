@@ -34,7 +34,12 @@ enum UserFlags: int
     case FLAG_UNVERIFIED = 2;
 
     /**
-     * 01000000: Account was created on FulpTube.rocks
+     * 00000100: Featured user (shown on guide/list to logged out users)
+     */
+    case FLAG_FEATURED = 4;
+
+    /**
+     * 10000000: Account was created on FulpTube.rocks
      */
     case FLAG_FULPTUBE_ACCOUNT = 64;
 
@@ -52,6 +57,7 @@ enum UserFlags: int
         return [
             'fulptube_account' => (bool)($flags & self::FLAG_FULPTUBE_ACCOUNT->value),
             'unverified' => (bool)($flags & self::FLAG_UNVERIFIED->value),
+            'featured' => (bool)($flags & self::FLAG_FEATURED->value),
             'profile_customization_enabled' => (bool)($flags & self::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value),
         ];
     }

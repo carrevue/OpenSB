@@ -57,10 +57,18 @@
                             {{ role }}
                         </div>
                         <div>
-                            Joined: {{ user.info.joined | relative_time() }}
+                            Registered: {{ user.info.joined | relative_time() }}
                         </div>
                         <div>
-                            Logged in: {{ user.info.connected | relative_time() }}
+                            Last seen: {{ user.info.connected | relative_time() }}
+                        </div>
+                        <div>
+                            {% if user.info.flags.unverified %}
+                                <span class="text-danger">Unverified</span>
+                            {% endif %}
+                            {% if user.info.flags.featured %}
+                                <span class="text-success">Featured</span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
