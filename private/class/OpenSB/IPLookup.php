@@ -70,11 +70,11 @@ class IPLookup
             // made up bullshit so theres no bugs
             return [
                 "as_domain" => "localhost",
-                "as_name" => "Loopback Network LLC",
+                "as_name" => "Unknown",
                 "asn" => "AS00000",
-                "continent" => "Lemuria",
+                "continent" => "Unknown",
                 "continent_code" => "XX",
-                "country" => "Localhostia",
+                "country" => "Unknown",
                 "country_code" => "XX",
             ];
         }
