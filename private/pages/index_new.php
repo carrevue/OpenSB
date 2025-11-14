@@ -51,8 +51,8 @@ $feed = [
         "uploads" => Utilities::makeUploadArray($database, $uploads_featured),
     ],
     "recent" => [
-        "icon" => "/assets/profiledef_hitchhiker.svg",
-        "title" => "Recent uploads",
+        //"icon" => "/assets/profiledef_hitchhiker.svg",
+        "title" => "Recent Uploads",
         "uploads" => Utilities::makeUploadArray($database, $uploads_recent),
     ],
 ];

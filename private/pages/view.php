@@ -37,9 +37,23 @@ use OpenSB\Utilities;
 
 $options = $sb->getLocalOptions();
 
+function handle_error(string $message, string $redirect = "/") {
+    global $sb, $twig; // Lol
+
+    if ($sb->isHitchhiker()) {
+        echo $twig->render('watch_error.twig', [
+            'error' => $message,
+        ]);
+        die();
+    } else {
+        // go back to homepage with a notification (or something else if specified)
+        Utilities::notifyBanner($message, $redirect);
+    }
+}
+
 if ($sb->isFulpTube()) {
     if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
-        Utilities::notifyBanner("notify_original_fulptube_video", "/");
+        handle_error("notify_original_fulptube_video");
     }
 }
 
@@ -48,17 +62,16 @@ $upload = new UploadData($database, $id);
 // check if the upload has been taken down.
 $takedown = $upload->getTakedown();
 if ($takedown && !$auth->userHasRole(UserRoleEnum::Moderator)) {
-    // go back to homepage with a notification
-    Utilities::notifyBanner("notify_taken_down_upload", "/");
+    handle_error("notify_taken_down_upload");
 }
 
 if ($upload->isDeleted()) {
-    Utilities::notifyBanner("notify_deleted_upload", "/");
+    handle_error("notify_deleted_upload");
 }
 
 $data = $upload->getData();
 if (!$data) {
-    Utilities::notifyBanner("notify_invalid_upload", "/");
+    handle_error("notify_invalid_upload");
 }
 
 $tagBlacklist = $auth->getUserTagBlacklist();
@@ -69,9 +82,9 @@ if (isset($data["tags"])) {
         foreach ($decodedTags as $tag) {
             if (in_array($tag, $tagBlacklist)) {
                 if ($auth->isUserLoggedIn()) {
-                    Utilities::notifyBanner("notify_upload_tag_blacklist_logged_in", "/");
+                    handle_error("notify_upload_tag_blacklist_logged_in");
                 } else {
-                    Utilities::notifyBanner("notify_upload_tag_blacklist_logged_out", "/");
+                    handle_error("notify_upload_tag_blacklist_logged_out");
                 }
             }
         }
@@ -81,7 +94,7 @@ if (isset($data["tags"])) {
 $author = new UserData($database, $data["author"]);
 
 if ($author->isUserBanned() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_taken_down_upload", "/");
+    handle_error("notify_taken_down_upload");
 }
 
 $owner = ($auth->getUserID() == $data["author"]);
@@ -107,7 +120,7 @@ $followed = Utilities::isFollowingUser($data["author"]);
 $flags = $upload->getUploadFlagsArray();
 
 if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("notify_login_required_view_upload", "/login");
+    handle_error("notify_login_required_view_upload", "/login");
 }
 
 // this is awkward
@@ -115,7 +128,7 @@ $upload_rating = UploadRatingEnum::fromString($data["rating"]);
 $comfortable_rating = UploadRatingEnum::fromString($auth->getUserData()["comfortable_rating"]);
 
 if ($upload_rating->value > $comfortable_rating->value) {
-    Utilities::notifyBanner("notify_cannot_access_mature_upload", "/");
+    handle_error("notify_cannot_access_mature_upload");
 }
 
 $ip = Utilities::getIpAddress();
@@ -156,7 +169,7 @@ if (!$CrawlerDetect->isCrawler()) {
         );
 
         // increment the indexed view count. this might go out of sync eventually, but this can be fixed through
-        // 2024-08-recount-views.php.
+        // the recount_views.php script.
         $new_views = $data["views"] + 1;
         $database->query(
             "UPDATE uploads SET views = ? WHERE id = ?",
