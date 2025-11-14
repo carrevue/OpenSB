@@ -117,7 +117,7 @@
                                             <span id="follower_count">{{ upload.author.followers }}</span>
                                         {% else %}
                                             <span class="watch-box-followers-logged-out">
-                                                {{ upload.author.followers }} followers
+                                                {{ localize('followers', upload.author.followers) }}
                                             </span>
                                         {% endif %}
                                     </div>

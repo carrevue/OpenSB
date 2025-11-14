@@ -233,7 +233,7 @@ class SquareBracket
             $this->setOptionCookie($this->options);
         }
 
-        $this->localization = new Localization($this->options["locale"] ?? "en-US");
+        $this->localization = new Localization($this->options);
 
         if (isset($_COOKIE["SBACCOUNTS"])) {
             $cookie_raw = $_COOKIE["SBACCOUNTS"];

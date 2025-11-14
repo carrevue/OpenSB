@@ -11,6 +11,9 @@
     "follow": "Follow",
     "unfollow": "Unfollow",
 
+    "follow_hitchhiker": "Subscribe",
+    "unfollow_hitchhiker": "Unsubscribe",
+
     "form_required": "Required",
     "form_optional": "Optional",
 
@@ -24,6 +27,8 @@
     "views": "{count, plural, one {# view} other {# views}}",
     "star_ratings": "{count, plural, one {# rating} other {# ratings}}",
     "upload_count": "{count, plural, one {# upload} other {# uploads}}",
+
+    "followers_hitchhiker": "{count, plural, one {# subscriber} other {# subscribers}}",
 
     "relative_unknown": "unknown",
     "relative_year": "year",
@@ -56,6 +61,8 @@
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
+
+    "login_hitchhiker": "Sign in",
 
     "currently_logged_in_as": "You are currently logged in as %s.",
     "other_accounts": "Other accounts:",
@@ -147,6 +154,8 @@
     "comments_disabled": "Commenting has been disabled.",
     "please_login_to_comment": "Please login to comment.",
 
+    "write_comment_hitchhiker": "Add a comment...",
+
     "comment": "Comment",
 
     "reply_action": "Reply",
@@ -162,6 +171,10 @@
     "uploaded_on": "Uploaded on %s",
     "first_uploaded_on": "First uploaded on %s on %s",
     "originally_uploaded_on": "Originally uploaded on %s on %s",
+
+    "uploaded_on_hitchhiker": "Published on %s",
+    "first_uploaded_on_hitchhiker": "First published on %s on %s",
+    "originally_uploaded_on_hitchhiker": "Originally published on %s on %s",
 
     "uploads_from_user": "From %s",
     "related_uploads": "Related uploads",

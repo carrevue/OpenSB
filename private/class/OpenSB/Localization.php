@@ -35,6 +35,11 @@ use NumberFormatter;
 class Localization
 {
     /**
+     * @var array The user's options, inherited from the core SquareBracket class.
+     */
+    private array $options;
+
+    /**
      * @var string The current locale.
      */
     protected string $locale;
@@ -57,13 +62,14 @@ class Localization
     /**
      * function __construct
      *
-     * @param mixed $locale
+     * @param array $options
      *
      * @return void
      */
-    public function __construct($locale = 'en-US')
+    public function __construct(array $options)
     {
-        $this->locale = $locale;
+        $this->options = $options;
+        $this->locale = $options["locale"] ?? "en-US";
         $this->loadLocalizationData();
     }
 
@@ -237,6 +243,15 @@ class Localization
      */
     public function translate($key, ...$args)
     {
+        //$hitchhiker_string_debug = isset($this->options["localization_use_hitchhiker_strings"]) && $this->options["localization_use_hitchhiker_strings"] == "true";
+    
+        // if we're on finalium hitchhiker, check if there's a hitchhiker-specific version of a string
+        if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker" /*|| $hitchhiker_string_debug*/) {
+            if (array_key_exists($key . "_hitchhiker", $this->messages)) {
+                $key .= "_hitchhiker";
+            }
+        }
+
         if ($this->isPsuedo) {
             return $this->translatePsuedo($key, ...$args);
         }
@@ -244,7 +259,6 @@ class Localization
         $message = $this->messages[$key] ?? $this->messages_fallback[$key] ?? $key;
 
         if (str_contains($message, '{')) {
-            // 
             if ($args && array_keys($args) === range(0, count($args) - 1)) {
                 $args = ['count' => $args[0]];
             }
@@ -261,7 +275,7 @@ class Localization
     /**
      * function getLanguageCode
      * 
-     * Returns the language code.
+     * Returns the current locale's language code.
      *
      * @return string|mixed
      */

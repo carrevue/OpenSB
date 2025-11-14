@@ -45,12 +45,12 @@ $uploads_featured = $upload_query->query(
 );
 
 $feed = [
-    "uploads_featured" => [
-        "icon" => "/assets/profiledef_hitchhiker.svg",
-        "title" => "Featured on FulpTube",
+    "featured" => [
+        //"icon" => "/assets/profiledef_hitchhiker.svg",
+        "title" => "Featured on " . $sb->getBrandingSettings()["name"],
         "uploads" => Utilities::makeUploadArray($database, $uploads_featured),
     ],
-    "uploads_recent" => [
+    "recent" => [
         "icon" => "/assets/profiledef_hitchhiker.svg",
         "title" => "Recent uploads",
         "uploads" => Utilities::makeUploadArray($database, $uploads_recent),
