@@ -16,10 +16,6 @@
     {% set jumbotronClassName = "homepage-logged-out" %}
 {% endif %}
 
-{% if not data.uploads and not data.upload_new and not data.news_recent %}
-    {% set empty_instance = true %}
-{% endif %}
-
 {% block precontent %}
     <div class="jumbotron page-banner homepage">
         <div class="jumbotron-container {{ jumbotronClassName }}">
@@ -64,7 +60,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if empty_instance %}
+    {% if not data.uploads_new  %}
         <div class="banner banner-secondary">
             This instance is currently empty.
         </div>
