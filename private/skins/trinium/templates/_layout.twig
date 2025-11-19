@@ -97,7 +97,7 @@
         </mask>
     </defs>
 </svg>
-<body>
+<body {% if is_goanna %}class="goanna"{% endif %}>
 {% if is_debug %}
     {% include('components/debug_dialog.twig') %}
 {% endif %}

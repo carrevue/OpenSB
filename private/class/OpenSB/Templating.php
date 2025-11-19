@@ -192,6 +192,7 @@ class Templating
         //$this->version_number = $sb->getVersionNumberClass();
         $this->version_number = new VersionNumber();
 
+        // TODO: this should be cleaned up on 2.1 or maybe 3.0
         $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizSquareBracketInstance());
         $this->twig->addGlobal('is_fulptube', $isFulpTube);
         $this->twig->addGlobal('is_debug', $sb->isDebug());
@@ -212,6 +213,7 @@ class Templating
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('options', $options);
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
+        $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
 
         if (isset($_SERVER["REQUEST_URI"])) {
             $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
@@ -330,5 +332,24 @@ class Templating
     public function render($template, array $data = []): string
     {
         return $this->twig->render($template, $data);
+    }
+
+    /**
+     * function areWeOnGoanna
+     *
+     * to some, the goanna-based pale moon and basilisk web browsers are an 
+     * accessible way to have the "classic firefox experience" without having 
+     * to fuck around with custom firefox userchrome themes. however, certain 
+     * things in the goanna engine are implemented in ways that arent consistent 
+     * with the mainline engines, so we gotta do this to enable certain css 
+     * workarounds within trinium/finalium without potentially causing issues 
+     * elsewhere.
+     *
+     * @return bool
+     */
+    private function areWeOnGoanna(): bool {
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) { return false; }
+        if (str_contains($_SERVER['HTTP_USER_AGENT'], "Goanna/")) { return true; }
+        return false;
     }
 }
