@@ -157,6 +157,28 @@
             </div>
         </div>
         <div class="col-6">
+             <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Tabs</h2>
+                </div>
+                <div class="tab-group">
+                    <div class="tabs">
+                        {# spaceless removes html whitespace that causes unnecessary margins #}
+                        {% apply spaceless %}
+                            <button class="tablink" data-tab="tab_designtest1">Tab 1</button>
+                            <button class="tablink" data-tab="tab_designtest2">Tab 2</button>
+                        {% endapply %}
+                    </div>
+                    <div class="content-box no-border-top">
+                        <div id="tab_designtest1" class="tabcontent">
+                            Contents of Tab 1.
+                        </div>
+                        <div id="tab_designtest2" class="tabcontent">
+                            Contents of Tab 2.
+                        </div>
+                    </div>
+                </div>
+            </div>           
             <div class="section">
                 <div class="section-header">
                     <h2 class="section-title">Upload vertical</h2>
