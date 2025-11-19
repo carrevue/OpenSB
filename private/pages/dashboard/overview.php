@@ -278,10 +278,14 @@ $results[] = [
 ];
 
 // existing upload percentage
-$existingUploads = $numbersOfThingsArray['uploads'];
-$unavailableUploads = $numbersOfThingsArray['upload_deleted'] + $numbersOfThingsArray['upload_takedowns'];
 
-var_dump($unavailableUploads);
+// TODO: should be refactored in opensb 2.1, this feels too ugly. -chaziz 11/19/2025
+$uploadsByBannedAuthors = $database->result("SELECT COUNT(*) FROM `uploads`
+WHERE author IN (SELECT user FROM user_bans)
+AND upload_id NOT IN (SELECT upload FROM upload_takedowns)");
+
+$existingUploads = $numbersOfThingsArray['uploads'];
+$unavailableUploads = $numbersOfThingsArray['upload_deleted'] + $numbersOfThingsArray['upload_takedowns'] + $uploadsByBannedAuthors;
 
 $totalUploads = $existingUploads + $unavailableUploads;
 $existingRatio = Utilities::calculatePercentage(1, $existingUploads, $totalUploads);
