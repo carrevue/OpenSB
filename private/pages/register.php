@@ -87,6 +87,7 @@ if (isset($_POST['registersubmit'])) {
             FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
         ) === false);
 
+    // TODO: make these strings properly localizable.
     if (!$sb->isInviteKeysEnabled() || !$sb->isDebug()) {
         if (!$isLocalIp) {
             if ($database->result("SELECT COUNT(*) FROM users WHERE ip = ?", [Utilities::getIpAddress()]) >= 2)
@@ -95,7 +96,8 @@ if (isset($_POST['registersubmit'])) {
     }
 
     if ($database->fetch("SELECT COUNT(*) FROM user_old_names WHERE old_name = ?", [$username])["COUNT(*)"] >= 1)
-        $error .= "You cannot use someone's previous username. ";
+        $error .= "Invalid username. ";
+        //$error .= "You cannot use someone's previous username. ";
 
     try {
         $dobDateTime = new DateTime($birthdate);
