@@ -30,10 +30,10 @@
                         <br>
                         <small>
                             {% if notice.detail.origin %}
+                                {{ localize('time_ago_on_origin', notice.time | relative_time, notice.detail.origin) }}
                             {% else %}
                                 {{ notice.time | relative_time }}
                             {% endif %}
-                            {{ localize('time_ago_on_origin', notice.time | relative_time, notice.detail.origin) }}
                         </small>
                     </div>
                 </div>
