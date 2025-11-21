@@ -26,6 +26,7 @@ namespace OpenSB\Pages;
 global $twig, $database, $auth, $sb;
 
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
+use BluffingoCore\CoreUtilities;
 use OpenSB\CommentData;
 use OpenSB\CommentLocation;
 use OpenSB\UploadData;
