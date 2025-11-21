@@ -36,12 +36,12 @@ class VersionNumber
     /**
      * @var string The version name,
      */
-    private string $versionName = "Brightney";
+    private string $versionName = "Scraps";
 
     /**
      * @var string The version number, which tries to follow Semantic versioning.
      */
-    private string $versionNumber = "2.0.7-dev";
+    private string $versionNumber = "2.1.0-dev";
 
     /**
      * @var string The full complete version string.
