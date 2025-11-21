@@ -260,11 +260,11 @@ class Storage
      * Return the user profile picture.
      *
      * @param mixed $username
-     * @param mixed $isAdmin
+     * @param mixed $isStaff
      *
      * @return string
      */
-    public function getUserProfilePicture($username, $isAdmin): string
+    public function getUserProfilePicture($username, $isStaff): string
     {
         $placeholder = $this->sb->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
@@ -275,7 +275,7 @@ class Storage
         // don't bother with userdata since that might slow shit down
         $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$id]);
 
-        if ($is_banned && !$isAdmin) {
+        if ($is_banned && !$isStaff) {
             return '/assets/' . $placeholder;
         }
 

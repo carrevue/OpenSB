@@ -409,9 +409,13 @@ class Utilities
         }
         if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $username)) $error .= "This username contains invalid characters. ";
 
-        // TODO: add blacklist for usernames
-        if ($username == "news") $error .= "This is an invalid username. ";
-        if ($username == "InvalidUser!") $error .= "This is an invalid username. ";
+        // TODO: add blacklist for usernames. for a somewhat crude blacklist, 
+        // you may use the user_old_names table and point the username you wish
+        // to blacklist to an invalid id (i'd recommend 0). a proper blacklist
+        // will be added in opensb 2.1. -chaziz 11/19/2025
+        if ($username == "news") $error .= "Invalid username. ";
+        if ($username == "InvalidUser!") $error .= "Invalid username. ";
+        if (str_starts_with($username, "DummyAccount-")) $error .= "Invalid username. ";
 
         return $error;
     }

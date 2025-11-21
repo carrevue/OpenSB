@@ -266,9 +266,7 @@ $chartData = [
     ]
 ];
 
-// fulptube accounts
-
-// unbanned-to-banned user ratio
+// unbanned user percentage
 $totalUsers = $numbersOfThingsArray['users'];
 $bannedUsers = $numbersOfThingsArray['user_bans'];
 $unbannedUsers = $totalUsers - $bannedUsers;
@@ -279,19 +277,22 @@ $results[] = [
     'value' => $unbannedRatio,
 ];
 
-// undeleted-to-deleted upload ratio
+// existing upload percentage
 
-// this does not include takedowns yet, why? because, at least in the prod sb db, the table for it reference uploads
-// that were later completely deleted off the database. -chaziz -4/14/2025
-$undeletedUploads = $numbersOfThingsArray['uploads'];
-$deletedUploads = $numbersOfThingsArray['upload_deleted'];
+// TODO: should be refactored in opensb 2.1, this feels too ugly. -chaziz 11/19/2025
+$uploadsByBannedAuthors = $database->result("SELECT COUNT(*) FROM `uploads`
+WHERE author IN (SELECT user FROM user_bans)
+AND upload_id NOT IN (SELECT upload FROM upload_takedowns)");
 
-$totalUploads = $undeletedUploads + $deletedUploads;
-$undeletedRatio = Utilities::calculatePercentage(1, $undeletedUploads, $totalUploads);
+$existingUploads = $numbersOfThingsArray['uploads'];
+$unavailableUploads = $numbersOfThingsArray['upload_deleted'] + $numbersOfThingsArray['upload_takedowns'] + $uploadsByBannedAuthors;
+
+$totalUploads = $existingUploads + $unavailableUploads;
+$existingRatio = Utilities::calculatePercentage(1, $existingUploads, $totalUploads);
 
 $results[] = [
-    'name' => "Non-deleted upload percentage",
-    'value' => $undeletedRatio,
+    'name' => "Existing upload percentage",
+    'value' => $existingRatio,
 ];
 
 $is_windows = str_starts_with(php_uname(), "Windows") ?? false;
@@ -320,17 +321,20 @@ if (file_exists('/etc/os-release')) {
 // fucking around with winmgmts through the unholy com php class. i didnt even know it was possible to interface with
 // windows' ole api via php, what the fuck??? -chaziz 4/15/2025
 if (!$is_windows) {
-    $uptime = shell_exec('uptime -p');
+    $uptime = shell_exec('uptime -p'); // posix_times() is unreliable
+    if ($uptime) {
+        $uptime = ltrim($uptime, "up ");
+    }
 
-    $system_directory = '/';
+    $avg = sys_getloadavg();
 
-    $disk_total = disk_total_space($system_directory);
-    $disk_free = disk_free_space($system_directory);
+    $root = '/';
+    $disk_total = disk_total_space($root);
+    $disk_free = disk_free_space($root);
     $disk_used = $disk_total - $disk_free;
+    $disk_percentage = Utilities::calculatePercentage(1, $disk_used, $disk_total);
 
     $instance_size = get_folder_size(BLUFF_ROOT_PATH);
-
-    $disk_percentage = Utilities::calculatePercentage(1, $disk_used, $disk_total);
 
     $disk = [
         "total" => Utilities::formatBytes($disk_total, 2),
@@ -341,7 +345,7 @@ if (!$is_windows) {
     ];
 } else {
     $uptime = "Unknown";
-
+    $avg = [];
     $disk = [];
 }
 
@@ -351,6 +355,7 @@ $data = [
         "uname" => php_uname(),
         "os_name" => $os_name,
         "uptime" => $uptime,
+        "avg" => $avg,
         "is_windows" => $is_windows,
         "disk" => $disk,
     ],

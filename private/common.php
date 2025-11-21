@@ -252,14 +252,17 @@ if (!BLUFF_CLI) {
         die();
     }
 
-    if (
-        $sb->isChazizSquareBracketInstance() &&
-        $sb->isIpLookupEnabled() &&
-        $sb->getIpLookupClass()->getCountry(CoreUtilities::getIpAddress()) == "GB" // online safety act
-    ) {
-        http_response_code(451);
-        echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);
-        die();
+    if ($sb->isChazizSquareBracketInstance() && $sb->isIpLookupEnabled()) {
+        $ipLookup = $sb->getIpLookupClass();
+        
+        if (
+            $ipLookup->getCountry(CoreUtilities::getIpAddress()) == "GB" || // online safety act
+            $ipLookup->getCountry(CoreUtilities::getIpAddress()) == "AZ"
+        ) {
+            http_response_code(451);
+            echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);
+            die();
+        }
     }
 
     $twig = new Templating($sb);

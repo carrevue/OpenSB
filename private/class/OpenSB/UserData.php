@@ -65,24 +65,36 @@ class UserData
         $this->database = $database;
         $this->id = $id;
 
-        // check if user data has already been cached
+        // check if user data has already been cached before doing anything
         if (isset(self::$userDataCache[$id])) {
             $this->data = self::$userDataCache[$id];
             return;
-        } else {
-            // otherwise fetch the data from the db
-            $this->data = $this->database->fetch(
-                "SELECT id, name, title, userlink_color, joined, last_seen, powerlevel, flags FROM users WHERE id = ?",
-                [$id]
-            );
         }
 
-        if ($this->data == null) {
-            trigger_error("User ID $id is nonexistent.", E_USER_WARNING);
-        } else {
-            // cache the data
-            self::$userDataCache[$id] = $this->data;
+        // fetch the data from the db
+        $data = $this->database->fetch(
+            "SELECT id, name, title, userlink_color, joined, last_seen, powerlevel, flags FROM users WHERE id = ?",
+            [$id]
+        );
+
+        if (!$data) {
+            //trigger_error("User ID $id is nonexistent.", E_USER_WARNING);
+            // fallback to generic data
+            $data = [
+                "name" => "InvalidUser!",
+                "title" => "Invalid user! ($id)",
+                "userlink_color" => "#FF00FF",
+                "joined" => 1,
+                "last_seen" => 1,
+                "powerlevel" => 0,
+                "flags" => 0, // we don't need any flags to be set.
+            ];   
         }
+
+        $this->data = $data;
+
+        // cache the data
+        self::$userDataCache[$id] = $this->data;
     }
 
     /**

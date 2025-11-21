@@ -26,6 +26,7 @@ namespace OpenSB\Pages;
 
 global $twig, $database;
 
+use OpenSB\UserFlags;
 use OpenSB\UserData;
 
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
@@ -39,11 +40,16 @@ $queryData = $database->fetchArray(
        (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
         FROM users u 
         WHERE u.id NOT IN (SELECT user FROM user_bans)
-        ORDER BY u.last_seen DESC $limit"
+        AND (u.flags & ?) = 0
+        ORDER BY u.last_seen DESC $limit", [UserFlags::FLAG_UNVERIFIED->value]
     )
 );
 
-$countData = $database->result("SELECT COUNT(*) FROM users u WHERE u.id NOT IN (SELECT user FROM user_bans)");
+$countData = $database->result(
+    "SELECT COUNT(*) FROM users u 
+    WHERE u.id NOT IN (SELECT user FROM user_bans)
+    AND (u.flags & ?) = 0", [UserFlags::FLAG_UNVERIFIED->value]
+);
 
 $usersData = [];
 foreach ($queryData as $user) {

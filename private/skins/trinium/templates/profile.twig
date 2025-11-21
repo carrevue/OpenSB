@@ -42,9 +42,9 @@
                                     {% if not data.is_current %}
                                         <button class="button button-secondary button-small" id="follow-user">
                                             {% if data.following %}
-                                                Unfollow
+                                                {{ localize('unfollow') }}
                                             {% else %}
-                                                Follow
+                                                {{ localize('follow') }}
                                             {% endif %}
                                         </button>
                                     {% else %}
