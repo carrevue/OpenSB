@@ -2,13 +2,13 @@
 {% if not user_data_cache %}
 {% set user_data_cache = get_user_data_cache() %}
 {% endif %}
-<dialog class="content-box debug-dialog" id="debug-dialog">
+<dialog class="content-box debug-dialog tab-group" id="debug-dialog">
     <div>{{ version_banner() }}</div>
     <div><small>{{ profiler_stats() }}</small>
     <div><a href="/debug">Debug backend</a></div>
     <hr>
     <div class="tabs">
-        {# spaceless removes html whitespace causes unnecessary margins #}
+        {# spaceless removes html whitespace that causes unnecessary margins #}
         {% apply spaceless %}
             <button class="tablink" data-tab="tab_db">Database</button>
             <button class="tablink" data-tab="tab_user">User Data Cache</button>

@@ -34,57 +34,61 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Get all tab links
-    const tabLinks = document.querySelectorAll(".tablink");
+    // Get all tab groups
+    const tabGroups = document.querySelectorAll(".tab-group");
+    tabGroups.forEach(tabGroup => {
+        // Get all tab links in the tab group
+        const tabLinks = tabGroup.querySelectorAll(".tablink")
 
-    // open the first tab automatically
-    if (tabLinks.length !== 0) {
-        const firstTab = tabLinks.item(0);
+        // open the first tab automatically
+        if (tabLinks.length > 0) {
+            const firstTab = tabLinks.item(0);
 
-        if (firstTab) {
-            const tabId = firstTab.getAttribute("data-tab");
-            if (tabId) {
-                const firstTabId = document.getElementById(tabId);
-                if (firstTabId) {
-                    firstTabId.style.display = "block";
-                    firstTab.classList.add("active");
-                } else {
-                    error(`Tab ${tabId} is missing contents.`)
+            if (firstTab) {
+                const tabId = firstTab.getAttribute("data-tab");
+                if (tabId) {
+                    const firstTabId = document.getElementById(tabId);
+                    if (firstTabId) {
+                        firstTabId.style.display = "block";
+                        firstTab.classList.add("active");
+                    } else {
+                        error(`Tab ${tabId} is missing contents.`)
+                    }
                 }
+            } else {
+                error("THIS SHOULD NOT HAPPEN.");
             }
-        } else {
-            error("THIS SHOULD NOT HAPPEN.");
         }
-    }
 
-    tabLinks.forEach(tabLink => {
-        // check if this tab has "data-tab". if it doesn't then don't bother.
-        const tabId = tabLink.getAttribute("data-tab");
+        tabLinks.forEach(tabLink => {
+            // check if this tab has "data-tab". if it doesn't then don't bother.
+            const tabId = tabLink.getAttribute("data-tab");
 
-        if (tabId) {
-            tabLink.addEventListener("click", function () {
-                // Hide all tab content
-                const tabContents = document.querySelectorAll(".tabcontent");
-                tabContents.forEach(tabContent => {
-                    tabContent.style.display = "none";
+            if (tabId) {
+                tabLink.addEventListener("click", function () {
+                    // Hide all tab content
+                    const tabContents = tabGroup.querySelectorAll(".tabcontent");
+                    tabContents.forEach(tabContent => {
+                        tabContent.style.display = "none";
+                    });
+
+                    // Remove 'active' class from all tab links
+                    tabLinks.forEach(link => {
+                        link.classList.remove("active");
+                    });
+
+                    // Show the selected tab content and mark the button as active
+                    const selectedTabId = document.getElementById(tabId);
+
+                    if (selectedTabId) {
+                        selectedTabId.style.display = "block";
+                        this.classList.add("active");
+                    } else {
+                        error(`Tab ${tabId} is missing contents.`)
+                    }
                 });
-
-                // Remove 'active' class from all tab links
-                tabLinks.forEach(link => {
-                    link.classList.remove("active");
-                });
-
-                // Show the selected tab content and mark the button as active
-                const selectedTabId = document.getElementById(tabId);
-
-                if (selectedTabId) {
-                    selectedTabId.style.display = "block";
-                    this.classList.add("active");
-                } else {
-                    error(`Tab ${tabId} is missing contents.`)
-                }
-            });
-        }
+            }
+        });
     });
 
     // Get all menu buttons
