@@ -122,22 +122,22 @@
     <div class="page-contents">
         <div class="container {{ page_name }} {% if banner_picture %}has-profile-banner{% endif %}">
             {{ include(component('banners')) }}
-            {% if not show_sidebar %}
+            {#{% if not show_sidebar %}
                 {% block content %}{% endblock %}
                 {{ include(component('footer')) }}
-            {% else %}
-                <div class="sidebar-page-grid">
-                    <div class="sidebar-container">
-                        <div class="sidebar {% if page_name == "home" %}with-jumbotron{% endif %}">
-                            {% include('components/_hamburger_menu.twig') %}
-                        </div>
-                    </div>
-                    <div class="content">
-                        {{ block('content') }}
-                        {{ include(component('footer')) }}
+            {% else %}#}
+            <div class="sidebar-page-grid">
+                <div class="sidebar-container {% if show_sidebar %}active{% endif %}" id="sidebar">
+                    <div class="sidebar {% if page_name == "home" %}with-jumbotron{% endif %}">
+                        {% include('components/_hamburger_menu.twig') %}
                     </div>
                 </div>
-            {% endif %}
+                <div class="content">
+                    {% block content %}{% endblock %}
+                    {{ include(component('footer')) }}
+                </div>
+            </div>
+            {#{% endif %}#}
         </div>
     </div>
 </div>
