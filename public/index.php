@@ -208,6 +208,8 @@ $router->add('/api/v3/get_instance_info', 'api/v3/get_instance_info.php');
 $router->add('/api/v3/get_upload', 'api/v3/get_upload.php');
 $router->add('/api/v3/get_uploads', 'api/v3/get_uploads.php');
 
+$router->add('/api/bot/test', 'api/bot/test.php');
+
 // redirect to dashboard
 $router->redirect('/admin', '/dashboard');
 $router->redirect('/admin/{page}', '/dashboard'); // just redirect to /dashboard for now

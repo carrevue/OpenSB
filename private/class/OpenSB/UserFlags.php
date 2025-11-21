@@ -37,11 +37,16 @@ enum UserFlags: int
      * 00000100: Featured user (shown on guide/list to logged out users)
      */
     case FLAG_FEATURED = 4;
+    
+    /**
+     * 01000000: Account was created on FulpTube.rocks
+     */
+    case FLAG_FULPTUBE_ACCOUNT = 64;
 
     /**
-     * 10000000: Account was created on FulpTube.rocks
+     * 10000000: Account is a bot (allows it to be used by a bot script)
      */
-    case FLAG_FULPTUBE_ACCOUNT = 80;
+    case FLAG_BOT = 128;
 
     /**
      * function toArray
@@ -56,6 +61,7 @@ enum UserFlags: int
     {
         return [
             'fulptube_account' => (bool)($flags & self::FLAG_FULPTUBE_ACCOUNT->value),
+            'bot' => (bool)($flags & self::FLAG_BOT->value),
             'unverified' => (bool)($flags & self::FLAG_UNVERIFIED->value),
             'featured' => (bool)($flags & self::FLAG_FEATURED->value),
             'profile_customization_enabled' => (bool)($flags & self::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value),

@@ -23,27 +23,27 @@ namespace OpenSB;
 
 enum UploadFlags: int
 {
-/**
+    /**
      * 00000001: Featured upload
      */
     case FLAG_FEATURED = 1;
 
-/**
+    /**
      * 00000010: Unprocessed video upload
      */
     case FLAG_UNPROCESSED = 2;
 
-/**
+    /**
      * 00000100: "Block guests from viewing this upload"
      */
     case FLAG_BLOCK_GUESTS = 4;
 
-/**
+    /**
      * 00001000: "Disable comments on this upload"
      */
     case FLAG_BLOCK_COMMENTS = 8;
 
-/**
+    /**
      * 00010000: Upload has custom thumbnail
      */
     case FLAG_CUSTOM_THUMBNAIL = 16;

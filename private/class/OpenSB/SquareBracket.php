@@ -175,7 +175,7 @@ class SquareBracket
             // if we are on debug mode
             $this->database->setProfiling(true);
         }
-        $this->authentication = new Authentication($this);
+        $this->authentication = new Authentication($this, $_SESSION["SBTOKEN"] ?? null);
 
         //$this->version_number = new VersionNumber();
 
@@ -299,6 +299,20 @@ class SquareBracket
         } else {
             $this->ip_lookup = null;
         }
+    }
+
+    /**
+     * function logInWithToken
+     * 
+     * Reinitialize the authentication class with a specified token.
+     * 
+     * @note: This may cause issues in most use cases, and should only be used for the bot API.
+     *
+     * @return void
+     */
+    public function logInWithToken($token)
+    {
+        $this->authentication = new Authentication($this, $token);
     }
 
     /**

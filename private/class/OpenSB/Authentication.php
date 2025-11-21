@@ -29,6 +29,7 @@ use BluffingoCore\CoreUtilities;
  */
 class Authentication
 {
+    private string $accountfields = "id, ip, name, title, email, token, about, powerlevel, joined, last_seen, birthdate, comfortable_rating, userlink_color, blacklisted_tags, flags";
     private Database $database;
     private bool $is_logged_in = false;
     private int $user_id;
@@ -37,14 +38,12 @@ class Authentication
     private $user_stat_data;
     private $has_authenticated_as_staff = false;
 
-    public function __construct(SquareBracket $sb)
+    public function __construct(SquareBracket $sb, $token)
     {
-        $accountfields = "id, ip, name, title, email, token, about, powerlevel, joined, last_seen, birthdate, comfortable_rating, userlink_color, blacklisted_tags, flags";
         $this->database = $sb->getDatabaseClass();
-        $token = $_SESSION["SBTOKEN"] ?? null;
 
         if (isset($token)) {
-            $this->user_data = $this->database->fetch("SELECT $accountfields FROM users WHERE token = ?", [$token]);
+            $this->user_data = $this->database->fetch("SELECT $this->accountfields FROM users WHERE token = ?", [$token]);
 
             if ($this->user_data) {
                 $this->is_logged_in = true;
