@@ -4,3 +4,6 @@
 [submodule "private/icons"]
 	path = private/icons
 	url = https://github.com/bluffingo/icons.git
+[submodule "private/skins/trinium/scss"]
+	path = private/skins/trinium/scss
+	url = https://github.com/bluffingo/trinium
