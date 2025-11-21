@@ -29,6 +29,7 @@ use OpenSB\UploadFlags;
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 use OpenSB\UserData;
+use OpenSB\UserFlags;
 
 $upload_query = new UploadQuery($sb);
 
@@ -91,7 +92,8 @@ if ($options["skin"] == "trinium") {
         (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
             FROM users u 
             WHERE u.id NOT IN (SELECT user FROM user_bans)
-            ORDER BY u.last_seen DESC LIMIT 5"
+            AND (u.flags & ?) = 0
+            ORDER BY u.last_seen DESC LIMIT 5", [UserFlags::FLAG_UNVERIFIED->value]
         )
     );
 

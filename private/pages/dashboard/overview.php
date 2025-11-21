@@ -266,7 +266,7 @@ $chartData = [
     ]
 ];
 
-// unbanned-to-banned user ratio
+// unbanned user percentage
 $totalUsers = $numbersOfThingsArray['users'];
 $bannedUsers = $numbersOfThingsArray['user_bans'];
 $unbannedUsers = $totalUsers - $bannedUsers;
@@ -277,19 +277,22 @@ $results[] = [
     'value' => $unbannedRatio,
 ];
 
-// undeleted-to-deleted upload ratio
+// existing upload percentage
 
-// this does not include takedowns yet, why? because, at least in the prod sb db, the table for it reference uploads
-// that were later completely deleted off the database. -chaziz -4/14/2025
-$undeletedUploads = $numbersOfThingsArray['uploads'];
-$deletedUploads = $numbersOfThingsArray['upload_deleted'];
+// TODO: should be refactored in opensb 2.1, this feels too ugly. -chaziz 11/19/2025
+$uploadsByBannedAuthors = $database->result("SELECT COUNT(*) FROM `uploads`
+WHERE author IN (SELECT user FROM user_bans)
+AND upload_id NOT IN (SELECT upload FROM upload_takedowns)");
 
-$totalUploads = $undeletedUploads + $deletedUploads;
-$undeletedRatio = Utilities::calculatePercentage(1, $undeletedUploads, $totalUploads);
+$existingUploads = $numbersOfThingsArray['uploads'];
+$unavailableUploads = $numbersOfThingsArray['upload_deleted'] + $numbersOfThingsArray['upload_takedowns'] + $uploadsByBannedAuthors;
+
+$totalUploads = $existingUploads + $unavailableUploads;
+$existingRatio = Utilities::calculatePercentage(1, $existingUploads, $totalUploads);
 
 $results[] = [
     'name' => "Existing upload percentage",
-    'value' => $undeletedRatio,
+    'value' => $existingRatio,
 ];
 
 $is_windows = str_starts_with(php_uname(), "Windows") ?? false;

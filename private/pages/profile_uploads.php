@@ -37,11 +37,15 @@ if (!$data) {
     $old_username_data = $database->fetch("SELECT user FROM user_old_names WHERE old_name = ?", [$username]);
 
     if ($old_username_data) {
-        // if so, redirect to the new profile.
+        // if so, attempt to fetch the user's current name through their id
         $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
-        http_response_code(301);
-        header("Location: /user/$new_username/uploads");
-        exit();
+        if ($new_username) {
+            CoreUtilities::redirect('/user/' . $new_username, 301);
+        } else {
+            // if for whatever reason this leads to nowhere (eg: deleted user or 
+            // half-assed prod blacklisting), return to homepage.
+            Utilities::notifyBanner("notify_invalid_user", "/");
+        }
     } else {
         Utilities::notifyBanner("notify_invalid_user", "/");
     }

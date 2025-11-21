@@ -109,9 +109,9 @@
                                         {% if not upload.is_owner and not upload.author_banned and is_user_logged_in %}
                                             <button class="button button-secondary button-small" id="follow-user">
                                                 {% if upload.author.following %}
-                                                    Unfollow
+                                                    {{ localize('unfollow') }}
                                                 {% else %}
-                                                    Follow
+                                                    {{ localize('follow') }}
                                                 {% endif %}
                                             </button>
                                             <span id="follower_count">{{ upload.author.followers }}</span>
