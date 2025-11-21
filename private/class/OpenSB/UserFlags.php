@@ -23,20 +23,20 @@ namespace OpenSB;
 
 enum UserFlags: int
 {
-/**
+    /**
      * 00000001: Enable profile customization
      */
     case FLAG_PROFILE_CUSTOMIZATION_ENABLED = 1;
 
-/**
+    /**
      * 00000010: Unverified user (this is SquareBracket/FulpTube-specific behavior)
      */
     case FLAG_UNVERIFIED = 2;
 
-/**
-     * 10000000: Account was created on FulpTube.rocks
+    /**
+     * 01000000: Account was created on FulpTube.rocks
      */
-    case FLAG_FULPTUBE_ACCOUNT = 80;
+    case FLAG_FULPTUBE_ACCOUNT = 64;
 
     /**
      * function toArray
