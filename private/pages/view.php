@@ -183,49 +183,100 @@ $whereRatings = $auth->databaseWhereRatingsHelper();
 $whereTagBlacklist = $auth->databaseWhereTagBlacklistHelper();
 $upload_query = new UploadQuery($sb);
 
-// ported from poktwo, modified to accommodate for takedowns and relevancy.
-$recommendfields = "
+// loose shitty recommendations
+if ($options["use_new_recommendation_shit"] ?? false) {
+    $recommendfields = "
     jaccard.upload_id,
     jaccard.flags,
     jaccard.intersect_count,
     jaccard.union_count,
     jaccard.intersect_count / jaccard.union_count AS jaccard_index
-FROM
-    (
-    SELECT
-        c2.upload_id AS upload_id,
-        c2.flags AS flags,
-        COUNT(ct2.tag_id) AS intersect_count,
+    FROM (
+        SELECT
+            c2.upload_id AS upload_id,
+            c2.flags AS flags,
+            COUNT(ct2.tag_id) AS intersect_count,
+            (
+                c1_tagcount.c1_count +
+                c2_tagcount.c2_count -
+                COUNT(ct2.tag_id)
+            ) AS union_count
+        FROM uploads AS c1
+        JOIN upload_tag_index AS ct1
+            ON ct1.upload_id = c1.id
+        JOIN upload_tag_index AS ct2
+            ON ct2.tag_id = ct1.tag_id
+        JOIN uploads AS c2
+            ON c2.id = ct2.upload_id AND c2.id != c1.id
+
+        JOIN (
+            SELECT upload_id, COUNT(*) AS c1_count
+            FROM upload_tag_index
+            GROUP BY upload_id
+        ) AS c1_tagcount ON c1_tagcount.upload_id = c1.id
+
+        JOIN (
+            SELECT upload_id, COUNT(*) AS c2_count
+            FROM upload_tag_index
+            GROUP BY upload_id
+        ) AS c2_tagcount ON c2_tagcount.upload_id = c2.id
+
+        WHERE c1.id = ?
+
+        GROUP BY
+            c2.upload_id,
+            c2.flags,
+            c1_tagcount.c1_count,
+            c2_tagcount.c2_count
+        HAVING intersect_count > 0
+    ) AS jaccard
+    WHERE jaccard.flags != 0x2
+    ORDER BY jaccard_index DESC
+    LIMIT 24";
+} else {
+    $recommendfields = "
+        jaccard.upload_id,
+        jaccard.flags,
+        jaccard.intersect_count,
+        jaccard.union_count,
+        jaccard.intersect_count / jaccard.union_count AS jaccard_index
+    FROM
         (
         SELECT
-            COUNT(DISTINCT ct3.tag_id)
+            c2.upload_id AS upload_id,
+            c2.flags AS flags,
+            COUNT(ct2.tag_id) AS intersect_count,
+            (
+            SELECT
+                COUNT(DISTINCT ct3.tag_id)
+            FROM
+                upload_tag_index ct3
+            WHERE
+                ct3.upload_id IN (c1.id, c2.id)
+        ) AS union_count
         FROM
-            upload_tag_index ct3
+            uploads AS c1
+        INNER JOIN uploads AS c2
+            ON c1.id != c2.id
+        LEFT JOIN upload_tag_index AS ct1
+            ON ct1.upload_id = c1.id
+        LEFT JOIN upload_tag_index AS ct2
+            ON ct2.upload_id = c2.id AND ct1.tag_id = ct2.tag_id
         WHERE
-            ct3.upload_id IN (c1.id, c2.id)
-    ) AS union_count
-    FROM
-        uploads AS c1
-    INNER JOIN uploads AS c2
-        ON c1.id != c2.id
-    LEFT JOIN upload_tag_index AS ct1
-        ON ct1.upload_id = c1.id
-    LEFT JOIN upload_tag_index AS ct2
-        ON ct2.upload_id = c2.id AND ct1.tag_id = ct2.tag_id
+            c1.id = ?
+            AND ct1.tag_id IS NOT NULL
+            AND ct2.tag_id IS NOT NULL
+        GROUP BY
+            c2.upload_id, c2.flags
+        HAVING
+            intersect_count > 0
+        ) AS jaccard
     WHERE
-        c1.id = ?
-        AND ct1.tag_id IS NOT NULL
-        AND ct2.tag_id IS NOT NULL
-    GROUP BY
-        c2.upload_id, c2.flags
-    HAVING
-        intersect_count > 0
-    ) AS jaccard
-WHERE
-    jaccard.flags != 0x2
-ORDER BY
-    jaccard_index DESC
-LIMIT 24";
+        jaccard.flags != 0x2
+    ORDER BY
+        jaccard_index DESC
+    LIMIT 24";
+}
 
 $uploads_by_author = $upload_query->query("RAND()", 24, "v.author = ? AND v.upload_id != ?", [$data["author"], $data["upload_id"]]);
 
@@ -344,25 +395,8 @@ if (Utilities::isLegacyFrontend()) {
         $current_rating = null;
     }
 
-    // translate 5 stars into like/dislikes. we do this because using the star rating ratio doesn't work that well
-    // with the likesaber on finalium.
-    // -chaziz 6/11/2024
-    $ratings = $page_data["interactions"]["ratings"]["stars"];
-
-    $likes = $ratings["4"] + $ratings["5"];
-    $dislikes = $ratings["1"] + $ratings["2"];
-    $total = $likes + $dislikes;
-
-    // calculate finalium likesaber
-    $ratio = ($total == 0 || $dislikes == 0)  ? 100
-        : Utilities::calculatePercentage($dislikes, $likes, $total);
-
-    $page_data["interactions"]["legacy"] = [
-        "likes" => $likes,
-        "dislikes" => $dislikes,
-        "ratio" => $ratio,
-        "current_rating" => $current_rating,
-    ];
+    $page_data["interactions"]["legacy"] = $upload->getRatingDataAsLikeRatio();
+    $page_data["interactions"]["legacy"]["current_rating"] = $current_rating;
 }
 
 // TODO: this should be moved to admin_upload_edit -chaziz 1/4/2025

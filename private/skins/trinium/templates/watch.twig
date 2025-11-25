@@ -40,7 +40,7 @@
     </script>
 {% endblock %}
 
-{% if upload.rating == 'mature' %}
+{% if upload.rating == 'mature' or upload.flags.mature %}
     {% set rating_text = localize('sensitive_rating') %}
 {% else %}
     {% set rating_text = localize('general_rating') %}

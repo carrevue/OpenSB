@@ -29,6 +29,7 @@ enum UploadRatingEnum: int
     case Questionable = 1; // unused
     case Mature = 2;
 
+    #[\Deprecated(message: "use mature rating flag instead", since: "2.1")]
     public static function fromString(string $rating): self
     {
         return match (strtolower($rating)) {

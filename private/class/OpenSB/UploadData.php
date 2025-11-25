@@ -66,7 +66,7 @@ class UploadData
     {
         $this->database = $database;
 
-        $this->is_deleted = $this->database->fetch("SELECT COUNT(*) FROM upload_deleted v WHERE id = ?", [$id])["COUNT(*)"];
+        $this->is_deleted = $this->database->result("SELECT COUNT(*) FROM upload_deleted v WHERE id = ?", [$id]);
 
         // if we get the internal id instead of the string id, we correct $id after fetching the upload otherwise
         // stuff won't work.
@@ -137,6 +137,21 @@ class UploadData
             return null;
         }
         return $this->ratings->calculateRatingData();
+    }
+
+    /**
+     * Calculate rating data using the `UploadRatingData` class
+     * 
+     * @note this is kind of awkward i'd say. try to merge this into getRatingData.
+     *
+     * @return array|null Rating data or null.
+     */
+    public function getRatingDataAsLikeRatio()
+    {
+        if ($this->ratings === null) {
+            return null;
+        }
+        return $this->ratings->calculateRatingDataAsLikeRatio();
     }
 
     /**
