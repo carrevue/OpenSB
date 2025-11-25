@@ -48,6 +48,11 @@ enum UploadFlags: int
      */
     case FLAG_CUSTOM_THUMBNAIL = 16;
 
+    /**
+     * 00100000: Upload is mature
+     */
+    case FLAG_MATURE = 32;    
+
     public static function toArray(int $flags): array
     {
         return [
@@ -56,6 +61,7 @@ enum UploadFlags: int
             'block_guests' => (bool)($flags & self::FLAG_BLOCK_GUESTS->value),
             'block_comments' => (bool)($flags & self::FLAG_BLOCK_COMMENTS->value),
             'custom_thumbnail' => (bool)($flags & self::FLAG_CUSTOM_THUMBNAIL->value),
+            'mature' => (bool)($flags & self::FLAG_MATURE->value),
         ];
     }
 }

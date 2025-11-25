@@ -61,6 +61,12 @@
                                 <label for="flag_custom_thumbnail"> Custom thumbnail</label>
                             </div>
 
+                            <div class="form-input">
+                                <input type="checkbox" id="flag_mature" name="flag_mature"
+                                       {% if upload.flags.mature %}checked{% endif %}>
+                                <label for="flag_mature"> Mature</label>
+                            </div>
+
                             <div class="form-button-container">
                                 <input type="submit" class="button button-primary" value="{{ localize('save_action') }}" name="flagsubmit">
                             </div>

@@ -66,12 +66,12 @@
                 </div>
                 <div class="watch-box">
                     <div class="section watch-box-title">
-                        {% if user_is_authenticated_admin %}
+                        {#{% if user_is_authenticated_admin %}
                             <div class="watch-box-row">
                                 <a href="/dashboard/uploads/{{ upload.id }}">{{ localize('dashboard_lookup') }}</a>
                             </div>
                             <hr>
-                        {% endif %}
+                        {% endif %}#}
                         <div class="section-header flex">
                             <div class="section-header-left">
                                 <h1 class="section-title">
@@ -82,11 +82,32 @@
                                     {% endif %}
                                 </h1>
                             </div>
-                            {% if upload.is_owner %}
+                            <div class="section-header-right">
+                                <div class="menu-button button button-secondary button-transparent button-caret"
+                                    data-menu-id="upload-{{ upload.id }}">
+                                    {{ icon('three-dots', 16) }}
+                                </div>
+                                <div class="menu" id="upload-{{ upload.id }}">
+                                    {% if upload.is_owner %}
+                                        <a class="menu-item-button" href="/edit?v={{ upload.id }}">
+                                            <span>{{ localize('edit') }}</span>
+                                        </a>
+                                    {% endif %}
+                                    {% if user_is_authenticated_admin %}
+                                        <a class="menu-item-button" href="/dashboard/uploads/{{ upload.id }}">
+                                            <span>{{ localize('dashboard_lookup') }}</span>
+                                        </a>
+                                    {% endif %}
+                                    <a class="menu-item-button">
+                                        <span>Report</span>
+                                    </a>
+                                </div>
+                            </div>
+                            {#{% if upload.is_owner %}
                                 <div class="section-header-right">
                                     <a href="/edit?v={{ upload.id }}">{{ localize('edit') }}</a>
                                 </div>
-                            {% endif %}
+                            {% endif %}#}
                         </div>
                         <div class="watch-box-below-title">
                             {{ type_text }} 

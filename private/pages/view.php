@@ -123,13 +123,14 @@ if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
     handle_error("notify_login_required_view_upload", "/login");
 }
 
-// this is awkward
+// OLD RATING SYSTEM. THIS WILL BE REMOVED LATER -chaziz 11/25/2025
 $upload_rating = UploadRatingEnum::fromString($data["rating"]);
 $comfortable_rating = UploadRatingEnum::fromString($auth->getUserData()["comfortable_rating"]);
 
 if ($upload_rating->value > $comfortable_rating->value) {
     handle_error("notify_cannot_access_mature_upload");
 }
+
 
 $ip = Utilities::getIpAddress();
 

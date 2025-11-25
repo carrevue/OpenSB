@@ -69,6 +69,9 @@ if (isset($_POST['flagsubmit'])) {
     if (isset($_POST['flag_custom_thumbnail'])) {
         $flags |= UploadFlags::FLAG_CUSTOM_THUMBNAIL->value;
     }
+    if (isset($_POST['flag_mature'])) {
+        $flags |= UploadFlags::FLAG_MATURE->value;
+    }
 
     $database->query(
         "UPDATE uploads SET flags = ? WHERE upload_id = ?",

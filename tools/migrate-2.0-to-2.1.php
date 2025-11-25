@@ -1,9 +1,10 @@
+#!/usr/bin/env php
 <?php
 
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2024-2025 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,25 +20,19 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\BotAPI;
+namespace OpenSB\Tools;
 
-global $sb;
+define("BLUFF_ROOT_PATH", dirname(__DIR__));
+define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
+define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
+define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
+define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-header('Content-Type: application/json');
+global $database;
 
-// SBTOKEN isn't going to suffice.
+require_once BLUFF_PRIVATE_PATH . '/common.php';
 
-//if (!$_SERVER['HTTP_AUTHORIZATION']) { (dogshit)
-if (!$token = getallheaders()["Authorization"]) {
-    http_response_code(403);
-    echo json_encode(['status' => 'Access denied.']);
-    die();
-}
+// migrate from opensb 2.0 table schema to opensb 2.1 table schema
 
-$sb->logInWithToken($token);
-
-$apiOutput = [
-    'status' => ["success"],
-];
-
-echo json_encode($apiOutput);
+// TODO: migrate mature-rated uploads from rating to flag
