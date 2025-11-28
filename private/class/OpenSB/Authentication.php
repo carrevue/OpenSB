@@ -142,6 +142,7 @@ class Authentication
             : [
                 'comfortable_rating' => 'general',
                 'blacklisted_tags' => [],
+                'flags' => 0,
             ];
     }
 

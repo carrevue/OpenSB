@@ -202,7 +202,7 @@
                     {% if isUserOver18 %}
                         <div class="form-submit">
                             <input type="checkbox" name="rating" id="rating" value="true"
-                            {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
+                            {% if flags.mature_content_access %}checked{% endif %}>
                             <label for="rating">{{ localize('enable_sensitive_content') }}</label><br>
                         </div>
 

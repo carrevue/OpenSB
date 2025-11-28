@@ -91,13 +91,7 @@ if (isset($_POST['save'])) {
         $font = $_POST['font'] ?? "default";
     }
 
-    if ($auth->isUserOver18() && !$sb->isChazizSquareBracketInstance()) {
-        $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
-    } else {
-        $rating = 'general';
-    }
-
-    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? $auth->getDefaultTagBlacklist());
+    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? []);
 
     if ($blacklisted_tags === '') {
         $parsed_tags = [];
@@ -105,8 +99,22 @@ if (isset($_POST['save'])) {
         $parsed_tags = preg_split('/[\s,]+/', trim($blacklisted_tags, ","));
     }
 
+    // kinda fucking stupid way to do this but whatever
+    $access_mature_content = $auth->isUserOver18() && 
+                            !$sb->isChazizSquareBracketInstance() && 
+                            isset($_POST['rating']) && 
+                            $_POST['rating'];
+
+    if ($access_mature_content) {
+        $flags |= UserFlags::FLAG_MATURE_CONTENT_ACCESS->value;
+    } else {
+        $flags &= ~UserFlags::FLAG_MATURE_CONTENT_ACCESS->value;
+    }
+
     if ($enable_customization) {
         $flags |= UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
+    } else {
+        $flags &= ~UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
     }
 
     $error = '';
@@ -206,12 +214,11 @@ if (isset($_POST['save'])) {
             "UPDATE users SET 
                  title = ?, 
                  about = ?, 
-                 comfortable_rating = ?, 
                  userlink_color = ?, 
                  flags = ?,
                  blacklisted_tags = ?
                  WHERE id = ?",
-            [$title, $about, $rating, ($userlink_color ?? ($auth->getUserData()["userlink_color"] ?? '#0069B4')), $flags, json_encode($parsed_tags), $auth->getUserID()]
+            [$title, $about, ($userlink_color ?? ($auth->getUserData()["userlink_color"] ?? '#0069B4')), $flags, json_encode($parsed_tags), $auth->getUserID()]
         );
 
         if ($options["skin"] == "trinium") {

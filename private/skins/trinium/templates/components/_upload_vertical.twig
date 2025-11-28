@@ -22,6 +22,11 @@
             <div class="content-thumbnail-badge">
                 {{ icon(icon) }}
             </div>
+            {% if upload.flags.mature %}
+                <div class="content-thumbnail-badge timestamp">
+                    MATURE
+                </div>
+            {% endif %}
             {% if upload.type == 0 %}
                 <div class="content-thumbnail-badge timestamp">
                     {{ convert_time(upload.length) }}

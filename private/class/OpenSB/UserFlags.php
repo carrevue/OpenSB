@@ -37,6 +37,11 @@ enum UserFlags: int
      * 00000100: Featured user (shown on guide/list to logged out users)
      */
     case FLAG_FEATURED = 4;
+
+    /**
+     * 00001000: Enable access to mature content
+     */
+    case FLAG_MATURE_CONTENT_ACCESS = 8;
     
     /**
      * 01000000: Account was created on FulpTube.rocks
@@ -64,6 +69,7 @@ enum UserFlags: int
             'bot' => (bool)($flags & self::FLAG_BOT->value),
             'unverified' => (bool)($flags & self::FLAG_UNVERIFIED->value),
             'featured' => (bool)($flags & self::FLAG_FEATURED->value),
+            'mature_content_access' => (bool)($flags & self::FLAG_MATURE_CONTENT_ACCESS->value),
             'profile_customization_enabled' => (bool)($flags & self::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value),
         ];
     }

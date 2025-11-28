@@ -30,7 +30,6 @@ use OpenSB\CommentData;
 use OpenSB\CommentLocation;
 use OpenSB\UploadData;
 use OpenSB\UploadQuery;
-use OpenSB\UploadRatingEnum;
 use OpenSB\UserData;
 use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
@@ -123,14 +122,9 @@ if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
     handle_error("notify_login_required_view_upload", "/login");
 }
 
-// OLD RATING SYSTEM. THIS WILL BE REMOVED LATER -chaziz 11/25/2025
-$upload_rating = UploadRatingEnum::fromString($data["rating"]);
-$comfortable_rating = UploadRatingEnum::fromString($auth->getUserData()["comfortable_rating"]);
-
-if ($upload_rating->value > $comfortable_rating->value) {
+if ($flags["mature"] && !$auth->getUserFlags(true)["mature_content_access"]) {
     handle_error("notify_cannot_access_mature_upload");
 }
-
 
 $ip = Utilities::getIpAddress();
 
