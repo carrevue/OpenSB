@@ -3,40 +3,35 @@ function error(error) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    let hamburgerButton = (document.getElementById('button-hamburger'));
+    let hamburgerMenu = (document.getElementById('hamburger'));
+    let sidebar = (document.getElementById('sidebar'));
+    
     // if the min-width breakpoints get changed, don't forgot to update this.
     const mediaQueryList = window.matchMedia("(min-width: 950px)");
-
     let isMobile = false;
-    let mediaQueryTest = (document.getElementById('media-query-test'));
 
     function handleMediaQueryChange(event) {
         if (event.matches) {
             isMobile = false;
-            if (mediaQueryTest) {
-                mediaQueryTest.innerText = "Desktop";
+            if (hamburgerMenu.classList.contains("active")) {
+                hamburgerMenu.classList.toggle("active");
             }
         } else {
             isMobile = true;
-            if (mediaQueryTest) {
-                mediaQueryTest.innerText = "Mobile";
-            }
         }
     }
 
     handleMediaQueryChange(mediaQueryList);
     mediaQueryList.addEventListener("change", handleMediaQueryChange);
     ///
-    
-    let hamburgerButton = (document.getElementById('button-hamburger')); // TEMPORARY
-    let hamburgerMenu = (document.getElementById('hamburger')); // TEMPORARY
-    let sidebar = (document.getElementById('sidebar')); // TEMPORARY
-
     if (hamburgerButton) {
         hamburgerButton.onclick = function () {
             if (hamburgerMenu && sidebar) {
                 if (isMobile) {
                     hamburgerMenu.classList.toggle("active");
                 } else {
+                    setConfig("trinium_show_sidebar", !sidebar.classList.contains("active"));
                     sidebar.classList.toggle("active");
                 }
             } else {

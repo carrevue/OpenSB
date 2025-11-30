@@ -127,7 +127,7 @@
                 {{ include(component('footer')) }}
             {% else %}#}
             <div class="sidebar-page-grid">
-                <div class="sidebar-container {% if show_sidebar %}active{% endif %}" id="sidebar">
+                <div class="sidebar-container {% if options.trinium_show_sidebar %}active{% endif %}" id="sidebar">
                     <div class="sidebar {% if page_name == "home" %}with-jumbotron{% endif %}">
                         {% include('components/_hamburger_menu.twig') %}
                     </div>
