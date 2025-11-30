@@ -1,5 +1,3 @@
-let uiSounds = false;
-
 $(document).ready(function () {
     $(window).click(function () {
         $("#mainMenu").removeClass("show");

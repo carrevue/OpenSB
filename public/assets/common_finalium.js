@@ -2,14 +2,6 @@ function error(error) {
     console.error("OpenSB Finalium Frontend Error: " + error);
 }
 
-function toggleElementDisplay(element) {
-    if (element.style.display === "block") {
-        element.style.display = "none";
-    } else {
-        element.style.display = "block";
-    }
-}
-
 function handleCommentEvents() {
     commentContents = document.getElementById('commentContents');
     postButton = document.getElementById('post');

@@ -47,6 +47,7 @@
 {% endif %}
 
 {% block content %}
+{% include('components/report_dialog.twig') %}
     {% if upload.takedown %}
         <div class="banner banner-secondary">
             This upload was taken down on {{ upload.takedown.time | format_date('long', 'medium') }}
@@ -98,7 +99,7 @@
                                             <span>{{ localize('dashboard_lookup') }}</span>
                                         </a>
                                     {% endif %}
-                                    <a class="menu-item-button">
+                                    <a class="menu-item-button" id="report-button">
                                         <span>Report</span>
                                     </a>
                                 </div>
@@ -160,7 +161,7 @@
                                 <div class="watch-box-description-info">
                                     {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
                                 </div>
-                                <div class="button button-danger button-small">Favorite</div>
+                                {#<div class="button button-danger button-small">Favorite</div>#}
                             </div>
                             {% if upload.published_originally and upload.original_site %}
                                 <div class="watch-box-description-info-small">

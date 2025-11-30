@@ -351,6 +351,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    let view_report_button = (document.getElementById('report-button'));
+    let view_report_dialog = (document.getElementById('report-dialog'));
+    let view_report_close_button = (document.getElementById('report-close-button'));
+
+    setUpModal(view_report_button, view_report_dialog, view_report_close_button);
+
     // SETTINGS
     let settings_display_name_input = (document.getElementById('settings-display-name-input'));
     let settings_display_name = (document.getElementById('settings-display-name'));
@@ -377,16 +383,8 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     let debug_button = (document.getElementById('debug-button'));
-    let debug_close_button = (document.getElementById('debug-close-button'));
     let debug_dialog = (document.getElementById('debug-dialog'));
+    let debug_close_button = (document.getElementById('debug-close-button'));
 
-    if (debug_button) {
-        debug_button.addEventListener("click", () => {
-            debug_dialog.showModal();
-        });
-
-        debug_close_button.addEventListener("click", () => {
-            debug_dialog.close();
-        });
-    }
+    setUpModal(debug_button, debug_dialog, debug_close_button);
 });

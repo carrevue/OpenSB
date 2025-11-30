@@ -47,12 +47,12 @@ if (is_dir($localesPath)) {
     if ($sb->isDebug()) {
         $locales[] = [
             'id' => "psuedo",
-            'name' => "Psuedolocale",
+            'name' => "[DEBUG] Psuedolocale",
         ];
     }
 }
 
-// the code to handle scanning themes is in the templating class
+// the code to handle scanning skins/themes is in the templating class
 
 if (isset($_POST['apply'])) {
     $options = [];
@@ -62,7 +62,6 @@ if (isset($_POST['apply'])) {
 
     $options["skin"] = $new[0];
     $options["theme"] = $new[1];
-    $options["sounds"] = $_POST['sounds'] ?? false;
 
     $options["locale"] = $_POST['locale'];
 
