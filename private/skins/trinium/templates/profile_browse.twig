@@ -24,16 +24,13 @@
                 <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
             </div>
         </div>
-        {% if not user %}
-            <div class="tabs">
-                <a class="tablink {% if type=='recent' %}active{% endif %}" href="/user/{{data.username}}/uploads?type=recent">
-                    {{ localize('new') }}
-                </a>
-                <a class="tablink {% if type=='popular' %}active{% endif %}"href="/user/{{data.username}}/uploads?type=popular">
-                    {{ localize('popular') }}
-                </a>
-            </div>
-        {% endif %}
+        <div class="tabs">
+            {% for key, tab in tabs %}
+                <a class="tablink {% if type==key %}active{% endif %}" href="/user/{{data.username}}/uploads?type={{key}}">
+                    {{ localize(tab.name) }}
+                </a>                
+            {% endfor %}
+        </div>
         <div class="content-box basic-box no-border-top">
             {% for upload in data.uploads %}
                 {{ include('/components/_upload_vertical.twig') }}
