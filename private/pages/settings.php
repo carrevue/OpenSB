@@ -161,7 +161,7 @@ if (isset($_POST['save'])) {
                     // didn't validate anything (sql was sanitized tho), at all! -chaziz 6/28/2024
                     $error .= Utilities::validateUsername($new_username, $database, false);
                     $database->query(
-                        "INSERT INTO user_old_names (user, old_name, time) VALUES (?, ?, ?)",
+                        "INSERT INTO user_old_names (user, old_name, timestamp) VALUES (?, ?, ?)",
                         [$auth->getUserID(), $old_username, time()]
                     );
 
