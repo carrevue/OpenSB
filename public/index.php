@@ -155,6 +155,7 @@ $router->add('/journals', 'journals.php');
 $router->add('/journals/{user}', 'journals.php');
 $router->add('/license', 'license.php');
 $router->add('/logout', 'logout.php');
+$router->add('/members', 'members.php');
 $router->add('/my_messages', 'my_messages.php');
 $router->add('/my_uploads', 'my_uploads.php');
 $router->add('/notifications', 'notifications.php');
@@ -167,7 +168,7 @@ $router->add('/staff', 'staff.php');
 $router->add('/theme', 'theme.php');
 $router->add('/tos', 'tos.php');
 $router->add('/upload', 'upload.php');
-$router->add('/users', 'users.php');
+$router->redirect('/users', '/members');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
 $router->add('/version', 'version.php');
 $router->add('/watch', function () {

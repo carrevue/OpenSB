@@ -28,6 +28,7 @@ global $twig, $database, $sb;
 use OpenSB\UploadFlags;
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
+use OpenSB\UserFlags;
 
 $upload_query = new UploadQuery($sb);
 
@@ -44,6 +45,16 @@ $uploads_featured = $upload_query->query(
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 );
 
+$featured_users = $database->fetchArray(
+    $database->query(
+        "SELECT u.id
+        FROM users u 
+        WHERE u.flags & ? = ?
+        ORDER BY RAND() LIMIT 6",
+        [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
+    )
+);
+
 $feed = [
     "featured" => [
         //"icon" => "/assets/profiledef_hitchhiker.svg",
@@ -56,6 +67,23 @@ $feed = [
         "uploads" => Utilities::makeUploadArray($database, $uploads_recent),
     ],
 ];
+
+// this feels somewhat inefficient?
+foreach ($featured_users as $user) {
+    $feed_key = "user_" . $user["id"];
+    $feed[$feed_key] = [
+        //"icon" => "/assets/profiledef_hitchhiker.svg",
+        "title" => Utilities::userIDToUsername($database, $user["id"]),
+        "uploads" => Utilities::makeUploadArray(
+            $database,
+            $upload_query->query(
+                "v.timestamp DESC",
+                $uploads_query_limit,
+                sprintf("v.author = %d", $user["id"])
+            )
+        ),
+    ];
+}
 
 echo $twig->render('index.twig', [
     'feed' => $feed,

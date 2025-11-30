@@ -515,10 +515,9 @@ class SquareBracketTwigExtension extends AbstractExtension
                 "name" => $this->localize("browse"), // Browse
                 "url" => "/browse",
             ],
-            //"members" => [
-            "users" => [
+            "members" => [
                 "name" => $this->localize("members"), // Members
-                "url" => "/users",
+                "url" => "/members",
             ],
         ];
 
