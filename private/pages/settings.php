@@ -74,21 +74,19 @@ if (isset($_POST['save'])) {
 
     if ($options["skin"] == "trinium") {
         $enable_customization = $_POST['enable_customization'] ?? false;
+        $font = $_POST['font'] ?? 'default';
 
         // the colors
-        $userlink_color = ($_POST['userlink_color'] ?? '#0069B4');
-        $font = $_POST['font'] ?? '';
-        $background_color = $_POST['background_color'] ?? '#FFFFFF';
-        $title_color = $_POST['title_color'] ?? '#333333';
-        $link_color = $_POST['link_color'] ?? '#0033cc';
-        $basic_box_border_color = $_POST['basic_box_border_color'] ?? '#666666';
-        $basic_box_background_color = $_POST['basic_box_background_color'] ?? '#FFFFFF';
-        $basic_box_text_color = $_POST['basic_box_text_color'] ?? '#000000';
-        $highlight_box_border_color = $_POST['highlight_box_border_color'] ?? '#666666';
-        $highlight_box_background_color = $_POST['highlight_box_background_color'] ?? '#E6E6E6';
-        $highlight_box_text_color = $_POST['highlight_box_text_color'] ?? '#000000';
-
-        $font = $_POST['font'] ?? "default";
+        $userlink_color = substr($_POST['userlink_color'] ?? '#0069B4', 0, 7);
+        $background_color = substr($_POST['background_color'] ?? '#FFFFFF', 0, 7);
+        $title_color = substr($_POST['title_color'] ?? '#333333', 0, 7);
+        $link_color = substr($_POST['link_color'] ?? '#0033cc', 0, 7);
+        $basic_box_border_color = substr($_POST['basic_box_border_color'] ?? '#666666', 0, 7);
+        $basic_box_background_color = substr($_POST['basic_box_background_color'] ?? '#FFFFFF', 0, 7);
+        $basic_box_text_color = substr($_POST['basic_box_text_color'] ?? '#000000', 0, 7);
+        $highlight_box_border_color = substr($_POST['highlight_box_border_color'] ?? '#666666', 0, 7);
+        $highlight_box_background_color = substr($_POST['highlight_box_background_color'] ?? '#E6E6E6', 0, 7);
+        $highlight_box_text_color = substr($_POST['highlight_box_text_color'] ?? '#000000', 0, 7);
     }
 
     if ($auth->isUserOver18() && !$sb->isChazizSquareBracketInstance()) {
