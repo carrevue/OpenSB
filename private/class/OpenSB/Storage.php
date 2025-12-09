@@ -75,14 +75,14 @@ class Storage
         // this uses the version of php on path. if the upload processor errors
         // out with "OpenSB is not compatible with your PHP version.", then 
         // your path's php is too old.
-        if (str_starts_with(php_uname(), "Windows")) {
+        if (PHP_OS_FAMILY == 'Windows') {
             pclose(popen(sprintf(
                 'start /B  php %s "%s" "%s" "$s" "1" > %s',
                 BLUFF_PRIVATE_PATH . '\scripts\upload_processor.php',
                 $new,
                 $target_file,
                 $type,
-                BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
+                BLUFF_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
             ), "r"));
         } else {
             system(sprintf(
@@ -91,7 +91,7 @@ class Storage
                 $new,
                 $target_file,
                 $type,
-                BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
+                BLUFF_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
             ));
         }
     }

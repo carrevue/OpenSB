@@ -15,6 +15,9 @@ dynamic/custom_thumbnails/
 dynamic/music/
 dynamic/emojis/
 
+## Upload processor logs
+private/upload_processor_logs/*.log
+
 ## Site-specific branding
 public/assets/*_branding/
 !public/assets/sb_branding/
