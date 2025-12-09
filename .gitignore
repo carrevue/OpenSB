@@ -4,16 +4,16 @@ private/config/*.mmdb
 private/skins/cache
 
 ## User generated files
-dynamic/pfp/
-dynamic/thumbnails/
-dynamic/banners/
-dynamic/videos/
-dynamic/videos_test/
-dynamic/art/
-dynamic/art_thumbnails/
-dynamic/custom_thumbnails/
-dynamic/music/
-dynamic/emojis/
+dynamic/pfp/*
+dynamic/thumbnails/*
+dynamic/banners/*
+dynamic/videos/*
+dynamic/videos_test/*
+dynamic/art/*
+dynamic/art_thumbnails/*
+dynamic/custom_thumbnails/*
+dynamic/music/*
+dynamic/emojis/*
 
 ## Upload processor logs
 private/upload_processor_logs/*.log
@@ -55,3 +55,6 @@ Ocean_Sound_Theme_OpenSB.wav
 
 # Doxygen output
 doxygen
+
+# Keep the gitkeeps
+!**/.gitkeep
