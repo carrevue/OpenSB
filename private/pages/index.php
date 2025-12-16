@@ -83,7 +83,7 @@ $uploads_featured = $upload_query->query(
 
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
 
-if ($options["skin"] == "trinium") {
+if ($options["skin"] == "trinium" || $options["skin"] == "classic") {
     // TODO: maybe move this (and the equivalent code in users.php) into a "UsersQuery" class?
     $users_recent_data = $database->fetchArray(
         $database->query(

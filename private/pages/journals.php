@@ -23,7 +23,7 @@ namespace OpenSB\Pages;
 
 global $twig, $database, $auth, $sb;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 use OpenSB\Utilities;
 
 $journal_count = 0;

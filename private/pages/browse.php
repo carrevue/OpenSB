@@ -24,7 +24,7 @@ namespace OpenSB\Pages;
 
 global $twig, $sb, $database;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 use OpenSB\UploadQuery;
 use OpenSB\UploadFlags;
 use OpenSB\Utilities;

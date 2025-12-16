@@ -23,7 +23,7 @@ namespace OpenSB\Pages;
 
 global $auth, $database, $twig, $sb;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
 use OpenSB\UserFlags;

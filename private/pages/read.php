@@ -23,7 +23,7 @@ namespace OpenSB\Pages;
 
 global $sb, $twig, $database, $auth;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 use OpenSB\CommentData;
 use OpenSB\CommentLocation;
 use OpenSB\UserCustomizationData;

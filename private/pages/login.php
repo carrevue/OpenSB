@@ -25,7 +25,7 @@ namespace OpenSB\Pages;
 
 global $twig, $database, $auth, $sb;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 use OpenSB\Utilities;
 
 $warning = $sb->getWarningString();

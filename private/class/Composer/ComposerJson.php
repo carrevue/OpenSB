@@ -17,7 +17,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace BluffingoCore\Composer;
+namespace OpenSB\Composer;
 
 /**
  * Reads a composer.json file and provides accessors to get

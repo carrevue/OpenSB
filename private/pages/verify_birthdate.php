@@ -27,7 +27,7 @@ use DateMalformedStringException;
 use DateTime;
 
 use OpenSB\Utilities;
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 
 if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {
     CoreUtilities::redirect("/");

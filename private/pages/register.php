@@ -28,7 +28,7 @@ global $sb, $twig, $database;
 
 use DateMalformedStringException;
 use DateTime;
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 use Random\RandomException;
 use OpenSB\UserFlags;
 use OpenSB\Utilities;
