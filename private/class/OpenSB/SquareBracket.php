@@ -190,8 +190,6 @@ class SquareBracket extends Site
             $this->setOptionCookie($this->options);
         }
 
-        $this->localization = new Localization($this->options);
-
         if (isset($_COOKIE["SBACCOUNTS"])) {
             $cookie_raw = $_COOKIE["SBACCOUNTS"];
 
