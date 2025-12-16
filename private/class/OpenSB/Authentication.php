@@ -21,8 +21,8 @@
 
 namespace OpenSB;
 
-use BluffingoCore\Database;
-use BluffingoCore\CoreUtilities;
+use OpenSB\Database;
+use OpenSB\CoreUtilities;
 
 /**
  * Authentication stuff.

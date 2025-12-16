@@ -28,8 +28,8 @@ define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
 define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
 define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-use BluffingoCore\CoreUtilities;
-use BluffingoCore\Router;
+use OpenSB\CoreUtilities;
+use OpenSB\Router;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 

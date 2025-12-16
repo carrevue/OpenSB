@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 use DateTime;
 use Exception;
 use Random\Randomizer;
@@ -464,7 +464,7 @@ class Utilities
      *
      * @return mixed|string
      *
-     * @deprecated This will be moved to BluffingoCore's CoreUtilties class around version 2.
+     * @deprecated This will be moved to OpenSB's CoreUtilties class around version 2.
      */
     public static function getIpAddress()
     {

@@ -30,8 +30,8 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-use BluffingoCore\Database;
-use BluffingoCore\Profiler;
+use OpenSB\Database;
+use OpenSB\Profiler;
 
 use OpenSB\UserRoleEnum;
 

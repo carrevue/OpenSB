@@ -25,7 +25,7 @@ namespace OpenSB;
 
 use OpenSB\UserRoleEnum;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\CoreUtilities;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;

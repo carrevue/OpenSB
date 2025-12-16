@@ -22,7 +22,7 @@
 namespace OpenSB;
 
 use OpenSB\SquareBracket;
-use BluffingoCore\Database;
+use OpenSB\Database;
 
 /**
  * class UploadQuery
@@ -131,7 +131,7 @@ class UploadQuery
         }
 
         if (str_contains($limit, "LIMIT")) {
-            // compatibility with BluffingoCore\Database::paginate()
+            // compatibility with OpenSB\Database::paginate()
             $query .= " ORDER BY $order $limit";
         } else {
             $query .= " ORDER BY $order LIMIT $limit";

@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-use BluffingoCore\GitInfo;
+use OpenSB\GitInfo;
 use Exception;
 
 /**

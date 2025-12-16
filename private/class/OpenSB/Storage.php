@@ -24,7 +24,7 @@ namespace OpenSB;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-use BluffingoCore\Database;
+use OpenSB\Database;
 
 /**
  * class Storage
