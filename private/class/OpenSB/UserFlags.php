@@ -23,20 +23,35 @@ namespace OpenSB;
 
 enum UserFlags: int
 {
-/**
+    /**
      * 00000001: Enable profile customization
      */
     case FLAG_PROFILE_CUSTOMIZATION_ENABLED = 1;
 
-/**
+    /**
      * 00000010: Unverified user (this is SquareBracket/FulpTube-specific behavior)
      */
     case FLAG_UNVERIFIED = 2;
 
-/**
-     * 10000000: Account was created on FulpTube.rocks
+    /**
+     * 00000100: Featured user (shown on guide/list to logged out users)
      */
-    case FLAG_FULPTUBE_ACCOUNT = 80;
+    case FLAG_FEATURED = 4;
+
+    /**
+     * 00001000: Enable access to mature content
+     */
+    case FLAG_MATURE_CONTENT_ACCESS = 8;
+    
+    /**
+     * 01000000: Account was created on FulpTube.rocks
+     */
+    case FLAG_FULPTUBE_ACCOUNT = 64;
+
+    /**
+     * 10000000: Account is a bot (allows it to be used by a bot script)
+     */
+    case FLAG_BOT = 128;
 
     /**
      * function toArray
@@ -51,7 +66,10 @@ enum UserFlags: int
     {
         return [
             'fulptube_account' => (bool)($flags & self::FLAG_FULPTUBE_ACCOUNT->value),
+            'bot' => (bool)($flags & self::FLAG_BOT->value),
             'unverified' => (bool)($flags & self::FLAG_UNVERIFIED->value),
+            'featured' => (bool)($flags & self::FLAG_FEATURED->value),
+            'mature_content_access' => (bool)($flags & self::FLAG_MATURE_CONTENT_ACCESS->value),
             'profile_customization_enabled' => (bool)($flags & self::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value),
         ];
     }

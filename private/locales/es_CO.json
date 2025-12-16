@@ -202,7 +202,6 @@
     "notify_dashboard_key_generated": "¡Clave generada! (%s)",
     "notify_dashboard_welcome_first_time": "¡Bienvenid@! Tu contraseña de acceso al panel es %s. Por favor anótala en un lugar seguro para evitar perderla.",
     "notify_dashboard_welcome": "Bienvenid@ al panel de control.",
-    "notify_dashboard_ban_fail": "Este usuario no puede ser bloqueado.",
     "notify_dashboard_ban_success": "Exitosamente bloqueado %s.",
     "notify_dashboard_unban_success": "Exitosamente desbloqueado %s.",
     "notify_dashboard_verify_success": "Exitosamente verificado %s.",

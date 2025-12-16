@@ -288,7 +288,14 @@ class DiscordWebhookLogging
 
         $title = 'Views have been recounted.';
 
-        $author = 'OpenSB (automatic)';
+        $username = exec('whoami');
+        $hostname = gethostname();
+
+        if ($username !== false && $hostname !== false) {
+            $author = $username . '@' . $hostname;
+        } else {
+            $author = 'OpenSB';
+        }
 
         $mbd = new Embed();
 

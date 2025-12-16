@@ -1,17 +1,7 @@
 {% extends "_layout.twig" %}
 
-{% set show_sidebar = true %}
-
 {% if is_user_logged_in %}
     {% set jumbotronClassName = "homepage-logged-in" %}
-
-    {% if user_stat_data.followers != 1 %}
-        {% set pluralSubscribers = "s" %}
-    {% endif %}
-
-    {% if user_stat_data.views != 1 %}
-        {% set pluralViews = "s" %}
-    {% endif %}
 {% else %}
     {% set jumbotronClassName = "homepage-logged-out" %}
 {% endif %}

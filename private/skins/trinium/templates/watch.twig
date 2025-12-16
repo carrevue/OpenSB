@@ -1,7 +1,5 @@
 {% extends "_layout.twig" %}
 
-{% set show_sidebar = true %}
-
 {% set title = upload.title %}
 
 {% if upload.description | trim is not empty %}
@@ -40,13 +38,14 @@
     </script>
 {% endblock %}
 
-{% if upload.rating == 'mature' %}
+{% if upload.rating == 'mature' or upload.flags.mature %}
     {% set rating_text = localize('sensitive_rating') %}
 {% else %}
     {% set rating_text = localize('general_rating') %}
 {% endif %}
 
 {% block content %}
+{% include('components/report_dialog.twig') %}
     {% if upload.takedown %}
         <div class="banner banner-secondary">
             This upload was taken down on {{ upload.takedown.time | format_date('long', 'medium') }}
@@ -66,12 +65,12 @@
                 </div>
                 <div class="watch-box">
                     <div class="section watch-box-title">
-                        {% if user_is_authenticated_admin %}
+                        {#{% if user_is_authenticated_admin %}
                             <div class="watch-box-row">
                                 <a href="/dashboard/uploads/{{ upload.id }}">{{ localize('dashboard_lookup') }}</a>
                             </div>
                             <hr>
-                        {% endif %}
+                        {% endif %}#}
                         <div class="section-header flex">
                             <div class="section-header-left">
                                 <h1 class="section-title">
@@ -82,11 +81,32 @@
                                     {% endif %}
                                 </h1>
                             </div>
-                            {% if upload.is_owner %}
+                            <div class="section-header-right">
+                                <div class="menu-button button button-secondary button-transparent button-caret"
+                                    data-menu-id="upload-{{ upload.id }}">
+                                    {{ icon('three-dots', 16) }}
+                                </div>
+                                <div class="menu" id="upload-{{ upload.id }}">
+                                    {% if upload.is_owner %}
+                                        <a class="menu-item-button" href="/edit?v={{ upload.id }}">
+                                            <span>{{ localize('edit') }}</span>
+                                        </a>
+                                    {% endif %}
+                                    {% if user_is_authenticated_admin %}
+                                        <a class="menu-item-button" href="/dashboard/uploads/{{ upload.id }}">
+                                            <span>{{ localize('dashboard_lookup') }}</span>
+                                        </a>
+                                    {% endif %}
+                                    <a class="menu-item-button" id="report-button">
+                                        <span>Report</span>
+                                    </a>
+                                </div>
+                            </div>
+                            {#{% if upload.is_owner %}
                                 <div class="section-header-right">
                                     <a href="/edit?v={{ upload.id }}">{{ localize('edit') }}</a>
                                 </div>
-                            {% endif %}
+                            {% endif %}#}
                         </div>
                         <div class="watch-box-below-title">
                             {{ type_text }} 
@@ -135,8 +155,11 @@
                         </div>
                         <hr>
                         <div class="watch-box-description">
-                            <div class="watch-box-description-info">
-                                {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
+                            <div class="flex">
+                                <div class="watch-box-description-info">
+                                    {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
+                                </div>
+                                {#<div class="button button-danger button-small">Favorite</div>#}
                             </div>
                             {% if upload.published_originally and upload.original_site %}
                                 <div class="watch-box-description-info-small">

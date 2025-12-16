@@ -69,6 +69,9 @@ if (isset($_POST['flagsubmit'])) {
     if (isset($_POST['flag_custom_thumbnail'])) {
         $flags |= UploadFlags::FLAG_CUSTOM_THUMBNAIL->value;
     }
+    if (isset($_POST['flag_mature'])) {
+        $flags |= UploadFlags::FLAG_MATURE->value;
+    }
 
     $database->query(
         "UPDATE uploads SET flags = ? WHERE upload_id = ?",
@@ -82,8 +85,8 @@ if (isset($_POST['flagsubmit'])) {
 }
 
 
-if (file_exists(BLUFF_DYNAMIC_PATH . "/videos/" . $id . ".log")) {
-    $log = file_get_contents(BLUFF_DYNAMIC_PATH . "/videos/" . $id . ".log");
+if (file_exists(BLUFF_PRIVATE_PATH . "/upload_processor_logs/" . $id . ".log")) {
+    $log = file_get_contents(BLUFF_PRIVATE_PATH . "/upload_processor_logs/" . $id . ".log");
 } else {
     $log = null;
 }

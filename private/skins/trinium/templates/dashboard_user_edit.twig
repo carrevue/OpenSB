@@ -18,8 +18,11 @@
                         {% else %}
                             <button name="verify_user" value="{{ user.name }}" class="button button-success" onclick="if (!confirm('Are you sure you want to verify this user?')) { return false }">Verify</button>
                         {% endif %}
+                    {% endif %}
+                    {% if flags.featured %}
+                        <button name="feature_user" value="{{ user.name }}" class="button button-secondary" onclick="if (!confirm('Are you sure you want to unfeature this user?')) { return false }">Unfeature</button>
                     {% else %}
-                        This space intentionally left blank.
+                        <button name="feature_user" value="{{ user.name }}" class="button button-primary" onclick="if (!confirm('Are you sure you want to feature this user?')) { return false }">Feature</button>
                     {% endif %}
                 </form>
             </div>
@@ -76,6 +79,9 @@
                                     {% if flags.fulptube_account %}
                                     <br><small>{{ localize('fulptube_account') }}</small>
                                     {% endif %}
+                                    {% if flags.bot %}
+                                    <br><small>{{ localize('bot') }}</small>
+                                    {% endif %}
                                 </td>
                             </tr>
                             <tr>
@@ -123,7 +129,7 @@
                     <div class="section">
                         <div class="content-box">
                             <div class="section-header">
-                                <h2 class="section-title">Other accounts with matching IP</h2>
+                                <h2 class="section-title">Accounts with matching IP</h2>
                             </div>
                             <table class="styled">
                                 <tbody>
@@ -156,7 +162,7 @@
                                             {{ entry.old_name }}
                                         </td>
                                         <td>
-                                            {{ entry.time | format_date('long', 'medium') }}
+                                            {{ entry.timestamp | format_date('long', 'medium') }}
                                         </td>
                                     </tr>
                                 {% endfor %}

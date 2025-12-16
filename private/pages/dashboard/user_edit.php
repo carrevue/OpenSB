@@ -23,7 +23,7 @@ namespace OpenSB\Pages;
 
 global $auth, $twig, $database, $sb, $path;
 
-use OpenSB\UserData;
+use OpenSB\UserData; // only used for staff notes, do NOT use this for user datahere
 use OpenSB\UserFlags;
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
@@ -80,7 +80,7 @@ if (isset($_POST['ban_user'])) {
     }
     // Don't ban staff.
     if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["ban_user"]])["powerlevel"] != 1) {
-        Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/user/{$username}");
+        Utilities::notifyBanner("notify_no_permission", "/dashboard/user/{$username}");
     }
 
     if ($database->fetch("SELECT b.user FROM user_bans b WHERE b.user = ?", [$user["id"]])) {
@@ -112,7 +112,7 @@ if (isset($_POST['verify_user'])) {
     }
     // Don't (un)verify staff.
     if ($database->fetch("SELECT u.powerlevel FROM users u WHERE u.name = ?", [$_POST["verify_user"]])["powerlevel"] != 1) {
-        Utilities::notifyBanner("notify_dashboard_ban_fail", "/dashboard/user/{$username}");
+        Utilities::notifyBanner("notify_no_permission", "/dashboard/user/{$username}");
     }
 
     if ($flags & UserFlags::FLAG_UNVERIFIED->value) {
@@ -141,6 +141,41 @@ if (isset($_POST['verify_user'])) {
         }
 
         Utilities::notifyBanner("notify_dashboard_unverify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
+    }
+}
+
+if (isset($_POST['feature_user'])) {
+    // Don't (un)feature non-existent users.
+    if (!$database->fetch("SELECT u.name FROM users u WHERE u.name = ?", [$_POST["feature_user"]])) {
+        Utilities::notifyBanner("notify_invalid_user", "/dashboard/users/");
+    }
+
+    if ($flags & UserFlags::FLAG_FEATURED->value) {
+        $flags &= ~UserFlags::FLAG_FEATURED->value;
+
+        $database->query(
+            "UPDATE users SET flags = ? WHERE id = ?",
+            [$flags, $user["id"]]
+        );
+
+        if ($sb->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'verified');
+        }
+
+        Utilities::notifyBanner("notify_dashboard_unfeature_user_success", "/dashboard/users/{$username}", "success", [$_POST["feature_user"]]);
+    } else {
+        $flags |= UserFlags::FLAG_FEATURED->value;
+
+        $database->query(
+            "UPDATE users SET flags = ? WHERE id = ?",
+            [$flags, $user["id"]]
+        );
+
+        if ($sb->isDiscordWebhookEnabled()) {
+            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'unverified');
+        }
+
+        Utilities::notifyBanner("notify_dashboard_feature_user_success", "/dashboard/users/{$username}", "success", [$_POST["feature_user"]]);
     }
 }
 

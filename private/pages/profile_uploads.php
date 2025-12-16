@@ -29,6 +29,7 @@ use OpenSB\UserRoleEnum;
 use OpenSB\UserFlags;
 use OpenSB\UserCustomizationData;
 use OpenSB\UploadQuery;
+use OpenSB\UploadFlags;
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
@@ -69,23 +70,36 @@ if ($flags["profile_customization_enabled"]) {
 
 $upload_query = new UploadQuery($sb);
 
-function getOrderFromType($type): string
-{
-    $order = match ($type) {
-        'recent' => "v.timestamp DESC",
-        'popular' => "views DESC",
-        default => "v.timestamp DESC",
-    };
-    return $order;
-}
+$tabs = [
+    "recent" => [
+        "name" => "new",
+        "order" => "timestamp DESC",
+        "where" => "v.author = ?",
+    ],
+    "popular" => [
+        "name" => "popular",
+        "order" => "views DESC",
+        "where" => "v.author = ?",
+    ],
+    "featured" => [
+        "name" => "featured",
+        "order" => "v.timestamp DESC",
+        "where" => sprintf("v.author = ? AND (v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value),
+    ],
+    "random" => [
+        "name" => "random",
+        "order" => "RAND()",
+        "where" => "v.author = ?",
+    ],
+];
 
 $type = ($_GET['type'] ?? 'recent');
+$user = ($_GET['user'] ?? null);
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-$order = getOrderFromType($type);
 $limit = $database->paginate($page, 20);
 
-$uploads = $upload_query->query($order, $limit, "v.author = ?", [$data["id"]]);
+$uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limit, $tabs[$type]["where"] ?? null, [$data["id"]]);
 $upload_count = $upload_query->count("v.author = ?", [$data["id"]]);
 
 $page_data = [
@@ -107,4 +121,5 @@ echo $twig->render('profile_browse.twig', [
     'data' => $page_data,
     'page' => $page,
     'type' => $type,
+    'tabs' => $tabs,
 ]);

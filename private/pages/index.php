@@ -35,6 +35,12 @@ $upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 
+// on finalium, use new fulptube index page.
+if ($options["skin"] == "finalium") {
+    include_once "index_new.php";
+    die();
+}
+
 $trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new_shit"] == "true";
 
 if ($options["skin"] == "trinium") {
@@ -72,7 +78,7 @@ $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
     $uploads_featured_query_limit,
-    sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
+    sprintf("(v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value)
 );
 
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));

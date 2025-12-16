@@ -2,8 +2,8 @@ console.log(
     "%cOpenSB " + opensb_version,
     "color: #0069B4; font-family: sans-serif; font-size: 2em;"
 );
-console.log(
-    "%cWarning: DO NOT PASTE ANYTHING SUSPICIOUS. If someone is asking you to paste something here, they may be attempting to steal your account.",
+console.warn(
+    "%cWarning: DO NOT PASTE ANYTHING SUSPICIOUS. If someone is asking you to paste something here, they could be trying to steal your account.",
     "color: red; font-family: monospace; font-size: 1em"
 );
 
@@ -13,7 +13,7 @@ if (sbOptions) {
     const encodedOptions = sbOptions.split('=')[1];
     const decodedOptions = decodeURIComponent(encodedOptions);
     const options = JSON.parse(atob(decodedOptions));
-    console.log(options);
+    console.info("Your current options:", options);
 }
 
 function setConfig(key, value) {
@@ -33,4 +33,25 @@ function setConfig(key, value) {
 
     // set the cookie
     document.cookie = `SBOPTIONS=${encodedUpdatedOptions}; path=/; SameSite=Lax`;
+}
+
+function toggleElementDisplay(element) {
+    if (element.style.display === "block") {
+        element.style.display = "none";
+    } else {
+        element.style.display = "block";
+    }
+}
+
+function setUpModal(trigger_button, modal, close_button) {
+    if (trigger_button) {
+        trigger_button.addEventListener("click", () => {
+            modal.showModal();
+        });
+
+        close_button.addEventListener("click", () => {
+            modal.close();
+        });
+        console.info("Modal set up for", modal.id);
+    }
 }

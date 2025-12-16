@@ -52,11 +52,10 @@ function rate($number, $upload): array
 if (isset($post_data['upload'])) {
     if (isset($post_data['action'])) {
         $apiOutput = match ($post_data['action']) {
-            // favorites are still unimplemented FUCK -chaziz 10/31/2024
-            /*'favorite' => [
+            'favorite' => [
                 "favorited" => true,
-                "number" => rand(0, 47101), // placeholder code (which is still placeholder even a year later since favorites were never implemented WHOOPS)
-            ],*/
+                "number" => rand(0, 47101),
+            ],
             'rate' => [
                 rate($post_data['number'], $post_data['upload']),
             ],

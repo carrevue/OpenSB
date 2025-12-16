@@ -28,9 +28,7 @@ global $sb, $database, $twig, $auth;
 
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
-use OpenSB\DiscordWebhookLogging;
-
-use \DiscordWebhooks\Embed;
+use OpenSB\UploadFlags;
 
 // TODO: a more automated method to detect which file format the user is trying to upload.
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
@@ -125,16 +123,30 @@ function discord_webhook_notify($sb, $new, $title, $description, $auth)
 }
 
 if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLoggedIn()) {
+    $flags = 0;
+
     $new = Utilities::generateRandomString(11, true);
     $uploader = $auth->getUserID();
 
     $title = ($_POST['title'] ?? null);
     $description = ($_POST['desc'] ?? null);
 
+    /*
     if ($sb->isChazizSquareBracketInstance()) {
         $rating = 'general';
     } else {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
+    }
+    */
+
+    // kinda fucking stupid way to do this but whatever
+    $mature = $auth->isUserOver18() && 
+            !$sb->isChazizSquareBracketInstance() && 
+            isset($_POST['rating']) && 
+            $_POST['rating'];
+
+    if ($mature) {
+        $flags |= UploadFlags::FLAG_MATURE->value;
     }
 
     $tags = ($_POST['tags'] ?? '');
@@ -154,16 +166,16 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
     if (in_array(strtolower($ext), $supportedVideoFormats, true)) { // VIDEO
         if (isset($noProcess) && $sb->isDebug()) {
-            $status = 0x0; // pretend that video has been successfully uploaded (does this still work???)
+            // pretend video has been successfully uploaded (does this still work???)
             $target_file = BLUFF_DYNAMIC_PATH . '/dynamic/videos/' . $new . '.converted.' . $ext;
         } else {
-            $status = 0x2;
+            $flags |= UploadFlags::FLAG_UNPROCESSED->value;
             $target_file = BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.' . $ext;
         }
         if (move_uploaded_file($temp_name, $target_file)) {
             $database->query(
-                "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags, rating) VALUES (?,?,?,?,?,?,?,?,?)",
-                [$new, $title, $description, $uploader, time(), json_encode($tags2), 'dynamic/videos/' . $new, $status, $rating]
+                "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags) VALUES (?,?,?,?,?,?,?,?)",
+                [$new, $title, $description, $uploader, time(), json_encode($tags2), 'dynamic/videos/' . $new, $flags]
             );
 
             if (!isset($noProcess)) {
@@ -178,19 +190,26 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
             Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
         } else {
-            Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
+            if ($sb->isDebug()) {
+                die("DEBUG: Unable to move $temp_name to $target_file, check your permissions!");
+            } else {
+                Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
+            }
         }
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
         try {
         $sb->getStorageClass()->processImageUpload($temp_name, $new);
         } catch (\Exception $e) {
-            Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
+            if ($sb->isDebug()) {
+                die("DEBUG: Unable to process image upload. The exception's message is {$e->getMessage()}.");
+            } else {
+                Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
+            }
         }
         
-        $status = 0x0;
         $database->query(
-            "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags, type, rating) VALUES (?,?,?,?,?,?,?,?,?,?)",
-            [$new, $title, $description, $uploader, time(), json_encode(explode(', ', $_POST['tags'])), '/dynamic/art/' . $new . '.png', $status, 2, $rating]
+            "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags, type) VALUES (?,?,?,?,?,?,?,?,?)",
+            [$new, $title, $description, $uploader, time(), json_encode(explode(', ', $_POST['tags'])), '/dynamic/art/' . $new . '.png', $flags, 2]
         );
 
         parse_tags($tags2, $new, $database);

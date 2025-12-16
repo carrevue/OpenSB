@@ -74,30 +74,22 @@ if (isset($_POST['save'])) {
 
     if ($options["skin"] == "trinium") {
         $enable_customization = $_POST['enable_customization'] ?? false;
+        $font = $_POST['font'] ?? 'default';
 
         // the colors
-        $userlink_color = ($_POST['userlink_color'] ?? '#0069B4');
-        $font = $_POST['font'] ?? '';
-        $background_color = $_POST['background_color'] ?? '#FFFFFF';
-        $title_color = $_POST['title_color'] ?? '#333333';
-        $link_color = $_POST['link_color'] ?? '#0033cc';
-        $basic_box_border_color = $_POST['basic_box_border_color'] ?? '#666666';
-        $basic_box_background_color = $_POST['basic_box_background_color'] ?? '#FFFFFF';
-        $basic_box_text_color = $_POST['basic_box_text_color'] ?? '#000000';
-        $highlight_box_border_color = $_POST['highlight_box_border_color'] ?? '#666666';
-        $highlight_box_background_color = $_POST['highlight_box_background_color'] ?? '#E6E6E6';
-        $highlight_box_text_color = $_POST['highlight_box_text_color'] ?? '#000000';
-
-        $font = $_POST['font'] ?? "default";
+        $userlink_color = substr($_POST['userlink_color'] ?? '#0069B4', 0, 7);
+        $background_color = substr($_POST['background_color'] ?? '#FFFFFF', 0, 7);
+        $title_color = substr($_POST['title_color'] ?? '#333333', 0, 7);
+        $link_color = substr($_POST['link_color'] ?? '#0033cc', 0, 7);
+        $basic_box_border_color = substr($_POST['basic_box_border_color'] ?? '#666666', 0, 7);
+        $basic_box_background_color = substr($_POST['basic_box_background_color'] ?? '#FFFFFF', 0, 7);
+        $basic_box_text_color = substr($_POST['basic_box_text_color'] ?? '#000000', 0, 7);
+        $highlight_box_border_color = substr($_POST['highlight_box_border_color'] ?? '#666666', 0, 7);
+        $highlight_box_background_color = substr($_POST['highlight_box_background_color'] ?? '#E6E6E6', 0, 7);
+        $highlight_box_text_color = substr($_POST['highlight_box_text_color'] ?? '#000000', 0, 7);
     }
 
-    if ($auth->isUserOver18() && !$sb->isChazizSquareBracketInstance()) {
-        $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
-    } else {
-        $rating = 'general';
-    }
-
-    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? $auth->getDefaultTagBlacklist());
+    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? []);
 
     if ($blacklisted_tags === '') {
         $parsed_tags = [];
@@ -105,8 +97,22 @@ if (isset($_POST['save'])) {
         $parsed_tags = preg_split('/[\s,]+/', trim($blacklisted_tags, ","));
     }
 
+    // kinda fucking stupid way to do this but whatever
+    $access_mature_content = $auth->isUserOver18() && 
+                            !$sb->isChazizSquareBracketInstance() && 
+                            isset($_POST['rating']) && 
+                            $_POST['rating'];
+
+    if ($access_mature_content) {
+        $flags |= UserFlags::FLAG_MATURE_CONTENT_ACCESS->value;
+    } else {
+        $flags &= ~UserFlags::FLAG_MATURE_CONTENT_ACCESS->value;
+    }
+
     if ($enable_customization) {
         $flags |= UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
+    } else {
+        $flags &= ~UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
     }
 
     $error = '';
@@ -153,7 +159,7 @@ if (isset($_POST['save'])) {
                     // didn't validate anything (sql was sanitized tho), at all! -chaziz 6/28/2024
                     $error .= Utilities::validateUsername($new_username, $database, false);
                     $database->query(
-                        "INSERT INTO user_old_names (user, old_name, time) VALUES (?, ?, ?)",
+                        "INSERT INTO user_old_names (user, old_name, timestamp) VALUES (?, ?, ?)",
                         [$auth->getUserID(), $old_username, time()]
                     );
 
@@ -206,12 +212,11 @@ if (isset($_POST['save'])) {
             "UPDATE users SET 
                  title = ?, 
                  about = ?, 
-                 comfortable_rating = ?, 
                  userlink_color = ?, 
                  flags = ?,
                  blacklisted_tags = ?
                  WHERE id = ?",
-            [$title, $about, $rating, $userlink_color, $flags, json_encode($parsed_tags), $auth->getUserID()]
+            [$title, $about, ($userlink_color ?? ($auth->getUserData()["userlink_color"] ?? '#0069B4')), $flags, json_encode($parsed_tags), $auth->getUserID()]
         );
 
         if ($options["skin"] == "trinium") {

@@ -132,7 +132,7 @@ class SquareBracket extends Site
         $this->is_chaziz_squarebracket_instance = ($config["site"] === "squarebracket_chaziz");
         $this->is_sitetest_instance = ($config["site"] === "sitetest");
 
-        $this->authentication = new Authentication($this);
+        $this->authentication = new Authentication($this, $_SESSION["SBTOKEN"] ?? null);
 
         //$this->version_number = new VersionNumber();
 
@@ -190,6 +190,8 @@ class SquareBracket extends Site
             $this->setOptionCookie($this->options);
         }
 
+        $this->localization = new Localization($this->options);
+
         if (isset($_COOKIE["SBACCOUNTS"])) {
             $cookie_raw = $_COOKIE["SBACCOUNTS"];
 
@@ -246,6 +248,20 @@ class SquareBracket extends Site
         } else {
             $this->discord = null;
         }
+    }
+
+    /**
+     * function logInWithToken
+     * 
+     * Reinitialize the authentication class with a specified token.
+     * 
+     * @note: This may cause issues in most use cases, and should only be used for the bot API.
+     *
+     * @return void
+     */
+    public function logInWithToken($token)
+    {
+        $this->authentication = new Authentication($this, $token);
     }
 
     /**

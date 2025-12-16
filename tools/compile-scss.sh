@@ -1,59 +1,71 @@
 #!/bin/bash
 
 command=$1
+only_skin=$2
 
 common_arguments="--style expanded --no-source-map --load-path=private/skins"
 
 common_arguments+="--silence-deprecation=import,global-builtin"
 
 if [ "$command" = "dev" ]; then
-  common_arguments+=" --watch --poll"
+    common_arguments+=" --watch --poll"
 fi
 
+# Check if we're on Windows
 machine=$(uname -s)
-case "${machine}" in
-  CYGWIN*|MINGW*|MSYS*) machine=Windows;;
-  *)                    machine=Other;;
+    case "${machine}" in
+    CYGWIN*|MINGW*|MSYS*) machine=Windows;;
+    *)                    machine=Other;;
 esac
 
 if [ "$machine" == "Windows" ]; then
-  if ! sass --version &> /dev/null; then
-    sass_executable="sass.bat"
-  else
-    sass_executable="sass"
-  fi
-else
-  if ! sass --version &> /dev/null; then
-    if command -v dart-sass &> /dev/null; then
-      sass_executable="dart-sass"
+    if ! sass --version &> /dev/null; then
+        sass_executable="sass.bat"
     else
-      echo "Please install Dart-Sass."
-      exit 1
+        sass_executable="sass"
     fi
-  else
-    sass_executable="sass"
-  fi
+else
+    if ! sass --version &> /dev/null; then
+        if command -v dart-sass &> /dev/null; then
+        sass_executable="dart-sass"
+        else
+        echo "Please install Dart-Sass."
+        exit 1
+        fi
+    else
+        sass_executable="sass"
+    fi
 fi
 
+# Create the CSS directory if that doesn't exist
 if [ ! -d "public/assets/css" ]; then
-  mkdir -p public/assets/css || { echo "Error: Failed to create public/assets/css directory"; exit 1; }
+    mkdir -p public/assets/css || { echo "Failed to create public/assets/css directory"; exit 1; }
 fi
 
-# scan for skins
-scss_dirs=""
-for skin_dir in private/skins/*; do
-  if [ -d "$skin_dir/scss" ]; then
-    scss_dirs+=" ${skin_dir}/scss:public/assets/css"
-  fi
-done
+if [ "$only_skin" ]; then
+    # Compile only the specified skin
+    if [ -d "private/skins/$only_skin/scss" ]; then
+        scss_dirs="private/skins/$only_skin/scss:public/assets/css"
+    else
+        echo "The '$only_skin' skin does not exist."
+    fi
+else
+    # Scan for skins
+    scss_dirs=""
+    for skin_dir in private/skins/*; do
+    if [ -d "$skin_dir/scss" ]; then
+        scss_dirs+=" ${skin_dir}/scss:public/assets/css"
+    fi
+    done
+fi
 
-# Check if there are any SCSS directories to compile
+# Check if there are any skins to compile
 if [ -z "$scss_dirs" ]; then
-  echo "You do not have any skins."
-  exit 1
+    echo "You do not have any skins."
+    exit 1
 fi
 
-# Compile SCSS directories
+# Call SCSS compiler
 ${sass_executable} ${common_arguments} ${scss_dirs}
 
 echo "SCSS compilation complete."

@@ -23,30 +23,35 @@ namespace OpenSB;
 
 enum UploadFlags: int
 {
-/**
+    /**
      * 00000001: Featured upload
      */
     case FLAG_FEATURED = 1;
 
-/**
+    /**
      * 00000010: Unprocessed video upload
      */
     case FLAG_UNPROCESSED = 2;
 
-/**
+    /**
      * 00000100: "Block guests from viewing this upload"
      */
     case FLAG_BLOCK_GUESTS = 4;
 
-/**
+    /**
      * 00001000: "Disable comments on this upload"
      */
     case FLAG_BLOCK_COMMENTS = 8;
 
-/**
+    /**
      * 00010000: Upload has custom thumbnail
      */
     case FLAG_CUSTOM_THUMBNAIL = 16;
+
+    /**
+     * 00100000: Upload is mature
+     */
+    case FLAG_MATURE = 32;    
 
     public static function toArray(int $flags): array
     {
@@ -56,6 +61,7 @@ enum UploadFlags: int
             'block_guests' => (bool)($flags & self::FLAG_BLOCK_GUESTS->value),
             'block_comments' => (bool)($flags & self::FLAG_BLOCK_COMMENTS->value),
             'custom_thumbnail' => (bool)($flags & self::FLAG_CUSTOM_THUMBNAIL->value),
+            'mature' => (bool)($flags & self::FLAG_MATURE->value),
         ];
     }
 }

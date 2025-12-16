@@ -52,6 +52,11 @@ class UploadQuery
     private string $whereTagBlacklist;
 
     /**
+     * @var int
+     */
+    private int $userFlags;
+
+    /**
      * function __construct
      *
      * @param SquareBracket $sb
@@ -64,6 +69,11 @@ class UploadQuery
         $this->auth = $sb->getAuthenticationClass();
         $this->whereRatings = $sb->getAuthenticationClass()->databaseWhereRatingsHelper();
         $this->whereTagBlacklist = $sb->getAuthenticationClass()->databaseWhereTagBlacklistHelper();
+        if ($this->auth->isUserLoggedIn()) {
+            $this->userFlags = $this->auth->getUserFlags();
+        } else {
+            $this->userFlags = 0;
+        }
     }
 
     /**
@@ -100,6 +110,13 @@ class UploadQuery
         }
 
         if (!$adminPanel) {
+            if (!($this->userFlags & UserFlags::FLAG_MATURE_CONTENT_ACCESS->value)) {
+                $matureFlag = UploadFlags::FLAG_MATURE->value;
+
+                $whereClauses[] = "v.flags & $matureFlag != $matureFlag";
+            }
+
+            // OLD RATINGS (this will be removed later)
             if (!empty($this->whereRatings)) {
                 $whereClauses[] = $this->whereRatings;
             }
@@ -155,6 +172,13 @@ class UploadQuery
             $whereClauses[] = $whereCondition;
         }
 
+        if (!($this->userFlags & UserFlags::FLAG_MATURE_CONTENT_ACCESS->value)) {
+            $matureFlag = UploadFlags::FLAG_MATURE->value;
+
+            $whereClauses[] = "v.flags & $matureFlag != $matureFlag";
+        }
+
+        // OLD RATINGS (this will be removed later)
         if (!empty($this->whereRatings)) {
             $whereClauses[] = $this->whereRatings;
         }

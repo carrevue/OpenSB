@@ -11,6 +11,9 @@
     "follow": "Follow",
     "unfollow": "Unfollow",
 
+    "follow_hitchhiker": "Subscribe",
+    "unfollow_hitchhiker": "Unsubscribe",
+
     "form_required": "Required",
     "form_optional": "Optional",
 
@@ -24,6 +27,8 @@
     "views": "{count, plural, one {# view} other {# views}}",
     "star_ratings": "{count, plural, one {# rating} other {# ratings}}",
     "upload_count": "{count, plural, one {# upload} other {# uploads}}",
+
+    "followers_hitchhiker": "{count, plural, one {# subscriber} other {# subscribers}}",
 
     "relative_unknown": "unknown",
     "relative_year": "year",
@@ -56,6 +61,8 @@
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
+
+    "login_hitchhiker": "Sign in",
 
     "currently_logged_in_as": "You are currently logged in as %s.",
     "other_accounts": "Other accounts:",
@@ -147,6 +154,8 @@
     "comments_disabled": "Commenting has been disabled.",
     "please_login_to_comment": "Please login to comment.",
 
+    "write_comment_hitchhiker": "Add a comment...",
+
     "comment": "Comment",
 
     "reply_action": "Reply",
@@ -163,6 +172,10 @@
     "first_uploaded_on": "First uploaded on %s on %s",
     "originally_uploaded_on": "Originally uploaded on %s on %s",
 
+    "uploaded_on_hitchhiker": "Published on %s",
+    "first_uploaded_on_hitchhiker": "First published on %s on %s",
+    "originally_uploaded_on_hitchhiker": "Originally published on %s on %s",
+
     "uploads_from_user": "From %s",
     "related_uploads": "Related uploads",
     "random_uploads": "Random uploads",
@@ -170,7 +183,7 @@
     "featured": "Featured",
     "none": "None",
     "general_rating": "General",
-    "sensitive_rating": "Sensitive",
+    "sensitive_rating": "Mature",
 
     "404_not_found": "404 Not Found",
     "ip_banned_intro": "You have been IP banned from %s",
@@ -186,6 +199,7 @@
     "age": "Age",
     "registered": "Registered",
     "fulptube_account": "FulpTube account",
+    "bot": "Bot",
     "last_seen": "Last seen",
     "comfortable_rating": "Comfortable rating",
     "user_link_color": "User link color",
@@ -238,11 +252,12 @@
 
     "new_upload_intro": "Make sure you have read the <a href=\"%s\">community guidelines</a> first. Failure to comply with the community guidelines will result in your upload being taken down.",
     "reupload_warning": "Reminder: Do not reupload content that you have not made.",
+    "reupload_warning_hitchhiker": "Do not upload any copyrighted content that does not belong to you. If you attempt to reupload anything, you WILL be banned.",
     "title": "Title",
     "description": "Description",
     "tags": "Tags",
     "file": "File",
-    "mark_as_sensitive": "Mark as sensitive",
+    "mark_as_sensitive": "Mark as mature",
     "mark_as_sensitive_description": "Makes the upload only accessible to logged-in users over 18.",
     "upload_limit": "Upload limit: %s",
     "supported_files": "Common video and image formats are supported.",
@@ -275,8 +290,8 @@
     "search_results_for": "Results for \"%s\"",
 
     "filtering": "Filtering",
-    "enable_sensitive_content": "Enable sensitive content",
-    "restricted_sensitive_content": "Based on your account's birthdate, access to sensitive content is restricted. If you have entered an incorrect birthdate, please contact the %s staff team.",
+    "enable_sensitive_content": "Enable access to mature content",
+    "restricted_sensitive_content": "Based on your birthdate, access to mature content is restricted. If you have entered an incorrect birthdate, please contact the %s staff team.",
     "blocked_tags": "Blocked tags",
 
     "version_intro": "This website is powered by OpenSB. © %s %s and other contributors.",
@@ -346,9 +361,10 @@
     "notify_dashboard_key_generated": "Generated key! (%s)",
     "notify_dashboard_welcome_first_time": "Welcome! Your dashboard access password is %s. Please note it down in a safe and secure place to avoid losing it.",
     "notify_dashboard_welcome": "Welcome to the dashboard.",
-    "notify_dashboard_ban_fail": "This user cannot be banned.",
     "notify_dashboard_ban_success": "Successfully banned %s.",
     "notify_dashboard_unban_success": "Successfully unbanned %s.",
     "notify_dashboard_verify_success": "Successfully verified %s.",
-    "notify_dashboard_unverify_success": "Successfully unverified %s."
+    "notify_dashboard_unverify_success": "Successfully unverified %s.",
+    "notify_dashboard_feature_user_success": "Successfully featured %s.",
+    "notify_dashboard_unfeature_user_success": "Successfully unfeatured %s."
 }

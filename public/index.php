@@ -156,6 +156,7 @@ $router->add('/journals/{user}', 'journals.php');
 $router->add('/license', 'license.php');
 $router->add('/logout', 'logout.php');
 $router->add('/my_messages', 'debug/inbox.php'); // load debugging page for now
+$router->add('/members', 'members.php');
 $router->add('/my_uploads', 'my_uploads.php');
 $router->add('/notifications', 'notifications.php');
 $router->add('/privacy', 'privacy.php');
@@ -167,7 +168,7 @@ $router->add('/staff', 'staff.php');
 $router->add('/theme', 'theme.php');
 $router->add('/tos', 'tos.php');
 $router->add('/upload', 'upload.php');
-$router->add('/users', 'users.php');
+$router->redirect('/users', '/members');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
 $router->add('/version', 'version.php');
 $router->add('/watch', function () {
@@ -207,6 +208,8 @@ $router->add('/api/v3/get_comments', 'api/v3/get_comments.php');
 $router->add('/api/v3/get_instance_info', 'api/v3/get_instance_info.php');
 $router->add('/api/v3/get_upload', 'api/v3/get_upload.php');
 $router->add('/api/v3/get_uploads', 'api/v3/get_uploads.php');
+
+$router->add('/api/bot/test', 'api/bot/test.php');
 
 // redirect to dashboard
 $router->redirect('/admin', '/dashboard');

@@ -192,6 +192,7 @@ class Templating
         //$this->version_number = $sb->getVersionNumberClass();
         $this->version_number = new VersionNumber();
 
+        // TODO: this should be cleaned up on 2.1 or maybe 3.0
         $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizSquareBracketInstance());
         $this->twig->addGlobal('is_fulptube', $isFulpTube);
         $this->twig->addGlobal('is_debug', $sb->isDebug());

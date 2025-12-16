@@ -3,40 +3,35 @@ function error(error) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    let hamburgerButton = (document.getElementById('button-hamburger'));
+    let hamburgerMenu = (document.getElementById('hamburger'));
+    let sidebar = (document.getElementById('sidebar'));
+    
     // if the min-width breakpoints get changed, don't forgot to update this.
     const mediaQueryList = window.matchMedia("(min-width: 950px)");
-
     let isMobile = false;
-    let mediaQueryTest = (document.getElementById('media-query-test'));
 
     function handleMediaQueryChange(event) {
         if (event.matches) {
             isMobile = false;
-            if (mediaQueryTest) {
-                mediaQueryTest.innerText = "Desktop";
+            if (hamburgerMenu.classList.contains("active")) {
+                hamburgerMenu.classList.toggle("active");
             }
         } else {
             isMobile = true;
-            if (mediaQueryTest) {
-                mediaQueryTest.innerText = "Mobile";
-            }
         }
     }
 
     handleMediaQueryChange(mediaQueryList);
     mediaQueryList.addEventListener("change", handleMediaQueryChange);
     ///
-
-    let hamburgerButton = (document.getElementById('button-hamburger')); // TEMPORARY
-    let hamburgerMenu = (document.getElementById('hamburger')); // TEMPORARY
-    let sidebar = (document.getElementById('sidebar')); // TEMPORARY
-
     if (hamburgerButton) {
         hamburgerButton.onclick = function () {
             if (hamburgerMenu && sidebar) {
                 if (isMobile) {
                     hamburgerMenu.classList.toggle("active");
                 } else {
+                    setConfig("trinium_show_sidebar", !sidebar.classList.contains("active"));
                     sidebar.classList.toggle("active");
                 }
             } else {
@@ -351,6 +346,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    let view_report_button = (document.getElementById('report-button'));
+    let view_report_dialog = (document.getElementById('report-dialog'));
+    let view_report_close_button = (document.getElementById('report-close-button'));
+
+    setUpModal(view_report_button, view_report_dialog, view_report_close_button);
+
     // SETTINGS
     let settings_display_name_input = (document.getElementById('settings-display-name-input'));
     let settings_display_name = (document.getElementById('settings-display-name'));
@@ -377,16 +378,8 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     let debug_button = (document.getElementById('debug-button'));
-    let debug_close_button = (document.getElementById('debug-close-button'));
     let debug_dialog = (document.getElementById('debug-dialog'));
+    let debug_close_button = (document.getElementById('debug-close-button'));
 
-    if (debug_button) {
-        debug_button.addEventListener("click", () => {
-            debug_dialog.showModal();
-        });
-
-        debug_close_button.addEventListener("click", () => {
-            debug_dialog.close();
-        });
-    }
+    setUpModal(debug_button, debug_dialog, debug_close_button);
 });

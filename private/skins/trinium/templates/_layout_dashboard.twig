@@ -17,11 +17,12 @@
     <a class="navigation-bar-button {% if page_name=='dashboard-uploads' %}active{% endif %}" href="/dashboard/uploads">
         Uploads
     </a>
-        {% if options.enable_incomplete_features %}
-        <a class="navigation-bar-button {% if page_name=='dashboard-interactions' %}active{% endif %}" href="/dashboard/interactions">
-            Interactions
-        </a>
-    {% endif %}
+    <a class="navigation-bar-button {% if page_name=='dashboard-journals' %}active{% endif %}" href="/dashboard/journals">
+        Journals
+    </a>
+    <a class="navigation-bar-button {% if page_name=='dashboard-interactions' %}active{% endif %}" href="/dashboard/interactions">
+        Interactions
+    </a>
     {% if invite_keys_enabled %}
         <a class="navigation-bar-button {% if page_name=='dashboard-invite_keys' %}active{% endif %}" href="/dashboard/invite_keys">
             Invite keys

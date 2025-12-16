@@ -75,14 +75,14 @@ class Storage
         // this uses the version of php on path. if the upload processor errors
         // out with "OpenSB is not compatible with your PHP version.", then 
         // your path's php is too old.
-        if (str_starts_with(php_uname(), "Windows")) {
+        if (PHP_OS_FAMILY == 'Windows') {
             pclose(popen(sprintf(
                 'start /B  php %s "%s" "%s" "$s" "1" > %s',
                 BLUFF_PRIVATE_PATH . '\scripts\upload_processor.php',
                 $new,
                 $target_file,
                 $type,
-                BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
+                BLUFF_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
             ), "r"));
         } else {
             system(sprintf(
@@ -91,7 +91,7 @@ class Storage
                 $new,
                 $target_file,
                 $type,
-                BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.log'
+                BLUFF_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
             ));
         }
     }
@@ -220,7 +220,7 @@ class Storage
      */
     public function getVideoUploadThumbnail($id, $custom): string
     {
-        $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
+        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
 
         return $this->getThumbnailPath(
             $id,
@@ -243,7 +243,7 @@ class Storage
      */
     public function getImageUploadThumbnail($id, $custom): string
     {
-        $placeholder = $this->sb->isFulpTube() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
+        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
 
         return $this->getThumbnailPath(
             $id,
@@ -266,7 +266,7 @@ class Storage
      */
     public function getUserProfilePicture($username, $isStaff): string
     {
-        $placeholder = $this->sb->isFulpTube() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+        $placeholder = $this->sb->isHitchhiker() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
         $id = Utilities::usernameToUserID($this->database, $username);
 
@@ -304,8 +304,7 @@ class Storage
         if (file_exists($path)) {
             return '/dynamic/banners/' . $id . '.png';
         } else {
-            //$data = "/assets/default_banner.svg"; this does not look good with profile customization
-            return false;
+            return $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
         }
     }
 

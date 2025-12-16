@@ -21,13 +21,12 @@
 
 namespace OpenSB;
 
-// use BluffingoCore\Database;
+use BluffingoCore\Database;
 
 /**
  * class UploadRatingData
  * 
- * Helper class for an upload's rating. This is not to be confused with
- * the general/sensitive upload rating system.
+ * Helper class for an upload's rating.
  */
 class UploadRatingData
 {
@@ -39,12 +38,12 @@ class UploadRatingData
     /**
      * function __construct
      *
-     * @param mixed $database
-     * @param mixed $upload_id
+     * @param Database $database
+     * @param string $upload_id
      *
      * @return void
      */
-    public function __construct($database, $upload_id)
+    public function __construct(Database $database, string $upload_id)
     {
         // we don't need $this->database nor $this->upload_id.
 
@@ -61,32 +60,51 @@ class UploadRatingData
     /**
      * function calculateRatingData
      *
-     * Calculate the upload's ratings.
+     * Calculate the upload's ratings as 5 stars.
      *
      * @return array
      */
     public function calculateRatingData(): array
     {
-        $total_ratings = ($this->upload_rating_data["1"] +
-            $this->upload_rating_data["2"] +
-            $this->upload_rating_data["3"] +
-            $this->upload_rating_data["4"] +
-            $this->upload_rating_data["5"]);
+        $ratings = $this->upload_rating_data;
 
-        if ($total_ratings == 0) {
-            $average_ratings = 0;
-        } else {
-            $average_ratings = ($this->upload_rating_data["1"] +
-                $this->upload_rating_data["2"] * 2 +
-                $this->upload_rating_data["3"] * 3 +
-                $this->upload_rating_data["4"] * 4 +
-                $this->upload_rating_data["5"] * 5) / $total_ratings;
+        $total = array_sum($ratings);
+
+        $weighted = 0;
+        foreach ($ratings as $score => $count) {
+            $weighted += (int)$score * $count;
         }
+        
+        return [
+            "stars"   => $ratings,
+            "total"   => $total,
+            "average" => $total ? ($weighted / $total) : 0,
+        ];
+    }
+
+    /**
+     * function calculateRatingDataAsLikeRatio
+     *
+     * Calculate the upload's ratings as like/dislike ratio.
+     *
+     * @return array
+     */
+    public function calculateRatingDataAsLikeRatio(): array
+    {
+        $likes = $this->upload_rating_data["4"] + $this->upload_rating_data["5"];
+        $dislikes = $this->upload_rating_data["1"] + $this->upload_rating_data["2"];
+        $total = $likes + $dislikes;
+
+        // calculate finalium likesaber
+        $ratio = ($total == 0 || $dislikes == 0)  ? 100
+            : Utilities::calculatePercentage($dislikes, $likes, $total);
 
         return [
-            "stars" => $this->upload_rating_data,
-            "total" => $total_ratings,
-            "average" => $average_ratings,
+            "likes" => $likes,
+            "dislikes" => $dislikes,
+            "total" => $total,
+            "ratio" => $ratio,
+           //"current_rating" => $current_rating,
         ];
     }
 }

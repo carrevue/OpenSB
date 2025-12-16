@@ -2,14 +2,6 @@ function error(error) {
     console.error("OpenSB Finalium Frontend Error: " + error);
 }
 
-function toggleElementDisplay(element) {
-    if (element.style.display === "block") {
-        element.style.display = "none";
-    } else {
-        element.style.display = "block";
-    }
-}
-
 function handleCommentEvents() {
     commentContents = document.getElementById('commentContents');
     postButton = document.getElementById('post');
@@ -135,6 +127,63 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
         */
+    });
+
+    // Get all tab groups
+    const tabGroups = document.querySelectorAll(".tab-group");
+    tabGroups.forEach(tabGroup => {
+        // Get all tab links in the tab group
+        const tabLinks = tabGroup.querySelectorAll(".tablink")
+
+        // open the first tab automatically
+        if (tabLinks.length > 0) {
+            const firstTab = tabLinks.item(0);
+
+            if (firstTab) {
+                const tabId = firstTab.getAttribute("data-tab");
+                if (tabId) {
+                    const firstTabId = document.getElementById(tabId);
+                    if (firstTabId) {
+                        firstTabId.style.display = "block";
+                        firstTab.classList.add("active");
+                    } else {
+                        error(`Tab ${tabId} is missing contents.`)
+                    }
+                }
+            } else {
+                error("THIS SHOULD NOT HAPPEN.");
+            }
+        }
+
+        tabLinks.forEach(tabLink => {
+            // check if this tab has "data-tab". if it doesn't then don't bother.
+            const tabId = tabLink.getAttribute("data-tab");
+
+            if (tabId) {
+                tabLink.addEventListener("click", function () {
+                    // Hide all tab content
+                    const tabContents = tabGroup.querySelectorAll(".tabcontent");
+                    tabContents.forEach(tabContent => {
+                        tabContent.style.display = "none";
+                    });
+
+                    // Remove 'active' class from all tab links
+                    tabLinks.forEach(link => {
+                        link.classList.remove("active");
+                    });
+
+                    // Show the selected tab content and mark the button as active
+                    const selectedTabId = document.getElementById(tabId);
+
+                    if (selectedTabId) {
+                        selectedTabId.style.display = "block";
+                        this.classList.add("active");
+                    } else {
+                        error(`Tab ${tabId} is missing contents.`)
+                    }
+                });
+            }
+        });
     });
 
     // guide button
@@ -407,14 +456,18 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // debug button
-    const debugButton = document.getElementById('debug-button');
-    const debugModal = document.getElementById('debugModal');
+    let debug_button = (document.getElementById('debug-button'));
+    //let debug_close_button = (document.getElementById('debug-close-button'));
+    let debug_dialog = (document.getElementById('debug-dialog'));
 
-    if (debugModal) {
-        debugButton.addEventListener('click', function () {
-            toggleElementDisplay(debugModal);
+    if (debug_button) {
+        debug_button.addEventListener("click", () => {
+            debug_dialog.showModal();
         });
+
+        //debug_close_button.addEventListener("click", () => {
+        //    debug_dialog.close();
+        //});
     }
 });
 

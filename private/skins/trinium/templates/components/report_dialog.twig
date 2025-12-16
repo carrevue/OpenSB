@@ -1,0 +1,28 @@
+<dialog class="content-box report-dialog tab-group" id="report-dialog">
+    <form method="dialog">
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Report</h1>
+            </div>
+        </div>
+        <div class="form-input">
+            <label for="report-offense" class="form-label">Offense</label>
+            <select id="report-offense" class="form-submit" required>
+                <option value="" disabled selected>Select an offense</option>
+                <option value="spam">Spam or misleading</option>
+                <option value="inappropriate">Inappropriate content</option>
+                <option value="copyright">Copyright infringement / Reupload</option>
+                <option value="offense">Offense</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="form-input">
+            <label for="report-reason" class="form-label">Reason</label>
+            <textarea id="report-reason" class="form-submit" rows="6" required></textarea>
+        </div>
+        <div class="form-button-container">
+            <button class="button button-secondary" id="report-close-button">Close</button>
+            <button class="button button-primary" id="report-submit-button">Submit</button>
+        </div>
+    </form>
+</dialog>
