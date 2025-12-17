@@ -58,3 +58,6 @@ doxygen
 
 # Keep the gitkeeps
 !**/.gitkeep
+
+## TEMPORARY:
+/public/assets/sb_branding/fulp/classic/
