@@ -25,7 +25,7 @@ namespace OpenSB\Pages;
 
 global $auth, $database, $twig, $sb;
 
-use OpenSB\CoreUtilities;
+use OpenSB\Utilities;
 use OpenSB\CommentData;
 use OpenSB\CommentLocation;
 use OpenSB\UploadData;
@@ -33,13 +33,12 @@ use OpenSB\UploadQuery;
 use OpenSB\UserCustomizationData;
 use OpenSB\UserFlags;
 use OpenSB\UserRoleEnum;
-use OpenSB\Utilities;
 
 $upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 
-if (isset($_GET['name'])) CoreUtilities::redirect('/user/' . $_GET['name'], 301);
+if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301);
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
@@ -51,7 +50,7 @@ if (!$data) {
         // if so, attempt to fetch the user's current name through their id
         $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
         if ($new_username) {
-            CoreUtilities::redirect('/user/' . $new_username, 301);
+            Utilities::redirect('/user/' . $new_username, 301);
         } else {
             // if for whatever reason this leads to nowhere (eg: deleted user or 
             // half-assed prod blacklisting), return to homepage.

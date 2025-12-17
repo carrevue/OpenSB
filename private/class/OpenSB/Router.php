@@ -51,7 +51,7 @@ class Router
 
     public function redirect(string $from, string $to, int $statusCode = 302): void
     {
-        $this->add($from, fn() => CoreUtilities::redirect($to, $statusCode));
+        $this->add($from, fn() => Utilities::redirect($to, $statusCode));
     }
 
     public function setFallback(mixed $handler): void

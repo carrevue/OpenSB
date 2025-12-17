@@ -29,6 +29,7 @@ use OpenSB\Utilities;
 if (!$sb->isIncompleteFeaturesEnabled()) {
     http_response_code(404);
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
+    die();
 }
 
 if (!$auth->isUserLoggedIn()) {

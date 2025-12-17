@@ -22,7 +22,7 @@
 namespace OpenSB;
 
 use OpenSB\Database;
-use OpenSB\CoreUtilities;
+use OpenSB\Utilities;
 
 /**
  * Authentication stuff.
@@ -77,7 +77,7 @@ class Authentication
                     $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
                     $path = explode('/', $uri);
                     if ($path[1] != "verify_birthdate") {
-                        CoreUtilities::redirect("/verify_birthdate");
+                        Utilities::redirect("/verify_birthdate");
                     }
                 }
 
@@ -113,7 +113,7 @@ class Authentication
     public function logOut(): void
     {
         session_destroy();
-        CoreUtilities::redirect('./');
+        Utilities::redirect('./');
     }
 
     /**

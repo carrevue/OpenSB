@@ -28,7 +28,7 @@ define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
 define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
 define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-use OpenSB\CoreUtilities;
+use OpenSB\Utilities;
 use OpenSB\Router;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
@@ -47,7 +47,7 @@ function load_thumbnail_from_skin($path): never
         readfile($skinPath);
         exit;
     } else {
-        CoreUtilities::redirect('/assets/unknown_theme.png');
+        Utilities::redirect('/assets/unknown_theme.png');
     }
 }
 
@@ -172,14 +172,14 @@ $router->redirect('/users', '/members');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
 $router->add('/version', 'version.php');
 $router->add('/watch', function () {
-    if (isset($_GET['v'])) CoreUtilities::redirect('/view/' . $_GET['v'], 301);
+    if (isset($_GET['v'])) Utilities::redirect('/view/' . $_GET['v'], 301);
 });
 $router->add('/view/{id}', 'view.php');
 $router->add('/write', 'write.php');
 
 // user profiles
 $router->add('/user', function () {
-    if (isset($_GET['name'])) CoreUtilities::redirect('/user/' . $_GET['name'], 301);
+    if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301);
 });
 $router->add('/user/{username}', 'profile_overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile_uploads.php'); // uploads

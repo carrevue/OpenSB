@@ -25,7 +25,7 @@ namespace OpenSB;
 
 use OpenSB\UserRoleEnum;
 
-use OpenSB\CoreUtilities;
+use OpenSB\Utilities;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -230,8 +230,8 @@ class Templating
         }
 
         if (isset($_SERVER['HTTP_HOST'])) {
-            $this->twig->addGlobal("page_url", CoreUtilities::getURL(true));
-            $this->twig->addGlobal("domain", CoreUtilities::getURL(false));
+            $this->twig->addGlobal("page_url", Utilities::getURL(true));
+            $this->twig->addGlobal("domain", Utilities::getURL(false));
         }
     }
 

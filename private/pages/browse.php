@@ -24,10 +24,9 @@ namespace OpenSB\Pages;
 
 global $twig, $sb, $database;
 
-use OpenSB\CoreUtilities;
+use OpenSB\Utilities;
 use OpenSB\UploadQuery;
 use OpenSB\UploadFlags;
-use OpenSB\Utilities;
 
 $upload_query = new UploadQuery($sb);
 
@@ -61,7 +60,7 @@ $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 
 $limit = $database->paginate($page, 20);
 
 if ($user) {
-    CoreUtilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
+    Utilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
 } else {
     $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limit, $tabs[$type]["where"] ?? null);
     $upload_count = $upload_query->count();
