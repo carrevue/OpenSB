@@ -33,7 +33,6 @@ use OpenSB\Router;
 
 require_once BLUFF_PRIVATE_PATH . '/common.php';
 
-// TODO: make this cachable
 function load_thumbnail_from_skin($path): never
 {
     $pathParts = explode('_', $path);
@@ -43,14 +42,35 @@ function load_thumbnail_from_skin($path): never
     $skinPath = BLUFF_PRIVATE_PATH . '/skins/' . $skin . '/' . $theme;
 
     if (file_exists($skinPath)) {
-        header('Content-Type: image/png');
-        readfile($skinPath);
+        load_file($skinPath, "image/png");
         exit;
     } else {
         Utilities::redirect('/assets/unknown_theme.png');
     }
 }
 
+// /private/skins/{skin}/assets/{path}
+function load_asset_from_skin(string $skin, string $path): never
+{
+    $skinAssetDirectory = BLUFF_PRIVATE_PATH . "/skins/{$skin}/assets";
+    $fullPath = realpath($skinAssetDirectory . '/' . $path);
+
+    // validation
+    if (
+        $fullPath === false ||
+        !str_starts_with($fullPath, $skinAssetDirectory) ||
+        !is_file($fullPath)
+    ) {
+        http_response_code(404);
+        die();
+    }
+
+    // get mime type
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime  = finfo_file($finfo, $fullPath) ?: 'application/octet-stream';
+
+    load_file($fullPath, $mime);
+}
 
 // this is very ugly, i know.
 function load_file(string $path, string $content_type): never
@@ -236,6 +256,11 @@ $router->add('/assets/icons.svg', function () {
 // bootstrap icons (used by bootstrap and finalium)
 $router->add('/assets/bootstrap-icons.svg', function () {
     load_file(BLUFF_VENDOR_PATH . '/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
+});
+
+// skin assets (ONLY WORKS IF THE ASSET IS NOT IN A NESTED FOLDER)
+$router->add('/assets/skin/{skin}/{asset}', function (array $params) {
+    load_asset_from_skin($params['skin'], $params['asset']);
 });
 
 // used by the theme page for images

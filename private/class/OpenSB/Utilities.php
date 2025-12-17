@@ -505,8 +505,6 @@ class Utilities
      * if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
      *
      * @return mixed|string
-     *
-     * @deprecated This will be moved to OpenSB's CoreUtilties class around version 2.
      */
     public static function getIpAddress()
     {
