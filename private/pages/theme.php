@@ -26,7 +26,7 @@ global $sb, $twig;
 use OpenSB\Utilities;
 
 // scan for localizations
-$localesPath = BLUFF_PRIVATE_PATH . "/locales/";
+$localesPath = SB_PRIVATE_PATH . "/locales/";
 $locales = [];
 
 if (is_dir($localesPath)) {

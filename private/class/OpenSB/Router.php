@@ -28,13 +28,13 @@ class Router
 
     public function add(string $path, mixed $handler, ?string $method = null): void
     {
-        // automatically add BLUFF_PRIVATE_PATH for file paths
+        // automatically add SB_PRIVATE_PATH for file paths
         if (
             is_string($handler)
-            && !str_contains($handler, BLUFF_PRIVATE_PATH)
+            && !str_contains($handler, SB_PRIVATE_PATH)
             && !str_starts_with($handler, '/')
         ) {
-            $handler = BLUFF_PRIVATE_PATH . '/pages/' . ltrim($handler, '/');
+            $handler = SB_PRIVATE_PATH . '/pages/' . ltrim($handler, '/');
         }
 
         // if no method specified, just define for GET AND POST (we don't use any of the other methods, yet)

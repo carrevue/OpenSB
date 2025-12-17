@@ -23,16 +23,16 @@ namespace OpenSB\Tools;
 
 // TODO: make this work with new opensb 2.0 table names -chaziz 1/6/2025
 
-define("BLUFF_ROOT_PATH", dirname(__DIR__));
-define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
-define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
-define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
-define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
-define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("SB_ROOT_PATH", dirname(__DIR__));
+define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
+define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
+define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
+define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 global $database;
 
-require_once BLUFF_PRIVATE_PATH . '/common.php';
+require_once SB_PRIVATE_PATH . '/common.php';
 
 $users = $database->fetchArray($database->query("SELECT id, name, joined FROM users ORDER BY joined ASC"));
 
@@ -94,10 +94,10 @@ foreach ($id_mapping as $old_id => $temp_id) {
     $database->query("UPDATE videos SET author = ? WHERE author = ?", [$new_id, $temp_id]);
 
     // TODO: fix this for opensb 2.0
-    $pfpOld = BLUFF_DYNAMIC_PATH . '/pfp/' . $user["name"] . '.png';
-    $pfpNew = BLUFF_DYNAMIC_PATH . '/pfp/' . $new_id . '.png';
-    $bannerOld = BLUFF_DYNAMIC_PATH . '/banners/' . $user["name"] . '.png';
-    $bannerNew = BLUFF_DYNAMIC_PATH . '/banners/' . $new_id . '.png';
+    $pfpOld = SB_DYNAMIC_PATH . '/pfp/' . $user["name"] . '.png';
+    $pfpNew = SB_DYNAMIC_PATH . '/pfp/' . $new_id . '.png';
+    $bannerOld = SB_DYNAMIC_PATH . '/banners/' . $user["name"] . '.png';
+    $bannerNew = SB_DYNAMIC_PATH . '/banners/' . $new_id . '.png';
 
     if (file_exists($pfpOld)) {
         if (!rename($pfpOld, $pfpNew)) {

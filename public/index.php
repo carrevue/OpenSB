@@ -21,17 +21,17 @@
 
 namespace OpenSB;
 
-define("BLUFF_ROOT_PATH", dirname(__DIR__));
-define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
-define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
-define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
-define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
-define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("SB_ROOT_PATH", dirname(__DIR__));
+define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
+define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
+define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
+define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 use OpenSB\Utilities;
 use OpenSB\Router;
 
-require_once BLUFF_PRIVATE_PATH . '/common.php';
+require_once SB_PRIVATE_PATH . '/common.php';
 
 function load_thumbnail_from_skin($path): never
 {
@@ -39,7 +39,7 @@ function load_thumbnail_from_skin($path): never
     $skin = $pathParts[0] ?? '';
     $theme = $pathParts[1] ?? 'default.png';
 
-    $skinPath = BLUFF_PRIVATE_PATH . '/skins/' . $skin . '/' . $theme;
+    $skinPath = SB_PRIVATE_PATH . '/skins/' . $skin . '/' . $theme;
 
     if (file_exists($skinPath)) {
         load_file($skinPath, "image/png");
@@ -52,7 +52,7 @@ function load_thumbnail_from_skin($path): never
 // /private/skins/{skin}/assets/{path}
 function load_asset_from_skin(string $skin, string $path): never
 {
-    $skinAssetDirectory = BLUFF_PRIVATE_PATH . "/skins/{$skin}/assets";
+    $skinAssetDirectory = SB_PRIVATE_PATH . "/skins/{$skin}/assets";
     $fullPath = realpath($skinAssetDirectory . '/' . $path);
 
     // validation
@@ -124,7 +124,7 @@ function last_resort(): void
 
 function handle_debug_page_path(string $path): void
 {
-    $debug_pages_path = BLUFF_PRIVATE_PATH . '/pages/debug/';
+    $debug_pages_path = SB_PRIVATE_PATH . '/pages/debug/';
 
     if (!$path) $path = "index";
     $path = str_replace(['..', '/', '\\'], '', $path);
@@ -250,12 +250,12 @@ $router->redirect('/dashboard', '/dashboard/overview', 301);
 
 // trinium icons (used by trinium)
 $router->add('/assets/icons.svg', function () {
-    load_file(BLUFF_PRIVATE_PATH . '/icons/sprite.svg', 'image/svg+xml');
+    load_file(SB_PRIVATE_PATH . '/icons/sprite.svg', 'image/svg+xml');
 });
 
 // bootstrap icons (used by bootstrap and finalium)
 $router->add('/assets/bootstrap-icons.svg', function () {
-    load_file(BLUFF_VENDOR_PATH . '/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
+    load_file(SB_VENDOR_PATH . '/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
 });
 
 // skin assets (ONLY WORKS IF THE ASSET IS NOT IN A NESTED FOLDER)

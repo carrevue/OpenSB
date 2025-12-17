@@ -85,8 +85,8 @@ if (isset($_POST['flagsubmit'])) {
 }
 
 
-if (file_exists(BLUFF_PRIVATE_PATH . "/upload_processor_logs/" . $id . ".log")) {
-    $log = file_get_contents(BLUFF_PRIVATE_PATH . "/upload_processor_logs/" . $id . ".log");
+if (file_exists(SB_PRIVATE_PATH . "/upload_processor_logs/" . $id . ".log")) {
+    $log = file_get_contents(SB_PRIVATE_PATH . "/upload_processor_logs/" . $id . ".log");
 } else {
     $log = null;
 }

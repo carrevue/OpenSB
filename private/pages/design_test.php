@@ -37,7 +37,7 @@ $data["color_types"] = [
     "warning",
 ];
 
-$iconPattern = BLUFF_PRIVATE_PATH . '/icons/icons/*.svg';
+$iconPattern = SB_PRIVATE_PATH . '/icons/icons/*.svg';
 $icons = [];
 
 foreach (glob($iconPattern) as $filePath) {

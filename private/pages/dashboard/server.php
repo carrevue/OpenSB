@@ -42,7 +42,7 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
 function getComposerPackages(): array
 {
     $dependencies = [];
-    $installed = new ComposerInstalled(BLUFF_VENDOR_PATH . '/composer/installed.json');
+    $installed = new ComposerInstalled(SB_VENDOR_PATH . '/composer/installed.json');
     $dependencies += $installed->getInstalledDependencies();
     ksort($dependencies);
     return $dependencies;

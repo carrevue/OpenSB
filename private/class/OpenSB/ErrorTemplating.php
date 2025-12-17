@@ -61,7 +61,7 @@ class ErrorTemplating
      */
     public function __construct(SquareBracket $sb)
     {
-        chdir(BLUFF_PRIVATE_PATH);
+        chdir(SB_PRIVATE_PATH);
 
         $this->sb = $sb;
         //$options = $this->sb->getLocalOptions();

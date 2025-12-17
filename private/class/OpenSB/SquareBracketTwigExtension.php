@@ -750,7 +750,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getCssFileDate()
     {
-        return filemtime(BLUFF_PUBLIC_PATH . "/assets/css/trinium-default.css");
+        return filemtime(SB_PUBLIC_PATH . "/assets/css/trinium-default.css");
     }
 
     /**

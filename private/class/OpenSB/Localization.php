@@ -80,8 +80,8 @@ class Localization
      */
     protected function loadLocalizationData(): void
     {
-        $file = BLUFF_PRIVATE_PATH . "/locales/{$this->locale}.json";
-        $file_fallback = BLUFF_PRIVATE_PATH . "/locales/en-US.json"; // fallback to english
+        $file = SB_PRIVATE_PATH . "/locales/{$this->locale}.json";
+        $file_fallback = SB_PRIVATE_PATH . "/locales/en-US.json"; // fallback to english
 
         if ($this->locale == "psuedo") {
             $this->isPsuedo = true;

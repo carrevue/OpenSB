@@ -191,7 +191,7 @@ class Database
             : $immediateCaller;
 
         // remove root path so we have a shorter string
-        $file = str_replace(BLUFF_ROOT_PATH, '', $caller['file'] ?? '');
+        $file = str_replace(SB_ROOT_PATH, '', $caller['file'] ?? '');
 
         $callerInfo = [
             'file' => $file ?? 'unknown',

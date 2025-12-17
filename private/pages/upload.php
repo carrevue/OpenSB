@@ -167,10 +167,10 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     if (in_array(strtolower($ext), $supportedVideoFormats, true)) { // VIDEO
         if (isset($noProcess) && $sb->isDebug()) {
             // pretend video has been successfully uploaded (does this still work???)
-            $target_file = BLUFF_DYNAMIC_PATH . '/dynamic/videos/' . $new . '.converted.' . $ext;
+            $target_file = SB_DYNAMIC_PATH . '/dynamic/videos/' . $new . '.converted.' . $ext;
         } else {
             $flags |= UploadFlags::FLAG_UNPROCESSED->value;
-            $target_file = BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.' . $ext;
+            $target_file = SB_DYNAMIC_PATH . '/videos/' . $new . '.' . $ext;
         }
         if (move_uploaded_file($temp_name, $target_file)) {
             $database->query(

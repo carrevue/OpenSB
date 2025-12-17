@@ -78,20 +78,20 @@ class Storage
         if (PHP_OS_FAMILY == 'Windows') {
             pclose(popen(sprintf(
                 'start /B  php %s "%s" "%s" "$s" "1" > %s',
-                BLUFF_PRIVATE_PATH . '\scripts\upload_processor.php',
+                SB_PRIVATE_PATH . '\scripts\upload_processor.php',
                 $new,
                 $target_file,
                 $type,
-                BLUFF_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
+                SB_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
             ), "r"));
         } else {
             system(sprintf(
                 'php %s "%s" "%s" "%s" "1" > %s 2>&1 &',
-                BLUFF_PRIVATE_PATH . '/scripts/upload_processor.php',
+                SB_PRIVATE_PATH . '/scripts/upload_processor.php',
                 $new,
                 $target_file,
                 $type,
-                BLUFF_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
+                SB_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
             ));
         }
     }
@@ -109,8 +109,8 @@ class Storage
      */
     public function processImageUpload($temp_name, $new): void
     {
-        $target_file = BLUFF_DYNAMIC_PATH . '/art/' . $new . '.png';
-        $target_thumbnail = BLUFF_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
+        $target_file = SB_DYNAMIC_PATH . '/art/' . $new . '.png';
+        $target_thumbnail = SB_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
 
         // image upload
         $manager = new ImageManager(Driver::class);
@@ -139,7 +139,7 @@ class Storage
      */
     public function processProfilePicture($temp_name, $new): void
     {
-        $target_file = BLUFF_DYNAMIC_PATH . '/pfp/' . $new . '.png';
+        $target_file = SB_DYNAMIC_PATH . '/pfp/' . $new . '.png';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -162,7 +162,7 @@ class Storage
      */
     public function processCustomUploadThumbnail($temp_name, $new): void
     {
-        $target_file = BLUFF_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
+        $target_file = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -184,7 +184,7 @@ class Storage
      */
     public function processProfileBanner($temp_name, $new): void
     {
-        $target_file = BLUFF_DYNAMIC_PATH . '/banners/' . $new . '.png';
+        $target_file = SB_DYNAMIC_PATH . '/banners/' . $new . '.png';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -205,7 +205,7 @@ class Storage
      */
     public function deleteUploadFile($data): void
     {
-        unlink(BLUFF_ROOT_PATH . $data["upload_file"]);
+        unlink(SB_ROOT_PATH . $data["upload_file"]);
     }
 
     /**
@@ -270,7 +270,7 @@ class Storage
 
         $id = Utilities::usernameToUserID($this->database, $username);
 
-        $path = BLUFF_DYNAMIC_PATH . '/pfp/' . $id . '.png';
+        $path = SB_DYNAMIC_PATH . '/pfp/' . $id . '.png';
 
         // don't bother with userdata since that might slow shit down
         $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$id]);
@@ -299,7 +299,7 @@ class Storage
     {
         $id = Utilities::usernameToUserID($this->database, $username);
 
-        $path = BLUFF_DYNAMIC_PATH . '/banners/' . $id . '.png';
+        $path = SB_DYNAMIC_PATH . '/banners/' . $id . '.png';
 
         if (file_exists($path)) {
             return '/dynamic/banners/' . $id . '.png';
@@ -326,8 +326,8 @@ class Storage
         string $defaultExtension,
         string $fallback
     ): string {
-        $customPath = BLUFF_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg';
-        $defaultPath = BLUFF_DYNAMIC_PATH . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
+        $customPath = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg';
+        $defaultPath = SB_DYNAMIC_PATH . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
 
         // if custom thumbnail exists then use that
         if ($custom && file_exists($customPath)) {

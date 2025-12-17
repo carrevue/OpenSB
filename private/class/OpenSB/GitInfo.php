@@ -38,8 +38,8 @@ class GitInfo
         if (isset($path) && file_exists($path)) {
             $this->gitPath = $path;
             $this->isSubmodule = true;
-        } elseif (file_exists(BLUFF_GIT_PATH)) {
-            $this->gitPath = BLUFF_GIT_PATH;
+        } elseif (file_exists(SB_GIT_PATH)) {
+            $this->gitPath = SB_GIT_PATH;
             $this->isSubmodule = false;
         } else {
             throw new Exception("The Git path does not exist.");
@@ -77,9 +77,9 @@ class GitInfo
                 }
             }
         } else {
-            $gitHead = file_get_contents(BLUFF_GIT_PATH . '/HEAD');
+            $gitHead = file_get_contents(SB_GIT_PATH . '/HEAD');
             $this->gitBranch = rtrim(preg_replace("/(.*?\/){2}/", '', $gitHead));
-            $commit = file_get_contents(BLUFF_GIT_PATH . '/refs/heads/' . $this->gitBranch); // kind of bad but hey it works
+            $commit = file_get_contents(SB_GIT_PATH . '/refs/heads/' . $this->gitBranch); // kind of bad but hey it works
 
             $this->gitCommitHash = substr($commit, 0, 7);
         }

@@ -508,7 +508,7 @@ class Utilities
      */
     public static function getIpAddress()
     {
-        if (BLUFF_CLI) return null;
+        if (SB_CLI) return null;
 
         $ip = $_SERVER['REMOTE_ADDR'];
 
