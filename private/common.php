@@ -50,8 +50,6 @@ if (!empty($missing_extensions)) {
     die('The required PHP extensions are missing: ' . implode(', ', $missing_extensions));
 }
 
-// TODO: add check for BluffingoCore -chaziz 07/19/2025
-
 $config = include_once(SB_PRIVATE_PATH . '/config/config.php');
 
 require_once(SB_VENDOR_PATH . '/autoload.php');

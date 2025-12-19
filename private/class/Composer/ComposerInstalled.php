@@ -23,7 +23,7 @@ namespace OpenSB\Composer;
  * Reads an installed.json file and provides accessors to get what is
  * installed
  *
- * @since BluffingoCore 1.0/MediaWiki 1.27
+ * @since MediaWiki 1.27
  */
 class ComposerInstalled
 {

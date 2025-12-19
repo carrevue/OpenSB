@@ -23,7 +23,7 @@ namespace OpenSB\Composer;
  * Reads a composer.json file and provides accessors to get
  * its hash and the required dependencies
  *
- * @since BluffingoCore 1.0/MediaWiki 1.25
+ * @since MediaWiki 1.25
  */
 class ComposerJson
 {

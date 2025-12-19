@@ -67,11 +67,9 @@ function get_cpu_cores()
     return (int)$cores ?? 1;
 }
 
-function downscale_video_for_thumbnail($videoWidth, $videoHeight): array
+function downscale_video_for_thumbnail($videoWidth, $videoHeight, $targetWidth = 640): array
 {
-    $targetWidth = 640;
-
-    // if video width smaller than 640, dont bother with downscaling.
+    // if video width smaller than target width, dont bother with downscaling.
     if ($videoWidth <= $targetWidth) {
         return ['width' => $videoWidth, 'height' => $videoHeight];
     }
@@ -199,6 +197,10 @@ try {
     if ($fucked) {
         log("Taking thumbnail from first frame");
         $frame = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+        
+        $frameClassic1 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+        $frameClassic2 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+        $frameClassic3 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
     } else {
         // this is fucked. look into this later. -chaziz 6/9/2025
         /*
@@ -217,10 +219,32 @@ try {
         log("Taking thumbnail from frame " . $thumbnailTime);
 
         $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
+
+        // oh yeah the way this works i gotta redefine this shit Again. Lol
+        $thumbnailTimeClassic1 = $duration * 0.25;
+        $thumbnailTimeClassic2 = $duration * 0.5;
+        $thumbnailTimeClassic3 = $duration * 0.75;
+
+        $frameClassic1 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic1 / $framerate));
+        $frameClassic2 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic2 / $framerate));
+        $frameClassic3 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic3 / $framerate));
     }
     $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
-    log("Saving thumbnail");
+
+    $frameClassic1->filters()->custom('scale=130x97');
+    $frameClassic2->filters()->custom('scale=130x97');
+    $frameClassic3->filters()->custom('scale=130x97');
+
+    log("Saving thumbnail...");
+
+    // HQ thumbnails
     $frame->save(SB_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
+
+    // Classic thumbnails
+    $frameClassic1->save(SB_DYNAMIC_PATH . '/thumbnails/classic/' . $new . '.1.jpg');
+    $frameClassic2->save(SB_DYNAMIC_PATH . '/thumbnails/classic/' . $new . '.2.jpg');
+    $frameClassic3->save(SB_DYNAMIC_PATH . '/thumbnails/classic/' . $new . '.3.jpg');
+
     log("Thumbnail saved!");
 
     if ($upload_type == "video_thumbnail_only") {
