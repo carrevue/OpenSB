@@ -121,7 +121,6 @@
 <div class="page {% if data.customization %}customized-profile{% endif %}">
     <div class="page-contents">
         <div class="container {{ page_name }} {% if banner_picture %}has-profile-banner{% endif %}">
-            {{ include(component('banners')) }}
             {#{% if not show_sidebar %}
                 {% block content %}{% endblock %}
                 {{ include(component('footer')) }}
@@ -133,6 +132,7 @@
                     </div>
                 </div>
                 <div class="content">
+                    {{ include(component('banners')) }}
                     {% block content %}{% endblock %}
                     {{ include(component('footer')) }}
                 </div>
