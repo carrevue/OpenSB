@@ -1,6 +1,6 @@
 {
     "require": {
-        "twig/twig": "3.22.1",
+        "twig/twig": "3.22.2",
         "intervention/image": "3.11.5",
         "erusev/parsedown": "dev-master",
         "php-ffmpeg/php-ffmpeg": "1.3.2",
