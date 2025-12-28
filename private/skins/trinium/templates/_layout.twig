@@ -127,7 +127,9 @@
             {% else %}#}
             <div class="sidebar-page-grid">
                 <div class="sidebar-container {% if options.trinium_show_sidebar %}active{% endif %}" id="sidebar">
-                    <div class="sidebar {% if page_name == "home" %}with-jumbotron{% endif %}">
+                    <div class="sidebar
+                        {% if page_name == "home" %}with-jumbotron{% endif %}
+                        {% if data.customization %}user-custom-profile{% endif %}">
                         {% include('components/_hamburger_menu.twig') %}
                     </div>
                 </div>
