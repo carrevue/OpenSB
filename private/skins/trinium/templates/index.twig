@@ -42,6 +42,9 @@
                         <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
                             {{ icon('homepage-grid', 24) }}
                         </div>
+                        <div class="tablink homepage {% if type=='new' %}active{% endif %}" id="index-new-button">
+                            New
+                        </div>
                     </div>
                 </div>
             </div>
@@ -50,13 +53,15 @@
 {% endblock %}
 
 {% block content %}
-    {% if not data.uploads_new  %}
+    {% if not data.uploads_new and not data.uploads_featured %}
         <div class="banner banner-secondary">
             This instance is currently empty.
         </div>
     {% else %}
         {% if type == "grid" %}
             {{ include('/components/_index_grid.twig') }}
+        {% elseif type == "new" %}
+            {{ include('/components/_index_new.twig') }}
         {% else %}
             {{ include('/components/_index_list.twig') }}
         {% endif %}

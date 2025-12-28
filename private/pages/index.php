@@ -41,8 +41,6 @@ if ($options["skin"] == "finalium") {
     die();
 }
 
-$trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new_shit"] == "true";
-
 if ($options["skin"] == "trinium") {
     $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
 
@@ -51,15 +49,22 @@ if ($options["skin"] == "trinium") {
     } else {
         $uploads_random_query_limit = 24;
     }
+
+    if ($type == "new") {
+        $uploads_featured_query_limit = 12;
+    } else {
+        $uploads_featured_query_limit = 4;
+    }
+
     $uploads_recent_query_limit = 12;
 } else {
     $type = "list";
 
     $uploads_random_query_limit = 12;
     $uploads_recent_query_limit = 12;
-}
 
-$uploads_featured_query_limit = 4;
+    $uploads_featured_query_limit = 4;
+}
 
 if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 1;
@@ -73,7 +78,11 @@ if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type ==
     $uploads_random = $upload_query->query("RAND()", $uploads_random_query_limit);
 }
 
-$uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
+if ($options["skin"] == "trinium" & $type == "new") {
+    $uploads_recent = [];
+} else {
+    $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
+}
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
