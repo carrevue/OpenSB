@@ -132,6 +132,28 @@ $data = [
 ];
 
 
+$slogan = null;
+if ($sb->getLocalizationClass()->getLanguageCode() === 'en') {
+    $handle = fopen(SB_PRIVATE_PATH . '/random.txt', 'r');
+
+    if ($handle) {
+        $count = 0;
+
+        while (($line = fgets($handle)) !== false) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+
+            if (++$count === 1 || random_int(1, $count) === 1) {
+                $slogan = $line;
+            }
+        }
+
+        fclose($handle);
+    }
+}
+
 /*
 if ($options["skin"] == "trinium" && !$sb->getAuthenticationClass()->isUserLoggedIn()) {
     if (empty($_SESSION['csrf_token'])) {
@@ -144,4 +166,5 @@ if ($options["skin"] == "trinium" && !$sb->getAuthenticationClass()->isUserLogge
 echo $twig->render('index.twig', [
     'data' => $data,
     'type' => $type,
+    'slogan' => $slogan ?? null,
 ]);

@@ -21,7 +21,9 @@
                     </div>
                 {% else %}
                     <h1>{{ localize('welcome_logged_out', website_branding.name) }}</h1>
-                    {% if is_chaziz_sb %}
+                    {% if slogan %}
+                        <p><q>{{ slogan }}</q></p>
+                    {% elseif is_chaziz_sb %}
                         <p>{{ localize('welcome_slogan') }}</p>
                     {% endif %}
                     <div class="jumbotron-get-started">
@@ -32,6 +34,7 @@
             </div>
             <div class="jumbotron-right-container">
                 <div class="jumbotron-right-date">
+                    {# todo: maybe remove this? -chaziz 12/28/2025 #}
                     {{ date() | format_date('long', 'none') }}
                 </div>
                 <div class="jumbotron-right-buttons">
