@@ -1,6 +1,6 @@
 {% extends "_layout_profile.twig" %}
 
-{% set banner_picture = profile_banner(data.author.info.username) %}
+{% set banner_picture = profile_banner(data.author.id) %}
 
 {% set title = data.title %}
 
@@ -26,7 +26,7 @@
             <div class="profile-box">
                 <div class="profile-box-pfp small">
                     <div class="profile-picture">
-                        <img src="{{ profile_picture(data.author.info.username) }}" class="pfp"
+                        <img src="{{ profile_picture(data.author.id) }}" class="pfp"
                              alt="{{ data.author.info.username }}">
                     </div>
                 </div>

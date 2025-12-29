@@ -15,9 +15,6 @@ dynamic/custom_thumbnails/*
 dynamic/music/*
 dynamic/emojis/*
 
-## Slogans
-private/random.txt
-
 ## Upload processor logs
 private/upload_processor_logs/*.log
 
@@ -25,7 +22,8 @@ private/upload_processor_logs/*.log
 public/assets/*_branding/
 !public/assets/sb_branding/
 
-!*.txt
+## Slogans
+private/random.txt
 
 ## CSS
 /public/assets/css/*.css

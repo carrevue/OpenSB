@@ -72,7 +72,7 @@ $feed = [
 foreach ($featured_users as $user) {
     $feed_key = "user_" . $user["id"];
     $feed[$feed_key] = [
-        //"icon" => "/assets/profiledef_hitchhiker.svg",
+        "icon" => $sb->getStorageClass()->getUserProfilePicture($user["id"]),
         "title" => Utilities::userIDToUsername($database, $user["id"]),
         "uploads" => Utilities::makeUploadArray(
             $database,

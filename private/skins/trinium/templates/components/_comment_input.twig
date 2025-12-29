@@ -1,7 +1,7 @@
 {% if is_user_logged_in %}
 <div class="new-comment" id="comment_field">
     <div class="profile-picture">
-        <img src="{{ profile_picture(user_data.name) }}" class="pfp" alt="{{ user_data.name }}">
+        <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
     </div>
     <div id="new-comment-logged-out">
         {{ localize('write_comment') }}

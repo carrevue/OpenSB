@@ -259,28 +259,26 @@ class Storage
      * 
      * Return the user profile picture.
      *
-     * @param mixed $username
-     * @param mixed $isStaff
+     * @param int $id User's ID
+     * @param bool $isStaff Admin-specific behavior
      *
      * @return string
      */
-    public function getUserProfilePicture($username, $isStaff): string
+    public function getUserProfilePicture($user, $isStaff = false): string
     {
         $placeholder = $this->sb->isHitchhiker() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
-        $id = Utilities::usernameToUserID($this->database, $username);
-
-        $path = SB_DYNAMIC_PATH . '/pfp/' . $id . '.png';
+        $path = SB_DYNAMIC_PATH . '/pfp/' . $user . '.png';
 
         // don't bother with userdata since that might slow shit down
-        $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$id]);
+        $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$user]);
 
         if ($is_banned && !$isStaff) {
             return '/assets/' . $placeholder;
         }
 
         if (file_exists($path)) {
-            return '/dynamic/pfp/' . $id . '.png';
+            return '/dynamic/pfp/' . $user . '.png';
         }
 
         return '/assets/' . $placeholder;
@@ -291,18 +289,16 @@ class Storage
      * 
      * Returns the user profile banner.
      *
-     * @param mixed $username
+     * @param int $id User's ID
      *
      * @return bool|string
      */
-    public function getUserProfileBanner($username): bool|string
+    public function getUserProfileBanner($user): bool|string
     {
-        $id = Utilities::usernameToUserID($this->database, $username);
-
-        $path = SB_DYNAMIC_PATH . '/banners/' . $id . '.png';
+        $path = SB_DYNAMIC_PATH . '/banners/' . $user . '.png';
 
         if (file_exists($path)) {
-            return '/dynamic/banners/' . $id . '.png';
+            return '/dynamic/banners/' . $user . '.png';
         } else {
             return $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
         }

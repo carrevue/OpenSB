@@ -1,6 +1,6 @@
 {% extends "_layout_profile.twig" %}
 
-{% set banner_picture = profile_banner(data.username) %}
+{% set banner_picture = profile_banner(data.id) %}
 
 {% set title = data.username ~ "'s uploads" %}
 
@@ -11,7 +11,7 @@
 {% else %}
     {% set opengraph_description = localize('profile_no_description') %}
 {% endif %}
-{% set opengraph_image = profile_picture(data.username) %}
+{% set opengraph_image = profile_picture(data.id) %}
 
 {% block content %}
     {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
