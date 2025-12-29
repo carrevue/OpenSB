@@ -15,6 +15,9 @@ dynamic/custom_thumbnails/*
 dynamic/music/*
 dynamic/emojis/*
 
+## Slogans
+private/random.txt
+
 ## Upload processor logs
 private/upload_processor_logs/*.log
 

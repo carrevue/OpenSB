@@ -87,4 +87,5 @@ foreach ($featured_users as $user) {
 
 echo $twig->render('index.twig', [
     'feed' => $feed,
+    'slogan' => Utilities::getRandomSlogan() ?? null,
 ]);
