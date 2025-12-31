@@ -166,6 +166,10 @@ class SquareBracket
         $this->is_chaziz_squarebracket_instance = ($config["site"] === "squarebracket_chaziz");
         $this->is_sitetest_instance = ($config["site"] === "sitetest");
 
+        if ($this->is_chaziz_squarebracket_instance || $this->is_sitetest_instance) {
+            date_default_timezone_set('America/New_York');
+        }
+
         $this->is_debug = ($config["mode"] ?? '') === "DEV";
 
         $this->database = new Database($host, $user, $pass, $db);

@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let hamburgerButton = (document.getElementById('button-hamburger'));
     let hamburgerMenu = (document.getElementById('hamburger'));
     let sidebar = (document.getElementById('sidebar'));
+
+    //profile
+    let profile_banner = (document.getElementById('profile-banner'));
     
     // if the min-width breakpoints get changed, don't forgot to update this.
     const mediaQueryList = window.matchMedia("(min-width: 950px)");
@@ -33,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     setConfig("trinium_show_sidebar", !sidebar.classList.contains("active"));
                     sidebar.classList.toggle("active");
+                    profile_banner.classList.toggle("sidebar-active");
                 }
             } else {
                 error("where the fuck is the hamburger menu");

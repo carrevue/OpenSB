@@ -92,7 +92,7 @@
 
 {% block precontent %}
     {% if banner_picture %}
-    <div class="jumbotron profile-banner"></div>
+    <div class="jumbotron profile-banner {% if options.trinium_show_sidebar %}sidebar-active{% endif %}" id="profile-banner"></div>
     {% endif %}
 {% endblock %}
 
