@@ -51,7 +51,7 @@ if ($options["skin"] == "trinium") {
     $type = "list";
 
     $uploads_random_query_limit = 12;
-    $uploads_featured_query_limit = 4;
+    $uploads_featured_query_limit = 12;
 }
 
 if ($options["skin"] == "bootstrap") {
