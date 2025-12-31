@@ -23,15 +23,14 @@ namespace OpenSB\Pages;
 
 global $sb, $twig, $database, $auth;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\Utilities;
 use OpenSB\CommentData;
 use OpenSB\CommentLocation;
 use OpenSB\UserCustomizationData;
 use OpenSB\UserData;
-use OpenSB\Utilities;
 
 if ($_GET['j'] ?? null) {
-    CoreUtilities::redirect('/read/' . $_GET['j'], 301);
+    Utilities::redirect('/read/' . $_GET['j'], 301);
 }
 
 $data = $database->fetch("SELECT j.* FROM journals j WHERE j.id = ?", [$id]);

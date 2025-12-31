@@ -39,14 +39,14 @@ use FFMpeg\Filters;
 use FFMpeg\Format\Video\X264;
 use FFMpeg\Exception\RuntimeException;
 
-define("BLUFF_ROOT_PATH", dirname(__DIR__, 2));
-define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
-define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
-define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
-define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
-define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("SB_ROOT_PATH", dirname(__DIR__, 2));
+define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
+define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
+define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
+define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
-require_once BLUFF_PRIVATE_PATH . '/common.php';
+require_once SB_PRIVATE_PATH . '/common.php';
 
 function log(string $message): void
 {
@@ -220,7 +220,7 @@ try {
     }
     $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
     log("Saving thumbnail");
-    $frame->save(BLUFF_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
+    $frame->save(SB_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
     log("Thumbnail saved!");
 
     if ($upload_type == "video_thumbnail_only") {
@@ -273,7 +273,7 @@ try {
     $video->filters()->custom('format=yuv420p');
 
     log("Converting video...");
-    $video->save($h264, BLUFF_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
+    $video->save($h264, SB_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
 
     debug_print_backtrace();
     unlink($target_file);

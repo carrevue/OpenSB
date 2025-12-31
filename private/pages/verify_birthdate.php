@@ -27,10 +27,9 @@ use DateMalformedStringException;
 use DateTime;
 
 use OpenSB\Utilities;
-use BluffingoCore\CoreUtilities;
 
 if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {
-    CoreUtilities::redirect("/");
+    Utilities::redirect("/");
 }
 
 if ($sb->getLocalOptions()["skin"] != "trinium") {
@@ -41,7 +40,7 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
 
     $sb->setOptionCookie($options);
 
-    CoreUtilities::redirect("/verify_birthdate");
+    Utilities::redirect("/verify_birthdate");
 }
 
 if (isset($_POST['birthdatesubmit'])) {

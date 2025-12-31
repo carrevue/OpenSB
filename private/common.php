@@ -29,11 +29,11 @@ if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
     die('OpenSB is not compatible with your PHP version. OpenSB requires PHP 8.2 or newer.');
 }
 
-if (!file_exists(BLUFF_VENDOR_PATH . '/autoload.php')) {
+if (!file_exists(SB_VENDOR_PATH . '/autoload.php')) {
     die('The required Composer packages are missing.');
 }
 
-if (!file_exists(BLUFF_PRIVATE_PATH . '/config/config.php')) {
+if (!file_exists(SB_PRIVATE_PATH . '/config/config.php')) {
     die('The configuration file could not be found.');
 }
 
@@ -52,9 +52,9 @@ if (!empty($missing_extensions)) {
 
 // TODO: add check for BluffingoCore -chaziz 07/19/2025
 
-$config = include_once(BLUFF_PRIVATE_PATH . '/config/config.php');
+$config = include_once(SB_PRIVATE_PATH . '/config/config.php');
 
-require_once(BLUFF_VENDOR_PATH . '/autoload.php');
+require_once(SB_VENDOR_PATH . '/autoload.php');
 
 use OpenSB\ErrorTemplating;
 use OpenSB\SquareBracket;
@@ -65,10 +65,10 @@ use OpenSB\VersionNumber;
 ini_set('session.gc_maxlifetime', 86400);
 
 // please use apache/nginx for production stuff.
-define('BLUFF_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
-define('BLUFF_CLI', php_sapi_name() === 'cli');
+define('SB_PHP_BUILTINSERVER', php_sapi_name() === 'cli-server');
+define('SB_CLI', php_sapi_name() === 'cli');
 
-if (!BLUFF_CLI) {
+if (!SB_CLI) {
     $blacklisted_user_agents = [
         '/python-requests/i',
         '/curl/i',
@@ -105,15 +105,15 @@ if (!BLUFF_CLI) {
 
 spl_autoload_register(function ($class_name) {
     $class_name = str_replace('\\', '/', $class_name);
-    if (file_exists(BLUFF_PRIVATE_PATH . "/class/$class_name.php")) {
-        require BLUFF_PRIVATE_PATH . "/class/$class_name.php";
+    if (file_exists(SB_PRIVATE_PATH . "/class/$class_name.php")) {
+        require SB_PRIVATE_PATH . "/class/$class_name.php";
     }
 });
 
 set_exception_handler(function ($exception) {
     $version_number = new VersionNumber(); // kinda ugly imo
 
-    if (BLUFF_CLI) {
+    if (SB_CLI) {
         $errorMsg = sprintf(
             "Error: %s" . PHP_EOL .
                 "Code: %s" . PHP_EOL .
@@ -181,7 +181,7 @@ set_exception_handler(function ($exception) {
 $sb = new SquareBracket($config);
 $database = $sb->getDatabaseClass();
 
-if (!BLUFF_CLI) {
+if (!SB_CLI) {
     $version_number = new VersionNumber(); // kinda ugly imo
     header('X-Powered-By: OpenSB ' . $version_number->getVersionString());
 
@@ -233,7 +233,7 @@ if (!BLUFF_CLI) {
         die();
     }
 
-    if ($sb->isUnderMaintenance() && !BLUFF_PHP_BUILTINSERVER) {
+    if ($sb->isUnderMaintenance() && !SB_PHP_BUILTINSERVER) {
         http_response_code(503);
         echo $twig_error->render("offline.twig", ["page" => "failwhale"]);
         die();

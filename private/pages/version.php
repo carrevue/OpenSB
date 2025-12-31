@@ -24,7 +24,6 @@ namespace OpenSB\Pages;
 global $twig, $database;
 
 use OpenSB\VersionNumber;
-use BluffingoCore\CoreVersionNumber;
 
 $database_version = $database->getServerVersion();
 
@@ -48,10 +47,6 @@ $data = [
         'sbVersion' => [
             'title' => "OpenSB " . $sbVersionNumber->getVersionName(),
             'info' => $sbVersionNumber->getVersionString(),
-        ],
-        'coreVersion' => [
-            'title' => "BluffingoCore",
-            'info' => (new CoreVersionNumber)->getVersionString(),
         ],
         'phpVersion' => [
             'title' => "PHP",

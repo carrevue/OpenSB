@@ -21,6 +21,9 @@ public/assets/*_branding/
 
 !*.txt
 
+## Slogans
+private/random.txt
+
 ## CSS
 /public/assets/css/*.css
 

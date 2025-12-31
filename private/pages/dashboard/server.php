@@ -25,7 +25,7 @@ global $auth, $twig, $database, $sb, $path;
 
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
-use BluffingoCore\Composer\ComposerInstalled;
+use Composer\ComposerInstalled;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");
@@ -42,7 +42,7 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
 function getComposerPackages(): array
 {
     $dependencies = [];
-    $installed = new ComposerInstalled(BLUFF_VENDOR_PATH . '/composer/installed.json');
+    $installed = new ComposerInstalled(SB_VENDOR_PATH . '/composer/installed.json');
     $dependencies += $installed->getInstalledDependencies();
     ksort($dependencies);
     return $dependencies;

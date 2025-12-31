@@ -23,23 +23,23 @@ namespace OpenSB\Tools;
 
 // INCOMPLETE
 
-define("BLUFF_ROOT_PATH", dirname(__DIR__));
-define("BLUFF_DYNAMIC_PATH", BLUFF_ROOT_PATH . '/dynamic');
-define("BLUFF_PUBLIC_PATH", BLUFF_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
-define("BLUFF_PRIVATE_PATH", BLUFF_ROOT_PATH . '/private');
-define("BLUFF_VENDOR_PATH", BLUFF_ROOT_PATH . '/vendor');
-define("BLUFF_GIT_PATH", BLUFF_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
+define("SB_ROOT_PATH", dirname(__DIR__));
+define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
+define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
+define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
+define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
+define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 global $database, $sb;
 
-require_once BLUFF_PRIVATE_PATH . '/common.php';
+require_once SB_PRIVATE_PATH . '/common.php';
 
 $uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE type = 0"));
 $storage = $sb->getStorageClass();
 
 foreach ($uploads as $upload) {
-    $video_path = BLUFF_DYNAMIC_PATH . "/videos/" . $upload["upload_id"] . ".converted.mp4";
-    $thumbnail_path = BLUFF_DYNAMIC_PATH . "/thumbnails/" . $upload["upload_id"] . ".png";
+    $video_path = SB_DYNAMIC_PATH . "/videos/" . $upload["upload_id"] . ".converted.mp4";
+    $thumbnail_path = SB_DYNAMIC_PATH . "/thumbnails/" . $upload["upload_id"] . ".png";
 
     if (!file_exists($thumbnail_path) && file_exists($video_path)) {
         $storage->processVideoUpload(

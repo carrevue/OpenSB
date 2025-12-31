@@ -25,7 +25,7 @@ namespace OpenSB;
 
 use OpenSB\UserRoleEnum;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\Utilities;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -87,7 +87,7 @@ class Templating
      */
     public function __construct(SquareBracket $sb)
     {
-        chdir(BLUFF_PRIVATE_PATH);
+        chdir(SB_PRIVATE_PATH);
 
         $this->sb = $sb;
         $this->authentication = $this->sb->getAuthenticationClass();
@@ -146,11 +146,11 @@ class Templating
             $path_default = '/components/default/' . $component . '.twig';
             $path_common = 'skins/common/' . $component . '.twig';
 
-            if (file_exists(BLUFF_PRIVATE_PATH . '/' . $templatePath . $path)) {
+            if (file_exists(SB_PRIVATE_PATH . '/' . $templatePath . $path)) {
                 return $path;
-            } elseif (file_exists(BLUFF_PRIVATE_PATH . '/' . $templatePath . $path_default)) {
+            } elseif (file_exists(SB_PRIVATE_PATH . '/' . $templatePath . $path_default)) {
                 return $path_default;
-            } elseif (file_exists(BLUFF_PRIVATE_PATH . '/' . $path_common)) {
+            } elseif (file_exists(SB_PRIVATE_PATH . '/' . $path_common)) {
                 return $component . '.twig'; // i guess???
             } else {
                 return '/missing_component.twig';
@@ -229,8 +229,8 @@ class Templating
         }
 
         if (isset($_SERVER['HTTP_HOST'])) {
-            $this->twig->addGlobal("page_url", CoreUtilities::getURL(true));
-            $this->twig->addGlobal("domain", CoreUtilities::getURL(false));
+            $this->twig->addGlobal("page_url", Utilities::getURL(true));
+            $this->twig->addGlobal("domain", Utilities::getURL(false));
         }
     }
 

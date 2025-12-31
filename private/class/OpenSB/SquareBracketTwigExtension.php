@@ -30,8 +30,8 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-use BluffingoCore\Database;
-use BluffingoCore\Profiler;
+use OpenSB\Database;
+use OpenSB\Profiler;
 
 use OpenSB\UserRoleEnum;
 
@@ -749,7 +749,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getCssFileDate()
     {
-        return filemtime(BLUFF_PUBLIC_PATH . "/assets/css/trinium-default.css");
+        return filemtime(SB_PUBLIC_PATH . "/assets/css/trinium-default.css");
     }
 
     /**

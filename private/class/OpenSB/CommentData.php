@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-use BluffingoCore\Database;
+use OpenSB\Database;
 
 /**
  * class CommentData

@@ -24,9 +24,8 @@ namespace OpenSB\Pages;
 
 global $twig, $sb, $database;
 
-use BluffingoCore\CoreUtilities;
-use OpenSB\UploadQuery;
 use OpenSB\Utilities;
+use OpenSB\UploadQuery;
 
 $upload_query = new UploadQuery($sb);
 
@@ -49,7 +48,7 @@ $order = getOrderFromType($type);
 $limit = $database->paginate($page, 20);
 
 if ($user) {
-    CoreUtilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
+    Utilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
 } else {
     $uploads = $upload_query->query($order, $limit);
     $upload_count = $upload_query->count();

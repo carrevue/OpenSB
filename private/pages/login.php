@@ -25,7 +25,6 @@ namespace OpenSB\Pages;
 
 global $twig, $database, $auth, $sb;
 
-use BluffingoCore\CoreUtilities;
 use OpenSB\Utilities;
 
 $warning = $sb->getWarningString();
@@ -180,7 +179,7 @@ if (isset($_POST["loginsubmit"])) {
 
                     $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
 
-                    CoreUtilities::redirect('./');
+                    Utilities::redirect('./');
                 }
             } else {
                 $_SESSION['login_attempts']['count']++;

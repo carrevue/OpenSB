@@ -22,9 +22,7 @@
 
 namespace OpenSB;
 
-use BluffingoCore\Database;
-use BluffingoCore\CoreUtilities;
-
+use OpenSB\Database;
 use OpenSB\Utilities;
 
 use \DiscordWebhooks\Client;
@@ -79,7 +77,7 @@ class DiscordWebhookLogging
         $this->footer_text = $sb->getBrandingSettings()["name"]
             . ' / OpenSB ' . (new VersionNumber())->getVersionString();
 
-        $this->domain = CoreUtilities::getURL(false);
+        $this->domain = Utilities::getURL(false);
     }
 
     /**

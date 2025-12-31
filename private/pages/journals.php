@@ -23,7 +23,6 @@ namespace OpenSB\Pages;
 
 global $twig, $database, $auth, $sb;
 
-use BluffingoCore\CoreUtilities;
 use OpenSB\Utilities;
 
 $journal_count = 0;
@@ -45,7 +44,7 @@ if ($user) {
         );
     } else {
         // just redirect to the new user-specific journals page
-        CoreUtilities::redirect('/user/' . $user . '/journals', 301);
+        Utilities::redirect('/user/' . $user . '/journals', 301);
     }
 
     $data = Utilities::makeJournalArray($database, $journal_array);

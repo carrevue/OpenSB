@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-use BluffingoCore\GitInfo;
+use OpenSB\GitInfo;
 use Exception;
 
 /**
@@ -41,7 +41,7 @@ class VersionNumber
     /**
      * @var string The version number, which tries to follow Semantic versioning.
      */
-    private string $versionNumber = "2.0.10";
+    private string $versionNumber = "2.0.11-dev";
 
     /**
      * @var string The full complete version string.

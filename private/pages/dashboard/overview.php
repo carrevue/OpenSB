@@ -334,7 +334,7 @@ if (!$is_windows) {
     $disk_used = $disk_total - $disk_free;
     $disk_percentage = Utilities::calculatePercentage(1, $disk_used, $disk_total);
 
-    $instance_size = get_folder_size(BLUFF_ROOT_PATH);
+    $instance_size = get_folder_size(SB_ROOT_PATH);
 
     $disk = [
         "total" => Utilities::formatBytes($disk_total, 2),

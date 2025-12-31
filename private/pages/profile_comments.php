@@ -23,10 +23,9 @@ namespace OpenSB\Pages;
 
 global $auth, $database, $twig, $sb;
 
-use BluffingoCore\CoreUtilities;
+use OpenSB\Utilities;
 use OpenSB\CommentData;
 use OpenSB\CommentLocation;
-use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
 use OpenSB\UserFlags;
 use OpenSB\UserCustomizationData;
@@ -41,7 +40,7 @@ if (!$data) {
         // if so, attempt to fetch the user's current name through their id
         $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
         if ($new_username) {
-            CoreUtilities::redirect('/user/' . $new_username, 301);
+            Utilities::redirect('/user/' . $new_username, 301);
         } else {
             // if for whatever reason this leads to nowhere (eg: deleted user or 
             // half-assed prod blacklisting), return to homepage.

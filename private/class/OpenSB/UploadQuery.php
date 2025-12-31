@@ -22,7 +22,7 @@
 namespace OpenSB;
 
 use OpenSB\SquareBracket;
-use BluffingoCore\Database;
+use OpenSB\Database;
 
 /**
  * class UploadQuery

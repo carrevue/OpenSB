@@ -28,10 +28,9 @@ global $sb, $twig, $database;
 
 use DateMalformedStringException;
 use DateTime;
-use BluffingoCore\CoreUtilities;
+use OpenSB\Utilities;
 use Random\RandomException;
 use OpenSB\UserFlags;
-use OpenSB\Utilities;
 
 if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
@@ -167,7 +166,7 @@ if (isset($_POST['registersubmit'])) {
             $sb->getDiscordWebhookClass()->newUserHook($data);
         }
 
-        CoreUtilities::redirect('./');
+        Utilities::redirect('./');
     } else {
         Utilities::notifyBanner($error, "/register");
     }
