@@ -18,15 +18,15 @@
 <div class="section">
     <div class="section-header flex">
         <div class="section-header-left">
-            <h2 class="section-title">{{ localize('homepage_recent_uploads') }}</h2>
-            <div class="section-desc">{{ localize('homepage_recent_uploads_desc') }}</div>
+            <h2 class="section-title">{{ localize('featured_uploads') }}</h2>
+            <div class="section-desc">{{ localize('featured_uploads_desc') }}</div>
         </div>
         <div class="section-header-right">
             <a href="/browse">{{ localize('more') }}</a>
         </div>
     </div>
     <div class="content-box content-grid">
-        {% for upload in data.uploads_new %}
+        {% for upload in data.uploads_featured %}
             {{ include('/components/_upload_grid.twig') }}
         {% endfor %}
     </div>

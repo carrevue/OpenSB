@@ -128,7 +128,7 @@ class Localization
             $locale,
             $this->convertDateFormatterPattern($dateFormat),
             $this->convertDateFormatterPattern($timeFormat),
-            $date->getTimezone(),
+            date_default_timezone_get(),
             IntlDateFormatter::GREGORIAN,
             $pattern
         );

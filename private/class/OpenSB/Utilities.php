@@ -654,6 +654,29 @@ class Utilities
         ";
     }
 
+    public static function getRandomSlogan() {
+        global $sb;
+
+        if ($sb->getLocalizationClass()->getLanguageCode() === 'en'
+            && is_readable($path = SB_PRIVATE_PATH . '/random.txt')
+            && ($handle = fopen($path, 'r'))
+        ) {
+            $count = 0;
+
+            while (($line = fgets($handle)) !== false) {
+                $line = trim($line);
+                if ($line !== '' && (++$count === 1 || random_int(1, $count) === 1)) {
+                    $slogan = $line;
+                }
+            }
+
+            fclose($handle);
+            return $slogan;
+        } else {
+            return null;
+        }
+    }
+
     // (hmac-sha256)
     private static function getCookieSecret()
     {

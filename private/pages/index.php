@@ -35,24 +35,22 @@ $upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 
-$trinium_new_shit = isset($options["trinium_new_shit"]) && $options["trinium_new_shit"] == "true";
+$uploads_recent_query_limit = 12; // only used on bootstrap skin's classic theme
 
 if ($options["skin"] == "trinium") {
     $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
 
     if ($type == "grid") {
-        $uploads_random_query_limit = 12;
-        $uploads_featured_query_limit = 4;
+        $uploads_random_query_limit = 8;
+        $uploads_featured_query_limit = 8;
     } else {
         $uploads_random_query_limit = 24;
         $uploads_featured_query_limit = 12;
     }
-    $uploads_recent_query_limit = 12;
 } else {
     $type = "list";
 
     $uploads_random_query_limit = 12;
-    $uploads_recent_query_limit = 12;
     $uploads_featured_query_limit = 4;
 }
 
@@ -62,16 +60,16 @@ if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 3;
 }
 
-if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type == "list")) {
+if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type == "list") || $options["skin"] == "finalium") {
     $uploads_random = [];
 } else {
     $uploads_random = $upload_query->query("RAND()", $uploads_random_query_limit);
 }
 
-if ($options["skin"] == "trinium" & $type == "list") {
-    $uploads_recent = [];
-} else {
+if ($options["skin"] == "bootstrap" & $options["theme"] == "classic") {
     $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
+} else {
+    $uploads_recent = [];
 }
 
 $uploads_featured = $upload_query->query(
@@ -134,4 +132,5 @@ if ($options["skin"] == "trinium" && !$sb->getAuthenticationClass()->isUserLogge
 echo $twig->render('index.twig', [
     'data' => $data,
     'type' => $type,
+    'slogan' => Utilities::getRandomSlogan() ?? null,
 ]);

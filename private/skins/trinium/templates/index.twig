@@ -29,8 +29,10 @@
                     </div>
                 {% else %}
                     <h1>{{ localize('welcome_logged_out', website_branding.name) }}</h1>
-                    {% if is_chaziz_sb %}
-                        <p>{{ localize('welcome_slogan') }}</p>
+                    {% if slogan %}
+                        <p class="jumbotron-slogan"><q>{{ slogan }}</q></p>
+                    {% elseif is_chaziz_sb %}
+                        <p class="jumbotron-slogan">{{ localize('welcome_slogan') }}</p>
                     {% endif %}
                     <div class="jumbotron-get-started">
                         <a href="/register" class="button button-warning">{{ localize('welcome_get_started') }}</a>
