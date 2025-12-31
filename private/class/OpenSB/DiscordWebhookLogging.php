@@ -355,6 +355,14 @@ class DiscordWebhookLogging
                 $author = 'User unverified by ' . $data['author'];
                 $color = Colors::DANGER;
                 break;
+            case "featured":
+                $author = 'User featured by ' . $data['author'];
+                $color = Colors::SUCCESS;
+                break;
+            case "unfeatured":
+                $author = 'User unfeatured by ' . $data['author'];
+                $color = Colors::WARNING;
+                break;
         }
 
         $title = $data['user']; //Utilities::userIDToUsername($this->database, $data['user']);
