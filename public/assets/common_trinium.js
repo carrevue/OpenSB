@@ -3,36 +3,56 @@ function error(error) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let hamburgerButton = (document.getElementById('button-hamburger')); // TEMPORARY
-    let hamburgerMenu = (document.getElementById('hamburger')); // TEMPORARY
+    let hamburgerButton = (document.getElementById('button-hamburger'));
+    let hamburgerMenu = (document.getElementById('hamburger'));
+    let sidebar = (document.getElementById('sidebar'));
+    
+    // if the min-width breakpoints get changed, don't forgot to update this.
+    const mediaQueryList = window.matchMedia("(min-width: 950px)");
+    let isMobile = false;
 
+    function handleMediaQueryChange(event) {
+        if (event.matches) {
+            isMobile = false;
+            if (hamburgerMenu.classList.contains("active")) {
+                hamburgerMenu.classList.toggle("active");
+            }
+        } else {
+            isMobile = true;
+        }
+    }
+
+    handleMediaQueryChange(mediaQueryList);
+    mediaQueryList.addEventListener("change", handleMediaQueryChange);
+    ///
     if (hamburgerButton) {
         hamburgerButton.onclick = function () {
-            if (hamburgerMenu) {
-                hamburgerMenu.classList.toggle("active");
+            if (hamburgerMenu && sidebar) {
+                if (isMobile) {
+                    hamburgerMenu.classList.toggle("active");
+                } else {
+                    setConfig("trinium_show_sidebar", !sidebar.classList.contains("active"));
+                    sidebar.classList.toggle("active");
+                }
             } else {
-                console.error("where the fuck is the hamburger menu");
+                error("where the fuck is the hamburger menu");
             }
         }
     }
 
-    // get those two buttons in the homepage
-    let indexListButton = (document.getElementById('index-list-button'));
-    let indexGridButton = (document.getElementById('index-grid-button'));
+    // get those tabs in the homepage
+    function bindIndexTabToggle(id, type) {
+        const btn = document.getElementById(id);
+        if (!btn) return;
 
-    if (indexListButton) {
-        indexListButton.onclick = function () {
-            setConfig("trinium_homepage_type", "list");
+        btn.addEventListener('click', () => {
+            setConfig('trinium_homepage_type', type);
             location.reload();
-        }
+        });
     }
 
-    if (indexGridButton) {
-        indexGridButton.onclick = function () {
-            setConfig("trinium_homepage_type", "grid");
-            location.reload();
-        }
-    }
+    bindIndexTabToggle('index-list-button', 'list');
+    bindIndexTabToggle('index-grid-button', 'grid');
 
     // Get all tab groups
     const tabGroups = document.querySelectorAll(".tab-group");
@@ -348,16 +368,8 @@ document.addEventListener("DOMContentLoaded", () => {
     */
 
     let debug_button = (document.getElementById('debug-button'));
-    let debug_close_button = (document.getElementById('debug-close-button'));
     let debug_dialog = (document.getElementById('debug-dialog'));
+    let debug_close_button = (document.getElementById('debug-close-button'));
 
-    if (debug_button) {
-        debug_button.addEventListener("click", () => {
-            debug_dialog.showModal();
-        });
-
-        debug_close_button.addEventListener("click", () => {
-            debug_dialog.close();
-        });
-    }
+    setUpModal(debug_button, debug_dialog, debug_close_button);
 });

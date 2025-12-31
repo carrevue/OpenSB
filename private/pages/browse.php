@@ -26,31 +26,43 @@ global $twig, $sb, $database;
 
 use OpenSB\Utilities;
 use OpenSB\UploadQuery;
+use OpenSB\UploadFlags;
 
 $upload_query = new UploadQuery($sb);
 
-function getOrderFromType($type): string
-{
-    $order = match ($type) {
-        'recent' => "v.timestamp DESC",
-        'popular' => "views DESC",
-        'random' => "RAND()",
-        default => "v.timestamp DESC",
-    };
-    return $order;
-}
+$tabs = [
+    "recent" => [
+        "name" => "new",
+        "order" => "timestamp DESC",
+        "where" => null,
+    ],
+    "featured" => [
+        "name" => "featured",
+        "order" => "v.timestamp DESC",
+        "where" => sprintf("(v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value),
+    ],
+    "popular" => [
+        "name" => "popular",
+        "order" => "views DESC",
+        "where" => null,
+    ],
+    "random" => [
+        "name" => "random",
+        "order" => "RAND()",
+        "where" => null,
+    ],
+];
 
 $type = ($_GET['type'] ?? 'recent');
 $user = ($_GET['user'] ?? null);
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-$order = getOrderFromType($type);
 $limit = $database->paginate($page, 20);
 
 if ($user) {
     Utilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
 } else {
-    $uploads = $upload_query->query($order, $limit);
+    $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limit, $tabs[$type]["where"] ?? null);
     $upload_count = $upload_query->count();
 }
 
@@ -60,8 +72,8 @@ $data = [
 ];
 
 echo $twig->render('browse.twig', [
-    'user' => $user,
     'data' => $data,
     'page' => $page,
     'type' => $type,
+    'tabs' => $tabs,
 ]);

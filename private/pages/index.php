@@ -42,8 +42,10 @@ if ($options["skin"] == "trinium") {
 
     if ($type == "grid") {
         $uploads_random_query_limit = 12;
+        $uploads_featured_query_limit = 4;
     } else {
         $uploads_random_query_limit = 24;
+        $uploads_featured_query_limit = 12;
     }
     $uploads_recent_query_limit = 12;
 } else {
@@ -51,9 +53,8 @@ if ($options["skin"] == "trinium") {
 
     $uploads_random_query_limit = 12;
     $uploads_recent_query_limit = 12;
+    $uploads_featured_query_limit = 4;
 }
-
-$uploads_featured_query_limit = 4;
 
 if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 1;
@@ -67,7 +68,11 @@ if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type ==
     $uploads_random = $upload_query->query("RAND()", $uploads_random_query_limit);
 }
 
-$uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
+if ($options["skin"] == "trinium" & $type == "list") {
+    $uploads_recent = [];
+} else {
+    $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
+}
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",

@@ -1,12 +1,6 @@
 {% extends "_layout.twig" %}
 
-{% set show_sidebar = true %}
-
-{% if user %}
-    {% set title = user ~ "'s uploads" %}
-{% else %}
-    {% set title = localize('browse') %}
-{% endif %}
+{% set title = localize('browse') %}
 
 {% block content %}
     {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
@@ -19,19 +13,13 @@
                 <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
             </div>
         </div>
-        {% if not user %}
-            <div class="tabs">
-                <a class="tablink {% if type=='recent' %}active{% endif %}" href="/browse?type=recent">
-                    {{ localize('new') }}
-                </a>
-                <a class="tablink {% if type=='popular' %}active{% endif %}" href="/browse?type=popular">
-                    {{ localize('popular') }}
-                </a>
-                <a class="tablink {% if type=='random' %}active{% endif %}" href="/browse?type=random">
-                    {{ localize('random') }}
-                </a>
-            </div>
-        {% endif %}
+        <div class="tabs">
+            {% for key, tab in tabs %}
+                <a class="tablink {% if type==key %}active{% endif %}" href="/browse?type={{key}}">
+                    {{ localize(tab.name) }}
+                </a>                
+            {% endfor %}
+        </div>
         <div class="content-box no-border-top">
             {% for upload in data.uploads %}
                 {{ include('/components/_upload_vertical.twig') }}

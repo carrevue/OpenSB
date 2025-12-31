@@ -51,26 +51,6 @@
 #}
 <div class="grid">
     <div class="col-medium-7 col-large-8">
-        {% if data.uploads_new %}
-        <div class="section">
-            <div class="section-header flex">
-                <div class="section-header-left">
-                    <h2 class="section-title">{{ localize('homepage_recent_uploads') }}</h2>
-                    <div class="section-desc">{{ localize('homepage_recent_uploads_desc') }}</div>
-                </div>
-                <div class="section-header-right">
-                    <a href="/browse">{{ localize('more') }}</a>
-                </div>
-            </div>
-            <div class="content-box">
-                {% for upload in data.uploads_new %}
-                    {{ include('/components/_upload_vertical.twig') }}
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
-    <div class="col-medium-5 col-large-4">
         {% if data.uploads_featured %}
         <div class="section">
             <div class="section-header flex">
@@ -84,11 +64,13 @@
             </div>
             <div class="content-box">
                 {% for upload in data.uploads_featured %}
-                    {{ include('/components/_upload_vertical_small.twig') }}
+                    {{ include('/components/_upload_vertical.twig') }}
                 {% endfor %}
             </div>
         </div>
         {% endif %}
+    </div>
+    <div class="col-medium-5 col-large-4">
         {% if data.news_recent %}
         <div class="section">
             <div class="section-header flex">

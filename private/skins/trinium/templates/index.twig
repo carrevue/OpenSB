@@ -1,7 +1,5 @@
 {% extends "_layout.twig" %}
 
-{% set show_sidebar = true %}
-
 {% if is_user_logged_in %}
     {% set jumbotronClassName = "homepage-logged-in" %}
 
@@ -60,7 +58,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if not data.uploads_new  %}
+    {% if not data.uploads_new and not data.uploads_featured %}
         <div class="banner banner-secondary">
             This instance is currently empty.
         </div>

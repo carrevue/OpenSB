@@ -11,7 +11,7 @@
                     <img alt="{{ website_branding.name }}" class="logo" src="{{ logo }}">
                 </a>
             </div>
-            {% if not show_sidebar %}
+            {#{% if not show_sidebar %}
                 <div class="header-hidden-links">
                 {% for key, link in header_main_links() %}
                     <a class="menulink" href="{{ link.url }}">
@@ -19,7 +19,7 @@
                     </a>
                 {% endfor %}
                 </div>
-            {% endif %}
+            {% endif %}#}
             <form class="header-search" action="/search">
                 <input id="header-search-input" type="text" name="query" placeholder="{{ localize('search') }}...">
                 <button id="header-search-button">
@@ -39,8 +39,8 @@
                         <a class="menu-item-button" href="/write">{{ localize('new_journal') }}</a>
                     </div>
                 </div>
-                {# notifications #}
-                <div class="user-menu-container">
+                {# notifications (hidden) #}
+                {#<div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="notify-menu">
                         {{ icon('bell') }}
                     </div>
@@ -50,7 +50,7 @@
                         <a class="menu-item-button" href="/my_messages">Messages (0)</a>
                         {% endif %}
                     </div>
-                </div>
+                </div>#}
                 {# user #}
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="user-menu">
@@ -78,6 +78,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <hr>
+                            <a class="menu-item-button" href="/notifications">{{ localize('notifications') }} ({{ user_stat_data.notifications }})</a>
                             <hr>
                         {% for link in header_user_links() %}
                             <a class="menu-item-button" href="{{ link.url }}">{{ link.name }}</a>
