@@ -581,6 +581,9 @@ class Utilities
 
         $output = str_replace(array_keys($properUrlReplacements), array_values($properUrlReplacements), $output);
 
+        // very awkward fix for sb journal #289
+        $output = str_replace("Accounts registered on FulpTube in 2021-2022", "Accounts registered on SquareBracket in 2021-2022", $output);
+
         return $output;
     }
 
