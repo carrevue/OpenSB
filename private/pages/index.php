@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
 
@@ -35,35 +35,23 @@ $upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 
-// on finalium, use new fulptube index page.
-if ($options["skin"] == "finalium") {
-    include_once "index_new.php";
-    die();
-}
+$uploads_recent_query_limit = 12; // only used on bootstrap skin's classic theme
 
 if ($options["skin"] == "trinium") {
     $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
 
     if ($type == "grid") {
-        $uploads_random_query_limit = 12;
+        $uploads_random_query_limit = 8;
+        $uploads_featured_query_limit = 8;
     } else {
         $uploads_random_query_limit = 24;
-    }
-
-    if ($type == "new") {
         $uploads_featured_query_limit = 12;
-    } else {
-        $uploads_featured_query_limit = 4;
     }
-
-    $uploads_recent_query_limit = 12;
 } else {
     $type = "list";
 
     $uploads_random_query_limit = 12;
-    $uploads_recent_query_limit = 12;
-
-    $uploads_featured_query_limit = 4;
+    $uploads_featured_query_limit = 12;
 }
 
 if ($options["skin"] == "bootstrap") {
@@ -72,27 +60,27 @@ if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 3;
 }
 
-if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type == "list")) {
+if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type == "list") || $options["skin"] == "finalium") {
     $uploads_random = [];
 } else {
     $uploads_random = $upload_query->query("RAND()", $uploads_random_query_limit);
 }
 
-if ($options["skin"] == "trinium" & $type == "new") {
-    $uploads_recent = [];
-} else {
+if ($options["skin"] == "bootstrap" & $options["theme"] == "classic") {
     $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
+} else {
+    $uploads_recent = [];
 }
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
     $uploads_featured_query_limit,
-    sprintf("(v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value)
+    sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 );
 
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
 
-if ($options["skin"] == "trinium" || $options["skin"] == "classic") {
+if ($options["skin"] == "trinium") {
     // TODO: maybe move this (and the equivalent code in users.php) into a "UsersQuery" class?
     $users_recent_data = $database->fetchArray(
         $database->query(

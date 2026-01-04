@@ -36,15 +36,15 @@ $tabs = [
         "order" => "timestamp DESC",
         "where" => null,
     ],
-    "popular" => [
-        "name" => "popular",
-        "order" => "views DESC",
-        "where" => null,
-    ],
     "featured" => [
         "name" => "featured",
         "order" => "v.timestamp DESC",
         "where" => sprintf("(v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value),
+    ],
+    "popular" => [
+        "name" => "popular",
+        "order" => "views DESC",
+        "where" => null,
     ],
     "random" => [
         "name" => "random",
