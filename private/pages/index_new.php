@@ -36,8 +36,8 @@ $options = $sb->getLocalOptions();
 
 $uploads_query_limit = 15;
 
-$uploads_random = $upload_query->query("RAND()", $uploads_query_limit);
-$uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit);
+//$uploads_random = $upload_query->query("RAND()", $uploads_query_limit);
+//$uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit);
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
@@ -61,11 +61,11 @@ $feed = [
         "title" => "Featured on " . $sb->getBrandingSettings()["name"],
         "uploads" => Utilities::makeUploadArray($database, $uploads_featured),
     ],
-    "recent" => [
+    /*"recent" => [
         //"icon" => "/assets/profiledef_hitchhiker.svg",
         "title" => "Recent Uploads",
         "uploads" => Utilities::makeUploadArray($database, $uploads_recent),
-    ],
+    ],*/
 ];
 
 // this feels somewhat inefficient?
@@ -77,7 +77,7 @@ foreach ($featured_users as $user) {
         "uploads" => Utilities::makeUploadArray(
             $database,
             $upload_query->query(
-                "v.timestamp DESC",
+                "RAND()",
                 $uploads_query_limit,
                 sprintf("v.author = %d", $user["id"])
             )

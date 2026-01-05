@@ -35,6 +35,12 @@ $upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 
+// on finalium, use new fulptube index page.
+if ($options["skin"] == "finalium") {
+    include_once "index_new.php";
+    die();
+}
+
 $uploads_recent_query_limit = 12; // only used on bootstrap skin's classic theme
 
 if ($options["skin"] == "trinium") {
