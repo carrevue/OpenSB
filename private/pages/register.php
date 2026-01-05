@@ -105,7 +105,7 @@ if (isset($_POST['registersubmit'])) {
     } finally {
         $currentDate = new DateTime();
 
-        if ($dobDateTime->format('Y') < 1900) {
+        if ($dobDateTime->format('Y') < 1900 || $dobDateTime->format('Y') > date('Y')) {
             $error .= "You have an invalid birth date. ";
         } else {
             $age = $currentDate->diff($dobDateTime)->y;
