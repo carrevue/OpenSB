@@ -340,6 +340,7 @@
     "notify_write_success": "Your journal has been posted.",
     "notify_invalid_format": "This file format is not supported.",
     "notify_birthdate_fail": "Failed to process birthdate, please verify again.",
+    "notify_birthdate_invalid": "This birthdate is invalid, please verify again.",
     "notify_birthdate_success": "Your birthdate has been successfully verified.",
     "notify_dashboard_login_required": "Please login using your dashboard access password.",
     "notify_dashboard_login_incorrect": "Incorrect dashboard access password.",

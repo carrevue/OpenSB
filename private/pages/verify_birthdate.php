@@ -50,23 +50,27 @@ if (isset($_POST['birthdatesubmit'])) {
         $dobDateTime = new DateTime($birthdate);
     } catch (DateMalformedStringException $e) {
         Utilities::notifyBanner("notify_birthdate_fail", "/verify_birthdate");
+    } finally {
+        $currentDate = new DateTime();
+
+        if ($dobDateTime->format('Y') < 1900 || $dobDateTime->format('Y') > date('Y')) {
+            Utilities::notifyBanner("notify_birthdate_invalid", "/verify_birthdate");
+        }
+
+        $age = $currentDate->diff($dobDateTime)->y;
+
+        if ($age < 13) {
+            // TROLLED
+            $database->query(
+                "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
+                [$auth->getUserData()["id"], "Failed birthdate verification check / Below 13", time()]
+            );
+        } else {
+            Utilities::notifyBanner("notify_birthdate_success", false, "success");
+        }
+        $database->query("UPDATE users SET birthdate = ? WHERE id = ?", [$dobDateTime->format('Y-m-d'), $auth->getUserData()["id"]]);
+        header('Location: /index');
     }
-
-    $currentDate = new DateTime();
-
-    $age = $currentDate->diff($dobDateTime)->y;
-
-    if ($age < 13) {
-        // TROLLED
-        $database->query(
-            "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-            [$auth->getUserData()["id"], "Failed birthdate verification check / Below 13", time()]
-        );
-    } else {
-        Utilities::notifyBanner("notify_birthdate_success", false, "success");
-    }
-    $database->query("UPDATE users SET birthdate = ? WHERE id = ?", [$dobDateTime->format('Y-m-d'), $auth->getUserData()["id"]]);
-    header('Location: /index');
 }
 
 echo $twig->render('verify_birthdate.twig');
