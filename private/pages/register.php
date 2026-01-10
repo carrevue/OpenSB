@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
   Copyright (C) 2024 OkayHush
@@ -126,11 +126,11 @@ if (isset($_POST['registersubmit'])) {
     if (!$error) {
         $flags = 0;
 
-        if ($sb->isChazizSquareBracketInstance()) {
+        if ($sb->isChazizInstance()) {
             $flags |= UserFlags::FLAG_UNVERIFIED->value;
         }
 
-        if ($sb->isFulpTube()) {
+        if ($sb->isFulpTubeMode()) {
             $flags |= UserFlags::FLAG_FULPTUBE_ACCOUNT->value;
         }
 

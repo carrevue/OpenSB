@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -89,8 +89,8 @@ class ErrorTemplating
 
         $versionNumber = new VersionNumber;
 
-        $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizSquareBracketInstance());
-        $this->twig->addGlobal('is_fulptube', $sb->isFulpTube());
+        $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizInstance());
+        $this->twig->addGlobal('is_fulptube', $sb->isFulpTubeMode());
         $this->twig->addGlobal('opensb_version', $versionNumber->getVersionArray());
         $this->twig->addGlobal('website_branding', $sb->getBrandingSettings());
 

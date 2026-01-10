@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -74,12 +74,12 @@ class SquareBracket
     /**
      * @var bool
      */
-    private bool $is_chaziz_squarebracket_instance = false;
+    private bool $is_chaziz_instance = false;
 
     /**
      * @var bool
      */
-    private bool $is_sitetest_instance = false;
+    private bool $is_test_instance = false;
 
     /**
      * @var bool
@@ -158,15 +158,19 @@ class SquareBracket
         $user = $config["mysql"]["username"];
         $pass = $config["mysql"]["password"];
 
-        $allowedSites = ['squarebracket', 'squarebracket_chaziz', 'sitetest'];
+        $allowedSites = ['default', 'test', 'chaziz'];
         if (!in_array($config["site"], $allowedSites)) {
             trigger_error("The site mode in the configuration file should be 
-            set either to squarebracket, squarebracket_chaziz or sitetest.", E_USER_WARNING);
+            set either to default, test or chaziz.", E_USER_ERROR);
         }
-        $this->is_chaziz_squarebracket_instance = ($config["site"] === "squarebracket_chaziz");
-        $this->is_sitetest_instance = ($config["site"] === "sitetest");
+        $this->is_chaziz_instance = ($config["site"] === "chaziz");
 
-        if ($this->is_chaziz_squarebracket_instance || $this->is_sitetest_instance) {
+        $this->is_test_instance = (
+            ($this->is_chaziz_instance && str_contains(Utilities::getURL(), "web-orange-qa"))
+            || ($config["site"] === "test")
+        );
+
+        if ($this->is_chaziz_instance) {
             date_default_timezone_set('America/New_York');
         }
 
@@ -202,7 +206,7 @@ class SquareBracket
         $defaultSkin = "trinium";
         $defaultTheme = "default";
 
-        if ($this->isFulpTube()) {
+        if ($this->isFulpTubeMode()) {
             $defaultSkin = "finalium";
             $defaultTheme = "hitchhiker";
         }
@@ -243,7 +247,7 @@ class SquareBracket
             $cookie_raw = $_COOKIE["SBACCOUNTS"];
 
             // get rid of warning string
-            if (strpos($cookie_raw, $this->accounts_cookie_warning) === 0) {
+            if (str_starts_with($cookie_raw, $this->accounts_cookie_warning)) {
                 $cookie_raw = substr($cookie_raw, strlen($this->accounts_cookie_warning));
             }
 
@@ -265,11 +269,11 @@ class SquareBracket
         }
 
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
-        if ($this->isFulpTube()) {
-            //$isFulpTube = true;
+        if ($this->isFulpTubeMode()) {
+            //$isFulpTubeMode = true;
             $this->overrideBrandingWithFulpTube();
         } else {
-            //$isFulpTube = false;
+            //$isFulpTubeMode = false;
             $this->branding_settings = [
                 "name" => $config["branding"]["name"] ?? '',
                 "assets_location" => $config["branding"]["assets"] ?? '',
@@ -279,7 +283,7 @@ class SquareBracket
 
             // custom branding for themes. for that Extra Accuracy™.
             // TODO: make finalium and bootstrap *actually* work with updated branding
-            if ($this->is_chaziz_squarebracket_instance) {
+            if ($this->is_chaziz_instance) {
                 if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker") {
                     $this->overrideBrandingWithFulpTube();
                 } elseif ($this->options["skin"] == "finalium" || $this->options["skin"] == "bootstrap") {
@@ -538,7 +542,7 @@ class SquareBracket
      */
     public function isIncompleteFeaturesEnabled(): bool
     {
-        if ($this->is_sitetest_instance) {
+        if ($this->is_test_instance) {
             return true;
         } else {
             return $this->options["enable_incomplete_features"] ?? false;
@@ -549,7 +553,7 @@ class SquareBracket
      * function isHitchhiker
      *
      * Returns boolean for if hitchhiker is enabled.
-     * THIS IS SEPERATE FROM isFulpTube()
+     * THIS IS SEPERATE FROM isFulpTubeMode()
      *
      * @return bool
      */
@@ -560,13 +564,13 @@ class SquareBracket
     }
 
     /**
-     * function isFulpTube
+     * function isFulpTubeMode
      *
      * Returns boolean for FulpTube mode.
      *
      * @return bool
      */
-    public function isFulpTube(): bool
+    public function isFulpTubeMode(): bool
     {
         if (!isset($_SERVER['HTTP_HOST'])) {
             return false;
@@ -576,7 +580,7 @@ class SquareBracket
 
         $isDebugMode = ($this->getLocalOptions()['debug_fulptube_branding'] ?? false) && $this->isDebug();
 
-        if ($this->isChazizSquareBracketInstance() && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
+        if ($this->isChazizInstance() && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
             return true;
         } else {
             return false;
@@ -644,27 +648,27 @@ class SquareBracket
     }
 
     /**
-     * function isChazizSquareBracketInstance
+     * function isChazizInstance
      *
-     * Returns a bool that indicates if the instance is set to "Chaziz SquareBracket" mode.
+     * Returns a bool that indicates if the instance is set to "Chaziz" mode.
      *
      * @return bool
      */
-    public function isChazizSquareBracketInstance(): bool
+    public function isChazizInstance(): bool
     {
-        return  $this->is_chaziz_squarebracket_instance;
+        return  $this->is_chaziz_instance;
     }
 
     /**
-     * function isSiteTestInstance
+     * function isTestInstance
      *
-     * Returns a bool that indicates if the instance is set to "SiteTest" mode.
+     * Returns a bool that indicates if the instance is set to "Test" mode.
      *
      * @return bool
      */
-    public function isSiteTestInstance(): bool
+    public function isTestInstance(): bool
     {
-        return  $this->is_sitetest_instance;
+        return  $this->is_test_instance;
     }
 
     /**

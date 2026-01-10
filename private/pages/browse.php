@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021-2022 icanttellyou
 
   OpenSB is free software: you can redistribute it and/or modify it under the 

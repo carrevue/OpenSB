@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2022-2025 Chaziz
+  Copyright (C) 2022-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -241,7 +241,7 @@ $chartData = [
             ],
         ],
         'scales' => [
-            'x' => $sb->isChazizSquareBracketInstance()
+            'x' => $sb->isChazizInstance()
                 ? [
                     'type' => 'time',
                     'min' => '2021-01-30T23:33:29-05:00', // sb was first launched shortly before 01/31/2021

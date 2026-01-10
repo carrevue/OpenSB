@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -45,7 +45,7 @@ if ($auth->getUserID() == $data["author"]) {
     $owner = false;
 }
 
-if ($sb->isFulpTube() && $data["is_news"]) {
+if ($sb->isFulpTubeMode() && $data["is_news"]) {
     $data["title"] = Utilities::replaceSquareBracketWithFulpTube($data["title"]);
     $data["post"] = Utilities::replaceSquareBracketWithFulpTube($data["post"]);
 }

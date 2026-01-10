@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
 
@@ -716,8 +716,8 @@ class SquareBracketTwigExtension extends AbstractExtension
             $array = array_merge($version_array, $array);
         }
 
-        if ($this->sb->isChazizSquareBracketInstance()) {
-            if (!$this->sb->isFulpTube()) {
+        if ($this->sb->isChazizInstance()) {
+            if (!$this->sb->isFulpTubeMode()) {
                 $array["brickface"] = [
                     "name" => $this->localize("kylarz_link"),
                     "url" => "https://brickface.squarebracket.pw/",
@@ -730,7 +730,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             ];
         }
 
-        if ($this->sb->isSiteTestInstance()) {
+        if ($this->sb->isTestInstance()) {
             $array["test"] = [
                 "name" => "Custom Footer Link",
                 "url" => "/",

@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -93,7 +93,7 @@ class Authentication
                 // old system is left there for compatibility, which will probably get removed around opensb 2.1.
                 // also, on sb, if the user has their "comfortable rating" still not set to general, it now will be reset 
                 // to general. this is due to guideline changes caused by a vps move around june 2024. -chaziz 09/19/2025
-                if (($sb->isChazizSquareBracketInstance() && $this->user_data["comfortable_rating"] != "general") ||
+                if (($sb->isChazizInstance() && $this->user_data["comfortable_rating"] != "general") ||
                     $this->user_data["comfortable_rating"] == "questionable" ||
                     ($this->user_data["comfortable_rating"] == "mature" && !$this->isUserOver18())
                 ) {

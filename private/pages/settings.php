@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
 
@@ -99,7 +99,7 @@ if (isset($_POST['save'])) {
 
     // kinda fucking stupid way to do this but whatever
     $access_mature_content = $auth->isUserOver18() && 
-                            !$sb->isChazizSquareBracketInstance() && 
+                            !$sb->isChazizInstance() && 
                             isset($_POST['rating']) && 
                             $_POST['rating'];
 

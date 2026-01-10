@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
 
@@ -97,7 +97,7 @@ class Templating
         $default_skin = "trinium";
         $default_theme = "default";
 
-        if ($this->sb->isFulpTube()) {
+        if ($this->sb->isFulpTubeMode()) {
             $default_skin = "finalium";
             $default_theme = "hitchhiker";
         }
@@ -169,7 +169,7 @@ class Templating
             }));
         }
 
-        $isFulpTube = $sb->isFulpTube();
+        $isFulpTubeMode = $sb->isFulpTubeMode();
         $branding = $sb->getBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.
@@ -177,7 +177,7 @@ class Templating
         Registrations are closed until the site is ready.";
 
         /*
-        if ($sb->isChazizSquareBracketInstance()) {
+        if ($sb->isChazizInstance()) {
             $showWarningBanner = true;
             $warningBannerText = $warningBannerTextIfOnChazizOwnedDomain;
         } else {
@@ -193,8 +193,8 @@ class Templating
         $this->version_number = new VersionNumber();
 
         // TODO: this should be cleaned up on 2.1 or maybe 3.0
-        $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizSquareBracketInstance());
-        $this->twig->addGlobal('is_fulptube', $isFulpTube);
+        $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizInstance());
+        $this->twig->addGlobal('is_fulptube', $isFulpTubeMode);
         $this->twig->addGlobal('is_debug', $sb->isDebug());
         $this->twig->addGlobal('is_user_logged_in', $this->authentication->isUserLoggedIn());
         $this->twig->addGlobal('user_data', $this->authentication->getUserData());

@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
   Copyright (C) 2021 Veselcraft
@@ -132,7 +132,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $description = ($_POST['desc'] ?? null);
 
     /*
-    if ($sb->isChazizSquareBracketInstance()) {
+    if ($sb->isChazizInstance()) {
         $rating = 'general';
     } else {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
@@ -141,7 +141,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
 
     // kinda fucking stupid way to do this but whatever
     $mature = $auth->isUserOver18() && 
-            !$sb->isChazizSquareBracketInstance() && 
+            !$sb->isChazizInstance() && 
             isset($_POST['rating']) && 
             $_POST['rating'];
 

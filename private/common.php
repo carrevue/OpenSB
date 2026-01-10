@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
   Copyright (C) 2022 shiypc
@@ -237,7 +237,7 @@ if (!SB_CLI) {
         die();
     }
 
-    if ($sb->isChazizSquareBracketInstance() && $sb->isIpLookupEnabled()) {
+    if ($sb->isChazizInstance() && $sb->isIpLookupEnabled()) {
         $ipLookup = $sb->getIpLookupClass();
         
         if (

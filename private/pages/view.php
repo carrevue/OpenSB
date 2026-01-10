@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
 
@@ -50,7 +50,7 @@ function handle_error(string $message, string $redirect = "/") {
     }
 }
 
-if ($sb->isFulpTube()) {
+if ($sb->isFulpTubeMode()) {
     if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
         handle_error("notify_original_fulptube_video");
     }
