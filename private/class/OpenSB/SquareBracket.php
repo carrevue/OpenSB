@@ -185,6 +185,14 @@ class SquareBracket
         }
         $this->authentication = new Authentication($this, $_SESSION["SBTOKEN"] ?? null);
 
+        if (
+            $this->is_test_instance &&
+            $this->authentication->isUserLoggedIn() &&
+            $this->authentication->hasUserAuthenticatedAsStaff()
+        ) {
+            $this->is_debug = true;
+        }
+
         //$this->version_number = new VersionNumber();
 
         $storage_use_custom_path = (bool)($config['storage']['use_custom_path'] ?? false);
