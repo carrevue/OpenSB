@@ -27,9 +27,11 @@
                                 </div>
 
                                 <div class="login-bottom">
-                                    <div class="login-text">
-                                        {{ localize('dont_have_an_account') }} <a href="/register">{{ localize('register') }}</a>
-                                    </div>
+                                    {% if not is_test_instance %}
+                                        <div class="login-text">
+                                            {{ localize('dont_have_an_account') }} <a href="/register">{{ localize('register') }}</a>
+                                        </div>
+                                    {% endif %}
 
                                     <div class="form-button-container">
                                         <input type="submit" class="button button-primary button-login" value="{{ localize('login') }}" name="loginsubmit">
@@ -64,13 +66,22 @@
                             <hr>
                         {% endif %}
                         <div>
-                            <p>{{ localize("login_what_is_site_1", website_branding.name) }}</p>
-                            <ul>
-                                <li>{{ localize("login_what_is_site_2") }}</li>
-                                <li>{{ localize("login_what_is_site_3") }}</li>
-                                <li>{{ localize("login_what_is_site_4") }}</li>
-                                <li>{{ localize("login_what_is_site_5") }}</li>
-                            </ul>
+                            {% if is_test_instance %}
+                                {# this shouldn't be localized since changing locale in this case is only possible
+                                when logged in. -chaziz 1/9/2026 #}
+                                <p>If you are not staff on {{ website_branding.name }}, you will be unable to log in.</p>
+                                {% if is_chaziz_sb %}
+                                    <p>You should definitely go back to the <a href="https://squarebracket.pw">main site</a>.</p>
+                                {% endif %}
+                            {% else %}
+                                <p>{{ localize("login_what_is_site_1", website_branding.name) }}</p>
+                                <ul>
+                                    <li>{{ localize("login_what_is_site_2") }}</li>
+                                    <li>{{ localize("login_what_is_site_3") }}</li>
+                                    <li>{{ localize("login_what_is_site_4") }}</li>
+                                    <li>{{ localize("login_what_is_site_5") }}</li>
+                                </ul>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

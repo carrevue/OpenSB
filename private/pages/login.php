@@ -25,6 +25,7 @@ namespace OpenSB\Pages;
 
 global $twig, $database, $auth, $sb;
 
+use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
 
 $warning = $sb->getWarningString();
@@ -108,9 +109,15 @@ if (isset($_POST["loginsubmit"])) {
     }
 
     if (!$error) {
-        $logindata = $database->fetch("SELECT password,token,ip,id,flags FROM users WHERE name = ?", [$username]);
+        $logindata = $database->fetch("SELECT password,token,ip,id,flags,powerlevel FROM users WHERE name = ?", [$username]);
 
         if ($logindata) {
+            if ($sb->isTestInstance()) {
+                if ($logindata['powerlevel'] < UserRoleEnum::Moderator->value) {
+                    Utilities::notifyBanner("notify_login_test_instance", "/login");
+                }
+            }
+
             if ((password_verify($password, $logindata['password']))) {
                 if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
                     $new_password_hash = password_hash($password, PASSWORD_BCRYPT);

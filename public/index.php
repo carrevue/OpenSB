@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -32,6 +32,8 @@ use OpenSB\Utilities;
 use OpenSB\Router;
 
 require_once SB_PRIVATE_PATH . '/common.php';
+
+global $sb;
 
 function load_thumbnail_from_skin($path): never
 {
@@ -151,6 +153,23 @@ function automatic_ip_ban()
         ]);
         http_response_code(403);
         die();
+    }
+}
+
+if ($sb->isTestInstance())
+{
+    $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+    $path = explode('/', $uri);
+
+    $auth = $sb->getAuthenticationClass();
+
+    // if the user is still logged in but isnt an admin, log them out.
+    if ($auth->isUserLoggedIn() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
+        $auth->logOut();
+    }
+
+    if (Utilities::getIpAddress() != "localhost" && !$auth->isUserLoggedIn() && $path[1] != "login") {
+        Utilities::redirect("/login");
     }
 }
 

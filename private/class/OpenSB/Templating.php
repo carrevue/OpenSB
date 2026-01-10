@@ -176,24 +176,20 @@ class Templating
         $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is currently in a testing phase.
         Registrations are closed until the site is ready.";
 
-        /*
-        if ($sb->isChazizInstance()) {
+        if ($sb->isTestInstance()) {
             $showWarningBanner = true;
             $warningBannerText = $warningBannerTextIfOnChazizOwnedDomain;
         } else {
             $showWarningBanner = false;
             $warningBannerText = null;
         }
-        */
-
-        $showWarningBanner = false;
-        $warningBannerText = null;
 
         //$this->version_number = $sb->getVersionNumberClass();
         $this->version_number = new VersionNumber();
 
         // TODO: this should be cleaned up on 2.1 or maybe 3.0
         $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizInstance());
+        $this->twig->addGlobal('is_test_instance', $sb->isTestInstance());
         $this->twig->addGlobal('is_fulptube', $isFulpTubeMode);
         $this->twig->addGlobal('is_debug', $sb->isDebug());
         $this->twig->addGlobal('is_user_logged_in', $this->authentication->isUserLoggedIn());
