@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -46,16 +46,22 @@ class Storage
     private Database $database;
 
     /**
+     * @var string The path.
+     */
+    private string $path;
+
+    /**
      * function __construct
      *
      * @param SquareBracket $sb
+     * @param string|null $path The path
      *
-     * @return void
      */
-    public function __construct(SquareBracket $sb)
+    public function __construct(SquareBracket $sb, string $path = null)
     {
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
+        $this->path = $path ?? SB_DYNAMIC_PATH;
     }
 
     /**
@@ -70,7 +76,7 @@ class Storage
      *
      * @return void
      */
-    public function processVideoUpload(string $new, string $target_file, $type = "video"): void
+    public function processVideoUpload(string $new, string $target_file, string $type = "video"): void
     {
         // this uses the version of php on path. if the upload processor errors
         // out with "OpenSB is not compatible with your PHP version.", then 
@@ -102,15 +108,15 @@ class Storage
      * Downscales images to a width of 4096 pixels, and also downscales 
      * it to 640 pixels for the thumbnail.
      *
-     * @param mixed $temp_name
-     * @param mixed $new
+     * @param string $temp_name
+     * @param string $new
      *
      * @return void
      */
-    public function processImageUpload($temp_name, $new): void
+    public function processImageUpload(string $temp_name, string $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/art/' . $new . '.png';
-        $target_thumbnail = SB_DYNAMIC_PATH . '/art_thumbnails/' . $new . '.jpg';
+        $target_file = $this->path . '/art/' . $new . '.png';
+        $target_thumbnail = $this->path . '/art_thumbnails/' . $new . '.jpg';
 
         // image upload
         $manager = new ImageManager(Driver::class);
@@ -132,14 +138,14 @@ class Storage
      * 
      * Downscales profile pictures to a width and height of 512.
      *
-     * @param mixed $temp_name
-     * @param mixed $new
+     * @param string $temp_name
+     * @param string $new
      *
      * @return void
      */
-    public function processProfilePicture($temp_name, $new): void
+    public function processProfilePicture(string $temp_name, string $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/pfp/' . $new . '.png';
+        $target_file = $this->path . '/pfp/' . $new . '.png';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -155,14 +161,14 @@ class Storage
      * 
      * Downscales thumbnails to a width of 640.
      *
-     * @param mixed $temp_name
-     * @param mixed $new
+     * @param string $temp_name
+     * @param string $new
      *
      * @return void
      */
-    public function processCustomUploadThumbnail($temp_name, $new): void
+    public function processCustomUploadThumbnail(string $temp_name, string $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $new . '.jpg';
+        $target_file = $this->path . '/custom_thumbnails/' . $new . '.jpg';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -177,14 +183,14 @@ class Storage
      * 
      * Scales profile banners to a height of 300 pixels
      *
-     * @param mixed $temp_name
-     * @param mixed $new
+     * @param string $temp_name
+     * @param string $new
      *
      * @return void
      */
-    public function processProfileBanner($temp_name, $new): void
+    public function processProfileBanner(string $temp_name, string $new): void
     {
-        $target_file = SB_DYNAMIC_PATH . '/banners/' . $new . '.png';
+        $target_file = $this->path . '/banners/' . $new . '.png';
 
         $manager = new ImageManager(Driver::class);
         $img = $manager->read($temp_name);
@@ -199,11 +205,13 @@ class Storage
      * 
      * Deletes the upload's file.
      *
-     * @param mixed $data
+     * @param array $data The upload array
+     *
+     * @note This is kind of weird, and will be reworked soon.
      *
      * @return void
      */
-    public function deleteUploadFile($data): void
+    public function deleteUploadFile(array $data): void
     {
         unlink(SB_ROOT_PATH . $data["upload_file"]);
     }
@@ -213,12 +221,12 @@ class Storage
      * 
      * Returns the video upload thumbnail.
      *
-     * @param mixed $id
-     * @param mixed $custom
+     * @param string $id
+     * @param bool $custom
      *
      * @return string
      */
-    public function getVideoUploadThumbnail($id, $custom): string
+    public function getVideoUploadThumbnail(string $id, bool $custom): string
     {
         $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
 
@@ -236,12 +244,12 @@ class Storage
      * 
      * Returns the image upload thumbnail.
      *
-     * @param mixed $id
-     * @param mixed $custom
+     * @param string $id
+     * @param bool $custom
      *
      * @return string
      */
-    public function getImageUploadThumbnail($id, $custom): string
+    public function getImageUploadThumbnail(string $id, bool $custom): string
     {
         $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
 
@@ -256,19 +264,19 @@ class Storage
 
     /**
      * function getUserProfilePicture
-     * 
+     *
      * Return the user profile picture.
      *
-     * @param int $id User's ID
+     * @param int $user User's ID
      * @param bool $isStaff Admin-specific behavior
      *
      * @return string
      */
-    public function getUserProfilePicture($user, $isStaff = false): string
+    public function getUserProfilePicture(int $user, bool $isStaff = false): string
     {
         $placeholder = $this->sb->isHitchhiker() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
 
-        $path = SB_DYNAMIC_PATH . '/pfp/' . $user . '.png';
+        $path = $this->path . '/pfp/' . $user . '.png';
 
         // don't bother with userdata since that might slow shit down
         $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$user]);
@@ -289,13 +297,13 @@ class Storage
      * 
      * Returns the user profile banner.
      *
-     * @param int $id User's ID
+     * @param int $user User's ID
      *
      * @return bool|string
      */
-    public function getUserProfileBanner($user): bool|string
+    public function getUserProfileBanner(int $user): bool|string
     {
-        $path = SB_DYNAMIC_PATH . '/banners/' . $user . '.png';
+        $path = $this->path . '/banners/' . $user . '.png';
 
         if (file_exists($path)) {
             return '/dynamic/banners/' . $user . '.png';
@@ -322,8 +330,8 @@ class Storage
         string $defaultExtension,
         string $fallback
     ): string {
-        $customPath = SB_DYNAMIC_PATH . '/custom_thumbnails/' . $id . '.jpg';
-        $defaultPath = SB_DYNAMIC_PATH . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
+        $customPath = $this->path . '/custom_thumbnails/' . $id . '.jpg';
+        $defaultPath = $this->path . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
 
         // if custom thumbnail exists then use that
         if ($custom && file_exists($customPath)) {

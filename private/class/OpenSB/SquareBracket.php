@@ -187,7 +187,12 @@ class SquareBracket
 
         //$this->version_number = new VersionNumber();
 
-        $this->storage = new Storage($this);
+        $storage_use_custom_path = (bool)($config['storage']['use_custom_path'] ?? false);
+        $storage_path = $storage_use_custom_path
+            ? ($config['storage']['custom_path'] ?? SB_DYNAMIC_PATH)
+            : SB_DYNAMIC_PATH;
+
+        $this->storage = new Storage($this, $storage_path);
 
         $this->captcha_settings = $config["captcha"];
 

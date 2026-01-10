@@ -35,4 +35,8 @@ return [
         "is_vector" => false,
         "use_wordmark" => false,
     ],
+    "storage" => [
+        "use_custom_path" => false,
+        "custom_path" => "/var/www/instance/dynamic/",
+    ]
 ];
