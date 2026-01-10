@@ -537,17 +537,13 @@ class SquareBracketTwigExtension extends AbstractExtension
             $username = $this->authentication->getUserData()["name"];
 
             $array = [
-                "profile" => [
+                "my_account" => [
+                    "name" => $this->localize("my_account"), // My account
+                    "url" => "/my_account",
+                ],
+                "my_profile" => [
                     "name" => $this->localize("my_profile"), // My profile
                     "url" => "/user/" . $username,
-                ],
-                "my_uploads" => [
-                    "name" => $this->localize("my_uploads"), // My uploads
-                    "url" => "/my_uploads",
-                ],
-                "settings" => [
-                    "name" => $this->localize("account_settings"), // Account settings
-                    "url" => "/settings",
                 ],
                 "upload" => [
                     "name" => $this->localize("new_upload"), // Upload (New upload)

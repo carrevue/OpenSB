@@ -6,12 +6,6 @@
     {% set icon = "placeholder" %}
 {% endif %}
 
-{% if upload.published_originally and upload.original_site %}
-    {% set time = upload.published_originally | relative_time %}
-{% else %}
-    {% set time = upload.published | relative_time %}
-{% endif %}
-
 <div class="content-entry">
     <div class="content-thumbnail">
         <a href="/view/{{ upload.id }}">
@@ -59,13 +53,18 @@
             </div>
         </div>
         <div class="content-description">
-            {{ user_link(upload.author) }}
-            <br>
-            {{ localize('views', upload.views) }}
-            <br>
-            {% if upload.description|trim is not empty %}
+            {# {% if upload.description|trim is not empty %}
                 <span>{{ upload.description }}</span>
+            {% else %}
+                <span class="text-faded">No description</span>
             {% endif %}
+            <br>#}
+            {% if upload.published_originally %}
+                Original uploaded: {{ upload.published_originally | format_date('medium', 'medium') }}
+                {% if upload.original_site %}on {{ upload.original_site }}{% endif %}
+                <br>
+            {% endif %}
+            Uploaded: {{ upload.published | format_date('medium', 'medium') }}
         </div>
     </div>
 </div>
