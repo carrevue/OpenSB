@@ -177,12 +177,6 @@ class SquareBracket
         $this->is_debug = ($config["mode"] ?? '') === "DEV";
 
         $this->database = new Database($host, $user, $pass, $db);
-        $this->profiler = new Profiler($this->database);
-        if ($this->is_debug) {
-            // enable db profiler (not to be confused with the other profiler)
-            // if we are on debug mode
-            $this->database->setProfiling(true);
-        }
         $this->authentication = new Authentication($this, $_SESSION["SBTOKEN"] ?? null);
 
         if (
@@ -191,6 +185,13 @@ class SquareBracket
             $this->authentication->hasUserAuthenticatedAsStaff()
         ) {
             $this->is_debug = true;
+        }
+
+        $this->profiler = new Profiler($this->database);
+        if ($this->is_debug) {
+            // enable db profiler (not to be confused with the other profiler)
+            // if we are on debug mode
+            $this->database->setProfiling(true);
         }
 
         //$this->version_number = new VersionNumber();

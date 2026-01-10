@@ -44,6 +44,15 @@ class VersionNumber
     private string $versionNumber = "2.1.0-alpha.1";
 
     /**
+     * @var string The current Git branch.
+     */
+    private string $branch;
+    /**
+     * @var string The current Git commit hash.
+     */
+    private string $hash;
+
+    /**
      * @var string The full complete version string.
      */
     private string $versionString;
@@ -55,7 +64,18 @@ class VersionNumber
      */
     public function __construct()
     {
-        $this->versionString = $this->makeVersionString();
+        try {
+            $gitInfo = new GitInfo();
+            $this->branch = $gitInfo->getGitBranch();
+            $this->hash = $gitInfo->getGitCommitHash();
+
+            $this->versionString = $this->makeVersionString();
+        } catch (Exception) {
+            $this->branch = "unknown";
+            $this->hash = "unknown";
+
+            $this->versionString = $this->versionNumber;
+        }
     }
 
     /**
@@ -67,27 +87,18 @@ class VersionNumber
      */
     private function makeVersionString(): string
     {
-        try {
-            $gitInfo = new GitInfo();
+        // if for example, the version number is opensb 2.0 and we're on
+        // the opensb-2.0 branch, we don't need to show the git branch as
+        // it would just repeat itself.
+        if (preg_match('/^(\d+\.\d+)/', $this->versionNumber, $matches)) {
+            $majorMinor = $matches[1];
 
-            $branch = $gitInfo->getGitBranch();
-            $hash = $gitInfo->getGitCommitHash();
-
-            // if for example, the version number is opensb 2.0 and we're on 
-            // the opensb-2.0 branch, we don't need to show the git branch as 
-            // it would just repeat itself.
-            if (preg_match('/^(\d+\.\d+)/', $this->versionNumber, $matches)) {
-                $majorMinor = $matches[1];
-
-                if (str_starts_with($branch, 'opensb-' . $majorMinor)) {
-                    return sprintf('%s-%s', $this->versionNumber, $hash);
-                }
+            if (str_starts_with($this->branch, 'opensb-' . $majorMinor)) {
+                return sprintf('%s-%s', $this->versionNumber, $this->hash);
             }
-
-            return sprintf('%s.%s-%s', $this->versionNumber, $branch, $hash);
-        } catch (Exception) {
-            return $this->versionNumber;
         }
+
+        return sprintf('%s.%s-%s', $this->versionNumber, $this->branch, $this->hash);
     }
 
     /**
@@ -115,6 +126,7 @@ class VersionNumber
             "name" => $this->versionName,
             "number" => $this->versionNumber,
             "string" => $this->versionString,
+            "hash" => $this->hash,
         ];
     }
 
