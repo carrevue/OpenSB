@@ -1,0 +1,40 @@
+{% extends "_layout_my_account.twig" %}
+
+{% set title = localize('my_account') %}
+
+{% block mystuffcontent %}
+<div class="section">
+    <div class="section-header">
+        <h1 class="section-title">{{ localize('my_account') }}</h1>
+    </div>
+    <div class="content-box">
+        <div class="profile-box">
+            <div class="profile-box-pfp">
+                <div class="profile-picture">
+                    <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+                </div>
+            </div>
+            <div class="profile-box-info">
+                <div class="profile-box-username">
+                    <span style="color:{{ user_data.userlink_color }}" id="settings-display-name">
+                        {{ user_data.title }}
+                    </span>
+                </div>
+                <div class="profile-box-handle">
+                    @{{ user_data.name }}
+                </div>
+                <div class="profile-box-handle">
+                    {{ user_data.email }}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <ul>
+            <li><a href="/my_uploads">{{ localize('uploads') }}</a></li>
+            <li><a href="/my_messages">{{ localize('messages') }}</a></li>
+            <li><a href="/notifications">{{ localize('notifications') }}</a></li>
+            <li><a href="/settings">{{ localize('account_settings') }}</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
