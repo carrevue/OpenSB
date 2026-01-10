@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -50,7 +50,13 @@ foreach ($files as $file) {
     foreach ($fileUrls as $file) {
         $clean_name = ucwords(str_replace(["_", ".php"], [" ", ""], $file["filename"]));
 
-        echo sprintf('<li><a href="/debug/%s">%s</a></li>', $file["filename"], $clean_name);
+        if (str_ends_with($file["filename"], '.php')) {
+            $path = substr($file["filename"], 0, -4);
+        } else {
+            $path = $file["filename"]; // this should never happen
+        }
+
+        echo sprintf('<li><a href="/debug/%s">%s</a></li>', $path, $clean_name);
     }
     ?>
 </ul>

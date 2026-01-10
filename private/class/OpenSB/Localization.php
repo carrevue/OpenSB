@@ -105,6 +105,10 @@ class Localization
         }
     }
 
+    public function getLocaleData() {
+        return $this->messages;
+    }
+
     /**
      * function formatDate
      * 
