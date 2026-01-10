@@ -1,25 +1,25 @@
 {% extends "_layout.twig" %}
 
-{% block precontent %}
-    <div class="navigation-bar">
-        <a class="navigation-bar-button {% if page_name=='my_uploads' %}active{% endif %}" href="/my_uploads">
-            {{ localize('uploads') }}
-        </a>
-        {% if options.enable_incomplete_features %}
-        <a class="navigation-bar-button {% if page_name=='my_messages' %}active{% endif %}" href="/my_messages">
-            Messages
-        </a>
-        {% endif %}
-        <a class="navigation-bar-button {% if page_name=='notifications' %}active{% endif %}" href="/notifications">
-            {{ localize('notifications') }}
-        </a>
-        <a class="navigation-bar-button {% if page_name=='settings' %}active{% endif %}" href="/settings">
-            {{ localize('account_settings') }}
-        </a>
-    </div>
-{% endblock %}
-
 	{% block content %}
-        {% block mystuffcontent %}
-        {% endblock %}
+        <div class="section">
+            <div class="section-header flex">
+                <div class="section-header-left">
+                    <nav class="section-header-crumbs">
+                        <ol>
+                            <li><a href="/my_account">{{ localize('my_account') }}</a></li>
+                            <li><a href="#">{{ title }}</a></li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="section-header-right">
+                    Right
+                </div>
+                {#<div class="section-header-left">
+                    <h1 class="section-title">{{ localize('my_account') }}</h1>
+                    <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
+                </div>#}
+            </div>
+            {% block my_account_content %}
+            {% endblock %}
+        </div>
     {% endblock %}
