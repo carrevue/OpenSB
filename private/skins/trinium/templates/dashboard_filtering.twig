@@ -1,0 +1,16 @@
+{% extends "_layout_dashboard.twig" %}
+
+{% set title = "Filtering" %}
+
+	{% block dashboard_content %}
+        <table class="styled">
+            <tr class="table-header">
+                <th>Name</th>
+            </tr>
+            {% for entry in data %}
+                <tr>
+                    <td class="a">{{ entry.name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endblock %}
