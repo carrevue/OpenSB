@@ -8,7 +8,7 @@
 
 {% set title = "Uploads" %}
 
-	{% block admincontent %}
+	{% block dashboard_content %}
         {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
         {% set current_page = page %}
 

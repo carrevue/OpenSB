@@ -17,7 +17,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Composer;
+namespace Composer;
 
 /**
  * Reads an installed.json file and provides accessors to get what is

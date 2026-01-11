@@ -25,7 +25,7 @@ global $auth, $twig, $database, $sb, $path;
 
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
-use OpenSB\Composer\ComposerInstalled;
+use Composer\ComposerInstalled;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");

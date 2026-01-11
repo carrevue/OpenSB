@@ -1,36 +1,32 @@
 {% extends "_layout.twig" %}
 
-
-{% block precontent %}
-<div class="navigation-bar">
-    <a class="navigation-bar-button {% if page_name=='dashboard-overview' %}active{% endif %}" href="/dashboard/overview">
-        Overview
-    </a>
-    <a class="navigation-bar-button {% if page_name=='dashboard-users' %}active{% endif %}" href="/dashboard/users">
-        Users
-    </a>
-    {% if user_data.powerlevel > 2 %}
-        <a class="navigation-bar-button {% if page_name=='dashboard-ip_bans' %}active{% endif %}" href="/dashboard/ip_bans">
-            IP bans
-        </a>
-    {% endif %}
-    <a class="navigation-bar-button {% if page_name=='dashboard-uploads' %}active{% endif %}" href="/dashboard/uploads">
-        Uploads
-    </a>
-    <a class="navigation-bar-button {% if page_name=='dashboard-journals' %}active{% endif %}" href="/dashboard/journals">
-        Journals
-    </a>
-    <a class="navigation-bar-button {% if page_name=='dashboard-interactions' %}active{% endif %}" href="/dashboard/interactions">
-        Interactions
-    </a>
-    {% if invite_keys_enabled %}
-        <a class="navigation-bar-button {% if page_name=='dashboard-invite_keys' %}active{% endif %}" href="/dashboard/invite_keys">
-            Invite keys
-        </a>
-    {% endif %}
-</div>
+{% block content %}
+    <div class="section">
+        <div class="section-header flex">
+            <div class="section-header-left">
+                <nav class="section-header-crumbs">
+                    <ol>
+                        <li><a href="/dashboard">{{ localize('dashboard') }}</a></li>
+                        <li><a href="#">{{ title }}</a></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="section-header-right">
+                Right
+            </div>
+            {#<div class="section-header-left">
+                <h1 class="section-title">{{ localize('my_account') }}</h1>
+                <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
+            </div>#}
+        </div>
+        <div class="content-box">
+            {% block dashboard_content %}
+            {% endblock %}
+        </div>
+    </div>
 {% endblock %}
 
+{#
 {% block content %}
     <div class="section">
         <div class="section-header">
@@ -40,7 +36,8 @@
         </div>
     </div>
     <div class="content-box">
-        {% block admincontent %}
+        {% block dashboard_content %}
         {% endblock %}
     </div>
 {% endblock %}
+#}
