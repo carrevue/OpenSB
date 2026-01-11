@@ -93,6 +93,7 @@ $infoData = [
     "description" => $data["description"],
     "published" => $data["timestamp"],
     "type" => $data["type"],
+    "flags" => $upload->getUploadFlagsArray(),
 ];
 
 echo $twig->render('edit.twig', [
