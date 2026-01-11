@@ -87,7 +87,7 @@
                         {% for link in header_user_account_links() %}
                             <a class="menu-item-button" href="/login/{{ link.username }}">
                                 <div class="menu-item-profile-picture profile-picture">
-                                    <img src="{{ profile_picture(link.username) }}" class="pfp"
+                                    <img src="{{ profile_picture(link.id) }}" class="pfp"
                                          alt="{{ link.username }}">
                                 </div>
                                 <span>{{ link.username }}</span>
