@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
 
@@ -72,12 +72,12 @@ if (isset($user)) {
 
     if ($is_the_account_in_the_accounts_array) {
         $_SESSION["SBTOKEN"] = $token;
+        $_SESSION["SB_STAFF_AUTHED"] = null;
 
         $signed = Utilities::makeSignedCookiePayload($new_array);
         Utilities::setSafeCookie('SBACCOUNTS', $warning . $signed, time() + (30 * 24 * 60 * 60));
 
-        $sanitized_user = htmlspecialchars($user, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$sanitized_user]);
+        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$user]);
     } else {
         Utilities::notifyBanner("You are not logged into this account.", '/login');
     }
@@ -127,13 +127,6 @@ if (isset($_POST["loginsubmit"])) {
                 }
 
                 if (!$error) {
-                    session_regenerate_id(true);
-                    $_SESSION["SBTOKEN"] = $logindata['token'];
-                    $_SESSION["SB_STAFF_AUTHED"] = null;
-
-                    $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
-                    $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
-
                     if (isset($_COOKIE['SBACCOUNTS'])) {
                         $raw = $_COOKIE['SBACCOUNTS'];
                         if (strpos($raw, $warning) === 0) {
@@ -171,6 +164,13 @@ if (isset($_POST["loginsubmit"])) {
 
                         $signed = Utilities::makeSignedCookiePayload($safe_accounts);
                         Utilities::setSafeCookie('SBACCOUNTS', $warning . $signed, time() + (30 * 24 * 60 * 60));
+
+                        session_regenerate_id(true);
+                        $_SESSION["SBTOKEN"] = $logindata['token'];
+                        $_SESSION["SB_STAFF_AUTHED"] = null;
+
+                        $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
+                        $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
                     } else {
                         $payload = [['userid' => $auth->getUserID(), 'token' => $_SESSION['SBTOKEN']]];
                         $signed = Utilities::makeSignedCookiePayload($payload);
