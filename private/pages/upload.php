@@ -131,17 +131,8 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $title = ($_POST['title'] ?? null);
     $description = ($_POST['desc'] ?? null);
 
-    /*
-    if ($sb->isChazizInstance()) {
-        $rating = 'general';
-    } else {
-        $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
-    }
-    */
-
     // kinda fucking stupid way to do this but whatever
     $mature = $auth->isUserOver18() && 
-            !$sb->isChazizInstance() && 
             isset($_POST['rating']) && 
             $_POST['rating'];
 

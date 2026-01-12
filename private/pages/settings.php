@@ -89,7 +89,13 @@ if (isset($_POST['save'])) {
         $highlight_box_text_color = substr($_POST['highlight_box_text_color'] ?? '#000000', 0, 7);
     }
 
-    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? []);
+    if ($auth->isUserOver18()) {
+        $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
+    } else {
+        $rating = 'general';
+    }
+
+    $blacklisted_tags = ($_POST['blacklisted_tags'] ?? "");
 
     if ($blacklisted_tags === '') {
         $parsed_tags = [];
