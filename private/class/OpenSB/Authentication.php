@@ -92,13 +92,10 @@ class Authentication
                 // if "comfortable rating" is questionable, reset it back to general. this is because opensb now uses
                 // "general" and "sensitive" instead of the old "general", "questionable" and "mature" ratings, but the
                 // old system is left there for compatibility, which will probably get removed around opensb 2.1.
-                // also, on sb, if the user has their "comfortable rating" still not set to general, it now will be reset 
-                // to general. this is due to guideline changes caused by a vps move around june 2024. -chaziz 09/19/2025
-                if (($sb->isChazizSquareBracketInstance() && $this->user_data["comfortable_rating"] != "general") ||
-                    $this->user_data["comfortable_rating"] == "questionable" ||
-                    ($this->user_data["comfortable_rating"] == "mature" && !$this->isUserOver18())
-                ) {
-
+                // -chaziz 09/19/2025
+                if ($this->user_data["comfortable_rating"] == "questionable" ||
+                    ($this->user_data["comfortable_rating"] != "general" && !$this->isUserOver18())) 
+                {
                     $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
                     Utilities::notifyBanner("notify_content_filtering_reset", false, "primary");
                 }
