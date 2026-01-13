@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Last updated by Chaziz on October 25th 2025.
+Last updated on October 25th 2025.
 
 This is the privacy policy for this website FulpTube, alternatively known as SquareBracket.
 
