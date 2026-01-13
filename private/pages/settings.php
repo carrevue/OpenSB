@@ -89,7 +89,7 @@ if (isset($_POST['save'])) {
         $highlight_box_text_color = substr($_POST['highlight_box_text_color'] ?? '#000000', 0, 7);
     }
 
-    if ($auth->isUserOver18()) {
+    if ($auth->isUserOver18() && !$sb->isChazizSquareBracketInstance()) {
         $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
     } else {
         $rating = 'general';

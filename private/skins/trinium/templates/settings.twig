@@ -198,19 +198,21 @@
                 <h2 class="section-title">{{ localize('filtering') }}</h2>
                 </div>
 
-                {% if isUserOver18 %}
-                    <div class="form-submit">
-                        <input type="checkbox" name="rating" id="rating" value="true"
-                        {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
-                        <label for="rating">{{ localize('enable_sensitive_content') }}</label><br>
-                    </div>
+                {% if not is_chaziz_sb %}
+                    {% if isUserOver18 %}
+                        <div class="form-submit">
+                            <input type="checkbox" name="rating" id="rating" value="true"
+                            {% if user_data.comfortable_rating == "mature" %}checked{% endif %}>
+                            <label for="rating">{{ localize('enable_sensitive_content') }}</label><br>
+                        </div>
 
-                    {#<div class="form-submit">
-                        <input type="checkbox" name="rating" id="rating" value="true">
-                        <label for="rating"> Block profile/upload access from people under 18</label><br>
-                    </div>#}
-                {% else %}
-                    <div class="text-danger">{{ localize('restricted_sensitive_content', website_branding.name) }}</div>
+                        {#<div class="form-submit">
+                            <input type="checkbox" name="rating" id="rating" value="true">
+                            <label for="rating"> Block profile/upload access from people under 18</label><br>
+                        </div>#}
+                    {% else %}
+                        <div class="text-danger">{{ localize('restricted_sensitive_content', website_branding.name) }}</div>
+                    {% endif %}
                 {% endif %}
 
                 <div class="form-input">

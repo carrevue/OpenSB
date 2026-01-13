@@ -131,7 +131,11 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $title = ($_POST['title'] ?? null);
     $description = ($_POST['desc'] ?? null);
 
-    $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
+    if ($sb->isChazizSquareBracketInstance()) {
+        $rating = 'general';
+    } else {
+        $rating = isset($_POST['rating']) && $_POST['rating'] === 'true' ? 'mature' : 'general';
+    }
 
     $tags = ($_POST['tags'] ?? '');
     if ($tags === '') {
