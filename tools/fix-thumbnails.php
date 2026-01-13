@@ -1,9 +1,10 @@
+#!/usr/bin/php
 <?php
 
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -20,8 +21,6 @@
 */
 
 namespace OpenSB\Tools;
-
-// INCOMPLETE
 
 define("SB_ROOT_PATH", dirname(__DIR__));
 define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
