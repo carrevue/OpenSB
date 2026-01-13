@@ -231,11 +231,15 @@ class Utilities
     {
         global $sb;
 
-        $localization = $sb->getLocalizationClass();
+        if ($sb && method_exists($sb, 'getLocalizationClass')) {
+            $localization = $sb->getLocalizationClass();
+        } else {
+            $localization = null;
+        }
 
         // awkward fix for if we use notifyBanner before localization is initialized
         if (!$localization) {
-            $localization = new Localization($sb->getOptionsCookie()["locale"] ?? "en-US");
+            $localization = new Localization("en-US");
         }
 
         $_SESSION["notif_message"] = $localization->translate($message, ...$args);
