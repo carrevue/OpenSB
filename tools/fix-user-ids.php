@@ -67,6 +67,7 @@ foreach ($id_mapping as $old_id => $temp_id) {
     $database->query("UPDATE upload_takedowns SET sender = ? WHERE sender = ?", [$temp_id, $old_id]);
     $database->query("UPDATE users SET new_id = ? WHERE id = ?", [$temp_id, $old_id]);
     $database->query("UPDATE user_old_names SET user = ? WHERE user = ?", [$temp_id, $old_id]);
+    $database->query("UPDATE user_profile_customization SET user = ? WHERE user = ?", [$temp_id, $old_id]);
     $database->query("UPDATE uploads SET author = ? WHERE author = ?", [$temp_id, $old_id]);
 
     $pfpOld = SB_DYNAMIC_PATH . '/pfp/' . $old_id . '.png';
@@ -108,6 +109,7 @@ foreach ($id_mapping as $old_id => $temp_id) {
     $database->query("UPDATE upload_takedowns SET sender = ? WHERE sender = ?", [$new_id, $temp_id]);
     $database->query("UPDATE users SET new_id = ? WHERE new_id = ?", [$new_id, $temp_id]);
     $database->query("UPDATE user_old_names SET user = ? WHERE user = ?", [$new_id, $temp_id]);
+    $database->query("UPDATE user_profile_customization SET user = ? WHERE user = ?", [$new_id, $temp_id]);
     $database->query("UPDATE uploads SET author = ? WHERE author = ?", [$new_id, $temp_id]);
 
     $pfpTemp = SB_DYNAMIC_PATH . '/pfp/temp_' . $temp_id . '.png';
