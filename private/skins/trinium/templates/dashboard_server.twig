@@ -3,6 +3,27 @@
 {% set title = "Server details" %}
 
 	{% block dashboard_content %}
+            <div class+"section">
+                {% if system.is_windows %}
+                    <div class="text-danger">
+                        Windows is no longer officially supported. If you are using XAMPP, please switch to Windows
+                        Subsystem for Linux.
+                    </div>
+                {% endif %}
+                <ul>
+                    {% if system.os_name %}
+                        <li>Operating System: {{ system.os_name }}</li>
+                    {% endif %}
+                    <li>Uname: <code>{{ system.uname }}</code></li>
+                    {% if not system.is_windows %}
+                    <li>Uptime: {{ system.uptime }}</li>
+                    <li>Load average (1, 5, 15 min): {{ system.avg[0] }}, {{ system.avg[1] }}, {{ system.avg[2] }}</li>
+                    <li>Storage: {{ system.disk.free }} free of {{ system.disk.total }} ({{ system.disk.percentage }} used)</li>
+                    <li>Instance size: {{ system.disk.instance_size }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+            <hr>
             <div class="section">
                 <div class="section-header">
                     <h1 class="section-title">Installed skins</h1>
@@ -44,7 +65,7 @@
                         <th>Description</th>
                         <th>Authors</th>
                     </tr>
-                    {% for key, package in data.packages %}
+                    {% for key, package in packages %}
                         <tr>
                             <td class="a" width="200">{{ key }}</td>
                             <td class="b" width="100">{{ package.version }}</td>

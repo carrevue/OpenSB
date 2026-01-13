@@ -39,6 +39,8 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
+
+
 function getComposerPackages(): array
 {
     $dependencies = [];
@@ -48,10 +50,77 @@ function getComposerPackages(): array
     return $dependencies;
 }
 
-$data = [
-    "packages" => getComposerPackages(),
-];
+function get_folder_size($path)
+{
+    $path = escapeshellarg($path);
+    $command = "du -sb $path | cut -f1";
+    $size = shell_exec($command);
+    return (int)$size;
+}
+
+
+$is_windows = str_starts_with(php_uname(), "Windows") ?? false;
+
+// get distro info if on a unix-based system that supports os-release
+// this is better than using lsb-release because lsb is some dead linux-only standard while os-release will work on
+// anything that uses systemd, including freebsd from what ive seen online. openrc may support this but im not sure.
+// -chaziz 12/22/2024
+if (file_exists('/etc/os-release')) {
+    $os_release = file('/etc/os-release', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    $os_data = [];
+    foreach ($os_release as $line) {
+        list($key, $value) = explode("=", $line, 2);
+        $os_data[$key] = trim($value, '"');
+    }
+
+    $os_name = $os_data['PRETTY_NAME'] ?? null;
+} else {
+    $os_name = null;
+}
+
+// we dont really support windows hosts, because most people on windows would just attempt hosting opensb using xampp as
+// a basis which hasnt been updated since november 2023 and is a big pile of shit. also, theres no reliably fast method
+// of getting the uptime of a windows system through php without relying on systemfo which is slow as shit or possibly
+// fucking around with winmgmts through the unholy com php class. i didnt even know it was possible to interface with
+// windows' ole api via php, what the fuck??? -chaziz 4/15/2025
+if (!$is_windows) {
+    $uptime = shell_exec('uptime -p'); // posix_times() is unreliable
+    if ($uptime) {
+        $uptime = ltrim($uptime, "up ");
+    }
+
+    $avg = sys_getloadavg();
+
+    $root = '/';
+    $disk_total = disk_total_space($root);
+    $disk_free = disk_free_space($root);
+    $disk_used = $disk_total - $disk_free;
+    $disk_percentage = Utilities::calculatePercentage(1, $disk_used, $disk_total);
+
+    $instance_size = get_folder_size(SB_ROOT_PATH);
+
+    $disk = [
+        "total" => Utilities::formatBytes($disk_total, 2),
+        "free" => Utilities::formatBytes($disk_free, 2),
+        "used" => Utilities::formatBytes($disk_used, 2),
+        "percentage" => $disk_percentage,
+        "instance_size" => Utilities::formatBytes($instance_size),
+    ];
+} else {
+    $uptime = "Unknown";
+    $avg = [];
+    $disk = [];
+}
 
 echo $twig->render("dashboard_server.twig", [
-    'data' => $data
+    "packages" => getComposerPackages(),
+    "system" => [
+        "uname" => php_uname(),
+        "os_name" => $os_name,
+        "uptime" => $uptime,
+        "avg" => $avg,
+        "is_windows" => $is_windows,
+        "disk" => $disk,
+    ],
 ]);

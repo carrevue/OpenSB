@@ -20,4 +20,4 @@ Unlike other simillar platforms, this platform does not care about what you do o
 * Do not upload anything not listed here that may break our hosting provider Endless Hosting's [Acceptable Use Policy](https://portal.theendlessweb.com/plugin/support_manager/knowledgebase/view/2/terms-of-service/).
 
 ## Written content (Comments/Journals)
-* Do not use comments and/or journals as a way of calling out someone. If someone has been called out off-platform (as long as it falls under this site's off-platform guidelines), you should reach out to a staff member in private.
+* Do not use comments and/or journals as a way of calling out someone. If someone has been called out off-platform (as long as what they're exposed for breaks this platform's off-platform guidelines), you should reach out to a staff member in private.

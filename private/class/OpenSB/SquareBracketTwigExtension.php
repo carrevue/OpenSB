@@ -232,10 +232,12 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $branding = $this->sb->getBrandingSettings();
                 $markdown = new Parsedown();
 
+                $text = $markdown->text($text);
+
                 // replace hardcoded dummy strings with proper strings
                 $text = str_replace("OpenSBInstanceName", $branding["name"], $text);
 
-                return $markdown->text($text);
+                return $text;
             }, ['is_safe' => ['html']]),
 
             // Markdown function for non-inline text. **NOT SANITIZED, DON'T LET IT EVER TOUCH USER INPUT**

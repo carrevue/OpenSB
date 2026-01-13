@@ -21,35 +21,6 @@
         </div>
         <hr>
         <div class="section">
-            <div class="section-header flex">
-                <div class="section-header-left">
-                    <h1 class="section-title">Server details</h1>
-                </div>
-                <div class="section-header-right">
-                    <a href="/dashboard/server">{{ localize('more') }}</a>
-                </div>
-            </div>
-            {% if data.system.is_windows %}
-                <div class="text-danger">
-                    Windows is no longer officially supported. If you are using XAMPP, please switch to Windows
-                    Subsystem for Linux.
-                </div>
-            {% endif %}
-            <ul>
-                {% if data.system.os_name %}
-                    <li>Operating System: {{ data.system.os_name }}</li>
-                {% endif %}
-                <li>Uname: <code>{{ data.system.uname }}</code></li>
-                {% if not data.system.is_windows %}
-                <li>Uptime: {{ data.system.uptime }}</li>
-                <li>Load average (1, 5, 15 min): {{ data.system.avg[0] }}, {{ data.system.avg[1] }}, {{ data.system.avg[2] }}</li>
-                <li>Storage: {{ data.system.disk.free }} free of {{ data.system.disk.total }} ({{ data.system.disk.percentage }} used)</li>
-                <li>Instance size: {{ data.system.disk.instance_size }}</li>
-                {% endif %}
-            </ul>
-        </div>
-        <hr>
-        <div class="section">
             <div class="section-header">
                 <h1 class="section-title">Statistics</h1>
             </div>
