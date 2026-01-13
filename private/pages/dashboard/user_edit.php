@@ -159,7 +159,7 @@ if (isset($_POST['feature_user'])) {
         );
 
         if ($sb->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'verified');
+            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'unfeatured');
         }
 
         Utilities::notifyBanner("notify_dashboard_unfeature_user_success", "/dashboard/users/{$username}", "success", [$_POST["feature_user"]]);
@@ -172,7 +172,7 @@ if (isset($_POST['feature_user'])) {
         );
 
         if ($sb->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'unverified');
+            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'featured');
         }
 
         Utilities::notifyBanner("notify_dashboard_feature_user_success", "/dashboard/users/{$username}", "success", [$_POST["feature_user"]]);
