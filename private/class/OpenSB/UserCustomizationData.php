@@ -59,7 +59,7 @@ class UserCustomizationData
         );
 
         // kind of stupid but at this point i dont care
-        $font = UserCustomizationFont::tryFrom($this->data["font"]) ?? UserCustomizationFont::DEFAULT;
+        $font = UserCustomizationFont::tryFrom($this->data["font"] ?? 'default') ?? UserCustomizationFont::DEFAULT;
         $this->data["font"] = $font->getCss();
     }
 
