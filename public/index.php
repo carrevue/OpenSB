@@ -220,6 +220,7 @@ $router->add('/write', 'write.php');
 // user profiles
 $router->add('/user', function () {
     if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301);
+    if (isset($_GET['n'])) Utilities::redirect('/user/' . $_GET['n'], 301);
 });
 $router->add('/user/{username}', 'profile_overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile_uploads.php'); // uploads
