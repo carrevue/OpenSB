@@ -7,7 +7,6 @@
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
   Copyright (C) 2022 shiypc
-  Copyright (C) 2024 OkayHush
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 

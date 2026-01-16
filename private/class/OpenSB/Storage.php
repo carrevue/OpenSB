@@ -57,7 +57,7 @@ class Storage
      * @param string|null $path The path
      *
      */
-    public function __construct(SquareBracket $sb, string $path = null)
+    public function __construct(SquareBracket $sb, ?string $path = null)
     {
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
