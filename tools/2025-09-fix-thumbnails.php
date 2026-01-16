@@ -24,7 +24,6 @@ namespace OpenSB\Tools;
 // INCOMPLETE
 
 define("SB_ROOT_PATH", dirname(__DIR__));
-define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
 define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
 define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
@@ -36,10 +35,11 @@ require_once SB_PRIVATE_PATH . '/common.php';
 
 $uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE type = 0"));
 $storage = $sb->getStorageClass();
+$path = $storage->getPath();
 
 foreach ($uploads as $upload) {
-    $video_path = SB_DYNAMIC_PATH . "/videos/" . $upload["upload_id"] . ".converted.mp4";
-    $thumbnail_path = SB_DYNAMIC_PATH . "/thumbnails/" . $upload["upload_id"] . ".png";
+    $video_path = $path . "/videos/" . $upload["upload_id"] . ".converted.mp4";
+    $thumbnail_path = $path . "/thumbnails/" . $upload["upload_id"] . ".png";
 
     if (!file_exists($thumbnail_path) && file_exists($video_path)) {
         $storage->processVideoUpload(

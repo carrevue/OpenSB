@@ -40,13 +40,14 @@ use FFMpeg\Format\Video\X264;
 use FFMpeg\Exception\RuntimeException;
 
 define("SB_ROOT_PATH", dirname(__DIR__, 2));
-define("SB_DYNAMIC_PATH", SB_ROOT_PATH . '/dynamic');
 define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
 define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 require_once SB_PRIVATE_PATH . '/common.php';
+
+$dev_enable_classic_thumbnails = false;
 
 function log(string $message): void
 {
@@ -113,6 +114,10 @@ if ($upload_type != "video" && $upload_type != "video_thumbnail_only") {
 }
 
 try {
+    $path = $sb->getStorageClass()->getPath();
+
+    log("Storage path: " . $path);
+
     $ffmpeg = FFMpeg::create($config);
     $ffprobe = FFProbe::create($config);
     $h264 = new X264();
@@ -197,10 +202,12 @@ try {
     if ($fucked) {
         log("Taking thumbnail from first frame");
         $frame = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-        
-        $frameClassic1 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-        $frameClassic2 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-        $frameClassic3 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+
+        if ($dev_enable_classic_thumbnails) {
+            $frameClassic1 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+            $frameClassic2 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+            $frameClassic3 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+        }
     } else {
         // this is fucked. look into this later. -chaziz 6/9/2025
         /*
@@ -220,30 +227,36 @@ try {
 
         $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
 
-        // oh yeah the way this works i gotta redefine this shit Again. Lol
-        $thumbnailTimeClassic1 = $duration * 0.25;
-        $thumbnailTimeClassic2 = $duration * 0.5;
-        $thumbnailTimeClassic3 = $duration * 0.75;
+        if ($dev_enable_classic_thumbnails) {
+            // oh yeah the way this works i gotta redefine this shit Again. Lol
+            $thumbnailTimeClassic1 = $duration * 0.25;
+            $thumbnailTimeClassic2 = $duration * 0.5;
+            $thumbnailTimeClassic3 = $duration * 0.75;
 
-        $frameClassic1 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic1 / $framerate));
-        $frameClassic2 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic2 / $framerate));
-        $frameClassic3 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic3 / $framerate));
+            $frameClassic1 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic1 / $framerate));
+            $frameClassic2 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic2 / $framerate));
+            $frameClassic3 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic3 / $framerate));
+        }
     }
     $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
 
-    $frameClassic1->filters()->custom('scale=130x97');
-    $frameClassic2->filters()->custom('scale=130x97');
-    $frameClassic3->filters()->custom('scale=130x97');
+    if ($dev_enable_classic_thumbnails) {
+        $frameClassic1->filters()->custom('scale=130x97');
+        $frameClassic2->filters()->custom('scale=130x97');
+        $frameClassic3->filters()->custom('scale=130x97');
+    }
 
     log("Saving thumbnail...");
 
     // HQ thumbnails
-    $frame->save(SB_DYNAMIC_PATH . '/thumbnails/' . $new . '.png');
+    $frame->save($path . '/thumbnails/' . $new . '.png');
 
-    // Classic thumbnails
-    $frameClassic1->save(SB_DYNAMIC_PATH . '/thumbnails/classic/' . $new . '.1.jpg');
-    $frameClassic2->save(SB_DYNAMIC_PATH . '/thumbnails/classic/' . $new . '.2.jpg');
-    $frameClassic3->save(SB_DYNAMIC_PATH . '/thumbnails/classic/' . $new . '.3.jpg');
+    if ($dev_enable_classic_thumbnails) {
+        // Classic thumbnails
+        $frameClassic1->save($path . '/thumbnails/classic/' . $new . '.1.jpg');
+        $frameClassic2->save($path . '/thumbnails/classic/' . $new . '.2.jpg');
+        $frameClassic3->save($path . '/thumbnails/classic/' . $new . '.3.jpg');
+    }
 
     log("Thumbnail saved!");
 
@@ -297,7 +310,7 @@ try {
     $video->filters()->custom('format=yuv420p');
 
     log("Converting video...");
-    $video->save($h264, SB_DYNAMIC_PATH . '/videos/' . $new . '.converted.mp4');
+    $video->save($h264, $path . '/videos/' . $new . '.converted.mp4');
 
     debug_print_backtrace();
     unlink($target_file);

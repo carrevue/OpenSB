@@ -199,8 +199,8 @@ class SquareBracket
 
         $storage_use_custom_path = (bool)($config['storage']['use_custom_path'] ?? false);
         $storage_path = $storage_use_custom_path
-            ? ($config['storage']['custom_path'] ?? SB_DYNAMIC_PATH)
-            : SB_DYNAMIC_PATH;
+            ? ($config['storage']['custom_path'] ?? null)
+            : null;
 
         $this->storage = new Storage($this, $storage_path);
 

@@ -59,9 +59,23 @@ class Storage
      */
     public function __construct(SquareBracket $sb, ?string $path = null)
     {
+        $default_path = SB_ROOT_PATH . '/dynamic'; // equivalent to SB_DYNAMIC_PATH in opensb 1.1-2.0
+
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
-        $this->path = $path ?? SB_DYNAMIC_PATH;
+        $this->path = $path ?? $default_path;
+    }
+
+    /**
+     * function processVideoUpload
+     * 
+     * Returns the storage path.
+     * 
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
     }
 
     /**
