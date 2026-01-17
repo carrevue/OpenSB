@@ -53,7 +53,7 @@
 			</div>
 		</div>
 
-		{% set le_url = 'users?page=%s' %}
+		{% set le_url = 'members?page=%s' %}
 
 		{{ pagination(users.count, items_per_page, le_url, current_page) }}
 	{% endblock %}

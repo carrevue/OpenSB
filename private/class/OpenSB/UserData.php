@@ -106,7 +106,7 @@ class UserData
      */
     public function isUserBanned(): bool
     {
-        // also cache if a user is banned (for later)
+        // also cache if a user is banned (if needed in the future)
         if (isset(self::$userDataCache["banned_$this->id"])) {
             return self::$userDataCache["banned_$this->id"];
         }
