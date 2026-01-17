@@ -213,6 +213,7 @@ class Templating
         $this->twig->addGlobal('options', $options);
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
         $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
+        $this->twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
 
         if (isset($_SERVER["REQUEST_URI"])) {
             $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);

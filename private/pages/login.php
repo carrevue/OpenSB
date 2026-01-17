@@ -29,11 +29,6 @@ use OpenSB\Utilities;
 
 $warning = $sb->getWarningString();
 
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(16));
-}
-$csrf_token_for_template = $_SESSION['csrf_token'];
-
 if (!isset($_SESSION['login_attempts'])) {
     $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
 }
@@ -196,4 +191,4 @@ if (isset($_POST["loginsubmit"])) {
     }
 }
 
-echo $twig->render('login.twig', ['csrf_token' => $csrf_token_for_template]);
+echo $twig->render('login.twig');

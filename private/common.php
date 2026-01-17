@@ -101,6 +101,10 @@ if (!SB_CLI) {
             "gc_maxlifetime" => 86400,
         ]);
     }
+
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
 }
 
 spl_autoload_register(function ($class_name) {
