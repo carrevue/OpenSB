@@ -4,7 +4,7 @@
             <a href="{{ link.url }}">{{ link.name }}</a> 
             {% if not loop.last %}·{% endif %}
         {% endfor %}
-    <p>{{ localize('powered_by') }} <a href="/version">OpenSB {{ opensb_version }}</a></p>
+    <p>{{ localize('powered_by') }} <a href="/version">OpenSB {{ opensb_version.name }} {{ opensb_version.number }}</a></p>
     {% if is_debug %}
         <p>{{ profiler_stats() }}</p>
     {% endif %}

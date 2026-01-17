@@ -113,12 +113,10 @@ class Templating
 
         $skinPath = 'skins/' . $this->skin;
 
-        // get metadata so that we can check if the skin is actually intended for squarebracket
+        // load in the skin metadata
         $metadata = $this->getSkinMetadata($skinPath);
-
-        // if this skin is not meant for squarebracket, don't load.
-        if ($metadata["metadata"]["site"] != "squarebracket") {
-            trigger_error("Current skin is invalid", E_USER_WARNING);
+        if (!$metadata) {
+            trigger_error("Failed to load skin", E_USER_WARNING);
             $this->skin = "trinium";
         }
 
@@ -128,7 +126,7 @@ class Templating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            trigger_error("Current skin is invalid", E_USER_WARNING);
+            trigger_error("Failed to load skin", E_USER_WARNING);
 
             $this->skin = "trinium";
             $this->theme = "default";
@@ -269,13 +267,45 @@ class Templating
      */
     public function getSkinMetadata($skin): ?array
     {
+        $skin_name = substr($skin, strrpos($skin, '/') + 1);
+
         if (file_exists($skin . "/skin.json")) {
             $metadata = file_get_contents($skin . "/skin.json");
+
+            if ($metadata === false) {
+                trigger_error(sprintf("Could not read the metadata for skin %s", $skin_name), E_USER_WARNING);
+                return null;
+            }
+
+            $metadata = json_decode($metadata, true);
+
+            // awkward leftover from the opensb 1.2 beta era, when there was
+            // gonna be a secondary site to sb called "soos" which died in
+            // very early development.
+            if (isset($metadata["site"]) && $metadata["site"] !== "squarebracket") {
+                trigger_error(sprintf("%s is incompatible", $skin_name), E_USER_WARNING);
+                return null;
+            }
+
+            // anti-stupid check
+            if (isset($metadata["requires"]["MediaWiki"])) {
+                trigger_error(sprintf("%s is incompatible", $skin_name), E_USER_WARNING);
+                return null;
+            }
+
+            /*
+            // version check (very crude for now)
+            if (!isset($metadata["version"])) {
+                trigger_error(sprintf("%s is too old", $skin_name), E_USER_WARNING);
+                return null;
+            }
+            */
+
+            return $metadata;
         } else {
-            trigger_error(sprintf("The metadata for OpenSB skin %s is missing", $skin), E_USER_WARNING);
+            trigger_error(sprintf("The metadata for skin %s is missing", $skin_name), E_USER_WARNING);
             return null;
         }
-        return json_decode($metadata, true);
     }
 
     /**
@@ -293,20 +323,19 @@ class Templating
         $skins = [];
         foreach ($this->getAllSkins() as $skin) {
             $metadata = $this->getSkinMetadata($skin);
-            $site = $metadata["metadata"]["site"] ?? "unknown";
-            if ($site == "squarebracket") {
-                $incomplete = $this->sb->isDebug() ? false : ($metadata["metadata"]["incomplete"] ?? false);
-                // dont show incomplete skins
-                if (!$incomplete) {
-                    // dont show incomplete themes
-                    if (isset($metadata["metadata"]["themes"]) && is_array($metadata["metadata"]["themes"])) {
-                        $metadata["metadata"]["themes"] = array_filter($metadata["metadata"]["themes"], function ($theme)
-                        use ($isDebug) {
-                            return $isDebug || !($theme["incomplete"] ?? false);
-                        });
-                    }
-                    $skins[] = $metadata;
+
+            $incomplete = $this->sb->isDebug() ? false : ($metadata["metadata"]["incomplete"] ?? false);
+
+            // dont show incomplete skins
+            if (!$incomplete) {
+                // dont show incomplete themes
+                if (isset($metadata["metadata"]["themes"]) && is_array($metadata["metadata"]["themes"])) {
+                    $metadata["metadata"]["themes"] = array_filter($metadata["metadata"]["themes"], function ($theme)
+                    use ($isDebug) {
+                        return $isDebug || !($theme["incomplete"] ?? false);
+                    });
                 }
+                $skins[] = $metadata;
             }
         }
 

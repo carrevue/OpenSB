@@ -29,6 +29,13 @@
                 "name": "Dark (Matte)",
                 "description": "The dark theme, but it's flat.",
                 "author": "Bluffingo Development"
+            },
+            {
+                "id": "test",
+                "name": "Test",
+                "description": "Test",
+                "author": "Bluffingo Development",
+                "incomplete": true
             }
         ]
     }
