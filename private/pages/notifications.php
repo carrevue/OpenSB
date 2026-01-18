@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -69,7 +69,7 @@ function getRequiredData($database, $notice)
             $comment = $database->fetch("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM user_profile_comments c WHERE c.id = ?", [$notice["related_id"]]);
             $profile = $database->fetch("SELECT u.name FROM users u WHERE u.id = ?", [$notice["level"]]);
 
-            $data["info"] = $comment["comment"];
+            $data["info"] = $comment["comment"] ?? '';
 
             if (!isset($profile["name"])) {
                 $profile = [
