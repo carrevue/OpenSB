@@ -30,6 +30,16 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
+if ($auth->getUserBanData()) {
+    Utilities::notifyBanner("notify_no_permission", "/");
+}
+
+if ($auth->getUserFlags(true)["unverified"]) {
+    http_response_code(401);
+    echo $twig->render('unverified.twig');
+    die();
+}
+
 if (!$sb->isInviteKeysEnabled()) {
     http_response_code(404);
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
