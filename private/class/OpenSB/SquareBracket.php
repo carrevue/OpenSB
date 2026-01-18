@@ -280,6 +280,11 @@ class SquareBracket
             // custom branding for themes. for that Extra Accuracy™.
             // TODO: make finalium and bootstrap *actually* work with updated branding
             if ($this->is_chaziz_squarebracket_instance) {
+                // TEMPORARY CODE for sb 5th anniversary - do NOT cherrypick into 2.1
+                if (date('m/d/Y') === '01/31/2026') {
+                    $this->branding_settings["name"] = "PokTube";
+                }
+
                 if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker") {
                     $this->overrideBrandingWithFulpTube();
                 } elseif ($this->options["skin"] == "finalium" || $this->options["skin"] == "bootstrap") {

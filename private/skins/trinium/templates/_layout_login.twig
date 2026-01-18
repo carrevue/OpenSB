@@ -8,6 +8,12 @@
 
 {% set logo = website_branding.assets_location ~ '/' ~ logo_type ~ logo_suffix ~ logo_extension %}
 
+{# temporary code, do NOT cherrypick into 2.1 #}
+{% if is_chaziz_sb and myDateObj.format('Y-m-d') == '2026-01-31' %}
+    {% set anniversary = true %}
+    {% set logo = '/assets/sb_branding/poktube.svg' %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="{{ language_code }}" dir="ltr">
 <head>
@@ -28,7 +34,7 @@
 </head>
 <body class="login">
 <div class="headers">
-    <div class="header">
+    <div class="header {% if anniversary %}anniversary{% endif %}">
         <div class="header-container">
             <div class="header-main">
                 <div class="header-logo">
