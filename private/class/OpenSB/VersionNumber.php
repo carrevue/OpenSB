@@ -41,7 +41,7 @@ class VersionNumber
     /**
      * @var string The version number, which tries to follow Semantic versioning.
      */
-    private string $versionNumber = "2.0.14";
+    private string $versionNumber = "2.0.15";
 
     /**
      * @var string The full complete version string.
