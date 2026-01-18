@@ -67,8 +67,7 @@
                                 <p>
                                     {{ localize('register_invite_key_required', website_branding.name) }}
                                 </p>
-                            {% endif %}
-                            {% if is_chaziz_sb %}
+                            {% elseif is_chaziz_sb %}
                                 <p>
                                     {{ localize('register_discord_requirement', website_branding.name) }}
                                 </p>

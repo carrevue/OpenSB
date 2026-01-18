@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -155,6 +155,7 @@ $router->add('/journals', 'journals.php');
 $router->add('/journals/{user}', 'journals.php');
 $router->add('/license', 'license.php');
 $router->add('/logout', 'logout.php');
+$router->add('/my_invite_keys', 'my_invite_keys.php');
 $router->add('/my_messages', 'my_messages.php');
 $router->add('/my_uploads', 'my_uploads.php');
 $router->add('/notifications', 'notifications.php');

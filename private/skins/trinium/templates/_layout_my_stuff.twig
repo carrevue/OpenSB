@@ -13,6 +13,11 @@
         <a class="navigation-bar-button {% if page_name=='notifications' %}active{% endif %}" href="/notifications">
             {{ localize('notifications') }}
         </a>
+        {% if invite_keys_enabled %}
+            <a class="navigation-bar-button {% if page_name=='my_invite_keys' %}active{% endif %}" href="/my_invite_keys">
+                {{ localize('invite_keys') }}
+            </a>
+        {% endif %}
         <a class="navigation-bar-button {% if page_name=='settings' %}active{% endif %}" href="/settings">
             {{ localize('account_settings') }}
         </a>

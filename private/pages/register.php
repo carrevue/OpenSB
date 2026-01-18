@@ -126,7 +126,7 @@ if (isset($_POST['registersubmit'])) {
     if (!$error) {
         $flags = 0;
 
-        if ($sb->isChazizSquareBracketInstance()) {
+        if ($sb->isChazizSquareBracketInstance() && !$enableInviteKeys) {
             $flags |= UserFlags::FLAG_UNVERIFIED->value;
         }
 

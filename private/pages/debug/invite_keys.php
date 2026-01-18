@@ -44,10 +44,12 @@ if (isset($_POST["submit"])) {
 }
 
 $data = $database->fetchArray($database->query("SELECT * FROM invite_keys WHERE generated_by = ?", [$auth->getUserId()]));
+
+$latest_invite_key = $database->result("SELECT generated_time FROM invite_keys WHERE generated_by = ? ORDER BY generated_time DESC LIMIT 1", [$auth->getUserID()]);
 ?>
 <h1>My Invite Keys</h1>
-<p>This is the (prototype) implementation of managing invite keys meant for normal users.
-    Staff can manage invite keys through the admin panel.</p>
+<p>Your ID is <?= $auth->getUserID() ?></p>
+<p>Your last one was generated <?= date('Y-m-d H:i:s', $latest_invite_key) ?></p>
 <div>
     <form action="/debug/invite_keys" method="post">
         <div>
