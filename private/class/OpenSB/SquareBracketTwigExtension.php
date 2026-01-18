@@ -798,6 +798,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             'success' => 'success',
             'warning' => 'warning',
             'danger' => 'error',
+            default => 'info', // fallback
         };
 
         return $this->getIcon($icon, $size);

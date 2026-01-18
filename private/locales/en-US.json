@@ -54,6 +54,7 @@
     "my_account": "My account",
     "my_profile": "My profile",
     "my_uploads": "My uploads",
+    "my_invite_keys": "My invite keys",
     "account_settings": "Settings",
     "new_upload": "New upload",
     "new_journal": "New journal",
@@ -107,6 +108,16 @@
     "birthdate_verify_explaination": "To use %s, you must be 13 years of age or older. Please log out immediately if you are under 13. Users who are caught lying about their age will be banned.",
 
     "submit_action": "Submit",
+
+    "invite_keys": "Invite keys",
+
+    "invite_key_action": "Generate invite key",
+    "invite_key_cooldown": "You can only generate one invite key every 24 hours. Please wait before generating another invite key.",
+    "invite_key_cooldown_new_users": "New users must wait 7 days after registering before they can generate an invite key.",
+    "invite_key_disclaimer": "You can only generate one invite key every 24 hours.",
+    "no_invite_keys_generated": "You have not generated any invite keys yet.",
+    "claimed_by": "Claimed by",
+    "unclaimed": "Unclaimed",
 
     "list": "List",
     "grid": "Grid",

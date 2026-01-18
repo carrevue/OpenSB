@@ -195,6 +195,7 @@ $router->add('/license', 'license.php');
 $router->add('/logout', 'logout.php');
 $router->add('/members', 'members.php');
 $router->add('/my_account', 'my_account.php');
+$router->add('/my_invite_keys', 'my_invite_keys.php');
 $router->add('/my_messages', 'my_messages.php');
 $router->add('/my_uploads', 'my_uploads.php');
 $router->add('/notifications', 'notifications.php');
