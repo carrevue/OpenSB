@@ -18,29 +18,23 @@
 {% if pages > 1 %}
     <div class="pagination">
         {% if start > 1 %}
-            <div class="pagination-item">
-                <a href="{{ url | format(1) }}">1</a>
-            </div>
+            <a class="pagination-item" href="{{ url | format(1) }}">1</a>
             {% if start > 2 %}
-                <div class="pagination-item">...</div>
+                <div class="pagination-item ellipsis">...</div>
             {% endif %}
         {% endif %}
         {% for page in start..end %}
-            <div class="pagination-item{% if page == current %} current{% endif %}">
-                {% if page != current %}
-                    <a href="{{ url | format(page) }}">{{ page }}</a>
-                {% else %}
-                    <span>{{ page }}</span>
-                {% endif %}
-            </div>
+            {% if page != current %}
+                <a class="pagination-item" href="{{ url | format(page) }}">{{ page }}</a>
+            {% else %}
+                <span class="pagination-item current">{{ page }}</span>
+            {% endif %}
         {% endfor %}
         {% if end < pages %}
             {% if end < pages - 1 %}
-                <div class="pagination-item">...</div>
+                <div class="pagination-item ellipsis">...</div>
             {% endif %}
-            <div class="pagination-item">
-                <a href="{{ url | format(pages) }}">{{ pages }}</a>
-            </div>
+            <a class="pagination-item" href="{{ url | format(pages) }}">{{ pages }}</a>
         {% endif %}
     </div>
 {% endif %}

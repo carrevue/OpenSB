@@ -97,10 +97,9 @@
                     </div>
                 </div>
             {% else %}
-                {% for link in header_user_links() %}
+                {#{% for link in header_user_links() %}
                     <a class="menulink" href="{{ link.url }}">{{ link.name }}</a>
-                {% endfor %}
-                {# disabled due to opensb 2.0.4 csrf update, look back into this for opensb 2.1 -chaziz 10/07/2025
+                {% endfor %}#}
                 <div class="user-menu-container">
                     <div class="menu-button user-menu-button" data-menu-id="login-menu">
                         <span class="have-an-account">{{ localize('have_an_account') }}</span> {{ localize('login') }}
@@ -134,7 +133,6 @@
                         </form>
                     </div>
                 </div>
-                #}
             {% endif %}
         </div>
     </div>
