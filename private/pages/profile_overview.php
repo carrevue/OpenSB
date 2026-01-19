@@ -33,6 +33,7 @@ use OpenSB\UploadQuery;
 use OpenSB\UserCustomizationData;
 use OpenSB\UserFlags;
 use OpenSB\UserRoleEnum;
+use OpenSB\FakeUser;
 
 $upload_query = new UploadQuery($sb);
 
@@ -57,7 +58,13 @@ if (!$data) {
             Utilities::notifyBanner("notify_invalid_user", "/");
         }
     } else {
-        Utilities::notifyBanner("notify_invalid_user", "/");
+        // check if this could be a fake user
+        $fake_user_data = FakeUser::getFakeUserFromName($username);
+        if ($fake_user_data) {
+            $data = $fake_user_data;
+        } else {
+            Utilities::notifyBanner("notify_invalid_user", "/");
+        }
     }
 }
 

@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -22,6 +22,7 @@
 namespace OpenSB;
 
 use OpenSB\Database;
+use OpenSB\FakeUser;
 
 /**
  * class UserData
@@ -70,12 +71,16 @@ class UserData
             $this->data = self::$userDataCache[$id];
             return;
         }
-
-        // fetch the data from the db
-        $data = $this->database->fetch(
-            "SELECT id, name, title, userlink_color, joined, last_seen, powerlevel, flags FROM users WHERE id = ?",
-            [$id]
-        );
+        
+        if ($id < 0) {
+            $data = FakeUser::getFakeUserFromID($id);
+        } else {
+            // fetch the data from the db
+            $data = $this->database->fetch(
+                "SELECT id, name, title, userlink_color, joined, last_seen, powerlevel, flags FROM users WHERE id = ?",
+                [$id]
+            );
+        }
 
         if (!$data) {
             //trigger_error("User ID $id is nonexistent.", E_USER_WARNING);

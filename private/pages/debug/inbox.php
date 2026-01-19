@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,32 +19,23 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace OpenSB\Pages\Debug;
 
-global $twig, $database, $auth, $twig_error, $sb;
+global $sb, $auth, $database;
 
-use OpenSB\UserData;
-use OpenSB\Utilities;
-
-if (!$sb->isIncompleteFeaturesEnabled()) {
-    http_response_code(404);
-    echo $twig_error->render("404.twig", ["page" => "failwhale"]);
+// /my_messages points to this page so don't check for this yet
+/*
+if (!$sb->isDebug()) {
+    http_response_code(403);
     die();
 }
+*/
 
 if (!$auth->isUserLoggedIn()) {
-    Utilities::notifyBanner("notify_login_required", "/login");
+    die("NOT LOGGED IN");
 }
 
-// fetch data from private_messages table
-
-//  `id` int NOT NULL,
-//  `reply_to_id` int NULL,
-//  `title` varchar(128) NOT NULL,
-//  `contents` text NOT NULL,
-//  `author` int NOT NULL,
-//  `recipient` int NOT NULL,
-//  `date` int NOT NULL
+use OpenSB\UserData;
 
 // think of this as data from the database.
 $database_data = [
@@ -89,7 +80,47 @@ foreach ($database_data as $message) {
             ],
         ];
 }
+?>
 
-echo $twig->render('my_messages.twig', [
-    'data' => $messageArray,
-]);
+<body>
+    <h1>inbox</h1>
+    <a href="/">go back home</a>
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="80%" valign="top">
+                <!--
+                <table width="100%" border="1" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <td>
+                            <span>Write</span>
+                            <span>Delete</span>
+                        </td>
+                        <td align="right">
+                            <span>amount</span>
+                        </td>
+                    </tr>
+                </table>-->
+
+                <table width="100%" border="1" cellpadding="1" cellspacing="0">
+                    <?php
+                    // holy subrocks
+                    foreach ($messageArray as $message) {
+                    ?>
+                        <tr>
+                            <td width="24px"><input type="checkbox"></td>
+                            <td width="240px"><?php echo $message["author"]["info"]["username"] ?></td>
+                            <td>
+                                <?php echo $message["title"] ?>
+                            </td>
+                            <td width="150px" align="right"><?php echo date('Y-m-d H:i:s', $message["published"]) ?></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
