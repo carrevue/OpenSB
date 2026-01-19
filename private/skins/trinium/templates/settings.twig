@@ -48,7 +48,7 @@
 
                 <div class="form-input">
                     <label for="about">{{ localize('profile_description') }}</label>
-                    <textarea class="form-submit" name="about" rows="4" wrap="hard">{{ user_data.about }}</textarea>
+                    <textarea class="form-submit" name="about" rows="4">{{ user_data.about }}</textarea>
                 </div>
 
                 <div class="form-input">
@@ -216,7 +216,7 @@
                 <div class="form-input">
                 <label for="blacklisted_tags">{{ localize('blocked_tags') }}</label>
                     <div class="form-submit">
-                        <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80" wrap="hard">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
+                        <textarea class="form-submit" name="blacklisted_tags" rows="5" cols="80">{% for tag in user_data.blacklisted_tags %}{{ tag }},{% endfor %}</textarea>
                     </div>
                 </div>
             </div>
