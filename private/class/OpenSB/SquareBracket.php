@@ -267,7 +267,17 @@ class SquareBracket
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
         if ($this->isFulpTube()) {
             //$isFulpTube = true;
-            $this->overrideBrandingWithFulpTube();
+            // TEMPORARY CODE for sb 5th anniversary - do NOT cherrypick into 2.1
+            if ((date('m/d/Y') === '01/31/2026') && ($this->options["skin"] == "trinium")) {
+                $this->branding_settings = [
+                    "name" => "PokTube",
+                    "assets_location" => $config["branding"]["assets"] ?? '',
+                    "is_vector" => $config["branding"]["is_vector"] ?? false,
+                    "use_wordmark" => $config["branding"]["use_wordmark"] ?? false,
+                ];
+            } else {
+                $this->overrideBrandingWithFulpTube();
+            }
         } else {
             //$isFulpTube = false;
             $this->branding_settings = [
