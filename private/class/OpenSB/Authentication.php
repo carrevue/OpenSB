@@ -152,11 +152,14 @@ class Authentication
     }
 
     /**
-     * Returns user ban data if it exists.
+     * Returns if the user is banned.
+     * 
+     * @note I don't think this gets called? Banned users get instantly
+     * logged out if they're banned.
      */
-    public function getUserBanData(): ?array
+    public function isBanned(): bool
     {
-        return $this->user_ban_data ?: null;
+        return !empty($this->user_ban_data);
     }
 
     /**

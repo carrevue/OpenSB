@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -22,6 +22,7 @@
 namespace OpenSB;
 
 use OpenSB\Database;
+use OpenSB\UserData;
 
 /**
  * class UploadData
@@ -36,6 +37,10 @@ class UploadData
      */
     private Database $database;
 
+    /**
+     * @var UserData The upload's author
+     */
+    private UserData $author;
 
     /**
      * @var UploadRatingData|null The Upload rating data helper class.
@@ -80,6 +85,7 @@ class UploadData
         }
 
         if ($this->data != []) {
+            $this->author = new UserData($database, $this->data["author"]);
             $this->takedown = $this->database->fetchArray($this->database->query("SELECT * FROM upload_takedowns t WHERE t.upload = ?", [$id]));
             $this->tags = $this->database->fetchArray($this->database->query("SELECT * FROM `upload_tag_index` ti JOIN upload_tag_meta t ON (t.tag_id = ti.tag_id) WHERE ti.upload_id = ?", [$this->data["id"]]));
             $this->ratings = new UploadRatingData($database, $this->data["id"]);
@@ -91,7 +97,7 @@ class UploadData
      *
      * @return array|null Array containing takedown data, or null if not found.
      */
-    public function getTakedown()
+    public function getTakedownData()
     {
         return $this->takedown;
     }
@@ -107,6 +113,16 @@ class UploadData
     }
 
     /**
+     * Get the upload author's data.
+     *
+     * @return array
+     */
+    public function getAuthorData()
+    {
+        return $this->author->getUserArray();
+    }
+
+    /**
      * Get the tags associated with the upload.
      *
      * @return array|null Array of tags, or null if none or upload not found.
@@ -114,6 +130,16 @@ class UploadData
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * Check whether this upload has been taken down or if the author is banned.
+     *
+     * @return bool
+     */
+    public function isTakenDown()
+    {
+        return $this->is_deleted || $this->author->isUserBanned();
     }
 
     /**
@@ -159,7 +185,7 @@ class UploadData
      *
      * @return array Upload flag array data.
      */
-    public function getUploadFlagsArray()
+    public function getFlagArray()
     {
         return UploadFlags::toArray($this->data["flags"]);
     }

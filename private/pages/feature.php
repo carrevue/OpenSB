@@ -40,7 +40,7 @@ if (!$id) {
     Utilities::notifyBanner("You have not specified the upload.", "/");
 }
 
-if ($auth->getUserBanData() || $upload->getTakedown()) {
+if ($auth->isBanned() || $upload->isTakenDown()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 

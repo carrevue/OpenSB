@@ -39,7 +39,7 @@ if (!$id) {
     die();
 }
 
-if ($upload->getTakedown()) {
+if ($upload->isTakenDown()) {
     $apiOutput = ['error' => "Upload taken down."];
 }
 

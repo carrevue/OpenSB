@@ -34,7 +34,7 @@ $apiOutput = [
     "error" => "This request is invalid."
 ];
 
-if ($auth->getUserBanData()) {
+if ($auth->isBanned()) {
     $apiOutput = [
         "error" => "You have been banned."
     ];

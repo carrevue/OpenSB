@@ -30,7 +30,6 @@ use OpenSB\CommentData;
 use OpenSB\CommentLocation;
 use OpenSB\UploadData;
 use OpenSB\UploadQuery;
-use OpenSB\UserData;
 use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
 
@@ -59,9 +58,9 @@ if ($sb->isFulpTubeMode()) {
 $upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
-$takedown = $upload->getTakedown();
-if ($takedown && !$auth->userHasRole(UserRoleEnum::Moderator)) {
-    handle_error("notify_taken_down_upload");
+if ($upload->isTakenDown() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
+    // go back to homepage with a notification
+    Utilities::notifyBanner("notify_taken_down_upload", "/");
 }
 
 if ($upload->isDeleted()) {
@@ -90,15 +89,9 @@ if (isset($data["tags"])) {
     }
 }
 
-$author = new UserData($database, $data["author"]);
-
-if ($author->isUserBanned() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
-    handle_error("notify_taken_down_upload");
-}
-
 $owner = ($auth->getUserID() == $data["author"]);
 
-$author_info = $author->getUserArray();
+$author_info = $upload->getAuthorData();
 
 /*
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
@@ -116,7 +109,7 @@ $followed = Utilities::isFollowingUser($data["author"]);
 // TODO: this feature is unused.
 //$favorites = $database->result("SELECT COUNT(upload_id) FROM user_favorites WHERE upload_id=?", [$id]);
 
-$flags = $upload->getUploadFlagsArray();
+$flags = $upload->getFlagArray();
 
 if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
     handle_error("notify_login_required_view_upload", "/login");
@@ -394,6 +387,7 @@ if (Utilities::isLegacyFrontend()) {
 }
 
 // TODO: this should be moved to admin_upload_edit -chaziz 1/4/2025
+/*
 if ($auth->userHasRole(UserRoleEnum::Administrator) && $takedown) {
     $page_data["takedown"] = $takedown[0];
     $page_data["takedown"]["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
@@ -402,6 +396,7 @@ if ($auth->userHasRole(UserRoleEnum::Administrator) && $takedown) {
     $page_data["takedown"] = [];
     $page_data["author_banned"] = false;
 }
+*/
 
 echo $twig->render('watch.twig', [
     'upload' => $page_data,

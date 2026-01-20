@@ -48,7 +48,7 @@ if (!$data) {
     Utilities::notifyBanner("notify_invalid_upload", "/dashboard/uploads");
 }
 
-$flags = $upload->getUploadFlagsArray();
+$flags = $upload->getFlagArray();
 
 // Update flags
 if (isset($_POST['flagsubmit'])) {

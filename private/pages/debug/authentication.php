@@ -28,7 +28,7 @@ $auth = $sb->getAuthenticationClass();
 $logged = $auth->isUserLoggedIn();
 $adult = $auth->isUserOver18();
 $stats = $auth->getUserStatData();
-$banned = $auth->getUserBanData();
+$banned = $auth->isBanned();
 
 function trueOrFalse($value) {
     if ($value) {

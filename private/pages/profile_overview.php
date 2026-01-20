@@ -104,7 +104,7 @@ function handleFeaturedUpload($database, $data): false|array
 
     $upload = new UploadData($database, $featured_id["upload_id"]);
     $upload_data = $upload->getData();
-    $bools = $upload->getUploadFlagsArray();
+    $bools = $upload->getFlagArray();
 
     // IF:
     // * The upload is taken down, and/or
@@ -114,7 +114,7 @@ function handleFeaturedUpload($database, $data): false|array
     // * TODO: The upload is privated...
     // then simply just return false, so we don't show the featured upload.
     if (
-        $upload->getTakedown()
+        $upload->isTakenDown()
         || !$upload_data
         || ($upload_data["author"] != $data["id"])
         || ($bools["block_guests"] && !$auth->isUserLoggedIn())

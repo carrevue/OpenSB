@@ -38,7 +38,7 @@ $apiOutput = [
     "error" => "Invalid request."
 ];
 
-if ($auth->getUserBanData()) {
+if ($auth->isBanned()) {
     echo json_encode(["error" => "User is banned."]);
     exit;
 }

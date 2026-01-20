@@ -26,37 +26,39 @@ global $sb, $twig, $database, $auth;
 use OpenSB\Utilities;
 use OpenSB\CommentData;
 use OpenSB\CommentLocation;
+use OpenSB\JournalData;
 use OpenSB\UserCustomizationData;
-use OpenSB\UserData;
+use OpenSB\UserRoleEnum;
 
 if ($_GET['j'] ?? null) {
     Utilities::redirect('/read/' . $_GET['j'], 301);
 }
 
-$data = $database->fetch("SELECT j.* FROM journals j WHERE j.id = ?", [$id]);
+$journal = new JournalData($database, $id);
 
+// check if the journal has been taken down.
+if ($journal->isTakenDown() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
+    // go back to homepage with a notification
+    Utilities::notifyBanner("notify_taken_down_upload", "/"); // TODO
+}
+
+$data = $journal->getData();
 if (!$data) {
     Utilities::notifyBanner("notify_invalid_journal", "/");
 }
 
-if ($auth->getUserID() == $data["author"]) {
-    $owner = true;
-} else {
-    $owner = false;
-}
+$owner = ($auth->getUserID() == $data["author"]);
 
 if ($sb->isFulpTubeMode() && $data["is_news"]) {
     $data["title"] = Utilities::replaceSquareBracketWithFulpTube($data["title"]);
     $data["post"] = Utilities::replaceSquareBracketWithFulpTube($data["post"]);
 }
 
-$author = new UserData($database, $data["author"]);
-
-$author_userdata_info = $author->getUserArray();
+$author_info = $journal->getAuthorData();
 
 $comments = new CommentData($database, CommentLocation::Journal, $id);
 
-if ($author_userdata_info["flags"]["profile_customization_enabled"]) {
+if ($author_info["flags"]["profile_customization_enabled"]) {
     $profile_color_data = new UserCustomizationData($database, $data["author"]);
 } else {
     $profile_color_data = null;
@@ -70,7 +72,7 @@ $data = [
     "published" => $data["timestamp"],
     "author" => [
         "id" => $data["author"],
-        "info" => $author->getUserArray(),
+        "info" => $author_info,
     ],
     "comments" => $comments->getComments(),
     "customization" => $profile_color_data?->getData() ?? false,

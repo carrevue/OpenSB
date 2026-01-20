@@ -39,7 +39,7 @@ if (!$auth->isUserLoggedIn()) {
 }
 
 // we shouldn't let banned users change settings.
-if ($auth->getUserBanData()) {
+if ($auth->isBanned()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 

@@ -102,14 +102,6 @@
     {% include('components/debug_dialog.twig') %}
 {% endif %}
 {{ include(component('header')) }}
-{% if user_ban_data %}
-    <div class="banner banner-danger full-screen">
-        {{ notification_icon('danger') }}
-        <span class="banner-text">
-        You have been banned from {{ website_branding.name }}.
-        </span>
-    </div>
-{% endif %}
 {% if show_warning_banner %}
     <div class="banner banner-danger full-screen">
     <span class="banner-text">

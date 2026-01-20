@@ -192,7 +192,7 @@ class Templating
         $this->twig->addGlobal('is_debug', $sb->isDebug());
         $this->twig->addGlobal('is_user_logged_in', $this->authentication->isUserLoggedIn());
         $this->twig->addGlobal('user_data', $this->authentication->getUserData());
-        $this->twig->addGlobal('user_ban_data', $this->authentication->getUserBanData());
+        //$this->twig->addGlobal('user_ban_data', $this->authentication->isBanned());
         $this->twig->addGlobal('user_stat_data', $this->authentication->getUserStatData());
         $this->twig->addGlobal('user_is_authenticated_admin', $this->authentication->hasUserAuthenticatedAsStaff());
         $this->twig->addGlobal('skins', $this->getAllSkinsMetadata());

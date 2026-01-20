@@ -45,7 +45,7 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
-if ($auth->getUserBanData()) {
+if ($auth->isBanned()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 

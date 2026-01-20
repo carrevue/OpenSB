@@ -43,7 +43,7 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
-if ($auth->getUserBanData() || $upload->getTakedown()) {
+if ($auth->isBanned() || $upload->isTakenDown()) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
@@ -93,7 +93,7 @@ $infoData = [
     "description" => $data["description"],
     "published" => $data["timestamp"],
     "type" => $data["type"],
-    "flags" => $upload->getUploadFlagsArray(),
+    "flags" => $upload->getFlagArray(),
 ];
 
 echo $twig->render('edit.twig', [
