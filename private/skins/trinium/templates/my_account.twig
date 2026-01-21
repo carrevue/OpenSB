@@ -3,10 +3,6 @@
 {% set title = localize('my_account') %}
 
 {% block my_account_content %}
-<div class="section">
-    <div class="section-header">
-        <h1 class="section-title">{{ localize('my_account') }}</h1>
-    </div>
     <div class="content-box">
         <div class="profile-box">
             <div class="profile-box-pfp">
@@ -32,9 +28,9 @@
         <ul>
             <li><a href="/my_uploads">{{ localize('uploads') }}</a></li>
             <li><a href="/my_messages">{{ localize('messages') }}</a></li>
-            <li><a href="/notifications">{{ localize('notifications') }}</a></li>
+            <li><a href="/my_invite_keys">{{ localize('invite_keys') }}</a></li>
+            {#<li><a href="/notifications">{{ localize('notifications') }}</a></li>#}
             <li><a href="/settings">{{ localize('account_settings') }}</a></li>
         </ul>
     </div>
-</div>
 {% endblock %}

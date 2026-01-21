@@ -21,7 +21,7 @@
 
 namespace OpenSB\Pages;
 
-global $sb, $twig, $database, $auth;
+global $sb, $twig, $twig_error, $database, $auth;
 
 use OpenSB\UserData;
 use OpenSB\Utilities;
@@ -43,6 +43,7 @@ if ($auth->getUserFlags(true)["unverified"]) {
 if (!$sb->isInviteKeysEnabled()) {
     http_response_code(404);
     echo $twig_error->render("404.twig", ["page" => "failwhale"]);
+    die();
 }
 
 $cooldown = false;

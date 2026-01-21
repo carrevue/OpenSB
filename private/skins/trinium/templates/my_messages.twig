@@ -3,35 +3,30 @@
 {% set title = "My messages" %}
 
 {% block my_account_content %}
-    <div class="section">
-        <div class="section-header">
-            <h1 class="section-title">My messages (Inbox?)</h1>
-        </div>
-        <div class="banner banner-secondary">
-            INCOMPLETE!
-        </div>
-        <div class="content-box">
-            {% for message in data %}
-                <div class="content-entry">
-                    <div class="content-thumbnail">
-                        <div class="content-image profile-picture">
-                            <img src="{{ profile_picture(message.author.id) }}"
-                                 alt="{{ message.author.info.username }}" class="pfp">
-                        </div>
-                    </div>
-                    <div class="content-info">
-                        <div class="content-author">
-                            {{ user_link(message.author) }}
-                            <small title="{{ message.published | format_date('long', 'none') }}">
-                                {{ message.published | relative_time }}
-                            </small>
-                        </div>
-                        <div class="content-title">
-                            {{ message.title }} {{ message.contents }}
-                        </div>
+    <div class="content-box">
+        {% for message in data %}
+            <div class="content-entry">
+                <div class="content-thumbnail">
+                    <div class="content-image profile-picture">
+                        <img src="{{ profile_picture(message.author.id) }}"
+                                alt="{{ message.author.info.username }}" class="pfp">
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+                <div class="content-info">
+                    <div class="content-author">
+                        {{ user_link(message.author) }}
+                        <small title="{{ message.published | format_date('long', 'none') }}">
+                            {{ message.published | relative_time }}
+                        </small>
+                    </div>
+                    <div class="content-title">
+                        {{ message.title }}
+                    </div>
+                    <div class="content-description">
+                        {{ message.contents }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

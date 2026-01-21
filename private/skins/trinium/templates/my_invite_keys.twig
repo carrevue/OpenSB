@@ -1,74 +1,69 @@
-{% extends "_layout_my_stuff.twig" %}
+{% extends "_layout_my_account.twig" %}
 
 {% set title = localize("my_invite_keys") %}
 
-	{% block mystuffcontent %}
-        <div class="section">
-            <div class="section-header">
-                <h1 class="section-title">{{ localize("my_invite_keys") }}</h1>
-            </div>
-            <div class="content-box">
-                {% if cooldown %}
-                    {% if user_data.joined >= ("now"|date("U") - 604800) %}
-                        <p class="text-danger">{{ localize("invite_key_cooldown_new_users") }}</p>
-                    {% else %}
-                        <p class="text-danger">{{ localize("invite_key_cooldown") }}</p>
-                    {% endif %}
+	{% block my_account_content %}
+        <div class="content-box">
+            {% if cooldown %}
+                {% if user_data.joined >= ("now"|date("U") - 604800) %}
+                    <p class="text-danger">{{ localize("invite_key_cooldown_new_users") }}</p>
                 {% else %}
-                    <div class="inviteKeyGenerationForm">
-                        <form name="inviteKeyGenerationForm" id="inviteKeyGenerationForm" method="post"
-                            action="/my_invite_keys" enctype="multipart/form-data">
-                            <input type="hidden" id="action" name="action" value="generate_invite_key"/>
-                            <input class="button button-primary button-huge" type="submit" id="generate" name="generate"
-                                value="{{ localize("invite_key_action") }}">
-                            <p>{{ localize("invite_key_disclaimer") }}</p>
-                        </form>
-                    </div>
+                    <p class="text-danger">{{ localize("invite_key_cooldown") }}</p>
                 {% endif %}
-                <hr>
-                {% if data.invites %}
-                    <div class="section">
-                        <table class="styled">
-                            <tr class="table-header">
-                                <th>{{ localize("invite_key") }}</th>
-                                <th>{{ localize("claimed_by") }}</th>
-                            </tr>
-                            {% for inviteKey in data.invites %}
-                                <tr>
-                                    <td>
-                                        <code>{{ inviteKey.invite_key }}</code>
-                                    </td>
-                                    <td>
-                                        {% if inviteKey.claimed_by %}
-                                            <div class="content-entry user-id-{{ inviteKey.claimee.id }}">
-                                                <div class="content-thumbnail">
-                                                    <a href="/user/{{ inviteKey.claimee.info.username }}">
-                                                        <div class="content-image profile-picture">
-                                                            <img src="{{ profile_picture(inviteKey.claimee.info.username) }}"
-                                                                alt="{{ inviteKey.claimee.info.username }}" class="pfp">
-                                                        </div>
-                                                    </a>
+            {% else %}
+                <div class="inviteKeyGenerationForm">
+                    <form name="inviteKeyGenerationForm" id="inviteKeyGenerationForm" method="post"
+                        action="/my_invite_keys" enctype="multipart/form-data">
+                        <input type="hidden" id="action" name="action" value="generate_invite_key"/>
+                        <input class="button button-primary button-huge" type="submit" id="generate" name="generate"
+                            value="{{ localize("invite_key_action") }}">
+                        <p>{{ localize("invite_key_disclaimer") }}</p>
+                    </form>
+                </div>
+            {% endif %}
+            <hr>
+            {% if data.invites %}
+                <div class="section">
+                    <table class="styled">
+                        <tr class="table-header">
+                            <th>{{ localize("invite_key") }}</th>
+                            <th>{{ localize("claimed_by") }}</th>
+                        </tr>
+                        {% for inviteKey in data.invites %}
+                            <tr>
+                                <td>
+                                    <code>{{ inviteKey.invite_key }}</code>
+                                </td>
+                                <td>
+                                    {% if inviteKey.claimed_by %}
+                                        <div class="content-entry user-id-{{ inviteKey.claimee.id }}">
+                                            <div class="content-thumbnail">
+                                                <a href="/user/{{ inviteKey.claimee.info.username }}">
+                                                    <div class="content-image profile-picture">
+                                                        <img src="{{ profile_picture(inviteKey.claimee.info.username) }}"
+                                                            alt="{{ inviteKey.claimee.info.username }}" class="pfp">
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="content-info">
+                                                <div class="content-author">
+                                                    {{ user_link(inviteKey.claimee) }}
                                                 </div>
-                                                <div class="content-info">
-                                                    <div class="content-author">
-                                                        {{ user_link(inviteKey.claimee) }}
-                                                    </div>
-                                                    <div class="content-description">
-                                                        {{ inviteKey.claimed_time | relative_time }}
-                                                    </div>
+                                                <div class="content-description">
+                                                    {{ inviteKey.claimed_time | relative_time }}
                                                 </div>
                                             </div>
-                                        {% else %}
-                                            {{ localize("unclaimed") }}
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                {% else %}
-                    <p>{{ localize("no_invite_keys_generated") }}</p>
-                {% endif %}
-            </div>
+                                        </div>
+                                    {% else %}
+                                        {{ localize("unclaimed") }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% else %}
+                <p>{{ localize("no_invite_keys_generated") }}</p>
+            {% endif %}
         </div>
     {% endblock %}
