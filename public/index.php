@@ -277,12 +277,6 @@ $ban = function () { // awkward as fuck but it works
     automatic_ip_ban();
 };
 
-// temporary for now
-$ip = Utilities::getIpAddress();
-if (str_starts_with($ip, "217.133.19")) {
-    automatic_ip_ban();
-}
-
 foreach ($spam_paths as $p) {
     $router->add($p, $ban);
 }

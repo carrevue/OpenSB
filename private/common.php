@@ -73,6 +73,7 @@ if (!SB_CLI) {
         '/python-requests/i',
         '/curl/i',
         '/Barkrowler/i',
+        '/IbouBot/i'
     ];
 
     $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
