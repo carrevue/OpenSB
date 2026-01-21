@@ -27,7 +27,7 @@ global $auth, $database, $sb;
 $localization = $sb->getLocalizationClass();
 
 if (!isset($_POST['subscription']) or $_POST['subscription'] == '') {
-    die(); //don't output anything if this sneaky bastard didn't put anything to the comment field
+    die();
 }
 if ($database->result("SELECT COUNT(user) FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $_POST['subscription']]) != 0) {
     $database->query("DELETE FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $_POST['subscription']]);

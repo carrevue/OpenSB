@@ -58,7 +58,7 @@ class BotInterface {
         );
 
         if (!$this->socket) {
-            throw new \Exception("Could not connect to bot: $errStr ($errNo)");
+            throw new \RuntimeException("Could not connect to bot: $errStr ($errNo)");
         }
 
         stream_set_blocking($this->socket, true);
@@ -72,7 +72,7 @@ class BotInterface {
     public function send(string $data): void
     {
         if (!$this->socket) {
-            throw new \Exception("Socket not connected");
+            throw new \RuntimeException("Socket not connected");
         }
 
         fwrite($this->socket, $data);

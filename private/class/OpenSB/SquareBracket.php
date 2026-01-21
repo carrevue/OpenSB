@@ -161,8 +161,8 @@ class SquareBracket
 
         $allowedSites = ['default', 'test', 'chaziz'];
         if (!in_array($config["site"], $allowedSites)) {
-            trigger_error("The site mode in the configuration file should be 
-            set either to default, test or chaziz.", E_USER_ERROR);
+            throw new \RuntimeException("The site mode in the configuration file should be 
+            set either to default, test or chaziz.");
         }
         $this->is_chaziz_instance = ($config["site"] === "chaziz");
 
@@ -467,7 +467,7 @@ class SquareBracket
     public function getDiscordWebhookClass(): DiscordWebhookLogging
     {
         if (!$this->discord || !$this->enable_discord_webhook) {
-            throw new \Exception("getDiscordWebhookClass() called while Discord webhook is disabled.");
+            throw new \RuntimeException("getDiscordWebhookClass() called while Discord webhook is disabled.");
         }
         return $this->discord;
     }
@@ -494,7 +494,7 @@ class SquareBracket
     public function getIpLookupClass(): IPLookup
     {
         if (!$this->ip_lookup || !$this->enable_ip_lookup) {
-            throw new \Exception("getIpLookupClass() called while IP reader is disabled.");
+            throw new \RuntimeException("getIpLookupClass() called while IP reader is disabled.");
         }
         return $this->ip_lookup;
     }

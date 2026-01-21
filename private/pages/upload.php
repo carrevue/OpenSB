@@ -190,7 +190,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         }
     } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
         try {
-        $sb->getStorageClass()->processImageUpload($temp_name, $new);
+            $sb->getStorageClass()->processImageUpload($temp_name, $new);
         } catch (\Exception $e) {
             if ($sb->isDebug()) {
                 die("DEBUG: Unable to process image upload. The exception's message is {$e->getMessage()}.");

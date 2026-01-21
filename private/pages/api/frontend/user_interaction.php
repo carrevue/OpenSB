@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -26,6 +26,8 @@ global $auth, $sb;
 use OpenSB\NotificationEnum;
 use OpenSB\Utilities;
 
+$localization = $sb->getLocalizationClass();
+
 header('Content-Type: application/json');
 
 $post_data = json_decode(file_get_contents('php://input'), true);
@@ -44,7 +46,7 @@ $database = $sb->getDatabaseClass();
 
 function follow($member): array
 {
-    global $database, $auth;
+    global $database, $auth, $localization;
 
     if ($member == $auth->getUserID()) {
         return [
@@ -65,9 +67,9 @@ function follow($member): array
     $number = $database->fetch("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$member])['COUNT(user)'];
 
     if ($result) {
-        $text = "Unfollow";
+        $text = $localization->translate("unfollow");
     } else {
-        $text = "Follow";
+        $text = $localization->translate("follow");
     }
 
     return [
