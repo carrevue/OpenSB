@@ -680,14 +680,6 @@ class SquareBracketTwigExtension extends AbstractExtension
                 "name" => $this->localize("change_theme"),
                 "url" => "/theme",
             ],
-            "help" => [
-                "name" => $this->localize("help"),
-                "url" => "/help",
-            ],
-            "guidelines" => [
-                "name" => $this->localize("community_guidelines"),
-                "url" => "/guidelines",
-            ],
             "tos" => [
                 "name" => $this->localize("terms_of_service"),
                 "url" => "/tos",
@@ -695,6 +687,14 @@ class SquareBracketTwigExtension extends AbstractExtension
             "privacy" => [
                 "name" => $this->localize("privacy_policy"),
                 "url" => "/privacy",
+            ],
+            "guidelines" => [
+                "name" => $this->localize("community_guidelines"),
+                "url" => "/guidelines",
+            ],
+            "help" => [
+                "name" => $this->localize("help"),
+                "url" => "/help",
             ],
             "staff" => [
                 "name" => $this->localize("staff"),
@@ -715,17 +715,29 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
 
         if ($this->sb->isChazizInstance()) {
+            $insert = [];
+
             if (!$this->sb->isFulpTubeMode()) {
-                $array["brickface"] = [
+                $insert["brickface"] = [
                     "name" => $this->localize("kylarz_link"),
-                    "url" => "https://brickface.squarebracket.pw/",
+                    "url"  => "https://brickface.squarebracket.pw/",
                 ];
             }
 
-            $array["discord"] = [
+            $insert["discord"] = [
                 "name" => "Discord",
-                "url" => "https://discord.gg/jG3DaRf6Rm",
+                "url"  => "https://discord.gg/jG3DaRf6Rm",
             ];
+
+
+            $pos = array_search("staff", array_keys($array), true);
+
+            if ($pos !== false) {
+                $array =
+                    array_slice($array, 0, $pos, true)
+                    + $insert
+                    + array_slice($array, $pos, null, true);
+            }
         }
 
         if ($this->sb->isTestInstance()) {

@@ -7,6 +7,7 @@
     "browse_more": "Browse more",
 
     "members": "Members",
+    "members_hitchhiker": "Channels",
 
     "follow": "Follow",
     "unfollow": "Unfollow",
@@ -69,12 +70,6 @@
     "currently_logged_in_as": "You are currently logged in as %s.",
     "other_accounts": "Other accounts:",
 
-    "login_what_is_site_1": "%s is a multimedia sharing website. With an account, you can:",
-    "login_what_is_site_2": "Upload videos and images",
-    "login_what_is_site_3": "Interact with people and comment on uploads and user profiles",
-    "login_what_is_site_4": "Write journal entries on your profile",
-    "login_what_is_site_5": "and much more!",
-
     "register_invite_key_required": "%s requires an invite key in order to register. You will need to obtain this from someone.",
     "register_discord_requirement": "%s currently requires your account to be manually verified through Discord before you can upload.",
     "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
@@ -130,6 +125,9 @@
 
     "following": "Following",
     "following_uploads_desc": "From users you follow",
+
+    "following_hitchhiker": "Subscriptions",
+    "following_uploads_desc_hitchhiker": "From users you're subscribed to",
 
     "best_of_site": "Best of %s",
 
@@ -321,6 +319,9 @@
     "staff": "Staff",
     "kylarz_link": "Go to Brickface/Quadium",
     "debug": "Debug",
+
+    "terms_of_service_hitchhiker": "Terms",
+    "privacy_policy_hitchhiker": "Privacy",
 
     "notify_content_filtering_reset": "Your content filtering settings have been reset to General.",
     "notify_frontend_no_longer_available": "The %s skin is no longer available.",
