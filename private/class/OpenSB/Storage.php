@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -46,6 +46,11 @@ class Storage
     private Database $database;
 
     /**
+     * @var bool If assets are disabled.
+     */
+    private bool $disabled;
+
+    /**
      * function __construct
      *
      * @param SquareBracket $sb
@@ -56,6 +61,7 @@ class Storage
     {
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
+        $this->disabled = $sb->isAssetsDisabled();
     }
 
     /**
@@ -222,6 +228,8 @@ class Storage
     {
         $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
 
+        if ($this->disabled) return '/assets/' . $placeholder;
+
         return $this->getThumbnailPath(
             $id,
             $custom,
@@ -245,6 +253,8 @@ class Storage
     {
         $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
 
+        if ($this->disabled) return '/assets/' . $placeholder;
+
         return $this->getThumbnailPath(
             $id,
             $custom,
@@ -267,6 +277,8 @@ class Storage
     public function getUserProfilePicture($username, $isStaff): string
     {
         $placeholder = $this->sb->isHitchhiker() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+
+        if ($this->disabled) return '/assets/' . $placeholder;
 
         $id = Utilities::usernameToUserID($this->database, $username);
 
@@ -297,6 +309,8 @@ class Storage
      */
     public function getUserProfileBanner($username): bool|string
     {
+        if ($this->disabled) return false;
+
         $id = Utilities::usernameToUserID($this->database, $username);
 
         $path = SB_DYNAMIC_PATH . '/banners/' . $id . '.png';
