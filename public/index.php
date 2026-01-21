@@ -308,6 +308,7 @@ $spam_paths = [
     '/wordpress/{path}',
     '/wp/{path}',
     '/wp-content/{path}',
+    '/wp-includes/{path}',
     '/xmlrpc',
     '/OA_HTML/{path}',
     '/xwiki/{path}',

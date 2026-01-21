@@ -46,6 +46,11 @@ class Storage
     private Database $database;
 
     /**
+     * @var bool If assets are disabled.
+     */
+    private bool $disabled;
+
+    /**
      * @var string The path.
      */
     private string $path;
@@ -63,6 +68,7 @@ class Storage
 
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
+        $this->disabled = $sb->isAssetsDisabled();
         $this->path = $path ?? $default_path;
     }
 
@@ -244,6 +250,8 @@ class Storage
     {
         $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
 
+        if ($this->disabled) return '/assets/' . $placeholder;
+
         return $this->getThumbnailPath(
             $id,
             $custom,
@@ -267,6 +275,8 @@ class Storage
     {
         $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
 
+        if ($this->disabled) return '/assets/' . $placeholder;
+
         return $this->getThumbnailPath(
             $id,
             $custom,
@@ -289,6 +299,8 @@ class Storage
     public function getUserProfilePicture(int $user, bool $isStaff = false): string
     {
         $placeholder = $this->sb->isHitchhiker() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+
+        if ($this->disabled) return '/assets/' . $placeholder;
 
         $path = $this->path . '/pfp/' . $user . '.png';
 
@@ -317,6 +329,8 @@ class Storage
      */
     public function getUserProfileBanner(int $user): bool|string
     {
+        if ($this->disabled) return false;
+
         $path = $this->path . '/banners/' . $user . '.png';
 
         if (file_exists($path)) {

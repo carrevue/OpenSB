@@ -118,6 +118,11 @@ class SquareBracket
     private bool $enable_ip_lookup = false;
 
     /**
+     * @var bool
+     */
+    private bool $disable_assets = false;
+
+    /**
      * @var array
      */
     private array $branding_settings;
@@ -202,6 +207,7 @@ class SquareBracket
             ? ($config['storage']['custom_path'] ?? null)
             : null;
 
+        $this->disable_assets = (bool)($config["disable_assets"] ?? false);
         $this->storage = new Storage($this, $storage_path);
 
         $this->captcha_settings = $config["captcha"];
@@ -660,6 +666,19 @@ class SquareBracket
     public function isUnderMaintenance(): bool
     {
         return $this->under_maintenance;
+    }
+
+    /**
+     * function isAssetsDisabled
+     *
+     * Returns boolean for if assets are disabled. This will make Storage fallback to
+     * the default placeholder thumbnails/profile pictures.
+     *
+     * @return bool
+     */
+    public function isAssetsDisabled(): bool
+    {
+        return $this->disable_assets;
     }
 
     /**
