@@ -72,6 +72,7 @@ if (!SB_CLI) {
     $blacklisted_user_agents = [
         '/python-requests/i',
         '/curl/i',
+        '/Barkrowler/i',
     ];
 
     $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
