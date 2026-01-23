@@ -546,10 +546,10 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "name" => $this->localize("my_uploads"), // My uploads
                     "url" => "/my_uploads",
                 ],
-                "my_invite_keys" => [
+                /*"my_invite_keys" => [
                     "name" => $this->localize("my_invite_keys"), // My invite keys
                     "url" => "/my_invite_keys",
-                ],
+                ],*/
                 "settings" => [
                     "name" => $this->localize("account_settings"), // Account settings
                     "url" => "/settings",
