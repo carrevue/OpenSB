@@ -4,29 +4,31 @@
 
 {% block my_account_content %}
     <div class="content-box">
-        {% for message in data %}
-            <div class="content-entry">
-                <div class="content-thumbnail">
-                    <div class="content-image profile-picture">
-                        <img src="{{ profile_picture(message.author.id) }}"
-                                alt="{{ message.author.info.username }}" class="pfp">
-                    </div>
-                </div>
-                <div class="content-info">
-                    <div class="content-author">
-                        {{ user_link(message.author) }}
-                        <small title="{{ message.published | format_date('long', 'none') }}">
-                            {{ message.published | relative_time }}
-                        </small>
-                    </div>
-                    <div class="content-title">
-                        {{ message.title }}
-                    </div>
-                    <div class="content-description">
-                        {{ message.contents }}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+        <div>
+            <div>none of these do anything yet</div>
+            <a class="button button-secondary button-small">Archive</a>
+            <a class="button button-secondary button-small">Report Spam</a>
+            <a class="button button-secondary button-small">Delete</a>
+        </div>
+        <table class="styled">
+            <tbody>
+                <tr class="table-header">
+                    <th></th>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                </tr>
+                {% for message in data %}
+                <tr>
+                    <td width="24px"><input type="checkbox"></td>
+                    <td width="240px">{{ user_link(message.author) }}</td>
+                    <td>{{ message.title }}</td>
+                    <td width="150px" align="right">
+                        <span title="{{ message.published | format_date('long', 'none') }}">{{ message.published | relative_time }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

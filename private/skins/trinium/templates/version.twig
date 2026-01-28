@@ -37,7 +37,7 @@
             <div class="col-4">
                 <div class="section">
                     <div class="content-box">
-                        {% for user in data.staff %}
+                        {% for user in data.staff|sort((a, b) => b.level <=> a.level) %}
                             <div class="content-entry centered index-user user-id-{{ user.id }}">
                                 <div class="content-thumbnail">
                                     <a href="/user/{{ user.info.username }}">
