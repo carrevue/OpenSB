@@ -680,6 +680,10 @@ class SquareBracketTwigExtension extends AbstractExtension
                 "name" => $this->localize("change_theme"),
                 "url" => "/theme",
             ],
+            "about" => [
+                "name" => $this->localize("about"),
+                "url" => "/about",
+            ],
             "tos" => [
                 "name" => $this->localize("terms_of_service"),
                 "url" => "/tos",
@@ -696,10 +700,6 @@ class SquareBracketTwigExtension extends AbstractExtension
                 "name" => $this->localize("help"),
                 "url" => "/help",
             ],
-            "staff" => [
-                "name" => $this->localize("staff"),
-                "url" => "/staff",
-            ],
         ];
 
         if ($this->sb->getLocalOptions()["skin"] == "bootstrap") {
@@ -715,29 +715,17 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
 
         if ($this->sb->isChazizInstance()) {
-            $insert = [];
-
             if (!$this->sb->isFulpTubeMode()) {
-                $insert["brickface"] = [
+                $array["brickface"] = [
                     "name" => $this->localize("kylarz_link"),
                     "url"  => "https://brickface.squarebracket.pw/",
                 ];
             }
 
-            $insert["discord"] = [
+            $array["discord"] = [
                 "name" => "Discord",
                 "url"  => "https://discord.gg/jG3DaRf6Rm",
             ];
-
-
-            $pos = array_search("staff", array_keys($array), true);
-
-            if ($pos !== false) {
-                $array =
-                    array_slice($array, 0, $pos, true)
-                    + $insert
-                    + array_slice($array, $pos, null, true);
-            }
         }
 
         if ($this->sb->isTestInstance()) {

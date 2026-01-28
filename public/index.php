@@ -179,6 +179,7 @@ $router->add('/', 'index.php');
 $router->add('/index', 'index.php');
 
 // standard pages
+$router->add('/about', 'about.php');
 $router->add('/browse', 'browse.php');
 $router->add('/login', 'login.php');
 $router->add('/login/{user}', 'login.php');
@@ -204,13 +205,13 @@ $router->add('/read', 'read.php');
 $router->add('/read/{id}', 'read.php');
 $router->add('/search', 'search.php');
 $router->add('/settings', 'settings.php');
-$router->add('/staff', 'staff.php');
+$router->redirect('/staff', '/about');
 $router->add('/theme', 'theme.php');
 $router->add('/tos', 'tos.php');
 $router->add('/upload', 'upload.php');
 $router->redirect('/users', '/members');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
-$router->add('/version', 'version.php');
+$router->redirect('/version', '/about');
 $router->add('/watch', function () {
     if (isset($_GET['v'])) Utilities::redirect('/view/' . $_GET['v'], 301);
 });

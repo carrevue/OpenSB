@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -23,7 +23,33 @@ namespace OpenSB\Pages;
 
 global $twig, $database;
 
+use OpenSB\UserData;
+use OpenSB\UserRoleEnum;
 use OpenSB\VersionNumber;
+
+// STAFF
+
+$staffQueryData = $database->fetchArray(
+    $database->query(
+        "SELECT u.id, u.powerlevel
+        FROM users u 
+        WHERE u.powerlevel >= ?",
+        [UserRoleEnum::Moderator->value]
+    )
+);
+
+$usersData = [];
+foreach ($staffQueryData as $user) {
+    $userData = new UserData($database, $user["id"]);
+    $usersData[] =
+        [
+            "id" => $user["id"],
+            "info" => $userData->getUserArray(),
+            "level" => $user["powerlevel"],
+        ];
+}
+
+// VERSION
 
 $database_version = $database->getServerVersion();
 
@@ -57,6 +83,7 @@ $data = [
             'info' => $database_version,
         ],
     ],
+    "staff" => $usersData,
 ];
 
 echo $twig->render('version.twig', [

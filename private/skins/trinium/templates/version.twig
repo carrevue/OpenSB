@@ -1,15 +1,21 @@
 {% extends "_layout.twig" %}
 
-{% set title = localize('version') %}
+{% set user_role_titles = {
+    4: localize('user_role_owner'),
+    3: localize('user_role_administrator'),
+    2: localize('user_role_moderator'),
+} %}
+
+{% set title = localize('about') %}
 
 {% block content %}
     <div class="section">
         <div class="section-header">
-            <h1 class="section-title">{{ localize('version') }}</h1>
+            <h1 class="section-title">{{ localize('about_site', website_branding.name) }}</h1>
         </div>
         <div class="content-box version-box">
             <div class="col-img">
-                <img srcset="/assets/chaz_opensb.png, /assets/chaz_opensb_2x.png 2x" class="img-version">
+                <img src="/assets/opensb_logo.svg" class="img-version">
             </div>
             <div>
                 <p>{{ localize('version_intro', '2021-' ~ ('now' | date('Y')), data.developers|join(', ')) }}</p>
@@ -24,6 +30,11 @@
                             {{ thing.title }}: {{ thing.info }}
                         </li>
                     {% endfor %}
+                </ul>
+                <ul class="unstyled-list">
+                {% for user in data.staff %}
+                    <li>{{ user_link(user) }} {{ user_role_titles[user.level] }}</li>
+                {% endfor %}
                 </ul>
             </div>
         </div>

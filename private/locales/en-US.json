@@ -303,6 +303,8 @@
     "enable_sensitive_content": "Enable access to mature content",
     "restricted_sensitive_content": "Based on your birthdate, access to mature content is restricted. If you have entered an incorrect birthdate, please contact the %s staff team.",
     "blocked_tags": "Blocked tags",
+    
+    "about_site": "About %s",
 
     "version_intro": "This website is powered by OpenSB. © %s %s and other contributors.",
     "version_agpl": "OpenSB is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.",
