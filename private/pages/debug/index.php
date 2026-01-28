@@ -42,9 +42,7 @@ foreach ($files as $file) {
     $fileUrls[] = ['filename' => $fileUrl];
 }
 ?>
-<img src="/assets/chaz_opensb.png" width="200">
 <h1>OpenSB Backend Debug</h1>
-<hr>
 <ul>
     <?php
     foreach ($fileUrls as $file) {
