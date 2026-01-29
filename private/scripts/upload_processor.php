@@ -244,16 +244,16 @@ try {
     $isHD = ($videoWidth >= 1280 || $videoHeight >= 720);
     $isFullHD = ($videoWidth >= 1920 || $videoHeight >= 1080);
 
-    // this is fucked, look into this later. -chaziz 9/18/2025
+    // calculate bitrate for video based on the resolution.
     if ($isFullHD) {
-        $bitrate = 10000;
-    } elseif ($isHD) {
         $videoScaleFactor = min($videoWidth / 1920, $videoHeight / 1080);
-        $bitrate = (int)max(5000, min(10000, 5000 + (5000 * $videoScaleFactor)));
-    } else {
-        // calculate bitrate for video based on the resolution.
+        $bitrate = (int)min(4500, max(3000, 3000 * $videoScaleFactor));
+    } elseif ($isHD) {
         $videoScaleFactor = min($videoWidth / 1280, $videoHeight / 720);
-        $bitrate = (int)max(1000, 5000 * $videoScaleFactor);
+        $bitrate = (int)min(2500, max(1000, 1000 * $videoScaleFactor));
+    } else {
+        $videoScaleFactor = min($videoWidth / 640, $videoHeight / 360);
+        $bitrate = (int)min(1200, max(600, 600 * $videoScaleFactor));
     }
 
     log("Video bitrate: " . $bitrate);
