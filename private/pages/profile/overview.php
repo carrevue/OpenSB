@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021 ROllerozxa
   Copyright (C) 2021-2022 icanttellyou
 
@@ -30,10 +30,6 @@ use OpenSB\CommentData;
 use OpenSB\CommentLocation;
 use OpenSB\UploadData;
 use OpenSB\UploadQuery;
-use OpenSB\UserCustomizationData;
-use OpenSB\UserFlags;
-use OpenSB\UserRoleEnum;
-use OpenSB\FakeUser;
 
 $upload_query = new UploadQuery($sb);
 
@@ -41,38 +37,7 @@ $options = $sb->getLocalOptions();
 
 if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301);
 
-$data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
-
-if (!$data) {
-    // check if this username was used before and was changed out of.
-    $old_username_data = $database->fetch("SELECT user FROM user_old_names WHERE old_name = ?", [$username]);
-
-    if ($old_username_data) {
-        // if so, attempt to fetch the user's current name through their id
-        $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
-        if ($new_username) {
-            Utilities::redirect('/user/' . $new_username, 301);
-        } else {
-            // if for whatever reason this leads to nowhere (eg: deleted user or 
-            // half-assed prod blacklisting), return to homepage.
-            Utilities::notifyBanner("notify_invalid_user", "/");
-        }
-    } else {
-        // check if this could be a fake user
-        $fake_user_data = FakeUser::getFakeUserFromName($username);
-        if ($fake_user_data) {
-            $data = $fake_user_data;
-        } else {
-            Utilities::notifyBanner("notify_invalid_user", "/");
-        }
-    }
-}
-
-if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$data["id"]])) {
-    if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-        Utilities::notifyBanner("notify_banned_user", "/");
-    }
-}
+include_once('_include.php');
 
 if ($options["skin"] == "finalium") {
     $user_uploads_query_limit = 4;
@@ -83,7 +48,7 @@ if ($options["skin"] == "finalium") {
 // TODO: redo this
 function handleFeaturedUpload($database, $data): false|array
 {
-    global $sb, $auth;
+    global $auth;
 
     // handle featured upload
     // if user hasn't specified anything, then use latest upload, if that doesn't exist, do not bother.
@@ -144,14 +109,6 @@ $user_journals =
     );
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
-
-$flags = UserFlags::toArray($data["flags"]);
-
-if ($flags["profile_customization_enabled"]) {
-    $profile_customization_data = new UserCustomizationData($database, $data["id"]);
-} else {
-    $profile_customization_data = null;
-}
 
 if (
     $sb->getLocalOptions()["skin"] != "bootstrap" && $sb->getLocalOptions()["skin"] != "finalium"

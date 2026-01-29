@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -21,14 +21,11 @@
 
 namespace OpenSB\Pages;
 
-global $auth, $database, $twig, $sb;
-
 use OpenSB\Utilities;
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
 use OpenSB\UserRoleEnum;
 use OpenSB\UserFlags;
 use OpenSB\UserCustomizationData;
+use OpenSB\FakeUser;
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
@@ -47,7 +44,13 @@ if (!$data) {
             Utilities::notifyBanner("notify_invalid_user", "/");
         }
     } else {
-        Utilities::notifyBanner("notify_invalid_user", "/");
+        // check if this could be a fake user
+        $fake_user_data = FakeUser::getFakeUserFromName($username);
+        if ($fake_user_data) {
+            $data = $fake_user_data;
+        } else {
+            Utilities::notifyBanner("notify_invalid_user", "/");
+        }
     }
 }
 
@@ -64,26 +67,3 @@ if ($flags["profile_customization_enabled"]) {
 } else {
     $profile_customization_data = null;
 }
-
-// page-specific shit Here.
-
-$comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
-$comments = $comment_data->getComments();
-
-$page_data = [
-    "id" => $data["id"],
-    "username" => $data["name"],
-    "displayname" => $data["title"],
-    "color" => $data["userlink_color"],
-    "about" => ($data["about"] ?? null),
-    "customization" => $profile_customization_data?->getData() ?? false,
-    "comments" => $comments,
-];
-
-if ($sb->getLocalOptions()["skin"] == "bootstrap") {
-    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["userlink_color"]);
-}
-
-echo $twig->render("profile_comments.twig", [
-    'data' => $page_data,
-]);

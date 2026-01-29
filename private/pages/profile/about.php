@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -24,16 +24,7 @@ namespace OpenSB\Pages;
 global $auth, $database, $twig, $sb;
 
 use OpenSB\Utilities;
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
-use OpenSB\UploadData;
 use OpenSB\UploadQuery;
-use OpenSB\UserCustomizationData;
-use OpenSB\UserFlags;
-use OpenSB\UserRoleEnum;
-
-$upload_query = new UploadQuery($sb);
-
 $options = $sb->getLocalOptions();
 
 // if we're not on finalium, redirect to the normal profile page.
@@ -41,32 +32,9 @@ if ($sb->getLocalOptions()["skin"] != "finalium") {
     Utilities::redirect("/user/$username");
 }
 
-$data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
+include_once('_include.php');
 
-if (!$data) {
-    // check if this username was used before and was changed out of.
-    $old_username_data = $database->fetch("SELECT user FROM user_old_names WHERE old_name = ?", [$username]);
-
-    if ($old_username_data) {
-        // if so, attempt to fetch the user's current name through their id
-        $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
-        if ($new_username) {
-            Utilities::redirect('/user/' . $new_username, 301);
-        } else {
-            // if for whatever reason this leads to nowhere (eg: deleted user or 
-            // half-assed prod blacklisting), return to homepage.
-            Utilities::notifyBanner("notify_invalid_user", "/");
-        }
-    } else {
-        Utilities::notifyBanner("notify_invalid_user", "/");
-    }
-}
-
-if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$data["id"]])) {
-    if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-        Utilities::notifyBanner("notify_banned_user", "/");
-    }
-}
+$upload_query = new UploadQuery($sb);
 
 $user_uploads_query_limit = 12;
 
@@ -88,14 +56,6 @@ $user_journals =
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-$flags = UserFlags::toArray($data["flags"]);
-
-if ($flags["profile_customization_enabled"]) {
-    $profile_customization_data = new UserCustomizationData($database, $data["id"]);
-} else {
-    $profile_customization_data = null;
-}
-
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["id"]]);
 $followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
@@ -115,12 +75,6 @@ $profile_data = [
     "views" => $views,
     "customization" => $profile_customization_data?->getData() ?? false,
 ];
-
-/*
-if ($sb->getLocalOptions()["skin"] == "bootstrap") {
-    $profile_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["userlink_color"]);
-}
-*/
 
 echo $twig->render("profile_about.twig", [
     'data' => $profile_data,

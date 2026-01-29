@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -24,46 +24,10 @@ namespace OpenSB\Pages;
 global $auth, $database, $twig, $sb;
 
 use OpenSB\Utilities;
-use OpenSB\UserRoleEnum;
-use OpenSB\UserFlags;
-use OpenSB\UserCustomizationData;
 use OpenSB\UploadQuery;
 use OpenSB\UploadFlags;
 
-$data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
-
-if (!$data) {
-    // check if this username was used before and was changed out of.
-    $old_username_data = $database->fetch("SELECT user FROM user_old_names WHERE old_name = ?", [$username]);
-
-    if ($old_username_data) {
-        // if so, attempt to fetch the user's current name through their id
-        $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
-        if ($new_username) {
-            Utilities::redirect('/user/' . $new_username, 301);
-        } else {
-            // if for whatever reason this leads to nowhere (eg: deleted user or 
-            // half-assed prod blacklisting), return to homepage.
-            Utilities::notifyBanner("notify_invalid_user", "/");
-        }
-    } else {
-        Utilities::notifyBanner("notify_invalid_user", "/");
-    }
-}
-
-if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$data["id"]])) {
-    if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-        Utilities::notifyBanner("notify_banned_user", "/");
-    }
-}
-
-$flags = UserFlags::toArray($data["flags"]);
-
-if ($flags["profile_customization_enabled"]) {
-    $profile_customization_data = new UserCustomizationData($database, $data["id"]);
-} else {
-    $profile_customization_data = null;
-}
+include_once('_include.php');
 
 // page-specific shit Here.
 

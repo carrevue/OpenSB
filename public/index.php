@@ -223,11 +223,11 @@ $router->add('/user', function () {
     if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301);
     if (isset($_GET['n'])) Utilities::redirect('/user/' . $_GET['n'], 301);
 });
-$router->add('/user/{username}', 'profile_overview.php'); // overview
-$router->add('/user/{username}/uploads', 'profile_uploads.php'); // uploads
-$router->add('/user/{username}/comments', 'profile_comments.php'); // comments
-$router->add('/user/{username}/journals', 'profile_journals.php'); // journals
-$router->add('/user/{username}/about', 'profile_about.php'); // about (mainly fulphiker-specific)
+$router->add('/user/{username}', 'profile/overview.php'); // overview
+$router->add('/user/{username}/uploads', 'profile/uploads.php'); // uploads
+$router->add('/user/{username}/comments', 'profile/comments.php'); // comments
+$router->add('/user/{username}/journals', 'profile/journals.php'); // journals
+$router->add('/user/{username}/about', 'profile/about.php'); // about (mainly fulphiker-specific)
 
 // api
 $router->add('/api/frontend/comment_load', 'api/frontend/comment_load.php'); // finalium-only
