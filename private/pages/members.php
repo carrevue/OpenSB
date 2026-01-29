@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
   Copyright (C) 2022-2023 ROllerozxa
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
@@ -24,46 +24,19 @@
 
 namespace OpenSB\Pages;
 
-global $twig, $database;
+global $twig, $database, $sb;
 
-use OpenSB\UserFlags;
-use OpenSB\UserData;
+use OpenSB\UserQuery;
+use OpenSB\Utilities;
 
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
-$limit = $database->paginate($page, pp: 20);
+$limit = $database->paginate($page, 20);
 
-$queryData = $database->fetchArray(
-    $database->query(
-        "SELECT u.id, u.about, u.title, 
-       (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
-       (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
-       (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
-        FROM users u 
-        WHERE u.id NOT IN (SELECT user FROM user_bans)
-        AND (u.flags & ?) = 0
-        ORDER BY u.last_seen DESC $limit", [UserFlags::FLAG_UNVERIFIED->value]
-    )
-);
+$user_query = new UserQuery($sb);
 
-$countData = $database->result(
-    "SELECT COUNT(*) FROM users u 
-    WHERE u.id NOT IN (SELECT user FROM user_bans)
-    AND (u.flags & ?) = 0", [UserFlags::FLAG_UNVERIFIED->value]
-);
-
-$usersData = [];
-foreach ($queryData as $user) {
-    $userData = new UserData($database, $user["id"]);
-    $usersData[] =
-        [
-            "id" => $user["id"],
-            "info" => $userData->getUserArray(),
-            "uploads" => $user["s_num"],
-            "journals" => $user["j_num"],
-            "followers" => $user["f_num"],
-            "about" => $user["about"],
-        ];
-}
+$queryData = $user_query->query("u.last_seen DESC", $limit);
+$countData = $user_query->count();
+$usersData = Utilities::makeUserArray($database, $queryData);
 
 $data = [
     'users' => $usersData,

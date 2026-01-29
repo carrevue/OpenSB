@@ -27,9 +27,8 @@ global $twig, $database, $sb, $auth;
 
 use OpenSB\UploadFlags;
 use OpenSB\UploadQuery;
+use OpenSB\UserQuery;
 use OpenSB\Utilities;
-use OpenSB\UserData;
-use OpenSB\UserFlags;
 
 // this page is fucked up and should be cleaned up in 2.1
 
@@ -37,9 +36,9 @@ $upload_query = new UploadQuery($sb);
 
 $options = $sb->getLocalOptions();
 
-// on finalium, use new fulptube index page.
+// use different index for finalium skin
 if ($options["skin"] == "finalium") {
-    include_once "index_new.php";
+    include_once "index_finalium.php";
     die();
 }
 
@@ -68,13 +67,13 @@ if ($options["skin"] == "bootstrap") {
     $news_recent_query_limit = 3;
 }
 
-if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" & $type == "list") || $options["skin"] == "finalium") {
+if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" && $type == "list") || $options["skin"] == "finalium") {
     $uploads_random = [];
 } else {
     $uploads_random = $upload_query->query("RAND()", $uploads_random_query_limit);
 }
 
-if ($options["skin"] == "bootstrap" & $options["theme"] == "classic") {
+if ($options["skin"] == "bootstrap" && $options["theme"] == "classic") {
     $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
 } else {
     $uploads_recent = [];
@@ -99,7 +98,7 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
     );
 
     if ($rows) {
-        $users = array_column($rows, 'id');
+        $users = array_map('intval', array_column($rows, 'id'));
         $query = implode(', ', $users);
 
         $uploads_following = $upload_query->query(
@@ -117,32 +116,8 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
 
 if ($options["skin"] == "trinium") {
-    // TODO: maybe move this (and the equivalent code in users.php) into a "UsersQuery" class?
-    $users_recent_data = $database->fetchArray(
-        $database->query(
-            "SELECT u.id, 
-        (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
-        (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
-            FROM users u 
-            WHERE u.id NOT IN (SELECT user FROM user_bans)
-            AND (u.flags & ?) = 0
-            ORDER BY u.last_seen DESC LIMIT 5", [UserFlags::FLAG_UNVERIFIED->value]
-        )
-    );
-
-    $users_recent = [];
-    foreach ($users_recent_data as $user) {
-        $userData = new UserData($database, $user["id"]);
-        $users_recent[] =
-            [
-                "id" => $user["id"],
-                "info" => $userData->getUserArray(),
-                "uploads" => $user["s_num"],
-                //"journals" => $user["j_num"],
-                "followers" => $user["f_num"],
-                //"about" => $user["about"],
-            ];
-    }
+    $user_query = new UserQuery($sb);
+    $users_recent = Utilities::makeUserArray($database, $user_query->query("u.last_seen DESC", 5));
 } else {
     $users_recent = [];
 }

@@ -47,7 +47,7 @@ if ($database->result("SELECT COUNT(*) FROM journals WHERE timestamp > ? AND aut
     Utilities::notifyBanner("notify_write_ratelimit", "/");
 }
 
-if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLoggedIn()) {
+if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isUserLoggedIn()) {
     $uploader = $auth->getUserID();
 
     $title = ($_POST['title'] ?? "No title");

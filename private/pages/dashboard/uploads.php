@@ -42,23 +42,22 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
 $upload_query = new UploadQuery($sb);
 
 $amount = $_GET["amount"] ?? 16;
-$search = $_GET["search"] ?? ""; //TODO
+$search = trim((string) ($_GET["search"] ?? ""));
 $page = $_GET["page"] ?? 1;
 
 $limit = $database->paginate($page, pp: $amount);
 
-/*
- $count = $database->result(
-        "SELECT COUNT(*)
-        FROM users u
-        WHERE (u.name LIKE CONCAT('%', ?, '%'))
-        ", [$search]);
- */
+$whereCondition = null;
+$params = [];
+if ($search !== "") {
+    $whereCondition = "(v.title LIKE ? OR v.upload_id LIKE ?)";
+    $params = ["%{$search}%", "%{$search}%"];
+}
 
-$count = $database->result("SELECT COUNT(*) FROM uploads u");
-
-// kinda fucking stupid i guess but whatever
-$uploads = $upload_query->query('v.timestamp DESC', $limit, null, [], true);
+$count = $search !== ""
+    ? (int) $database->result("SELECT COUNT(*) FROM uploads v WHERE (v.title LIKE ? OR v.upload_id LIKE ?)", ["%{$search}%", "%{$search}%"])
+    : (int) $database->result("SELECT COUNT(*) FROM uploads v");
+$uploads = $upload_query->query('v.timestamp DESC', $limit, $whereCondition, $params, true);
 
 $uploads_array = Utilities::makeUploadArray($database, $uploads);
 

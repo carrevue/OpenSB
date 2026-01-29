@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021-2023 ROllerozxa
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
@@ -170,6 +170,9 @@ class Database
         if ($page > 2147483647) {
             $page = 1;
         }
+
+        $pp = (is_numeric($pp) && $pp > 0 ? (int) $pp : 20);
+        $pp = min($pp, 100);
 
         return sprintf(" LIMIT %s, %s", (($page - 1) * $pp), $pp);
     }

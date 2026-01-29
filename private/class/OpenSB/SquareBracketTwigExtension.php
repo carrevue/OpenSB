@@ -740,15 +740,27 @@ class SquareBracketTwigExtension extends AbstractExtension
 
     /**
      * function getCssFileDate
-     *
-     * @todo this should probably be changed to check the file date of the current theme, not just that of the
-     * default theme on trinium -chaziz 1/13/2025.
      * 
-     * @return mixed
+     * Returns timestamp of the current skin's theme.
+     *
+     * @return int
      */
-    public function getCssFileDate()
+    public function getCssFileDate(): int
     {
-        return filemtime(SB_PUBLIC_PATH . "/assets/css/trinium-default.css");
+        $options = $this->sb->getLocalOptions();
+        $skin = $options["skin"] ?? "trinium";
+        $theme = $options["theme"] ?? "default";
+        $base = SB_PUBLIC_PATH . "/assets/css";
+        $candidates = [
+            $base . "/" . $skin . "-" . $theme . ".css",
+            $base . "/" . $skin . "_" . $theme . ".css",
+        ];
+        foreach ($candidates as $path) {
+            if (file_exists($path)) {
+                return filemtime($path);
+            }
+        }
+        return filemtime($base . "/trinium-default.css");
     }
 
     /**

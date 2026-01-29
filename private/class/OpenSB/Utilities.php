@@ -123,6 +123,34 @@ class Utilities
     }
 
     /**
+     * function makeUserArray
+     *
+     * @param mixed $database
+     * @param mixed $users 
+     *
+     * @return array
+     */
+    public static function makeUserArray($database, $users): array
+    {
+        if (!$users) {
+            return [];
+        }
+        $out = [];
+        foreach ($users as $user) {
+            $userData = new UserData($database, $user["id"]);
+            $out[] = [
+                "id" => $user["id"],
+                "info" => $userData->getUserArray(),
+                "uploads" => $user["s_num"] ?? 0,
+                "journals" => $user["j_num"] ?? 0,
+                "followers" => $user["f_num"] ?? 0,
+                "about" => $user["about"] ?? null,
+            ];
+        }
+        return $out;
+    }
+
+    /**
      * function makeJournalArray
      *
      * @param mixed $database

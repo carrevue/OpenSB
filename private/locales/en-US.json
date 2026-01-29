@@ -365,7 +365,7 @@
     "notify_upload_ratelimit": "Please wait at least %s minutes before uploading again.",
     "notify_upload_success": "Your upload has been posted.",
     "notify_upload_technical_issue": "A problem has occurred while attempting to upload.",
-    "notify_upload_audio_unimplemented": "Audio uploading will be implemented at a later date.",
+    "notify_upload_audio_unimplemented": "Uploading audio is not yet implemented.",
     "notify_write_disabled": "The ability to write journals has been disabled.",
     "notify_write_ratelimit": "Please wait at least a minute before posting another journal.",
     "notify_write_success": "Your journal has been posted.",

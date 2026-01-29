@@ -30,10 +30,42 @@ use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
 use OpenSB\UploadFlags;
 
-// TODO: a more automated method to detect which file format the user is trying to upload.
+// supported extensions
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
 $supportedImageFormats = ["png", "jpg", "jpeg", "bmp", "webp"];
-$supportedAudioFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"]; // TODO
+$supportedAudioFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"];
+
+// supported mime types
+function detectUploadType(string $tmpPath, string $extension, array $videoExts, array $imageExts, array $audioExts): ?string
+{
+    $ext = strtolower($extension);
+    $mimeToType = [
+        'video/mp4' => 'video', 'video/x-matroska' => 'video', 'video/x-ms-wmv' => 'video',
+        'video/x-flv' => 'video', 'video/x-msvideo' => 'video', 'video/quicktime' => 'video',
+        'video/3gpp' => 'video', 'video/webm' => 'video',
+        'image/png' => 'image', 'image/jpeg' => 'image', 'image/bmp' => 'image', 'image/webp' => 'image', 'image/gif' => 'image',
+        'audio/mpeg' => 'audio', 'audio/wav' => 'audio', 'audio/flac' => 'audio', 'audio/aiff' => 'audio',
+        'audio/ogg' => 'audio', 'audio/x-ms-wma' => 'audio', 'audio/mp4' => 'audio', 'audio/x-m4a' => 'audio',
+    ];
+    if (file_exists($tmpPath)) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = $finfo ? @finfo_file($finfo, $tmpPath) : null;
+
+        if ($mime && isset($mimeToType[$mime])) {
+            return $mimeToType[$mime];
+        }
+    }
+    if (in_array($ext, $videoExts, true)) {
+        return 'video';
+    }
+    if (in_array($ext, $imageExts, true)) {
+        return 'image';
+    }
+    if (in_array($ext, $audioExts, true)) {
+        return 'audio';
+    }
+    return null;
+}
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
 // kind of access denied error. run these commands as root/sudo:
@@ -122,7 +154,7 @@ function discord_webhook_notify($sb, $new, $title, $description, $auth)
     $sb->getDiscordWebhookClass()->newUploadHook($data);
 }
 
-if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLoggedIn()) {
+if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isUserLoggedIn()) {
     $flags = 0;
 
     $new = Utilities::generateRandomString(11, true);
@@ -156,7 +188,9 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
     $ext = pathinfo($_FILES['fileToUpload']['name'], PATHINFO_EXTENSION);
     $path = $sb->getStorageClass()->getPath();
 
-    if (in_array(strtolower($ext), $supportedVideoFormats, true)) { // VIDEO
+    $detectedType = detectUploadType($temp_name, $ext, $supportedVideoFormats, $supportedImageFormats, $supportedAudioFormats);
+
+    if ($detectedType === 'video') { // VIDEO
         if (isset($noProcess) && $sb->isDebug()) {
             // pretend video has been successfully uploaded (does this still work???)
             $target_file = $path . '/dynamic/videos/' . $new . '.converted.' . $ext;
@@ -188,7 +222,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
                 Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
             }
         }
-    } elseif (in_array(strtolower($ext), $supportedImageFormats, true)) { // IMAGES
+    } elseif ($detectedType === 'image') { // IMAGES
         try {
             $sb->getStorageClass()->processImageUpload($temp_name, $new);
         } catch (\Exception $e) {
@@ -211,7 +245,7 @@ if (isset($_POST['upload']) or isset($_POST['upload_video']) and $auth->isUserLo
         }
 
         Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
-    } elseif (in_array(strtolower($ext), $supportedAudioFormats, true)) { // AUDIO
+    } elseif ($detectedType === 'audio') { // AUDIO
         Utilities::notifyBanner("notify_upload_audio_unimplemented", "/upload");
     } else {
         Utilities::notifyBanner("notify_invalid_format", "/upload");

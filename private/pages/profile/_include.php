@@ -21,8 +21,11 @@
 
 namespace OpenSB\Pages;
 
+global $auth, $database, $twig, $sb;
+
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
+use OpenSB\UserData;
 use OpenSB\UserFlags;
 use OpenSB\UserCustomizationData;
 use OpenSB\FakeUser;
@@ -37,6 +40,7 @@ if (!$data) {
         // if so, attempt to fetch the user's current name through their id
         $new_username = $database->fetch("SELECT name FROM users WHERE id = ?", [$old_username_data['user']])["name"];
         if ($new_username) {
+            // TODO: handle paths (currently: /user/OldName/subpage will redirect to /user/NewName)
             Utilities::redirect('/user/' . $new_username, 301);
         } else {
             // if for whatever reason this leads to nowhere (eg: deleted user or 
@@ -66,4 +70,24 @@ if ($flags["profile_customization_enabled"]) {
     $profile_customization_data = new UserCustomizationData($database, $data["id"]);
 } else {
     $profile_customization_data = null;
+}
+
+// right. cheat "related channels" on finalium profiles by using featured users
+if ($sb->getLocalOptions()["skin"] == "finalium") {
+    // ripped from SquareBracketTwigExtension
+    $users = $database->fetchArray(
+        $database->query(
+            "SELECT u.id
+            FROM users u 
+            WHERE u.flags & ? = ?",
+            [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
+        )
+    );
+
+    $related_users = [];
+
+    foreach ($users as $user) {
+        $user = new UserData($database, $user["id"]);
+        $related_users[] = $user->getUserArray();
+    }
 }
