@@ -281,6 +281,11 @@ $router->add('/assets/bootstrap-icons.svg', function () {
     load_file(SB_VENDOR_PATH . '/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
 });
 
+// bootstrap js (used by bootstrap)
+$router->add('/assets/bootstrap.js', function () {
+    load_file(SB_VENDOR_PATH . '/twbs/bootstrap/dist/js/bootstrap.bundle.min.js', 'application/javascript');
+});
+
 // skin assets (ONLY WORKS IF THE ASSET IS NOT IN A NESTED FOLDER)
 $router->add('/assets/skin/{skin}/{asset}', function (array $params) {
     load_asset_from_skin($params['skin'], $params['asset']);

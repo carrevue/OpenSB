@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -49,6 +49,16 @@ function rate($number, $upload): array
     return ["rated" => true];
 }
 
+function unrate($upload): array
+{
+    global $database, $auth;
+
+    if ($database->result("SELECT COUNT(rating) FROM upload_ratings WHERE upload=? AND user=?", [$upload, $auth->getUserID()])) {
+        $database->query("DELETE FROM upload_ratings WHERE upload=? AND user=?", [$upload, $auth->getUserID()]);
+    }
+    return ["rated" => false];
+}
+
 if (isset($post_data['upload'])) {
     if (isset($post_data['action'])) {
         $apiOutput = match ($post_data['action']) {
@@ -58,6 +68,15 @@ if (isset($post_data['upload'])) {
             ],
             'rate' => [
                 rate($post_data['number'], $post_data['upload']),
+            ],
+            'unrate' => [
+                unrate($post_data['upload']),
+            ],
+            'like' => [
+                rate(5, $post_data['upload']),
+            ],
+            'dislike' => [
+                rate(1, $post_data['upload']),
             ],
             default => [
                 "error" => "This interaction type is invalid."

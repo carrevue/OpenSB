@@ -21,5 +21,3 @@ All SquareBracket (sb_branding) Trinium backgrounds by Chaziz.
 
 SquareBracket logo by Chaziz and shiypc.
 Vectorized FulpTube logo by shiypc.
-
-Chaz the Spare Parts Craft (in chaz_opensb.png) by Chaziz, Design inspired by on Dandy's World by BlushCrunch Studio.

@@ -702,18 +702,6 @@ class SquareBracketTwigExtension extends AbstractExtension
             ],
         ];
 
-        if ($this->sb->getLocalOptions()["skin"] == "bootstrap") {
-            // Oops. Ugly!
-            $version_array = [
-                "version" => [
-                    "name" => $this->localize("version"),
-                    "url" => "/version",
-                ],
-            ];
-
-            $array = array_merge($version_array, $array);
-        }
-
         if ($this->sb->isChazizInstance()) {
             if (!$this->sb->isFulpTubeMode()) {
                 $array["brickface"] = [
