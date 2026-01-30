@@ -225,8 +225,12 @@ class Templating
         }
 
         if (isset($_SERVER['HTTP_HOST'])) {
-            $this->twig->addGlobal("page_url", Utilities::getURL(true));
-            $this->twig->addGlobal("domain", Utilities::getURL(false));
+            if ($sb->isIpLookupEnabled()) {
+                $this->twig->addGlobal('country_code', $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()) ?? '');
+            }
+
+            $this->twig->addGlobal('page_url', Utilities::getURL(true));
+            $this->twig->addGlobal('domain', Utilities::getURL(false));
         }
     }
 
