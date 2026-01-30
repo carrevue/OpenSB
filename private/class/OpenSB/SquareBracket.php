@@ -293,8 +293,7 @@ class SquareBracket
                 "use_wordmark" => $config["branding"]["use_wordmark"] ?? false,
             ];
 
-            // custom branding for themes. for that Extra Accuracy™.
-            // TODO: make finalium and bootstrap *actually* work with updated branding
+            // use fulptube branding on sb if we're on finalium hitchhiker
             if ($this->is_chaziz_squarebracket_instance) {
                 // TEMPORARY CODE for sb 5th anniversary - do NOT cherrypick into 2.1
                 if (date('m/d/Y') === '01/31/2026') {
@@ -303,8 +302,6 @@ class SquareBracket
 
                 if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker") {
                     $this->overrideBrandingWithFulpTube();
-                } elseif ($this->options["skin"] == "finalium" || $this->options["skin"] == "bootstrap") {
-                    $this->branding_settings["name"] = "squareBracket";
                 }
             }
         }

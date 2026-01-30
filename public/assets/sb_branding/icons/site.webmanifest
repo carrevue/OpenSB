@@ -1,6 +1,6 @@
 {
-    "name": "SquareBracket",
-    "short_name": "SquareBracket",
+    "name": "squareBracket",
+    "short_name": "squareBracket",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
