@@ -4,7 +4,7 @@
 
 {% block my_account_content %}
     {% if error %}
-    <div class="banner banner-danger">{{ error }}</div>
+    <div class="banner danger">{{ error }}</div>
     {% endif %}
     <div class="content-box">
         <div class="profile-box">
@@ -219,7 +219,7 @@
             </div>
             <hr>
             <div class="form-button-container">
-                <input type="submit" id="upload" name="save" class="button button-primary" value="{{ localize('save_action') }}">
+                <input type="submit" id="upload" name="save" class="button primary" value="{{ localize('save_action') }}">
             </div>
         </form>
     </div>

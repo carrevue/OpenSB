@@ -4,7 +4,7 @@
 
 	{% block content %}
         {% if is_test_instance %}
-            <div class="banner banner-danger">
+            <div class="banner danger">
                 you should probably just upload on the production instance instead
             </div>
         {% endif %}
@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="form-button-container">
-                                <input class="button button-primary" type="submit" id="upload" name="upload"
+                                <input class="button primary" type="submit" id="upload" name="upload"
                                        value="{{ localize('upload_action') }}">
                             </div>
                         </div>

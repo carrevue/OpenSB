@@ -47,13 +47,13 @@
 {% block content %}
 {% include('components/report_dialog.twig') %}
     {% if upload.takedown %}
-        <div class="banner banner-secondary">
+        <div class="banner secondary">
             This upload was taken down on {{ upload.takedown.time | format_date('long', 'medium') }}
             by {{ upload.takedown.takedownee }} for the following reason: {{ upload.takedown.reason }}
         </div>
     {% endif %}
     {% if upload.author_banned %}
-        <div class="banner banner-secondary">
+        <div class="banner secondary">
             The author of this upload is banned.
         </div>
     {% endif %}
@@ -82,7 +82,7 @@
                                 </h1>
                             </div>
                             <div class="section-header-right">
-                                <div class="menu-button button button-secondary button-transparent button-caret"
+                                <div class="menu-button button secondary button-transparent button-caret"
                                     data-menu-id="upload-{{ upload.id }}">
                                     {{ icon('three-dots', 16) }}
                                 </div>
@@ -126,7 +126,7 @@
                                     </div>
                                     <div class="watch-box-author-follow">
                                         {% if not upload.is_owner and not upload.author_banned and is_user_logged_in %}
-                                            <button class="button button-secondary button-small" id="follow-user">
+                                            <button class="button secondary small" id="follow-user">
                                                 {% if upload.author.following %}
                                                     {{ localize('unfollow') }}
                                                 {% else %}
@@ -158,7 +158,7 @@
                                 <div class="watch-box-description-info">
                                     {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
                                 </div>
-                                {#<div class="button button-danger button-small">Favorite</div>#}
+                                {#<div class="button danger small">Favorite</div>#}
                             </div>
                             {% if upload.published_originally and upload.original_site %}
                                 <div class="watch-box-description-info-small">
@@ -190,7 +190,7 @@
                                 {% if is_user_logged_in %}
                                     <form class="form-flex">
                                         <input type="text" class="form-submit">
-                                        <input type="submit" value="Add" class="button button-secondary">
+                                        <input type="submit" value="Add" class="button secondary">
                                     </form>
                                 {% endif %}
                                 #}

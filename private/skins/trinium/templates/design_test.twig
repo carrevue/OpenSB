@@ -5,7 +5,7 @@
 {% block content %}
     <div class="section">
         {% for color in color_types %}
-            <div class="banner banner-{{ color }}">
+            <div class="banner {{ color }}">
                 {{ notification_icon(color) }}
                 <span class="banner-text">
                 This is a {{ color }} banner. You may go back to the homepage <a href="/">here</a>.
@@ -66,19 +66,19 @@
                     <h2 class="section-title">Buttons</h2>
                 </div>
                 {% for color in color_types %}
-                    <div class="button button-{{ color }} button-small">small {{ color }} button!</div>
+                    <div class="button {{ color }} small">small {{ color }} button!</div>
                 {% endfor %}
                 <br>
                 {% for color in color_types %}
-                    <div class="button button-{{ color }}">{{ color }} button!</div>
+                    <div class="button {{ color }}">{{ color }} button!</div>
                 {% endfor %}
                 <br>
                 {% for color in color_types %}
-                    <div class="button button-{{ color }} button-big">big {{ color }} button!</div>
+                    <div class="button {{ color }} big">big {{ color }} button!</div>
                 {% endfor %}
                 <br>
                 {% for color in color_types %}
-                    <div class="button button-{{ color }} button-huge">huge {{ color }} button!</div>
+                    <div class="button {{ color }} huge">huge {{ color }} button!</div>
                 {% endfor %}
             </div>
             <hr>
@@ -87,7 +87,7 @@
                     <h2 class="section-title">Menus</h2>
                 </div>
                 <div class="menu-container">
-                    <div class="menu-button button button-secondary button-menu" data-menu-id="test-menu">
+                    <div class="menu-button button secondary button-menu" data-menu-id="test-menu">
                         Toggle menu
                         <div class="menu-caret-container">
                             {{ icon('caret-closed', 16, 'menu-caret') }}

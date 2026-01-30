@@ -23,7 +23,7 @@
 
 {% block content %}
     {% if data.ban_data %}
-        <div class="banner banner-secondary">
+        <div class="banner secondary">
             This user was banned on {{ data.ban_data.timestamp | format_date('long', 'medium') }} for the following reason:
             {{ data.ban_data.reason }}
         </div>
@@ -40,7 +40,7 @@
                             {% if not data.ban_data %}
                                 {% if is_user_logged_in %}
                                     {% if not data.is_current %}
-                                        <button class="button button-secondary button-small" id="follow-user">
+                                        <button class="button secondary small" id="follow-user">
                                             {% if data.following %}
                                                 {{ localize('unfollow') }}
                                             {% else %}

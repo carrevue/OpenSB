@@ -24,7 +24,7 @@
             <form method="GET" action="/dashboard/users/" class="admin-form-search">
                 <input type="hidden" name="amount" value="{{ amount }}">
                 <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
-                <button type="submit" class="button button-secondary">
+                <button type="submit" class="button secondary">
                     {{ icon('search') }}
                 </button>
             </form>
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="admin-user-buttons">
-                    <a class="button button-secondary" href="/dashboard/users/{{ user.info.username }}">
+                    <a class="button secondary" href="/dashboard/users/{{ user.info.username }}">
                         Manage
                     </a>
                 </div>
