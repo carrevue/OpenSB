@@ -26,6 +26,7 @@ namespace OpenSB\Pages;
 global $twig, $database, $auth, $sb;
 
 use OpenSB\UserRoleEnum;
+use OpenSB\UserFlags;
 use OpenSB\Utilities;
 
 $warning = $sb->getWarningString();
@@ -107,10 +108,12 @@ if (isset($_POST["loginsubmit"])) {
         $logindata = $database->fetch("SELECT password,token,ip,id,flags,powerlevel FROM users WHERE name = ?", [$username]);
 
         if ($logindata) {
-            if ($sb->isTestInstance()) {
-                if ($logindata['powerlevel'] < UserRoleEnum::Moderator->value) {
-                    Utilities::notifyBanner("notify_login_test_instance", "/login");
-                }
+            if (
+                $sb->isTestInstance()
+                && $logindata['powerlevel'] < UserRoleEnum::Moderator->value
+                && !($logindata['flags'] & UserFlags::FLAG_TEST_INSTANCE_ACCESS->value)
+            ) {
+                Utilities::notifyBanner("notify_login_test_instance", "/login");
             }
 
             if ((password_verify($password, $logindata['password']))) {

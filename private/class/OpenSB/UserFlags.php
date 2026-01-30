@@ -49,9 +49,9 @@ enum UserFlags: int
     case FLAG_FULPTUBE_ACCOUNT = 64;
 
     /**
-     * 10000000: Account is a bot (allows it to be used by a bot script)
+     * 10000000: Account has access to the testing instance
      */
-    case FLAG_BOT = 128;
+    case FLAG_TEST_INSTANCE_ACCESS = 128;
 
     /**
      * function toArray
@@ -66,7 +66,7 @@ enum UserFlags: int
     {
         return [
             'fulptube_account' => (bool)($flags & self::FLAG_FULPTUBE_ACCOUNT->value),
-            'bot' => (bool)($flags & self::FLAG_BOT->value),
+            'test_access' => (bool)($flags & self::FLAG_TEST_INSTANCE_ACCESS->value),
             'unverified' => (bool)($flags & self::FLAG_UNVERIFIED->value),
             'featured' => (bool)($flags & self::FLAG_FEATURED->value),
             'mature_content_access' => (bool)($flags & self::FLAG_MATURE_CONTENT_ACCESS->value),

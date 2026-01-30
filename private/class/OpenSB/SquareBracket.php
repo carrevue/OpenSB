@@ -328,20 +328,6 @@ class SquareBracket
     }
 
     /**
-     * function logInWithToken
-     * 
-     * Reinitialize the authentication class with a specified token.
-     * 
-     * @note: This may cause issues in most use cases, and should only be used for the bot API.
-     *
-     * @return void
-     */
-    public function logInWithToken($token)
-    {
-        $this->authentication = new Authentication($this, $token);
-    }
-
-    /**
      * function overrideBrandingWithFulpTube
      *
      * @return void
@@ -699,7 +685,7 @@ class SquareBracket
      */
     public function isTestInstance(): bool
     {
-        return  $this->is_test_instance;
+        return true;
     }
 
     /**

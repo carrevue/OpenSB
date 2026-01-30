@@ -162,8 +162,12 @@ if ($sb->isTestInstance())
 
     $auth = $sb->getAuthenticationClass();
 
-    // if the user is still logged in but isnt an admin, log them out.
-    if ($auth->isUserLoggedIn() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
+    // if the user is still logged in but isnt staff (or doesnt have test instance access flag), log them out.
+    if (
+        $auth->isUserLoggedIn()
+        && !$auth->userHasRole(UserRoleEnum::Moderator)
+        && !($auth->getUserFlags() & UserFlags::FLAG_TEST_INSTANCE_ACCESS->value)
+    ) {
         $auth->logOut();
     }
 
@@ -250,8 +254,6 @@ $router->add('/api/v3/get_comments', 'api/v3/get_comments.php');
 $router->add('/api/v3/get_instance_info', 'api/v3/get_instance_info.php');
 $router->add('/api/v3/get_upload', 'api/v3/get_upload.php');
 $router->add('/api/v3/get_uploads', 'api/v3/get_uploads.php');
-
-$router->add('/api/bot/test', 'api/bot/test.php');
 
 // redirect to dashboard
 $router->redirect('/admin', '/dashboard');
