@@ -171,18 +171,9 @@ class Templating
         $branding = $sb->getBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.
-        $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is currently in a testing phase.
-        Registrations are closed until the site is ready.";
+        $showWarningBanner = false;
+        $warningBannerText = null;
 
-        if ($sb->isTestInstance()) {
-            $showWarningBanner = true;
-            $warningBannerText = $warningBannerTextIfOnChazizOwnedDomain;
-        } else {
-            $showWarningBanner = false;
-            $warningBannerText = null;
-        }
-
-        //$this->version_number = $sb->getVersionNumberClass();
         $this->version_number = new VersionNumber();
 
         // TODO: this should be cleaned up on 2.1 or maybe 3.0

@@ -685,7 +685,7 @@ class SquareBracket
      */
     public function isTestInstance(): bool
     {
-        return true;
+        return $this->is_test_instance;
     }
 
     /**

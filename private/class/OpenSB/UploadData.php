@@ -40,7 +40,7 @@ class UploadData
     /**
      * @var UserData The upload's author
      */
-    private UserData $author;
+    private ?UserData $author;
 
     /**
      * @var UploadRatingData|null The Upload rating data helper class.
@@ -70,7 +70,7 @@ class UploadData
     public function __construct(Database $database, $id)
     {
         $this->database = $database;
-
+        $this->author = null;
         $this->is_deleted = $this->database->result("SELECT COUNT(*) FROM upload_deleted v WHERE id = ?", [$id]);
 
         // if we get the internal id instead of the string id, we correct $id after fetching the upload otherwise
@@ -139,7 +139,7 @@ class UploadData
      */
     public function isTakenDown()
     {
-        return $this->is_deleted || $this->author->isUserBanned();
+        return $this->is_deleted || $this->author?->isUserBanned();
     }
 
     /**
