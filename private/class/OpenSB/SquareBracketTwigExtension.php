@@ -519,16 +519,19 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "home" => [
                         "name" => $this->localize("home"),
                         "url"  => "/",
+                        "icon" => "guide-home"
                     ],
                     "browse" => [
                         "name" => $this->localize("browse"),
                         "url"  => "/browse",
+                        "icon" => "guide-home"
                     ],
                 ],
                 "bottom" => [
                     "members" => [
                         "name" => $this->localize("browse_members"),
                         "url"  => "/members",
+                        "icon" => "guide-home"
                     ],
                 ],
             ];
@@ -538,6 +541,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "name" => $this->localize("my_profile"),
                     "url"  => "/user/" . $user_data["name"],
                     "page" => "user " . $user_data["name"],
+                    "icon" => "guide-home"
                 ];
             }
 
@@ -803,9 +807,12 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getIcon($icon, $size = "16", $class = null)
     {
-        if (Utilities::isLegacyFrontend()) {
+        if ($this->sb->getLocalOptions()["skin"] === "bootstrap") {
             $root_class = "bi";
             $svg = "bootstrap-icons.svg";
+        } elseif ($this->sb->getLocalOptions()["skin"] === "finalium") {
+            $root_class = "icon";
+            $svg = "skin/finalium/icons.svg";
         } else {
             $root_class = "icon";
             $svg = "icons.svg";

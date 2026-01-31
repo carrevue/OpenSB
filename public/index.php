@@ -277,7 +277,7 @@ $router->add('/assets/icons.svg', function () {
     load_file(SB_PRIVATE_PATH . '/icons/sprite.svg', 'image/svg+xml');
 });
 
-// bootstrap icons (used by bootstrap and finalium)
+// bootstrap icons (used by bootstrap)
 $router->add('/assets/bootstrap-icons.svg', function () {
     load_file(SB_VENDOR_PATH . '/twbs/bootstrap-icons/bootstrap-icons.svg', 'image/svg+xml');
 });
