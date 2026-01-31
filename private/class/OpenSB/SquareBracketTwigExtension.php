@@ -508,6 +508,42 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function headerMainLinks()
     {
+        $options = $this->sb->getLocalOptions();
+
+        // use different links for finalium
+        if ($options["skin"] === "finalium") {
+            $user_data = $this->authentication->getUserData();
+
+            $menu = [
+                "top" => [
+                    "home" => [
+                        "name" => $this->localize("home"),
+                        "url"  => "/",
+                    ],
+                    "browse" => [
+                        "name" => $this->localize("browse"),
+                        "url"  => "/browse",
+                    ],
+                ],
+                "bottom" => [
+                    "members" => [
+                        "name" => $this->localize("browse_members"),
+                        "url"  => "/members",
+                    ],
+                ],
+            ];
+
+            if ($this->authentication->isUserLoggedIn()) {
+                $menu["top"]["profile"] = [
+                    "name" => $this->localize("my_profile"),
+                    "url"  => "/user/" . $user_data["name"],
+                    "page" => "user " . $user_data["name"],
+                ];
+            }
+
+            return $menu;
+        }
+
         $array = [
             "home" => [
                 "name" => $this->localize("home"), // Home
@@ -635,10 +671,14 @@ class SquareBracketTwigExtension extends AbstractExtension
             // logged in: following
             $users = $this->database->fetchArray(
                 $this->database->query(
-                    "SELECT s.* FROM user_follows s 
-                    JOIN users u ON s.user = u.id 
+                    "SELECT s.*
+                    FROM user_follows s
+                    JOIN users follower ON s.user = follower.id
+                    JOIN users followed ON s.id = followed.id
                     WHERE s.user = ?
-                    AND s.id NOT IN (SELECT user FROM user_bans)",
+                    AND followed.id NOT IN (SELECT user FROM user_bans)
+                    ORDER BY followed.name
+                    ",
                     [$userid]
                 )
             );
@@ -648,7 +688,8 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $this->database->query(
                     "SELECT u.id
                     FROM users u 
-                    WHERE u.flags & ? = ?",
+                    WHERE u.flags & ? = ?
+                    ORDER BY u.name",
                     [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
                 )
             );

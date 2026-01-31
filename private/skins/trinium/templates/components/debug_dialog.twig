@@ -85,6 +85,9 @@
                                 <li>
                                     Last seen: {{ user.last_seen | format_date('long', 'medium') }}
                                 </li>
+                                <li>
+                                    Following: {{ user.following ? 'Yes' : 'No' }}
+                                </li>
                             </ul>
                         </td>
                         <td style="background:{{ user.userlink_color }}"></td>

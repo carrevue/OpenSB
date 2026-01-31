@@ -42,7 +42,7 @@ foreach ($files as $file) {
     $fileUrls[] = ['filename' => $fileUrl];
 }
 ?>
-<h1>OpenSB Backend Debug</h1>
+<h1>OpenSB Debug</h1>
 <ul>
     <?php
     foreach ($fileUrls as $file) {

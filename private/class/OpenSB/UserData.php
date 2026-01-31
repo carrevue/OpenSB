@@ -23,6 +23,7 @@ namespace OpenSB;
 
 use OpenSB\Database;
 use OpenSB\FakeUser;
+use OpenSB\Utilities;
 
 /**
  * class UserData
@@ -93,10 +94,12 @@ class UserData
                 "last_seen" => 1,
                 "powerlevel" => 0,
                 "flags" => 0, // we don't need any flags to be set.
+                "following" => false,
             ];   
         }
 
         $this->data = $data;
+        $this->data["following"] = Utilities::isFollowingUser($id);
 
         // cache the data
         self::$userDataCache[$id] = $this->data;
@@ -141,6 +144,7 @@ class UserData
                 "color" => $this->data["userlink_color"],
                 "joined" => $this->data["joined"],
                 "connected" => $this->data["last_seen"],
+                "following" => $this->data["following"],
                 // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
                 "powerlevel" => $this->data["powerlevel"],
                 "flags" => UserFlags::toArray($this->data["flags"]), // stupid i think
@@ -152,6 +156,7 @@ class UserData
                 "color" => "#FF0000",
                 "joined" => 0,
                 "connected" => 0,
+                "following" => false,
                 "powerlevel" => 1,
             ];
         }
