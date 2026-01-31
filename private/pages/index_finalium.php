@@ -30,17 +30,15 @@ use OpenSB\UserFlags;
 
 $upload_query = new UploadQuery($sb);
 
-$uploads_query_limit = 15;
-
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
-    $uploads_query_limit,
+    15,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 );
 
 $featured_users = $database->fetchArray(
     $database->query(
-        "SELECT u.id
+        "SELECT u.id, u.name
         FROM users u 
         WHERE u.flags & ? = ?
         ORDER BY RAND() LIMIT 6",
@@ -61,12 +59,14 @@ foreach ($featured_users as $user) {
     $feed_key = "user_" . $user["id"];
     $feed[$feed_key] = [
         "icon" => $sb->getStorageClass()->getUserProfilePicture($user["id"]),
-        "title" => Utilities::userIDToUsername($database, $user["id"]),
+        "title" => $user["name"],
+        "label" => "Featured channel",
+        "link" => "/user/" . $user["name"],
         "uploads" => Utilities::makeUploadArray(
             $database,
             $upload_query->query(
                 "RAND()",
-                $uploads_query_limit,
+                10,
                 sprintf("v.author = %d", $user["id"])
             )
         ),
