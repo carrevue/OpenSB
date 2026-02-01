@@ -7,12 +7,21 @@
     "browse_more": "Plus",
 
     "members": "Membres",
+    "members_hitchhiker": "Chaînes",
+
+    "browse_members": "Parcourir les membres",
+    "browse_members_hitchhiker": "Parcourir les chaînes",
+
+    "library": "Bibliothèque",
+
+    "collections": "Collections",
+    "collections_hitchhiker": "Listes de lecture",
 
     "follow": "S'abonner",
-    "unfollow": "Unfollow",
+    "unfollow": "Se désabonner",
 
     "form_required": "Required",
-    "form_optional": "Se désabonner",
+    "form_optional": "Optionel",
 
     "welcome_logged_in": "Bienvenue, %s",
     "welcome_logged_out": "Bienvenue sur %s",
@@ -46,12 +55,18 @@
     "page_num_of_num": "Page %s sur %s",
 
     "dashboard": "Panel du personnel",
+    "my_account": "Mon compte",
     "my_profile": "Mon profil",
     "my_uploads": "Mes publications",
-    "account_settings": "Paramètres du compte",
+    "my_collections": "Mes collections",
+    "my_invite_keys": "Mes clés d'invitation",
+    "account_settings": "Paramètres de compte",
     "new_upload": "Nouveau publication",
     "new_journal": "Nouvelle journal",
     "add_account": "Ajouter un compte",
+
+    "my_profile_hitchhiker": "Ma chaîne",
+    "my_collections_hitchhiker": "Mes listes de lecture",
 
     "login": "Connecter",
     "register": "Inscrire",
@@ -90,6 +105,23 @@
 
     "submit_action": "Submit",
 
+    "invite_keys": "Clés d'invitation",
+
+    "invite_key_action": "Générer une clé",
+    "invite_key_cooldown": "Vous ne pouvez générer une nouvelle clé d'invitation que toutes les 24 heures. Veuillez patienter avant d'en générer une autre.",
+    "invite_key_cooldown_new_users": "Les nouveaux utilisateurs doivent attendre une semaine avant de pouvoir générer une clé d'invitation.",
+    "invite_key_disclaimer": "Vous pouvez générer une clé d'invitation toutes les 24 heures.",
+    "no_invite_keys_generated": "Vous n'avez pas encore généré de clé d'invitation.",
+    "claimed_by": "Réclamé par",
+    "unclaimed": "Personne",
+
+    "ban_title": "Compte banni",
+    "ban_intro_1": "Votre compte (@%s) est banni.",
+    "ban_intro_2": "Vous avez été banni pour violation d'une ou plusieurs des <a href=\"%s\">Conditions de Service</a> et/ou des <a href=\"%s\">Règles Communautaires</a>.",
+    "ban_evasion_warning": "Utiliser un autre compte pour contourner votre bannissement entraînera un bannissement permanent, si vous n'en possédez pas déjà un.",
+    "ban_filed_temporary": "Vous êtes banni depuis le %s. Cela expirera le %s.",
+    "ban_filed_permanent": "Vous êtes banni depuis le %s. Cela n'expirera pas.",
+
     "list": "Liste",
     "grid": "Grille",
 
@@ -103,12 +135,16 @@
     "following_uploads_desc": "Publications par les personnes que vous vous abonnez",
 
     "best_of_site": "Le meilleur de %s",
+    "featured_on_site": "En vedette sur %s",
 
     "featured_uploads": "En vedette",
     "featured_uploads_desc": "Le favori du personnel",
 
     "recent_members": "Members",
     "recent_members_desc": "Last 5 members online",
+
+    "featured_member": "Membre vedette",
+    "featured_member_hitchhiker": "Chaîne vedette",
 
     "site_news": "Nouvelles",
     "site_news_desc": "Les nouvelles du site",
@@ -150,8 +186,8 @@
     "upload_no_description": "Cette publication n'a pas de description.",
 
     "uploaded_on": "Publié le %s",
-    "first_uploaded_on": "Initialement publié le %s",
-    "originally_uploaded_on": "Initialement publié sur %s le %s",
+    "first_uploaded_on": "Publié initialement le %s",
+    "originally_uploaded_on": "Publié initialement sur %s le %s",
 
     "uploads_from_user": "Plus de %s",
     "related_uploads": "Publications similaires",
@@ -164,7 +200,6 @@
 
     "404_not_found": "404 Non Trouvé",
     "ip_banned_intro": "Votre addresse IP a été bannie de %s",
-    "ban_filed_permanent": "Vous êtes banni depuis le %s, cela n'expirera pas.",
     "ip_message": "Votre adresse IP est %s, et le(s) compte(s) lié à cette addresse IP sont: %s",
 
     "dashboard_lookup": "Recherche (panel du personnel)",
@@ -180,8 +215,29 @@
     "comfortable_rating": "Mode de filtrage",
     "user_link_color": "Couleur d'utilisateur",
 
+    "profile": "Profil",
+    "profile_settings_header_desc": "Cela sera affiché publiquement sur votre profil",
+    "profile_description": "Description du profil",
+    "profile_picture": "Photo de profil",
+    "profile_banner": "Bannière de profil",
+    "userlink_color": "Couleur du lien d'utilisateur",
+    "profile_customization": "Coloration du profil",
+    "profile_customization_desc": "Personnalisez les couleurs de votre profil. Elles seront visibles uniquement sur Trinium.",
+    "enable_profile_customization": "Activer la coloration",
+
+    "profile_title_color": "Couleur du titre",
+    "profile_link_color": "Couleur des liens",
+    "profile_background_color": "Couleur d'arrière-plan",
+    "profile_basic_box_border_color": "Couleur de bordure des boîtes",
+    "profile_basic_box_background_color": "Couleur de fond des boîtes",
+    "profile_basic_box_text_color": "Couleur du texte des boîtes",
+    "profile_highlight_box_border_color": "Couleur de bordure de l'introduction",
+    "profile_highlight_box_background_color": "Couleur de fond de l'introduction",
+    "profile_highlight_box_text_color": "Couleur du texte de l'introduction",
+
     "profile_featured": "Épinglé",
     "profile_no_description": "Cet utilisateur n'a pas de description.",
+    "recommended_resolution": "Résolution recommandée : %s",
 
     "user_role_unknown": "Inconnu",
     "user_role_normal": "Normal",
@@ -205,7 +261,7 @@
     "staff_administrators": "Les administrateurs",
     "staff_moderators": "Les modérateurs",
 
-    "new_upload_intro": "Assurez-vous d'avoir lu au moins une fois les <a href=\"%s\">règles de la communauté</a>. Le manque de respect de ces règles résultera en la suppression de votre publication.",
+    "new_upload_intro": "Assurez-vous d'avoir lu au moins une fois les <a href=\"%s\">Règles Communautaires</a>. Le manque de respect de ces règles résultera en la suppression de votre publication.",
     "reupload_warning": "Rappel : ne republiez pas de contenu qui ne vous appartient pas.",
     "title": "Titre",
     "description": "Description",
@@ -242,6 +298,13 @@
     "no_notifications": "Vous n'avez aucune notification.",
 
     "search_results_for": "Results for \"%s\"",
+
+    "filtering": "Filtrage",
+    "enable_sensitive_content": "Permettre l'accès au contenu mature",
+    "restricted_sensitive_content": "L'accès au contenu mature est restreint pour ce compte. Si vous avez entré une date de naissance incorrecte, veuillez contacter l'équipe %s.",
+    "blocked_tags": "Blocage des étiquettes",
+
+    "about_site": "À propos de %s",
 
     "version_intro": "Ce site web est propulsé par OpenSB. © %s %s et autres contributeurs.",
     "version_agpl": "OpenSB est un logiciel libre, vous pouvez le redsistribuer ou le modifier selon les termes de la Licence publique générale GNU Affero, telle que publiée par la Free Software Foundation; soit la version 3 de la Licence, ou (à votre convenance) toute version ultérieure.",
@@ -285,6 +348,9 @@
     "notify_login_incorrect": "Les informations d'identification sont incorrectes.",
     "notify_login_no_account": "Il n'y a pas de compte avec ces informations d'identification.",
     "notify_login_invalid": "Veuillez entrer vos identifiants.",
+    "notify_login_too_many_attempts": "Trop d'essais de connexion. Veuillez patienter avant de réessayer.",
+    "notify_login_test_instance": "Vous ne pouvez pas vous connecter.",
+    "notify_invalid_csrf": "Le jeton CSRF est invalide. Veuillez réessayer.",
     "notify_notifications_cleared": "Vos notifications ont été effacées avec succès.",
     "notify_invalid_journal": "Ce journal n'existe pas.",
     "notify_register_disabled": "L'inscription d'un nouveau compte est présentement désactivé.",
@@ -296,7 +362,7 @@
     "notify_upload_ratelimit": "Veuillez patienter au moins %s minutes avant de publier à nouveau.",
     "notify_upload_success": "Votre publication a été publiée.",
     "notify_upload_technical_issue": "Il y a un problème technique, réessayez plus tard.",
-    "notify_upload_audio_unimplemented": "Cette fonctionnalité sera ajoutée à l'avenir.",
+    "notify_upload_audio_unimplemented": "Vous ne pouvez pas encore publier d'audio.",
     "notify_write_disabled": "La création d'un nouveau journal est présentement désactivée.",
     "notify_write_ratelimit": "Veuillez patienter au moins une minute avant de publier un autre journal.",
     "notify_write_success": "Votre journal a été publié.",
@@ -311,5 +377,7 @@
     "notify_dashboard_ban_success": "%s a été banni avec succès.",
     "notify_dashboard_unban_success": "%s a été débanni avec succès.",
     "notify_dashboard_verify_success": "%s a été verifié avec succès.",
-    "notify_dashboard_unverify_success": "%s a été déverifié avec succès."
+    "notify_dashboard_unverify_success": "%s a été déverifié avec succès.",
+    "notify_dashboard_feature_user_success": "%s a été ajouté avec succès à la liste des utilisateurs vedette.",
+    "notify_dashboard_unfeature_user_success": "%s a été retiré avec succès à la liste des utilisateurs vedette."
 }

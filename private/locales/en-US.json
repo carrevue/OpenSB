@@ -71,7 +71,7 @@
     "add_account": "Add account",
 
     "my_profile_hitchhiker": "My channel",
-    "my_collections_hitchhiker": "My Playlists",
+    "my_collections_hitchhiker": "My playlists",
 
     "login": "Login",
     "register": "Register",
@@ -154,12 +154,16 @@
     "following_uploads_desc_hitchhiker": "From channels you're subscribed to",
 
     "best_of_site": "Best of %s",
+    "featured_on_site": "Featured on %s",
 
     "featured_uploads": "Featured",
     "featured_uploads_desc": "Curated by staff",
 
     "recent_members": "Members",
     "recent_members_desc": "Last 5 members online",
+
+    "featured_member": "Featured member",
+    "featured_member_hitchhiker": "Featured channel",
 
     "site_news": "News",
     "site_news_desc": "Site announcements",

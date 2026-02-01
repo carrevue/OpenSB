@@ -46,10 +46,13 @@ $featured_users = $database->fetchArray(
     )
 );
 
+$localization = $sb->getLocalizationClass();
+
 $feed = [
     "featured" => [
-        "icon" => "/assets/profiledef_hitchhiker.svg",
-        "title" => "Featured on " . $sb->getBrandingSettings()["name"],
+        "icon" => "/assets/skin/finalium/homepage_featured.svg",
+        "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),
+        "label" => $localization->translate('featured_uploads_desc'),
         "uploads" => Utilities::makeUploadArray($database, $uploads_featured),
     ],
 ];
@@ -60,7 +63,7 @@ foreach ($featured_users as $user) {
     $feed[$feed_key] = [
         "icon" => $sb->getStorageClass()->getUserProfilePicture($user["id"]),
         "title" => $user["name"],
-        "label" => "Featured channel",
+        "label" => $localization->translate('featured_member'),
         "link" => "/user/" . $user["name"],
         "uploads" => Utilities::makeUploadArray(
             $database,
