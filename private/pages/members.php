@@ -20,8 +20,6 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-// ported from principia-web by chaziz -4/20/2023
-
 namespace OpenSB\Pages;
 
 global $twig, $database, $sb;
@@ -29,12 +27,31 @@ global $twig, $database, $sb;
 use OpenSB\UserQuery;
 use OpenSB\Utilities;
 
+$user_query = new UserQuery($sb);
+
+$tabs = [
+    "recent" => [
+        "name" => "last_seen",
+        "order" => "u.last_seen DESC",
+        "where" => null,
+    ],
+    "popular" => [
+        "name" => "popular",
+        "order" => "f_num DESC",
+        "where" => null,
+    ],
+    "random" => [
+        "name" => "random",
+        "order" => "RAND()",
+        "where" => null,
+    ],
+];
+
+$type = ($_GET['type'] ?? 'recent');
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 $limit = $database->paginate($page, 20);
 
-$user_query = new UserQuery($sb);
-
-$queryData = $user_query->query("u.last_seen DESC", $limit);
+$queryData = $user_query->query($tabs[$type]["order"] ?? "u.last_seen DESC", $limit);
 $countData = $user_query->count();
 $usersData = Utilities::makeUserArray($database, $queryData);
 
@@ -46,4 +63,6 @@ $data = [
 echo $twig->render('users.twig', [
     'users' => $data,
     'page' => $page,
+    'type' => $type,
+    'tabs' => $tabs,
 ]);

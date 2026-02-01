@@ -19,7 +19,6 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-// ported from principia-web by chaziz -4/20/2023
 namespace OpenSB\Pages;
 
 global $twig;

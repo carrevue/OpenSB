@@ -7,6 +7,9 @@
             </a>
         </li>
     {% endfor %}
+    {% if is_user_logged_in %}
+        <li class="list-header">{{ localize('library') }}</li>
+    {% endif %}
     {% if sidebar_following_users() %}
         <li class="list-header">
             {% if is_user_logged_in %}

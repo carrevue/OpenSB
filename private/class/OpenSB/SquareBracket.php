@@ -334,9 +334,13 @@ class SquareBracket
      */
     private function overrideBrandingWithFulpTube()
     {
+        $path = ($this->isTestInstance() || $this->isDebug())
+            ? '/assets/sb_branding/fulp_qa'
+            : '/assets/sb_branding/fulp';
+
         $this->branding_settings = [
             "name" => "FulpTube",
-            "assets_location" => "/assets/sb_branding/fulp",
+            "assets_location" => $path,
             "is_vector" => true,
             "use_wordmark" => true,
         ];

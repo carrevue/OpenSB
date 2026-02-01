@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
   Copyright (C) 2023 ROllerozxa
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
@@ -19,8 +19,6 @@
   You should have received a copy of the GNU Affero General Public License
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-
-// ported from principia-web by chaziz -4/20/2023
 
 namespace OpenSB\Pages;
 

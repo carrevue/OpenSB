@@ -37,6 +37,10 @@ $data["color_types"] = [
     "warning",
 ];
 
+if ($sb->getLocalOptions()["skin"] === "finalium") {
+    $data["color_types"][] = "dark";
+}
+
 $iconPattern = SB_PRIVATE_PATH . '/icons/icons/*.svg';
 $icons = [];
 

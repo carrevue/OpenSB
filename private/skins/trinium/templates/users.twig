@@ -13,20 +13,14 @@
 					<div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
 				</div>
 			</div>
-			{% if options.enable_incomplete_features %}
 			<div class="tabs">
-				<a class="tablink {% if type=='recent' %}active{% endif %}" href="/browse?type=recent">
-					Recently seen
-				</a>
-				<a class="tablink {% if type=='popular' %}active{% endif %}" href="/browse?type=popular">
-					Most followed
-				</a>
-				<a class="tablink {% if type=='random' %}active{% endif %}" href="/browse?type=random">
-					{{ localize('random') }}
-				</a>
+                {% for key, tab in tabs %}
+                    <a class="tablink {% if type==key %}active{% endif %}" href="/members?type={{key}}">
+                        {{ localize(tab.name) }}
+                    </a>                
+                {% endfor %}
 			</div>
-			{% endif %}
-			<div class="content-box content-grid content-grid-users {# no-border-top #}">
+			<div class="content-box content-grid content-grid-users no-border-top">
 				{% for user in users.users %}
 					<div class="content-entry user-id-{{ user.id }}">
 						<div class="content-thumbnail">
@@ -53,7 +47,11 @@
 			</div>
 		</div>
 
-		{% set le_url = 'members?page=%s' %}
+        {% if type == 'recent' %}
+            {% set le_url = 'members?page=%s' %}
+        {% else %}
+            {% set le_url = 'members?type=' ~ type ~ '&page=%s' %}
+        {% endif %}
 
 		{{ pagination(users.count, items_per_page, le_url, current_page) }}
 	{% endblock %}

@@ -26,9 +26,7 @@
             {% endfor %}
         </div>
 
-        {% if user %}
-            {% set le_url = 'browse?user=' ~ user ~ '&page=%s' %}
-        {% elseif type == 'recent' %}
+        {% if type == 'recent' %}
             {% set le_url = 'browse?page=%s' %}
         {% else %}
             {% set le_url = 'browse?type=' ~ type ~ '&page=%s' %}
