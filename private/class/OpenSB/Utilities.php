@@ -550,11 +550,15 @@ class Utilities
     }
 
     /**
-     * function isLegacyFrontend
+     * function isClassicSkin
      *
-     * @return mixed
+     * Returns true if we are currently on the Finalium or Bootstrap skin.
+     * 
+     * @note This will be moved into the SquareBracket class soon.
+     * 
+     * @return bool
      */
-    public static function isLegacyFrontend()
+    public static function isClassicSkin(): bool
     {
         global $sb;
 
@@ -642,19 +646,19 @@ class Utilities
             . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
     }
 
-    // calculate the color used for profile banner on the bootstrap frontend
+    // calculate the color used for profile banner on the bootstrap skin
     // the original implementation for this used a scss php compiler library 
     // thing but that is fucking stupid and it'll slow down the site, so lets
     // just approximate this.
 
     /**
-     * function makeBootstrapFrontendProfileGradient
+     * function makeBootstrapSkinProfileGradient
      *
      * @param mixed $userlink_color
      *
      * @return mixed
      */
-    public static function makeBootstrapFrontendProfileGradient($userlink_color)
+    public static function makeBootstrapSkinProfileGradient($userlink_color)
     {
         // approximate bootstrap's text-contrast scss function
         $hex = ltrim($userlink_color, '#');

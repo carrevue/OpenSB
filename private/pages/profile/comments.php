@@ -45,7 +45,7 @@ $page_data = [
 ];
 
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
-    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapFrontendProfileGradient($data["userlink_color"]);
+    $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapSkinProfileGradient($data["userlink_color"]);
 }
 
 echo $twig->render("profile_comments.twig", [

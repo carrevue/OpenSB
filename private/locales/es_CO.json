@@ -154,8 +154,8 @@
     "debug": "Depurar",
 
     "notify_content_filtering_reset": "Tu configuración de filtrado de contenido ha sido restablecida a General.",
-    "notify_frontend_no_longer_available": "La apariencia %s ya no está disponible.",
-    "notify_frontend_switch_required": "Por favor cambia tu apariencia a %s.",
+    "notify_skin_no_longer_available": "La apariencia %s ya no está disponible.",
+    "notify_skin_switch_required": "Por favor cambia tu apariencia a %s.",
     "notify_invalid_user": "Este usuario no existe.",
     "notify_banned_user": "Este usuario está bloqueado.",
     "notify_login_required": "Por favor inicia sesión para continuar.",

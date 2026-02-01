@@ -241,13 +241,13 @@ class SquareBracket
         if (isset($_COOKIE["SBOPTIONS"])) {
             $this->options = $this->getOptionsCookie();
 
-            // the charla frontend is now called trinium
+            // the charla skin is now called trinium
             if ($this->options["skin"] == "charla") {
                 $this->options["skin"] = "trinium";
                 $this->setOptionCookie($this->options);
             }
 
-            // migrate biscuit users to trinium. the frontend has been retired.
+            // migrate biscuit users to trinium. the skin has been retired.
             if ($this->options["skin"] == "biscuit") {
                 $this->options["skin"] = "trinium";
 
@@ -256,7 +256,7 @@ class SquareBracket
                 }
 
                 $this->setOptionCookie($this->options);
-                Utilities::notifyBanner("notify_frontend_no_longer_available", null, "primary", ["Biscuit"]);
+                Utilities::notifyBanner("notify_skin_no_longer_available", null, "primary", ["Biscuit"]);
             }
         } else {
             $this->setOptionCookie($this->options);

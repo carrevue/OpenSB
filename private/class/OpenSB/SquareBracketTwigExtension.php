@@ -104,7 +104,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         } elseif ($options["skin"] == "trinium") {
             // default to new implementation on trinium (this logic should be swapped later)
             $userlink_function_name = "userLink";
-        } else { // Utilities::isLegacyFrontend()
+        } else { // Utilities::isClassicSkin()
             // otherwise use the old implementation.
             $userlink_function_name = "userLinkLegacy";
         }
@@ -610,7 +610,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             // remove upload link on finalium 1, bootstrap and trinium
             if ($options["skin"] != "bootstrap" && $options["theme"] != "classic") {
-                if (Utilities::isLegacyFrontend() || $options["skin"] == "trinium") {
+                if (Utilities::isClassicSkin() || $options["skin"] == "trinium") {
                     unset($array["upload"]);
                 }
             }
@@ -871,7 +871,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * function smallUploadBox
      * 
-     * legacy function used by finalium and bootstrap frontend only.
+     * legacy function used by finalium and bootstrap skin only.
      * apparantly this is used on finalium for Some reason.
      *
      * @param mixed $upload
@@ -886,7 +886,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * function comment
      *
-     * legacy function used by finalium and bootstrap frontend only.
+     * legacy function used by finalium and bootstrap skin only.
      * apparantly this is used on finalium for Some reason.
      * 
      * @param mixed $comment

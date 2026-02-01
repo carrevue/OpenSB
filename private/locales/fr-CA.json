@@ -260,8 +260,8 @@
     "debug": "Débogage",
 
     "notify_content_filtering_reset": "Votre mode de filtrage est maintenant Général.",
-    "notify_frontend_no_longer_available": "Le skin %s n'est plus disponible.",
-    "notify_frontend_switch_required": "Veuillez définir votre skin à %s.",
+    "notify_skin_no_longer_available": "Le skin %s n'est plus disponible.",
+    "notify_skin_switch_required": "Veuillez définir votre skin à %s.",
     "notify_invalid_user": "Cet utilisateur n'existe pas.",
     "notify_banned_user": "Cet utilisateur est banni.",
     "notify_login_required": "Veuillez vous connecter pour continuer.",

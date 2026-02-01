@@ -31,7 +31,7 @@ if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
 }
 
 if ($sb->getLocalOptions()["skin"] != "trinium") {
-    Utilities::notifyBanner("notify_frontend_switch_required", "/theme", "primary", ["Trinium"]);
+    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
 if (empty($_SESSION['csrf_token'])) {

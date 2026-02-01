@@ -6,7 +6,7 @@
         rating:{{ upload.interactions.ratings.average }},
         element:document.querySelector("#rater"),
         rateCallback:function rateCallback(rating, done) {
-            fetch("/api/frontend/upload_interaction", {
+            fetch("/api/skin/upload_interaction", {
                 method: "POST",
                 body: JSON.stringify({
                     action: "rate",

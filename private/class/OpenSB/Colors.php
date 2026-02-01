@@ -26,7 +26,7 @@ namespace OpenSB;
  */
 final class Colors
 {
-    /* IMPORTANT: These should be kept in sync with the colors in the Trinium frontend. */
+    /* IMPORTANT: These should be kept in sync with the colors in the Trinium skin. */
     const PRIMARY = '#0069B4';
     const SUCCESS = '#00A651';
     const WARNING = '#FFBB00';

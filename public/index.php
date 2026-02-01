@@ -215,11 +215,16 @@ $router->add('/upload', 'upload.php');
 $router->redirect('/users', '/members');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
 $router->redirect('/version', '/about');
-$router->add('/watch', function () {
-    if (isset($_GET['v'])) Utilities::redirect('/view/' . $_GET['v'], 301);
-});
-$router->add('/view/{id}', 'view.php');
 $router->add('/write', 'write.php');
+$router->add('/view/{id}', 'view.php');
+
+if (Utilities::isClassicSkin()) {
+    $router->add('/watch', 'view.php');
+} else {
+    $router->add('/watch', function () {
+        if (isset($_GET['v'])) Utilities::redirect('/view/' . $_GET['v'], 301);
+    });
+}
 
 // user profiles
 $router->add('/user', function () {
@@ -233,10 +238,10 @@ $router->add('/user/{username}/journals', 'profile/journals.php'); // journals
 $router->add('/user/{username}/about', 'profile/about.php'); // about (mainly fulphiker-specific)
 
 // api
-$router->add('/api/frontend/comment_load', 'api/frontend/comment_load.php'); // finalium-only
-$router->add('/api/frontend/comment_send', 'api/frontend/comment_send.php'); // trinium-only
-$router->add('/api/frontend/upload_interaction', 'api/frontend/upload_interaction.php'); // trinium-only
-$router->add('/api/frontend/user_interaction', 'api/frontend/user_interaction.php'); // trinium-only
+$router->add('/api/skin/comment_load', 'api/skin/comment_load.php'); // finalium-only
+$router->add('/api/skin/comment_send', 'api/skin/comment_send.php'); // trinium-only
+$router->add('/api/skin/upload_interaction', 'api/skin/upload_interaction.php');
+$router->add('/api/skin/user_interaction', 'api/skin/user_interaction.php'); // trinium-only
 
 // only used by bootstrap and finalium (old, trash and deprecated)
 $router->add('/api/legacy/ajax_watch', (function () {

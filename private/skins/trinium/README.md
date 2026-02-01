@@ -1,2 +1,2 @@
-# Trinium Frontend for OpenSB
-Formerly known as the Charla Frontend.
+# Trinium Skin for OpenSB
+Formerly known as the Charla Skin.

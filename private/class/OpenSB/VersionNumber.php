@@ -116,7 +116,7 @@ class VersionNumber
     /**
      * function getVersionArray
      *
-     * Returns a version array intended for the frontend.
+     * Returns a version array intended for the skin.
      *
      * @return array
      */

@@ -49,6 +49,18 @@ function handle_error(string $message, string $redirect = "/") {
     }
 }
 
+if (Utilities::isClassicSkin()) {
+    if (isset($_GET["v"])) { // get "v" parameter and set that as the id
+        $id = $_GET["v"];
+    } elseif (isset($id)) { // if id is already defined, this is likely a trinium-style url, so redirect to watch
+        Utilities::redirect('/watch?v=' . $id, 301);
+    }
+} else {
+    if (isset($_GET["v"])) { // handle awkward edgecase
+        Utilities::redirect('/view/' . $_GET['v'], 301);
+    }
+}
+
 if ($sb->isFulpTubeMode()) {
     if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
         handle_error("notify_original_fulptube_video");
@@ -367,7 +379,7 @@ $page_data = [
 ];
 
 // if we are on bootstrap or on finalium 1, emulate the old like/dislike system.
-if (Utilities::isLegacyFrontend()) {
+if (Utilities::isClassicSkin()) {
     if ($auth->isUserLoggedIn()) {
         $current_rating_from_db = $database->result("SELECT rating FROM upload_ratings WHERE upload=? AND user=?", [$data["id"], $auth->getUserID()]);
 
