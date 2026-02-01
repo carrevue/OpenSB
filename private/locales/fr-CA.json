@@ -15,7 +15,9 @@
     "library": "Bibliothèque",
 
     "collections": "Collections",
+    "collection": "Collection",
     "collections_hitchhiker": "Listes de lecture",
+    "collection_hitchhiker": "Liste de lecture",
 
     "follow": "S'abonner",
     "unfollow": "Se désabonner",
@@ -67,6 +69,7 @@
 
     "my_profile_hitchhiker": "Ma chaîne",
     "my_collections_hitchhiker": "Mes listes de lecture",
+    "new_upload_hitchhiker": "Mettre en ligne",
 
     "login": "Connecter",
     "register": "Inscrire",

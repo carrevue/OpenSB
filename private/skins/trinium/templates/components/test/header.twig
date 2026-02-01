@@ -2,7 +2,7 @@
     <h1>
         <a href="/">{{ website_branding.name }}</a>
     </h1>
-    {% for link in header_main_links() %}
+    {% for link in sidebar_main_links() %}
         <a href="{{ link.url }}">{{ link.name }}</a>
     {% endfor %}
     {% for link in header_user_links() %}

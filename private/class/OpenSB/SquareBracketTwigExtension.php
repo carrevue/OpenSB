@@ -136,11 +136,12 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('show_ratings', [$this, 'displayUploadRatings'], ['is_safe' => ['html']]),
             new TwigFunction('notification_icon', [$this, 'getNotificationIcon'], ['is_safe' => ['html']]),
             new TwigFunction('pagination', [$this, 'pagination'], ['is_safe' => ['html']]),
-            new TwigFunction('header_main_links', [$this, 'headerMainLinks']),
+            new TwigFunction('sidebar_main_links', [$this, 'sidebarMainLinks']),
+            new TwigFunction('sidebar_library_links', [$this, 'sidebarLibraryLinks']),
+            new TwigFunction('sidebar_following_users', [$this, 'sidebarFollowingUsers']),
             new TwigFunction('header_user_links', [$this, 'headerUserLinks']),
             new TwigFunction('header_user_account_links', [$this, 'headerUserAccountLinks']),
             new TwigFunction('footer_links', [$this, 'footerLinks']),
-            new TwigFunction('sidebar_following_users', [$this, 'sidebarFollowingUsers']),
             new TwigFunction('get_css_file_date', [$this, 'getCssFileDate']),
             new TwigFunction('upload_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
             new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
@@ -509,11 +510,11 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     /**
-     * function headerMainLinks
+     * function sidebarMainLinks
      *
-     * @return mixed
+     * @return array
      */
-    public function headerMainLinks()
+    public function sidebarMainLinks()
     {
         $options = $this->sb->getLocalOptions();
 
@@ -531,7 +532,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "browse" => [
                         "name" => $this->localize("browse"),
                         "url"  => "/browse",
-                        "icon" => "placeholder"
+                        "icon" => "guide-uploads"
                     ],
                 ],
                 "bottom" => [
@@ -548,7 +549,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "name" => $this->localize("my_profile"),
                     "url"  => "/user/" . $user_data["name"],
                     "page" => "user " . $user_data["name"],
-                    "icon" => "placeholder"
+                    "icon" => "guide-my-profile"
                 ];
             }
 
@@ -574,9 +575,84 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     /**
+     * function sidebarLibraryLinks
+     *
+     * @return array
+     */
+    public function sidebarLibraryLinks()
+    {
+        if ($this->sb->getLocalOptions()["skin"] === "finalium") {
+            $collection_icon = "guide-collection";
+        } else {
+            $collection_icon = "collection";
+        }
+
+        $array = [
+            "collection1" => [
+                "name" => $this->localize("collection"),
+                "url" => "/",
+                "icon" => $collection_icon,
+            ],
+        ];
+
+        return $array;
+    }
+
+    /**
+     * function sidebarFollowingUsers
+     *
+     * @return array
+     */
+    public function sidebarFollowingUsers()
+    {
+        $userid = $this->authentication->getUserID();
+
+        if ($this->authentication->isUserLoggedIn()) {
+            // logged in: following
+            $users = $this->database->fetchArray(
+                $this->database->query(
+                    "SELECT s.*
+                    FROM user_follows s
+                    JOIN users follower ON s.user = follower.id
+                    JOIN users followed ON s.id = followed.id
+                    WHERE s.user = ?
+                    AND followed.id NOT IN (SELECT user FROM user_bans)
+                    ORDER BY followed.name
+                    ",
+                    [$userid]
+                )
+            );
+        } else {
+            // logged out: featured
+            $users = $this->database->fetchArray(
+                $this->database->query(
+                    "SELECT u.id
+                    FROM users u 
+                    WHERE u.flags & ? = ?
+                    ORDER BY u.name",
+                    [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
+                )
+            );
+        }
+
+        $array = [];
+
+        foreach ($users as $user) {
+            $data = $this->database->result("SELECT name FROM users WHERE id = ?", [$user["id"]]);
+
+            $array[] = [
+                "id" => $user["id"],
+                "username" => $data,
+            ];
+        }
+
+        return $array;
+    }
+
+    /**
      * function headerUserLinks
      *
-     * @return mixed
+     * @return array
      */
     public function headerUserLinks()
     {
@@ -649,7 +725,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * function headerUserAccountLinks
      *
-     * @return mixed
+     * @return array
      */
     public function headerUserAccountLinks()
     {
@@ -670,60 +746,9 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     /**
-     * function sidebarFollowingUsers
-     *
-     * @return mixed
-     */
-    public function sidebarFollowingUsers()
-    {
-        $userid = $this->authentication->getUserID();
-
-        if ($this->authentication->isUserLoggedIn()) {
-            // logged in: following
-            $users = $this->database->fetchArray(
-                $this->database->query(
-                    "SELECT s.*
-                    FROM user_follows s
-                    JOIN users follower ON s.user = follower.id
-                    JOIN users followed ON s.id = followed.id
-                    WHERE s.user = ?
-                    AND followed.id NOT IN (SELECT user FROM user_bans)
-                    ORDER BY followed.name
-                    ",
-                    [$userid]
-                )
-            );
-        } else {
-            // logged out: featured
-            $users = $this->database->fetchArray(
-                $this->database->query(
-                    "SELECT u.id
-                    FROM users u 
-                    WHERE u.flags & ? = ?
-                    ORDER BY u.name",
-                    [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
-                )
-            );
-        }
-
-        $array = [];
-
-        foreach ($users as $user) {
-            $data = $this->database->result("SELECT name FROM users WHERE id = ?", [$user["id"]]);
-
-            $array[] = [
-                "id" => $user["id"],
-                "username" => $data,
-            ];
-        }
-
-        return $array;
-    }
-
-    /**
      * function footerLinks
      *
-     * @return mixed
+     * @return array
      */
     public function footerLinks()
     {
