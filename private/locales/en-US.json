@@ -70,7 +70,7 @@
     "new_journal": "New journal",
     "add_account": "Add account",
 
-    "my_profile_hitchhiker": "My Channel",
+    "my_profile_hitchhiker": "My channel",
     "my_collections_hitchhiker": "My Playlists",
 
     "login": "Login",
@@ -88,7 +88,7 @@
     "other_accounts_hitchhiker": "Other accounts",
 
     "register_invite_key_required": "%s requires an invite key in order to register. You will need to obtain this from someone.",
-    "register_discord_requirement": "%s currently requires your account to be manually verified through Discord before you can upload.",
+    "register_discord_requirement": "Before uploading on %s, you will first need to verify your account through our Discord server. We apologize for the inconvenience.",
     "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
     "register_tldr_1": "TL;DR:",
     "register_tldr_2": "You must be over the age of 13.",

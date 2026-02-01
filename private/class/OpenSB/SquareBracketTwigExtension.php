@@ -451,11 +451,18 @@ class SquareBracketTwigExtension extends AbstractExtension
         );
 
         if ($powerlevel > 1) {
-            $staff_icon = $this->getIcon("shield", 14);
+            if ($this->sb->getLocalOptions()["skin"] == "finalium") {
+                $staff_icon = $this->getIcon("placeholder", [12, 9]);
+            } else {
+                $staff_icon = $this->getIcon("shield", 14);
+            }
+
+            $staff_string = $this->localize("staff");
 
             return sprintf(
-                '%s %s',
+                '%s <span class="uix-tooltip" title="%s">%s</span>',
                 $userlink,
+                $staff_string,
                 $staff_icon
             );
         } else {
@@ -524,14 +531,14 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "browse" => [
                         "name" => $this->localize("browse"),
                         "url"  => "/browse",
-                        "icon" => "guide-home"
+                        "icon" => "placeholder"
                     ],
                 ],
                 "bottom" => [
                     "members" => [
                         "name" => $this->localize("browse_members"),
                         "url"  => "/members",
-                        "icon" => "guide-home"
+                        "icon" => "guide-browse-members"
                     ],
                 ],
             ];
@@ -541,7 +548,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "name" => $this->localize("my_profile"),
                     "url"  => "/user/" . $user_data["name"],
                     "page" => "user " . $user_data["name"],
-                    "icon" => "guide-home"
+                    "icon" => "placeholder"
                 ];
             }
 
@@ -818,11 +825,20 @@ class SquareBracketTwigExtension extends AbstractExtension
             $svg = "icons.svg";
         }
 
+        if (is_array($size)) {
+            $width = $size[0];
+            $height = $size[1];
+        } else {
+            $width = $size;
+            $height = $size;
+        }
+
         return $this->twig->render(
             'icon.twig',
             [
                 'icon' => $icon,
-                'size' => $size,
+                'width' => $width,
+                'height' => $height,
                 'root_class' => $root_class,
                 'class' => $class,
                 'svg' => $svg,
