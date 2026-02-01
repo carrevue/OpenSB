@@ -164,7 +164,7 @@
 
     "404_not_found": "404 Non Trouvé",
     "ip_banned_intro": "Votre addresse IP a été bannie de %s",
-    "ip_banned_filed": "Vous êtes banni depuis le %s, cela n'expirera pas.",
+    "ban_filed_permanent": "Vous êtes banni depuis le %s, cela n'expirera pas.",
     "ip_message": "Votre adresse IP est %s, et le(s) compte(s) lié à cette addresse IP sont: %s",
 
     "dashboard_lookup": "Recherche (panel du personnel)",

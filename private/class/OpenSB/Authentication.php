@@ -81,11 +81,6 @@ class Authentication
                     }
                 }
 
-                // if the user is banned/ip banned, instantly log them out.
-                if ($this->user_ban_data || $this->database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$this->user_data['ip']])) {
-                    $this->logOut();
-                }
-
                 $this->database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
 
                 // if "comfortable rating" is questionable, reset it back to general. this is because opensb now uses
@@ -153,13 +148,18 @@ class Authentication
 
     /**
      * Returns if the user is banned.
-     * 
-     * @note I don't think this gets called? Banned users get instantly
-     * logged out if they're banned.
      */
     public function isBanned(): bool
     {
         return !empty($this->user_ban_data);
+    }
+
+    /**
+     * Returns user ban data.
+     */
+    public function getUserBanData(): array
+    {
+        return $this->user_ban_data ?? [];
     }
 
     /**

@@ -68,6 +68,11 @@ class SquareBracket
     private ?IPLookup $ip_lookup;
 
     /**
+     * @var Templating
+     */
+    private Templating $templating;
+
+    /**
      * @var bool
      */
     private bool $is_debug = false;
@@ -325,6 +330,8 @@ class SquareBracket
         } else {
             $this->ip_lookup = null;
         }
+
+        $this->templating = new Templating($this);
     }
 
     /**
@@ -490,6 +497,18 @@ class SquareBracket
             throw new \RuntimeException("getIpLookupClass() called while IP reader is disabled.");
         }
         return $this->ip_lookup;
+    }
+
+    /**
+     * function getTemplatingClass
+     *
+     * Returns the templating class.
+     *
+     * @return Templating
+     */
+    public function getTemplatingClass(): Templating
+    {
+        return $this->templating;
     }
 
     /**

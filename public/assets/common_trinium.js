@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function submitComment(type, id, content, replyTo = 0) {
-        fetch("/api/frontend/comment_send", {
+        fetch("/api/skin/comment_send", {
             method: "POST",
             body: JSON.stringify({
                 type: type,
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (follow_button) {
         let follow_count = (document.getElementById('follower_count'));
         follow_button.onclick = function () {
-            fetch("/api/frontend/user_interaction", {
+            fetch("/api/skin/user_interaction", {
                 method: "POST",
                 body: JSON.stringify({
                     action: "follow",

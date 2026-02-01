@@ -38,7 +38,7 @@ if ($sb->isLockdownEnabled()) {
 }
 
 if ($auth->getUserFlags(true)["unverified"]) {
-    http_response_code(401);
+    http_response_code(403);
     echo $twig->render('unverified.twig');
     die();
 }

@@ -122,6 +122,7 @@ if (isset($_POST["loginsubmit"])) {
                     $database->query("UPDATE users SET password = ? WHERE id = ?", [$new_password_hash, $logindata['id']]);
                 }
 
+                /*
                 $isBanned = (bool)$database->fetch("SELECT * FROM user_bans WHERE user = ?", [$logindata['id']]);
                 $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ? LIKE ip", [$logindata['ip']]);
 
@@ -130,6 +131,7 @@ if (isset($_POST["loginsubmit"])) {
                     $_SESSION['login_attempts']['count']++;
                     $error = true;
                 }
+                */
 
                 if (!$error) {
                     if (isset($_COOKIE['SBACCOUNTS'])) {

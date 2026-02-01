@@ -244,8 +244,7 @@ if (!SB_CLI) {
         $ipLookup = $sb->getIpLookupClass();
         
         if (
-            $ipLookup->getCountry(Utilities::getIpAddress()) == "GB" || // online safety act
-            $ipLookup->getCountry(Utilities::getIpAddress()) == "AZ"
+            $ipLookup->getCountry(Utilities::getIpAddress()) == "GB" // online safety act
         ) {
             http_response_code(451);
             echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);
@@ -253,5 +252,20 @@ if (!SB_CLI) {
         }
     }
 
-    $twig = new Templating($sb);
+    $twig = $sb->getTemplatingClass();
+
+    
+    if ($sb->getAuthenticationClass()->isBanned()) {
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $segments = array_values(array_filter(explode('/', $path)));
+
+        $first = $segments[0] ?? null;
+
+        // dont show error when logging out or when fetching certain assets
+        if ($first !== 'assets' && $first !== 'logout') {
+            http_response_code(403);
+            echo $twig->render('banned.twig', $sb->getAuthenticationClass()->getUserBanData());
+            die();
+        }
+    }
 }
