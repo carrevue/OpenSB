@@ -1,9 +1,13 @@
 # Terms of Service
-Last updated on January 13th 2026.
+Last updated on February 2nd 2026.
 
 ## Glossary
 
-The term "platform" refers to the FulpTube website which also goes by SquareBracket, which are currently accessible on the domains ``fulptube.rocks`` and ``squarebracket.pw``. This does not refer to the original FulpTube from 2020-2021, nor the website known as squareBracket which previously went by Brickface. This additionally does not refer to any websites that may appear on former domains/names previously used by the platform.
+The term "platform" refers to the FulpTube website, also known as squareBracket, which is currently accessible on the ``fulptube.rocks`` and ``squarebracket.pw`` domains. This does not refer to the original "FulpTube" website from 2020-2021, nor the "squareBracket" website formerly known as Brickface and Quadium. This additionally does not refer to any websites that may appear on former domains/names previously used by the platform.
+
+## Legal
+
+The platform has no affiliation with, and is not endorsed by Alphabet Inc., Google LLC, nor Newgrounds.com, Inc. The FulpTube interface, also known as the "Finalium skin", is a libre recreation of the old YouTube hitchhiker interface. The platform is an enthusiast project. It does not run on advertisements, and has no plans for any form of monetization.
 
 ## Agreement
 
