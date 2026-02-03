@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -96,7 +96,7 @@ class UploadRatingData
         $total = $likes + $dislikes;
 
         // calculate finalium likesaber
-        $ratio = ($total == 0 || $dislikes == 0)  ? 100
+        $ratio = ($total == 0 || $dislikes == 0)  ? "100%"
             : Utilities::calculatePercentage($likes, $total);
 
         return [

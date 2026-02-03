@@ -29,16 +29,18 @@ use OpenSB\Utilities;
 $upload_query = new UploadQuery($sb);
 $uploads = $upload_query->query("v.id DESC", 2);
 
-$data["color_types"] = [
-    "primary",
-    "secondary",
-    "success",
-    "danger",
-    "warning",
-];
-
 if ($sb->getLocalOptions()["skin"] === "finalium") {
-    $data["color_types"][] = "dark";
+    $data["button_color_types"] = [
+        "primary", "default", "destructive", "dark", "light",
+    ];
+
+    $data["banner_color_types"] = [
+        "error", "warning", "success", "info" 
+    ];
+} else {
+    $data["color_types"] = [
+        "primary", "secondary", "success", "danger", "warning",
+    ];
 }
 
 $iconPattern = SB_PRIVATE_PATH . '/icons/icons/*.svg';

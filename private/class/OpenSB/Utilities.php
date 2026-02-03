@@ -259,23 +259,41 @@ class Utilities
     {
         global $sb;
 
-        if ($sb && method_exists($sb, 'getLocalizationClass')) {
-            $localization = $sb->getLocalizationClass();
-        } else {
-            $localization = null;
+        $isFinalium = false;
+        $localization = null;
+
+        if ($sb) {
+            if (method_exists($sb, 'getLocalizationClass')) {
+                $localization = $sb->getLocalizationClass();
+            }
+
+            if (method_exists($sb, 'getLocalOptions')) {
+                $isFinalium = $sb->getLocalOptions()["skin"] == "finalium";
+            }
         }
 
         // awkward fix for if we use notifyBanner before localization is initialized
         if (!$localization) {
-            $localization = new Localization("en-US");
+            $localization = new Localization(["locale" => "en-US"]);
         }
 
-        $_SESSION["notif_message"] = $localization->translate($message, ...$args);
+        if ($isFinalium) {
+            $map = [
+                'primary'   => 'info',
+                'secondary' => 'info',
+                'success'   => 'success',
+                'danger'    => 'error',
+                'warning'   => 'warning',
+            ];
+
+            $color = $map[$color] ?? $color;
+        }
+
+        $_SESSION["notif_message"] = $localization->translate($message, ...$args); // FIXME: this fucks up on /register
         $_SESSION["notif_color"] = $color;
 
         if ($redirect) {
-            // this should most definitely use redirect
-            header(sprintf('Location: %s', $redirect));
+            Utilities::redirect($redirect);
             die();
         }
     }

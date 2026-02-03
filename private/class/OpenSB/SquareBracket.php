@@ -387,6 +387,9 @@ class SquareBracket
             'httponly' => false,
             'samesite' => 'Lax'
         ]);
+
+        // overwrite our copy for certain cases (eg: changing the theme/language)
+        $this->options = $options;
     }
 
     /**
