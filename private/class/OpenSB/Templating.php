@@ -216,8 +216,8 @@ class Templating
         }
 
         if (isset($_SERVER['HTTP_HOST'])) {
-            if ($sb->isIpLookupEnabled()) {
-                $this->twig->addGlobal('country_code', $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()) ?? '');
+            if ($sb->isIpLookupEnabled() && isset($_SESSION['ip_country_code'])) {
+                $this->twig->addGlobal('country_code', $_SESSION['ip_country_code'] ?? '');
             }
 
             $this->twig->addGlobal('page_url', Utilities::getURL(true));

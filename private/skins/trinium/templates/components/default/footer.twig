@@ -11,10 +11,5 @@
         <div class="footer-copyright">
             <span>{{ localize('footer_copyright', ('now' | date('Y'))) }}</span>
         </div>
-        {% if is_debug %}
-            <div>
-                <a class="button danger small" id="debug-button">{{ localize('debug') }}</a>
-            </div>
-        {% endif %}
     </div>
 </footer>

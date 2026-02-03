@@ -1,3 +1,4 @@
+<a id="debug-button">{{ localize('debug') }} @{{ opensb_version.hash }}</a>
 {% set profiler = db_profiler_info() %}
 {% if not user_data_cache %}
 {% set user_data_cache = get_user_data_cache() %}
@@ -5,7 +6,6 @@
 <dialog class="content-box debug-dialog tab-group" id="debug-dialog">
     <div>{{ version_banner() }}</div>
     <div><small>{{ profiler_stats() }}</small>
-    <div><a href="/debug">Debug backend</a></div>
     <hr>
     <div class="tabs">
         {# spaceless removes html whitespace that causes unnecessary margins #}
@@ -101,6 +101,7 @@
     </div>
     <br>
     <form method="dialog" class="form-button-container">
+        <a class="button danger" href="/debug">Debug Backend</a>
         <button class="button secondary" id="debug-close-button">OK</button>
     </form>
 </dialog>

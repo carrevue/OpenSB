@@ -194,7 +194,7 @@ if (isset($_POST["loginsubmit"])) {
             }
         } else {
             $_SESSION['login_attempts']['count']++;
-            Utilities::notifyBanner("notify_login_invalid", "/login");
+            Utilities::notifyBanner("notify_login_no_account", "/login");
         }
     } else {
         if (!isset($_SESSION['login_attempts']['count'])) $_SESSION['login_attempts']['count'] = 0;

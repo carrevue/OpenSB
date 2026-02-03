@@ -327,10 +327,14 @@ class SquareBracket
 
         if ($this->enable_ip_lookup) {
             $this->ip_lookup = new IPLookup($config["ip_lookup"]["mmdb"]);
+
+            if (empty($_SESSION['ip_country_code'])) {
+                $_SESSION['ip_country_code'] = $this->ip_lookup->getCountry(Utilities::getIpAddress());
+            }
         } else {
             $this->ip_lookup = null;
         }
-
+        
         $this->templating = new Templating($this);
     }
 
