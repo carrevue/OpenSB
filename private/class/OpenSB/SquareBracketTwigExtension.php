@@ -527,19 +527,19 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "home" => [
                         "name" => $this->localize("home"),
                         "url"  => "/",
-                        "icon" => "guide-home"
+                        "icon" => "guide_home"
                     ],
                     "browse" => [
                         "name" => $this->localize("browse"),
                         "url"  => "/browse",
-                        "icon" => "guide-uploads"
+                        "icon" => "guide_uploads"
                     ],
                 ],
                 "bottom" => [
                     "members" => [
                         "name" => $this->localize("browse_members"),
                         "url"  => "/members",
-                        "icon" => "guide-browse-members"
+                        "icon" => "guide_browse_members"
                     ],
                 ],
             ];
@@ -549,7 +549,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "name" => $this->localize("my_profile"),
                     "url"  => "/user/" . $user_data["name"],
                     "page" => "user " . $user_data["name"],
-                    "icon" => "guide-my-profile"
+                    "icon" => "guide_my_profile"
                 ];
             }
 
@@ -582,7 +582,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function sidebarLibraryLinks()
     {
         if ($this->sb->getLocalOptions()["skin"] === "finalium") {
-            $collection_icon = "guide-collection";
+            $collection_icon = "guide_collection";
         } else {
             $collection_icon = "collection";
         }
@@ -839,10 +839,10 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getIcon($icon, $size = "16", $class = null)
     {
-        if ($this->sb->getLocalOptions()["skin"] === "bootstrap") {
+        if ($this->sb->getLocalOptions()["skin"] === "bootstrap" || ($this->sb->getLocalOptions()["skin"] === "finalium" && $this->sb->getLocalOptions()["theme"] !== "hitchhiker")) {
             $root_class = "bi";
             $svg = "bootstrap-icons.svg";
-        } elseif ($this->sb->getLocalOptions()["skin"] === "finalium") {
+        } elseif ($this->sb->getLocalOptions()["skin"] === "finalium" && $this->sb->getLocalOptions()["theme"] === "hitchhiker") {
             $root_class = "icon";
             $svg = "skin/finalium/icons.svg";
         } else {

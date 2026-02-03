@@ -99,7 +99,7 @@
                     </div>
                     <div class="menu" id="login-menu">
                         <form method="post" name="loginForm" id="loginForm" action="/login" class="form-login">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 
                             <div class="form-input">
                                 <label for="username">{{ localize('username') }}</label>

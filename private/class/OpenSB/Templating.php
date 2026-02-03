@@ -23,8 +23,6 @@
 
 namespace OpenSB;
 
-use OpenSB\UserRoleEnum;
-
 use OpenSB\Utilities;
 
 use Twig\Environment;
@@ -77,6 +75,11 @@ class Templating
      * @var VersionNumber The version number class
      */
     private VersionNumber $version_number;
+
+    /**
+     * @var SquareBracketTwigExtension The twig extension
+     */
+    private SquareBracketTwigExtension $twigExtension;
 
     /**
      * function __construct
@@ -155,7 +158,9 @@ class Templating
             }
         }));
 
-        $this->twig->addExtension(new SquareBracketTwigExtension($sb, $this->twig));
+        $this->twigExtension = new SquareBracketTwigExtension($sb, $this->twig);
+
+        $this->twig->addExtension($this->twigExtension);
         $this->twig->addExtension(new StringExtension());
 
         if ($sb->isDebug()) {
@@ -183,23 +188,26 @@ class Templating
         $this->twig->addGlobal('is_debug', $sb->isDebug());
         $this->twig->addGlobal('is_user_logged_in', $this->authentication->isUserLoggedIn());
         $this->twig->addGlobal('user_data', $this->authentication->getUserData());
-        //$this->twig->addGlobal('user_ban_data', $this->authentication->isBanned());
         $this->twig->addGlobal('user_stat_data', $this->authentication->getUserStatData());
         $this->twig->addGlobal('user_is_authenticated_admin', $this->authentication->hasUserAuthenticatedAsStaff());
         $this->twig->addGlobal('skins', $this->getAllSkinsMetadata());
         $this->twig->addGlobal('opensb_version', $this->version_number->getVersionArray());
         $this->twig->addGlobal('session', $_SESSION);
         $this->twig->addGlobal('website_branding', $branding);
-        $this->twig->addGlobal('current_theme', $this->theme); // not to be confused with skins
+        $this->twig->addGlobal('current_theme', $this->theme); // the current skin in the current theme
         $this->twig->addGlobal('invite_keys_enabled', $sb->isInviteKeysEnabled());
-        $this->twig->addGlobal('items_per_page', 20);
+        $this->twig->addGlobal('items_per_page', 20); // principia web leftover, probably remove this shit
         $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('options', $options);
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
         $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
-        $this->twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
+
+        if ($this->skin == "finalium") {
+            // fi = finalium icon
+            $this->twig->addGlobal('fi', $this->generateFinaliumIconMap());
+        }
 
         if (isset($_SERVER["REQUEST_URI"])) {
             $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
@@ -372,5 +380,65 @@ class Templating
         if (!isset($_SERVER['HTTP_USER_AGENT'])) { return false; }
         if (str_contains($_SERVER['HTTP_USER_AGENT'], "Goanna/")) { return true; }
         return false;
+    }
+
+
+    /**
+     * function generateFinaliumIconMap
+     * 
+     * This generates a list of icons depending on which Finalium theme is being used.
+     * 
+     * @return array
+     */
+    private function generateFinaliumIconMap(): array {
+        if ($this->skin != "finalium") {
+            throw new RuntimeException("why the fuck are you using this outside of finalium???");
+        }
+
+        if ($this->theme == "hitchhiker") {
+            $icons = [
+                'masthead_guide' => 'masthead-guide',
+                'masthead_search' => 'masthead-search',
+                'masthead_upload' => 'masthead-upload',
+                'masthead_bell' => 'masthead-bell',
+                'guide_home' => 'guide-home',
+                'guide_uploads' => 'guide-uploads',
+                'guide_browse_members' => 'guide-browse-members',
+                'guide_my_profile' => 'guide-my-profile',
+                'guide_collection' => 'guide-collection',
+                'watch_like' => 'watch-like',
+                'watch_dislike' => 'watch-dislike',
+                'watch_add_to' => 'watch-add-to',
+                'watch_share' => 'watch-share',
+                'watch_more' => 'watch-more',
+                'watch_panel_report' => 'watch-panel-report',
+                'watch_panel_stats' => 'placeholder',
+                'watch_panel_dismiss' => 'watch-panel-dismiss',
+                'watch_creator_info' => 'watch-creator-info',
+            ];
+        } else {
+            $icons = [
+                'masthead_guide' => 'list',
+                'masthead_search' => 'search',
+                'masthead_upload' => 'upload',
+                'masthead_bell' => 'bell',
+                'guide_home' => 'house-door',
+                'guide_uploads' => 'play-btn',
+                'guide_browse_members' => 'people',
+                'guide_my_profile' => 'person',
+                'guide_collection' => 'list-ul',
+                'watch_like' => 'hand-thumbs-up-fill',
+                'watch_dislike' => 'hand-thumbs-down-fill',
+                'watch_add_to' => 'plus-lg',
+                'watch_share' => 'share-fill',
+                'watch_more' => 'three-dots',
+                'watch_panel_report' => 'flag-fill',
+                'watch_panel_stats' => 'bar-chart-fill',
+                'watch_panel_dismiss' => 'x-lg',
+                'watch_creator_info' => 'pencil-fill',
+            ];      
+        }
+
+        return $icons;
     }
 }
