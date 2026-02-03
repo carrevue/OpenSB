@@ -570,15 +570,18 @@ class Utilities
     /**
      * function calculatePercentage
      *
-     * @param float $number
-     * @param float $percent
+     * @param float $part
      * @param float $total
      *
      * @return string
      */
-    public static function calculatePercentage(float $number, float $percent, float $total): string
+    public static function calculatePercentage(float $part, float $total): string
     {
-        return $total == 0 ? '0%' : number_format(($percent / $total) * $number * 100, 2) . '%';
+        return $total <= 0 || $part <= 0
+            ? '0%'
+            : ($part >= $total
+                ? '100%'
+                : number_format(($part / $total) * 100, 2) . '%');
     }
 
     /**
@@ -591,32 +594,26 @@ class Utilities
     public static function replaceSquareBracketWithFulpTube($input)
     {
         // replace "squarebracket" with "fulptube"
-        $replacements = [
+        $output = strtr($input, [
             'squarebracket' => 'fulptube',
             'squareBracket' => 'FulpTube',
             'SquareBracket' => 'FulpTube',
             'SQUAREBRACKET' => 'FULPTUBE',
-        ];
-
-        $output = str_replace(array_keys($replacements), array_values($replacements), $input);
+        ]);
 
         // de-fuck urls
-        $urlReplacements = [
+        $output = strtr($output, [
             'fulptube.me' => 'squarebracket.pw',
             'fulptube.pw' => 'squarebracket.pw',
             'fulptube.veselcraft.ru' => 'squarebracket.veselcraft.ru', // this domain still works lol
-        ];
-
-        $output = str_replace(array_keys($urlReplacements), array_values($urlReplacements), $output);
+        ]);
 
         // now replace all *actual* squarebracket urls with fulptube.rocks
-        $properUrlReplacements = [
+        $output = strtr($output, [
             '://squarebracket.pw' => '://fulptube.rocks',
             '://squarebracket.veselcraft.ru' => '://fulptube.rocks',
-        ];
-
-        $output = str_replace(array_keys($properUrlReplacements), array_values($properUrlReplacements), $output);
-
+        ]);
+        
         return $output;
     }
 

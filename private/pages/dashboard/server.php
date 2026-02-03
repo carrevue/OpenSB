@@ -96,7 +96,7 @@ if (!$is_windows) {
     $disk_total = disk_total_space($root);
     $disk_free = disk_free_space($root);
     $disk_used = $disk_total - $disk_free;
-    $disk_percentage = Utilities::calculatePercentage(1, $disk_used, $disk_total);
+    $disk_percentage = Utilities::calculatePercentage($disk_used, $disk_total);
 
     $instance_size = get_folder_size(SB_ROOT_PATH);
 

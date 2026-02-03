@@ -262,7 +262,7 @@ $chartData = [
 $totalUsers = $numbersOfThingsArray['users'];
 $bannedUsers = $numbersOfThingsArray['user_bans'];
 $unbannedUsers = $totalUsers - $bannedUsers;
-$unbannedRatio = Utilities::calculatePercentage(1, $unbannedUsers, $totalUsers);
+$unbannedRatio = Utilities::calculatePercentage($unbannedUsers, $totalUsers);
 
 $results[] = [
     'name' => "Unbanned user percentage",
@@ -280,7 +280,7 @@ $existingUploads = $numbersOfThingsArray['uploads'];
 $unavailableUploads = $numbersOfThingsArray['upload_deleted'] + $numbersOfThingsArray['upload_takedowns'] + $uploadsByBannedAuthors;
 
 $totalUploads = $existingUploads + $unavailableUploads;
-$existingRatio = Utilities::calculatePercentage(1, $existingUploads, $totalUploads);
+$existingRatio = Utilities::calculatePercentage($existingUploads, $totalUploads);
 
 $results[] = [
     'name' => "Existing upload percentage",

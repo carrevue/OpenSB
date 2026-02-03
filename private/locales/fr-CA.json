@@ -36,6 +36,8 @@
     "star_ratings": "{count, plural, one {# note} other {# notes}}",
     "upload_count": "{count, plural, one {# publication} other {# publications}}",
 
+    "views_hitchhiker": "{count, plural, one {# visionnement} other {# visionnements}}",
+
     "relative_unknown": "inconnu",
     "relative_year": "année",
     "relative_years": "années",
@@ -73,7 +75,7 @@
 
     "login": "Connecter",
     "register": "Inscrire",
-    "logout": "Déconnecter",
+    "logout": "Déconnexion",
 
     "currently_logged_in_as": "Vous êtes présentement connecté comme %s.",
     "other_accounts": "Autres comptes :",
@@ -188,9 +190,22 @@
     "upload_no_title": "Aucun titre",
     "upload_no_description": "Cette publication n'a pas de description.",
 
-    "uploaded_on": "Publié le %s",
-    "first_uploaded_on": "Publié initialement le %s",
-    "originally_uploaded_on": "Publié initialement sur %s le %s",
+    "add_to": "Ajouter à",
+    "share": "Partager",
+    "more_actions": "Autres actions",
+    "report": "Signaler",
+    "show_more": "Plus",
+
+    "i_like_this": "J'aime ce contenu",
+    "i_dislike_this": "Je n'aime pas ce contenu",
+
+    "loading": "Chargement...",
+
+    "unavailable_feature": " Cette fonctionnalité n'est pas accessible pour le moment. Veuillez réessayer plus tard.",
+
+    "uploaded_on": "Publiée le %s",
+    "first_uploaded_on": "Publiée initialement le %s",
+    "originally_uploaded_on": "Publiée initialement sur %s le %s",
 
     "uploads_from_user": "Plus de %s",
     "related_uploads": "Publications similaires",

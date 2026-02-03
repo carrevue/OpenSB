@@ -98,7 +98,7 @@
                                         </a>
                                     {% endif %}
                                     <a class="menu-item-button" id="report-button">
-                                        <span>Report</span>
+                                        <span>{{ localize('report') }}</span>
                                     </a>
                                 </div>
                             </div>
@@ -180,11 +180,11 @@
                         <hr>
                         <div class="watch-box-description">
                             <div class="watch-box-description-info-small">
-                                <span class="text-faded">{{ localize('tags') }}</span>
+                                {{ localize('tags') }}:
                                 {% for tag in upload.tags %}
                                     <a href="/search?query={{ tag.name }}">{{ tag.name }}</a>{{ not loop.last ? ',' }}
                                 {% else %}
-                                    {{ localize('none') }}
+                                    <span class="text-faded">{{ localize('none') }}</span>
                                 {% endfor %}
                                 {# TODO:
                                 {% if is_user_logged_in %}

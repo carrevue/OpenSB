@@ -97,7 +97,7 @@ class UploadRatingData
 
         // calculate finalium likesaber
         $ratio = ($total == 0 || $dislikes == 0)  ? 100
-            : Utilities::calculatePercentage($dislikes, $likes, $total);
+            : Utilities::calculatePercentage($likes, $total);
 
         return [
             "likes" => $likes,

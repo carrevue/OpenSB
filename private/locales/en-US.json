@@ -219,6 +219,19 @@
     "first_uploaded_on_hitchhiker": "First published on %s on %s",
     "originally_uploaded_on_hitchhiker": "Originally published on %s on %s",
 
+    "add_to": "Add to",
+    "share": "Share",
+    "more_actions": "More actions",
+    "report": "Report",
+    "show_more": "Show more",
+
+    "i_like_this": "I like this",
+    "i_dislike_this": "I dislike this",
+
+    "loading": "Loading...",
+
+    "unavailable_feature": "This feature is not available right now. Please try again later.",
+
     "uploads_from_user": "From %s",
     "related_uploads": "Related uploads",
     "random_uploads": "Random uploads",
