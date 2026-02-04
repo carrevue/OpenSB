@@ -582,7 +582,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function sidebarLibraryLinks()
     {
         if ($this->sb->getLocalOptions()["skin"] === "finalium") {
-            $collection_icon = "guide_collection";
+            $collection_icon = "guide_collection"; // tied to finalium icon map
         } else {
             $collection_icon = "collection";
         }
@@ -590,7 +590,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $array = [
             "collection1" => [
                 "name" => $this->localize("collection"),
-                "url" => "/",
+                "url" => $this->sb->isHitchhiker() ? "/playlist?list=test" : "/collection/list",
                 "icon" => $collection_icon,
             ],
         ];

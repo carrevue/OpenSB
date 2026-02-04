@@ -15,7 +15,6 @@ Placeholder Trinium light login page background by Jeremy Bishop on Unsplash: ht
 Placeholder Trinium dark login page background by Quino Al on Unsplash: https://unsplash.com/photos/body-of-water-and-seashore-JFeOy62yjXk
 Placeholder Trinium light jumbotron background by Armennano on Pixabay: https://pixabay.com/photos/rain-drops-rainy-wet-droplets-4941771/
 Placeholder Trinium dark jumbotron background by Matt Bango on StockSnap: https://stocksnap.io/photo/cloud-cloudscape-W9JMAUN9DM
-Finalium "leaf droplet" login background by Min An on Pexels: https://www.pexels.com/photo/macro-shot-of-water-drop-on-green-textile-689326/
 
 All SquareBracket (sb_branding) Trinium backgrounds by Chaziz.
 

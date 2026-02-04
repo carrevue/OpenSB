@@ -392,7 +392,7 @@ class Templating
      */
     private function generateFinaliumIconMap(): array {
         if ($this->skin != "finalium") {
-            throw new RuntimeException("why the fuck are you using this outside of finalium???");
+            throw new \RuntimeException("generateFinaliumIconMap() called when the current skin isn't Finalium");
         }
 
         if ($this->theme == "hitchhiker") {

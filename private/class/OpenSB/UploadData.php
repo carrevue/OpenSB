@@ -67,7 +67,7 @@ class UploadData
      */
     private bool $is_deleted = false;
 
-    public function __construct(Database $database, $id)
+    public function __construct(Database $database, string|int $id)
     {
         $this->database = $database;
         $this->author = null;

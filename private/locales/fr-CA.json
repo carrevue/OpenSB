@@ -89,9 +89,6 @@
     "register_invite_key_required": "%s nécessite une code d'invitation pour s'inscrire. Vous devrez l'obtenir auprès d'une autre personne.",
     "register_discord_requirement": "Votre compte doit être vérifié manuellement sur Discord avant d'utiliser %s.",
     "register_agreement": "En vous inscrivant sur %s, vous acceptez les <a href=\"%s\">Conditions de Service</a> and <a href=\"%s\">Politique de Confidentialité</a>.",
-    "register_tldr_1": "En gros :",
-    "register_tldr_2": "Vous devez avoir plus de 13 ans.",
-    "register_tldr_3": "Vous ne pouvez pas enregistrer un autre compte si vous avez été banni.",
 
     "email_address": "Adresse courriel",
     "username": "Nom d'utilisateur",

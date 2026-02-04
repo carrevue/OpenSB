@@ -185,6 +185,7 @@ $router->add('/index', 'index.php');
 // standard pages
 $router->add('/about', 'about.php');
 $router->add('/browse', 'browse.php');
+$router->add('/collection/{id}', 'collection.php');
 $router->add('/login', 'login.php');
 $router->add('/login/{user}', 'login.php');
 $router->add('/register', 'register.php');
@@ -226,10 +227,19 @@ if (Utilities::isClassicSkin()) {
     });
 }
 
+// well. this is awkward
+if ($sb->isHitchhiker()) {
+    $router->add('/playlist', 'collection.php');
+} else {
+    $router->add('/playlist', function () {
+        if (isset($_GET['list'])) Utilities::redirect('/collection/' . $_GET['list'], 301);
+    });
+}
+
 // user profiles
 $router->add('/user', function () {
-    if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301);
-    if (isset($_GET['n'])) Utilities::redirect('/user/' . $_GET['n'], 301);
+    if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301); // old sb
+    if (isset($_GET['n'])) Utilities::redirect('/user/' . $_GET['n'], 301); // og fulptube
 });
 $router->add('/user/{username}', 'profile/overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile/uploads.php'); // uploads

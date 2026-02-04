@@ -12,82 +12,66 @@
                 <h1 class="section-title">{{ localize('register') }}</h1>
             </div>
             <div class="content-box login">
-                <div class="grid center">
-                    <div class="col-6">
-                        <div class="panel-body">
-                            <form method="post" name="loginForm" id="loginForm" action="register" class="form-login">
-                                <div class="form-input">
-                                    <label for="email">{{ localize('email_address') }}</label>
-                                    <input type="email" name="email" class="form-submit" required>
-                                </div>
-
-                                <div class="form-input">
-                                    <label for="username">{{ localize('username') }}</label>
-                                    <input type="text" name="username" class="form-submit" required>
-                                </div>
-
-                                <div class="form-input">
-                                    <label for="pass1">{{ localize('password') }}</label>
-                                    <input type="password" name="pass1" class="form-submit" required>
-                                </div>
-
-                                <div class="form-input">
-                                    <label for="pass2">{{ localize('password_again') }}</label>
-                                    <input type="password" name="pass2" class="form-submit" required>
-                                </div>
-
-                                {% if invite_keys_enabled %}
-                                    <div class="form-input">
-                                        <label for="invite">{{ localize('invite_key') }}</label>
-                                        <input type="text" name="invite" class="form-submit" required>
-                                    </div>
-                                {% endif %}
-
-                                <div class="form-input">
-                                    <label for="birthdate">{{ localize('birthdate') }}</label>
-                                    <input type="date" name="birthdate" class="form-submit" required />
-                                </div>
-
-                                {% if captcha_public_token %}
-                                    <div class="form-input">
-                                        <label>{{ localize('captcha') }}</label>
-                                        <div class="h-captcha" data-sitekey="{{ captcha_public_token }}"></div>
-                                    </div>
-                                {% endif %}
-
-                                <div class="form-button-container">
-                                    <input type="submit" class="button primary button-login" value="{{ localize('register') }}" name="registersubmit">
-                                </div>
-                            </form>
+                <div class="panel-body">
+                    <form method="post" name="loginForm" id="loginForm" action="register" class="form-login">
+                        <div class="form-input">
+                            <label for="email">{{ localize('email_address') }}</label>
+                            <input type="email" name="email" class="form-submit" required>
                         </div>
-                    </div>
-                    <div class="col-6 col-login-info">
-                        <div>
-                            {% if invite_keys_enabled %}
-                                <p>
-                                    {{ localize('register_invite_key_required', website_branding.name) }}
-                                </p>
-                            {% elseif is_chaziz_sb %}
-                                <p>
-                                    {{ localize('register_discord_requirement', website_branding.name) }}
-                                </p>
-                            {% endif %}
-                            <p>
-                                {{ localize('register_agreement',  website_branding.name, '/tos', '/privacy') | raw }}
-                            </p>
-                            <p>
-                                {{ localize('register_tldr_1') }}
-                            </p>
-                            <ul>
-                                <li>
-                                    {{ localize('register_tldr_2') }}
-                                </li>
-                                <li>
-                                    {{ localize('register_tldr_3') }}
-                                </li>
-                            </ul>
+
+                        <div class="form-input">
+                            <label for="username">{{ localize('username') }}</label>
+                            <input type="text" name="username" class="form-submit" required>
                         </div>
-                    </div>
+
+                        <div class="form-input">
+                            <label for="pass1">{{ localize('password') }}</label>
+                            <input type="password" name="pass1" class="form-submit" required>
+                        </div>
+
+                        <div class="form-input">
+                            <label for="pass2">{{ localize('password_again') }}</label>
+                            <input type="password" name="pass2" class="form-submit" required>
+                        </div>
+
+                        {% if invite_keys_enabled %}
+                            <div class="form-input">
+                                <label for="invite">{{ localize('invite_key') }}</label>
+                                <input type="text" name="invite" class="form-submit" required>
+                            </div>
+                        {% endif %}
+
+                        <div class="form-input">
+                            <label for="birthdate">{{ localize('birthdate') }}</label>
+                            <input type="date" name="birthdate" class="form-submit" required />
+                        </div>
+
+                        {% if captcha_public_token %}
+                            <div class="form-input">
+                                <label>{{ localize('captcha') }}</label>
+                                <div class="h-captcha" data-sitekey="{{ captcha_public_token }}"></div>
+                            </div>
+                        {% endif %}
+
+                        <div class="form-button-container">
+                            <input type="submit" class="button primary button-login" value="{{ localize('register') }}" name="registersubmit">
+                        </div>
+
+                        <hr>
+
+                        {% if invite_keys_enabled %}
+                            <p>
+                                {{ localize('register_invite_key_required', website_branding.name) }}
+                            </p>
+                        {% elseif is_chaziz_sb %}
+                            <p>
+                                {{ localize('register_discord_requirement', website_branding.name) }}
+                            </p>
+                        {% endif %}
+                        <p>
+                            {{ localize('register_agreement',  website_branding.name, '/tos', '/privacy') | raw }}
+                        </p>
+                    </form>
                 </div>
             </div>
         </div>

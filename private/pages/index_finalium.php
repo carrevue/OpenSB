@@ -28,6 +28,8 @@ use OpenSB\UploadQuery;
 use OpenSB\Utilities;
 use OpenSB\UserFlags;
 
+$is_hitchhiker = $sb->isHitchhiker();
+
 $upload_query = new UploadQuery($sb);
 
 $uploads_featured = $upload_query->query(
@@ -50,7 +52,9 @@ $localization = $sb->getLocalizationClass();
 
 $feed = [
     "featured" => [
-        "icon" => "/assets/skin/finalium/homepage_featured.svg",
+        "icon" => $is_hitchhiker
+                ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
+                : "/assets/skin/finalium/homepage_featured.svg",
         "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),
         "label" => $localization->translate('featured_uploads_desc'),
         "uploads" => Utilities::makeUploadArray($database, $uploads_featured),
