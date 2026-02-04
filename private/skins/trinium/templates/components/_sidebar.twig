@@ -1,0 +1,39 @@
+<ul class="list">
+    {% for key, link in sidebar_main_links() %}
+        <li class="list-link">
+            <a href="{{ link.url }}" {% if page_name == key %}class="selected"{%endif %}>
+                {{ link.name }}
+            </a>
+        </li>
+    {% endfor %}
+    {% if is_user_logged_in %}
+        <li class="list-header">{{ localize('library') }}</li>
+        {% for key, link in sidebar_library_links() %}
+            <li class="list-link">
+                <a href="{{ link.url }}" {% if page_name == key %}class="selected"{%endif %}>
+                    {{ icon("placeholder", 16) }}
+                    {{ link.name }}
+                </a>
+            </li>
+        {% endfor %}
+    {% endif %}
+    {% if sidebar_following_users() %}
+        <li class="list-header">
+            {% if is_user_logged_in %}
+                {{ localize('following') }}
+            {% else %}
+                {{ localize('best_of_site', website_branding.name )}}
+            {% endif %}
+        </li>
+        {% for key, link in sidebar_following_users() %}
+            <li class="list-link">
+                <a href="/user/{{ link.username }}" {% if page_name == "user " ~ link.username %}class="selected"{%endif %}>
+                    <div class="list-link-profile-picture profile-picture">
+                        <img src="{{ profile_picture(link.id) }}" class="pfp" alt="{{ link.username }}">
+                    </div>
+                    {{ link.username }}
+                </a>
+            </li>
+        {% endfor %}
+    {% endif %}
+</ul>

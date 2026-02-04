@@ -1,0 +1,27 @@
+{% extends "_layout.twig" %}
+
+{% set title = data.title %}
+
+{% block content %}
+    {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
+    {% set current_page = page %}
+
+    <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">{{ title }}</h1>
+        </div>
+        <div class="content-box">
+            {% for upload in uploads %}
+                {{ include('/components/_upload_vertical.twig') }}
+            {% endfor %}
+        </div>
+
+        {% if type == 'recent' %}
+            {% set le_url = 'browse?page=%s' %}
+        {% else %}
+            {% set le_url = 'browse?type=' ~ type ~ '&page=%s' %}
+        {% endif %}
+
+        {{ pagination(data.count, items_per_page, le_url, current_page) }}
+    </div>
+{% endblock %}

@@ -2,13 +2,16 @@
 
 # common (stuff shared between skins)
 !common/
+!common/**
 
 # error template
 !error/
+!error/**
 
 # vsc is kinda fucking stupid and treats finalium and bootstrap as git modules
 bootstrap/
 finalium/
 
-# finalium 3 (trinium)
+# trinium
 !trinium/
+!trinium/**
