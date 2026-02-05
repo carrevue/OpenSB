@@ -252,6 +252,7 @@ $router->add('/api/skin/comment_load', 'api/skin/comment_load.php'); // finalium
 $router->add('/api/skin/comment_send', 'api/skin/comment_send.php'); // trinium-only
 $router->add('/api/skin/upload_interaction', 'api/skin/upload_interaction.php');
 $router->add('/api/skin/user_interaction', 'api/skin/user_interaction.php'); // trinium-only
+$router->add('/api/skin/validate_username', 'api/skin/validate_username.php');
 
 // only used by bootstrap and finalium (old, trash and deprecated)
 $router->add('/api/legacy/ajax_watch', (function () {

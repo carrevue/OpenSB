@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\FrontendAPI;
+namespace OpenSB\Pages\SkinAPI;
 
 global $auth, $database;
 
@@ -33,7 +33,7 @@ $apiOutput = [
 
 if ($auth->isBanned()) {
     $apiOutput = [
-        "error" => "You have been banned."
+        "error" => "You are banned."
     ];
 }
 

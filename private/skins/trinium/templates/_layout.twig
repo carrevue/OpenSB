@@ -5,7 +5,7 @@
 {% set logo = website_branding.assets_location ~ '/' ~ logo_type ~ logo_suffix ~ logo_extension %}
 
 <!DOCTYPE html>
-<html lang="{{ language_code }}" dir="ltr">
+<html lang="{{ language_code }}" dir="ltr" class="{{ page_name|split(' ')|first }}">
 <head>
     {{ include('/components/_html_head.twig') }}
     <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_date() }}">
@@ -49,8 +49,7 @@
     {% endif %}
 
     <style>
-        {# this is done through twig because css does not support string addition or whatever the FUCK its called.
-            -chaziz 2025-08-03 #}
+        {# this is done through twig because css does not support string addition #}
         :root {
             {% if current_theme starts with 'dark' %}
             --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background_dark.jpg');
@@ -134,9 +133,8 @@
     opensb_version = '{{ opensb_version.name }} {{ opensb_version.string }}';
 </script>
 {% block scripts %}{% endblock %}
-{# yes #}
-<script src="/assets/common_shared.js?r={{ get_css_file_date() }}"></script>
-<script src="/assets/common_trinium.js?r={{ get_css_file_date() }}"></script>
+<script src="/assets/common.js?r={{ get_css_file_date() }}"></script>
+<script src="/assets/skin/trinium/common.js?r={{ get_css_file_date() }}"></script>
 <!-- {{ version_banner() }} -->
 </body>
 </html>

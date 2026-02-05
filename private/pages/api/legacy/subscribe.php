@@ -20,7 +20,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\LegacyFrontendAPI;
+namespace OpenSB\Pages\LegacySkinAPI;
 
 global $auth, $database, $sb;
 

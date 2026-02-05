@@ -488,6 +488,8 @@ class Utilities
      * @param mixed $database
      * @param mixed $checkIfTaken
      *
+     * @note this will be redone soon.
+     * 
      * @return string
      */
     public static function validateUsername($username, $database, $checkIfTaken = true): string

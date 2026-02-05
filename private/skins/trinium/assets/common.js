@@ -1,14 +1,20 @@
 function error(error) {
-    console.error("OpenSB Trinium Frontend Error: " + error);
+    console.error("OpenSB Trinium Skin Error: " + error);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let hamburgerButton = (document.getElementById('button-hamburger'));
-    let hamburgerMenu = (document.getElementById('hamburger'));
-    let sidebar = (document.getElementById('sidebar'));
+    if (!document.documentElement.className) {
+        return;
+    }
 
-    //profile
-    let profile_banner = (document.getElementById('profile-banner'));
+    const page = document.documentElement.className;
+
+    const sidebarButton = (document.getElementById('button-sidebar'));
+    const hamburgerMenu = (document.getElementById('hamburger')); // mobile sidebar
+    const sidebar = (document.getElementById('sidebar')); // desktop sidebar
+
+    // profile banner
+    const profile_banner = (document.getElementById('profile-banner'));
     
     // if the min-width breakpoints get changed, don't forgot to update this.
     const mediaQueryList = window.matchMedia("(min-width: 950px)");
@@ -28,20 +34,24 @@ document.addEventListener("DOMContentLoaded", () => {
     handleMediaQueryChange(mediaQueryList);
     mediaQueryList.addEventListener("change", handleMediaQueryChange);
     ///
-    if (hamburgerButton) {
-        hamburgerButton.onclick = function () {
+    if (sidebarButton) {
+        sidebarButton.onclick = function () {
             if (hamburgerMenu && sidebar) {
                 if (isMobile) {
                     hamburgerMenu.classList.toggle("active");
                 } else {
-                    setConfig("trinium_show_sidebar", !sidebar.classList.contains("active"));
+                    setOption("trinium_show_sidebar", !sidebar.classList.contains("active"));
                     sidebar.classList.toggle("active");
-                    profile_banner.classList.toggle("sidebar-active");
+                    if (profile_banner) {
+                        profile_banner.classList.toggle("sidebar-active");
+                    }
                 }
             } else {
-                error("where the fuck is the hamburger menu");
+                error("at least one of the two sidebars are missing");
             }
         }
+    } else {
+        error("where is the sidebar button");
     }
 
     // get those tabs in the homepage
@@ -50,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!btn) return;
 
         btn.addEventListener('click', () => {
-            setConfig('trinium_homepage_type', type);
+            setOption('trinium_homepage_type', type);
             location.reload();
         });
     }
@@ -242,7 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             repliesContainer.insertAdjacentHTML("beforeend", json.html);
                         } else {
-                            error(`replies-${replyTo} doesn't exist. Trinium fucked up.`);
+                            error(`replies-${replyTo} doesn't exist.`);
                         }
                     } else {
                         let comment_field = (document.getElementById('comment_field'));
@@ -256,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             comment_field.insertAdjacentHTML("afterend", json.html);
                         } else {
-                            error(`Comments section doesn't exist????? Trinium fucked up.`);
+                            error(`Comments section doesn't exist?????`);
                         }
                     }
 

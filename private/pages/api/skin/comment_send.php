@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\FrontendAPI;
+namespace OpenSB\Pages\SkinAPI;
 
 global $auth, $sb, $twig;
 
@@ -35,16 +35,16 @@ $post_data = json_decode(file_get_contents('php://input'), true);
 $userId = $auth->getUserID();
 
 $apiOutput = [
-    "error" => "Invalid request."
+    "error" => "This request is invalid."
 ];
 
 if ($auth->isBanned()) {
-    echo json_encode(["error" => "User is banned."]);
+    echo json_encode(["error" => "You are banned."]);
     exit;
 }
 
 if ($auth->getUserFlags(true)["unverified"]) {
-    echo json_encode(["error" => "You have been not verified yet."]);
+    echo json_encode(["error" => "You are not verified yet."]);
     exit;
 }
 

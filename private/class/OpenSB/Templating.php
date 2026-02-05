@@ -217,7 +217,7 @@ class Templating
                 'user'      => 'user ' . ($uriParts[1] ?? ''),
                 'dashboard' => 'dashboard-' . ($uriParts[1] ?? 'home'),
                 'index', '' => 'home',
-                default     => $uriParts[0] ?? 'index'
+                default     => $uriParts[0] ?? 'home'
             };
 
             $this->twig->addGlobal('page_name', $pageName);
