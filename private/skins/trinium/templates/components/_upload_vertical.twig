@@ -7,9 +7,9 @@
 {% endif %}
 
 {% if upload.published_originally and upload.original_site %}
-    {% set time = upload.published_originally | relative_time %}
+    {% set time = upload.published_originally %}
 {% else %}
-    {% set time = upload.published | relative_time %}
+    {% set time = upload.published %}
 {% endif %}
 
 <div class="content-entry">
@@ -51,7 +51,7 @@
             {{ user_link(upload.author) }}
             <br>
             {{ localize('views', upload.views) }}
-            • <span class="use-tooltip" title="{{ time | format_date('long', 'short') }}">{{ time }}</span>
+            • <span class="use-tooltip" title="{{ time | format_date('long', 'short') }}">{{ time | relative_time }}</span>
             {% if upload.published_originally and upload.original_site %}
                 <span class="text-faded">on {{ upload.original_site }}</span>
             {% endif %}
