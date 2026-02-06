@@ -25,8 +25,9 @@ global $sb, $database, $twig;
 
 use OpenSB\UserQuery;
 use OpenSB\Utilities;
+use RuntimeException;
 
-if ($sb->getLocalOptions()['skin'] != "finalium") { die(); }
+if ($sb->getLocalOptions()['skin'] != "finalium") { throw new RuntimeException("You should be using Finalium!"); }
 
 $user_query = new UserQuery($sb);
 

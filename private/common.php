@@ -55,7 +55,6 @@ require_once(SB_VENDOR_PATH . '/autoload.php');
 
 use OpenSB\ErrorTemplating;
 use OpenSB\SquareBracket;
-use OpenSB\Templating;
 use OpenSB\Utilities;
 use OpenSB\VersionNumber;
 
