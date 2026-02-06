@@ -41,11 +41,8 @@
                         <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
                             {{ icon('homepage-list', 24) }}
                         </div>
-                        <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
-                            {{ icon('homepage-grid', 24) }}
-                        </div>
-                        {% if enable_incomplete_features %}
-                        <div class="tablink homepage {% if options.experiment_enable_wavelet %}active{% endif %}" id="index-wavelet-button">
+                        {% if options.experiment_enable_wavelet and enable_incomplete_features %}
+                        <div class="tablink homepage {% if type =='wavelet' %}active{% endif %}" id="index-wavelet-button">
                             {{ icon('homepage-wavelet', 24) }}
                         </div>
                         {% endif %}
@@ -58,11 +55,73 @@
 
 {# TODO: new "empty instance" thing #}
 {% block content %}
-    {% if options.experiment_enable_wavelet and enable_incomplete_features %}
-        {{ include('/components/_index_wavelet.twig') }}
-    {% elseif type == "grid" %}
-        {{ include('/components/_index_grid.twig') }}
-    {% else %}
-        {{ include('/components/_index_list.twig') }}
-    {% endif %}
+    <div class="grid cluster">
+        <div class="col-8">
+            {% if options.experiment_enable_wavelet and enable_incomplete_features and type == 'wavelet' %}
+                {{ include('/components/_index_wavelet.twig') }}
+            {% else %}
+                {{ include('/components/_index_list.twig') }}
+            {% endif %}
+        </div>
+        <div class="col-4">
+            {% if data.news_recent %}
+            <div class="section">
+                {#<div class="section-header flex">
+                    <div class="section-header-left">
+                        <h2 class="section-title">{{ localize('site_news') }}</h2>
+                        <div class="section-desc">{{ localize('site_news_desc') }}</div>
+                    </div>
+                    <div class="section-header-right">
+                        <a href="/journals/news">{{ localize('more') }}</a>
+                    </div>
+                </div>#}
+                <div class="content-box">
+                    {# work around awkwardly defined array #}
+                    {% set news = data.news_recent|first %}
+                    <div class="section-header">
+                        <h2 class="section-title">{{ news.title }}</h2>
+                    </div>
+                    {{ user_link(news.author) }}
+                    <p>{{ news.contents }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% if data.users_recent %}
+            <div class="section">
+                <div class="section-header flex">
+                    <div class="section-header-left">
+                        <h2 class="section-title">{{ localize('recent_members') }}</h2>
+                        <div class="section-desc">{{ localize('recent_members_desc') }}</div>
+                    </div>
+                    <div class="section-header-right">
+                        <a href="/users">{{ localize('more') }}</a>
+                    </div>
+                </div>
+                <div class="content-box">
+                    {% for user in data.users_recent %}
+                        <div class="content-entry centered index-user user-id-{{ user.id }}">
+                            <div class="content-thumbnail">
+                                <a href="/user/{{ user.info.username }}">
+                                    <div class="content-image profile-picture">
+                                        <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp">
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="content-info">
+                                <div class="content-title">
+                                    {{ user_link(user) }}
+                                </div>
+                                <div class="content-description">
+                                    <div>
+                                        {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.uploads) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

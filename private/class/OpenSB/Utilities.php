@@ -125,8 +125,8 @@ class Utilities
     /**
      * function makeUserArray
      *
-     * @param mixed $database
-     * @param mixed $users 
+     * @param Database $database
+     * @param array $users 
      *
      * @return array
      */
@@ -153,8 +153,8 @@ class Utilities
     /**
      * function makeJournalArray
      *
-     * @param mixed $database
-     * @param mixed $journals
+     * @param Database $database
+     * @param array $journals
      *
      * @return array
      */
@@ -191,10 +191,10 @@ class Utilities
      *
      * Not to be confused with notifyBanner, which makes a banner.
      *
-     * @param mixed $database
-     * @param mixed $user
-     * @param mixed $location
-     * @param mixed $related_id
+     * @param Database $database
+     * @param int $user
+     * @param int $location
+     * @param int $related_id
      * @param NotificationEnum $type
      *
      * @return void
@@ -248,14 +248,14 @@ class Utilities
      * This is not to be confused with NotifyUser, which is for the (still incomplete as of now)
      * notifications system.
      *
-     * @param mixed $message
-     * @param mixed $redirect
+     * @param string $message
+     * @param string $redirect
      * @param string $color
      * @param array $args
      *
      * @return void
      */
-    public static function notifyBanner($message, $redirect, string $color = "danger", array $args = []): void
+    public static function notifyBanner(string $message, string $redirect, string $color = "danger", array $args = []): void
     {
         global $sb;
 
@@ -301,8 +301,8 @@ class Utilities
     /**
      * function generateRandomString
      *
-     * @param mixed $length
-     * @param mixed $includeSymbols
+     * @param string $length
+     * @param bool $includeSymbols
      *
      * @return string
      */
@@ -331,8 +331,8 @@ class Utilities
     /**
      * function usernameToUserID
      *
-     * @param mixed $database
-     * @param mixed $username
+     * @param Database $database
+     * @param string $username
      *
      * @return mixed|bool
      */
@@ -348,8 +348,8 @@ class Utilities
     /**
      * function userIDToUsername
      *
-     * @param mixed $database
-     * @param mixed $id
+     * @param Database $database
+     * @param int $id
      *
      * @return mixed|bool
      */
@@ -365,8 +365,8 @@ class Utilities
     /**
      * function uploadStringIDToUploadNumericID
      *
-     * @param mixed $database
-     * @param mixed $uploadStringID
+     * @param Database $database
+     * @param string $uploadStringID
      *
      * @return mixed|bool
      */
@@ -382,8 +382,8 @@ class Utilities
     /**
      * function uploadNumericIDToUploadStringID
      *
-     * @param mixed $database
-     * @param mixed $uploadNumericID
+     * @param Database $database
+     * @param int $uploadNumericID
      *
      * @return mixed|bool
      */
@@ -399,8 +399,8 @@ class Utilities
     /**
      * function uploadStringIDToUploadTitle
      *
-     * @param mixed $database
-     * @param mixed $uploadStringID
+     * @param Database $database
+     * @param string $uploadStringID
      *
      * @return mixed|bool
      *
@@ -418,8 +418,8 @@ class Utilities
     /**
      * function uploadNumericIDToUploadTitle
      *
-     * @param mixed $database
-     * @param mixed $uploadNumericID
+     * @param Database $database
+     * @param int $uploadNumericID
      *
      * @return mixed|bool
      */
@@ -435,8 +435,8 @@ class Utilities
     /**
      * function journalIDtoJournalTitle
      *
-     * @param mixed $database
-     * @param mixed $journalID
+     * @param Database $database
+     * @param int $journalID
      *
      * @return mixed|bool
      */

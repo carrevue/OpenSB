@@ -63,10 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         btn.addEventListener('click', () => {
             setOptions({
-                experiment_enable_wavelet: type === 'wavelet',
-                ...(type !== 'wavelet' && {
-                    trinium_homepage_type: type
-                })
+                trinium_homepage_type: type
             });
 
             location.reload();
@@ -74,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     bindIndexTabToggle('index-list-button', 'list');
-    bindIndexTabToggle('index-grid-button', 'grid');
     bindIndexTabToggle('index-wavelet-button', 'wavelet');
 
     // Get all tab groups

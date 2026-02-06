@@ -109,7 +109,7 @@
     </div>
 {% endif %}
 {% block precontent %}{% endblock %}
-<div class="page {% if data.customization %}customized-profile{% endif %}">
+<div class="page {% if data.customization or banner_picture or page_name == "home" %}no-padding{% endif %}">
     <div class="page-contents">
         <div class="container {{ page_name }} {% if banner_picture %}has-profile-banner{% endif %}">
             <div class="sidebar-page-grid">

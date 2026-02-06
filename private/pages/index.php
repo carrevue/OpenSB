@@ -30,14 +30,7 @@ use OpenSB\UploadQuery;
 use OpenSB\UserQuery;
 use OpenSB\Utilities;
 
-// this page is fucked up and should be cleaned up in 2.1
-
 $options = $sb->getLocalOptions();
-
-if ((($options['experiment_enable_wavelet'] ?? false) === true) && $options["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled()) {
-    include_once 'index_wavelet.php';
-    exit;
-}
 
 // use different index for finalium skin
 if ($options["skin"] == "finalium") {
@@ -45,38 +38,22 @@ if ($options["skin"] == "finalium") {
     exit;
 }
 
+$enable_wavelet = (($options['experiment_enable_wavelet'] ?? false) === true) && $options["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled();
+
 $upload_query = new UploadQuery($sb);
-
-$uploads_recent_query_limit = 12; // only used on bootstrap skin's classic theme
-
 if ($options["skin"] == "trinium") {
     $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
 
-    if ($type == "grid") {
-        $uploads_random_query_limit = 8;
-        $uploads_featured_query_limit = 8;
-    } else {
-        $uploads_random_query_limit = 24;
-        $uploads_featured_query_limit = 12;
+    if ($type == "wavelet" && !$enable_wavelet) {
+        $type = "list";
     }
 } else {
-    $type = "list";
-
-    $uploads_random_query_limit = 12;
-    $uploads_featured_query_limit = 12;
+    $type = "list"; // avoid undefined warning
 }
 
-if ($options["skin"] == "bootstrap") {
-    $news_recent_query_limit = 1;
-} else {
-    $news_recent_query_limit = 3;
-}
-
-if ($options["skin"] == "bootstrap" || ($options["skin"] == "trinium" && $type == "list") || $options["skin"] == "finalium") {
-    $uploads_random = [];
-} else {
-    $uploads_random = $upload_query->query("RAND()", $uploads_random_query_limit);
-}
+$uploads_featured_query_limit = 12;
+$uploads_recent_query_limit = 12; // only used on bootstrap skin's classic theme
+$news_recent_query_limit = 1;
 
 if ($options["skin"] == "bootstrap" && $options["theme"] == "classic") {
     $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
@@ -120,6 +97,12 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
 
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
 
+if ($type == "wavelet" && $enable_wavelet) {
+    $posts = $database->fetchArray($database->query("SELECT j.* FROM journals j ORDER BY j.timestamp DESC LIMIT 12"));
+} else {
+    $posts = [];
+}
+
 if ($options["skin"] == "trinium") {
     $user_query = new UserQuery($sb);
     $users_recent = Utilities::makeUserArray($database, $user_query->query("u.last_seen DESC", 5));
@@ -128,12 +111,12 @@ if ($options["skin"] == "trinium") {
 }
 
 $data = [
-    "uploads" => Utilities::makeUploadArray($database, $uploads_random),
-    "uploads_new" => Utilities::makeUploadArray($database, $uploads_recent),
-    "uploads_featured" => Utilities::makeUploadArray($database, $uploads_featured),
-    "uploads_following" => Utilities::makeUploadArray($database, $uploads_following),
-    "news_recent" => Utilities::makeJournalArray($database, $news_recent),
-    "users_recent" => $users_recent,
+    "uploads_new" => Utilities::makeUploadArray($database, $uploads_recent) ?? [],
+    "uploads_featured" => Utilities::makeUploadArray($database, $uploads_featured) ?? [],
+    "uploads_following" => Utilities::makeUploadArray($database, $uploads_following) ?? [],
+    "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
+    "posts" => Utilities::makeJournalArray($database, $posts) ?? [],
+    "users_recent" => $users_recent ?? [],
 ];
 
 echo $twig->render('index.twig', [
