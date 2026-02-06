@@ -60,11 +60,11 @@
             {% endif %}
             <br>#}
             {% if upload.published_originally %}
-                Original uploaded: {{ upload.published_originally | format_date('medium', 'medium') }}
+                Original uploaded: {{ upload.published_originally | format_date('published', 'medium') }}
                 {% if upload.original_site %}on {{ upload.original_site }}{% endif %}
                 <br>
             {% endif %}
-            Uploaded: {{ upload.published | format_date('medium', 'medium') }}
+            Uploaded: {{ upload.published | format_date('long', 'medium') }}
         </div>
     </div>
 </div>

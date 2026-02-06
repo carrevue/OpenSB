@@ -4,7 +4,7 @@
 
 {% set title = data.title %}
 
-{% set opengraph_description = data.contents|u.truncate(125, '...') %}
+{% set opengraph_description = data.contents|u.truncate(240, '...') %}
 
 {% set opengraph_type = "article" %}
 {% set opengraph_published = data.published | date('c') %}

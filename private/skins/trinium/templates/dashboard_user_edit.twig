@@ -45,6 +45,12 @@
                                 <td>{{ localize('username') }}</td>
                                 <td>{{ user.name }}</td>
                             </tr>
+                            {% if user_data.powerlevel > 2 %}
+                                <tr>
+                                    <td>{{ localize('email_address') }}</td>
+                                    <td>{{ user.email }}</td>
+                                </tr>
+                            {% endif %}
                             <tr>
                                 <td>{{ localize('profile_name') }}</td>
                                 <td>{{ user.title }}</td>
@@ -85,10 +91,10 @@
                                 <td>{{ localize('last_seen') }}</td>
                                 <td>{{ user.last_seen | format_date('long', 'medium') }}</td>
                             </tr>
-                            <tr>
+                            {#<tr>
                                 <td>{{ localize('comfortable_rating') }}</td>
                                 <td>{{ user.comfortable_rating }}</td>
-                            </tr>
+                            </tr>#}
                             <tr>
                                 <td>{{ localize('user_link_color') }}</td>
                                 <td style="background:{{ user.userlink_color }};"></td>

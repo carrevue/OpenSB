@@ -82,7 +82,7 @@
                         <h2 class="section-title">{{ news.title }}</h2>
                     </div>
                     {{ user_link(news.author) }}
-                    <p>{{ news.contents }}</p>
+                    <p>{{ news.contents | markdown_user_written(true) }}</p>
                 </div>
             </div>
             {% endif %}

@@ -10,11 +10,9 @@
     <div class="content-title">
         {{ upload.title }}
     </div>
-    {% if data.username != upload.author.info.username %}
     <div class="content-author">
         {{ user_link(upload.author) }}
     </div>
-    {% endif %}
     <div class="content-rating">
         {{ show_ratings(upload.interactions.ratings) }}
     </div>

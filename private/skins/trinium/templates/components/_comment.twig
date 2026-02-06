@@ -7,7 +7,7 @@
     <div class="comment-body">
         <div class="comment-author">
             {{ user_link(comment.author) }}
-            <span class="comment-timestamp" title="{{ comment.posted | format_date('long', 'medium') }}">{{ comment.posted | relative_time }}</span>
+            <span class="comment-timestamp use-tooltip" title="{{ comment.posted | format_date('long', 'medium') }}">{{ comment.posted | relative_time }}</span>
         </div>
         <div class="comment-contents">
             {% if comment.post | trim is not empty %}
@@ -16,9 +16,11 @@
                 <small>Null comment</small>
             {% endif %}
 
-            {% if comment.id and is_user_logged_in %}
-            <a class="reply-button" data-comment-id="{{ comment.id }}">{{ localize('reply_action') }}</a>
-            {% endif %}
+            <div class="comment-actions">
+                {% if comment.id and is_user_logged_in %}
+                <a class="action-button reply-button" data-comment-id="{{ comment.id }}">{{ localize('reply_action') }}</a>
+                {% endif %}
+            </div>
 
             <div class="replies" id="replies-{{ comment.id }}">
                 {% if comment.id and is_user_logged_in %}

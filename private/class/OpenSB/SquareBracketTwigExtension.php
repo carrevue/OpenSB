@@ -388,14 +388,14 @@ class SquareBracketTwigExtension extends AbstractExtension
         $color = $user["info"]["color"];
         $powerlevel =  $user["info"]["powerlevel"];
 
-        // Define common values
-        $href = "/user/" . $username;
-        $class = "userlink-" . $username;
-        $style = "color:" . $color;
+        // common values
+        $href  = "/user/{$username}";
+        $class = "userlink-{$username}";
+        $style = "color:{$color}";
 
         // if user is staff
         if ($powerlevel > 1) {
-            $icon = $this->getIcon("staff");
+            $icon = '<span class="use-tooltip userlink-icon" title="Staff">' . $this->getIcon("staff") . '</span>';
         } else {
             $icon = '';
         }
@@ -417,7 +417,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             );
         }
 
-        // return link
+        // output link
         return sprintf(
             '<div class="userlink-container"><a class="%s" style="%s" href="%s">%s</a></div>',
             $class,

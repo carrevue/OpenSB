@@ -51,7 +51,7 @@
             {{ user_link(upload.author) }}
             <br>
             {{ localize('views', upload.views) }}
-            • {{ time }}
+            • <span class="use-tooltip" title="{{ time | format_date('long', 'short') }}">{{ time }}</span>
             {% if upload.published_originally and upload.original_site %}
                 <span class="text-faded">on {{ upload.original_site }}</span>
             {% endif %}

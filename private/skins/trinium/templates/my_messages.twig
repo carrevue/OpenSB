@@ -24,7 +24,7 @@
                     <td width="240px">{{ user_link(message.author) }}</td>
                     <td>{{ message.title }}</td>
                     <td width="150px" align="right">
-                        <span title="{{ message.published | format_date('long', 'none') }}">{{ message.published | relative_time }}</span>
+                        <span class="use-tooltip" title="{{ message.published | format_date('long', 'none') }}">{{ message.published | relative_time }}</span>
                     </td>
                 </tr>
                 {% endfor %}
