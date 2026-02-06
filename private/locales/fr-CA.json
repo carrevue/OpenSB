@@ -39,8 +39,8 @@
     "views_hitchhiker": "{count, plural, one {# visionnement} other {# visionnements}}",
 
     "relative_unknown": "inconnu",
-    "relative_year": "année",
-    "relative_years": "années",
+    "relative_year": "an",
+    "relative_years": "ans",
     "relative_month": "mois",
     "relative_months": "mois",
     "relative_week": "semaine",
@@ -175,10 +175,12 @@
     "comments_disabled": "Les commentaires sont désactivés.",
     "please_login_to_comment": "Connectez-vous pour commenter.",
 
+    "write_comment_hitchhiker": "Ajouter un commentaire public...",
+
     "comment": "Commentaire",
 
     "reply_action": "Repondre",
-    "post": "Publier",
+    "post_action": "Publier",
 
     "upload_image": "Image",
     "upload_music": "Musique",
