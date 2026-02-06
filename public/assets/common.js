@@ -10,29 +10,37 @@ console.log(
 const sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
 
 if (sbOptions) {
-    const encodedOptions = sbOptions.split('=')[1];
-    const decodedOptions = decodeURIComponent(encodedOptions);
-    const options = JSON.parse(atob(decodedOptions));
-    console.table(options);
+    try {
+        const value = sbOptions.startsWith('SBOPTIONS=')
+            ? sbOptions.slice('SBOPTIONS='.length)
+            : sbOptions;
+
+        const decodedOptions = decodeURIComponent(value);
+        const options = JSON.parse(atob(decodedOptions));
+
+        console.table(options);
+    } catch (e) {
+        console.warn('Invalid SBOPTIONS', e);
+    }
 }
 
-function setOption(key, value) {
+function setOptions(patch) {
     let options = {};
 
-    if (sbOptions) {
-        const encodedOptions = sbOptions.split('=')[1];
-        const decodedOptions = decodeURIComponent(encodedOptions);
-        options = JSON.parse(atob(decodedOptions));
+    if (typeof sbOptions === 'string') {
+        try {
+            options = JSON.parse(
+                atob(decodeURIComponent(sbOptions.replace(/^SBOPTIONS=/, '')))
+            );
+        } catch {}
     }
 
-    options[key] = value;
+    Object.assign(options, patch);
 
-    // turn into json, encoded into base64 and then Idfk
-    const updatedOptions = btoa(JSON.stringify(options));
-    const encodedUpdatedOptions = encodeURIComponent(updatedOptions);
-
-    // set the cookie
-    document.cookie = `SBOPTIONS=${encodedUpdatedOptions}; path=/; SameSite=Lax`;
+    document.cookie =
+        'SBOPTIONS=' +
+        encodeURIComponent(btoa(JSON.stringify(options))) +
+        '; path=/; SameSite=Lax';
 }
 
 function toggleElementDisplay(element) {

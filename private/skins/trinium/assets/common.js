@@ -40,7 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (isMobile) {
                     hamburgerMenu.classList.toggle("active");
                 } else {
-                    setOption("trinium_show_sidebar", !sidebar.classList.contains("active"));
+                    setOptions({
+                        trinium_show_sidebar: !sidebar.classList.contains("active")
+                    });
                     sidebar.classList.toggle("active");
                     if (profile_banner) {
                         profile_banner.classList.toggle("sidebar-active");
@@ -60,14 +62,20 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!btn) return;
 
         btn.addEventListener('click', () => {
-            setOption('trinium_homepage_type', type);
+            setOptions({
+                experiment_enable_wavelet: type === 'wavelet',
+                ...(type !== 'wavelet' && {
+                    trinium_homepage_type: type
+                })
+            });
+
             location.reload();
         });
     }
 
     bindIndexTabToggle('index-list-button', 'list');
     bindIndexTabToggle('index-grid-button', 'grid');
-    bindIndexTabToggle('index-new-button', 'new');
+    bindIndexTabToggle('index-wavelet-button', 'wavelet');
 
     // Get all tab groups
     const tabGroups = document.querySelectorAll(".tab-group");
@@ -201,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function closeCommentForm() {
         // kinda stupid but whatever
-        let new_comment_box = document.getElementById('new-comment-logged-out');
+        let new_comment_box = document.getElementById('new-comment-button');
         let new_comment_form = document.getElementById('new-comment-form');
 
         new_comment_box.style.display = "block";
@@ -230,14 +238,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         let reply_form_error = document.getElementById(`reply-form-error-${replyTo}`);
 
                         if (reply_form_error) {
-                            reply_form_error.style.display = "inline";
                             reply_form_error.innerHTML = json.error;
                         }
                     } else {
                         let comment_form_error = (document.getElementById('comment-form-error'));
 
                         if (comment_form_error) {
-                            comment_form_error.style.display = "inline";
                             comment_form_error.innerHTML = json.error;
                         }
                     }
@@ -279,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let comment_field = (document.getElementById('comment_field'));
     if (comment_field) {
-        let new_comment_box = document.getElementById('new-comment-logged-out');
+        let new_comment_box = document.getElementById('new-comment-button');
         let new_comment_form = document.getElementById('new-comment-form');
 
         new_comment_box.onclick = function () {
@@ -293,10 +299,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-        let comment_button = document.getElementById('comment_button');
+        let comment_post_button = document.getElementById('comment_post_button');
+        let comment_cancel_button = document.getElementById('comment_cancel_button');
         let comment_contents = document.getElementById('comment_contents');
-        comment_button.onclick = function () {
+        comment_post_button.onclick = function () {
             submitComment(comment_type, comment_id, comment_contents);
+        };
+        comment_cancel_button.onclick = function () {
+            closeCommentForm();
         };
     }
 
@@ -319,6 +329,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (replyContents) {
                 submitComment(comment_type, comment_id, replyContents, commentId);
             }
+        }
+        if (event.target && event.target.classList.contains("submit-cancel-button")) {
+            closeCommentReplyForm();
         }
     });
 

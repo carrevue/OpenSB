@@ -169,6 +169,7 @@
     "site_news_desc": "Site announcements",
 
     "no_journals": "There are currently no journals.",
+    "no_posts": "There are currently no posts.",
 
     "more": "More",
     "edit": "Edit",
@@ -177,6 +178,7 @@
 
     "delete_upload_confirm": "Are you sure you want to delete this upload?",
     "delete_journal_confirm": "Are you sure you want to delete this journal?",
+    "delete_post_confirm": "Are you sure you want to delete this post?",
     "feature_on_profile_confirm": "Are you sure you want to feature this upload on your profile?",
 
     "new": "New",
@@ -184,11 +186,12 @@
     "random": "Random",
     "uploads": "Uploads",
     "journals": "Journals",
+    "posts": "Posts",
     "comments": "Comments",
     "about": "About",
 
-    "write_comment": "Write your comment here.",
-    "write_reply": "Write your reply here.",
+    "write_comment": "Write your comment...",
+    "write_reply": "Write your reply...",
     "comments_disabled": "Commenting has been disabled.",
     "please_login_to_comment": "Please login to comment.",
 
@@ -198,6 +201,7 @@
 
     "reply_action": "Reply",
     "post_action": "Post",
+    "cancel": "Cancel",
 
     "upload_image": "Image",
     "upload_music": "Music",

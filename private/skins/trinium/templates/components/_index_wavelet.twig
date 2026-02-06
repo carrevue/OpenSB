@@ -1,0 +1,16 @@
+<div class="grid cluster">
+    <div class="col-8">
+        <div class="section">
+            <div class="content-box">
+                {% for journal in data.posts %}
+                    {{ include('/components/_journal.twig') }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="section">
+            {{ website_branding.name }}
+        </div>
+    </div>
+</div>

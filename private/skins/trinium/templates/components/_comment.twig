@@ -27,14 +27,17 @@
                             <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
                         </div>
                         <div class="new-reply-form">
-                            <textarea class="form-submit" id="reply_contents_{{ comment.id }}" maxlength="1000" rows="3"></textarea>
-                            <div class="flex">
-                                <div class="text-danger" id="reply-form-error-{{ comment.id }}" style="display:none;">
-                                    Reply Form Error
+                            <textarea class="form-submit" id="reply_contents_{{ comment.id }}" placeholder="{{ localize('write_reply') }}" maxlength="1000" rows="3"></textarea>
+                            <div class="new-comment-bottom">
+                                <div class="text-danger comment-form-error" id="reply-form-error-{{ comment.id }}"></div>
+                                <div class="new-comment-buttons">
+                                    <button type="cancel" id="comment_cancel_button" name="cancel" class="button secondary submit-cancel-button">
+                                        {{ localize('cancel') }}
+                                    </button>
+                                    <button type="submit" id="comment_post_button" class="button primary submit-reply-button" data-comment-id="{{ comment.id }}">
+                                        {{ localize('reply_action') }}
+                                    </button>
                                 </div>
-                                <button class="button primary submit-reply-button" data-comment-id="{{ comment.id }}">
-                                    {{ localize('reply_action') }}
-                                </button>
                             </div>
                         </div>
                     </div>

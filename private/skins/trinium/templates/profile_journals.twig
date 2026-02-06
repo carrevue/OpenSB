@@ -2,7 +2,11 @@
 
 {% set banner_picture = profile_banner(data.id) %}
 
+{% if options.experiment_enable_wavelet and enable_incomplete_features %}
+{% set title = data.username ~ "'s posts" %}
+{% else %}
 {% set title = data.username ~ "'s journals" %}
+{% endif %}
 
 {% set opengraph_type = "profile" %}
 {% set opengraph_username = data.username %}

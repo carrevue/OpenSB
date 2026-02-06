@@ -27,7 +27,9 @@
         <hr>
         <ul>
             <li><a href="/my_uploads">{{ localize('uploads') }}</a></li>
+            {% if enable_incomplete_features %}
             <li><a href="/my_messages">{{ localize('messages') }}</a></li>
+            {% endif %}
             <li><a href="/my_invite_keys">{{ localize('invite_keys') }}</a></li>
             {#<li><a href="/notifications">{{ localize('notifications') }}</a></li>#}
             <li><a href="/settings">{{ localize('account_settings') }}</a></li>

@@ -1,3 +1,23 @@
+{% if options.experiment_enable_wavelet and enable_incomplete_features %}
+<div class="comment" id="post-{{ journal.id }}">
+    <a href="/user/{{ journal.author.info.username }}">
+        <div class="profile-picture user-id-{{ journal.author.id }}">
+            <img src="{{ profile_picture(journal.author.id) }}" class="pfp" alt="{{ journal.author.info.username }}">
+        </div>
+    </a>
+    <div class="comment-body">
+        <div class="comment-author">
+            {{ user_link(journal.author) }}
+            <span class="comment-timestamp" title="{{ journal.posted | format_date('long', 'medium') }}">{{ journal.published | relative_time }}</span>
+        </div>
+        <div class="comment-contents">
+            {% if journal.contents | trim is not empty %}
+                {{ journal.contents | markdown_user_written }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% else %}
 <div class="content-entry journal">
     <div class="content-info">
         <div class="content-title">
@@ -16,3 +36,4 @@
         </div>
     </div>
 </div>
+{% endif %}

@@ -32,15 +32,20 @@ use OpenSB\Utilities;
 
 // this page is fucked up and should be cleaned up in 2.1
 
-$upload_query = new UploadQuery($sb);
-
 $options = $sb->getLocalOptions();
+
+if ((($options['experiment_enable_wavelet'] ?? false) === true) && $options["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled()) {
+    include_once 'index_wavelet.php';
+    exit;
+}
 
 // use different index for finalium skin
 if ($options["skin"] == "finalium") {
     include_once "index_finalium.php";
-    die();
+    exit;
 }
+
+$upload_query = new UploadQuery($sb);
 
 $uploads_recent_query_limit = 12; // only used on bootstrap skin's classic theme
 

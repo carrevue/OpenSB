@@ -37,7 +37,7 @@
                     </div>
                     <div class="menu" id="notify-menu">
                         <a class="menu-item-button" href="/notifications">{{ localize('notifications') }} ({{ user_stat_data.notifications }})</a>
-                        {% if options.enable_incomplete_features %}
+                        {% if enable_incomplete_features %}
                         <a class="menu-item-button" href="/my_messages">Messages (0)</a>
                         {% endif %}
                     </div>

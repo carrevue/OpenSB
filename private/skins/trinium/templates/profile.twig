@@ -108,7 +108,11 @@
                 <div class="content-box basic-box">
                     <div class="section-header flex">
                         <div class="section-header-left">
+                            {% if options.experiment_enable_wavelet and enable_incomplete_features %}
+                            <h2 class="section-title">{{ localize('posts') }}</h2>
+                            {% else %}
                             <h2 class="section-title">{{ localize('journals') }}</h2>
+                            {% endif %}
                         </div>
                         <div class="section-header-right">
                             <a href="/user/{{ data.username }}/journals">{{ localize('more') }}</a>
@@ -153,7 +157,7 @@
                 </div>
             {% endif %}
 
-            {% if options.enable_incomplete_features %}
+            {% if enable_incomplete_features %}
             <div class="section">
                 <div class="content-box basic-box">
                     <div class="section-header">

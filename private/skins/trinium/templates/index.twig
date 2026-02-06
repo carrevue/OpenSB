@@ -34,7 +34,6 @@
             </div>
             <div class="jumbotron-right-container">
                 <div class="jumbotron-right-date">
-                    {# todo: maybe remove this? -chaziz 12/28/2025 #}
                     {{ date() | format_date('long', 'none') }}
                 </div>
                 <div class="jumbotron-right-buttons">
@@ -45,6 +44,11 @@
                         <div class="tablink homepage {% if type=='grid' %}active{% endif %}" id="index-grid-button">
                             {{ icon('homepage-grid', 24) }}
                         </div>
+                        {% if enable_incomplete_features %}
+                        <div class="tablink homepage {% if options.experiment_enable_wavelet %}active{% endif %}" id="index-wavelet-button">
+                            {{ icon('homepage-wavelet', 24) }}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -52,18 +56,13 @@
     </div>
 {% endblock %}
 
+{# TODO: new "empty instance" thing #}
 {% block content %}
-    {% if not data.uploads_new and not data.uploads_featured %}
-        <div class="banner secondary">
-            This instance is currently empty.
-        </div>
+    {% if options.experiment_enable_wavelet and enable_incomplete_features %}
+        {{ include('/components/_index_wavelet.twig') }}
+    {% elseif type == "grid" %}
+        {{ include('/components/_index_grid.twig') }}
     {% else %}
-        {% if type == "grid" %}
-            {{ include('/components/_index_grid.twig') }}
-        {% elseif type == "new" %}
-            {{ include('/components/_index_new.twig') }}
-        {% else %}
-            {{ include('/components/_index_list.twig') }}
-        {% endif %}
+        {{ include('/components/_index_list.twig') }}
     {% endif %}
 {% endblock %}

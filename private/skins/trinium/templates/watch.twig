@@ -65,12 +65,6 @@
                 </div>
                 <div class="watch-box">
                     <div class="section watch-box-title">
-                        {#{% if user_is_authenticated_admin %}
-                            <div class="watch-box-row">
-                                <a href="/dashboard/uploads/{{ upload.id }}">{{ localize('dashboard_lookup') }}</a>
-                            </div>
-                            <hr>
-                        {% endif %}#}
                         <div class="section-header flex">
                             <div class="section-header-left">
                                 <h1 class="section-title">
@@ -97,9 +91,11 @@
                                             <span>{{ localize('dashboard_lookup') }}</span>
                                         </a>
                                     {% endif %}
+                                    {% if enable_incomplete_features %}
                                     <a class="menu-item-button" id="report-button">
                                         <span>{{ localize('report') }}</span>
                                     </a>
+                                    {% endif %}
                                 </div>
                             </div>
                             {#{% if upload.is_owner %}
@@ -212,7 +208,7 @@
                             {{ include('/components/_comment_input.twig') }}
                         {% else %}
                             <div>
-                                <div id="new-comment-logged-out">
+                                <div id="new-comment-button">
                                     {{ localize('comments_disabled') }}
                                 </div>
                             </div>

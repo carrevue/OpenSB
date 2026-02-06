@@ -202,6 +202,7 @@ class Templating
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('options', $options);
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
+        $this->twig->addGlobal('enable_incomplete_features', $this->sb->isIncompleteFeaturesEnabled());
         $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
 
         if ($this->skin == "finalium") {
