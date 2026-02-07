@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -22,6 +22,8 @@
 namespace OpenSB;
 
 use Arokettu\Pseudolocale\Pseudolocale;
+use DateTime;
+use DateTimeInterface;
 use Exception;
 use IntlDateFormatter;
 use MessageFormatter;
@@ -123,13 +125,13 @@ class Localization
      */
     public function formatDate($date, $dateFormat = 'medium', $timeFormat = 'medium', $pattern = null)
     {
-        if (!$date instanceof \DateTimeInterface) {
+        if (!$date instanceof DateTimeInterface) {
             if ($date === null) {
                 return "unknown";
             } elseif (is_numeric($date)) {
-                $date = new \DateTime('@' . $date);
+                $date = new DateTime('@' . $date);
             } else {
-                $date = new \DateTime($date);
+                $date = new DateTime($date);
             }
         }
 
@@ -285,7 +287,7 @@ class Localization
      */
     public function getLanguageCode()
     {
-        if ($this->locale === null) {
+        if ($this->locale == null) {
             return 'en';
         }
 

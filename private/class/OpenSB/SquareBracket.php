@@ -182,6 +182,7 @@ class SquareBracket
         );
 
         if ($this->is_chaziz_instance) {
+            // gets overriden by options, but keep this as a fallback.
             date_default_timezone_set('America/New_York');
         }
 
@@ -245,6 +246,12 @@ class SquareBracket
 
         if (isset($_COOKIE["SBOPTIONS"])) {
             $this->options = $this->getOptionsCookie();
+
+            if (!empty($this->options['timezone'])
+                && in_array($this->options['timezone'], timezone_identifiers_list(), true)
+            ) {
+                date_default_timezone_set($this->options['timezone']);
+            }
 
             // the charla skin is now called trinium
             if ($this->options["skin"] == "charla") {

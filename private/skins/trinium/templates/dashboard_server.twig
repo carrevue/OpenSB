@@ -16,6 +16,8 @@
                     {% endif %}
                     <li>Uname: <code>{{ system.uname }}</code></li>
                     {% if not system.is_windows %}
+                    <li>Processor: {{ system.cpu }}</li>
+                    <li>Memory: {{ system.memory.used }} used of {{ system.memory.total }} ({{ system.memory.percentage }} used)</li>
                     <li>Uptime: {{ system.uptime }}</li>
                     <li>Load average (1, 5, 15 min): {{ system.avg[0] }}, {{ system.avg[1] }}, {{ system.avg[2] }}</li>
                     <li>Storage: {{ system.disk.free }} free of {{ system.disk.total }} ({{ system.disk.percentage }} used)</li>

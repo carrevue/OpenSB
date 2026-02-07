@@ -7,17 +7,17 @@ console.log(
     "color: red; font-family: monospace; font-size: 1em;"
 );
 
-const sbOptions = document.cookie.split('; ').find(row => row.startsWith('SBOPTIONS='));
+let options = {};
 
-if (sbOptions) {
+const row = document.cookie
+    .split('; ')
+    .find(r => r.startsWith('SBOPTIONS='));
+
+if (row) {
     try {
-        const value = sbOptions.startsWith('SBOPTIONS=')
-            ? sbOptions.slice('SBOPTIONS='.length)
-            : sbOptions;
-
-        const decodedOptions = decodeURIComponent(value);
-        const options = JSON.parse(atob(decodedOptions));
-
+        options = JSON.parse(
+            atob(decodeURIComponent(row.slice('SBOPTIONS='.length)))
+        );
         console.table(options);
     } catch (e) {
         console.warn('Invalid SBOPTIONS', e);
@@ -25,22 +25,19 @@ if (sbOptions) {
 }
 
 function setOptions(patch) {
-    let options = {};
-
-    if (typeof sbOptions === 'string') {
-        try {
-            options = JSON.parse(
-                atob(decodeURIComponent(sbOptions.replace(/^SBOPTIONS=/, '')))
-            );
-        } catch {}
-    }
-
     Object.assign(options, patch);
 
     document.cookie =
         'SBOPTIONS=' +
         encodeURIComponent(btoa(JSON.stringify(options))) +
         '; path=/; SameSite=Lax';
+}
+
+if (!options.timezone) {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setOptions({
+        timezone: timezone
+    });
 }
 
 function toggleElementDisplay(element) {

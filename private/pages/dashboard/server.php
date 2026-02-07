@@ -85,6 +85,35 @@ if (file_exists('/etc/os-release')) {
 // fucking around with winmgmts through the unholy com php class. i didnt even know it was possible to interface with
 // windows' ole api via php, what the fuck??? -chaziz 4/15/2025
 if (!$is_windows) {
+    if (is_readable('/proc/cpuinfo')) {
+        foreach (file('/proc/cpuinfo') as $line) {
+            if (stripos($line, 'model name') === 0) {
+                $cpu_name = trim(explode(':', $line, 2)[1]);
+                break;
+            }
+        }
+    }
+
+    if (is_readable('/proc/meminfo')) {
+        $meminfo = [];
+
+        foreach (file('/proc/meminfo') as $line) {
+            [$key, $value] = array_map('trim', explode(':', $line, 2));
+            $meminfo[$key] = (int) filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+        }
+
+        $total = $meminfo['MemTotal'] * 1024;
+        $available = $meminfo['MemAvailable'] * 1024;
+        $used = $total - $available;
+
+        $memory = [
+            "total" => Utilities::formatBytes($total),
+            "used" => Utilities::formatBytes($used),
+            "free" => Utilities::formatBytes($available),
+            "percentage" => Utilities::calculatePercentage($used, $total),
+        ];
+    }
+
     $uptime = shell_exec('uptime -p'); // posix_times() is unreliable
     if ($uptime) {
         $uptime = ltrim($uptime, "up ");
@@ -108,6 +137,9 @@ if (!$is_windows) {
         "instance_size" => Utilities::formatBytes($instance_size),
     ];
 } else {
+    // maybe look into wmic in the future but not now -chaziz 2/6/2026
+    $cpu_name = "Unknown";
+    $memory = [];
     $uptime = "Unknown";
     $avg = [];
     $disk = [];
@@ -118,6 +150,8 @@ echo $twig->render("dashboard_server.twig", [
     "system" => [
         "uname" => php_uname(),
         "os_name" => $os_name,
+        "cpu" => $cpu_name,
+        "memory" => $memory,
         "uptime" => $uptime,
         "avg" => $avg,
         "is_windows" => $is_windows,

@@ -101,15 +101,15 @@ $page_data = [
     "published_originally" => $data["original_timestamp"],
     "type" => $data["type"],
     "file" => $data["upload_file"],
-    //"author" => [
-    //    "id" => $data["author"],
-    //    "info" => $author->getUserArray(),
-    //    "followers" => $followers,
-    //    "following" => $followed,
-    //],
+    "author" => [
+        "id" => $data["author"],
+        "info" => $upload->getAuthorData(),
+        //"followers" => $followers,
+        //"following" => $followed,
+    ],
     "interactions" => [
         "views" => $data["views"],
-        //"ratings" => Utilities::calculateUploadRatings($ratings),
+        "ratings" => $upload->getRatingData(),
         //"favorites" => $favorites,
         //"comments" => $comment_count,
     ],

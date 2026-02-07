@@ -21,7 +21,7 @@
 
 namespace OpenSB\Pages;
 
-global $auth, $twig, $sb;
+global $twig, $database, $auth, $sb;
 
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
@@ -38,7 +38,18 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
-$data = [
+// for the time being, query from user aliases table for usernames tied to user id 0
+$db = $database->fetchArray($database->query("SELECT * FROM user_old_names WHERE user = 0"));
+
+$data = [];
+
+foreach ($db as $entry) {
+    $data[] = [
+        "name" => $entry["old_name"],
+    ];
+}
+
+/*$data = [
     1 => [
         "name" => "blocked_name",
         "author" => 1,
@@ -49,6 +60,6 @@ $data = [
         "author" => 1,
         "added" => time(),
     ]
-];
+];*/
 
 echo $twig->render("dashboard_filtering.twig", ['data' => $data]);
