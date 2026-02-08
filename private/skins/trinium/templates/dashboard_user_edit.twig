@@ -71,6 +71,7 @@
                                 {{ role }}
                             </td>
                         </tr>
+                        {% if user.birthdate %}
                         <tr>
                             <td>{{ localize('age') }}/{{ localize('birthdate') }}</td>
                             <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | format_date('long', 'none') }}</td>
@@ -84,6 +85,16 @@
                                 {% endif %}
                             </td>
                         </tr>
+                        {% else %}
+                        <tr>
+                            <td>{{ localize('registered') }}</td>
+                            <td>{{ user.joined | format_date('long', 'medium') }}
+                                {% if flags.fulptube_account %}
+                                <br><small>{{ localize('fulptube_account') }}</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
                         <tr>
                             <td>{{ localize('last_seen') }}</td>
                             <td>{{ user.last_seen | format_date('long', 'medium') }}</td>
@@ -99,8 +110,8 @@
                         </tbody>
                     </table>
                 </div>
-                <hr>
                 {% if ip_info %}
+                    <hr>
                     <div class="section">
                         <div class="section-header">
                             <h2 class="section-title">IP info</h2>
@@ -120,9 +131,28 @@
                             </tbody>
                         </table>
                     </div>
+                {% endif %}
+                {% if users_with_matching_ips %}
                     <hr>
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Accounts with matching IP</h2>
+                        </div>
+                        <table class="styled">
+                            <tbody>
+                            {% for user in users_with_matching_ips %}
+                                <tr>
+                                    <td>
+                                        <a href="/dashboard/users/{{ user.name }}">{{ user.name }}</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 {% endif %}
                 {% if old_names %}
+                    <hr>
                     {# username history (entries with timestamp) #}
                     <div class="section">
                         <div class="section-header">
@@ -161,25 +191,6 @@
                         </table>
                     </div>
                 {% endif %}
-                {% if users_with_matching_ips %}
-                    <hr>
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Accounts with matching IP</h2>
-                        </div>
-                        <table class="styled">
-                            <tbody>
-                            {% for user in users_with_matching_ips %}
-                                <tr>
-                                    <td>
-                                        <a href="/dashboard/users/{{ user.name }}">{{ user.name }}</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endif %}
             </div>
             <div class="col-6">
                 <div class="section">
@@ -204,25 +215,24 @@
                     </table>
                 </div>
                 {% if notes %}
+                <hr>
                 <div class="section">
-                    <div class="content-box">
-                        <div class="section-header">
-                            <h2 class="section-title">Notes</h2>
-                        </div>
-                        {% for note in notes %}
-                            <div class="content-box">
-                                <div class="content-info">
-                                    <div class="content-title">
-                                        {{ user_link(note.author) }}
-                                        {{ note.time | relative_time }}
-                                    </div>
-                                </div>
-                                <div class="content-description">
-                                    {{ note.content | markdown_user_written(true) }}
+                    <div class="section-header">
+                        <h2 class="section-title">Notes</h2>
+                    </div>
+                    {% for note in notes %}
+                        <div class="content-box">
+                            <div class="content-info">
+                                <div class="content-title">
+                                    {{ user_link(note.author) }}
+                                    {{ note.time | relative_time }}
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
+                            <div class="content-description">
+                                {{ note.content | markdown_user_written(true) }}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
                 {% endif %}
             </div>
