@@ -3,6 +3,9 @@ private/config/config.php
 private/config/*.mmdb
 private/skins/cache
 
+## Upload processor logs (future-proofing)
+private/upload_processor_logs/*.log
+
 ## User generated files
 dynamic/pfp/
 dynamic/thumbnails/
@@ -32,25 +35,14 @@ vendor/
 composer.phar
 composer.lock
 
-## Admin features
+## Adminer/PHPMyAdmin
 adminer*.php
 /latest-*-*.php
 pma
 phpmyadmin
 phpma
 
-# mariadb stuff from docker
-mariadb-data
-
-# output from 2024-02-video_url_export.php
-/tools/video_urls.txt
-
-# sound stuff
-*.bak
-*.sfk
-Ocean_Sound_Theme_OpenSB.wav
-
-# weird ass file that shows up only on wsl
+# WSL quirk
 *:Zone.Identifier
 
 # Doxygen output

@@ -10,26 +10,19 @@
             <h1 class="section-title">{{ localize('version') }}</h1>
         </div>
         <div class="content-box">
-            <div class="grid">
-                <div class="col-4 col-version">
-                    <img srcset="/assets/chaz_opensb.png, /assets/chaz_opensb_2x.png 2x" class="img-version">
-                </div>
-                <div class="col-8">
-                    <p>{{ localize('version_intro', '2021-' ~ ('now' | date('Y')), data.developers|join(', ')) }}</p>
-                    <p>{{ localize('version_agpl') }}</p>
-                    <p>{{ localize('version_no_warranty') }}</p>
-                    <p>{{ localize('version_license_notice', '/license', 'http://www.gnu.org/licenses/') | raw }}</p>
-                    <p>{{ localize('version_github', 'https://github.com/bluffingo/OpenSB') | raw }}</p>
-                    <hr>
-                    <ul class="unstyled-list">
-                        {% for thing in data.software %}
-                            <li>
-                                {{ thing.title }}: {{ thing.info }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+            <p>{{ localize('version_intro', '2021-' ~ ('now' | date('Y')), data.developers|join(', ')) }}</p>
+            <p>{{ localize('version_agpl') }}</p>
+            <p>{{ localize('version_no_warranty') }}</p>
+            <p>{{ localize('version_license_notice', '/license', 'http://www.gnu.org/licenses/') | raw }}</p>
+            <p>{{ localize('version_github', 'https://github.com/bluffingo/OpenSB') | raw }}</p>
+            <hr>
+            <ul class="unstyled-list">
+                {% for thing in data.software %}
+                    <li>
+                        {{ thing.title }}: {{ thing.info }}
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
