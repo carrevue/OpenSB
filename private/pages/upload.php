@@ -193,7 +193,7 @@ if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isUserL
     if ($detectedType === 'video') { // VIDEO
         if (isset($noProcess) && $sb->isDebug()) {
             // pretend video has been successfully uploaded (does this still work???)
-            $target_file = $path . '/dynamic/videos/' . $new . '.converted.' . $ext;
+            $target_file = $path . '/videos/' . $new . '.converted.' . $ext;
         } else {
             $flags |= UploadFlags::FLAG_UNPROCESSED->value;
             $target_file = $path . '/videos/' . $new . '.' . $ext;

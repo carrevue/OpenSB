@@ -3,11 +3,6 @@
 {% set title = localize('new_upload') %}
 
 	{% block content %}
-        {% if is_test_instance %}
-            <div class="banner danger">
-                you should probably just upload on the production instance instead
-            </div>
-        {% endif %}
         <div class="section">
             <div class="section-header">
                 <h1 class="section-title">{{ localize('new_upload') }}</h1>
