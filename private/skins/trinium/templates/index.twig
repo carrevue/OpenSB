@@ -75,12 +75,12 @@
                         <a href="/journals/news">{{ localize('more') }}</a>
                     </div>
                 </div>#}
+                {# work around awkwardly defined array #}
+                {% set news = data.news_recent|first %}
+                <div class="section-header">
+                    <h2 class="section-title">{{ news.title }}</h2>
+                </div>
                 <div class="content-box">
-                    {# work around awkwardly defined array #}
-                    {% set news = data.news_recent|first %}
-                    <div class="section-header">
-                        <h2 class="section-title">{{ news.title }}</h2>
-                    </div>
                     {{ user_link(news.author) }}
                     <p>{{ news.contents | markdown_user_written(true) }}</p>
                 </div>

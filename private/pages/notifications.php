@@ -88,7 +88,7 @@ function getRequiredData($database, $notice)
             $comment = $database->fetch("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM journal_comments c WHERE c.id = ?", [$notice["related_id"]]);
             $journal = $database->fetch("SELECT title FROM journals WHERE id = ?", [$notice["level"]]);
 
-            $data["info"] = $comment["comment"];
+            $data["info"] = $comment["comment"] ?? "";
             $data["origin"] = $journal["title"] ?? "Unknown journal";
             break;
 
@@ -96,7 +96,7 @@ function getRequiredData($database, $notice)
             $comment = $database->fetch("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM upload_comments c WHERE c.id = ?", [$notice["related_id"]]);
             $upload = $database->fetch("SELECT v.upload_id, v.author, v.title FROM uploads v WHERE v.id = ?", [$notice["level"]]);
 
-            $data["info"] = $comment["comment"];
+            $data["info"] = $comment["comment"] ?? "";
             $data["origin"] = $upload["title"] ?? "Unknown upload";
             break;
 
