@@ -63,8 +63,11 @@
                             Last seen: {{ user.info.connected | relative_time() }}
                         </div>
                         <div>
-                            {% if user.info.flags.unverified %}
-                                <span class="text-danger">Unverified</span>
+                            {% if user.info.flags.unverified and not user.banned %}
+                                <span class="text-faded">Unverified</span>
+                            {% endif %}
+                            {% if user.banned %}
+                                <span class="text-danger">Banned</span>
                             {% endif %}
                             {% if user.info.flags.featured %}
                                 <span class="text-success">Featured</span>

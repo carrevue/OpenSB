@@ -1,7 +1,28 @@
 {% extends "_layout.twig" %}
 
 {% block style %}
-    <style>
+        <style>
+        :root {
+            {% if data.customization %}
+                --bg-page: {{ data.customization.background_color }};
+                --link-color: {{ data.customization.link_color }};
+                --title-color: {{ data.customization.title_color }};
+
+                --highlight-bg: {{ data.customization.highlight_box_background_color }};
+                --highlight-border: {{ data.customization.highlight_box_border_color }};
+                --highlight-text: {{ data.customization.highlight_box_text_color }};
+
+                --basic-bg: {{ data.customization.basic_box_background_color }};
+                --basic-border: {{ data.customization.basic_box_border_color }};
+                --basic-text: {{ data.customization.basic_box_text_color }};
+
+                {% if data.customization.font %}
+                --page-font: {{ data.customization.font | raw }};
+                {% endif %}
+            {% endif %}
+                --username-color: {{ data.color }};
+        }
+
         {% if banner_picture %}
         .jumbotron.profile-banner {
         {% if data.customization %}
@@ -13,80 +34,78 @@
 
         {% if data.customization %}
         body {
-            background: {{ data.customization.background_color }};
+            background: var(--bg-page);
         }
-
-        {% if data.customization.font %}
+        
         /* Font */
         .page {
-            font-family: {{ data.customization.font | raw }};
+            font-family: var(--page-font, inherit);
         }
-        {% endif %}
 
         /* Links */
         a {
-            color: {{ data.customization.link_color }};
+            color: var(--link-color);
         }
 
         /* Titles */
         .section-title {
-            color: {{ data.customization.title_color }};
+            color: var(--title-color);
         }
 
         /* Highlight box */
         .content-box.highlight-box {
-            background-color: {{ data.customization.highlight_box_background_color }};
-            border-color: {{ data.customization.highlight_box_border_color }};
-            color: {{ data.customization.highlight_box_text_color }};
+            background-color: var(--highlight-bg);
+            border-color: var(--highlight-border);
+            color: var(--highlight-text);
         }
- 
+
         .content-box.highlight-box hr,
         .profile-details .profile-details-list .detail-item {
-            border-color: {{ data.customization.highlight_box_border_color }};
+            border-color: var(--highlight-border);
         }
 
         /* Basic box */
         .content-box.basic-box {
-            background-color: {{ data.customization.basic_box_background_color }};
-            border-color: {{ data.customization.basic_box_border_color }};
-            color: {{ data.customization.basic_box_text_color }};
+            background-color: var(--basic-bg);
+            border-color: var(--basic-border);
+            color: var(--basic-text);
         }
 
-        /* Comment borders */
         .content-box.basic-box hr,
         .content-box.basic-box .content-entry,
         .content-box.basic-box .comment,
         .content-box.basic-box .replies,
         .content-box.basic-box .new-comment,
         .content-box.basic-box .reply-form {
-            border-color: {{ data.customization.basic_box_border_color }};
+            border-color: var(--basic-border);
         }
 
         /* Footer */
         .footer .footer-container {
             padding-top: 1em;
-            color: {{ data.customization.basic_box_text_color }};
-            border-top: 1px solid {{ data.customization.basic_box_border_color }};
+            color: var(--basic-text);
+            border-top: 1px solid var(--basic-border);
         }
 
         .footer .footer-container .footer-copyright {
-            opacity: 100%;
+            opacity: 1;
         }
 
         /* Comments/Userlink */
-        .comment .comment-body .comment-author .comment-timestamp {
-            color: {{ data.customization.basic_box_text_color }};
-            opacity: 100%;
+        .comment .comment-body .comment-author .comment-timestamp,
+        .userlink-container .userlink .userlink-handle {
+            color: var(--basic-text);
+            opacity: 1;
         }
 
         .userlink-container .userlink a {
-            color: {{ data.customization.basic_box_text_color }} !important;
-        }
-        {% else %}
-        .profile-box-username {
-            color: {{ data.color }}
+            color: var(--basic-text) !important;
         }
         {% endif %}
+        
+        .profile-box-username {
+            color: var(--username-color);
+        }
     </style>
 {% endblock %}
 

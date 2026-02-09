@@ -23,7 +23,7 @@ namespace OpenSB\Pages;
 
 global $auth, $twig, $database, $sb, $path;
 
-use OpenSB\UserData; // only used for staff notes, do NOT use this for user datahere
+use OpenSB\UserData; // only used for staff notes authors, do NOT use this for actual user data
 use OpenSB\UserFlags;
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;

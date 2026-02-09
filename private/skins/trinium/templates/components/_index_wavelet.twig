@@ -1,5 +1,7 @@
 <div class="section">
     <div class="content-box">
+        <div class="text-danger">this doesnt work yet <a href="/write">go to the old journal write page</a></div>
+        {{ include('/components/_comment_input.twig') }}
         {% for journal in data.posts %}
             {{ include('/components/_journal.twig') }}
         {% endfor %}

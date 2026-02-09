@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021-2022 icanttellyou
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
@@ -34,14 +34,31 @@ $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 
 
 $limit = $database->paginate($page, pp: 20);
 
+// TODO: searching for a user should prioitize them and their uploads
+
 $uploads = $upload_query->query(
-    "v.timestamp DESC",
+    "(
+        (v.tags = ?) * 200 +
+        (v.tags LIKE CONCAT('%', ?, '%')) * 120 +
+        (v.title = ?) * 60 +
+        (v.title LIKE CONCAT('%', ?, '%')) * 30 +
+        (v.description LIKE CONCAT('%', ?, '%')) * 10
+     )
+     + (LOG10(v.views + 1) * 5)
+     DESC,
+     v.timestamp DESC",
     $limit,
-    "(v.tags LIKE CONCAT('%', ?, '%') 
-    OR v.title LIKE CONCAT('%', ?, '%') 
-    OR v.description LIKE CONCAT('%', ?, '%'))",
-    [$query, $query, $query]
+    "(v.tags LIKE CONCAT('%', ?, '%')
+      OR v.title LIKE CONCAT('%', ?, '%')
+      OR v.description LIKE CONCAT('%', ?, '%'))",
+    [
+        // scoring
+        $query, $query, $query, $query, $query,
+        // filtering
+        $query, $query, $query
+    ]
 );
+
 $upload_count = $upload_query->count("(v.tags LIKE CONCAT('%', ?, '%') 
     OR v.title LIKE CONCAT('%', ?, '%') 
     OR v.description LIKE CONCAT('%', ?, '%'))", [$query, $query, $query]);

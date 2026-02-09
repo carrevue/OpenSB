@@ -92,21 +92,24 @@ function make_running_total_graph_from_views($database): array
     ));
 }
 
-$date = $database->fetch("SELECT u.joined FROM users u ORDER BY u.joined ASC")["joined"];
+if ($sb->isChazizInstance()) {
+    $date = 1612069200;
+} else {
+    $date = $database->result("SELECT u.joined FROM users u ORDER BY u.joined ASC");
+}
 
 $thingsToCount = [
+    'users' => 'Users',
+    'uploads' => 'Uploads',
+    'journals' => 'Posts',
     'upload_comments' => 'Upload comments',
     'user_profile_comments' => 'Profile comments',
     'journal_comments' => 'Journal comments',
-    'users' => 'Users',
-    'uploads' => 'Uploads',
     'upload_deleted' => 'Deleted uploads',
     'upload_takedowns' => 'Taken down uploads',
     'upload_views' => 'Views',
-    'user_favorites' => 'Favorites',
     'user_bans' => 'User bans',
     'ip_bans' => 'IP bans',
-    'journals' => 'Journals'
 ];
 
 $query = "SELECT ";
@@ -176,7 +179,7 @@ $chartData = [
                 'yAxisID' => 'n',
             ],
             [
-                'label' => 'Journals',
+                'label' => 'Posts',
                 'data' => array_map(function ($graph) {
                     return [
                         'x' => $graph['timestamp'],
@@ -207,6 +210,7 @@ $chartData = [
                 }, $view_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'v',
+                'hidden' => true, // hide this by default
             ],
         ]
     ],
@@ -297,6 +301,6 @@ $data = [
     ],
 ];
 
-echo $twig->render("dashboard_overview.twig", [
+echo $twig->render("dashboard_statistics.twig", [
     'data' => $data
 ]);

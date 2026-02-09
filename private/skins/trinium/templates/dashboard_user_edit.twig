@@ -31,192 +31,208 @@
         <div class="grid">
             <div class="col-6">
                 <div class="section">
-                    <div class="content-box">
+                    <div class="section-header">
+                        <h2 class="section-title">Details</h2>
+                    </div>
+                    <table class="styled">
+                        <tbody>
+                        <tr>
+                            <td>{{ localize('user_id') }}</td>
+                            <td>{{ user.id }}</td>
+                        </tr>
+                        {% if user_data.powerlevel > 2 %}
+                            <tr>
+                                <td>IP address</td>
+                                <td>{{ user.ip }}</td>
+                            <tr>
+                            <tr>
+                                <td>{{ localize('email_address') }}</td>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ localize('username') }}</td>
+                            <td>{{ user.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ localize('profile_name') }}</td>
+                            <td>{{ user.title }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ localize('user_role') }}</td>
+                            <td>
+                                {% set role = 
+                                    user.powerlevel == 1 ? localize('user_role_normal') :
+                                    user.powerlevel == 2 ? localize('user_role_moderator') :
+                                    user.powerlevel == 3 ? localize('user_role_administrator') :
+                                    user.powerlevel == 4 ? localize('user_role_owner') :
+                                    localize('user_role_unknown') ~ ' (' ~ user.powerlevel ~ ')'
+                                %}
+                                {{ role }}
+                            </td>
+                        </tr>
+                        {% if user.birthdate %}
+                        <tr>
+                            <td>{{ localize('age') }}/{{ localize('birthdate') }}</td>
+                            <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | format_date('long', 'none') }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ localize('registered') }}</td>
+                            <td>{{ user.joined | format_date('long', 'medium') }}
+                                <br>({{ user.birthdate | calculate_age_from(user.joined) }} years old)
+                                {% if flags.fulptube_account %}
+                                <br><small>{{ localize('fulptube_account') }}</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td>{{ localize('registered') }}</td>
+                            <td>{{ user.joined | format_date('long', 'medium') }}
+                                {% if flags.fulptube_account %}
+                                <br><small>{{ localize('fulptube_account') }}</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ localize('last_seen') }}</td>
+                            <td>{{ user.last_seen | format_date('long', 'medium') }}</td>
+                        </tr>
+                        {#<tr>
+                            <td>{{ localize('comfortable_rating') }}</td>
+                            <td>{{ user.comfortable_rating }}</td>
+                        </tr>#}
+                        <tr>
+                            <td>{{ localize('user_link_color') }}</td>
+                            <td style="background:{{ user.userlink_color }};"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% if ip_info %}
+                    <hr>
+                    <div class="section">
                         <div class="section-header">
-                            <h2 class="section-title">Details</h2>
+                            <h2 class="section-title">IP info</h2>
                         </div>
                         <table class="styled">
                             <tbody>
-                            <tr>
-                                <td>{{ localize('user_id') }}</td>
-                                <td>{{ user.id }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ localize('username') }}</td>
-                                <td>{{ user.name }}</td>
-                            </tr>
-                            {% if user_data.powerlevel > 2 %}
+                            {% for key, info in ip_info %}
                                 <tr>
-                                    <td>{{ localize('email_address') }}</td>
-                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        {{ localize(key) }}
+                                    </td>
+                                    <td>
+                                        {{ info }}
+                                    </td>
                                 </tr>
-                            {% endif %}
-                            <tr>
-                                <td>{{ localize('profile_name') }}</td>
-                                <td>{{ user.title }}</td>
-                            </tr>
-                            {% if user_data.powerlevel > 2 %}
-                                <tr>
-                                    <td>IP address</td>
-                                    <td>{{ user.ip }}</td>
-                                <tr>
-                            {% endif %}
-                            <tr>
-                                <td>{{ localize('user_role') }}</td>
-                                <td>
-                                    {% set role = 
-                                        user.powerlevel == 1 ? localize('user_role_normal') :
-                                        user.powerlevel == 2 ? localize('user_role_moderator') :
-                                        user.powerlevel == 3 ? localize('user_role_administrator') :
-                                        user.powerlevel == 4 ? localize('user_role_owner') :
-                                        localize('user_role_unknown') ~ ' (' ~ user.powerlevel ~ ')'
-                                    %}
-                                    {{ role }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ localize('age') }}/{{ localize('birthdate') }}</td>
-                                <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | format_date('long', 'none') }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ localize('registered') }}</td>
-                                <td>{{ user.joined | format_date('long', 'medium') }}
-                                    <br>({{ user.birthdate | calculate_age_from(user.joined) }} years old)
-                                    {% if flags.fulptube_account %}
-                                    <br><small>{{ localize('fulptube_account') }}</small>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ localize('last_seen') }}</td>
-                                <td>{{ user.last_seen | format_date('long', 'medium') }}</td>
-                            </tr>
-                            {#<tr>
-                                <td>{{ localize('comfortable_rating') }}</td>
-                                <td>{{ user.comfortable_rating }}</td>
-                            </tr>#}
-                            <tr>
-                                <td>{{ localize('user_link_color') }}</td>
-                                <td style="background:{{ user.userlink_color }};"></td>
-                            </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                </div>
-                {% if ip_info %}
-                    <div class="section">
-                        <div class="content-box">
-                            <div class="section-header">
-                                <h2 class="section-title">IP info</h2>
-                            </div>
-                            <table class="styled">
-                                <tbody>
-                                {% for key, info in ip_info %}
-                                    <tr>
-                                        <td>
-                                            {{ localize(key) }}
-                                        </td>
-                                        <td>
-                                            {{ info }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 {% endif %}
                 {% if users_with_matching_ips %}
+                    <hr>
                     <div class="section">
-                        <div class="content-box">
-                            <div class="section-header">
-                                <h2 class="section-title">Accounts with matching IP</h2>
-                            </div>
-                            <table class="styled">
-                                <tbody>
-                                {% for user in users_with_matching_ips %}
-                                    <tr>
-                                        <td>
-                                            <a href="/dashboard/users/{{ user.name }}">{{ user.name }}</a>
-                                        </td>
-                                        <td>
-                                            {{ user.title }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="section-header">
+                            <h2 class="section-title">Accounts with matching IP</h2>
                         </div>
+                        <table class="styled">
+                            <tbody>
+                            {% for user in users_with_matching_ips %}
+                                <tr>
+                                    <td>
+                                        <a href="/dashboard/users/{{ user.name }}">{{ user.name }}</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 {% endif %}
                 {% if old_names %}
+                    <hr>
+                    {# username history (entries with timestamp) #}
                     <div class="section">
-                        <div class="content-box">
-                            <div class="section-header">
-                                <h2 class="section-title">Previous usernames</h2>
-                            </div>
-                            <table class="styled">
-                                <tbody>
-                                {% for entry in old_names %}
+                        <div class="section-header">
+                            <h2 class="section-title">Username history</h2>
+                        </div>
+                        <table class="styled">
+                            <tbody>
+                                {% for entry in old_names
+                                    |filter(e => e.timestamp != 0 and e.timestamp != 1)
+                                    |sort((a, b) => b.timestamp <=> a.timestamp)
+                                %}
                                     <tr>
-                                        <td>
-                                            {{ entry.old_name }}
-                                        </td>
-                                        <td>
-                                            {{ entry.timestamp | format_date('long', 'medium') }}
-                                        </td>
+                                        <td>{{ entry.old_name }}</td>
+                                        <td>{{ entry.timestamp | format_date('long', 'medium') }}</td>
                                     </tr>
                                 {% endfor %}
-                                </tbody>
-                            </table>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+                    {# aliases (entries with no timestamp) #}
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Aliases</h2>
                         </div>
+                        <table class="styled">
+                            <tbody>
+                                {% for entry in old_names
+                                    |filter(e => e.timestamp == 0 or e.timestamp == 1)
+                                %}
+                                    <tr>
+                                        <td>{{ entry.old_name }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 {% endif %}
             </div>
             <div class="col-6">
                 <div class="section">
-                    <div class="content-box">
-                        <div class="section-header">
-                            <h2 class="section-title">Assets</h2>
-                        </div>
-                        <table class="styled">
-                            <tbody>
-                            <tr class="table-header">
-                                <th style="width:50%;">Profile picture</th>
-                                <th style="width:50%;">Banner</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="{{ profile_picture(user.id) }}" style="width:100%;" alt="{{ user.username }}">
-                                </td>
-                                <td>
-                                    <img src="{{ profile_banner(user.id) }}" style="width:100%;" alt="{{ user.username }}">
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="section-header">
+                        <h2 class="section-title">Assets</h2>
                     </div>
+                    <table class="styled">
+                        <tbody>
+                        <tr class="table-header">
+                            <th style="width:25%;">Profile picture</th>
+                            <th style="width:75%;">Banner</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="{{ profile_picture(user.id) }}" style="width:100%;" alt="{{ user.username }}">
+                            </td>
+                            <td>
+                                <img src="{{ profile_banner(user.id) }}" style="width:100%;" alt="{{ user.username }}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 {% if notes %}
+                <hr>
                 <div class="section">
-                    <div class="content-box">
-                        <div class="section-header">
-                            <h2 class="section-title">Notes</h2>
-                        </div>
-                        {% for note in notes %}
-                            <div class="content-box">
-                                <div class="content-info">
-                                    <div class="content-title">
-                                        {{ user_link(note.author) }}
-                                        {{ note.time | relative_time }}
-                                    </div>
-                                </div>
-                                <div class="content-description">
-                                    {{ note.content | markdown_user_written(true) }}
+                    <div class="section-header">
+                        <h2 class="section-title">Notes</h2>
+                    </div>
+                    {% for note in notes %}
+                        <div class="content-box">
+                            <div class="content-info">
+                                <div class="content-title">
+                                    {{ user_link(note.author) }}
+                                    {{ note.time | relative_time }}
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
+                            <div class="content-description">
+                                {{ note.content | markdown_user_written(true) }}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
                 {% endif %}
             </div>

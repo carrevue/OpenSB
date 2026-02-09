@@ -3,14 +3,19 @@
 {% set title = "Filtering" %}
 
 	{% block dashboard_content %}
-        <table class="styled">
-            <tr class="table-header">
-                <th>Name</th>
-            </tr>
-            {% for entry in data %}
-                <tr>
-                    <td class="a">{{ entry.name }}</td>
+        <div class="section">
+            <div class="section-header">
+                <h2>Blocked usernames</h2>
+            </div>
+            <table class="styled">
+                <tr class="table-header">
+                    <th>Name</th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for entry in data %}
+                    <tr>
+                        <td class="a">{{ entry.name }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     {% endblock %}

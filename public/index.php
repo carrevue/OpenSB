@@ -279,13 +279,14 @@ $router->add('/dashboard', 'dashboard/index.php');
 $router->add('/dashboard/login', 'dashboard/login.php');
 $router->add('/dashboard/users', 'dashboard/users.php');
 $router->add('/dashboard/users/{username}', 'dashboard/user_edit.php');
-$router->add('/dashboard/overview', 'dashboard/overview.php');
+$router->redirect('/dashboard/overview', '/dashboard');
 $router->add('/dashboard/uploads', 'dashboard/uploads.php');
 $router->add('/dashboard/uploads/{id}', 'dashboard/upload_edit.php');
 $router->add('/dashboard/interactions', 'dashboard/interactions.php');
 $router->add('/dashboard/invite_keys', 'dashboard/invite_keys.php');
 $router->add('/dashboard/ip_bans', 'dashboard/ip_bans.php');
 $router->add('/dashboard/filtering', 'dashboard/filtering.php');
+$router->add('/dashboard/statistics', 'dashboard/statistics.php');
 $router->add('/dashboard/server', 'dashboard/server.php');
 
 // trinium icons (used by trinium)

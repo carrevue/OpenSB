@@ -49,15 +49,22 @@ $limit = $database->paginate($page, $amount);
 
 $usersDataQuery = $database->fetchArray(
     $database->query(
-        "SELECT u.id, u.title, u.powerlevel,
-       (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
-       (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num
-       /*(SELECT COUNT(*) FROM user_bans WHERE user = u.id) AS is_banned*/
+        "
+        SELECT u.id, u.title, u.powerlevel,
+            (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
+            (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
+            (SELECT COUNT(*) FROM user_bans WHERE user = u.id) AS is_banned
         FROM users u
-        WHERE (u.name LIKE CONCAT('%', ?, '%'))
-        ORDER BY u.id DESC $limit
+        WHERE u.name LIKE CONCAT('%', ?, '%')
+        ORDER BY
+            CASE
+                WHEN LOWER(u.name) = LOWER(?) THEN 0
+                ELSE 1
+            END,
+            u.id DESC
+        $limit
         ",
-        [$search]
+        [$search, $search]
     )
 );
 
@@ -69,7 +76,7 @@ foreach ($usersDataQuery as $user) {
             "info" => $userData->getUserArray(),
             "uploads" => $user["s_num"],
             "journals" => $user["j_num"],
-            //"banned" => $user["is_banned"],
+            "banned" => $user["is_banned"],
             "powerlevel" => $user["powerlevel"],
         ];
 }

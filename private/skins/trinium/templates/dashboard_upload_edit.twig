@@ -5,95 +5,119 @@
 	{% block dashboard_content %}
         <div class="grid">
             <div class="col-6">
-                <div class="content-box">
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Details</h2>
-                        </div>
-                        <table class="styled">
-                            <tbody>
-                            <tr>
-                                <td>Title</td>
-                                <td>{{ upload.title }}</td>
-                            </tr>
-                            <tr>
-                                <td>Published</td>
-                                <td>{{ upload.published | format_date('long', 'medium') }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Details</h2>
                     </div>
+                    <table class="styled">
+                        <tbody>
+                        <tr>
+                            <td>Title</td>
+                            <td>{{ upload.title }}</td>
+                        </tr>
+                        <tr>
+                            <td>Author</td>
+                            <td><a href="/dashboard/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Uploaded</td>
+                            <td>{{ upload.published | format_date('long', 'medium') }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <br>
-                <div class="content-box">
-                    <div class="section">
-                        <div class="section-header">
-                            <h2 class="section-title">Flags</h2>
-                        </div>
-                        <form method="post" name="booleanForm" id="booleanForm" action="/dashboard/uploads/{{ upload.id }}">
-                            <div class="form-input">
-                                <input type="checkbox" id="flag_featured" name="flag_featured"
-                                       {% if upload.flags.featured %}checked{% endif %}>
-                                <label for="flag_featured"> Featured</label>
-                            </div>
-
-                            <div class="form-input">
-                                <input type="checkbox" id="flag_unprocessed" name="flag_unprocessed"
-                                       {% if upload.flags.unprocessed %}checked{% endif %}>
-                                <label for="flag_unprocessed"> Unprocessed video</label>
-                            </div>
-
-                            <div class="form-input">
-                                <input type="checkbox" id="flag_block_guests" name="flag_block_guests"
-                                       {% if upload.flags.block_guests %}checked{% endif %}>
-                                <label for="flag_block_guests"> Block guests</label>
-                            </div>
-
-                            <div class="form-input">
-                                <input type="checkbox" id="flag_block_comments" name="flag_block_comments"
-                                       {% if upload.flags.block_comments %}checked{% endif %}>
-                                <label for="flag_block_comments"> Block comments</label>
-                            </div>
-
-                            <div class="form-input">
-                                <input type="checkbox" id="flag_custom_thumbnail" name="flag_custom_thumbnail"
-                                       {% if upload.flags.custom_thumbnail %}checked{% endif %}>
-                                <label for="flag_custom_thumbnail"> Custom thumbnail</label>
-                            </div>
-
-                            <div class="form-input">
-                                <input type="checkbox" id="flag_mature" name="flag_mature"
-                                       {% if upload.flags.mature %}checked{% endif %}>
-                                <label for="flag_mature"> Mature</label>
-                            </div>
-
-                            <div class="form-button-container">
-                                <input type="submit" class="button primary" value="{{ localize('save_action') }}" name="flagsubmit">
-                            </div>
-                        </form>
+                <hr>
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Ratings</h2>
                     </div>
+                    <table class="styled">
+                        <tbody>
+                            <tr class="table-header">
+                                <th>Stars</th>
+                                <th>Count</th>
+                            </tr>
+
+                            {% for stars, count in upload.interactions.ratings.stars %}
+                                <tr>
+                                    <td>{{ stars }}</td>
+                                    <td>{{ count }}</td>
+                                </tr>
+                            {% endfor %}
+
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td>{{ upload.interactions.ratings.total }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Average</strong></td>
+                                <td>{{ upload.interactions.ratings.average }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="col-6">
-                <div class="content-box">
-                    {{ upload_view(upload) }}
-                </div>
-                <br>
-                <div>
-                    <div class="content-box">
-                        <div class="section">
-                            <div class="section-header">
-                                <h2 class="section-title">Upload processor log</h2>
-                            </div>
-                            {% if upload.log %}
-                                <pre>
-                                {{- upload.log -}}
-                            </pre>
-                            {% else %}
-                                No logs could be found.
-                            {% endif %}
-                        </div>
+                {{ upload_view(upload) }}
+                <hr>
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Flags</h2>
                     </div>
+                    <form method="post" name="booleanForm" id="booleanForm" action="/dashboard/uploads/{{ upload.id }}">
+                        <div class="form-input">
+                            <input type="checkbox" id="flag_featured" name="flag_featured"
+                                    {% if upload.flags.featured %}checked{% endif %}>
+                            <label for="flag_featured"> Featured</label>
+                        </div>
+
+                        <div class="form-input">
+                            <input type="checkbox" id="flag_unprocessed" name="flag_unprocessed"
+                                    {% if upload.flags.unprocessed %}checked{% endif %}>
+                            <label for="flag_unprocessed"> Unprocessed video</label>
+                        </div>
+
+                        <div class="form-input">
+                            <input type="checkbox" id="flag_block_guests" name="flag_block_guests"
+                                    {% if upload.flags.block_guests %}checked{% endif %}>
+                            <label for="flag_block_guests"> Block guests</label>
+                        </div>
+
+                        <div class="form-input">
+                            <input type="checkbox" id="flag_block_comments" name="flag_block_comments"
+                                    {% if upload.flags.block_comments %}checked{% endif %}>
+                            <label for="flag_block_comments"> Block comments</label>
+                        </div>
+
+                        <div class="form-input">
+                            <input type="checkbox" id="flag_custom_thumbnail" name="flag_custom_thumbnail"
+                                    {% if upload.flags.custom_thumbnail %}checked{% endif %}>
+                            <label for="flag_custom_thumbnail"> Custom thumbnail</label>
+                        </div>
+
+                        <div class="form-input">
+                            <input type="checkbox" id="flag_mature" name="flag_mature"
+                                    {% if upload.flags.mature %}checked{% endif %}>
+                            <label for="flag_mature"> Mature</label>
+                        </div>
+
+                        <div class="form-button-container">
+                            <input type="submit" class="button primary" value="{{ localize('save_action') }}" name="flagsubmit">
+                        </div>
+                    </form>
+                </div>
+                <hr>
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Upload processor log</h2>
+                    </div>
+                    {% if upload.log %}
+                        <pre>
+                        {{- upload.log -}}
+                    </pre>
+                    {% else %}
+                        No logs could be found.
+                    {% endif %}
                 </div>
             </div>
         </div>

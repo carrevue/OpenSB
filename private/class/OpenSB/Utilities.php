@@ -456,12 +456,19 @@ class Utilities
      *
      * @return int
      */
-    public static function calculateAge($birthdate): int
+    public static function calculateAge(string $birthdate): int
     {
-        $birthDate = new DateTime($birthdate);
-        $today = new DateTime('now');
-        $interval = $today->diff($birthDate);
-        return $interval->y;
+        if (!$birthdate) {
+            return 0;
+        }
+
+        try {
+            $birthDate = new DateTime($birthdate);
+        } catch (Exception $e) {
+            return 0;
+        }
+
+        return (new DateTime())->diff($birthDate)->y;
     }
 
     /**
@@ -474,11 +481,14 @@ class Utilities
      */
     public static function calculateAgeFrom($birthdate, $date): int
     {
-        $birthDate = new DateTime($birthdate);
-        $targetDate = new DateTime();
-        $targetDate->setTimestamp($date);
-        $interval = $targetDate->diff($birthDate);
-        return $interval->y;
+        if (empty($birthdate) || empty($date)) {
+            return 0;
+        }
+
+        $birthDate  = new DateTime($birthdate);
+        $targetDate = (new DateTime())->setTimestamp((int)$date);
+
+        return $targetDate->diff($birthDate)->y;
     }
 
     /**

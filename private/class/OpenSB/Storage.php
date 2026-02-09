@@ -98,6 +98,13 @@ class Storage
      */
     public function processVideoUpload(string $new, string $target_file, string $type = "video"): void
     {
+        // on test instance, we'll have to put them in prod's /dynamic/videos for now
+        if ($this->sb->isTestInstance()) {
+            $log_path = $this->path . '/videos/' . $new . '.log';
+        } else {
+            $log_path = SB_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log';
+        }
+
         // this uses the version of php on path. if the upload processor errors
         // out with "OpenSB is not compatible with your PHP version.", then 
         // your path's php is too old.
@@ -108,7 +115,7 @@ class Storage
                 $new,
                 $target_file,
                 $type,
-                SB_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
+                $log_path
             ), "r"));
         } else {
             system(sprintf(
@@ -117,7 +124,7 @@ class Storage
                 $new,
                 $target_file,
                 $type,
-                SB_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log'
+                $log_path
             ));
         }
     }

@@ -55,7 +55,6 @@ require_once(SB_VENDOR_PATH . '/autoload.php');
 
 use OpenSB\ErrorTemplating;
 use OpenSB\SquareBracket;
-use OpenSB\Templating;
 use OpenSB\Utilities;
 use OpenSB\VersionNumber;
 
@@ -90,13 +89,10 @@ if (!SB_CLI) {
             'path' => '/',
             'secure' => $is_secure,
             'httponly' => true,
-            'samesite' => 'Strict'
+            'samesite' => 'Lax'
         ]);
 
-        session_start([
-            "cookie_lifetime" => 86400,
-            "gc_maxlifetime" => 86400,
-        ]);
+        session_start();
     }
 
     if (empty($_SESSION['csrf_token'])) {
