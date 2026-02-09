@@ -352,7 +352,7 @@ class SquareBracket
             $this->ip_lookup = null;
         }
 
-        $this->enable_mail = $config["mail"]["enabled"];
+        $this->enable_mail = $config["mail"]["enabled"] ?? false;
 
         if ($this->enable_mail) {
             $this->mail = new Mail($this, $config["mail"]);
