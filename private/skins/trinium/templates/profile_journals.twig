@@ -27,7 +27,7 @@
         </div>
         <div class="content-box basic-box">
             {% for journal in journals %}
-                {{ include('/components/_journal.twig') }}
+                {{ include('/components/_post.twig') }}
             {% else %}
                 <p>No journals!</p>
             {% endfor %}

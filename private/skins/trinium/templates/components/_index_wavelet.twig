@@ -1,9 +1,31 @@
 <div class="section">
     <div class="content-box">
-        <div class="text-danger">this doesnt work yet <a href="/write">go to the old journal write page</a></div>
-        {{ include('/components/_comment_input.twig') }}
+        {% if is_user_logged_in %}
+        <div class="new-post" id="post_field">
+            <div class="profile-picture">
+                <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+            </div>
+            <div id="new-post-form">
+                <textarea class="form-submit" id="post_contents" placeholder="{{ localize('write_post') }}" name="post" maxlength="1000" rows="3"></textarea>
+                <div class="new-post-bottom">
+                    <div class="text-danger post-form-error" id="post-form-error">
+                        this doesn't work yet <a href="/write">go to the old journal write page</a>
+                    </div>
+                    <div class="new-post-buttons">
+                        <button type="submit" id="post_post_button" name="post" class="button primary">
+                            {{ localize('post_action') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div id="new-comment-button">
+            {{ localize('please_login_to_comment') }}
+        </div>
+        {% endif %}
         {% for journal in data.posts %}
-            {{ include('/components/_journal.twig') }}
+            {{ include('/components/_post.twig') }}
         {% endfor %}
     </div>
 </div>

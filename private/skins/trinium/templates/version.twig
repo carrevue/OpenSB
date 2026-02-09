@@ -17,7 +17,7 @@
             <div class="col-8">
                 <div class="section">
                     <div class="content-box">
-                        <img src="/assets/opensb_logo.svg" class="img-version">
+                        {{ icon('opensb_logo', ['180', '41.4']) }}
                         <p>{{ localize('version_intro', '2021-' ~ ('now' | date('Y')), data.developers|join(', ')) }}</p>
                         <p>{{ localize('version_agpl') }}</p>
                         <p>{{ localize('version_no_warranty') }}</p>
@@ -48,7 +48,7 @@
                                     </a>
                                 </div>
                                 <div class="content-info">
-                                    <div class="content-author">
+                                    <div class="content-title">
                                         {{ user_link(user) }}
                                     </div>
                                     <div class="content-description">

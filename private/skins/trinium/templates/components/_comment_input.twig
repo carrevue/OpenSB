@@ -1,5 +1,5 @@
 {% if is_user_logged_in %}
-<div class="new-comment" id="comment_field">
+<div class="new-post" id="comment_field">
     <div class="profile-picture">
         <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
     </div>
@@ -8,9 +8,9 @@
     </div>
     <div id="new-comment-form">
         <textarea class="form-submit" id="comment_contents" placeholder="{{ localize('write_comment') }}" name="comment" maxlength="1000" rows="3"></textarea>
-        <div class="new-comment-bottom">
-            <div class="text-danger comment-form-error" id="comment-form-error"></div>
-            <div class="new-comment-buttons">
+        <div class="new-post-bottom">
+            <div class="text-danger post-form-error" id="comment-form-error"></div>
+            <div class="new-post-buttons">
                 <button type="cancel" id="comment_cancel_button" name="cancel" class="button secondary">
                     {{ localize('cancel') }}
                 </button>

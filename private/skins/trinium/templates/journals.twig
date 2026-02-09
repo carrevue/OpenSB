@@ -28,7 +28,7 @@
         {% endif %}
         <div class="content-box">
             {% for journal in data %}
-                {{ include('/components/_journal.twig') }}
+                {{ include('/components/_post.twig') }}
             {% else %}
                 <p>{{ localize('no_journals') }}</p>
             {% endfor %}

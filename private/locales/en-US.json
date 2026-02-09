@@ -202,7 +202,7 @@
     "comments": "Comments",
     "about": "About",
 
-    "write_comment": "Write your comment...",
+    "write_comment": "Share your thoughts...",
     "write_reply": "Write your reply...",
     "comments_disabled": "Commenting has been disabled.",
     "please_login_to_comment": "Please login to comment.",
@@ -210,6 +210,8 @@
     "write_comment_hitchhiker": "Add a public comment...",
 
     "comment": "Comment",
+
+    "write_post": "What's on your mind?",
 
     "reply_action": "Reply",
     "post_action": "Post",

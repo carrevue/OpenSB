@@ -30,7 +30,9 @@
             {% if enable_incomplete_features %}
             <li><a href="/my_messages">{{ localize('messages') }}</a></li>
             {% endif %}
+            {% if invite_keys_enabled %}
             <li><a href="/my_invite_keys">{{ localize('invite_keys') }}</a></li>
+            {% endif %}
             {#<li><a href="/notifications">{{ localize('notifications') }}</a></li>#}
             <li><a href="/settings">{{ localize('account_settings') }}</a></li>
         </ul>

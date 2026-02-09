@@ -1,22 +1,22 @@
-<div class="comment" id="comment-{{ comment.id }}">
+<div class="post" id="comment-{{ comment.id }}">
     <a href="/user/{{ comment.author.info.username }}">
         <div class="profile-picture user-id-{{ comment.author.id }}">
             <img src="{{ profile_picture(comment.author.id) }}" class="pfp" alt="{{ comment.author.info.username }}">
         </div>
     </a>
-    <div class="comment-body">
-        <div class="comment-author">
+    <div class="post-body">
+        <div class="post-author">
             {{ user_link(comment.author) }}
-            <span class="comment-timestamp use-tooltip" title="{{ comment.posted | format_date('long', 'medium') }}">{{ comment.posted | relative_time }}</span>
+            <span class="post-timestamp use-tooltip" title="{{ comment.posted | format_date('long', 'medium') }}">{{ comment.posted | relative_time }}</span>
         </div>
-        <div class="comment-contents">
+        <div class="post-contents">
             {% if comment.post | trim is not empty %}
                 {{ comment.post | markdown_user_written }}
             {% else %}
                 <small>Null comment</small>
             {% endif %}
 
-            <div class="comment-actions">
+            <div class="post-actions">
                 {% if comment.id and is_user_logged_in %}
                 <a class="action-button reply-button" data-comment-id="{{ comment.id }}">{{ localize('reply_action') }}</a>
                 {% endif %}
@@ -30,9 +30,9 @@
                         </div>
                         <div class="new-reply-form">
                             <textarea class="form-submit" id="reply_contents_{{ comment.id }}" placeholder="{{ localize('write_reply') }}" maxlength="1000" rows="3"></textarea>
-                            <div class="new-comment-bottom">
-                                <div class="text-danger comment-form-error" id="reply-form-error-{{ comment.id }}"></div>
-                                <div class="new-comment-buttons">
+                            <div class="new-post-bottom">
+                                <div class="text-danger post-form-error" id="reply-form-error-{{ comment.id }}"></div>
+                                <div class="new-post-buttons">
                                     <button type="cancel" id="comment_cancel_button" name="cancel" class="button secondary submit-cancel-button">
                                         {{ localize('cancel') }}
                                     </button>

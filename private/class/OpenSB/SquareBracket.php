@@ -628,7 +628,7 @@ class SquareBracket
      */
     public function isIncompleteFeaturesEnabled(): bool
     {
-        if ($this->is_chaziz_instance && !$this->is_test_instance) {
+        if ($this->is_chaziz_instance && !$this->is_test_instance && !$this->is_debug) {
             return false;
         }
 

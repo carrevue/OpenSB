@@ -1,21 +1,21 @@
 {% if enable_incomplete_features %}
-<div class="comment" id="post-{{ journal.id }}">
+<div class="post" id="post-{{ journal.id }}">
     <a href="/user/{{ journal.author.info.username }}">
         <div class="profile-picture user-id-{{ journal.author.id }}">
             <img src="{{ profile_picture(journal.author.id) }}" class="pfp" alt="{{ journal.author.info.username }}">
         </div>
     </a>
-    <div class="comment-body">
-        <div class="comment-author">
+    <div class="post-body">
+        <div class="post-author">
             {{ user_link(journal.author) }}
-            <span class="comment-timestamp use-tooltip" title="{{ journal.published | format_date('long', 'medium') }}">{{ journal.published | relative_time }}</span>
+            <span class="post-timestamp use-tooltip" title="{{ journal.published | format_date('long', 'medium') }}">{{ journal.published | relative_time }}</span>
         </div>
-        <div class="comment-contents">
+        <div class="post-contents">
             {% if journal.contents | trim is not empty %}
                 {{ journal.contents | markdown_user_written }}
             {% endif %}
         </div>
-        <div class="comment-actions">
+        <div class="post-actions">
             <a class="action-button">Action</a>
             <a class="action-button">Action</a>
             <a class="action-button">Action</a>
