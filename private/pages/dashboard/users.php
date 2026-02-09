@@ -41,7 +41,7 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
 
 $usersData = [];
 
-$amount = $_GET["amount"] ?? 16;
+$amount = $_GET["amount"] ?? 24;
 $search = $_GET["search"] ?? "";
 $page = $_GET["page"] ?? 1;
 

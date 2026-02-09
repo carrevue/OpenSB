@@ -38,7 +38,7 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
-$amount = $_GET["amount"] ?? 16;
+$amount = $_GET["amount"] ?? 24;
 $search = $_GET["search"] ?? "";
 $page = $_GET["page"] ?? 1;
 

@@ -41,7 +41,7 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
 
 $upload_query = new UploadQuery($sb);
 
-$amount = $_GET["amount"] ?? 16;
+$amount = $_GET["amount"] ?? 24;
 $search = trim((string) ($_GET["search"] ?? ""));
 $page = $_GET["page"] ?? 1;
 
