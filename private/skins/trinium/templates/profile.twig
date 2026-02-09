@@ -34,6 +34,12 @@
     {% endif %}
 {% endblock %}
 
+{% if options.experiment_enable_wavelet and enable_incomplete_features %}
+{% set posts_title = localize('posts') %}
+{% else %}
+{% set posts_title = localize('journals') %}
+{% endif %}
+
 {% block content %}
     {% if data.ban_data %}
         <div class="banner secondary">
@@ -107,6 +113,10 @@
                                 <span class="detail-label">{{ localize('last_seen') }}:</span>
                                 <span class="detail-value">{{ data.connected | relative_time() }}</span>
                             </li>
+                            <li class="detail-item">
+                                <span class="detail-label">{{ localize('upload_views') }}:</span>
+                                <span class="detail-value">{{ data.views ?? 0 | format_number }}</span>
+                            </li>
                         </ul>
                         {% if user_is_authenticated_admin %}
                             <hr>
@@ -117,88 +127,86 @@
             </div>
 
             <div class="section">
-                {% if data.journals %}
-                <div class="content-box basic-box">
-                    <div class="section-header flex">
-                        <div class="section-header-left">
-                            {% if options.experiment_enable_wavelet and enable_incomplete_features %}
-                            <h2 class="section-title">{{ localize('posts') }}</h2>
-                            {% else %}
-                            <h2 class="section-title">{{ localize('journals') }}</h2>
-                            {% endif %}
-                        </div>
-                        <div class="section-header-right">
-                            <a href="/user/{{ data.username }}/journals">{{ localize('more') }}</a>
-                        </div>
-                    </div>
-                        {% for journal in data.journals %}
-                            {{ include('/components/_journal.twig') }}
-                        {% endfor %}
-                </div>
-                {% endif %}
             </div>
         </div>
         <div class="col-8">
-            {% if data.featured_upload %}
-            <div class="section">
-                <div class="content-box basic-box">
-                    <div class="section-header">
-                        <h2 class="section-title">{{ localize('profile_featured') }}</h2>
+             <div class="section">
+                <div class="tab-group">
+                    <div class="tabs">
+                        {# spaceless removes html whitespace that causes unnecessary margins #}
+                        {% apply spaceless %}
+                            {% if data.uploads %}<div class="tablink" data-tab="tab_feed">{{ localize('uploads') }}</div>{% endif %}
+                            {% if enable_incomplete_features %}<div class="tablink" data-tab="tab_collections">{{ localize('collections') }}</div>{% endif %}
+                            {% if data.journals %}<div class="tablink" data-tab="tab_posts">{{ posts_title }}</div>{% endif %}
+                            <div class="tablink" data-tab="tab_comments">{{ localize('comments') }} (legacy)</div>
+                        {% endapply %}
                     </div>
-                    {% include('/components/_upload_vertical.twig') with {'upload': data.featured_upload} %}
-                </div>
-            </div>
-            {% endif %}
-
-            {% if data.uploads %}
-                <div class="section">
-                    <div class="content-box basic-box">
-                        <div class="section-header flex">
-                            <div class="section-header-left">
-                                <h2 class="section-title">{{ localize('uploads') }}</h2>
+                    <div class="content-box basic-box no-border-top">
+                        {% if data.uploads %}
+                        <div id="tab_feed" class="tabcontent">
+                            {% if data.featured_upload %}
+                                <div class="section-header">
+                                    <h2 class="section-title">{{ localize('profile_featured') }}</h2>
+                                </div>
+                                {% include('/components/_upload_vertical.twig') with {'upload': data.featured_upload} %}
+                                <div class="section-header flex">
+                                    <div class="section-header-left">
+                                        <h2 class="section-title">{{ localize('uploads') }}</h2>
+                                    </div>
+                                    <div class="section-header-right">
+                                        <a href="/user/{{ data.username }}/uploads">{{ localize('more') }}</a>
+                                    </div>
+                                </div>
+                                <div class="content-grid">
+                                    {% for upload in data.uploads %}
+                                        {{ include('/components/_upload_grid.twig') }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        {% if enable_incomplete_features %}
+                        <div id="tab_collections" class="tabcontent">
+                            <div class="section-header">
+                                <h2 class="section-title">Collections</h2>
                             </div>
-                            <div class="section-header-right">
-                                <a href="/user/{{ data.username }}/uploads">{{ localize('more') }}</a>
+                            <div>
+                                PLACEHOLDER
                             </div>
                         </div>
-                        <div class="content-grid">
-                            {% for upload in data.uploads %}
-                                {{ include('/components/_upload_grid.twig') }}
+                        {% endif %}
+                        {% if data.journals %}
+                        <div id="tab_posts" class="tabcontent">
+                            <div class="section-header flex">
+                                <div class="section-header-left">
+                                    <h2 class="section-title">{{ posts_title }}</h2>
+                                </div>
+                                <div class="section-header-right">
+                                    <a href="/user/{{ data.username }}/journals">{{ localize('more') }}</a>
+                                </div>
+                            </div>
+                            {% for journal in data.journals %}
+                                {{ include('/components/_journal.twig') }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div id="tab_comments" class="tabcontent">
+                            <div class="section-header flex">
+                                <div class="section-header-left">
+                                    <h2 class="section-title">{{ localize('comments') }}</h2>
+                                </div>
+                                <div class="section-header-right">
+                                    <a href="/user/{{ data.username }}/comments">
+                                        {{ localize('more') }}
+                                    </a>
+                                </div>
+                            </div>
+                            {{ include('/components/_comment_input.twig') }}
+                            {% for comment in data.comments %}
+                                {{ include('/components/_comment.twig') }}
                             {% endfor %}
                         </div>
                     </div>
-                </div>
-            {% endif %}
-
-            {% if enable_incomplete_features %}
-            <div class="section">
-                <div class="content-box basic-box">
-                    <div class="section-header">
-                        <h2 class="section-title">Collections</h2>
-                    </div>
-                    <div>
-                        PLACEHOLDER
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            <div class="section">
-                <div class="content-box basic-box">
-                    <div class="section-header flex">
-                        <div class="section-header-left">
-                            <h2 class="section-title">{{ localize('comments') }}</h2>
-                        </div>
-                        <div class="section-header-right">
-                            <a href="/user/{{ data.username }}/comments">
-                                {{ localize('more') }}
-                            </a>
-                        </div>
-                    </div>
-                    {{ include('/components/_comment_input.twig') }}
-                    {% for comment in data.comments %}
-                        {{ include('/components/_comment.twig') }}
-                    {% endfor %}
                 </div>
             </div>
         </div>

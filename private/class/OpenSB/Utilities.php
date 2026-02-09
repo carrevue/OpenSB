@@ -648,10 +648,36 @@ class Utilities
     }
 
     /**
+     * function hexToRgb
+     * 
+     * @param string $hex
+     * 
+     * @return ?array
+     */
+    public static function hexToRgb(string $hex): ?array
+    {
+        $hex = ltrim(trim($hex), '#');
+
+        if (strlen($hex) === 3) {
+            $hex = "{$hex[0]}{$hex[0]}{$hex[1]}{$hex[1]}{$hex[2]}{$hex[2]}";
+        }
+
+        if (strlen($hex) !== 6 || !ctype_xdigit($hex)) {
+            return null;
+        }
+
+        return [
+            hexdec(substr($hex, 0, 2)),
+            hexdec(substr($hex, 2, 2)),
+            hexdec(substr($hex, 4, 2)),
+        ];
+    }
+
+    /**
      * function adjustCssColorBrightness
      *
-     * @param mixed $hex
-     * @param mixed $percent
+     * @param string $hex
+     * @param int $percent
      *
      * @return string
      */
@@ -673,17 +699,14 @@ class Utilities
             . str_pad(dechex($b), 2, '0', STR_PAD_LEFT);
     }
 
-    // calculate the color used for profile banner on the bootstrap skin
-    // the original implementation for this used a scss php compiler library 
-    // thing but that is fucking stupid and it'll slow down the site, so lets
-    // just approximate this.
-
     /**
      * function makeBootstrapSkinProfileGradient
+     * 
+     * calculate the color used for the profile banner seen on the Bootstrap skin
      *
-     * @param mixed $userlink_color
+     * @param string $userlink_color
      *
-     * @return mixed
+     * @return string
      */
     public static function makeBootstrapSkinProfileGradient($userlink_color)
     {

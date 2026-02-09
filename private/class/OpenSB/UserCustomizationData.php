@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -72,10 +72,36 @@ class UserCustomizationData
      */
     public function getData(): array|false
     {
-        if ($this->data) {
-            return $this->data;
-        } else {
+        if (!$this->data) {
             return false;
         }
+
+        $data = $this->data;
+
+        $colorKeys = [
+            'background_color',
+            'title_color',
+            'link_color',
+
+            'basic_box_border_color',
+            'basic_box_background_color',
+            'basic_box_text_color',
+
+            'highlight_box_border_color',
+            'highlight_box_background_color',
+            'highlight_box_text_color',
+        ];
+
+        foreach ($colorKeys as $key) {
+            if (!empty($data[$key])) {
+                $rgb = Utilities::hexToRgb($data[$key]);
+
+                if ($rgb !== null) {
+                    $data[$key . '_rgb'] = implode(' ', $rgb);
+                }
+            }
+        }
+
+        return $data;
     }
 }

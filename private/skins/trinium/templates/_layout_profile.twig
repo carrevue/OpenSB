@@ -1,26 +1,38 @@
 {% extends "_layout.twig" %}
 
+{% set cssVars = {
+    'bg-page': 'background_color',
+    'link-color': 'link_color',
+    'title-color': 'title_color',
+
+    'highlight-bg': 'highlight_box_background_color',
+    'highlight-border': 'highlight_box_border_color',
+    'highlight-text': 'highlight_box_text_color',
+
+    'basic-bg': 'basic_box_background_color',
+    'basic-border': 'basic_box_border_color',
+    'basic-text': 'basic_box_text_color'
+} %}
+
 {% block style %}
         <style>
         :root {
-            {% if data.customization %}
-                --bg-page: {{ data.customization.background_color }};
-                --link-color: {{ data.customization.link_color }};
-                --title-color: {{ data.customization.title_color }};
-
-                --highlight-bg: {{ data.customization.highlight_box_background_color }};
-                --highlight-border: {{ data.customization.highlight_box_border_color }};
-                --highlight-text: {{ data.customization.highlight_box_text_color }};
-
-                --basic-bg: {{ data.customization.basic_box_background_color }};
-                --basic-border: {{ data.customization.basic_box_border_color }};
-                --basic-text: {{ data.customization.basic_box_text_color }};
-
-                {% if data.customization.font %}
-                --page-font: {{ data.customization.font | raw }};
+        {% if data.customization %}
+            {% for cssVar, key in cssVars %}
+                {% if data.customization[key] is not empty %}
+            --{{ cssVar }}: {{ data.customization[key] }};
+                    {% if data.customization[key ~ '_rgb'] is defined %}
+            --{{ cssVar }}-rgb: {{ data.customization[key ~ '_rgb'] }};
+                    {% endif %}
                 {% endif %}
+            {% endfor %}
+
+            {% if data.customization.font %}
+            --page-font: {{ data.customization.font | raw }};
             {% endif %}
-                --username-color: {{ data.color }};
+        {% endif %}
+
+            --username-color: {{ data.color }};
         }
 
         {% if banner_picture %}
@@ -79,6 +91,24 @@
         .content-box.basic-box .reply-form {
             border-color: var(--basic-border);
         }
+
+        /* Tabs */
+        .tabs, .tablink.active {
+            border-color: var(--basic-border);
+        }
+
+        .tablink:hover {
+            background-color: rgb(var(--basic-bg-rgb) / 50%);
+        }
+
+        .tablink.active, .tablink:active {
+            background-color: var(--basic-bg);
+        }
+
+        .tablink.active {
+            color: var(--title-color);
+        }
+
 
         /* Footer */
         .footer .footer-container {

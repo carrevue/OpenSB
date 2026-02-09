@@ -26,8 +26,6 @@ global $auth, $sb;
 use OpenSB\NotificationEnum;
 use OpenSB\Utilities;
 
-$localization = $sb->getLocalizationClass();
-
 header('Content-Type: application/json');
 
 $post_data = json_decode(file_get_contents('php://input'), true);
@@ -42,11 +40,12 @@ if ($auth->isBanned()) {
     ];
 }
 
-$database = $sb->getDatabaseClass();
-
 function follow($member): array
 {
-    global $database, $auth, $localization;
+    global $sb, $database, $auth;
+
+    // cant put this outside here otherwise it shits out, so thats definitely something
+    $localization = $sb->getLocalizationClass();
 
     if ($member == $auth->getUserID()) {
         return [
