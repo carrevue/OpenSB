@@ -87,17 +87,6 @@ class VersionNumber
      */
     private function makeVersionString(): string
     {
-        // if for example, the version number is opensb 2.0 and we're on
-        // the opensb-2.0 branch, we don't need to show the git branch as
-        // it would just repeat itself.
-        if (preg_match('/^(\d+\.\d+)/', $this->versionNumber, $matches)) {
-            $majorMinor = $matches[1];
-
-            if (str_starts_with($this->branch, 'opensb-' . $majorMinor)) {
-                return sprintf('%s-%s', $this->versionNumber, $this->hash);
-            }
-        }
-
         return sprintf('%s.%s-%s', $this->versionNumber, $this->branch, $this->hash);
     }
 

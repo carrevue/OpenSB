@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -49,9 +49,9 @@ enum UserFlags: int
     case FLAG_FULPTUBE_ACCOUNT = 64;
 
     /**
-     * 10000000: Account has access to the testing instance
+     * 10000000: Account has access to the QA instance
      */
-    case FLAG_TEST_INSTANCE_ACCESS = 128;
+    case FLAG_QA_ACCESS = 128;
 
     /**
      * function toArray
@@ -66,7 +66,7 @@ enum UserFlags: int
     {
         return [
             'fulptube_account' => (bool)($flags & self::FLAG_FULPTUBE_ACCOUNT->value),
-            'test_access' => (bool)($flags & self::FLAG_TEST_INSTANCE_ACCESS->value),
+            'qa_access' => (bool)($flags & self::FLAG_QA_ACCESS->value),
             'unverified' => (bool)($flags & self::FLAG_UNVERIFIED->value),
             'featured' => (bool)($flags & self::FLAG_FEATURED->value),
             'mature_content_access' => (bool)($flags & self::FLAG_MATURE_CONTENT_ACCESS->value),

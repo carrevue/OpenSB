@@ -98,7 +98,7 @@ class Storage
      */
     public function processVideoUpload(string $new, string $target_file, string $type = "video"): void
     {
-        // on test instance, we'll have to put them in prod's /dynamic/videos for now
+        // on QA, we'll have to put them in prod's /dynamic/videos for now
         if ($this->sb->isTestInstance()) {
             $log_path = $this->path . '/videos/' . $new . '.log';
         } else {

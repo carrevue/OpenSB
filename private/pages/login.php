@@ -111,7 +111,7 @@ if (isset($_POST["loginsubmit"])) {
             if (
                 $sb->isTestInstance()
                 && $logindata['powerlevel'] < UserRoleEnum::Moderator->value
-                && !($logindata['flags'] & UserFlags::FLAG_TEST_INSTANCE_ACCESS->value)
+                && !($logindata['flags'] & UserFlags::FLAG_QA_ACCESS->value)
             ) {
                 Utilities::notifyBanner("notify_login_test_instance", "/login");
             }

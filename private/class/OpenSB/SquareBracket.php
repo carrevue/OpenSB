@@ -352,7 +352,7 @@ class SquareBracket
      */
     private function overrideBrandingWithFulpTube()
     {
-        $path = ($this->isTestInstance() || $this->isDebug())
+        $path = ($this->is_test_instance || $this->isDebug())
             ? '/assets/sb_branding/fulp_qa'
             : '/assets/sb_branding/fulp';
 
@@ -577,17 +577,21 @@ class SquareBracket
      * function isIncompleteFeaturesEnabled
      *
      * Returns boolean that indicates if incomplete features should be enabled.
-     * This is separate from isDebug, and is enabled by default on SiteTest.
+     * This is separate from isDebug, and is enabled by default on QA.
      *
      * @return bool
      */
     public function isIncompleteFeaturesEnabled(): bool
     {
+        if ($this->is_chaziz_instance && !$this->is_test_instance) {
+            return false;
+        }
+
         if ($this->is_test_instance) {
             return true;
-        } else {
-            return $this->options["enable_incomplete_features"] ?? false;
         }
+
+        return $this->options['enable_incomplete_features'] ?? false;
     }
 
     /**
@@ -621,7 +625,7 @@ class SquareBracket
 
         $isDebugMode = ($this->getLocalOptions()['debug_fulptube_branding'] ?? false) && $this->isDebug();
 
-        if ($this->isChazizInstance() && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
+        if ($this->is_chaziz_instance && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
             return true;
         } else {
             return false;

@@ -162,11 +162,11 @@ if ($sb->isTestInstance())
 
     $auth = $sb->getAuthenticationClass();
 
-    // if the user is still logged in but isnt staff (or doesnt have test instance access flag), log them out.
+    // if the user is still logged in but isnt staff (or doesnt have QA access flag), log them out.
     if (
         $auth->isUserLoggedIn()
         && !$auth->userHasRole(UserRoleEnum::Moderator)
-        && !($auth->getUserFlags() & UserFlags::FLAG_TEST_INSTANCE_ACCESS->value)
+        && !($auth->getUserFlags() & UserFlags::FLAG_QA_ACCESS->value)
     ) {
         $auth->logOut();
     }
