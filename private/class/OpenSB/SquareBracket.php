@@ -68,6 +68,11 @@ class SquareBracket
     private ?IPLookup $ip_lookup;
 
     /**
+     * @var Mail
+     */
+    private ?Mail $mail;
+
+    /**
      * @var Templating
      */
     private Templating $templating;
@@ -121,6 +126,11 @@ class SquareBracket
      * @var bool
      */
     private bool $enable_ip_lookup = false;
+
+    /**
+     * @var bool
+     */
+    private bool $enable_mail = false;
 
     /**
      * @var bool
@@ -341,6 +351,14 @@ class SquareBracket
         } else {
             $this->ip_lookup = null;
         }
+
+        $this->enable_mail = $config["mail"]["enabled"];
+
+        if ($this->enable_mail) {
+            $this->mail = new Mail($this, $config["mail"]);
+        } else {
+            $this->mail = null;
+        }
         
         $this->templating = new Templating($this);
     }
@@ -511,6 +529,33 @@ class SquareBracket
             throw new \RuntimeException("getIpLookupClass() called while IP reader is disabled.");
         }
         return $this->ip_lookup;
+    }
+
+    /**
+     * function isMailEnabled
+     *
+     * Returns the bool that toggles the mail class.
+     *
+     * @return bool
+     */
+    public function isMailEnabled(): bool
+    {
+        return $this->enable_mail;
+    }
+
+    /**
+     * function getMailClass
+     *
+     * Returns the mail class.
+     *
+     * @return Mail
+     */
+    public function getMailClass(): Mail
+    {
+        if (!$this->mail || !$this->enable_mail) {
+            throw new \RuntimeException("getMailClass() called while IP reader is disabled.");
+        }
+        return $this->mail;
     }
 
     /**

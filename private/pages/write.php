@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -29,18 +29,12 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
-if ($auth->isBanned()) {
+if ($auth->isBanned() || $auth->getUserFlags(true)["unverified"]) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($sb->isLockdownEnabled()) {
     Utilities::notifyBanner("notify_write_disabled", "/");
-}
-
-if ($auth->getUserFlags(true)["unverified"]) {
-    http_response_code(403);
-    echo $twig->render('unverified.twig');
-    die();
 }
 
 if ($database->result("SELECT COUNT(*) FROM journals WHERE timestamp > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$sb->isDebug()) {

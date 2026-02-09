@@ -29,7 +29,11 @@ enum UserFlags: int
     case FLAG_PROFILE_CUSTOMIZATION_ENABLED = 1;
 
     /**
-     * 00000010: Unverified user (this is SquareBracket/FulpTube-specific behavior)
+     * 00000010: Unverified user
+     * 
+     * @note In earlier versions of OpenSB, this was only used for 
+     * squareBracket/FulpTube's manual Discord verification. Since
+     * OpenSB 2.1, this has changed to be used for email verification.
      */
     case FLAG_UNVERIFIED = 2;
 

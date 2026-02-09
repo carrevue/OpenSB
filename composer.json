@@ -11,7 +11,8 @@
         "ext-curl": "*",
         "nopjmp/discord-webhooks": "0.4.1",
         "maxmind-db/reader": "1.13.1",
-        "wikimedia/composer-merge-plugin": "^2.1"
+        "wikimedia/composer-merge-plugin": "^2.1",
+        "phpmailer/phpmailer": "7.0.2"
     },
     "minimum-stability": "stable",
     "config": {

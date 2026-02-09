@@ -7,6 +7,8 @@
 # error template
 !error/
 !error/**
+!mail/
+!mail/**
 
 # vsc is kinda fucking stupid and treats finalium and bootstrap as git modules
 bootstrap/

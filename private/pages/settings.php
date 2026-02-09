@@ -38,15 +38,8 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
-// we shouldn't let banned users change settings.
-if ($auth->isBanned()) {
+if ($auth->isBanned() || $auth->getUserFlags(true)["unverified"]) {
     Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if ($auth->getUserFlags(true)["unverified"]) {
-    http_response_code(403);
-    echo $twig->render('unverified.twig');
-    die();
 }
 
 if ($options["skin"] == "trinium") {

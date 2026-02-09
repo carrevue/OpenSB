@@ -77,18 +77,12 @@ if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
-if ($auth->isBanned()) {
+if ($auth->isBanned() || $auth->getUserFlags(true)["unverified"]) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
 if ($sb->isLockdownEnabled()) {
     Utilities::notifyBanner("notify_upload_disabled", "/");
-}
-
-if ($auth->getUserFlags(true)["unverified"]) {
-    http_response_code(403);
-    echo $twig->render('unverified.twig');
-    die();
 }
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {

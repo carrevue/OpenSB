@@ -94,6 +94,13 @@
     "register_discord_requirement": "Before uploading on %s, you will first need to verify your account through our Discord server. We apologize for the inconvenience.",
     "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
 
+    "site1_aka_site2": "%s (also known as %s)",
+
+    "unverified_email_title": "Please verify your email",
+    "unverified_email": "A verification email has been sent. Click the link provided in the email to verify your account. If you don't see it, please check your spam folder.",
+    "unverified_email_chaziz_instance": "<strong>NOTE</strong>: The email will come from fulptube.rocks.",
+    "resend": "Resend",
+
     "email_address": "Email address",
     "username": "Username",
     "password": "Password",

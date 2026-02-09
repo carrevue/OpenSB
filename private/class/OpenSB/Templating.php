@@ -246,7 +246,7 @@ class Templating
         $skins = [];
 
         // stuff in the skins folder that arent Proper skins
-        $excludedSkins = ['common', 'cache', 'error'];
+        $excludedSkins = ['common', 'cache', 'error', 'mail'];
 
         // include currently installed skins
         foreach (glob('skins/*', GLOB_ONLYDIR) as $skin) {

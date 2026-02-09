@@ -215,6 +215,7 @@ $router->add('/tos', 'tos.php');
 $router->add('/upload', 'upload.php');
 $router->redirect('/users', '/members');
 $router->add('/verify_birthdate', 'verify_birthdate.php');
+$router->add('/verify_email', 'verify_email.php');
 $router->redirect('/version', '/about');
 $router->add('/write', 'write.php');
 $router->add('/view/{id}', 'view.php');
