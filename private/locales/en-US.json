@@ -96,10 +96,15 @@
 
     "site1_aka_site2": "%s (also known as %s)",
 
-    "unverified_email_title": "Please verify your email",
+    "unverified_email_title": "Email verification",
     "unverified_email": "A verification email has been sent. Click the link provided in the email to verify your account. If you don't see it, please check your spam folder.",
     "unverified_email_chaziz_instance": "<strong>NOTE</strong>: The email will come from fulptube.rocks.",
     "resend": "Resend",
+
+    "email_verify_title": "Please verify your email.",
+    "email_verify_1": "Hello, someone has registered an account on %s, with the username %s.",
+    "email_verify_2": "To confirm that this account belongs to you, please open this link:",
+    "email_verify_3": "If this account does not belong to you, please ignore this email.",
 
     "email_address": "Email address",
     "username": "Username",

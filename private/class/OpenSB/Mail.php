@@ -34,18 +34,20 @@ class Mail
 {
     private PHPMailer $mailer;
     private MailTemplating $twig;
+    private Localization $localization;
 
     public function __construct(SquareBracket $sb, array $config)
     {
         $this->mailer = new PHPMailer(true);
         $this->twig = new MailTemplating($sb); // much simpler than if we were to use Templating.
+        $this->localization = $sb->getLocalizationClass();
 
         if ($sb->isChazizInstance() && !$sb->isFulpTubeMode()) {
             // for emails intended for squarebracket.pw users, refer to the site
             // like this, as the emails come from fulptube.rocks.
             $name = $sb->getLocalizationClass()->translate('site1_aka_site2', 'squareBracket', 'FulpTube');
         } else {
-            $name = $config["username"];
+            $name = $sb->getBrandingSettings()["name"];
         }
 
         $this->mailer->SMTPDebug = false;
@@ -56,15 +58,20 @@ class Mail
         $this->mailer->Password   = $config["password"];
         $this->mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $this->mailer->Port       = 465;
+
+        $this->mailer->setFrom($config['email'], $name);
     }
 
-    public function sendVerificationMail(array $recipient, string $token)
+    public function sendVerificationMail(string $email, string $username, string $link)
     {
-        $this->mailer->addAddress('email@email.com', 'Chaziz');
+        $this->mailer->addAddress($email, $username);
 
         $this->mailer->isHTML(true);
-        $this->mailer->Subject = 'Hello, World';
-        $this->mailer->Body    = $this->twig->render("unverified.twig");
+        $this->mailer->Subject = $this->localization->translate('email_verify_title');
+        $this->mailer->Body    = $this->twig->render("unverified.twig", [
+            "username" => $username,
+            "link" => $link,
+        ]);
 
         $this->mailer->send();
     }

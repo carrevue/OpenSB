@@ -90,6 +90,18 @@
     "register_discord_requirement": "Votre compte doit être vérifié manuellement sur Discord avant d'utiliser %s.",
     "register_agreement": "En vous inscrivant sur %s, vous acceptez les <a href=\"%s\">Conditions de Service</a> and <a href=\"%s\">Politique de Confidentialité</a>.",
 
+    "site1_aka_site2": "%s (aussi connu par %s)",
+
+    "email_verify": "Vérification du courriel",
+    "unverified_email": "Un courriel de vérification vous a été envoyé. Cliquez sur le lien qu'il contient pour vérifier votre compte. Si vous ne le voyez pas, veuillez vérifier votre dossier de pourriels.",
+    "unverified_email_chaziz_instance": "<strong>NOTE</strong> : Le courriel indiquera qu'il provient de fulptube.rocks.",
+    "resend": "Renvoyer",
+
+    "email_verify_title": "Veuillez vérifier votre adresse courriel",
+    "email_verify_1": "Bonjour, quelqu'un a enregistré un compte sur %s, avec le nom d'utilisateur %s.",
+    "email_verify_2": "Pour confirmer que ce compte vous appartient, veuillez ouvrir ce lien :",
+    "email_verify_3": "Si ce compte ne vous appartient pas, veuillez ignorer ce courriel.",
+
     "email_address": "Adresse courriel",
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",

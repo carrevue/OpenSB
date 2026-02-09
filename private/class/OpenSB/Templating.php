@@ -179,6 +179,14 @@ class Templating
         $showWarningBanner = false;
         $warningBannerText = null;
 
+        if ($this->authentication->isUserLoggedIn() && 
+            $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value) {
+            $showWarningBanner = true;
+            $warningBannerText = 
+            "Heads up! You have still not verified your account. Please check your inbox and spam for a verification email. " .
+            "<a href='/verify_email?resend'>Send again.</a>";
+        }
+
         $this->version_number = new VersionNumber();
 
         // TODO: this should be cleaned up on 2.1 or maybe 3.0

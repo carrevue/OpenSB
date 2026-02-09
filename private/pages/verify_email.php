@@ -30,9 +30,10 @@ if (!$auth->isUserLoggedIn()) { //|| !($auth->getUserFlags() & UserFlags::FLAG_U
     Utilities::redirect('/');
 }
 
-if (isset($_POST["loginsubmit"])) {
+if (isset($_POST["loginsubmit"]) || isset($_GET["resend"])) {
+    $data = $auth->getUserData();
     $mail = $sb->getMailClass();
-    $mail->sendVerificationMail(["test"], "test");
+    $mail->sendVerificationMail($data["email"], $data["name"], "https://example.com/ (This is a testing email)");
 }
 
 echo $twig->render('unverified.twig');

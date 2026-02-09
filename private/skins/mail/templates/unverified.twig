@@ -1,7 +1,4 @@
-<p>Hello, someone has registered an account on {{ website_name }}, with the username Chaziz.</p>
-
-<p>To confirm that this account belongs to you, please open this link:</p>
-
-<p>(insert link here, this is only a testing email.)</p>
-
-<p>If this account does not belong to you, please ignore this email.</p>
+<p>{{ localize('email_verify_1', website_name, username) }}</p>
+<p>{{ localize('email_verify_2') }}</p>
+<a href="{{ link }}">{{ link }}</a>
+<p>{{ localize('email_verify_3') }}</p>
