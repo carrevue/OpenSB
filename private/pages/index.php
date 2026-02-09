@@ -38,7 +38,7 @@ if ($options["skin"] == "finalium") {
     exit;
 }
 
-$enable_wavelet = (($options['experiment_enable_wavelet'] ?? false) === true) && $options["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled();
+$enable_wavelet = $options["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled();
 
 $upload_query = new UploadQuery($sb);
 if ($options["skin"] == "trinium") {

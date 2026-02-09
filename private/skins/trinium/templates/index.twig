@@ -41,7 +41,7 @@
                         <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
                             {{ icon('homepage-list', 24) }}
                         </div>
-                        {% if options.experiment_enable_wavelet and enable_incomplete_features %}
+                        {% if enable_incomplete_features %}
                         <div class="tablink homepage {% if type =='wavelet' %}active{% endif %}" id="index-wavelet-button">
                             {{ icon('homepage-wavelet', 24) }}
                         </div>
@@ -57,7 +57,7 @@
 {% block content %}
     <div class="grid cluster">
         <div class="col-8">
-            {% if options.experiment_enable_wavelet and enable_incomplete_features and type == 'wavelet' %}
+            {% if enable_incomplete_features and type == 'wavelet' %}
                 {{ include('/components/_index_wavelet.twig') }}
             {% else %}
                 {{ include('/components/_index_list.twig') }}

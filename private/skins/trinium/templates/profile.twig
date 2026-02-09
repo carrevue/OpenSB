@@ -34,7 +34,7 @@
     {% endif %}
 {% endblock %}
 
-{% if options.experiment_enable_wavelet and enable_incomplete_features %}
+{% if enable_incomplete_features %}
 {% set posts_title = localize('posts') %}
 {% else %}
 {% set posts_title = localize('journals') %}
@@ -111,11 +111,11 @@
                             </li>
                             <li class="detail-item">
                                 <span class="detail-label">{{ localize('last_seen') }}:</span>
-                                <span class="detail-value">{{ data.connected | relative_time() }}</span>
+                                <span class="detail-value use-tooltip" title="{{ data.joined | format_date('long', 'none') }}">{{ data.connected | relative_time() }}</span>
                             </li>
                             <li class="detail-item">
                                 <span class="detail-label">{{ localize('upload_views') }}:</span>
-                                <span class="detail-value">{{ data.views ?? 0 | format_number }}</span>
+                                <span class="detail-value">{{ data.views | format_number }}</span>
                             </li>
                         </ul>
                         {% if user_is_authenticated_admin %}
@@ -136,7 +136,6 @@
                         {# spaceless removes html whitespace that causes unnecessary margins #}
                         {% apply spaceless %}
                             {% if data.uploads %}<div class="tablink" data-tab="tab_feed">{{ localize('uploads') }}</div>{% endif %}
-                            {% if enable_incomplete_features %}<div class="tablink" data-tab="tab_collections">{{ localize('collections') }}</div>{% endif %}
                             {% if data.journals %}<div class="tablink" data-tab="tab_posts">{{ posts_title }}</div>{% endif %}
                             <div class="tablink" data-tab="tab_comments">{{ localize('comments') }} (legacy)</div>
                         {% endapply %}
@@ -157,16 +156,13 @@
                                         <a href="/user/{{ data.username }}/uploads">{{ localize('more') }}</a>
                                     </div>
                                 </div>
-                                <div class="content-grid">
-                                    {% for upload in data.uploads %}
-                                        {{ include('/components/_upload_grid.twig') }}
-                                    {% endfor %}
-                                </div>
                             {% endif %}
-                        </div>
-                        {% endif %}
-                        {% if enable_incomplete_features %}
-                        <div id="tab_collections" class="tabcontent">
+                            <div class="content-grid">
+                                {% for upload in data.uploads %}
+                                    {{ include('/components/_upload_grid.twig') }}
+                                {% endfor %}
+                            </div>
+                            <hr>
                             <div class="section-header">
                                 <h2 class="section-title">Collections</h2>
                             </div>

@@ -159,6 +159,8 @@ class Localization
      */
     public function formatNumber($number)
     {
+        if ($number == null) $number = 0;
+        
         $formatter = new NumberFormatter($this->isPsuedo ? 'en-US' : $this->locale, NumberFormatter::DECIMAL);
         return $formatter->format($number);
     }

@@ -2,7 +2,7 @@
 
 {% set banner_picture = profile_banner(data.id) %}
 
-{% if options.experiment_enable_wavelet and enable_incomplete_features %}
+{% if enable_incomplete_features %}
 {% set title = data.username ~ "'s posts" %}
 {% else %}
 {% set title = data.username ~ "'s journals" %}
