@@ -52,13 +52,7 @@
                 </div>
             </div>
         </div>
-        <div class="content-description">
-            {# {% if upload.description|trim is not empty %}
-                <span>{{ upload.description }}</span>
-            {% else %}
-                <span class="text-faded">No description</span>
-            {% endif %}
-            <br>#}
+        <div class="content-info">
             {% if upload.published_originally %}
                 Original uploaded: {{ upload.published_originally | format_date('published', 'medium') }}
                 {% if upload.original_site %}on {{ upload.original_site }}{% endif %}

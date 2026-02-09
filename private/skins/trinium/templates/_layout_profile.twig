@@ -110,6 +110,8 @@
 {% endblock %}
 
 {% block precontent %}
+    {% block precontentappend %}
+    {% endblock %}
     {% if banner_picture %}
     <div class="jumbotron profile-banner {% if options.trinium_show_sidebar %}sidebar-active{% endif %}" id="profile-banner"></div>
     {% endif %}

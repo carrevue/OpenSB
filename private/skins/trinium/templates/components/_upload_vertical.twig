@@ -47,18 +47,19 @@
                 {{ show_ratings(upload.interactions.ratings ?? []) }}
             </div>
         </div>
-        <div class="content-description">
+        <div class="content-author">
             {{ user_link(upload.author) }}
-            <br>
-            {{ localize('views', upload.views) }}
-            • <span class="use-tooltip" title="{{ time | format_date('long', 'none') }}">{{ time | relative_time }}</span>
+        </div>
+        <div class="content-info">
+            {{ localize('views', upload.views) }} • <span class="use-tooltip" title="{{ time | format_date('long', 'none') }}">{{ time | relative_time }}</span>
             {% if upload.published_originally and upload.original_site %}
                 <span class="text-faded">on {{ upload.original_site }}</span>
             {% endif %}
-            <br>
-            {% if upload.description|trim is not empty %}
-                <span>{{ upload.description }}</span>
-            {% endif %}
         </div>
+        {% if upload.description|trim is not empty %}
+        <div class="content-description">
+            {{ upload.description }}
+        </div>
+        {% endif %}
     </div>
 </div>

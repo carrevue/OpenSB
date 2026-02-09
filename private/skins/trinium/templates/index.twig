@@ -77,12 +77,17 @@
                 </div>#}
                 {# work around awkwardly defined array #}
                 {% set news = data.news_recent|first %}
-                <div class="section-header">
+                {#<div class="section-header">
                     <h2 class="section-title">{{ news.title }}</h2>
-                </div>
+                </div>#}
                 <div class="content-box">
-                    {{ user_link(news.author) }}
-                    <p>{{ news.contents | markdown_user_written(true) }}</p>
+                    <div class="content-entry">
+                        <div class="content-info">
+                            <div class="content-title">{{ news.title }}</div>
+                            <div class="content-author">{{ user_link(news.author) }}</div>
+                            <p>{{ news.contents | markdown_user_written(true) }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endif %}

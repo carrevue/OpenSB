@@ -72,6 +72,8 @@ if ($flags["profile_customization_enabled"]) {
     $profile_customization_data = null;
 }
 
+$is_own_profile = $data["id"] == $auth->getUserID();
+
 // right. cheat "related channels" on finalium profiles by using featured users
 if ($sb->getLocalOptions()["skin"] == "finalium") {
     // ripped from SquareBracketTwigExtension

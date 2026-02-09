@@ -108,8 +108,6 @@ $user_journals =
                          DESC LIMIT ?", [$data["id"], $user_journal_limit])
     );
 
-$is_own_profile = ($data["id"] == $auth->getUserID());
-
 if (
     $sb->getLocalOptions()["skin"] != "bootstrap" && $sb->getLocalOptions()["skin"] != "finalium"
 ) {

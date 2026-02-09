@@ -39,11 +39,11 @@
                 {% endif %}
             </a>
         </div>
-        <div class="content-description">
+        <div class="content-author">
             {{ user_link(upload.author) }}
-            <br>
-            {{ localize('views', upload.views) }}
-            • <span class="use-tooltip" title="{{ time | format_date('long', 'none') }}">{{ time | relative_time }}</span>
+        </div>
+        <div class="content-info">
+            {{ localize('views', upload.views) }} • <span class="use-tooltip" title="{{ time | format_date('long', 'none') }}">{{ time | relative_time }}</span>
             {% if upload.published_originally and upload.original_site %}
                 <span class="text-faded">on {{ upload.original_site }}</span>
             {% endif %}

@@ -21,6 +21,19 @@
     </script>
 {% endblock %}
 
+{% block precontentappend %}
+    {% if data.is_current %}
+    <div class="profile-edit-container">
+        <div class="profile-edit">
+            <div class="button secondary">Settings</div>
+            <div class="button secondary">Themes</div>
+            <div class="button secondary">Modules</div>
+            <div class="text-danger">Subject to change</div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     {% if data.ban_data %}
         <div class="banner secondary">

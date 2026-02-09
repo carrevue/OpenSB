@@ -32,14 +32,12 @@
 							</a>
 						</div>
 						<div class="content-info">
-							<div class="content-author">
+							<div class="content-title">
 								{{ user_link(user) }}
 							</div>
-                            <div class="content-description">
-								{{ localize('followers', user.followers) }}
-							</div>
-							<div class="content-description">
-								{{ localize('upload_count', user.uploads) }}
+                            <div class="content-info">
+								<div>{{ localize('followers', user.followers) }}</div>
+								<div>{{ localize('upload_count', user.uploads) }}</div>
 							</div>
 						</div>
 					</div>
