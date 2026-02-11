@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html lang="{{ language_code }}" dir="ltr" class="{{ page_name|split(' ')|first }}">
 <head>
-    {{ include('/components/_html_head.twig') }}
+    {{ include('_html_head.twig') }}
     <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_date() }}">
     {% if page_name == "register" and captcha_public_token %}
         <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
