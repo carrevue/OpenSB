@@ -2,16 +2,15 @@
 
 {% set title = localize('my_uploads') %}
 
-{% block my_account_content %}
-    {% set items_per_page = 20 %}
-    {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
-    {% set current_page = page %}
+{% set items_per_page = 20 %}
+{% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
 
+{% block my_account_content %}
     <div class="section">
         <div class="section-header flex">
             <div class="section-header-left">
                 <h1 class="section-title">{{ localize('my_uploads') }}</h1>
-                <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
+                <div class="section-desc">{{ localize('page_num_of_num', page, total_pages )}}</div>
             </div>
         </div>
         <div class="content-box">
@@ -21,6 +20,6 @@
         </div>
         {% set le_url = 'my_uploads?page=%s' %}
 
-        {{ pagination(data.count, items_per_page, le_url, current_page) }}
+        {{ pagination(data.count, items_per_page, le_url, page) }}
     </div>
 {% endblock %}

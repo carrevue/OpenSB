@@ -24,6 +24,7 @@
 namespace OpenSB;
 
 use OpenSB\Utilities;
+use OpenSB\StupidFuckingClassThatIllNameLater;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -401,7 +402,7 @@ class Templating
     {
         $twig_output = $this->twig->render($template, $data);
 
-        if ($this->is_spf /*|| true */) {
+        if ($this->is_spf /*|| true*/) {
             return $this->outputSpfJson($twig_output);
         } else {
             return $twig_output;
@@ -421,6 +422,8 @@ class Templating
     private function outputSpfJson($input): string {
         header('Content-Type: application/json');
 
+        $shit = new StupidFuckingClassThatIllNameLater($input);
+
         // render all required bits
         $spf_output = [
             "head" => "head",
@@ -439,7 +442,7 @@ class Templating
             ],
             "name" => "name",
             "title" => [
-                "title - website"
+                $shit->getTitle(),
             ],
         ];
             
