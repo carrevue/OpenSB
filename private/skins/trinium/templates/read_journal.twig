@@ -4,6 +4,7 @@
 
 {% set title = data.title %}
 
+{# just wait until wavelet posts are implemented
 {% set opengraph_description = data.contents|u.truncate(240, '...') %}
 
 {% set opengraph_type = "article" %}
@@ -11,6 +12,7 @@
 {% set opengraph_author = domain ~ "user/" ~ data.author.info.username %}
 {% set metadata_author = data.author.info.username %}
 {% set opengraph_section = "SquareBracket post" %}
+#}
 
 {% block scripts %}
     <script>

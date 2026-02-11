@@ -4,15 +4,6 @@
 
 {% set title = data.username %}
 
-{% set opengraph_type = "profile" %}
-{% set opengraph_username = data.username %}
-{% if data.about | trim is not empty %}
-    {% set opengraph_description = data.about %}
-{% else %}
-    {% set opengraph_description = localize('profile_no_description') %}
-{% endif %}
-{% set opengraph_image = profile_picture(data.id) %}
-
 {% block scripts %}
     <script>
         comment_type = 'profile';

@@ -360,17 +360,9 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getUploadThumbnail($id, $type, $custom)
     {
-        $data = null;
-
-        if ($type == 0) {
-            $data = $this->storage->getVideoUploadThumbnail($id, $custom);
-        }
-        if ($type == 2) {
-            $data = $this->storage->getImageUploadThumbnail($id, $custom);
-        }
-
-        return $data;
+        return $this->storage->getUploadThumbnail($id, $type, $custom);
     }
+    
     /**
      * function userLink
      * 

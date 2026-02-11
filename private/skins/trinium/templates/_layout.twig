@@ -7,46 +7,9 @@
 <!DOCTYPE html>
 <html lang="{{ language_code }}" dir="ltr" class="{{ page_name|split(' ')|first }}">
 <head>
-    {{ include('/components/_html_head.twig') }}
+    {{ include('_html_head.twig') }}
     <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_date() }}">
-
-    {% if opengraph_type %}
-        <meta property="og:type" content="{{ opengraph_type }}" />
-    {% else %}
-        <meta property="og:type" content="website" />
-    {% endif %}
-
-    {% if opengraph_type == "profile" %}
-        <meta property="profile:username"
-              content="{{ opengraph_username }}" />
-    {% endif %}
-
-    {% if opengraph_description %}
-        <meta property="og:description"
-              content="{{ opengraph_description }}" />
-        <meta name="description" content="{{ opengraph_description }}">
-    {% endif %}
-
-    {% if opengraph_image %}
-        <meta property="og:image" content="{{ opengraph_image }}">
-    {% else %}
-        <meta property="og:image" content="{{ website_branding.assets_location }}/logo_square_icon.png">
-    {% endif %}
-
-    {% if opengraph_author %}
-        <meta property="article:author" content="{{ opengraph_author }}" />
-    {% endif %}
-    {% if metadata_author %}
-        <meta name="author" content="{{ metadata_author }}">
-    {% endif %}
-
-    {% if opengraph_section %}
-        <meta property="article:section" content="{{ opengraph_section }}" />
-    {% endif %}
-
-    {% if opengraph_published %}
-        <meta property="article:published_time" content="{{ opengraph_published }}" />
-    {% endif %}
+    <link rel="preload" href="/assets/icons.svg" as="image" type="image/svg+xml">
 
     <style>
         {# this is done through twig because css does not support string addition #}

@@ -1,0 +1,64 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% if title %}
+    <title>{{ title }} - {{ website_branding.name }}</title>
+{% else %}
+    <title>{{ website_branding.name }}</title>
+{% endif %}
+
+{% if current_skin == "finalium" and current_theme == "hitchhiker" %}
+    {% set color = "#e62117" %}
+{% else %}
+    {% set color = "#0069B4" %}
+{% endif %}
+
+<link rel="manifest" href="{{ website_branding.assets_location }}/icons/site.webmanifest">
+<link rel="shortcut icon" href="{{ website_branding.assets_location }}/icons/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ website_branding.assets_location }}/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ website_branding.assets_location }}/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ website_branding.assets_location }}/icons/favicon-16x16.png">
+<meta name="apple-mobile-web-app-title" content="{{ website_branding.name }}">
+<meta name="application-name" content="{{ website_branding.name }}">
+<meta name="theme-color" content="{{ color }}">
+<meta property="og:title" content="{{ title }}" />
+<meta property="og:url" content="{{ page_url }}">
+<meta property="og:site_name" content="{{ website_branding.name }}" />
+
+{% if meta.opengraph_type %}
+    <meta property="og:type" content="{{ meta.opengraph_type }}" />
+{% else %}
+    <meta property="og:type" content="website" />
+{% endif %}
+
+{% if meta.opengraph_type == "profile" %}
+    <meta property="profile:username"
+            content="{{ opengraph_username }}" />
+{% endif %}
+
+{% if meta.opengraph_description %}
+    <meta property="og:description"
+            content="{{ meta.opengraph_description }}" />
+    <meta name="description" content="{{ meta.opengraph_description }}">
+{% endif %}
+
+{% if meta.opengraph_image %}
+    <meta property="og:image" content="{{ meta.opengraph_image }}">
+{% else %}
+    <meta property="og:image" content="{{ website_branding.assets_location }}/logo_square_icon.png">
+{% endif %}
+
+{% if meta.opengraph_author %}
+    <meta property="article:author" content="{{ meta.opengraph_author }}" />
+{% endif %}
+{% if meta.metadata_author %}
+    <meta name="author" content="{{ meta.metadata_author }}">
+{% endif %}
+
+{% if meta.opengraph_section %}
+    <meta property="article:section" content="{{ meta.opengraph_section }}" />
+{% endif %}
+
+{% if meta.opengraph_published %}
+    <meta property="article:published_time" content="{{ meta.opengraph_published }}" />
+{% endif %}

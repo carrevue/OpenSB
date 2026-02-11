@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2026 Chaziz
+  Copyright (C) 2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -23,7 +23,6 @@ namespace OpenSB\Pages\Debug;
 
 global $twig, $sb;
 
-use OpenSB\BanTypeEnum;
 use OpenSB\FakeUser;
 
 if (isset($_POST['submit'])) {
@@ -43,7 +42,6 @@ if (isset($_POST['submit'])) {
         'reason'     => 'Debug ban preview',
         'timestamp'  => $banTimestamp,
         'expiration' => $expirationTimestamp,
-        'ban_type'   => BanTypeEnum::from($_POST['ban_type']),
         'user_data'  => $userData, // override Templating's userdata
     ];
 
@@ -69,20 +67,6 @@ if (isset($_POST['submit'])) {
         <input type="datetime-local" id="expiration" name="expiration"> 
     </div>
 
-    <div>
-        <label for="ban_type">Ban Type:</label>
-        <select id="ban_type" name="ban_type" required>
-            <?php
-            foreach (BanTypeEnum::cases() as $case) {
-                echo sprintf(
-                    '<option value="%s">%s</option>',
-                    $case->value,
-                    $case->name
-                );
-            }
-            ?>
-        </select>
-    </div>
     <p style="color: red;">this does NOT ban you</p>
     <div>
         <input type="submit" name="submit" value="Ill show you...">

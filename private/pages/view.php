@@ -410,6 +410,20 @@ if ($auth->userHasRole(UserRoleEnum::Administrator) && $takedown) {
 }
 */
 
+// this is kind of ugly. -chaziz 02/11/2026
+$localization = $sb->getLocalizationClass();
+$storage = $sb->getStorageClass();
+
+$twig->setPageMeta([
+    "opengraph_description" => (!empty(trim($data["description"])) ? $data["description"] : $localization->translate("upload_no_description")),
+    "opengraph_image" => $storage->getUploadThumbnail($data["id"], $data["type"], $flags["custom_thumbnail"]),
+    "opengraph_type" => "article",
+    "opengraph_published" => date("c", strtotime($data["timestamp"])),
+    "opengraph_author" => Utilities::getURL(false) . "user/" . $author_info["username"],
+    "metadata_author" => $author_info["username"],
+    "opengraph_section" => $data["type"] == 2 ? "Image" : ($data["type"] == 3 ? "Music" : "Video")
+]);
+
 echo $twig->render('watch.twig', [
     'upload' => $page_data,
 ]);

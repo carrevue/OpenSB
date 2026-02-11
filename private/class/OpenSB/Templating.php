@@ -211,7 +211,7 @@ class Templating
         $this->twig->addGlobal('website_branding', $branding);
         $this->twig->addGlobal('current_theme', $this->theme); // the current skin in the current theme
         $this->twig->addGlobal('invite_keys_enabled', $sb->isInviteKeysEnabled());
-        $this->twig->addGlobal('items_per_page', value: 20); // principia-web leftover, probably remove this shit
+        $this->twig->addGlobal('items_per_page', 20); // principia-web leftover, probably remove this shit
         $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
@@ -368,10 +368,32 @@ class Templating
     }
 
     /**
-     * function render
+     * function setPageMeta
+     * 
+     * Sets the page meta.
      *
-     * @param mixed $template
-     * @param array $data
+     * @param array $data The data
+     *
+     * @return string
+     */
+    public function setPageMeta(array $data = []): void
+    {
+        $meta = [];
+
+        foreach ($data as $key => $value) {
+            $meta[$key] = $value;
+        }
+
+        $this->twig->addGlobal('meta', $meta);
+    }
+
+    /**
+     * function render
+     * 
+     * Renders the template.
+     *
+     * @param string $template The template
+     * @param array $data The data
      *
      * @return string
      */

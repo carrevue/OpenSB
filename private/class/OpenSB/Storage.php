@@ -244,53 +244,28 @@ class Storage
     }
 
     /**
-     * function getVideoUploadThumbnail
+     * function getUploadThumbnail
      * 
-     * Returns the video upload thumbnail.
+     * Returns the upload thumbnail.
      *
      * @param string $id
+     * @param int $type
      * @param bool $custom
      *
      * @return string
      */
-    public function getVideoUploadThumbnail(string $id, bool $custom): string
+    public function getUploadThumbnail($id, $type, $custom): string
     {
-        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
+        $data = null;
 
-        if ($this->disabled) return '/assets/' . $placeholder;
+        if ($type == 0) {
+            $data = $this->getVideoUploadThumbnail($id, $custom);
+        }
+        if ($type == 2) {
+            $data = $this->getImageUploadThumbnail($id, $custom);
+        }
 
-        return $this->getThumbnailPath(
-            $id,
-            $custom,
-            'thumbnails',
-            'png',
-            $placeholder
-        );
-    }
-
-    /**
-     * function getImageUploadThumbnail
-     * 
-     * Returns the image upload thumbnail.
-     *
-     * @param string $id
-     * @param bool $custom
-     *
-     * @return string
-     */
-    public function getImageUploadThumbnail(string $id, bool $custom): string
-    {
-        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
-
-        if ($this->disabled) return '/assets/' . $placeholder;
-
-        return $this->getThumbnailPath(
-            $id,
-            $custom,
-            'art_thumbnails',
-            'jpg',
-            $placeholder
-        );
+        return $data;
     }
 
     /**
@@ -345,6 +320,56 @@ class Storage
         } else {
             return $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
         }
+    }
+
+    /**
+     * function getVideoUploadThumbnail
+     * 
+     * Returns the video upload thumbnail.
+     *
+     * @param string $id
+     * @param bool $custom
+     *
+     * @return string
+     */
+    private function getVideoUploadThumbnail(string $id, bool $custom): string
+    {
+        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
+
+        if ($this->disabled) return '/assets/' . $placeholder;
+
+        return $this->getThumbnailPath(
+            $id,
+            $custom,
+            'thumbnails',
+            'png',
+            $placeholder
+        );
+    }
+
+    /**
+     * function getImageUploadThumbnail
+     * 
+     * Returns the image upload thumbnail.
+     *
+     * @param string $id
+     * @param bool $custom
+     *
+     * @return string
+     */
+    private function getImageUploadThumbnail(string $id, bool $custom): string
+    {
+        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
+
+        if ($this->disabled) return '/assets/' . $placeholder;
+
+        return $this->getThumbnailPath(
+            $id,
+            $custom,
+            'art_thumbnails',
+            'jpg',
+            $placeholder
+        );
     }
 
     /**

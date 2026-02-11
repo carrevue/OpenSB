@@ -2,30 +2,6 @@
 
 {% set title = upload.title %}
 
-{% if upload.description | trim is not empty %}
-    {% set opengraph_description = upload.description %}
-{% else %}
-    {% set opengraph_description = localize('upload_no_description') %}
-{% endif %}
-
-{% set opengraph_image = thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) %}
-
-{% set opengraph_type = "article" %}
-{% set opengraph_published = upload.published | date('c') %}
-{% set opengraph_author = domain ~ "user/" ~ upload.author.info.username %}
-{% set metadata_author = upload.author.info.username %}
-
-{% if upload.type == 2 %}
-    {% set type_text = localize('upload_image') %}
-    {% set opengraph_section = "SquareBracket image" %}
-{% elseif upload.type == 3 %}
-    {% set type_text = localize('upload_music') %}
-    {% set opengraph_section = "SquareBracket music" %}
-{% else %}
-    {% set type_text = localize('upload_video') %}
-    {% set opengraph_section = "SquareBracket video" %}
-{% endif %}
-
 {% block scripts %}
     {{ include('upload_rating_script.twig') }}
 
