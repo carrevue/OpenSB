@@ -399,22 +399,52 @@ class Templating
      */
     public function render($template, array $data = []): string
     {
-        if ($this->is_spf) {
-            header('Content-Type: application/json');
+        $twig_output = $this->twig->render($template, $data);
 
-            // render all required bits
-            $spf_output = [
-                "head" => $this->twig->load($template)->renderBlock('head', $data),
-                "body" => [
-                    "precontent" => $this->twig->load($template)->renderBlock('precontent', $data),
-                    "content" => $this->twig->load($template)->renderBlock('content', $data),
-                ]
-            ];
-            return json_encode($spf_output);
+        if ($this->is_spf /*|| true */) {
+            return $this->outputSpfJson($twig_output);
         } else {
-            $twig_output = $this->twig->render($template, $data);
             return $twig_output;
         }
+    }
+
+    /**
+     * function outputSpfJson
+     *
+     * Takes the html twig output, and parses it into JSON compatible with
+     * SPF (Structured Page Fragments).
+     * 
+     * @note doesnt work lmao
+     *
+     * @return bool
+     */
+    private function outputSpfJson($input): string {
+        header('Content-Type: application/json');
+
+        // render all required bits
+        $spf_output = [
+            "head" => "head",
+            "body" => [
+                "precontent" => "precontent",
+                "content" => "content",
+            ],
+            "url" => Utilities::getURL(),
+            "attr" => [
+                "content" => [
+                    "class" => "class"
+                ],
+                "body" => [
+                    "class" => "class"
+                ]
+            ],
+            "name" => "name",
+            "title" => [
+                "title - website"
+            ],
+        ];
+            
+
+        return json_encode($spf_output);
     }
 
     /**
