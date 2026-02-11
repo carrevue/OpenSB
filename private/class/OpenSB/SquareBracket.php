@@ -775,6 +775,18 @@ class SquareBracket
     }
 
     /**
+     * function isSpfRequest
+     *
+     * Returns a bool that indicates if this is a SPF request.
+     *
+     * @return bool
+     */
+    public function isSpfRequest(): bool
+    {
+        return isset($_SERVER['HTTP_X_SPF_REQUEST']) || isset($_GET["spf"]);
+    }
+
+    /**
      * function getBrandingSettings
      *
      * Returns array for the instance's branding.
@@ -787,13 +799,13 @@ class SquareBracket
     }
 
     /**
-     * function returnCaptchaSettings
+     * function getCaptchaSettings
      *
      * Returns array for the captcha settings.
      *
      * @return array
      */
-    public function returnCaptchaSettings(): array
+    public function getCaptchaSettings(): array
     {
         return $this->captcha_settings;
     }

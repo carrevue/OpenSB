@@ -36,7 +36,7 @@ if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
 }
 
-$captcha = $sb->returnCaptchaSettings();
+$captcha = $sb->getCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
 // kind of access denied error. run this command as root/sudo:

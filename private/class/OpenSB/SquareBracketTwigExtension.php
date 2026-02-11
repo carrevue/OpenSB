@@ -444,8 +444,9 @@ class SquareBracketTwigExtension extends AbstractExtension
         $powerlevel = $user["info"]["powerlevel"];
 
         $userlink = sprintf(
-            '<a class="userlink userlink-%s" %shref="/user/%s">%s</a>',
+            '<a class="userlink userlink-%s %s" %shref="/user/%s">%s</a>',
             $username,
+            $this->sb->getLocalOptions()["skin"] == "finalium" ? 'spf-link' : '',
             $this->sb->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
             $username,
             $username

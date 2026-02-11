@@ -52,6 +52,11 @@ class Templating
     private string $theme;
 
     /**
+     * @var boolean If this is a SPF request.
+     */
+    private bool $is_spf;
+
+    /**
      * @var SquareBracket The core SquareBracket class
      */
     private SquareBracket $sb;
@@ -104,6 +109,8 @@ class Templating
             $default_skin = "finalium";
             $default_theme = "hitchhiker";
         }
+
+        $this->is_spf = $this->sb->isSpfRequest();
 
         $this->skin = $options["skin"] ?? $default_skin;
         $this->theme = $options["theme"] ?? $default_theme;
@@ -204,13 +211,14 @@ class Templating
         $this->twig->addGlobal('website_branding', $branding);
         $this->twig->addGlobal('current_theme', $this->theme); // the current skin in the current theme
         $this->twig->addGlobal('invite_keys_enabled', $sb->isInviteKeysEnabled());
-        $this->twig->addGlobal('items_per_page', 20); // principia web leftover, probably remove this shit
+        $this->twig->addGlobal('items_per_page', value: 20); // principia-web leftover, probably remove this shit
         $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
         $this->twig->addGlobal('options', $options);
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
         $this->twig->addGlobal('enable_incomplete_features', $this->sb->isIncompleteFeaturesEnabled());
+        $this->twig->addGlobal('is_spf', $sb->isSpfRequest());
         $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
 
         if ($this->skin == "finalium") {
@@ -369,7 +377,22 @@ class Templating
      */
     public function render($template, array $data = []): string
     {
-        return $this->twig->render($template, $data);
+        if ($this->is_spf) {
+            header('Content-Type: application/json');
+
+            // render all required bits
+            $spf_output = [
+                "head" => $this->twig->load($template)->renderBlock('head', $data),
+                "body" => [
+                    "precontent" => $this->twig->load($template)->renderBlock('precontent', $data),
+                    "content" => $this->twig->load($template)->renderBlock('content', $data),
+                ]
+            ];
+            return json_encode($spf_output);
+        } else {
+            $twig_output = $this->twig->render($template, $data);
+            return $twig_output;
+        }
     }
 
     /**
