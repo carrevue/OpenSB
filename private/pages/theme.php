@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -25,7 +25,7 @@ global $sb, $twig;
 
 use OpenSB\Utilities;
 
-// scan for localizations
+// scan for all locales
 $localesPath = SB_PRIVATE_PATH . "/locales/";
 $locales = [];
 
@@ -44,10 +44,10 @@ if (is_dir($localesPath)) {
         }
     }
 
-    if ($sb->isDebug()) {
+    if ($sb->isDebug() || $sb->isTestInstance()) {
         $locales[] = [
             'id' => "psuedo",
-            'name' => "[DEBUG] Psuedolocale",
+            'name' => "[DEBUG] Pseudolocalization",
         ];
     }
 }
@@ -64,6 +64,11 @@ if (isset($_POST['apply'])) {
     $options["theme"] = $new[1];
 
     $options["locale"] = $_POST['locale'];
+
+    // TEMPORARY: on finalium, include the option to enable SPF
+    if ($options["skin"] == "finalium") {
+        $options["finalium_enable_spf"] = isset($_POST['spf']) && $_POST['spf'] == "on";
+    }
 
     $sb->setOptionCookie($options);
 

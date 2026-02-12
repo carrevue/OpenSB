@@ -412,37 +412,47 @@ class Templating
     /**
      * function outputSpfJson
      *
-     * Takes the html twig output, and parses it into JSON compatible with
+     * Takes the Twig HTML output, and parses it into JSON compatible with
      * SPF (Structured Page Fragments).
      * 
-     * @note doesnt work lmao
+     * @note This is currently hardcoded for Finalium
      *
      * @return bool
      */
     private function outputSpfJson($input): string {
         header('Content-Type: application/json');
 
-        $shit = new StupidFuckingClassThatIllNameLater($input);
+        $extractor = new SpfDOMExtractor($input);
+
+        $url = Utilities::getURL(true);
+        $parts = parse_url($url);
+        parse_str($parts['query'] ?? '', $params);
+        unset($params['spf']);
+
+        $output_url = ($parts['path'] ?? '') . ($params ? '?' . http_build_query($params) : '');
 
         // render all required bits
         $spf_output = [
             "head" => "head",
             "body" => [
-                "precontent" => "precontent",
-                "content" => "content",
+                "precontent" => $extractor->getElementContentsFromID("precontent"),
+                "content" => $extractor->getElementContentsFromID("content"),
             ],
-            "url" => Utilities::getURL(),
+            "url" => $output_url,
             "attr" => [
                 "content" => [
-                    "class" => "class"
+                    "class" => $extractor->getElementClassesFromID("content"),
+                ],
+                "page" => [ // sb/finalium-specific quirk not found in real hitchhiker ?
+                    "class" => $extractor->getElementClassesFromID("page"),
                 ],
                 "body" => [
-                    "class" => "class"
+                    "class" => $extractor->getElementClassesFromID("body"),
                 ]
             ],
-            "name" => "name",
+            "name" => "other",
             "title" => [
-                $shit->getTitle(),
+                $extractor->getTitle(),
             ],
         ];
             

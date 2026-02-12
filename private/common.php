@@ -36,7 +36,7 @@ if (!file_exists(SB_PRIVATE_PATH . '/config/config.php')) {
     die('The configuration file could not be found.');
 }
 
-$required_extensions = ['gd', 'intl', 'pdo_mysql', 'curl'];
+$required_extensions = ['gd', 'intl', 'pdo_mysql', 'curl', 'xml'];
 $missing_extensions = [];
 
 foreach ($required_extensions as $ext) {

@@ -79,9 +79,14 @@ use DOMXPath;
 */
 
 /**
- * class StupidFuckingClassThatIllNameLater
+ * class SpfDOMExtractor
+ * 
+ * Handles extracting certain parts of the DOM for SPF (Structured Page 
+ * Fragments).
+ * 
+ * @note This is currently hardcoded for Finalium.
  */
-class StupidFuckingClassThatIllNameLater
+class SpfDOMExtractor
 {
     private DOMDocument $dom;
     private DOMXPath $xpath;
@@ -95,10 +100,38 @@ class StupidFuckingClassThatIllNameLater
         $this->xpath = new DOMXPath($this->dom);
     }
 
-    public function getTitle() {
-        $titleNodes = $this->xpath->query('//title');
-        if ($titleNodes->length > 0) {
-            return $titleNodes->item(0)->textContent;
+    public function getElementContentsFromID($id) {
+        $element = $this->getElementByID($id);
+
+        if (!$element) {
+            return null;
         }
+
+        $html = '';
+        foreach ($element->childNodes as $child) {
+            $html .= $element->ownerDocument->saveHTML($child);
+        }
+
+        return $html;
+    }
+
+    public function getElementClassesFromID($id) {
+        $element = $this->getElementByID($id);
+
+        if (!$element) {
+            return null;
+        }
+
+        return $element->getAttribute('class');
+    }
+
+    public function getTitle() {
+        $nodes = $this->xpath->query('//title');
+        return ($nodes->length > 0) ? $nodes->item(0)->textContent : null;
+    }
+
+    private function getElementByID($id) {
+        $nodes = $this->xpath->query("//*[@id='$id']");
+        return ($nodes->length > 0) ? $nodes->item(0) : null;
     }
 }
