@@ -1,5 +1,5 @@
-<link href="https://unpkg.com/plyr@3.8.3/dist/plyr.css" rel="stylesheet">
-<script src="https://unpkg.com/plyr@3.8.3/dist/plyr.min.js"></script>
+<link name="plyr-css" href="https://unpkg.com/plyr@3.8.4/dist/plyr.css" rel="stylesheet">
+<script name="plyr-js" src="https://unpkg.com/plyr@3.8.4/dist/plyr.min.js"></script>
 {% set video = "/dynamic/videos/" ~ upload.id ~ ".converted.mp4" %}
 
 {% if current_skin == "finalium" and current_theme == "hitchhiker" %}
@@ -15,7 +15,7 @@
 {% endif %}
 
 {% if upload.flags.unprocessed %}
-    <style>
+    <style name="unprocessed-upload">
         .unprocessed-video-upload {
             background-color: black;
             color: white;
@@ -30,7 +30,7 @@
         This video is being processed. Try again later.
     </div>
 {% else %}
-    <style>
+    <style name="plyr-css-override">
         .plyr--video {
             aspect-ratio: 16 / 9;
             --plyr-color-main: {{ color }};

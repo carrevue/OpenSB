@@ -433,7 +433,7 @@ class Templating
 
         // render all required bits
         $spf_output = [
-            "head" => "head",
+            "head" => $extractor->getResourceElementsFromTag("head"),
             "body" => [
                 "precontent" => $extractor->getElementContentsFromID("precontent"),
                 "content" => $extractor->getElementContentsFromID("content"),
@@ -451,9 +451,7 @@ class Templating
                 ]
             ],
             "name" => "other",
-            "title" => [
-                $extractor->getTitle(),
-            ],
+            "title" => [$extractor->getTitle()],
         ];
             
 

@@ -88,16 +88,15 @@ use DOMXPath;
  */
 class SpfDOMExtractor
 {
-    private DOMDocument $dom;
     private DOMXPath $xpath;
 
     public function __construct(string $html) {
-        $this->dom = new DOMDocument();
+        $dom = new DOMDocument();
         libxml_use_internal_errors(true);
-        $this->dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
 
-        $this->xpath = new DOMXPath($this->dom);
+        $this->xpath = new DOMXPath($dom);
     }
 
     public function getElementContentsFromID($id) {
@@ -130,6 +129,24 @@ class SpfDOMExtractor
         return ($nodes->length > 0) ? $nodes->item(0)->textContent : null;
     }
 
+    public function getResourceElementsFromTag($tagName) {
+        $response = '';
+
+        $nodes = $this->xpath->query("//{$tagName}");
+        if ($nodes->length === 0) {
+            return null;
+        }
+        
+        $element = $nodes->item(0);
+        
+        $resourceNodes = $this->xpath->query('.//style | .//link | .//script', $element);
+        
+        foreach ($resourceNodes as $node) {
+            $response .= $element->ownerDocument->saveHTML($node);
+        }
+        return $response;
+    }
+    
     private function getElementByID($id) {
         $nodes = $this->xpath->query("//*[@id='$id']");
         return ($nodes->length > 0) ? $nodes->item(0) : null;

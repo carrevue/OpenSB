@@ -150,15 +150,6 @@ if (!$CrawlerDetect->isCrawler()) {
         $ratelimit = true;
     }
 
-    // add a limit of one guest view per 10 minutes on uploads. this is to deter potential viewbots from
-    // quickly botting an upload's view count.
-    if (
-        !$auth->isUserLoggedIn() &&
-        $database->result("SELECT COUNT(*) FROM upload_views WHERE upload_id=? AND timestamp > 600", [$ip])
-    ) {
-        $ratelimit = true;
-    }
-
     if (
         $database->result("SELECT COUNT(upload_id) FROM upload_views WHERE upload_id=? AND user=?", [$id, $ip]) < 1
         && !$ratelimit
