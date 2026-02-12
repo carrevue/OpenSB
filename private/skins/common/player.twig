@@ -1,5 +1,9 @@
+{# don't define it here on finalium if spf is on, otherwise spf Will fuck it up. #}
+{% if current_skin != "finalium" or not options.finalium_enable_spf %}
 <link name="plyr-css" href="https://unpkg.com/plyr@3.8.4/dist/plyr.css" rel="stylesheet">
 <script name="plyr-js" src="https://unpkg.com/plyr@3.8.4/dist/plyr.min.js"></script>
+{% endif %}
+
 {% set video = "/dynamic/videos/" ~ upload.id ~ ".converted.mp4" %}
 
 {% if current_skin == "finalium" and current_theme == "hitchhiker" %}
@@ -30,6 +34,31 @@
         This video is being processed. Try again later.
     </div>
 {% else %}
+    {% if options.finalium_enable_spf %}
+        <style name="dumb-bullshit-no-one-cares-about">
+            .video-wrapper {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                background: black;
+                overflow: hidden;
+            }
+
+            .video-wrapper video {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+            }
+        </style>
+        <div class="video-wrapper">
+            <video 
+                controls 
+                crossorigin 
+                playsinline 
+                src="{{ video }}">
+            </video>
+        </div>
+    {% else %}
     <style name="plyr-css-override">
         .plyr--video {
             aspect-ratio: 16 / 9;
@@ -86,7 +115,7 @@
             color: white;
         }
     </style>
-    <script>
+    <script name="plyr-settings">
         document.addEventListener("DOMContentLoaded", () => {
             const video = document.querySelector("video");
 
@@ -137,4 +166,5 @@
     <div style="width:100%;">
         <video controls crossorigin playsinline></video>
     </div>
+    {% endif %}
 {% endif %}
