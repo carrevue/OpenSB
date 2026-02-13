@@ -210,6 +210,14 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $parsed_text = $this->parseUserMentions($parsed_text);
                 $parsed_text = $this->parseCustomEmojis($parsed_text);
 
+                // on finalium, replace paragraphs with breaks
+                if ($this->sb->getLocalOptions()["skin"] == "finalium") {
+                    $parsed_text = str_replace('</p>', '<br><br>', $parsed_text);
+                    $parsed_text = str_replace('<p>', '', $parsed_text);
+                    // remove the last breaks
+                    $parsed_text = preg_replace('/<br><br>(?!.*<br><br>)/s', '', $parsed_text);
+                }
+
                 return $parsed_text;
             }, ['is_safe' => ['html']]),
 
