@@ -6,14 +6,20 @@
     </a>
     <div class="post-body">
         <div class="post-author">
-            {{ user_link(comment.author) }}
+            {% if comment.author.is_owner %}
+                <div class="comment-owner">
+                    {{ user_link(comment.author) }}
+                </div>
+            {% else %}
+                {{ user_link(comment.author) }}
+            {% endif %}
             <span class="post-timestamp use-tooltip" title="{{ comment.posted | format_date('long', 'medium') }}">{{ comment.posted | relative_time }}</span>
         </div>
         <div class="post-contents">
             {% if comment.post | trim is not empty %}
                 {{ comment.post | markdown_user_written }}
             {% else %}
-                <small>Null comment</small>
+                <p><small>Null comment</small></p>
             {% endif %}
 
             <div class="post-actions">

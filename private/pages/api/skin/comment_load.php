@@ -33,6 +33,8 @@ if ($sb->getLocalOptions()["skin"] != "finalium") {
     $apiOutput = [
         "error" => "Not supported here."
     ];
+    echo json_encode($apiOutput);
+    die();
 }
 
 try {
@@ -47,6 +49,8 @@ try {
     $apiOutput = [
         "error" => "An error has occurred."
     ];
+    echo json_encode($apiOutput);
+    die();
 }
 
 $html = $twig->render('/components/comments.twig', [

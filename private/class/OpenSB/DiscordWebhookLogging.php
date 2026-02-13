@@ -32,6 +32,9 @@ use \DiscordWebhooks\Embed;
  * class DiscordWebhookLogging
  * 
  * The Discord Webhook Logging class.
+ * 
+ * @todo Turn this into an interface, so we can support
+ * other webhook interfaces.
  */
 class DiscordWebhookLogging
 {
@@ -125,7 +128,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::PRIMARY);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -165,7 +168,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::PRIMARY);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -216,7 +219,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::PRIMARY);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -243,7 +246,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::SUCCESS);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -270,7 +273,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::DANGER);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -302,7 +305,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::SUCCESS);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -329,7 +332,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::PRIMARY);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -381,6 +384,6 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color($color);
 
-        $this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send();
     }
 }

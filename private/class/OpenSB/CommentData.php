@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2023-2025 Chaziz
+  Copyright (C) 2023-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -36,107 +36,77 @@ class CommentData
     private Database $database;
 
     /**
-     * @var CommentLocation The Comment location type.
+     * @var CommentLocation The Comment location type
      */
     private CommentLocation $type;
 
     /**
-     * @var mixed
+     * @var int|string|null The location ID
      */
-    private mixed $id;
+    private int|string|null $locationId;
 
     /**
-     * @var int 
+     * @var int The author of the location upload/journal, or their profile
      */
-    private int $count = 0; // stupid? maybe idfk
+    private int $locationAuthorId;
 
     /**
      * function __construct
      *
      * @param Database $database
      * @param CommentLocation $type
-     * @param int $id
+     * @param int|string|null $id
      *
      * @return void
      */
-    public function __construct(Database $database, CommentLocation $type, $id = null)
+    public function __construct(Database $database, CommentLocation $type, $locationId = null)
     {
         $this->database = $database;
         $this->type = $type;
-        $this->id = $id;
+        $this->locationId = $locationId;
     }
 
     /**
-     * function fetchComments
+     * function getTable
      * 
-     * wait what the fuck is this
-     *
-     * @param mixed $query
-     * @param mixed $params
-     *
-     * @return mixed
-     */
-    private function fetchComments($query, $params)
-    {
-        return $this->database->fetchArray($this->database->query($query, $params));
-    }
-
-    //
-
-    /**
-     * function getReplies
+     * Get which table we'll be fetching from depending on the location type
      * 
-     * probably stupid and should be part of getComments. -chaziz 8/26/2023
-     *
-     * @param mixed $id
-     *
-     * @return mixed
+     * @return string
      */
-    public function getReplies($id)
+    private function getTable(): string
     {
-        $database_data = null;
-
-        switch ($this->type) {
-            case CommentLocation::Upload:
-                $database_data = $this->fetchComments("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM upload_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT user FROM user_bans) ORDER BY c.timestamp ASC", [$id]);
-                break;
-            case CommentLocation::Profile:
-                $database_data = $this->fetchComments("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM user_profile_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT user FROM user_bans) ORDER BY c.timestamp ASC", [$id]);
-                break;
-            case CommentLocation::Journal:
-                $database_data = $this->fetchComments("SELECT c.id, c.location_id, c.comment, c.author, c.timestamp FROM journal_comments c WHERE c.reply_to = ? AND c.author NOT IN (SELECT user FROM user_bans) ORDER BY c.timestamp ASC", [$id]);
-                break;
-        }
-
-        $data = [];
-        foreach ($database_data as $comment) {
-            $this->count++;
-            $author = new UserData($this->database, $comment["author"]);
-            $data[$comment["id"]] = [
-                "id" => $comment["id"],
-                "posted_id" => $comment["id"],
-                "post" => $comment["comment"],
-                "posted" => $comment["timestamp"],
-                "author" => [
-                    "id" => $comment["author"],
-                    "info" => $author->getUserArray(),
-                ],
-                "replies" => $this->getReplies($comment["id"]) // recursive call to get nested replies
-            ];
-        }
-        return $data;
+        return match ($this->type) {
+            CommentLocation::Upload  => 'upload_comments',
+            CommentLocation::Profile => 'user_profile_comments',
+            CommentLocation::Journal => 'journal_comments',
+        };
     }
 
     /**
-     * function getCommentCount
+     * getLocationAuthor
      * 
-     * @todo rework this completely
-     *
-     * @return mixed
+     * Get the author of the location itself.
      */
-    public function getCommentCount()
+    private function getLocationAuthor(): int
     {
-        return $this->count;
+        return match ($this->type) {
+
+            CommentLocation::Upload => (
+                $this->database->fetch(
+                    "SELECT author FROM uploads WHERE upload_id = ?", // weird ass shit
+                    [$this->locationId]
+                )['author'] ?? 0
+            ),
+
+            CommentLocation::Profile => $this->locationId,
+
+            CommentLocation::Journal => (
+                $this->database->fetch(
+                    "SELECT author FROM journals WHERE id = ?",
+                    [$this->locationId]
+                )['author'] ?? 0
+            ),
+        };
     }
 
     /**
@@ -144,64 +114,96 @@ class CommentData
      * 
      * Fetches all of the comments
      *
-     * @param mixed $limit
+     * @param int $limit
      *
-     * @return mixed
+     * @return array
      */
-    public function getComments($limit = 0)
+    public function getComments(int $limit = 0): array
     {
-        $database_data = null;
-        $limit_clause = $limit > 0 ? "LIMIT ?" : "";
+        $table = $this->getTable();
 
-        switch ($this->type) {
-            case CommentLocation::Upload:
-                $query = "SELECT c.id, c.location_id, c.comment, c.author, c.timestamp 
-                      FROM upload_comments c 
-                      WHERE c.location_id = ? AND c.reply_to = 0
-                      AND c.author NOT IN (SELECT user FROM user_bans)
-                      ORDER BY c.timestamp DESC " . $limit_clause;
-                $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
-                $database_data = $this->fetchComments($query, $params);
-                break;
+        $locationAuthor = $this->getLocationAuthor();
 
-            case CommentLocation::Profile:
-                $query = "SELECT c.id, c.location_id, c.comment, c.author, c.timestamp 
-                      FROM user_profile_comments c 
-                      WHERE c.location_id = ? AND c.reply_to = 0
-                      AND c.author NOT IN (SELECT user FROM user_bans)
-                      ORDER BY c.timestamp DESC " . $limit_clause;
-                $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
-                $database_data = $this->fetchComments($query, $params);
-                break;
+        $limitClause = $limit > 0 ? "LIMIT ?" : "";
 
-            case CommentLocation::Journal:
-                $query = "SELECT c.id, c.location_id, c.comment, c.author, c.timestamp 
-                      FROM journal_comments c 
-                      WHERE c.location_id = ? AND c.reply_to = 0
-                      AND c.author NOT IN (SELECT user FROM user_bans)
-                      ORDER BY c.timestamp DESC " . $limit_clause;
-                $params = $limit > 0 ? [$this->id, $limit] : [$this->id];
-                $database_data = $this->fetchComments($query, $params);
-                break;
-        }
+        $query = "
+            SELECT c.id, c.location_id, c.reply_to, c.comment, c.author, c.timestamp
+            FROM {$table} c
+            WHERE c.location_id = ?
+            AND c.author NOT IN (SELECT user FROM user_bans)
+            ORDER BY c.timestamp DESC
+            {$limitClause}
+        ";
 
+        $params = $limit > 0
+            ? [$this->locationId, $limit]
+            : [$this->locationId];
 
-        $data = [];
-        foreach ($database_data as $comment) {
-            $this->count++;
-            $author = new UserData($this->database, $comment["author"]);
-            $data[$comment["id"]] = [
-                "id" => $comment["id"],
-                "posted_id" => $comment["id"],
-                "post" => $comment["comment"],
-                "posted" => $comment["timestamp"],
-                "author" => [
-                    "id" => $comment["author"],
-                    "info" => $author->getUserArray(),
+        $comments_from_db = $this->database->fetchArray(
+            $this->database->query($query, $params)
+        ) ?? [];
+
+        $comments = [];
+        $lookup = [];
+
+        // organize the data
+        foreach ($comments_from_db as $comment) {
+            $author = new UserData($this->database, $comment['author']);
+
+            $lookup[$comment['id']] = [
+                'id' => $comment['id'],
+                'posted_id' => $comment['id'],
+                'post' => $comment['comment'],
+                'posted' => $comment['timestamp'],
+                'author' => [
+                    'id' => $comment['author'],
+                    'is_owner' => $locationAuthor == $comment['author'],
+                    'info' => $author->getUserArray(),
                 ],
-                "replies" => $this->getReplies($comment["id"]),
+                'replies' => [],
+                'reply_to' => $comment['reply_to'],
             ];
         }
-        return $data;
+
+        // then handle the replies
+        foreach ($lookup as $id => &$comment) {
+            if ($comment['reply_to'] == 0) {
+                $comments[$id] = &$comment;
+            } else {
+                $parentId = $comment['reply_to'];
+                if (isset($lookup[$parentId])) {
+                    $lookup[$parentId]['replies'][$id] = &$comment;
+                }
+            }
+        }
+
+        // but we don't need this at all in the frontend
+        foreach ($lookup as &$comment) {
+            unset($comment['reply_to']);
+        }
+
+        return $comments;
+    }
+
+    /**
+     * function getCommentCount
+     * 
+     * Get total comment count.
+     * 
+     * @return int
+     */
+    public function getCommentCount(): int
+    {
+        $table = $this->getTable();
+
+        $result = $this->database->fetch(
+            "SELECT COUNT(*) AS count
+                FROM {$table}
+                WHERE location_id = ?
+                AND author NOT IN (SELECT user FROM user_bans)",
+            [$this->locationId]
+        );
+
+        return (int) ($result['count'] ?? 0);
     }
 }
