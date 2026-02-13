@@ -31,14 +31,10 @@
                 {{ journal.title }}
             </a>
         </div>
-        <div class="content-description">
-            {% if data.username != journal.author.info.username %}
-                {{ user_link(journal.author) }}
-                <br>
-            {% endif %}
-            {{ journal.published | relative_time }}
-            <br>
-            {{ journal.contents|u.truncate(300, '...') }}
+        <div class="content-author">{{ user_link(journal.author) }}</div>
+        <div class="content-detail">{{ journal.published | relative_time }}</div>
+        <div class="content-description clamp">
+            {{ journal.contents }}
         </div>
     </div>
 </div>

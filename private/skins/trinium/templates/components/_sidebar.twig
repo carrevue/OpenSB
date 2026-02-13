@@ -11,7 +11,7 @@
         {% for key, link in sidebar_library_links() %}
             <li class="list-link">
                 <a href="{{ link.url }}" {% if page_name == key %}class="selected"{%endif %}>
-                    {{ icon("placeholder", 16) }}
+                    {{ icon("placeholder", 20) }}
                     {{ link.name }}
                 </a>
             </li>

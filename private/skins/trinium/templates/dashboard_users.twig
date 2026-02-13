@@ -41,38 +41,36 @@
                     <div class="content-title">
                         {{ user_link(user) }}
                     </div>
-                    <div class="content-description">
-                        <div>
-                            {{ user.uploads }} uploads · {{ user.journals }} journals
-                        </div>
-                        <div>
-                            Role:
-                            {% set role = 
-                                user.powerlevel == 1 ? 'User' :
-                                user.powerlevel == 2 ? 'Moderator' :
-                                user.powerlevel == 3 ? 'Administrator' :
-                                user.powerlevel == 4 ? 'Owner' :
-                                'Unknown (' ~ user.powerlevel ~ ')'
-                            %}
-                            {{ role }}
-                        </div>
-                        <div>
-                            Registered: {{ user.info.joined | relative_time() }}
-                        </div>
-                        <div>
-                            Last seen: {{ user.info.connected | relative_time() }}
-                        </div>
-                        <div>
-                            {% if user.info.flags.unverified and not user.banned %}
-                                <span class="text-faded">Unverified</span>
-                            {% endif %}
-                            {% if user.banned %}
-                                <span class="text-danger">Banned</span>
-                            {% endif %}
-                            {% if user.info.flags.featured %}
-                                <span class="text-success">Featured</span>
-                            {% endif %}
-                        </div>
+                    <div class="content-detail">
+                        {{ user.uploads }} uploads · {{ user.journals }} journals
+                    </div>
+                    <div class="content-detail">
+                        Role:
+                        {% set role = 
+                            user.powerlevel == 1 ? 'User' :
+                            user.powerlevel == 2 ? 'Moderator' :
+                            user.powerlevel == 3 ? 'Administrator' :
+                            user.powerlevel == 4 ? 'Owner' :
+                            'Unknown (' ~ user.powerlevel ~ ')'
+                        %}
+                        {{ role }}
+                    </div>
+                    <div class="content-detail">
+                        Registered: {{ user.info.joined | relative_time() }}
+                    </div>
+                    <div class="content-detail">
+                        Last seen: {{ user.info.connected | relative_time() }}
+                    </div>
+                    <div class="content-detail">
+                        {% if user.info.flags.unverified and not user.banned %}
+                            <span class="text-faded">Unverified</span>
+                        {% endif %}
+                        {% if user.banned %}
+                            <span class="text-danger">Banned</span>
+                        {% endif %}
+                        {% if user.info.flags.featured %}
+                            <span class="text-success">Featured</span>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="admin-user-buttons">

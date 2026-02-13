@@ -36,18 +36,18 @@
                 <div class="jumbotron-right-date">
                     {{ date() | format_date('long', 'none') }}
                 </div>
+                {% if enable_incomplete_features %}
                 <div class="jumbotron-right-buttons">
                     <div class="tabs homepage">
                         <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
                             {{ icon('homepage-list', 24) }}
                         </div>
-                        {% if enable_incomplete_features %}
                         <div class="tablink homepage {% if type =='wavelet' %}active{% endif %}" id="index-wavelet-button">
                             {{ icon('homepage-wavelet', 24) }}
                         </div>
-                        {% endif %}
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -66,26 +66,16 @@
         <div class="col-4">
             {% if data.news_recent %}
             <div class="section">
-                {#<div class="section-header flex">
-                    <div class="section-header-left">
-                        <h2 class="section-title">{{ localize('site_news') }}</h2>
-                        <div class="section-desc">{{ localize('site_news_desc') }}</div>
-                    </div>
-                    <div class="section-header-right">
-                        <a href="/journals/news">{{ localize('more') }}</a>
-                    </div>
-                </div>#}
                 {# work around awkwardly defined array #}
                 {% set news = data.news_recent|first %}
-                {#<div class="section-header">
-                    <h2 class="section-title">{{ news.title }}</h2>
-                </div>#}
                 <div class="content-box">
                     <div class="content-entry">
                         <div class="content-info">
                             <div class="content-title">{{ news.title }}</div>
                             <div class="content-author">{{ user_link(news.author) }}</div>
-                            <p>{{ news.contents | markdown_user_written(true) }}</p>
+                            <div class="content-detail">{{ news.published | format_date('long', 'none') }}</div>
+                            <div class="content-description">{{ news.contents | markdown_user_written(true) }}</div>
+                            <a href="/journals/news">{{ localize('site_news_previous') }}</a>
                         </div>
                     </div>
                 </div>
@@ -116,10 +106,8 @@
                                 <div class="content-title">
                                     {{ user_link(user) }}
                                 </div>
-                                <div class="content-description">
-                                    <div>
-                                        {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.uploads) }}
-                                    </div>
+                                <div class="content-detail">
+                                    {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.uploads) }}
                                 </div>
                             </div>
                         </div>

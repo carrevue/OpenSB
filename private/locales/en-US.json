@@ -179,6 +179,7 @@
 
     "site_news": "News",
     "site_news_desc": "Site announcements",
+    "site_news_previous": "Previous news »",
 
     "no_journals": "There are currently no journals.",
     "no_posts": "There are currently no posts.",
@@ -314,10 +315,7 @@
     "powered_by": "Powered by",
     "footer_copyright": "© %s Bluffingo Development",
 
-    "staff_title": "%s Staff",
-    "staff_owners": "Owners",
-    "staff_administrators": "Administrators",
-    "staff_moderators": "Moderators",
+    "staff_title": "Staff team",
 
     "new_upload_intro": "Make sure you have read the <a href=\"%s\">community guidelines</a> first. Failure to comply with the community guidelines will result in your upload being taken down.",
     "reupload_warning": "Reminder: Do not reupload content that you have not made.",

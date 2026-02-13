@@ -9,55 +9,56 @@
 {% set title = localize('about') %}
 
 {% block content %}
-    <div class="section">
-        <div class="section-header">
-            <h1 class="section-title">{{ localize('about_site', website_branding.name) }}</h1>
-        </div>
-        <div class="grid">
-            <div class="col-8">
-                <div class="section">
-                    <div class="content-box">
-                        {{ icon('opensb_logo', ['180', '41.4']) }}
-                        <p>{{ localize('version_intro', '2021-' ~ ('now' | date('Y')), data.developers|join(', ')) }}</p>
-                        <p>{{ localize('version_agpl') }}</p>
-                        <p>{{ localize('version_no_warranty') }}</p>
-                        <p>{{ localize('version_license_notice', '/license', 'http://www.gnu.org/licenses/') | raw }}</p>
-                        <p>{{ localize('version_github', 'https://github.com/bluffingo/OpenSB') | raw }}</p>
-                        <hr>
-                        <ul class="unstyled-list">
-                            {% for thing in data.software %}
-                                <li>
-                                    {{ thing.title }}: {{ thing.info }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+    <div class="grid">
+        <div class="col-8">
+            <div class="section">
+                <div class="section-header">
+                    <h1 class="section-title">{{ localize('about_site', website_branding.name) }}</h1>
+                </div>
+                <div class="content-box">
+                    {{ icon('opensb_logo', ['180', '41.4']) }}
+                    <p>{{ localize('version_intro', '2021-' ~ ('now' | date('Y')), data.developers|join(', ')) }}</p>
+                    <p>{{ localize('version_agpl') }}</p>
+                    <p>{{ localize('version_no_warranty') }}</p>
+                    <p>{{ localize('version_license_notice', '/license', 'http://www.gnu.org/licenses/') | raw }}</p>
+                    <p>{{ localize('version_github', 'https://github.com/bluffingo/OpenSB') | raw }}</p>
+                    <hr>
+                    <ul class="unstyled-list">
+                        {% for thing in data.software %}
+                            <li>
+                                {{ thing.title }}: {{ thing.info }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="section">
-                    <div class="content-box">
-                        {% for user in data.staff|sort((a, b) => b.level <=> a.level) %}
-                            <div class="content-entry centered index-user user-id-{{ user.id }}">
-                                <div class="content-thumbnail">
-                                    <a href="/user/{{ user.info.username }}">
-                                        <div class="content-image profile-picture">
-                                            <img src="{{ profile_picture(user.id) }}"
-                                                alt="{{ user.info.username }}" class="pfp">
-                                        </div>
-                                    </a>
+        </div>
+        <div class="col-4">
+            <div class="section">
+                <div class="section-header">
+                    <h1 class="section-title">{{ localize('staff_title') }}</h1>
+                </div>
+                <div class="content-box">
+                    {% for user in data.staff|sort((a, b) => b.level <=> a.level) %}
+                        <div class="content-entry centered index-user user-id-{{ user.id }}">
+                            <div class="content-thumbnail">
+                                <a href="/user/{{ user.info.username }}">
+                                    <div class="content-image profile-picture">
+                                        <img src="{{ profile_picture(user.id) }}"
+                                            alt="{{ user.info.username }}" class="pfp">
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="content-info">
+                                <div class="content-title">
+                                    {{ user_link(user) }}
                                 </div>
-                                <div class="content-info">
-                                    <div class="content-title">
-                                        {{ user_link(user) }}
-                                    </div>
-                                    <div class="content-description">
-                                        {{ user_role_titles[user.level] }}
-                                    </div>
+                                <div class="content-detail">
+                                    {{ user_role_titles[user.level] }}
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

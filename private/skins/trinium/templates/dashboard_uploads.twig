@@ -42,19 +42,17 @@
                     <div class="content-title">
                         {{ upload.title }}
                     </div>
-                    <div class="content-description">
-                        <div>
-                            Uploader: <a href="/dashboard/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a>
-                        </div>
-                        <div>
-                            Uploaded: {{ upload.published | format_date('long', 'medium') }} ({{ upload.published | relative_time }})</a>
-                        </div>
-                        {% if upload.status %}
-                        <div>
-                            Status: <span class="text-{{ upload.status.color }}">{{ upload.status.text }}</span>
-                        </div>
-                        {% endif %}
+                    <div class="content-detail">
+                        Uploader: <a href="/dashboard/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a>
                     </div>
+                    <div class="content-detail">
+                        Uploaded: {{ upload.published | format_date('long', 'medium') }} ({{ upload.published | relative_time }})</a>
+                    </div>
+                    {% if upload.status %}
+                    <div class="content-detail">
+                        Status: <span class="text-{{ upload.status.color }}">{{ upload.status.text }}</span>
+                    </div>
+                    {% endif %}
                     <div>
                         <a class="button secondary small" href="/dashboard/uploads/{{ upload.id }}">
                             Manage

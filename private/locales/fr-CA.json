@@ -285,10 +285,7 @@
     "powered_by": "Propulsé par",
     "footer_copyright": "© %s Bluffingo Development",
 
-    "staff_title": "Le personnel de %s",
-    "staff_owners": "Les propriétaires",
-    "staff_administrators": "Les administrateurs",
-    "staff_moderators": "Les modérateurs",
+    "staff_title": "Le personnel",
 
     "new_upload_intro": "Assurez-vous d'avoir lu au moins une fois les <a href=\"%s\">Règles Communautaires</a>. Le manque de respect de ces règles résultera en la suppression de votre publication.",
     "reupload_warning": "Rappel : ne republiez pas de contenu qui ne vous appartient pas.",

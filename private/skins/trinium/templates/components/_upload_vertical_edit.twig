@@ -52,13 +52,12 @@
                 </div>
             </div>
         </div>
-        <div class="content-info">
-            {% if upload.published_originally %}
-                Original uploaded: {{ upload.published_originally | format_date('published', 'medium') }}
-                {% if upload.original_site %}on {{ upload.original_site }}{% endif %}
-                <br>
-            {% endif %}
-            Uploaded: {{ upload.published | format_date('long', 'medium') }}
+        {% if upload.published_originally %}
+        <div class="content-detail">
+            Original uploaded: {{ upload.published_originally | format_date('published', 'medium') }}
+            {% if upload.original_site %}on {{ upload.original_site }}{% endif %}
         </div>
+        {% endif %}
+        <div class="content-detail">Uploaded: {{ upload.published | format_date('long', 'medium') }}</div>
     </div>
 </div>

@@ -50,14 +50,14 @@
         <div class="content-author">
             {{ user_link(upload.author) }}
         </div>
-        <div class="content-info">
+        <div class="content-detail">
             {{ localize('views', upload.views) }} • <span class="use-tooltip" title="{{ time | format_date('long', 'none') }}">{{ time | relative_time }}</span>
             {% if upload.published_originally and upload.original_site %}
                 <span class="text-faded">on {{ upload.original_site }}</span>
             {% endif %}
         </div>
         {% if upload.description|trim is not empty %}
-        <div class="content-description">
+        <div class="content-description clamp">
             {{ upload.description }}
         </div>
         {% endif %}

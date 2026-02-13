@@ -22,19 +22,17 @@
                         </div>
                     </div>
                     <div class="content-info">
-                        {{ notice.intro }} {{ user_link(notice.sender) }}
+                        <div class="content-title">{{ notice.intro }} {{ user_link(notice.sender) }}</div>
                         {% if notice.detail.info %}
-                        <br>
-                        {{ notice.detail.info }}
+                        <div class="content-description">{{ notice.detail.info }}</div>
                         {% endif %}
-                        <br>
-                        <small>
+                        <div class="content-detail">
                             {% if notice.detail.origin %}
                                 {{ localize('time_ago_on_origin', notice.time | relative_time, notice.detail.origin) }}
                             {% else %}
                                 {{ notice.time | relative_time }}
                             {% endif %}
-                        </small>
+                        </div>
                     </div>
                 </div>
             {% else %}

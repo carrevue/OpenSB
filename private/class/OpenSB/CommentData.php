@@ -46,11 +46,6 @@ class CommentData
     private int|string|null $locationId;
 
     /**
-     * @var int The author of the location upload/journal, or their profile
-     */
-    private int $locationAuthorId;
-
-    /**
      * function __construct
      *
      * @param Database $database
