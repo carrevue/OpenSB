@@ -87,7 +87,6 @@
     "login_what_is_site_5": "et bien plus encore !",
 
     "register_invite_key_required": "%s nécessite une code d'invitation pour s'inscrire. Vous devrez l'obtenir auprès d'une autre personne.",
-    "register_discord_requirement": "Votre compte doit être vérifié manuellement sur Discord avant d'utiliser %s.",
     "register_agreement": "En vous inscrivant sur %s, vous acceptez les <a href=\"%s\">Conditions de Service</a> and <a href=\"%s\">Politique de Confidentialité</a>.",
 
     "site1_aka_site2": "%s (aussi connu par %s)",

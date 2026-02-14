@@ -91,7 +91,6 @@
     "other_accounts_hitchhiker": "Other accounts",
 
     "register_invite_key_required": "%s requires an invite key in order to register. You will need to obtain this from someone.",
-    "register_discord_requirement": "Before uploading on %s, you will first need to verify your account through our Discord server. We apologize for the inconvenience.",
     "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
 
     "site1_aka_site2": "%s (also known as %s)",
