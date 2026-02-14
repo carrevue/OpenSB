@@ -23,6 +23,7 @@ namespace OpenSB;
 
 use OpenSB\SquareBracket;
 use OpenSB\Database;
+use OpenSB\UploadVisibilityEnum;
 
 /**
  * class UploadQuery
@@ -97,6 +98,8 @@ class UploadQuery
             $whereClauses[] = "v.upload_id NOT IN (SELECT upload FROM upload_takedowns)";
             // if upload does not belong to someone who has been banned
             $whereClauses[] = "v.author NOT IN (SELECT user FROM user_bans)";
+            // if upload is public
+            $whereClauses[] = "v.visibility = " . UploadVisibilityEnum::Public->value;
         }
 
         if (!$this->auth->isUserLoggedIn()) {
@@ -160,6 +163,7 @@ class UploadQuery
         $whereClauses[] = "v.upload_id NOT IN (SELECT upload FROM upload_takedowns)";
         // if upload does not belong to someone who has been banned
         $whereClauses[] = "v.author NOT IN (SELECT user FROM user_bans)";
+        $whereClauses[] = "v.visibility = " . UploadVisibilityEnum::Public->value;
         //}
 
         if (!$this->auth->isUserLoggedIn()) {

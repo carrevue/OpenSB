@@ -2,7 +2,7 @@
 
 {% set title = localize('new_upload') %}
 
-	{% block content %}
+    {% block content %}
         <div class="section">
             <div class="section-header">
                 <h1 class="section-title">{{ localize('new_upload') }}</h1>
@@ -25,13 +25,22 @@
                             <div class="form-input">
                                 <label for="desc">{{ localize('description') }} <span>{{ localize('form_optional') }}</span></label>
                                 <textarea class="form-submit" name="desc" maxlength="65535"
-                                          form="uploadForm"
-                                          style="overflow-x:hidden;resize:vertical" rows="8"></textarea>
+                                        form="uploadForm"
+                                        style="overflow-x:hidden;resize:vertical" rows="8"></textarea>
                             </div>
 
                             <div class="form-input">
                                 <label for="tags">{{ localize('tags') }} <span>{{ localize('form_optional') }}</span></label>
                                 <input type="text" class="form-submit" name="tags">
+                            </div>
+
+                            <div class="form-input">
+                                {{ localize('visibility') }}
+                                <select name="visibility" id="visibility">
+                                    <option value="public">{{ localize('public') }}</option>
+                                    <option value="unlisted">{{ localize('unlisted') }}</option>
+                                    <option value="private">{{ localize('private') }}</option>
+                                </select>
                             </div>
 
                             <div class="form-input">
@@ -50,7 +59,7 @@
 
                             <div class="form-button-container">
                                 <input class="button primary" type="submit" id="upload" name="upload"
-                                       value="{{ localize('upload_action') }}">
+                                    value="{{ localize('upload_action') }}">
                             </div>
                         </div>
                     </div>

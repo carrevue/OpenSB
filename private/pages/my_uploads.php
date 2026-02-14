@@ -36,6 +36,7 @@ if (!$auth->isUserLoggedIn()) {
 $limit = $database->paginate($page, 20);
 
 $database = $sb->getDatabaseClass();
+// TODO: maybe migrate this into UploadQuery?
 $uploads = $database->fetchArray($database->query("SELECT v.* FROM uploads v WHERE v.upload_id NOT IN (SELECT upload FROM upload_takedowns) AND v.author = ? ORDER BY v.id DESC $limit", [$auth->getUserID()]));
 $upload_count = $database->result("SELECT COUNT(*) FROM uploads u where u.author = ?", [$auth->getUserID()]);
 

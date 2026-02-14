@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021-2022 icanttellyou
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
@@ -27,6 +27,7 @@ global $twig, $database, $auth, $sb;
 use OpenSB\UploadData;
 use OpenSB\UploadFlags;
 use OpenSB\Utilities;
+use OpenSB\UploadVisibilityEnum;
 
 if (isset($_POST['upload'])) {
     $id = ($_POST['vid_id'] ?? null);
@@ -54,6 +55,15 @@ if ($auth->getUserID() != $data["author"]) {
 if (isset($_POST['upload'])) {
     $title = $_POST['title'] ?? null;
     $desc = $_POST['desc'] ?? null;
+    $visibility = $_POST['visibility'] ?? "public";
+
+    // visibilty
+    $visibility_type = match ($visibility) {
+        'private' => UploadVisibilityEnum::Private,
+        'unlisted' => UploadVisibilityEnum::Unlisted,
+        'public' => UploadVisibilityEnum::Public,
+        default => UploadVisibilityEnum::Public,
+    };
 
     $block_guests = $_POST['block_guests'] ?? false;
     $block_comments = $_POST['block_comments'] ?? false;
@@ -80,9 +90,10 @@ if (isset($_POST['upload'])) {
     }
 
     $database->query(
-        "UPDATE uploads SET title = ?, description = ?, flags = ? WHERE upload_id = ?",
-        [$title, $desc, $flags, $id]
+        "UPDATE uploads SET title = ?, description = ?, flags = ?, visibility = ? WHERE upload_id = ?",
+        [$title, $desc, $flags, $visibility_type->value, $id]
     );
+
     Utilities::notifyBanner("notify_successfully_modified_upload", "/view/" . $id, "success");
 }
 
@@ -93,6 +104,7 @@ $infoData = [
     "description" => $data["description"],
     "published" => $data["timestamp"],
     "type" => $data["type"],
+    "visibility" => $data["visibility"],
     "flags" => $upload->getFlagArray(),
 ];
 

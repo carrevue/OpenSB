@@ -34,6 +34,7 @@ use OpenSB\Database;
 use OpenSB\Profiler;
 
 use OpenSB\UserRoleEnum;
+use OpenSB\UploadTypeEnum;
 
 /**
  * class SquareBracketTwigExtension
@@ -343,16 +344,16 @@ class SquareBracketTwigExtension extends AbstractExtension
             throw new Exception('uploadView is missing data!');
         }
 
-        if ($upload_data["type"] == 0) {
+        if ($upload_data["type"] == UploadTypeEnum::Video->value) {
             echo $this->twig->render("player.twig", ['upload' => $upload_data]);
         }
 
-        if ($upload_data["type"] == 2) {
+        if ($upload_data["type"] == UploadTypeEnum::Image->value) {
             echo $this->twig->render("image.twig", ['upload' => $upload_data]);
         }
 
         // fyi: opensb still doesn't fully support music uploads.
-        if ($upload_data["type"] == 3) {
+        if ($upload_data["type"] == UploadTypeEnum::Music->value) {
             echo $this->twig->render("music.twig", ['upload' => $upload_data]);
         }
     }

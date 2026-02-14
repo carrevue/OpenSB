@@ -4,7 +4,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -35,3 +35,7 @@ require_once SB_PRIVATE_PATH . '/common.php';
 // migrate from opensb 2.0 table schema to opensb 2.1 table schema
 
 // TODO: migrate mature-rated uploads from rating to flag
+
+// add visiblity type
+$database->query("ALTER TABLE `uploads`
+ADD `visibility` int(11) NOT NULL DEFAULT '0' AFTER `type`;");

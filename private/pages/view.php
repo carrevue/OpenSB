@@ -32,6 +32,7 @@ use OpenSB\UploadData;
 use OpenSB\UploadQuery;
 use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
+use OpenSB\UploadVisibilityEnum;
 
 $options = $sb->getLocalOptions();
 
@@ -96,6 +97,12 @@ if (!$data) {
     handle_error("notify_invalid_upload");
 }
 
+$owner = $auth->getUserID() == $data["author"];
+
+if ($data["visibility"] == UploadVisibilityEnum::Private->value && !$owner) {
+    handle_error("notify_private_upload");
+}
+
 $tagBlacklist = $auth->getUserTagBlacklist();
 
 if (isset($data["tags"])) {
@@ -112,8 +119,6 @@ if (isset($data["tags"])) {
         }
     }
 }
-
-$owner = ($auth->getUserID() == $data["author"]);
 
 $author_info = $upload->getAuthorData();
 

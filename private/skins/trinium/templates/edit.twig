@@ -29,16 +29,20 @@
                                         style="overflow:hidden;resize:vertical" rows="8">{{ data.description }}</textarea>
                             </div>
 
-                            {% if enable_incomplete_features %}
-                                <div class="form-input">
-                                    {{ localize('visibility') }}
-                                    <select name="visibility" id="visibility">
-                                        <option value="public">{{ localize('public') }}</option>
-                                        <option value="unlisted">{{ localize('unlisted') }}</option>
-                                        <option value="private">{{ localize('private') }}</option>
-                                    </select>
-                                </div>
-                            {% endif %}
+                            <div class="form-input">
+                                {{ localize('visibility') }}
+                                <select name="visibility" id="visibility">
+                                    <option value="public"  {{ data.visibility == 0 ? 'selected' : '' }}>
+                                        {{ localize('public') }}
+                                    </option>
+                                    <option value="unlisted" {{ data.visibility == 2 ? 'selected' : '' }}>
+                                        {{ localize('unlisted') }}
+                                    </option>
+                                    <option value="private" {{ data.visibility == 1 ? 'selected' : '' }}>
+                                        {{ localize('private') }}
+                                    </option>
+                                </select>
+                            </div>
 
                             <div class="form-input">
                                 <label for="thumbnail">{{ localize('custom_thumbnail') }}</label>

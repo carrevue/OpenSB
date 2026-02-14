@@ -26,9 +26,13 @@ namespace OpenSB\Pages;
 
 global $sb, $database, $twig, $auth;
 
+use \Exception;
+
 use OpenSB\Utilities;
 use OpenSB\UserRoleEnum;
 use OpenSB\UploadFlags;
+use OpenSB\UploadTypeEnum;
+use OpenSB\UploadVisibilityEnum;
 
 // supported extensions
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
@@ -86,56 +90,94 @@ if ($sb->isLockdownEnabled()) {
 }
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    $joindate = $auth->getUserData()["joined"];
-    $timeSinceJoin = time() - strtotime($joindate);
 
-    if ($timeSinceJoin < 2 * 24 * 60 * 60) {
-        // if we have a new account, make the ratelimit longer as an antispam measure.
-        $rateLimit = 3 * 60;
-    } elseif ($timeSinceJoin < 7 * 24 * 60 * 60) {
-        // if its 2-7 days old make the rate limit smaller.
-        $rateLimit = 2 * 60;
+    $now = time();
+    $userId = $auth->getUserID();
+    $joined = strtotime($auth->getUserData()['joined']);
+    $age = $now - $joined;
+
+    if ($age < 2 * 86400) {
+        $rateLimit = 180;
+    } elseif ($age < 7 * 86400) {
+        $rateLimit = 120;
     } else {
-        // if it is older than that, keep our usual ratelimit of one minute.
-        $rateLimit = 1 * 60;
+        $rateLimit = 60;
     }
 
-    if ($database->result("SELECT COUNT(*) FROM uploads WHERE timestamp > ? AND author = ?", [time() - $rateLimit, $auth->getUserID()]) && !$sb->isDebug()) {
-        $waitTimeMinutes = $rateLimit / 60;
-        Utilities::notifyBanner("notify_upload_ratelimit", "/", "warning", [$waitTimeMinutes]);
+    if (!$sb->isDebug()) {
+        $recentUploads = $database->result(
+            "SELECT COUNT(*) FROM uploads WHERE timestamp > ? AND author = ?",
+            [$now - $rateLimit, $userId]
+        );
+
+        if ($recentUploads) {
+            Utilities::notifyBanner(
+                "notify_upload_ratelimit",
+                "/",
+                "warning",
+                [$rateLimit / 60]
+            );
+        }
     }
 }
 
-function parse_tags($tags, $upload_id, $database)
+function parse_tags(array $tags, string $upload_id, $database): void
 {
-    // parse tags from input
-    $tagsID = [];
-    foreach ($tags as $tag) {
-        // remove hashtags from tags.
-        $tag = preg_replace('/#(\w+)/', '$1', $tag);
-
-        $tagId = $database->result("SELECT tag_id FROM upload_tag_meta WHERE name = ?", [$tag]);
-
-        if ($tagId === false) {
-            $database->query("INSERT INTO upload_tag_meta (name, last_usage) VALUES (?,?)", [$tag, time()]);
-            $tagId = $database->insertId(); // Get the ID of the newly inserted tag
-        } else {
-            $database->query("UPDATE upload_tag_meta SET last_usage = ? WHERE name = ?", [time(), $tag]);
-        }
-
-        $tagsID[] = $tagId;
+    if (empty($tags)) {
+        return;
     }
 
-    $upload_integer_id = $database->result("SELECT id from uploads WHERE upload_id = ?", [$upload_id]);
+    $now = time();
 
-    // link tags to the upload
-    foreach ($tagsID as $tagID) {
-        if (!$database->result("SELECT tag_id FROM upload_tag_index WHERE tag_id = ? AND upload_id = ?", [$tagID, $upload_integer_id])) {
-            $database->query("INSERT INTO upload_tag_index (upload_id, tag_id) VALUES (?,?)", [$upload_integer_id, $tagID]);
+    $tags = array_unique(array_filter(array_map(function ($tag) {
+        $tag = preg_replace('/#(\w+)/', '$1', $tag);
+        return trim($tag);
+    }, $tags)));
+
+    if (empty($tags)) {
+        return;
+    }
+
+    // Get upload integer ID once
+    $uploadIntId = $database->result(
+        "SELECT id FROM uploads WHERE upload_id = ?",
+        [$upload_id]
+    );
+
+    foreach ($tags as $tag) {
+        $tagId = $database->result(
+            "SELECT tag_id FROM upload_tag_meta WHERE name = ?",
+            [$tag]
+        );
+
+        if (!$tagId) {
+            // insert in tag meta
+            $database->query(
+                "INSERT INTO upload_tag_meta (name, last_usage) VALUES (?, ?)",
+                [$tag, $now]
+            );
+            $tagId = $database->insertId();
+        } else {
+            // bump last usage
+            $database->query(
+                "UPDATE upload_tag_meta SET last_usage = ? WHERE tag_id = ?",
+                [$now, $tagId]
+            );
+        }
+
+        $exists = $database->result(
+            "SELECT 1 FROM upload_tag_index WHERE tag_id = ? AND upload_id = ?",
+            [$tagId, $uploadIntId]
+        );
+
+        if (!$exists) {
+            $database->query(
+                "INSERT INTO upload_tag_index (upload_id, tag_id) VALUES (?, ?)",
+                [$uploadIntId, $tagId]
+            );
         }
     }
 }
-
 function discord_webhook_notify($sb, $new, $title, $description, $auth)
 {
     $data = [
@@ -148,101 +190,122 @@ function discord_webhook_notify($sb, $new, $title, $description, $auth)
     $sb->getDiscordWebhookClass()->newUploadHook($data);
 }
 
-if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isUserLoggedIn()) {
-    $flags = 0;
-
+if (
+    (isset($_POST['upload']) || isset($_POST['upload_video'])) &&
+    $auth->isUserLoggedIn()
+) {
     $new = Utilities::generateRandomString(11, true);
     $uploader = $auth->getUserID();
+    $title = $_POST['title'] ?? null;
+    $desc = $_POST['desc'] ?? null;
+    $visibility = $_POST['visibility'] ?? "public";
+    $tagsRaw = $_POST['tags'] ?? '';
+    $flags = 0;
 
-    $title = ($_POST['title'] ?? null);
-    $description = ($_POST['desc'] ?? null);
+    // visibilty
+    $visibility_type = match ($visibility) {
+        'private' => UploadVisibilityEnum::Private,
+        'unlisted' => UploadVisibilityEnum::Unlisted,
+        'public' => UploadVisibilityEnum::Public,
+        default => UploadVisibilityEnum::Public,
+    };
 
-    // kinda fucking stupid way to do this but whatever
-    $mature = $auth->isUserOver18() && 
-            isset($_POST['rating']) && 
-            $_POST['rating'];
-
-    if ($mature) {
+    // mature flag
+    if (
+        $auth->isUserOver18() &&
+        !empty($_POST['rating'])
+    ) {
         $flags |= UploadFlags::FLAG_MATURE->value;
     }
 
-    $tags = ($_POST['tags'] ?? '');
-    if ($tags === '') {
-        $tags2 = [];
-    } else {
-        $tags2 = preg_split('/[\s,]+/', trim($tags, ","));
-    }
+    // tags
+    $tags = $tagsRaw === ''
+        ? []
+        : preg_split('/[\s,]+/', trim($tagsRaw, ','));
 
-    if ($sb->isDebug()) {
-        $noProcess = ($_POST['debugUploaderSkip'] ?? null);
-    }
-
-    $name = $_FILES['fileToUpload']['name'];
-    $temp_name = $_FILES['fileToUpload']['tmp_name']; // gets upload info
-    $ext = pathinfo($_FILES['fileToUpload']['name'], PATHINFO_EXTENSION);
+    // file info
+    $file = $_FILES['fileToUpload'];
+    $temp = $file['tmp_name'];
+    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
     $path = $sb->getStorageClass()->getPath();
 
-    $detectedType = detectUploadType($temp_name, $ext, $supportedVideoFormats, $supportedImageFormats, $supportedAudioFormats);
+    $type = detectUploadType(
+        $temp,
+        $ext,
+        $supportedVideoFormats,
+        $supportedImageFormats,
+        $supportedAudioFormats
+    );
 
-    if ($detectedType === 'video') { // VIDEO
-        if (isset($noProcess) && $sb->isDebug()) {
-            // pretend video has been successfully uploaded (does this still work???)
-            $target_file = $path . '/videos/' . $new . '.converted.' . $ext;
-        } else {
-            $flags |= UploadFlags::FLAG_UNPROCESSED->value;
-            $target_file = $path . '/videos/' . $new . '.' . $ext;
+    $uploadFilePath = null;
+    $uploadTypeEnum = null;
+
+    try {
+        switch ($type) {
+            case 'video':
+                $uploadTypeEnum = UploadTypeEnum::Video;
+
+                $flags |= UploadFlags::FLAG_UNPROCESSED->value;
+                $target = "$path/videos/$new.$ext";
+
+                if (!move_uploaded_file($temp, $target)) {
+                    throw new Exception("Failed to move uploaded file.");
+                }
+
+                $sb->getStorageClass()->processVideoUpload($new, $target);
+
+                $uploadFilePath = "dynamic/videos/$new";
+                break;
+
+            case 'image':
+                $uploadTypeEnum = UploadTypeEnum::Image;
+
+                $sb->getStorageClass()->processImageUpload($temp, $new);
+
+                $uploadFilePath = "/dynamic/art/$new.png";
+                break;
+
+            case 'audio':
+                Utilities::notifyBanner("notify_upload_audio_unimplemented", "/upload");
+                return;
+
+            default:
+                Utilities::notifyBanner("notify_invalid_format", "/upload");
+                return;
         }
-        if (move_uploaded_file($temp_name, $target_file)) {
-            $database->query(
-                "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags) VALUES (?,?,?,?,?,?,?,?)",
-                [$new, $title, $description, $uploader, time(), json_encode($tags2), 'dynamic/videos/' . $new, $flags]
-            );
 
-            if (!isset($noProcess)) {
-                $sb->getStorageClass()->processVideoUpload($new, $target_file);
-            }
-
-            parse_tags($tags2, $new, $database);
-
-            if ($sb->isDiscordWebhookEnabled()) {
-                discord_webhook_notify($sb, $new, $title, $description, $auth);
-            }
-
-            Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
-        } else {
-            if ($sb->isDebug()) {
-                die("DEBUG: Unable to move $temp_name to $target_file, check your permissions!");
-            } else {
-                Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
-            }
-        }
-    } elseif ($detectedType === 'image') { // IMAGES
-        try {
-            $sb->getStorageClass()->processImageUpload($temp_name, $new);
-        } catch (\Exception $e) {
-            if ($sb->isDebug()) {
-                die("DEBUG: Unable to process image upload. The exception's message is {$e->getMessage()}.");
-            } else {
-                Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
-            }
-        }
-        
         $database->query(
-            "INSERT INTO uploads (upload_id, title, description, author, timestamp, tags, upload_file, flags, type) VALUES (?,?,?,?,?,?,?,?,?)",
-            [$new, $title, $description, $uploader, time(), json_encode(explode(', ', $_POST['tags'])), '/dynamic/art/' . $new . '.png', $flags, 2]
+            "INSERT INTO uploads 
+            (upload_id, title, description, author, timestamp, tags, upload_file, flags, type, visibility)
+            VALUES (?,?,?,?,?,?,?,?,?,?)",
+            [
+                $new,
+                $title,
+                $desc,
+                $uploader,
+                time(),
+                json_encode($tags),
+                $uploadFilePath,
+                $flags,
+                $uploadTypeEnum->value,
+                $visibility_type->value,
+            ]
         );
 
-        parse_tags($tags2, $new, $database);
+        parse_tags($tags, $new, $database);
 
         if ($sb->isDiscordWebhookEnabled()) {
-            discord_webhook_notify($sb, $new, $title, $description, $auth);
+            discord_webhook_notify($sb, $new, $title, $desc, $auth);
         }
 
-        Utilities::notifyBanner("notify_upload_success", "/view/" . $new, "success");
-    } elseif ($detectedType === 'audio') { // AUDIO
-        Utilities::notifyBanner("notify_upload_audio_unimplemented", "/upload");
-    } else {
-        Utilities::notifyBanner("notify_invalid_format", "/upload");
+        Utilities::notifyBanner("notify_upload_success", "/view/$new", "success");
+
+    } catch (Exception $e) {
+        if ($sb->isDebug()) {
+            die("DEBUG: " . $e->getMessage());
+        }
+
+        Utilities::notifyBanner("notify_upload_technical_issue", "/upload");
     }
 }
 

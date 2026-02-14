@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2026 Chaziz
+  Copyright (C) 2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -21,11 +21,10 @@
 
 namespace OpenSB;
 
-enum UserRoleEnum: int
+enum UploadTypeEnum: int
 {
-    case None = 0;
-    case Normal = 1;
-    case Moderator = 2;
-    case Administrator = 3;
-    case Owner = 4;
+    case Video = 0;
+    case Unused = 1; // in earlier versions, this was defined as a "legacy video"
+    case Image = 2;
+    case Music = 3;
 }
