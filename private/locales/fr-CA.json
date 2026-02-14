@@ -80,12 +80,6 @@
     "currently_logged_in_as": "Vous êtes présentement connecté comme %s.",
     "other_accounts": "Autres comptes :",
 
-    "login_what_is_site_1": "%s est un site web de partage multimédia. Avec un compte, vous pouvez :",
-    "login_what_is_site_2": "Publiez vos vidéos et images",
-    "login_what_is_site_3": "Interagir avec les gens et commenter sur leurs publications",
-    "login_what_is_site_4": "Écrivez des journaux sur votre profil",
-    "login_what_is_site_5": "et bien plus encore !",
-
     "register_invite_key_required": "%s nécessite une code d'invitation pour s'inscrire. Vous devrez l'obtenir auprès d'une autre personne.",
     "register_agreement": "En vous inscrivant sur %s, vous acceptez les <a href=\"%s\">Conditions de Service</a> and <a href=\"%s\">Politique de Confidentialité</a>.",
 

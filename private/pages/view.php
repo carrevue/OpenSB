@@ -61,9 +61,21 @@ if (Utilities::isClassicSkin()) {
     }
 }
 
+// video ids in the original fulptube were actually the upload timestamp but encoded in base64, so
+// theoretically we could use this and opensb's "original_timestamp" to redirect "recovered" 
+// OG FulpTube videos into their current FulpTube/squareBracket counterparts.
+// ex: https://fulptube.rocks/watch?v=MTYxODY5MDE0MzU=02 -> https://fulptube.rocks/watch?v=i4caVqnxdKM
+// -chaziz 02/14/2026
 if ($sb->isFulpTubeMode()) {
-    if (preg_match('/^MTY.*=\d{2}$/', subject: $id)) {
-        handle_error("notify_original_fulptube_video");
+    if (preg_match('/^MTY.*=\d{2}$/', $id)) {
+        $og_fulptube_timestamp = base64_decode(substr($id, 0, strpos($id, '=') - 1));
+        $id_for_redirect = $database->result("SELECT upload_id FROM uploads where original_timestamp = ?", [$og_fulptube_timestamp]);
+
+        if ($id_for_redirect) {
+            Utilities::redirect('/watch?v=' . $id_for_redirect, 301);
+        } else {
+            handle_error("notify_original_fulptube_video");
+        }
     }
 }
 

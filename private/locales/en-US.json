@@ -228,11 +228,11 @@
 
     "uploaded_on": "Uploaded on %s",
     "first_uploaded_on": "First uploaded on %s on %s",
-    "originally_uploaded_on": "Originally uploaded on %s on %s",
+    "originally_uploaded_on": "First uploaded on %s",
 
     "uploaded_on_hitchhiker": "Published on %s",
-    "first_uploaded_on_hitchhiker": "First published on %s on %s",
-    "originally_uploaded_on_hitchhiker": "Originally published on %s on %s",
+    "first_uploaded_on_hitchhiker": "Published on %s on %s",
+    "originally_uploaded_on_hitchhiker": "First published on %s",
 
     "add_to": "Add to",
     "share": "Share",
