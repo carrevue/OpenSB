@@ -24,8 +24,16 @@ namespace OpenSB\Pages;
 
 global $twig, $sb, $database;
 
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use OpenSB\UploadQuery;
 use OpenSB\Utilities;
+
+$CrawlerDetect = new CrawlerDetect;
+
+// if it's a crawler, don't bother.
+if ($CrawlerDetect->isCrawler()) {
+    exit;
+}
 
 $upload_query = new UploadQuery($sb);
 
