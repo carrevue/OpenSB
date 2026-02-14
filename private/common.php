@@ -72,11 +72,19 @@ if (!SB_CLI) {
     $blacklisted_user_agents = [
         '/python-requests/i',
         '/curl/i',
+        '/libredtail-http/i',
+        '/Go-http-client/i',
         '/Barkrowler/i',
-        '/IbouBot/i'
+        '/IbouBot/i',
+        '/AhrefsBot/i',
     ];
 
     $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+    if ($user_agent == '') {
+        http_response_code(403);
+        exit;
+    }
 
     foreach ($blacklisted_user_agents as $pattern) {
         if (preg_match($pattern, $user_agent)) {
