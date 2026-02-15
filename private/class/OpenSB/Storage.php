@@ -252,16 +252,16 @@ class Storage
      * @param int $type
      * @param bool $custom
      *
-     * @return string
+     * @return ?string
      */
-    public function getUploadThumbnail($id, $type, $custom): string
+    public function getUploadThumbnail($id, $type, $custom): ?string
     {
         $data = null;
 
-        if ($type == 0) {
+        if ($type == UploadTypeEnum::Video->value) {
             $data = $this->getVideoUploadThumbnail($id, $custom);
         }
-        if ($type == 2) {
+        if ($type == UploadTypeEnum::Image->value) {
             $data = $this->getImageUploadThumbnail($id, $custom);
         }
 
