@@ -3,6 +3,10 @@ private/config/config.php
 private/config/*.mmdb
 private/skins/cache
 
+## Chunk/unprocessed upload files
+private/upload_chunks/*
+private/upload_temp/*
+
 ## User generated files
 dynamic/pfp/*
 dynamic/thumbnails/*
@@ -59,6 +63,3 @@ doxygen
 
 # Keep the gitkeeps
 !**/.gitkeep
-
-## TEMPORARY:
-/public/assets/sb_branding/fulp/classic/
