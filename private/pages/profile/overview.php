@@ -148,6 +148,13 @@ if ($sb->getLocalOptions()["skin"] == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapSkinProfileGradient($data["userlink_color"]);
 }
 
-echo $twig->render("profile.twig", [
-    'data' => $page_data,
-]);
+// temporary code
+if ($username == "Chaziz" && $sb->getLocalOptions()["skin"] == "trinium") {
+    echo $twig->render("profile_yt2010.twig", [
+        'data' => $page_data,
+    ]);
+} else {
+    echo $twig->render("profile.twig", [
+        'data' => $page_data,
+    ]);
+}
