@@ -139,7 +139,7 @@ class UploadData
      */
     public function isTakenDown()
     {
-        return $this->is_deleted || $this->author?->isUserBanned();
+        return $this->takedown || $this->author?->isUserBanned();
     }
 
     /**

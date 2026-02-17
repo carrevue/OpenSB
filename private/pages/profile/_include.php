@@ -101,7 +101,7 @@ $storage = $sb->getStorageClass();
 $twig->setPageMeta([
     "opengraph_type" => "profile",
     "opengraph_username" => $data["name"],
-    "opengraph_description" => (!empty(trim($data["about"])) ? $data["about"] : $localization->translate("profile_no_description")),
+    "opengraph_description" => (!empty(trim(($data["about"] ?? ''))) ? $data["about"] : $localization->translate("profile_no_description")),
     "opengraph_image" => $storage->getUserProfilePicture($data["id"], false),
     "opengraph_section" => "Profile",
 ]);

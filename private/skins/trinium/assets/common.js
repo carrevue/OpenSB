@@ -16,8 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // profile banner
     const profile_banner = (document.getElementById('profile-banner'));
     
-    // if the min-width breakpoints get changed, don't forgot to update this.
-    const mediaQueryList = window.matchMedia("(min-width: 950px)");
+    const mediaQueryList = window.matchMedia("(min-width: 1024px)");
     let isMobile = false;
 
     function handleMediaQueryChange(event) {
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     handleMediaQueryChange(mediaQueryList);
     mediaQueryList.addEventListener("change", handleMediaQueryChange);
-    ///
+    
     if (sidebarButton) {
         sidebarButton.onclick = function () {
             if (hamburgerMenu && sidebar) {
