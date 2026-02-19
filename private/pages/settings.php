@@ -80,6 +80,8 @@ if (isset($_POST['save'])) {
         $highlight_box_border_color = substr($_POST['highlight_box_border_color'] ?? '#666666', 0, 7);
         $highlight_box_background_color = substr($_POST['highlight_box_background_color'] ?? '#E6E6E6', 0, 7);
         $highlight_box_text_color = substr($_POST['highlight_box_text_color'] ?? '#000000', 0, 7);
+    } else {
+        $userlink_color = $auth->getUserData()["userlink_color"];
     }
 
     if ($auth->isUserOver18()) {

@@ -1,4 +1,4 @@
--- Adminer 5.3.0 MariaDB 10.11.11-MariaDB dump
+-- Adminer 5.4.1 MariaDB 11.8.3-MariaDB-0+deb13u1 from Debian dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -79,6 +79,7 @@ CREATE TABLE `uploads` (
   `video_length` bigint(20) unsigned DEFAULT NULL COMMENT 'Length of the video in seconds',
   `tags` text DEFAULT NULL COMMENT 'Upload tags, serialized in JSON',
   `type` int(11) NOT NULL DEFAULT 0 COMMENT 'The upload type, 0 is a video, 1 is a legacy video, 2 is art, and 3 is music.',
+  `visibility` int(11) NOT NULL DEFAULT 0,
   `rating` enum('general','questionable','mature') NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -271,4 +272,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2025-09-18 08:42:02 UTC
+-- 2026-02-19 09:10:43 UTC
