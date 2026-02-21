@@ -1,8 +1,21 @@
-# OpenSBInstanceName Help
+# Help
 
-## Uploading
-OpenSBInstanceName currently supports these file formats:
+## What can I upload?
+[OpenSBInstanceName] currently supports these file formats:
 
 **Video**: MP4, MKV, WMV, FLV, AVI, MOV, 3GP
 
 **Image**: PNG, JPEG, BMP, WEBP
+
+## What's the upload limit?
+The upload must be less than [size_limit] in size. Despite this, there is no limit on the length of a video.
+
+<!-- chazizsb start -->
+<!-- fulptube start -->
+## Is this the original FulpTube?
+No. The original incarnation of FulpTube, made by an individual who previously went under the alias "Chief Bazinga", shut down many years ago. However, this website is ran by people who were users of FulpTube and the original SubRocks back when they existed. No one from these sites (except for magnum22, who was staff on both) are involved or affiliated with this website.
+<!-- fulptube end -->
+
+## Is this part of the "OYC" / "Alt-Vid Community"?
+No. We don't really consider this website as being part of that community. If you want a website of such kind without all of the needless slap fights and harassment typically associated with the community, this may be the best option.
+<!-- chazizsb end -->

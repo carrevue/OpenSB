@@ -242,10 +242,20 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $branding = $this->sb->getBrandingSettings();
                 $markdown = new Parsedown();
 
+                // hide sections not meant to be seen outside of squarebracket.pw / fulptube.rocks
+                if (!$this->sb->isChazizInstance()) {
+                    $text = preg_replace('/<!--\s*chazizsb\s+start\s*-->.*?<!--\s*chazizsb\s+end\s*-->/s', '', $text);
+                }
+
+                if (!$this->sb->isFulpTubeMode()) {
+                    $text = preg_replace('/<!--\s*fulptube\s+start\s*-->.*?<!--\s*fulptube\s+end\s*-->/s', '', $text);
+                }
+
                 $text = $markdown->text($text);
 
                 // replace hardcoded dummy strings with proper strings
-                $text = str_replace("OpenSBInstanceName", $branding["name"], $text);
+                $text = str_replace("[OpenSBInstanceName]", $branding["name"], $text);
+                $text = str_replace("[size_limit]", Utilities::formatBytes(ini_get('upload_max_filesize')), $text);
 
                 return $text;
             }, ['is_safe' => ['html']]),
@@ -763,6 +773,10 @@ class SquareBracketTwigExtension extends AbstractExtension
                 "name" => $this->localize("about"),
                 "url" => "/about",
             ],
+            "help" => [
+                "name" => $this->localize("help"),
+                "url" => "/help",
+            ],
             "tos" => [
                 "name" => $this->localize("terms_of_service"),
                 "url" => "/tos",
@@ -774,10 +788,6 @@ class SquareBracketTwigExtension extends AbstractExtension
             "guidelines" => [
                 "name" => $this->localize("community_guidelines"),
                 "url" => "/guidelines",
-            ],
-            "help" => [
-                "name" => $this->localize("help"),
-                "url" => "/help",
             ],
         ];
 
