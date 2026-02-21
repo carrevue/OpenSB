@@ -39,3 +39,18 @@ require_once SB_PRIVATE_PATH . '/common.php';
 // add visiblity type
 $database->query("ALTER TABLE `uploads`
 ADD `visibility` int(11) NOT NULL DEFAULT '0' AFTER `type`;");
+
+// add username blocklist
+$database->query("CREATE TABLE `username_blocklist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `use_regex` tinyint(1) NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  `author` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+);");
+
+// update ip bans
+$database->query("ALTER TABLE `ip_bans`
+CHANGE `reason` `reason` varchar(255) COLLATE 'utf8mb4_general_ci' NOT NULL DEFAULT 'No reason specified' AFTER `ip`,
+ADD `author` int NOT NULL DEFAULT '-1000';"); // -1000 is System

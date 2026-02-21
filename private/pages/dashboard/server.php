@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -59,6 +59,8 @@ function get_folder_size($path)
 }
 
 
+$cpu_name = "Unknown";
+
 $is_windows = str_starts_with(php_uname(), "Windows") ?? false;
 
 // get distro info if on a unix-based system that supports os-release
@@ -90,6 +92,16 @@ if (!$is_windows) {
             if (stripos($line, 'model name') === 0) {
                 $cpu_name = trim(explode(':', $line, 2)[1]);
                 break;
+            }
+
+            if (stripos($line, 'hardware') === 0) {
+                $cpu_name = trim(explode(':', $line, 2)[1]);
+                break;
+            }
+
+            // we have no clue, so fallback into showing the system's arch type
+            if (stripos($line, 'processor') === 0) {
+                $cpu_name = php_uname('m');
             }
         }
     }
@@ -138,7 +150,6 @@ if (!$is_windows) {
     ];
 } else {
     // maybe look into wmic in the future but not now -chaziz 2/6/2026
-    $cpu_name = "Unknown";
     $memory = [];
     $uptime = "Unknown";
     $avg = [];

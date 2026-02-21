@@ -38,14 +38,13 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "primary", ["Trinium"]);
 }
 
-// for the time being, query from user aliases table for usernames tied to user id 0
-$db = $database->fetchArray($database->query("SELECT * FROM user_old_names WHERE user = 0"));
+$db = $database->fetchArray($database->query("SELECT * FROM username_blocklist"));
 
 $data = [];
 
 foreach ($db as $entry) {
     $data[] = [
-        "name" => $entry["old_name"],
+        "name" => $entry["name"],
     ];
 }
 

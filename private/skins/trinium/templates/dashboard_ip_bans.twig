@@ -36,6 +36,7 @@
                     <div class="content-title">
                         {{ ip.ip }}
                     </div>
+                    <div class="content-detail">By: {{ ip.author }}</div>
                     <div class="content-detail">Time: {{ ip.timestamp | format_date('long', 'medium') }} ({{ ip.timestamp | relative_time() }})</div>
                     <div class="content-detail">Reason: {{ ip.reason }}</div>
                 </div>

@@ -22,8 +22,9 @@ CREATE TABLE `invite_keys` (
 DROP TABLE IF EXISTS `ip_bans`;
 CREATE TABLE `ip_bans` (
   `ip` varchar(45) NOT NULL DEFAULT '0.0.0.0',
-  `reason` varchar(255) NOT NULL DEFAULT '<em>No reason specified</em>',
-  `timestamp` bigint(20) NOT NULL DEFAULT 0
+  `reason` varchar(255) NOT NULL DEFAULT 'No reason specified',
+  `timestamp` bigint(20) NOT NULL DEFAULT 0,
+  `author` int(11) NOT NULL DEFAULT -1000
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -151,6 +152,17 @@ CREATE TABLE `upload_views` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE IF EXISTS `username_blocklist`;
+CREATE TABLE `username_blocklist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `use_regex` tinyint(1) NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  `author` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Incrementing ID for internal purposes.',
@@ -272,4 +284,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-02-19 09:10:43 UTC
+-- 2026-02-21 04:41:01 UTC

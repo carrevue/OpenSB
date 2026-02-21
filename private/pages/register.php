@@ -94,9 +94,8 @@ if (isset($_POST['registersubmit'])) {
         }
     }
 
-    if ($database->fetch("SELECT COUNT(*) FROM user_old_names WHERE old_name = ?", [$username])["COUNT(*)"] >= 1)
-        $error .= "Invalid username. ";
-        //$error .= "You cannot use someone's previous username. ";
+    /*if ($database->fetch("SELECT COUNT(*) FROM user_old_names WHERE old_name = ?", [$username])["COUNT(*)"] >= 1)
+        $error .= "You cannot use someone's previous username. ";*/
 
     try {
         $dobDateTime = new DateTime($birthdate);

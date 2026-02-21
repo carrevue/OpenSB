@@ -494,34 +494,53 @@ class Utilities
     /**
      * function validateUsername
      *
-     * @param mixed $username
-     * @param mixed $database
-     * @param mixed $checkIfTaken
-     *
-     * @note this will be redone soon.
+     * @param string $username
+     * @param Database $database
+     * @param bool $checkIfTaken
      * 
      * @return string
      */
-    public static function validateUsername($username, $database, $checkIfTaken = true): string
+    public static function validateUsername(string $username, Database $database, bool $checkIfTaken = true): string
     {
-        $error = "";
-
-        // TODO: redo these errors in a way that theyre localizable with notifyBanner
-        if (!isset($username)) $error .= "This username is blank. ";
-        if ($checkIfTaken) {
-            if ($database->result("SELECT COUNT(*) FROM users WHERE name = ?", [$username])) $error .= "This username has already been taken. ";
+        if ($username === '') {
+            return "This username is blank.";
         }
-        if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $username)) $error .= "This username contains invalid characters. ";
 
-        // TODO: add blacklist for usernames. for a somewhat crude blacklist, 
-        // you may use the user_old_names table and point the username you wish
-        // to blacklist to an invalid id (i'd recommend 0). a proper blacklist
-        // will be added in opensb 2.1. -chaziz 11/19/2025
-        if ($username == "news") $error .= "Invalid username. ";
-        if ($username == "InvalidUser!") $error .= "Invalid username. ";
-        if (str_starts_with($username, "DummyAccount-")) $error .= "Invalid username. ";
+        if (!preg_match('/^[a-zA-Z0-9\-_]+$/', $username)) {
+            return "This username contains invalid characters.";
+        }
 
-        return $error;
+        if (
+            strcasecmp($username, 'news') === 0 ||
+            strcasecmp($username, 'system') === 0 ||
+            $username === 'InvalidUser!' ||
+            str_starts_with($username, 'DummyAccount-')
+        ) {
+            return "Invalid username.";
+        }
+
+        // this is going to become inefficient eventually -chaziz 02/20/2026
+        $blocklist = $database->query("SELECT name, use_regex FROM username_blocklist");
+
+        foreach ($blocklist as $entry) {
+            if ($entry['use_regex']) {
+                if (@preg_match($entry['name'], $username) === 1) {
+                    return "This username is not appropriate.";
+                }
+            } else {
+                if (strcasecmp($entry['name'], $username) === 0) {
+                    return "This username is not appropriate.";
+                }
+            }
+        }
+
+        if ($checkIfTaken) {
+            if ($database->result("SELECT 1 FROM users WHERE name = ? LIMIT 1", [$username])) {
+                return "This username has already been taken.";
+            }
+        }
+
+        return "";
     }
 
     /**

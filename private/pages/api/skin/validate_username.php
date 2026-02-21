@@ -23,6 +23,8 @@ namespace OpenSB\Pages\SkinAPI;
 
 global $database;
 
+use OpenSB\Utilities;
+
 header('Content-Type: application/json');
 
 $post_data = json_decode(file_get_contents('php://input'), true);
@@ -32,15 +34,17 @@ $apiOutput = [
 ];
 
 if (isset($post_data['username'])) {
-    if ($post_data['username'] == "BlockedUsername") {
-        $apiOutput = [
-            "message" => "This username cannot be used."
-        ];
-    }
+    $validate = Utilities::validateUsername($post_data['username'], $database);
 
-    if ($post_data['username'] == "TakenUsername") {
+    if ($validate) {
         $apiOutput = [
-            "message" => "This username has already been taken."
+            "code" => 1,
+            "message" => $validate,
+        ];
+    } else {
+        $apiOutput = [
+            "code" => 0,
+            "message" => "Username is valid.",
         ];
     }
 }
