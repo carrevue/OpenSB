@@ -22,7 +22,7 @@ CREATE TABLE `invite_keys` (
 DROP TABLE IF EXISTS `ip_bans`;
 CREATE TABLE `ip_bans` (
   `ip` varchar(45) NOT NULL DEFAULT '0.0.0.0',
-  `reason` varchar(255) NOT NULL DEFAULT 'No reason specified',
+  `reason` text NOT NULL DEFAULT 'No reason specified',
   `timestamp` bigint(20) NOT NULL DEFAULT 0,
   `author` int(11) NOT NULL DEFAULT -1000
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -284,4 +284,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-02-21 04:41:01 UTC
+-- 2026-02-21 10:30:43 UTC
