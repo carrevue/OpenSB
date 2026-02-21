@@ -120,10 +120,6 @@ class Templating
         $this->skin = $this->options["skin"] ?? $default_skin;
         $this->theme = $this->options["theme"] ?? $default_theme;
 
-        if ($this->skin != "trinium") {
-            $this->resetToDefault();
-        }
-
         //if ($this->skin === null || trim($this->skin) === '' || !is_dir('skins/' . $this->skin . '/templates')) {
         if ($this->skin === null || trim($this->skin) === '') {
             /*trigger_error("Current skin is invalid", E_USER_WARNING);
