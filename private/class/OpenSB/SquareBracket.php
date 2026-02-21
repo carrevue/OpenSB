@@ -262,24 +262,6 @@ class SquareBracket
             ) {
                 date_default_timezone_set($this->options['timezone']);
             }
-
-            // the charla skin is now called trinium
-            if ($this->options["skin"] == "charla") {
-                $this->options["skin"] = "trinium";
-                $this->setOptionCookie($this->options);
-            }
-
-            // migrate biscuit users to trinium. the skin has been retired.
-            if ($this->options["skin"] == "biscuit") {
-                $this->options["skin"] = "trinium";
-
-                if ($this->options["theme"] == "soretro") {
-                    $this->options["theme"] = "default";
-                }
-
-                $this->setOptionCookie($this->options);
-                Utilities::notifyBanner("notify_skin_no_longer_available", null, "primary", ["Biscuit"]);
-            }
         } else {
             $this->setOptionCookie($this->options);
         }

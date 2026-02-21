@@ -269,6 +269,7 @@ class Utilities
 
             if (method_exists($sb, 'getLocalOptions')) {
                 $isFinalium = $sb->getLocalOptions()["skin"] == "finalium";
+                $isBootstrap = $sb->getLocalOptions()["skin"] == "bootstrap";
             }
         }
 
@@ -277,16 +278,27 @@ class Utilities
             $localization = new Localization(["locale" => "en-US"]);
         }
 
-        if ($isFinalium) {
-            $map = [
-                'primary'   => 'info',
+        $maps = [
+            'finalium' => [
+                'accent'    => 'info',
                 'secondary' => 'info',
                 'success'   => 'success',
                 'danger'    => 'error',
                 'warning'   => 'warning',
-            ];
+            ],
+            'bootstrap' => [
+                'accent'    => 'primary',
+                'secondary' => 'secondary',
+                'success'   => 'success',
+                'danger'    => 'danger',
+                'warning'   => 'warning',
+            ],
+        ];
 
-            $color = $map[$color] ?? $color;
+        if ($isFinalium) {
+            $color = $maps['finalium'][$color] ?? $color;
+        } elseif ($isBootstrap) {
+            $color = $maps['bootstrap'][$color] ?? $color;
         }
 
         $_SESSION["notif_message"] = $localization->translate($message, ...$args); // FIXME: this fucks up on /register
@@ -652,7 +664,6 @@ class Utilities
 
         // de-fuck urls
         $output = strtr($output, [
-            'fulptube.me' => 'squarebracket.pw',
             'fulptube.pw' => 'squarebracket.pw',
             'fulptube.veselcraft.ru' => 'squarebracket.veselcraft.ru', // this domain still works lol
         ]);

@@ -36,7 +36,7 @@ if (!$auth->hasUserAuthenticatedAsStaff()) {
 }
 
 if ($sb->getLocalOptions()["skin"] != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "primary", ["Trinium"]);
+    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
 $upload_query = new UploadQuery($sb);
@@ -99,7 +99,7 @@ foreach ($uploads_array as $upload) {
     if ($upload["flags"]["block_guests"]) {
         $upload["status"] = [
             "text" => "Public (hidden to guests)",
-            "color" => "primary",
+            "color" => "accent",
         ];
     }
 

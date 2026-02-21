@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -27,7 +27,7 @@ namespace OpenSB;
 final class Colors
 {
     /* IMPORTANT: These should be kept in sync with the colors in the Trinium skin. */
-    const PRIMARY = '#0069B4';
+    const ACCENT  = '#0069B4';
     const SUCCESS = '#00A651';
     const WARNING = '#FFBB00';
     const DANGER  = '#CB122E';

@@ -57,13 +57,13 @@ $type = ($_GET['type'] ?? 'recent');
 $user = ($_GET['user'] ?? null);
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-$limit = $database->paginate($page, 20);
+$limit = $database->paginate($page, pp: 20);
 
 if ($user) {
     Utilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
 } else {
     $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limit, $tabs[$type]["where"] ?? null);
-    $upload_count = $upload_query->count();
+    $upload_count = $upload_query->count($tabs[$type]["where"] ?? null);
 }
 
 $data = [

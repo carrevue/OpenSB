@@ -117,7 +117,7 @@
                                 </div>
 
                                 <div class="form-button-container">
-                                    <input type="submit" class="button primary button-login" value="{{ localize('login') }}" name="loginsubmit">
+                                    <input type="submit" class="button accent button-login" value="{{ localize('login') }}" name="loginsubmit">
                                 </div>
                             </div>
                         </form>
@@ -127,18 +127,6 @@
         </div>
     </div>
 </div>
-{#
-<div class="mobile-navigation-bar-container">
-    <div class="navigation-bar">
-        {% for link in sidebar_main_links() %}
-            <a class="navigation-bar-button" href="{{ link.url }}">
-                <div class="icon homepage-list size-24"></div>
-                {{ link.name }}
-            </a>
-        {% endfor %}
-    </div>
-</div>
-#}
 <div class="hamburger" id="hamburger">
     {% include('components/_sidebar.twig') %}
 </div>

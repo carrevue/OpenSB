@@ -91,7 +91,7 @@ class Authentication
                     ($this->user_data["comfortable_rating"] != "general" && !$this->isUserOver18())) 
                 {
                     $this->database->query("UPDATE users SET comfortable_rating = 'general' WHERE id = ?", [$this->user_id]);
-                    Utilities::notifyBanner("notify_content_filtering_reset", false, "primary");
+                    Utilities::notifyBanner("notify_content_filtering_reset", false, "accent");
                 }
 
                 $this->has_authenticated_as_staff = $_SESSION["SB_STAFF_AUTHED"] ?? null;

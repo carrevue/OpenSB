@@ -39,7 +39,7 @@ if ($sb->getLocalOptions()["skin"] === "finalium") {
     ];
 } else {
     $data["color_types"] = [
-        "primary", "secondary", "success", "danger", "warning",
+        "accent", "secondary", "success", "danger", "warning",
     ];
 }
 

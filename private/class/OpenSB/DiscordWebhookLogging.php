@@ -126,7 +126,7 @@ class DiscordWebhookLogging
             ->url($uploadUrl)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY);
+            ->color(Colors::ACCENT);
 
         @$this->webhook->embed($mbd)->send();
     }
@@ -166,7 +166,7 @@ class DiscordWebhookLogging
             ->url($uploadUrl)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY);
+            ->color(Colors::ACCENT);
 
         @$this->webhook->embed($mbd)->send();
     }
@@ -217,7 +217,7 @@ class DiscordWebhookLogging
             ->url($uploadUrl)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY);
+            ->color(Colors::ACCENT);
 
         @$this->webhook->embed($mbd)->send();
     }
@@ -330,7 +330,7 @@ class DiscordWebhookLogging
         $mbd->title($title)
             ->author($author)
             ->footer($this->footer_text)
-            ->color(Colors::PRIMARY);
+            ->color(Colors::ACCENT);
 
         @$this->webhook->embed($mbd)->send();
     }

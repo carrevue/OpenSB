@@ -36,7 +36,7 @@ if (!$auth->hasUserAuthenticatedAsStaff()) {
 }
 
 if ($sb->getLocalOptions()["skin"] != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "primary", ["Trinium"]);
+    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
 

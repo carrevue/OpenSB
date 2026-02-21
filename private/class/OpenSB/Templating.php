@@ -43,12 +43,16 @@ use Twig\TwigFunction;
 class Templating
 {
     /**
-     * @var string The current user's skin
+     * @var array The user's options
+     */
+    private array $options;
+    /**
+     * @var string The current skin
      */
     private string $skin;
 
     /**
-     * @var string The current user's theme
+     * @var string The current theme
      */
     private string $theme;
 
@@ -101,7 +105,7 @@ class Templating
         $this->sb = $sb;
         $this->authentication = $this->sb->getAuthenticationClass();
 
-        $options = $sb->getLocalOptions();
+        $this->options = $sb->getLocalOptions();
 
         $default_skin = "trinium";
         $default_theme = "default";
@@ -113,13 +117,18 @@ class Templating
 
         $this->is_spf = $this->sb->isSpfRequest();
 
-        $this->skin = $options["skin"] ?? $default_skin;
-        $this->theme = $options["theme"] ?? $default_theme;
+        $this->skin = $this->options["skin"] ?? $default_skin;
+        $this->theme = $this->options["theme"] ?? $default_theme;
+
+        if ($this->skin != "trinium") {
+            $this->resetToDefault();
+        }
 
         //if ($this->skin === null || trim($this->skin) === '' || !is_dir('skins/' . $this->skin . '/templates')) {
         if ($this->skin === null || trim($this->skin) === '') {
-            trigger_error("Current skin is invalid", E_USER_WARNING);
-            $this->skin = "trinium";
+            /*trigger_error("Current skin is invalid", E_USER_WARNING);
+            $this->skin = "trinium";*/
+            $this->resetToDefault();
         }
 
         $skinPath = 'skins/' . $this->skin;
@@ -127,8 +136,9 @@ class Templating
         // load in the skin metadata
         $metadata = $this->getSkinMetadata($skinPath);
         if (!$metadata) {
-            trigger_error("Failed to load skin", E_USER_WARNING);
-            $this->skin = "trinium";
+            /*trigger_error("Failed to load skin", E_USER_WARNING);
+            $this->skin = "trinium";*/
+            $this->resetToDefault();
         }
 
         $templatePath = $skinPath . '/templates';
@@ -137,12 +147,15 @@ class Templating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
+            /*
             trigger_error("Failed to load skin", E_USER_WARNING);
 
             $this->skin = "trinium";
             $this->theme = "default";
             $templatePath = "skins/trinium/templates";
             $this->loader = new FilesystemLoader($templatePath);
+            */
+            $this->resetToDefault();
         }
 
         $doCache = !$sb->isTemplateCachingEnabled() ? false : 'skins/cache/';
@@ -216,7 +229,7 @@ class Templating
         $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
         $this->twig->addGlobal('warning_banner_text', $warningBannerText);
-        $this->twig->addGlobal('options', $options);
+        $this->twig->addGlobal('options', $this->options);
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
         $this->twig->addGlobal('enable_incomplete_features', $this->sb->isIncompleteFeaturesEnabled());
         $this->twig->addGlobal('is_spf', $sb->isSpfRequest());
@@ -477,6 +490,23 @@ class Templating
         return false;
     }
 
+    /**
+     * function resetToDefault
+     * 
+     * Resets the current theme to Trinium Default and then attempts to refresh.
+     * 
+     * @note On FulpTube mode, this should stay as is.
+     * 
+     * @return void
+     */
+    private function resetToDefault(): void {
+        $this->options["skin"] = "trinium";
+        $this->options["theme"] = "default";
+
+        $this->sb->setOptionCookie($this->options);
+        header("Refresh: 0");
+        die();
+    }
 
     /**
      * function generateFinaliumIconMap

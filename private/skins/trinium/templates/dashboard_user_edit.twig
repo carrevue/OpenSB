@@ -22,7 +22,7 @@
                     {% if flags.featured %}
                         <button name="feature_user" value="{{ user.name }}" class="button secondary" onclick="if (!confirm('Are you sure you want to unfeature this user?')) { return false }">Unfeature</button>
                     {% else %}
-                        <button name="feature_user" value="{{ user.name }}" class="button primary" onclick="if (!confirm('Are you sure you want to feature this user?')) { return false }">Feature</button>
+                        <button name="feature_user" value="{{ user.name }}" class="button accent" onclick="if (!confirm('Are you sure you want to feature this user?')) { return false }">Feature</button>
                     {% endif %}
                 </form>
             </div>

@@ -384,7 +384,6 @@
     "privacy_policy_hitchhiker": "Privacy",
 
     "notify_content_filtering_reset": "Your content filtering settings have been reset to General.",
-    "notify_skin_no_longer_available": "The %s skin is no longer available.",
     "notify_skin_switch_required": "Please change your skin to %s.",
     "notify_invalid_user": "This user does not exist.",
     "notify_banned_user": "This user is banned.",
