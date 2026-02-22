@@ -24,16 +24,16 @@
 namespace OpenSB;
 
 use OpenSB\Utilities;
-use OpenSB\StupidFuckingClassThatIllNameLater;
+use OpenSB\SpfDOMExtractor;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use Twig\Extension\DebugExtension;
 use Twig\Extra\String\StringExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
+
+use RuntimeException;
 
 /**
  * class Templating
@@ -60,6 +60,11 @@ class Templating
      * @var boolean If this is a SPF request.
      */
     private bool $is_spf;
+
+    /**
+     * @var array The icon map used on the Finalium skin.
+     */
+    private array $finalium_icon_map;
 
     /**
      * @var SquareBracket The core SquareBracket class
@@ -175,20 +180,6 @@ class Templating
             }
         }));
 
-        $this->twigExtension = new SquareBracketTwigExtension($sb, $this->twig);
-
-        $this->twig->addExtension($this->twigExtension);
-        $this->twig->addExtension(new StringExtension());
-
-        if ($sb->isDebug()) {
-            $this->twig->addExtension(new DebugExtension());
-        } else {
-            $this->twig->addFunction(new TwigFunction('dump', function () {
-                trigger_error("Twig dump function called outside of debug mode!", E_USER_WARNING);
-                return "This function is not available outside of debug mode.";
-            }));
-        }
-
         $isFulpTubeMode = $sb->isFulpTubeMode();
         $branding = $sb->getBrandingSettings();
 
@@ -233,7 +224,8 @@ class Templating
 
         if ($this->skin == "finalium") {
             // fi = finalium icon
-            $this->twig->addGlobal('fi', $this->generateFinaliumIconMap());
+            $this->generateFinaliumIconMap();
+            $this->twig->addGlobal('fi', $this->finalium_icon_map);
         }
 
         if (isset($_SERVER["REQUEST_URI"])) {
@@ -257,6 +249,36 @@ class Templating
 
             $this->twig->addGlobal('page_url', Utilities::getURL(true));
             $this->twig->addGlobal('domain', Utilities::getURL(false));
+        }
+
+        $this->twigExtension = new SquareBracketTwigExtension($sb, $this->twig);
+
+        $this->twig->addExtension($this->twigExtension);
+        $this->twig->addExtension(new StringExtension());
+
+        if ($sb->isDebug()) {
+            $this->twig->addExtension(new DebugExtension());
+        } else {
+            $this->twig->addFunction(new TwigFunction('dump', function () {
+                trigger_error("Twig dump function called outside of debug mode!", E_USER_WARNING);
+                return "This function is not available outside of debug mode.";
+            }));
+        }
+    }
+
+    /**
+     * function getFinaliumIconMap
+     *
+     * Gets the Finalium icon map.
+     *
+     * @return array
+     */
+    public function getFinaliumIconMap(): array
+    {
+        if ($this->skin == "finalium") {
+            return $this->finalium_icon_map ?? [];
+        } else {
+            throw new RuntimeException("getFinaliumIconMap() called when the current skin isn't Finalium");
         }
     }
 
@@ -507,47 +529,49 @@ class Templating
     /**
      * function generateFinaliumIconMap
      * 
-     * This generates a list of icons depending on which Finalium theme is being used.
+     * This defines a list of icons depending on which Finalium theme is being used.
      * 
-     * @return array
+     * @return void
      */
-    private function generateFinaliumIconMap(): array {
+    private function generateFinaliumIconMap(): void {
         if ($this->skin != "finalium") {
-            throw new \RuntimeException("generateFinaliumIconMap() called when the current skin isn't Finalium");
+            throw new RuntimeException("generateFinaliumIconMap() called when the current skin isn't Finalium");
         }
 
         if ($this->theme == "hitchhiker") {
-            $icons = [
-                'masthead_guide' => 'masthead-guide',
-                'masthead_search' => 'masthead-search',
-                'masthead_upload' => 'masthead-upload',
-                'masthead_bell' => 'masthead-bell',
+            $this->finalium_icon_map = [
                 'guide_home' => 'guide-home',
                 'guide_uploads' => 'guide-uploads',
                 'guide_browse_members' => 'guide-browse-members',
                 'guide_my_profile' => 'guide-my-profile',
                 'guide_collection' => 'guide-collection',
+                'masthead_guide' => 'masthead-guide',
+                'masthead_search' => 'masthead-search',
+                'masthead_upload' => 'masthead-upload',
+                'masthead_bell' => 'masthead-bell',
+                'userlink_staff' => 'userlink-staff',
                 'watch_like' => 'watch-like',
                 'watch_dislike' => 'watch-dislike',
                 'watch_add_to' => 'watch-add-to',
                 'watch_share' => 'watch-share',
                 'watch_more' => 'watch-more',
                 'watch_panel_report' => 'watch-panel-report',
-                'watch_panel_stats' => 'placeholder',
+                'watch_panel_stats' => 'watch-panel-stats',
                 'watch_panel_dismiss' => 'watch-panel-dismiss',
                 'watch_creator_info' => 'watch-creator-info',
             ];
         } else {
-            $icons = [
-                'masthead_guide' => 'list',
-                'masthead_search' => 'search',
-                'masthead_upload' => 'upload',
-                'masthead_bell' => 'bell',
+            $this->finalium_icon_map = [
                 'guide_home' => 'house-door',
                 'guide_uploads' => 'play-btn',
                 'guide_browse_members' => 'people',
                 'guide_my_profile' => 'person',
                 'guide_collection' => 'list-ul',
+                'masthead_guide' => 'list',
+                'masthead_search' => 'search',
+                'masthead_upload' => 'upload',
+                'masthead_bell' => 'bell',
+                'userlink_staff' => 'shield',
                 'watch_like' => 'hand-thumbs-up-fill',
                 'watch_dislike' => 'hand-thumbs-down-fill',
                 'watch_add_to' => 'plus-lg',
@@ -559,7 +583,5 @@ class Templating
                 'watch_creator_info' => 'pencil-fill',
             ];      
         }
-
-        return $icons;
     }
 }

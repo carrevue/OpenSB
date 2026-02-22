@@ -465,7 +465,8 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         if ($powerlevel > 1) {
             if ($this->sb->getLocalOptions()["skin"] == "finalium") {
-                $staff_icon = $this->getIcon("placeholder", [12, 9]);
+                // this STINKS. look into this later -chaziz 02/22/2026
+                $staff_icon = $this->getIcon($this->sb->getTemplatingClass()->getFinaliumIconMap()["userlink_staff"], [12, 9]);
             } else {
                 $staff_icon = $this->getIcon("shield", 14);
             }
@@ -473,7 +474,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             $staff_string = $this->localize("staff");
 
             return sprintf(
-                '%s <span class="uix-tooltip" title="%s">%s</span>',
+                '%s <span class="uix-tooltip userlink-icon" title="%s">%s</span>',
                 $userlink,
                 $staff_string,
                 $staff_icon
