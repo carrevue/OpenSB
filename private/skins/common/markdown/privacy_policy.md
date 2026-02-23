@@ -2,7 +2,7 @@
 
 Last updated on (not on prod).
 
-This is the privacy policy for this website FulpTube, alternatively known as SquareBracket.
+This is the privacy policy for this website FulpTube, alternatively known as squareBracket.
 
 The only people who have full server and database access are Chaziz, Jack/shiypc and magnum22, who are the website owners and server operators. Staff members do not have full server or database access and can only use tools provided from the dashboard.
 

@@ -8,12 +8,12 @@
 **Image**: PNG, JPEG, BMP, WEBP
 
 ## What's the upload limit?
-The upload must be less than [size_limit] in size. Despite this, there is no limit on the length of a video.
+The upload must be less than [size_limit] in size. There is no limit on the length of a video.
 
 <!-- chazizsb start -->
 <!-- fulptube start -->
 ## Is this the original FulpTube?
-No. The original incarnation of FulpTube, made by an individual who previously went under the alias "Chief Bazinga", shut down many years ago. However, this website is ran by people who were users of FulpTube and the original SubRocks back when they existed. No one from these sites (except for magnum22, who was staff on both) are involved or affiliated with this website.
+No. The original incarnation of FulpTube, made by an individual who previously went under the alias "Chief Bazinga", shut down many years ago. However, this website is ran by a few people who were users of the original FulpTube at the time. This website does not have any affiliation and endorsement from the original staff members (except for magnum22, who is a co-owner here).
 <!-- fulptube end -->
 
 ## Is this part of the "OYC" / "Alt-Vid Community"?
