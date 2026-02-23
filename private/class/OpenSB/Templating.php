@@ -173,21 +173,15 @@ class Templating
         $branding = $sb->getBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.
-        $warningBannerTextIfOnChazizOwnedDomain = $branding["name"] . " is currently in a testing phase.
-        Registrations are closed until the site is ready.";
+        $warningBannerTextIfOnChazizOwnedDomain = "New " . $branding["name"] . " update comes out March 1st 2026.";
 
-        /*
-        if ($sb->isChazizSquareBracketInstance()) {
+        if ($sb->isChazizSquareBracketInstance() && $sb->isFulpTube()) {
             $showWarningBanner = true;
             $warningBannerText = $warningBannerTextIfOnChazizOwnedDomain;
         } else {
             $showWarningBanner = false;
             $warningBannerText = null;
         }
-        */
-
-        $showWarningBanner = false;
-        $warningBannerText = null;
 
         //$this->version_number = $sb->getVersionNumberClass();
         $this->version_number = new VersionNumber();
