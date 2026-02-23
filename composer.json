@@ -1,7 +1,7 @@
 {
     "require": {
         "twig/twig": "3.23.0",
-        "intervention/image": "3.11.6",
+        "intervention/image": "3.11.7",
         "erusev/parsedown": "dev-master",
         "php-ffmpeg/php-ffmpeg": "1.4.0",
         "ext-pdo": "*",
