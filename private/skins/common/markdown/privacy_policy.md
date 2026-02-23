@@ -2,7 +2,7 @@
 
 Last updated on October 25th 2025.
 
-This is the privacy policy for this website FulpTube, alternatively known as SquareBracket.
+This is the privacy policy for this website FulpTube, alternatively known as squareBracket.
 
 The only people who have full server and database access are Chaziz and Jack/shiypc, who are the website owners and server operators. Administrators do not have full server or database access and can only use administration tools provided within the OpenSB codebase.
 
@@ -28,7 +28,7 @@ This platform uses a session cookie (`sb_session`) to keep you logged in. The ot
 If you have published personal information you would like to remove, use the tools given to edit it out if applicable. If this is not possible (e.g. you want to rename a personally identifiable username) or you would like to fully erase it, please contact Chaziz, Jack/shiypc, or any of the administrators.
 
 ## Transparency
-This platform runs on OpenSB (Open SquareBracket), which is fully open source and its source code [is available on GitHub](https://github.com/Bluffingo/OpenSB). You may inspect the source code yourself to see how your data is handled.
+This platform runs on OpenSB, which is fully open source and its source code [is available on GitHub](https://github.com/Bluffingo/OpenSB). You may inspect the source code yourself to see how your data is handled.
 
 ## Updates
 Updates to this privacy policy are done as commits to the OpenSB Git repository ([View changes](https://github.com/Bluffingo/OpenSB/blob/opensb-2.0/private/skins/common/markdown/privacy_policy.md)). You will be alerted of any substantial changes made to the privacy policy through the platform.
