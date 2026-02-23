@@ -36,6 +36,14 @@ if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
 }
 
+if ($sb->isIpLookupEnabled() && $sb->isChazizSquareBracketInstance()) {
+    $ipLookup = $sb->getIpLookupClass();
+    $ipInfo = $ipLookup->getInfo(Utilities::getIpAddress());
+    if ($ipInfo && $ipInfo['asn'] === 'AS212238') {
+        die();
+    }
+}
+
 $captcha = $sb->returnCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
