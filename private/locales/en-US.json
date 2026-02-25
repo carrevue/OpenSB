@@ -20,9 +20,11 @@
     "collection_hitchhiker": "Playlist",
 
     "follow": "Follow",
+    "followed": "Followed",
     "unfollow": "Unfollow",
 
     "follow_hitchhiker": "Subscribe",
+    "followed_hitchhiker": "Subscribed",
     "unfollow_hitchhiker": "Unsubscribe",
 
     "form_required": "Required",
@@ -222,9 +224,7 @@
     "upload_video": "Video",
 
     "upload_no_title": "No title",
-    "upload_no_description": "This upload does not have a description.",
-
-    "upload_no_description_hitchhiker": "No description available.",
+    "upload_no_description": "No description available.",
 
     "uploaded_on": "Uploaded on %s",
     "first_uploaded_on": "First uploaded on %s on %s",
@@ -260,7 +260,6 @@
 
     "404_not_found": "404 Not Found",
     "ip_banned_intro": "You have been IP banned from %s",
-    "ip_message": "Your IP is %s, and the account(s) linked to this IP are: %s",
 
     "dashboard_lookup": "Lookup",
 

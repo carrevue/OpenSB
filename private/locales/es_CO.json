@@ -96,7 +96,6 @@
     "404_not_found": "404 No encontrado",
     "ip_banned_intro": "Has sido bloqueado por IP de %s",
     "ban_filed_permanent": "Tu bloqueo fue registrado el %s, y no expira.",
-    "ip_message": "Tu IP es %s, y las cuentas vinculadas a esta IP son: %s",
 
     "dashboard_lookup": "Buscar",
 

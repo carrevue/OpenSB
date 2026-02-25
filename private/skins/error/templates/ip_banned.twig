@@ -1,4 +1,3 @@
 <p>{{ localize('ip_banned_intro', website_branding.name) }}.</p>
 <p>{{ localize('ban_filed_permanent', data.time | date("F jS Y H:i:s T")) }}</p>
 <p>{{ data.reason | raw }}</p>
-<p>{{ localize('ip_message', data.ip, users|map(user => user.name)|join(', ')) }}.</p>

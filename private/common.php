@@ -205,16 +205,46 @@ if (!SB_CLI) {
     $twig_error = new ErrorTemplating($sb);
 
     $ipban = $database->fetch(
-        "SELECT * FROM ip_bans WHERE ? LIKE ip",
-        [Utilities::getIpAddress()]
+        "
+        SELECT *
+        FROM ip_bans
+        WHERE
+            (
+                ? & (
+                    -1 << (
+                        32 - IF(
+                            LOCATE('/', ip) > 0,
+                            SUBSTRING_INDEX(ip, '/', -1),
+                            32
+                        )
+                    )
+                )
+            )
+            =
+            (
+                INET_ATON(
+                    IF(
+                        LOCATE('/', ip) > 0,
+                        SUBSTRING_INDEX(ip, '/', 1),
+                        ip
+                    )
+                )
+                &
+                (
+                    -1 << (
+                        32 - IF(
+                            LOCATE('/', ip) > 0,
+                            SUBSTRING_INDEX(ip, '/', -1),
+                            32
+                        )
+                    )
+                )
+            )
+        ",
+        [ip2long(Utilities::getIpAddress())]
     );
 
     if ($ipban) {
-        $usersAssociatedWithIP = $database->fetchArray($database->query(
-            "SELECT name FROM users WHERE ip LIKE ?",
-            [Utilities::getIpAddress()]
-        ));
-
         if ($sb->isDebug() && (!$ipban)) {
             $ipban = [
                 "ip" => Utilities::getIpAddress(),
@@ -225,7 +255,6 @@ if (!SB_CLI) {
         echo $twig_error->render("ip_banned.twig", [
             "page" => "ip-banned",
             "data" => $ipban,
-            "users" => $usersAssociatedWithIP,
         ]);
         die();
     }

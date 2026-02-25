@@ -153,25 +153,27 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <hr>
-                        <div class="watch-box-description">
-                            <div class="watch-box-description-info-small">
-                                {{ localize('tags') }}:
-                                {% for tag in upload.tags %}
-                                    <a href="/search?query={{ tag.name }}">{{ tag.name }}</a>{{ not loop.last ? ',' }}
-                                {% else %}
-                                    <span class="text-faded">{{ localize('none') }}</span>
-                                {% endfor %}
-                                {# TODO:
-                                {% if is_user_logged_in %}
-                                    <form class="form-flex">
-                                        <input type="text" class="form-submit">
-                                        <input type="submit" value="Add" class="button secondary">
-                                    </form>
-                                {% endif %}
-                                #}
+                        {% if upload.tags %}
+                            <hr>
+                            <div class="watch-box-description">
+                                <div class="watch-box-description-info-small">
+                                    {{ localize('tags') }}:
+                                    {% for tag in upload.tags %}
+                                        <a href="/search?query={{ tag.name }}">{{ tag.name }}</a>{{ not loop.last ? ',' }}
+                                    {% else %}
+                                        <span class="text-faded">{{ localize('none') }}</span>
+                                    {% endfor %}
+                                    {# TODO:
+                                    {% if is_user_logged_in %}
+                                        <form class="form-flex">
+                                            <input type="text" class="form-submit">
+                                            <input type="submit" value="Add" class="button secondary">
+                                        </form>
+                                    {% endif %}
+                                    #}
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
