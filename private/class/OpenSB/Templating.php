@@ -540,6 +540,8 @@ class Templating
 
         if ($this->theme == "hitchhiker") {
             $this->finalium_icon_map = [
+                'button_follow' => 'button-follow',
+                'button_followed' => 'button-followed',
                 'guide_home' => 'guide-home',
                 'guide_uploads' => 'guide-uploads',
                 'guide_browse_members' => 'guide-browse-members',
@@ -549,6 +551,8 @@ class Templating
                 'masthead_search' => 'masthead-search',
                 'masthead_upload' => 'masthead-upload',
                 'masthead_bell' => 'masthead-bell',
+                'spinner_left' => 'spinner-left',
+                'spinner_right' => 'spinner-right',
                 'userlink_staff' => 'userlink-staff',
                 'watch_like' => 'watch-like',
                 'watch_dislike' => 'watch-dislike',
@@ -562,6 +566,8 @@ class Templating
             ];
         } else {
             $this->finalium_icon_map = [
+                'button_follow' => 'plus-lg',
+                'button_followed' => 'check-lg',
                 'guide_home' => 'house-door',
                 'guide_uploads' => 'play-btn',
                 'guide_browse_members' => 'people',
@@ -571,6 +577,8 @@ class Templating
                 'masthead_search' => 'search',
                 'masthead_upload' => 'upload',
                 'masthead_bell' => 'bell',
+                'spinner_left' => 'chevron-left',
+                'spinner_right' => 'chevron-right',
                 'userlink_staff' => 'shield',
                 'watch_like' => 'hand-thumbs-up-fill',
                 'watch_dislike' => 'hand-thumbs-down-fill',
