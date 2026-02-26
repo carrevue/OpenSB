@@ -50,6 +50,12 @@ function handle_error(string $message, string $redirect = "/") {
     }
 }
 
+function recommendation_string_similarity(?string $a, ?string $b): float {
+    if (empty($a) || empty($b)) return 0.0;
+    similar_text(strtolower($a), strtolower($b), $percent);
+    return $percent / 100.0;
+}
+
 if (Utilities::isClassicSkin()) {
     if (isset($_GET["v"])) { // get "v" parameter and set that as the id
         $id = $_GET["v"];
@@ -190,135 +196,72 @@ $whereRatings = $auth->databaseWhereRatingsHelper();
 $whereTagBlacklist = $auth->databaseWhereTagBlacklistHelper();
 $upload_query = new UploadQuery($sb);
 
-// loose shitty recommendations
-if ($options["use_new_recommendation_shit"] ?? false) {
-    $recommendfields = "
-    jaccard.upload_id,
-    jaccard.flags,
-    jaccard.intersect_count,
-    jaccard.union_count,
-    jaccard.intersect_count / jaccard.union_count AS jaccard_index
-    FROM (
-        SELECT
-            c2.upload_id AS upload_id,
-            c2.flags AS flags,
-            COUNT(ct2.tag_id) AS intersect_count,
-            (
-                c1_tagcount.c1_count +
-                c2_tagcount.c2_count -
-                COUNT(ct2.tag_id)
-            ) AS union_count
-        FROM uploads AS c1
-        JOIN upload_tag_index AS ct1
-            ON ct1.upload_id = c1.id
-        JOIN upload_tag_index AS ct2
-            ON ct2.tag_id = ct1.tag_id
-        JOIN uploads AS c2
-            ON c2.id = ct2.upload_id AND c2.id != c1.id
+$uploads_by_author = $upload_query->query("RAND()", 20, "v.author = ? AND v.upload_id != ?", [$data["author"], $data["upload_id"]]);
 
-        JOIN (
-            SELECT upload_id, COUNT(*) AS c1_count
-            FROM upload_tag_index
-            GROUP BY upload_id
-        ) AS c1_tagcount ON c1_tagcount.upload_id = c1.id
+// this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
+$candidateQuery = "
+    SELECT v.*
+    FROM uploads v
+    WHERE v.upload_id != ?
+    AND v.flags != 0x2
+    AND v.upload_id NOT IN (SELECT upload FROM upload_takedowns)
+    AND v.author NOT IN (SELECT user FROM user_bans)
+    AND v.visibility = " . UploadVisibilityEnum::Public->value . "
+";
 
-        JOIN (
-            SELECT upload_id, COUNT(*) AS c2_count
-            FROM upload_tag_index
-            GROUP BY upload_id
-        ) AS c2_tagcount ON c2_tagcount.upload_id = c2.id
-
-        WHERE c1.id = ?
-
-        GROUP BY
-            c2.upload_id,
-            c2.flags,
-            c1_tagcount.c1_count,
-            c2_tagcount.c2_count
-        HAVING intersect_count > 0
-    ) AS jaccard
-    WHERE jaccard.flags != 0x2
-    ORDER BY jaccard_index DESC
-    LIMIT 24";
-} else {
-    $recommendfields = "
-        jaccard.upload_id,
-        jaccard.flags,
-        jaccard.intersect_count,
-        jaccard.union_count,
-        jaccard.intersect_count / jaccard.union_count AS jaccard_index
-    FROM
-        (
-        SELECT
-            c2.upload_id AS upload_id,
-            c2.flags AS flags,
-            COUNT(ct2.tag_id) AS intersect_count,
-            (
-            SELECT
-                COUNT(DISTINCT ct3.tag_id)
-            FROM
-                upload_tag_index ct3
-            WHERE
-                ct3.upload_id IN (c1.id, c2.id)
-        ) AS union_count
-        FROM
-            uploads AS c1
-        INNER JOIN uploads AS c2
-            ON c1.id != c2.id
-        LEFT JOIN upload_tag_index AS ct1
-            ON ct1.upload_id = c1.id
-        LEFT JOIN upload_tag_index AS ct2
-            ON ct2.upload_id = c2.id AND ct1.tag_id = ct2.tag_id
-        WHERE
-            c1.id = ?
-            AND ct1.tag_id IS NOT NULL
-            AND ct2.tag_id IS NOT NULL
-        GROUP BY
-            c2.upload_id, c2.flags
-        HAVING
-            intersect_count > 0
-        ) AS jaccard
-    WHERE
-        jaccard.flags != 0x2
-    ORDER BY
-        jaccard_index DESC
-    LIMIT 24";
+if (!empty($whereRatings)) {
+    $candidateQuery .= " AND $whereRatings";
 }
 
-$uploads_by_author = $upload_query->query("RAND()", 24, "v.author = ? AND v.upload_id != ?", [$data["author"], $data["upload_id"]]);
+if (!empty($whereTagBlacklist)) {
+    $candidateQuery .= " AND $whereTagBlacklist";
+}
 
-if ($tags === []) {
-    // if there are no tags, list the author's other uploads
-    $recommended = false;
-} else {
-    // if there are tags, use jaccard stuff ported from poktwo to list uploads that may be relevant enough.
-    // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
+$candidates = $database->fetchArray(
+    $database->query($candidateQuery, [$data["upload_id"]])
+);
 
-    $query = "SELECT v.* 
-    FROM uploads v
-    INNER JOIN (
-        SELECT $recommendfields
-    ) AS recommended
-    ON v.upload_id = recommended.upload_id
-    WHERE v.upload_id NOT IN (SELECT upload FROM upload_takedowns)";
+// get the tags
+$sourceTags = array_column(
+    $database->fetchArray($database->query(
+        "SELECT tag_id FROM upload_tag_index WHERE upload_id = ?",
+        [$data["id"]]
+    )),
+    'tag_id'
+);
 
-    if (!empty($whereRatings)) {
-        $query .= "AND $whereRatings ";
+$allTags = [];
+if (!empty($candidates)) {
+    $ids = implode(',', array_column($candidates, 'id'));
+    $tagRows = $database->fetchArray($database->query(
+        "SELECT upload_id, tag_id FROM upload_tag_index WHERE upload_id IN ($ids)"
+    ));
+    foreach ($tagRows as $row) {
+        $allTags[$row["upload_id"]][] = $row["tag_id"];
     }
+}
 
-    if (!empty($twhereTagBlacklist)) {
-        $query .= "AND $whereTagBlacklist ";
+// now score this shit
+if (!empty($candidates)) {
+    $sourceTagCount = count($sourceTags);
+
+    foreach ($candidates as &$row) {
+        $candidateTags = $allTags[$row["id"]] ?? [];
+        $intersection  = count(array_intersect($sourceTags, $candidateTags));
+        $union         = $sourceTagCount + count($candidateTags) - $intersection;
+        $jaccard       = $union > 0 ? $intersection / $union : 0.0;
+
+    $row["relevance_score"] =
+        (
+            ($jaccard * 0.85) +
+            (recommendation_string_similarity($data["title"], $row["title"]) * 0.10) +
+            (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05)
+        ) * min(2.0, max(1.0, $row["views"] / 20));
     }
+    unset($row);
 
-    $query .= "AND v.author NOT IN (SELECT user FROM user_bans)
-    ORDER BY RAND()";
-
-    $recommended = $database->fetchArray($database->query($query, [$data["id"]]));
-
-    // if no other uploads match, then fallback to listing the author's other uploads
-    if (empty($recommended)) {
-        $recommended = false;
-    }
+    usort($candidates, fn($a, $b) => $b["relevance_score"] <=> $a["relevance_score"]);
+    $recommended = array_slice($candidates, 0, 20);
 }
 
 if ($recommended) {
