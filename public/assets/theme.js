@@ -35,7 +35,7 @@ function updateSkinThemes() {
     if (typeof weOnTrinium !== "undefined" && weOnTrinium) {
         const theWarning = document.getElementById('notFullySupported');
 
-        if (selectedSkin.value == "finalium" || selectedSkin.value == "bootstrap") {
+        if (selectedSkin.value == "bootstrap") {
             theWarning.style.display = "inline";
         } else {
             theWarning.style.display = "none";

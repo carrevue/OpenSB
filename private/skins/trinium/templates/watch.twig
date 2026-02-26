@@ -203,18 +203,6 @@
             </div>
         </div>
         <div class="col-medium-12 col-large-4 col-huge-3">
-            {% if upload.other_by_author %}
-                <div class="section">
-                    <div class="section-header flex">
-                        <h2>{{ localize('uploads_from_user', upload.author.info.displayname) }}</h2>
-                    </div>
-                    <div class="content-box related-uploads">
-                        {% for upload in upload.other_by_author %}
-                            {{ include('/components/_upload_vertical_small.twig') }}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
             {% if upload.recommended %}
                 <div class="section">
                     <div class="section-header flex">
@@ -222,6 +210,18 @@
                     </div>
                     <div class="content-box related-uploads">
                         {% for upload in upload.recommended %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if upload.other_by_author %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <h2>{{ localize('uploads_from_user', upload.author.info.displayname) }}</h2>
+                    </div>
+                    <div class="content-box related-uploads">
+                        {% for upload in upload.other_by_author %}
                             {{ include('/components/_upload_vertical_small.twig') }}
                         {% endfor %}
                     </div>

@@ -2,7 +2,7 @@
 
 {% set title = "Change theme" %}
 
-{# fix so the locale picker doesnt default to the first listed option (which is belsrusian as of writing this) #}
+{# fix so the locale picker doesnt default to the first listed option #}
 {% if options.locale == null %}
     {% set options = options|merge({locale: "en-US"}) %}
 {% endif %}
