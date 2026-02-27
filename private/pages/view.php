@@ -33,6 +33,8 @@ use OpenSB\UploadQuery;
 use OpenSB\UserRoleEnum;
 use OpenSB\Utilities;
 use OpenSB\UploadVisibilityEnum;
+use OpenSB\UploadFlags;
+use OpenSB\UserFlags;
 
 $options = $sb->getLocalOptions();
 
@@ -52,11 +54,18 @@ function handle_error(string $message, string $redirect = "/") {
 
 function recommendation_string_similarity(?string $a, ?string $b): float {
     if (empty($a) || empty($b)) return 0.0;
-    $a = mb_strtolower(mb_substr(preg_replace('/[\p{P}\p{S}]/u', '', $a), 0, 50));
-    $b = mb_strtolower(mb_substr(preg_replace('/[\p{P}\p{S}]/u', '', $b), 0, 50));
-    if (empty($a) || empty($b)) return 0.0;
-    similar_text($a, $b, $percent);
-    return $percent / 100.0;
+    $clean = fn(string $s) => mb_strtolower(preg_replace('/[\p{P}\p{S}]/u', '', $s));
+    $tokenize = fn(string $s) => array_filter(explode(' ', preg_replace('/\s+/', ' ', trim($s))));
+
+    $wordsA = array_values($tokenize($clean($a)));
+    $wordsB = array_values($tokenize($clean($b)));
+
+    if (count($wordsA) === 0 || count($wordsB) === 0) return 0.0;
+
+    $intersection = count(array_intersect($wordsA, $wordsB));
+    $union        = count(array_unique(array_merge($wordsA, $wordsB)));
+
+    return $union === 0 ? 0.0 : $intersection / $union;
 }
 
 if (Utilities::isClassicSkin()) {
@@ -203,13 +212,14 @@ $uploads_by_author = $upload_query->query("RAND()", 20, "v.author = ? AND v.uplo
 
 // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
 $candidateQuery = "
-    SELECT v.*
+    SELECT v.*, u.flags AS author_flags
     FROM uploads v
+    JOIN users u ON u.id = v.author
     WHERE v.upload_id != ?
-    AND v.flags != 0x2
+    AND v.flags != " . UploadFlags::FLAG_UNPROCESSED->value . "
+    AND v.visibility = " . UploadVisibilityEnum::Public->value . "
     AND v.upload_id NOT IN (SELECT upload FROM upload_takedowns)
     AND v.author NOT IN (SELECT user FROM user_bans)
-    AND v.visibility = " . UploadVisibilityEnum::Public->value . "
 ";
 
 if (!empty($whereRatings)) {
@@ -250,10 +260,8 @@ $recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subroc
 // now score this shit
 if (!empty($candidates)) {
     $sourceTagCount = count($sourceTags);
-
     // count uploads per author across all candidates
     $authorUploadCounts = array_count_values(array_column($candidates, 'author'));
-
     foreach ($candidates as &$row) {
         $candidateTags = $allTags[$row["id"]] ?? [];
         $intersection  = count(array_intersect($sourceTags, $candidateTags));
@@ -262,6 +270,7 @@ if (!empty($candidates)) {
 
         $titleLower = strtolower($row["title"]);
         $penalty    = 0.0;
+
         foreach ($recommendation_title_penality as $word) {
             if (str_contains($titleLower, $word)) {
                 $penalty += 0.75;
@@ -274,26 +283,31 @@ if (!empty($candidates)) {
             if ($authorCount > 50) {
                 $penalty += min(0.15, ($authorCount - 50) * 0.005);
             }
-        }
 
-        // penalize uploads from before 2025 (mainly sb specific behavior)
-        if ($row["timestamp"] < 1735689600 || $row["original_timestamp"] < 1735689600) {
-            $penalty += 0.75;
+            // penalize unverified authors
+            if ($row["author_flags"] & UserFlags::FLAG_UNVERIFIED->value) {
+                $penalty += 0.5;
+            }
         }
 
         $row["relevance_score"] =
             (
                 ($jaccard * 0.75) +
                 (recommendation_string_similarity($data["title"], $row["title"]) * 0.075) +
-                (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05) /*+
-                (mt_rand(0, 100) / 250.0)*/
+                (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05) +
+                (mt_rand(0, 100) / 250.0)
             ) * min(2.0, max(1.0, $row["views"] / 20))
             - $penalty;
     }
     unset($row);
 
     usort($candidates, fn($a, $b) => $b["relevance_score"] <=> $a["relevance_score"]);
-    $recommended = array_slice($candidates, 0, 20);
+    $relevant   = array_values(array_filter($candidates, fn($row) => $row["relevance_score"] > 0.05));
+    $irrelevant = array_values(array_filter($candidates, fn($row) => $row["relevance_score"] <= 0.05));
+    // randomize irrelevant uploads so it doesn't list the same shit every time
+    shuffle($irrelevant);
+    $recommended = array_slice(array_merge($relevant, $irrelevant), 0, 20);
+    $recommended = !empty($recommended) ? $recommended : false;
 }
 
 if ($recommended) {
@@ -308,8 +322,9 @@ if ($uploads_by_author) {
     $uploads_by_author_array = [];
 }
 
+// fallback in case recommended somehow doesnt work and the author has no other uploads
 if (!$recommended && !$uploads_by_author) {
-    $random_uploads = $upload_query->query("RAND()", 24, "v.upload_id != ?", [$data["upload_id"]]);
+    $random_uploads = $upload_query->query("RAND()", 20, "v.upload_id != ?", [$data["upload_id"]]);
     if ($random_uploads) {
         $random_uploads_array = Utilities::makeUploadArray($database, $random_uploads);
     } else {
