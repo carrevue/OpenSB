@@ -52,7 +52,10 @@ function handle_error(string $message, string $redirect = "/") {
 
 function recommendation_string_similarity(?string $a, ?string $b): float {
     if (empty($a) || empty($b)) return 0.0;
-    similar_text(strtolower($a), strtolower($b), $percent);
+    $a = mb_strtolower(mb_substr(preg_replace('/[\p{P}\p{S}]/u', '', $a), 0, 50));
+    $b = mb_strtolower(mb_substr(preg_replace('/[\p{P}\p{S}]/u', '', $b), 0, 50));
+    if (empty($a) || empty($b)) return 0.0;
+    similar_text($a, $b, $percent);
     return $percent / 100.0;
 }
 
@@ -241,9 +244,15 @@ if (!empty($candidates)) {
     }
 }
 
+// avoid recommending masturbatory uploads, uploads about other sites, and "my first video" uploads, -chaziz 02/27/2025
+$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'betacast', 'first video', 'first upload'];
+
 // now score this shit
 if (!empty($candidates)) {
     $sourceTagCount = count($sourceTags);
+
+    // count uploads per author across all candidates
+    $authorUploadCounts = array_count_values(array_column($candidates, 'author'));
 
     foreach ($candidates as &$row) {
         $candidateTags = $allTags[$row["id"]] ?? [];
@@ -251,12 +260,35 @@ if (!empty($candidates)) {
         $union         = $sourceTagCount + count($candidateTags) - $intersection;
         $jaccard       = $union > 0 ? $intersection / $union : 0.0;
 
-    $row["relevance_score"] =
-        (
-            ($jaccard * 0.85) +
-            (recommendation_string_similarity($data["title"], $row["title"]) * 0.10) +
-            (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05)
-        ) * min(2.0, max(1.0, $row["views"] / 20));
+        $titleLower = strtolower($row["title"]);
+        $penalty    = 0.0;
+        foreach ($recommendation_title_penality as $word) {
+            if (str_contains($titleLower, $word)) {
+                $penalty += 0.75;
+            }
+        }
+
+        // penalize uploads from authors with a high number of uploads, so we can actually show other uploads
+        if ($row["author"] !== $data["author"]) {
+            $authorCount = $authorUploadCounts[$row["author"]] ?? 0;
+            if ($authorCount > 50) {
+                $penalty += min(0.15, ($authorCount - 50) * 0.005);
+            }
+        }
+
+        // penalize uploads from before 2025 (mainly sb specific behavior)
+        if ($row["timestamp"] < 1735689600 || $row["original_timestamp"] < 1735689600) {
+            $penalty += 0.75;
+        }
+
+        $row["relevance_score"] =
+            (
+                ($jaccard * 0.75) +
+                (recommendation_string_similarity($data["title"], $row["title"]) * 0.075) +
+                (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05) /*+
+                (mt_rand(0, 100) / 250.0)*/
+            ) * min(2.0, max(1.0, $row["views"] / 20))
+            - $penalty;
     }
     unset($row);
 
