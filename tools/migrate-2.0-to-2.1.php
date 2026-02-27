@@ -54,3 +54,11 @@ $database->query("CREATE TABLE `username_blocklist` (
 $database->query("ALTER TABLE `ip_bans`
 CHANGE `reason` `reason` text COLLATE 'utf8mb4_general_ci' NOT NULL DEFAULT 'No reason specified' AFTER `ip`,
 ADD `author` int NOT NULL DEFAULT '-1000';"); // -1000 is System
+
+// mail verification token
+$database->query("CREATE TABLE `email_verification_token` (
+  `user` int NOT NULL,
+  `token` varchar(128) NOT NULL,
+  `created` int NOT NULL,
+  `expiration` int NOT NULL
+);");

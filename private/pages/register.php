@@ -36,6 +36,14 @@ if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
 }
 
+if ($sb->isIpLookupEnabled() && $sb->isChazizInstance()) {
+    $ipLookup = $sb->getIpLookupClass();
+    $ipInfo = $ipLookup->getInfo(Utilities::getIpAddress());
+    if ($ipInfo && $ipInfo['asn'] === 'AS212238') {
+        die();
+    }
+}
+
 $captcha = $sb->getCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
@@ -68,16 +76,16 @@ if (isset($_POST['registersubmit'])) {
     $username = trim($_POST['username'] ?? '');
     $pass = $_POST['pass1'] ?? '';
     $pass2 = $_POST['pass2'] ?? '';
-    $mail = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $email_address = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $birthdate = $_POST['birthdate'] ?? '';
     if ($enableInviteKeys) {
         $invite = $_POST['invite'];
     }
 
     $error .= Utilities::validateUsername($username, $database);
-    if ($database->result("SELECT COUNT(*) FROM users WHERE email = ?", [$mail]) > 0) $error .= "This email address is used by another account. ";
+    if ($database->result("SELECT COUNT(*) FROM users WHERE email = ?", [$email_address]) > 0) $error .= "This email address is used by another account. ";
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
-    if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
+    if (!filter_var($email_address, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
 
     $isLocalIp = (Utilities::getIpAddress() === "localhost"
         || filter_var(
@@ -142,8 +150,8 @@ if (isset($_POST['registersubmit'])) {
         $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
         $database->query(
             "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate, flags)
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [$username, $hashedPassword, $token, time(), time(), $username, $mail, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags]
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [$username, $hashedPassword, $token, time(), time(), $username, $email_address, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d'), $flags]
         );
         $userId = $database->insertId();
 
@@ -154,8 +162,31 @@ if (isset($_POST['registersubmit'])) {
             );
         }
 
+        if ($sb->isMailEnabled()) {
+            $mail = $sb->getMailClass();
+
+            try {
+                $verification_token = bin2hex(random_bytes(32));
+            } catch (RandomException) {
+                // uh shit. just redirect to the login page?
+                Utilities::redirect("/login", 500);
+            }
+
+            $expiration = strtotime('+7 days', time());
+
+            $database->query(
+                "INSERT INTO email_verification_token (user, token, created, expiration) 
+                        VALUES (?, ?, ?, ?);", 
+                        [$userId, $verification_token, time(), $expiration]
+            );
+            
+            $link = Utilities::getURL() . "/verify_email?token=" . $verification_token;
+
+            $mail->sendVerificationMail($email_address, $username, $link);
+        }
+
         $_SESSION["SBTOKEN"] = $token;
-        $_SESSION["SB_STAFF_AUTHED"] = null; // just to be certain, clear this shit off.
+        $_SESSION["SB_STAFF_AUTHED"] = null; // just to be certain, clear this off.
 
         if ($sb->isDiscordWebhookEnabled()) {
             $data = [

@@ -30,6 +30,10 @@ if (!$auth->isUserLoggedIn()) { //|| !($auth->getUserFlags() & UserFlags::FLAG_U
     Utilities::redirect('/');
 }
 
+if (isset($_GET["token"])) {
+    die('We Got The Token !'); // temporary
+}
+
 if (isset($_POST["loginsubmit"]) || isset($_GET["resend"])) {
     $data = $auth->getUserData();
     $mail = $sb->getMailClass();

@@ -24,6 +24,11 @@
 <meta property="og:title" content="{{ title }}" />
 <meta property="og:url" content="{{ page_url }}">
 <meta property="og:site_name" content="{{ website_branding.name }}" />
+{% if is_fulptube %}
+<meta name="keywords" content="fulptube, video, sharing, camera phone, video phone, free, upload">
+{% else %}
+<meta name="keywords" content="video, sharing, camera phone, video phone, free, upload">
+{% endif %}
 
 {% if meta.opengraph_type %}
     <meta property="og:type" content="{{ meta.opengraph_type }}" />
