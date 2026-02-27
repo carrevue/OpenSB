@@ -127,7 +127,7 @@ if (isset($_GET["action"])) {
     if ($_GET["action"] == "clear_all") {
         $database->query("DELETE FROM user_notifications WHERE recipient = ?;", [$auth->getUserID()]);
 
-        Utilities::notifyBanner("notify_notifications_cleared", "/notices", "success");
+        Utilities::notifyBanner("notify_notifications_cleared", "/notifications", "success");
     }
 }
 

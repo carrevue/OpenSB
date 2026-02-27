@@ -1,71 +1,71 @@
-{% extends "_layout.twig" %}
+{% extends "_layout_my_account.twig" %}
 
 {% set title = localize('modify_upload') %}
 
-	{% block content %}
-        <div class="section">
-            <div class="section-header">
-                <h1 class="section-title">{{ localize('modify_upload') }}</h1>
-            </div>
-            <div class="content-box">
-                <form name="uploadForm" id="uploadForm" method="post" action="edit" enctype="multipart/form-data">
-                <input type="hidden" name="vid_id" value="{{ data.id }}">
-                    <div class="grid">
-                        <div class="col-4">
-                            <img src="{{ thumbnail(data.id, data.type, data.flags.custom_thumbnail) }}"
-                            alt="{{ data.title }}" class="form-image edit-page">
-                        </div>
-                        <div class="col-8">
-                            <div class="form-input">
-                                {{ localize('title') }}
-                                <input type="text" class="form-submit" name="title"
-                                    value="{{ data.title }}">
-                            </div>
+{% set breadcrumbs = [
+    { url: '/my_uploads', label: localize('my_uploads') },
+    { url: '/edit?v=' ~ data.id, label: data.title },
+] %}
 
-                            <div class="form-input">
-                                {{ localize('description') }}
-                                <textarea class="form-submit" name="desc" maxlength="65535"
-                                        form="uploadForm"
-                                        style="overflow:hidden;resize:vertical" rows="8">{{ data.description }}</textarea>
-                            </div>
-
-                            <div class="form-input">
-                                {{ localize('visibility') }}
-                                <select name="visibility" id="visibility">
-                                    <option value="public"  {{ data.visibility == 0 ? 'selected' : '' }}>
-                                        {{ localize('public') }}
-                                    </option>
-                                    <option value="unlisted" {{ data.visibility == 2 ? 'selected' : '' }}>
-                                        {{ localize('unlisted') }}
-                                    </option>
-                                    <option value="private" {{ data.visibility == 1 ? 'selected' : '' }}>
-                                        {{ localize('private') }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-input">
-                                <label for="thumbnail">{{ localize('custom_thumbnail') }}</label>
-                                <input class="form-submit" type="file" name="thumbnail" id="thumbnail">
-                            </div>
-
-                            <div class="form-input">
-                                <input type="checkbox" id="block_guests" name="block_guests" value="yes">
-                                <label for="block_guests">{{ localize('block_guests_from_upload') }}</label><br>
-                            </div>
-
-                            <div class="form-input">
-                                <input type="checkbox" id="block_comments" name="block_comments" value="yes">
-                                <label for="block_comments">{{ localize('disable_comments_from_upload') }}</label>
-                            </div>
-
-                            <div class="form-button-container">
-                                <input type="submit" id="upload" name="upload" class="button accent"
-                                    value="{{ localize('save_action') }}">
-                            </div>
-                        </div>
+{% block my_account_content %}
+    <div class="content-box">
+        <form name="uploadForm" id="uploadForm" method="post" action="edit" enctype="multipart/form-data">
+        <input type="hidden" name="vid_id" value="{{ data.id }}">
+            <div class="grid">
+                <div class="col-4">
+                    <img src="{{ thumbnail(data.id, data.type, data.flags.custom_thumbnail) }}"
+                    alt="{{ data.title }}" class="form-image edit-page">
+                </div>
+                <div class="col-8">
+                    <div class="form-input">
+                        {{ localize('title') }}
+                        <input type="text" class="form-submit" name="title"
+                            value="{{ data.title }}">
                     </div>
-                </form>
+
+                    <div class="form-input">
+                        {{ localize('description') }}
+                        <textarea class="form-submit" name="desc" maxlength="65535"
+                                form="uploadForm"
+                                style="overflow:hidden;resize:vertical" rows="8">{{ data.description }}</textarea>
+                    </div>
+
+                    <div class="form-input">
+                        {{ localize('visibility') }}
+                        <select name="visibility" id="visibility">
+                            <option value="public"  {{ data.visibility == 0 ? 'selected' : '' }}>
+                                {{ localize('public') }}
+                            </option>
+                            <option value="unlisted" {{ data.visibility == 2 ? 'selected' : '' }}>
+                                {{ localize('unlisted') }}
+                            </option>
+                            <option value="private" {{ data.visibility == 1 ? 'selected' : '' }}>
+                                {{ localize('private') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-input">
+                        <label for="thumbnail">{{ localize('custom_thumbnail') }}</label>
+                        <input class="form-submit" type="file" name="thumbnail" id="thumbnail">
+                    </div>
+
+                    <div class="form-input">
+                        <input type="checkbox" id="block_guests" name="block_guests" value="yes">
+                        <label for="block_guests">{{ localize('block_guests_from_upload') }}</label><br>
+                    </div>
+
+                    <div class="form-input">
+                        <input type="checkbox" id="block_comments" name="block_comments" value="yes">
+                        <label for="block_comments">{{ localize('disable_comments_from_upload') }}</label>
+                    </div>
+
+                    <div class="form-button-container">
+                        <input type="submit" id="upload" name="upload" class="button accent"
+                            value="{{ localize('save_action') }}">
+                    </div>
+                </div>
             </div>
-        </div>
-    {% endblock %}
+        </form>
+    </div>
+{% endblock %}

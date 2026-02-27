@@ -2,42 +2,41 @@
 
 {% set title = localize('notifications') %}
 
+{% set breadcrumbs = [
+    { url: '/notifications', label: localize('notifications') },
+] %}
+
+{% set section_header_right = {
+     url: '/notifications?action=clear_all', 
+     label: localize('clear_all') 
+} %}
+
 {% block my_account_content %}
-    <div class="section">
-        <div class="section-header flex">
-            <div class="section-header-left">
-                <h1 class="section-title">{{ localize('notifications') }}</h1>
-            </div>
-            <div class="section-header-right">
-                <a href="/notifications?action=clear_all">{{ localize('clear_all') }}</a>
-            </div>
-        </div>
-        <div class="content-box">
-            {% for notice in data %}
-                <div class="content-entry">
-                    <div class="content-thumbnail">
-                        <div class="content-image profile-picture">
-                            <img src="{{ profile_picture(notice.sender.id) }}"
-                                 alt="{{ notice.sender.info.username }}" class="pfp">
-                        </div>
-                    </div>
-                    <div class="content-info">
-                        <div class="content-title">{{ notice.intro }} {{ user_link(notice.sender) }}</div>
-                        {% if notice.detail.info %}
-                        <div class="content-description">{{ notice.detail.info }}</div>
-                        {% endif %}
-                        <div class="content-detail">
-                            {% if notice.detail.origin %}
-                                {{ localize('time_ago_on_origin', notice.time | relative_time, notice.detail.origin) }}
-                            {% else %}
-                                {{ notice.time | relative_time }}
-                            {% endif %}
-                        </div>
+    <div class="content-box">
+        {% for notice in data %}
+            <div class="content-entry">
+                <div class="content-thumbnail">
+                    <div class="content-image profile-picture">
+                        <img src="{{ profile_picture(notice.sender.id) }}"
+                                alt="{{ notice.sender.info.username }}" class="pfp">
                     </div>
                 </div>
-            {% else %}
-                {{ localize('no_notifications') }}
-            {% endfor %}
-        </div>
+                <div class="content-info">
+                    <div class="content-title">{{ notice.intro }} {{ user_link(notice.sender) }}</div>
+                    {% if notice.detail.info %}
+                    <div class="content-description">{{ notice.detail.info }}</div>
+                    {% endif %}
+                    <div class="content-detail">
+                        {% if notice.detail.origin %}
+                            {{ localize('time_ago_on_origin', notice.time | relative_time, notice.detail.origin) }}
+                        {% else %}
+                            {{ notice.time | relative_time }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {{ localize('no_notifications') }}
+        {% endfor %}
     </div>
 {% endblock %}

@@ -353,7 +353,7 @@
     "notifications": "Notifications",
     "clear_all": "Clear all",
     "time_ago_on_origin": "%s on %s",
-    "no_notifications": "You currently have no notifications.",
+    "no_notifications": "You do not have any notifications at the moment.",
 
     "search_results_for": "Results for \"%s\"",
 

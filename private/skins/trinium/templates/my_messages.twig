@@ -2,6 +2,10 @@
 
 {% set title = "My messages" %}
 
+{% set breadcrumbs = [
+    { url: '/my_messages', label: localize('my_messages') },
+] %}
+
 {% block my_account_content %}
     <div class="content-box">
         <div>

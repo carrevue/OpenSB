@@ -7,6 +7,15 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
+DROP TABLE IF EXISTS `email_verification_token`;
+CREATE TABLE `email_verification_token` (
+  `user` int(11) NOT NULL,
+  `token` varchar(128) NOT NULL,
+  `created` int(11) NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+
 DROP TABLE IF EXISTS `invite_keys`;
 CREATE TABLE `invite_keys` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -284,4 +293,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-02-21 10:30:43 UTC
+-- 2026-02-27 16:28:36 UTC

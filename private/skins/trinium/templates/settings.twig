@@ -2,6 +2,10 @@
 
 {% set title = localize('account_settings') %}
 
+{% set breadcrumbs = [
+    { url: '/settings', label: localize('account_settings') },
+] %}
+
 {% block my_account_content %}
     {% if error %}
     <div class="banner danger">{{ error }}</div>
