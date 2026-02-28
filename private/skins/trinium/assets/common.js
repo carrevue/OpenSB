@@ -442,24 +442,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-type": "application/json; charset=UTF-8"
                 }
             })
-                .then((response) => response.json())
-                .then((json) => {
-                    if (json["error"]) {
-                        error(json["error"])
+            .then((response) => response.json())
+            .then((json) => {
+                if (json["error"]) {
+                    error(json["error"])
+                }
+                else {
+                    if (follow_count) {
+                        follow_count.textContent = json["number"];
                     }
-                    else {
-                        if (follow_count) {
-                            follow_count.textContent = json["number"];
-                        }
-                        follow_button.textContent = json["text"];
-                        if (json["followed"]) {
-                            //play('subscribe');
-                        }
+                    follow_button.textContent = json["text"];
+                    if (json["followed"]) {
                     }
                 }
-                )
-                ;
-
+            });
         }
     }
 
@@ -472,7 +468,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // SETTINGS
     let settings_display_name_input = (document.getElementById('settings-display-name-input'));
     let settings_display_name = (document.getElementById('settings-display-name'));
-    //let settings_custom_color = (document.getElementById('settings-color'));
 
     if (settings_display_name_input && settings_display_name) {
         settings_display_name_input.addEventListener("input", function () {
@@ -480,19 +475,6 @@ document.addEventListener("DOMContentLoaded", () => {
             settings_display_name.innerHTML = settings_display_name_input.value;
         });
     }
-
-    /*
-    if (settings_custom_color) {
-        if (settings_display_name) {
-            settings_custom_color.addEventListener("input", function () {
-                settings_display_name.style.color = settings_custom_color.value;
-            });
-        }
-        settings_custom_color.addEventListener("input", function () {
-            document.documentElement.style.setProperty('--link-color', settings_custom_color.value);
-        });
-    }
-    */
 
     let debug_button = (document.getElementById('debug-button'));
     let debug_dialog = (document.getElementById('debug-dialog'));

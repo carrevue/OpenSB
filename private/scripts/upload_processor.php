@@ -47,8 +47,6 @@ define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() I
 
 require_once SB_PRIVATE_PATH . '/common.php';
 
-$dev_enable_classic_thumbnails = false;
-
 function log(string $message): void
 {
     $microtime = microtime(true);
@@ -205,12 +203,6 @@ try {
     if ($fucked) {
         log("Taking thumbnail from first frame");
         $frame = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-
-        if ($dev_enable_classic_thumbnails) {
-            $frameClassic1 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-            $frameClassic2 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-            $frameClassic3 = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-        }
     } else {
         // this is fucked. look into this later. -chaziz 6/9/2025
         /*
@@ -229,37 +221,13 @@ try {
         log("Taking thumbnail from frame " . $thumbnailTime);
 
         $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
-
-        if ($dev_enable_classic_thumbnails) {
-            // oh yeah the way this works i gotta redefine this shit Again. Lol
-            $thumbnailTimeClassic1 = $duration * 0.25;
-            $thumbnailTimeClassic2 = $duration * 0.5;
-            $thumbnailTimeClassic3 = $duration * 0.75;
-
-            $frameClassic1 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic1 / $framerate));
-            $frameClassic2 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic2 / $framerate));
-            $frameClassic3 = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTimeClassic3 / $framerate));
-        }
     }
     $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
 
-    if ($dev_enable_classic_thumbnails) {
-        $frameClassic1->filters()->custom('scale=130x97');
-        $frameClassic2->filters()->custom('scale=130x97');
-        $frameClassic3->filters()->custom('scale=130x97');
-    }
-
     log("Saving thumbnail...");
 
-    // HQ thumbnails
+    //Thumbnails
     $frame->save($path . '/thumbnails/' . $new . '.png');
-
-    if ($dev_enable_classic_thumbnails) {
-        // Classic thumbnails
-        $frameClassic1->save($path . '/thumbnails/classic/' . $new . '.1.jpg');
-        $frameClassic2->save($path . '/thumbnails/classic/' . $new . '.2.jpg');
-        $frameClassic3->save($path . '/thumbnails/classic/' . $new . '.3.jpg');
-    }
 
     log("Thumbnail saved!");
 

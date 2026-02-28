@@ -1,6 +1,6 @@
 {% extends "_layout.twig" %}
 
-{% set title = "Change theme" %}
+{% set title = localize('change_theme') %}
 
 {# fix so the locale picker doesnt default to the first listed option #}
 {% if options.locale == null %}
@@ -10,7 +10,7 @@
 {% block content %}
     <div class="section">
         <div class="section-header">
-            <h1 class="section-title">Change theme</h1>
+            <h1 class="section-title">{{ localize('change_theme') }}</h1>
         </div>
         <div class="content-box">
             <div id="previewContainer">
@@ -22,13 +22,13 @@
                     <div id="themeName"></div>
                     <div id="themeDescription"></div>
                     <div id="themeAuthor"></div>
-                    <div id="notFullySupported" class="text-danger" style="display:none;">This skin is not fully supported and may not be completely functional</div>
+                    <div id="notFullySupported" class="text-danger" style="display:none;">{{ localize('skin_unsupported') }}</div>
                 </div>
             </div>
             <hr>
             <form name="uploadForm" id="uploadForm" method="post" action="theme">
                 <div class="form-input">
-                    <label for="skin">Skin</label>
+                    <label for="skin">{{ localize('skin') }}</label>
                     <select id="skin" name="skin" class="form-submit" onchange="updateSkinThemes()">
                         {% for skin in skins %}
                             <option value="{{ skin.metadata.id }}" 
@@ -42,13 +42,13 @@
                     </select>
                 </div>
                 <div class="form-input">
-                    <label for="theme">Theme</label>
+                    <label for="theme">{{ localize('theme') }}</label>
                     <select id="theme" name="theme" class="form-submit" onchange="updatePreview()">
                     </select>
                 </div>
                 <hr>
                 <div class="form-input">
-                    <label for="locale">Language</label>
+                    <label for="locale">{{ localize('language') }}</label>
                     <select id="locale" name="locale" class="form-submit">
                         {% for locale in locales %}
                             <option value="{{ locale.id }}"

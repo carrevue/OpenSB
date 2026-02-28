@@ -330,8 +330,13 @@
     "version_license_notice": "Vous devriez avoir reçu <a href=\"%s\">une copie de la Licence publique générale GNU Affero</a> avec ce programme, sinon, <a href=\"%s\">lisez-la en ligne</a>.",
     "version_github": "Le code source d'OpenSB est disponible <a href=\"%s\">sur GitHub</a>.",
 
+    "skin": "Apparence",
+    "theme": "Thème",
+    "language": "Langage",
+    "skin_unsupported": "Cette apparence n'est pas entièrement supporté et pourrait ne pas être entièrement fonctionnel.",
+
     "version": "Version",
-    "change_theme": "Thème",
+    "change_theme": "Changer de thème",
     "help": "Aide",
     "community_guidelines": "Règles Communautaires",
     "terms_of_service": "Conditions de Service",

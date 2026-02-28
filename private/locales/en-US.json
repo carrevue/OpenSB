@@ -370,6 +370,11 @@
     "version_license_notice": "You should have received <a href=\"%s\">a copy of the GNU Affero General Public License</a> along with this program. If not, see <a href=\"%s\">http://www.gnu.org/licenses/</a>.",
     "version_github": "The source code to OpenSB is available <a href=\"%s\">on GitHub</a>.",
 
+    "skin": "Skin",
+    "theme": "Theme",
+    "language": "Language",
+    "skin_unsupported": "This skin is not fully supported and may not be completely functional.",
+
     "version": "Version",
     "change_theme": "Change theme",
     "help": "Help",
