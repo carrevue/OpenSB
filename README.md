@@ -1,6 +1,6 @@
 # OpenSB
 
-<img src="https://raw.githubusercontent.com/bluffingo/OpenSB/refs/heads/opensb-2.0/private/skins/trinium/default.png"></img>
+<img src="https://raw.githubusercontent.com/carrevue/OpenSB/refs/heads/opensb-2.1/private/skins/trinium/default.png"></img>
 
 OpenSB (Open SquareBracket) is a free and open-source PHP-based video/image sharing website script. Compared to other "video sharing site scripts", OpenSB aims to be lightweight and customizable. It is primarily used by the FulpTube/squareBracket platform.
 
