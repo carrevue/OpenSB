@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2026 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -21,16 +21,28 @@
 
 namespace OpenSB\Pages;
 
+global $twig, $database;
+
 use OpenSB\Utilities;
 
-$user = $user ?? "news";
+$journal_count = 0;
+$data = [];
 
-if ($user) {
-    if ($user == "news") {
-        Utilities::redirect('/news', 301);
-    } else {
-        Utilities::redirect('/user/' . $user . '/journals', 301);
-    }
-} else {
-    Utilities::notifyBanner("notify_invalid_user", "/");
-}
+$page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
+$limit = $database->paginate($page, 20);
+
+$journal_array = $database->fetchArray($database->query(
+    "SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC $limit"
+));
+
+$journal_count = $database->result(
+    "SELECT COUNT(*) FROM journals j WHERE j.is_news = 1"
+);
+
+$data = Utilities::makeJournalArray($database, $journal_array);
+
+echo $twig->render('news.twig', [
+    'data' => $data,
+    'page' => $page,
+    'count' => $journal_count
+]);

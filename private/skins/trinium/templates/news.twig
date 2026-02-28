@@ -1,0 +1,35 @@
+{% extends "_layout.twig" %}
+
+{% set title = localize('site_news') %}
+
+{% block content %}
+    {% set total_pages = (count / items_per_page) | round(0, 'ceil') %}
+    {% set current_page = page %}
+
+    <div class="section">
+        <div class="section-header flex">
+            <div class="section-header-left">
+                <h1 class="section-title">{{ localize('site_news') }}</h1>
+                <div class="section-desc">{{ localize('site_news_desc') }}</div>
+            </div>
+        </div>
+        <div class="content-box">
+            {% for news in data %}
+                <div class="content-entry">
+                    <div class="content-info">
+                        <div class="content-title">{{ news.title }}</div>
+                        <div class="content-author">{{ user_link(news.author) }}</div>
+                        <div class="content-detail">{{ news.published | format_date('long', 'none') }}</div>
+                        <div class="content-text">{{ news.contents | markdown_user_written(true) }}</div>
+                    </div>
+                </div>
+            {% else %}
+                <p>{{ localize('no_journals') }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% set le_url = '/news?page=%s' %}
+
+    {{ pagination(count, items_per_page, le_url, current_page) }}
+{% endblock %}
