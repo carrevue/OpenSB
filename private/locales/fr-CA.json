@@ -95,6 +95,9 @@
     "email_verify_2": "Pour confirmer que ce compte vous appartient, veuillez ouvrir ce lien :",
     "email_verify_3": "Si ce compte ne vous appartient pas, veuillez ignorer ce courriel.",
 
+    "heads_up": "Vous n'avez pas encore vérifié votre compte. Veuillez vérifier votre boîte de réception et vos courriels indésirables pour un courriel de vérification.",
+    "heads_up_link": "Renvoyer",
+
     "email_address": "Adresse courriel",
     "username": "Nom d'utilisateur",
     "password": "Mot de passe",

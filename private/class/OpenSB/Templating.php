@@ -188,11 +188,15 @@ class Templating
         $warningBannerText = null;
 
         if ($this->authentication->isUserLoggedIn() && 
-            $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value) {
+            $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value || true) {
+            $localization = $sb->getLocalizationClass();
+
             $showWarningBanner = true;
-            $warningBannerText = 
-            "Heads up! You have still not verified your account. Please check your inbox and spam for a verification email. " .
-            "<a href='/verify_email?resend'>Send again.</a>";
+            $warningBannerText = sprintf(
+                '%s <a href="/verify_email?resend">%s</a>',
+                $localization->translate('heads_up'),
+                $localization->translate('heads_up_link')
+            );
         }
 
         $this->version_number = new VersionNumber();

@@ -305,7 +305,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             $emoji_name = strtolower($matches[1]);
             // check if emoji exists so we dont load nothing
             if (file_exists('../dynamic/emojis/' . $emoji_name . '.png')) {
-                return '<img class="emoji" src="/dynamic/emojis/' . $emoji_name . '.png" alt=":' . $emoji_name . ':" />';
+                return '<img class="emoji use-tooltip" src="/dynamic/emojis/' . $emoji_name . '.png" alt=":' . $emoji_name . ':" title=":' . $emoji_name . ':" />';
             } else {
                 return ':' . $emoji_name . ':';
             }

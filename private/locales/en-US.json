@@ -107,6 +107,9 @@
     "email_verify_2": "To confirm that this account belongs to you, please open this link:",
     "email_verify_3": "If this account does not belong to you, please ignore this email.",
 
+    "heads_up": "Heads up! You have still not verified your account. Please check your inbox and spam for a verification email.",
+    "heads_up_link": "Resend verification email",
+
     "email_address": "Email address",
     "username": "Username",
     "password": "Password",
