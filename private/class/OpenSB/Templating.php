@@ -542,6 +542,7 @@ class Templating
             $this->finalium_icon_map = [
                 'button_follow' => 'button-follow',
                 'button_followed' => 'button-followed',
+                'button_unfollow' => 'button-unfollow',
                 'guide_home' => 'guide-home',
                 'guide_uploads' => 'guide-uploads',
                 'guide_browse_members' => 'guide-browse-members',
@@ -568,6 +569,7 @@ class Templating
             $this->finalium_icon_map = [
                 'button_follow' => 'plus-lg',
                 'button_followed' => 'check-lg',
+                'button_unfollow' => 'x-lg',
                 'guide_home' => 'house-door',
                 'guide_uploads' => 'play-btn',
                 'guide_browse_members' => 'people',

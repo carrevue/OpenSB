@@ -2,20 +2,22 @@
 
 Last updated on (not on prod).
 
-This is the privacy policy for this website FulpTube, alternatively known as squareBracket.
+This is the privacy policy for the website FulpTube (``fulptube.rocks``), alternatively known as squareBracket (``squarebracket.pw``).
 
 The only people who have full server and database access are Chaziz, Jack/shiypc and magnum22, who are the website owners and server operators. Staff members do not have full server or database access and can only use tools provided from the dashboard.
 
-Currently, the platform is hosted on a server provided by Endless Hosting in the United States. Periodic backups of the platform are stored by Chaziz in Canada.
+Currently, the website is hosted on a server provided by Endless Hosting in the United States. Periodic offline backups of the platform are stored by Chaziz in Canada.
 
 Whenever a request is sent, it is logged in the server's access logs. This will include your IP, user agent and HTTP referer. These access logs are only accessible to the server operators. They will be used for temporary statistics and for logging potential errors that occur. In the case of illegal activity (e.g. a DDoS attack), the offending parts of an access log may be saved for further analysis.
 
 This website consists of user generated content, and whenever you e.g. upload something or write a comment, you should be aware that this content will be publicly available and searchable on the Internet.
 
 ## User information
-When you register an account, you provide a username, email, birthdate and password. The username is visible and should not be your real name, but a pseudonym you are comfortable with others seeing. Your birthdate will not be shown to anyone besides staff members.
+When you register an account, you provide a username, email address, birthdate and password. The username is visible and should not be your real name, but a pseudonym you are comfortable with others seeing. Your birthdate will not be shown to anyone besides staff members. 
 
 The password you register with is one-way hashed with bcrypt and the hash is only visible to the server operators, who cannot convert this back into the original password.
+
+The email address you register with is used solely to verify your account. We will not send unsolicited email.
 
 Whenever you are logged in, your latest IP address is stored in the database (independent of access logs). This is only visible to the server operators and is kept strictly private unless abuse occurs.
 
@@ -28,7 +30,7 @@ This platform uses a session cookie (`sb_session`) to keep you logged in. The ot
 If you have published personal information you would like to remove, use the tools given to edit it out if applicable. If this is not possible (e.g. you want to rename a personally identifiable username) or you would like to fully erase it, please contact Chaziz, Jack/shiypc, magnum22 or any of the other staff members.
 
 ## Transparency
-This platform runs on OpenSB , which is fully open source and its source code [is available on GitHub](https://github.com/Bluffingo/OpenSB). You may inspect the source code yourself to see how your data is handled.
+This platform runs on OpenSB, which is fully open source and its source code [is available on GitHub](https://github.com/Bluffingo/OpenSB). You may inspect the source code yourself to see how your data is handled.
 
 ## Updates
 Updates to this privacy policy are done as commits to the OpenSB Git repository ([View changes](https://github.com/Bluffingo/OpenSB/blob/opensb-2.1/private/skins/common/markdown/privacy_policy.md)). You will be alerted of any substantial changes made to the privacy policy through the platform.
