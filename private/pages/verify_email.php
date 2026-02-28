@@ -40,7 +40,7 @@ if (isset($_GET["token"])) {
 
             if ($sb->isDiscordWebhookEnabled()) {
                 $data = [
-                    'user' => $result['user'],
+                    'user' => Utilities::userIDToUsername($database, $result['user']),
                     'author' => "System",
                     'action' => "verified",
                 ];

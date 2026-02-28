@@ -12,8 +12,10 @@ CREATE TABLE `email_verification_token` (
   `user` int(11) NOT NULL,
   `token` varchar(128) NOT NULL,
   `created` int(11) NOT NULL,
-  `expiration` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+  `expiration` int(11) NOT NULL,
+  `last_sent` int(11) NOT NULL,
+  PRIMARY KEY (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `invite_keys`;
@@ -279,7 +281,7 @@ CREATE TABLE `user_profile_customization` (
   `highlight_box_background_color` varchar(7) NOT NULL DEFAULT '#E6E6E6',
   `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `user_staff_notes`;
