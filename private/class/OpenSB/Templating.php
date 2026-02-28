@@ -173,9 +173,9 @@ class Templating
         $branding = $sb->getBrandingSettings();
 
         // TODO: make this dynamically changeable through the admin panel.
-        $warningBannerTextIfOnChazizOwnedDomain = "New " . $branding["name"] . " update comes out March 1st 2026.";
+        $warningBannerTextIfOnChazizOwnedDomain = "New " . $branding["name"] . " update comes out tomorrow.";
 
-        if ($sb->isChazizSquareBracketInstance() && $sb->isFulpTube()) {
+        if ($sb->isChazizSquareBracketInstance()) {
             $showWarningBanner = true;
             $warningBannerText = $warningBannerTextIfOnChazizOwnedDomain;
         } else {
