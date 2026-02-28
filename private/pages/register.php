@@ -155,6 +155,17 @@ if (isset($_POST['registersubmit'])) {
         );
         $userId = $database->insertId();
 
+        if ($sb->isDiscordWebhookEnabled()) {
+            $data = [
+                "username" => $username,
+            ];
+
+            $sb->getDiscordWebhookClass()->newUserHook($data);
+        }
+
+        $_SESSION["SBTOKEN"] = $token;
+        $_SESSION["SB_STAFF_AUTHED"] = null; // just to be certain, clear this off.
+
         if ($enableInviteKeys) {
             $database->query(
                 "UPDATE invite_keys SET claimed_by = ?, claimed_time = ? WHERE invite_key = ?",
@@ -168,32 +179,22 @@ if (isset($_POST['registersubmit'])) {
             try {
                 $verification_token = bin2hex(random_bytes(32));
             } catch (RandomException) {
-                // uh shit. just redirect to the login page?
-                Utilities::redirect("/login", 500);
+                // uh shit. just redirect to the homepage. unverified users are 
+                // supposed to have a "heads up!" banner anyways -chaziz 02/28/2026
+                Utilities::redirect("/");
             }
 
             $expiration = strtotime('+7 days', time());
 
             $database->query(
-                "INSERT INTO email_verification_token (user, token, created, expiration) 
-                        VALUES (?, ?, ?, ?);", 
-                        [$userId, $verification_token, time(), $expiration]
+                "INSERT INTO email_verification_token (user, token, created, expiration, last_sent) 
+                        VALUES (?, ?, ?, ?, ?);", 
+                        [$userId, $verification_token, time(), $expiration, time()]
             );
             
             $link = Utilities::getURL() . "/verify_email?token=" . $verification_token;
 
             $mail->sendVerificationMail($email_address, $username, $link);
-        }
-
-        $_SESSION["SBTOKEN"] = $token;
-        $_SESSION["SB_STAFF_AUTHED"] = null; // just to be certain, clear this off.
-
-        if ($sb->isDiscordWebhookEnabled()) {
-            $data = [
-                "username" => $username,
-            ];
-
-            $sb->getDiscordWebhookClass()->newUserHook($data);
         }
 
         Utilities::redirect('./');

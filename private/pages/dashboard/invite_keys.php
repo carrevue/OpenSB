@@ -62,7 +62,7 @@ if (isset($_POST["action"])) {
             [$random, $auth->getUserID(), time()]
         );
 
-        Utilities::notifyBanner("notify_dashboard_key_generated", "/dashboard/invite_keys", "success", [$random]);
+        Utilities::notifyBanner("notify_invite_key_generated", "/dashboard/invite_keys", "success", [$random]);
     }
 }
 

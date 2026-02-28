@@ -198,7 +198,7 @@
     "notify_birthdate_success": "Tu fecha de nacimiento ha sido verificada exitosamente.",
     "notify_dashboard_login_required": "Por favor inicia sesión usando tu contraseña de acceso al panel.",
     "notify_dashboard_login_incorrect": "Contraseña de acceso al panel incorrecta.",
-    "notify_dashboard_key_generated": "¡Clave generada! (%s)",
+    "notify_invite_key_generated": "¡Clave generada! (%s)",
     "notify_dashboard_welcome_first_time": "¡Bienvenid@! Tu contraseña de acceso al panel es %s. Por favor anótala en un lugar seguro para evitar perderla.",
     "notify_dashboard_welcome": "Bienvenid@ al panel de control.",
     "notify_dashboard_ban_success": "Exitosamente bloqueado %s.",

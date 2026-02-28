@@ -26,18 +26,62 @@ global $twig, $database, $sb, $auth;
 use OpenSB\UserFlags;
 use OpenSB\Utilities;
 
-if (!$auth->isUserLoggedIn()) { //|| !($auth->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value)) {
-    Utilities::redirect('/');
-}
-
 if (isset($_GET["token"])) {
-    die('We Got The Token !'); // temporary
+    $token = $_GET["token"];
+    $result = $database->fetch("SELECT * FROM email_verification_token WHERE token = ?", [$token]);
+
+    if ($result) {
+        if ($result['expiration'] < time()) {
+            $database->query("DELETE FROM email_verification_token WHERE token = ?", [$token]);
+            Utilities::notifyBanner("notify_register_email_token_expired", "/");
+        } else {
+            $database->query("DELETE FROM email_verification_token WHERE token = ?", [$token]);
+            $database->query("UPDATE users SET flags = flags & ~? WHERE id = ?", [UserFlags::FLAG_UNVERIFIED->value, $result['user']]);
+
+            if ($sb->isDiscordWebhookEnabled()) {
+                $data = [
+                    'user' => $result['user'],
+                    'author' => "System",
+                    'action' => "verified",
+                ];
+
+                $sb->getDiscordWebhookClass()->dashboardUserHook($data);
+            }
+
+            Utilities::notifyBanner("notify_register_email_token_success", "/", "success");
+        }
+    } else {
+        Utilities::notifyBanner("notify_register_email_token_invalid", "/");
+    }
 }
 
 if (isset($_POST["loginsubmit"]) || isset($_GET["resend"])) {
     $data = $auth->getUserData();
     $mail = $sb->getMailClass();
-    $mail->sendVerificationMail($data["email"], $data["name"], "https://example.com/ (This is a testing email)");
+
+    // check cooldown so people dont fuck up the mailer so we dont end up like a CERTAIN other site -chaziz 02/28/2026
+    $existing = $database->fetch("SELECT * FROM email_verification_token WHERE user = ?", [$data['id']]);
+    if ($existing && (time() - $existing['last_sent']) < 300) {
+        Utilities::notifyBanner("notify_register_email_ratelimit", "/verify_email", "warning", [300 / 60]);
+    }
+
+    $verification_token = bin2hex(random_bytes(32));
+    $expiration = strtotime('+7 days', time());
+    $link = Utilities::getURL() . "/verify_email?token=" . $verification_token;
+
+    if ($existing) {
+        $database->query(
+            "UPDATE email_verification_token SET token = ?, created = ?, expiration = ?, last_sent = ? WHERE user = ?",
+            [$verification_token, time(), $expiration, time(), $data['id']]
+        );
+    } else {
+        $database->query(
+            "INSERT INTO email_verification_token (user, token, created, expiration, last_sent) VALUES (?, ?, ?, ?, ?)",
+            [$data['id'], $verification_token, time(), $expiration, time()]
+        );
+    }
+
+    $mail->sendVerificationMail($data['email'], $data['name'], $link);
 }
 
 echo $twig->render('unverified.twig');

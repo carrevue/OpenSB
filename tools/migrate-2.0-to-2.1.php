@@ -60,5 +60,7 @@ $database->query("CREATE TABLE `email_verification_token` (
   `user` int NOT NULL,
   `token` varchar(128) NOT NULL,
   `created` int NOT NULL,
-  `expiration` int NOT NULL
+  `expiration` int NOT NULL,
+  `last_sent` int NOT NULL,
+  PRIMARY KEY (`token`)
 );");
