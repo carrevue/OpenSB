@@ -540,6 +540,7 @@ class Templating
 
         if ($this->theme == "hitchhiker") {
             $this->finalium_icon_map = [
+                'account_settings' => 'account-settings',
                 'button_follow' => 'button-follow',
                 'button_followed' => 'button-followed',
                 'button_unfollow' => 'button-unfollow',
@@ -567,6 +568,7 @@ class Templating
             ];
         } else {
             $this->finalium_icon_map = [
+                'account_settings' => 'gear-fill',
                 'button_follow' => 'plus-lg',
                 'button_followed' => 'check-lg',
                 'button_unfollow' => 'x-lg',

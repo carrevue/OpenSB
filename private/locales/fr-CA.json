@@ -139,7 +139,7 @@
     "homepage_recent_uploads_desc": "Les plus récents publications",
 
     "following": "Abonnements",
-    "following_uploads_desc": "Publications par les personnes que vous vous abonnez",
+    "following_uploads_desc": "Par qui vous êtes abonné",
 
     "best_of_site": "Le meilleur de %s",
     "featured_on_site": "En vedette sur %s",
@@ -147,8 +147,8 @@
     "featured_uploads": "En vedette",
     "featured_uploads_desc": "Le favori du personnel",
 
-    "recent_members": "Members",
-    "recent_members_desc": "Last 5 members online",
+    "recent_members": "Membres",
+    "recent_members_desc": "Les 5 derniers membres en ligne",
 
     "featured_member": "Membre vedette",
     "featured_member_hitchhiker": "Chaîne vedette",
@@ -309,13 +309,14 @@
     "disable_comments_from_journal": "Désactiver les commentaires sur ce journal",
 
     "save_action": "Sauvegarder",
+    "apply_action": "Appliquer",
 
     "notifications": "Notifications",
-    "clear_all": "Tout effacer",
+    "clear_all": "Effacer tout",
     "time_ago_on_origin": "%s sur %s",
     "no_notifications": "Vous n'avez aucune notification.",
 
-    "search_results_for": "Results for \"%s\"",
+    "search_results_for": "Résultats pour \"%s\"",
 
     "filtering": "Filtrage",
     "enable_sensitive_content": "Permettre l'accès au contenu mature",

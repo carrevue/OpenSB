@@ -74,7 +74,7 @@
                             <div class="content-title">{{ news.title }}</div>
                             <div class="content-author">{{ user_link(news.author) }}</div>
                             <div class="content-detail">{{ news.published | format_date('long', 'none') }}</div>
-                            <div class="content-description">{{ news.contents | markdown_user_written(true) }}</div>
+                            <div class="content-text">{{ news.contents | markdown_user_written(true) }}</div>
                             <a href="/journals/news">{{ localize('site_news_previous') }}</a>
                         </div>
                     </div>

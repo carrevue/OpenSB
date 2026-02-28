@@ -349,6 +349,7 @@
     "disable_comments_from_journal": "Disable comments on this journal",
 
     "save_action": "Save",
+    "apply_action": "Apply",
 
     "notifications": "Notifications",
     "clear_all": "Clear all",
