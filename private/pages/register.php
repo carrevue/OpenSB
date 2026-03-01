@@ -195,9 +195,10 @@ if (isset($_POST['registersubmit'])) {
             $link = Utilities::getURL() . "/verify_email?token=" . $verification_token;
 
             $mail->sendVerificationMail($email_address, $username, $link);
+            Utilities::redirect('/verify_email');
+        } else {
+            Utilities::redirect('/');
         }
-
-        Utilities::redirect('./');
     } else {
         Utilities::notifyBanner($error, "/register");
     }
