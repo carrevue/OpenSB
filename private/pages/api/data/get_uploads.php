@@ -19,20 +19,20 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\APIv3;
+namespace OpenSB\Pages\DataAPI;
 
-global $database;
+global $sb, $database;
 
-use OpenSB\VersionNumber;
+use OpenSB\UploadQuery;
 
 header('Content-Type: application/json');
 
-$version = new VersionNumber();
+$upload_query = new UploadQuery($sb);
+
+$uploads_random = $upload_query->query("RAND()", 8);
 
 $apiOutput = [
-    'instance' => [
-        'version' => $version->getVersionString(),
-    ],
+    'uploads' => $uploads_random,
 ];
 
 echo json_encode($apiOutput);

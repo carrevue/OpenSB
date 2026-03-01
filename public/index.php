@@ -267,11 +267,11 @@ $router->add('/api/legacy/comment', 'api/legacy/comment.php');
 $router->add('/api/legacy/rate', 'api/legacy/rate.php');
 $router->add('/api/legacy/subscribe', 'api/legacy/subscribe.php');
 
-// json api (not fully complete and probably won't be for a while)
-$router->add('/api/v3/get_comments', 'api/v3/get_comments.php');
-$router->add('/api/v3/get_instance_info', 'api/v3/get_instance_info.php');
-$router->add('/api/v3/get_upload', 'api/v3/get_upload.php');
-$router->add('/api/v3/get_uploads', 'api/v3/get_uploads.php');
+// data api (not fully complete and probably won't be for a while)
+$router->add('/api/data/get_comments', 'api/data/get_comments.php');
+$router->add('/api/data/get_instance_info', 'api/data/get_instance_info.php');
+$router->add('/api/data/get_upload', 'api/data/get_upload.php');
+$router->add('/api/data/get_uploads', 'api/data/get_uploads.php');
 
 // redirect to dashboard
 $router->redirect('/admin', '/dashboard');
