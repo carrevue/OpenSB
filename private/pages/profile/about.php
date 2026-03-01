@@ -66,12 +66,12 @@ $profile_data = [
     "displayname" => $data["title"],
     "color" => $data["userlink_color"],
     "about" => ($data['about'] ?? false),
+    "is_staff" => ($data["powerlevel"] > 1),
     "joined" => $data["joined"],
     "connected" => $data["last_seen"],
     "is_current" => $is_own_profile,
     "followers" => $followers,
     "following" => $followed,
-    "is_staff" => ($data["powerlevel"] > 1),
     "views" => $views,
     "customization" => $profile_customization_data?->getData() ?? false,
 ];

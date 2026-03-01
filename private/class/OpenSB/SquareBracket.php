@@ -648,7 +648,7 @@ class SquareBracket
             return false;
         }
 
-        $isOnFulpTubeDomain = str_contains($_SERVER['HTTP_HOST'], 'fulptube.rocks');
+        $isOnFulpTubeDomain = str_contains($_SERVER['HTTP_HOST'], 'fulptube.rocks') || $_SERVER['HTTP_HOST'] == "localhost-fulptube";
 
         $isDebugMode = ($this->getLocalOptions()['debug_fulptube_branding'] ?? false) && $this->isDebug();
 

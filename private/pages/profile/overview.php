@@ -129,6 +129,7 @@ $page_data = [
     "displayname" => $data["title"],
     "color" => $data["userlink_color"],
     "about" => ($data['about'] ?? false),
+    "is_staff" => ($data["powerlevel"] > 1),
     "joined" => $data["joined"],
     "connected" => $data["last_seen"],
     "is_current" => $is_own_profile,
@@ -138,7 +139,6 @@ $page_data = [
     "comments" => $comments,
     "followers" => $followers,
     "following" => $followed,
-    "is_staff" => ($data["powerlevel"] > 1),
     "views" => $views,
     "customization" => $profile_customization_data?->getData() ?? false,
     "ban_data" => $user_ban_data ?? [],
@@ -149,6 +149,7 @@ if ($sb->getLocalOptions()["skin"] == "bootstrap") {
 }
 
 // temporary code
+/*
 if ($username == "Chaziz" && $sb->getLocalOptions()["skin"] == "trinium") {
     echo $twig->render("profile_yt2010.twig", [
         'data' => $page_data,
@@ -158,3 +159,8 @@ if ($username == "Chaziz" && $sb->getLocalOptions()["skin"] == "trinium") {
         'data' => $page_data,
     ]);
 }
+*/
+
+echo $twig->render("profile.twig", [
+    'data' => $page_data,
+]);

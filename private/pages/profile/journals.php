@@ -53,6 +53,7 @@ $page_data = [
     "displayname" => $data["title"],
     "color" => $data["userlink_color"],
     "about" => ($data["about"] ?? null),
+    "is_staff" => ($data["powerlevel"] > 1),
     "customization" => $profile_customization_data?->getData() ?? false,
 ];
 

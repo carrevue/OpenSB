@@ -188,7 +188,7 @@ class Templating
         $warningBannerText = null;
 
         if ($this->authentication->isUserLoggedIn() && 
-            $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value || true) {
+            $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value) {
             $localization = $sb->getLocalizationClass();
 
             $showWarningBanner = true;
