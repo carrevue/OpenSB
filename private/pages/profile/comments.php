@@ -30,9 +30,15 @@ use OpenSB\CommentLocation;
 include_once('_include.php');
 
 // page-specific shit Here.
+if ($sb->getLocalOptions()["skin"] != "finalium") {
+    $comments = new CommentData($database, CommentLocation::Profile, $id);
 
-$comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
-$comments = $comment_data->getComments();
+    $comment_data = $comments->getComments();
+    $comment_count = $comments->getCommentCount();
+} else {
+    $comment_data = [];
+    $comment_count = 0;
+}
 
 $page_data = [
     "id" => $data["id"],
@@ -42,7 +48,7 @@ $page_data = [
     "about" => ($data["about"] ?? null),
     "is_staff" => ($data["powerlevel"] > 1),
     "customization" => $profile_customization_data?->getData() ?? false,
-    "comments" => $comments,
+    "comments" => $comment_data,
 ];
 
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {

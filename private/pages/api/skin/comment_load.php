@@ -41,7 +41,7 @@ try {
     $location_type = CommentLocation::fromString($_GET['location'] ?? '');
     $location_id = $_GET['id'] ?? '';
 
-    $comments = new CommentData($database, CommentLocation::Upload, $location_id);
+    $comments = new CommentData($database, $location_type, $location_id);
 
     $comment_data = $comments->getComments();
     $comment_count = $comments->getCommentCount();

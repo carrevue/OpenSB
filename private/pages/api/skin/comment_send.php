@@ -126,7 +126,14 @@ $comment = [
     "replies" => []
 ];
 
-$html = $twig->render('components/_comment.twig', ['comment' => $comment]);
+// temporary code, will be removed in beta 2. -chaziz 2/28/2026
+if ($sb->getLocalOptions()["skin"] == "trinium") {
+    $template = 'components/_comment.twig';
+} else {
+    $template = 'components/comment.twig';
+}
+
+$html = $twig->render($template, ['comment' => $comment]);
 
 // not gonna put this code in the first switch case YET due to a weird ass hack i have to do with upload comments
 

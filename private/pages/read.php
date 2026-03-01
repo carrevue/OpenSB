@@ -56,7 +56,15 @@ if ($sb->isFulpTubeMode() && $data["is_news"]) {
 
 $author_info = $journal->getAuthorData();
 
-$comments = new CommentData($database, CommentLocation::Journal, $id);
+if ($sb->getLocalOptions()["skin"] != "finalium") {
+    $comments = new CommentData($database, CommentLocation::Journal, $id);
+
+    $comment_data = $comments->getComments();
+    $comment_count = $comments->getCommentCount();
+} else {
+    $comment_data = [];
+    $comment_count = 0;
+}
 
 if ($author_info["flags"]["profile_customization_enabled"]) {
     $profile_color_data = new UserCustomizationData($database, $data["author"]);
@@ -74,7 +82,7 @@ $data = [
         "id" => $data["author"],
         "info" => $author_info,
     ],
-    "comments" => $comments->getComments(),
+    "comments" => $comment_data,
     "customization" => $profile_color_data?->getData() ?? false,
 ];
 
