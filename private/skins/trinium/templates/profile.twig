@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block precontentappend %}
-    {% if data.is_current %}
+    {% if data.is_current and enable_incomplete_features %}
     <div class="profile-edit-container">
         <div class="profile-edit">
             <div class="button secondary">Settings</div>
