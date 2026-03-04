@@ -38,44 +38,151 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
-/**
- * Based on the refactored implementation from principia-web. This was 
- * originally 5 slightly different duplicated functions.
- */
-function make_running_total_graph($database, $table, $orderfield): array
+function make_running_total_graph_from_users($database): array
 {
     $database->query("SET @runningTotal = 0;");
     return $database->fetchArray($database->query(
-        "SELECT $orderfield, num_interactions,
-			@runningTotal := @runningTotal + totals.num_interactions AS runningTotal
-		FROM
-			(SELECT FROM_UNIXTIME($orderfield) AS $orderfield, COUNT(*) AS num_interactions
-				FROM $table AS e
-				GROUP BY DATE(FROM_UNIXTIME(e.$orderfield))) totals
-		ORDER BY $orderfield"
+        "SELECT date AS joined, num_interactions,
+                @runningTotal := @runningTotal + num_interactions AS runningTotal
+         FROM (
+             SELECT date, SUM(num_interactions) AS num_interactions
+             FROM (
+                 SELECT DATE(FROM_UNIXTIME(joined)) AS date, COUNT(*) AS num_interactions
+                 FROM users
+                 GROUP BY DATE(FROM_UNIXTIME(joined))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(timestamp)) AS date, -COUNT(*) AS num_interactions
+                 FROM user_bans
+                 GROUP BY DATE(FROM_UNIXTIME(timestamp))
+             ) AS all_events
+             GROUP BY date
+         ) AS totals
+         ORDER BY date"
     ));
 }
 
-function make_running_total_graph_from_comment_tables($database): array
+function make_running_total_graph_from_uploads($database): array
 {
     $database->query("SET @runningTotal = 0;");
     return $database->fetchArray($database->query(
         "SELECT timestamp, num_interactions,
-            @runningTotal := @runningTotal + num_interactions AS runningTotal
-        FROM (
-            (SELECT FROM_UNIXTIME(timestamp) AS timestamp, COUNT(*) AS num_interactions
-            FROM upload_comments
-            GROUP BY DATE(FROM_UNIXTIME(timestamp)))
-            UNION ALL
-            (SELECT FROM_UNIXTIME(timestamp) AS timestamp, COUNT(*) AS num_interactions
-            FROM user_profile_comments
-            GROUP BY DATE(FROM_UNIXTIME(timestamp)))
-            UNION ALL
-            (SELECT FROM_UNIXTIME(timestamp) AS timestamp, COUNT(*) AS num_interactions
-            FROM journal_comments
-            GROUP BY DATE(FROM_UNIXTIME(timestamp)))
-        ) AS combined_data
-        ORDER BY timestamp"
+                @runningTotal := @runningTotal + num_interactions AS runningTotal
+         FROM (
+             SELECT timestamp, SUM(num_interactions) AS num_interactions
+             FROM (
+                 SELECT DATE(FROM_UNIXTIME(timestamp)) AS timestamp, COUNT(*) AS num_interactions
+                 FROM uploads
+                 GROUP BY DATE(FROM_UNIXTIME(timestamp))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(uploaded_time)) AS timestamp, COUNT(*) AS num_interactions
+                 FROM upload_deleted
+                 GROUP BY DATE(FROM_UNIXTIME(uploaded_time))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(deleted_time)) AS timestamp, -COUNT(*) AS num_interactions
+                 FROM upload_deleted
+                 GROUP BY DATE(FROM_UNIXTIME(deleted_time))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(ut.time)) AS timestamp, -COUNT(*) AS num_interactions
+                 FROM upload_takedowns ut
+                 INNER JOIN uploads u ON ut.upload = u.id
+                 GROUP BY DATE(FROM_UNIXTIME(ut.time))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(ub.timestamp)) AS timestamp, -COUNT(*) AS num_interactions
+                 FROM uploads u
+                 INNER JOIN user_bans ub ON u.author = ub.user
+                 GROUP BY DATE(FROM_UNIXTIME(ub.timestamp))
+             ) AS all_events
+             GROUP BY timestamp
+         ) AS combined_data
+         ORDER BY timestamp"
+    ));
+}
+
+function make_running_total_graph_from_journals($database): array
+{
+    $database->query("SET @runningTotal = 0;");
+    return $database->fetchArray($database->query(
+        "SELECT timestamp, num_interactions,
+                @runningTotal := @runningTotal + num_interactions AS runningTotal
+         FROM (
+             SELECT timestamp, SUM(num_interactions) AS num_interactions
+             FROM (
+                 SELECT DATE(FROM_UNIXTIME(timestamp)) AS timestamp, COUNT(*) AS num_interactions
+                 FROM journals
+                 GROUP BY DATE(FROM_UNIXTIME(timestamp))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(ub.timestamp)) AS timestamp, -COUNT(*) AS num_interactions
+                 FROM journals j
+                 INNER JOIN user_bans ub ON j.author = ub.user
+                 GROUP BY DATE(FROM_UNIXTIME(ub.timestamp))
+             ) AS all_events
+             GROUP BY timestamp
+         ) AS combined_data
+         ORDER BY timestamp"
+    ));
+}
+
+function make_running_total_graph_from_comments($database): array
+{
+    $database->query("SET @runningTotal = 0;");
+    return $database->fetchArray($database->query(
+        "SELECT timestamp, num_interactions,
+                @runningTotal := @runningTotal + num_interactions AS runningTotal
+         FROM (
+             SELECT timestamp, SUM(num_interactions) AS num_interactions
+             FROM (
+                 SELECT DATE(FROM_UNIXTIME(timestamp)) AS timestamp, COUNT(*) AS num_interactions
+                 FROM upload_comments
+                 GROUP BY DATE(FROM_UNIXTIME(timestamp))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(timestamp)) AS timestamp, COUNT(*) AS num_interactions
+                 FROM user_profile_comments
+                 GROUP BY DATE(FROM_UNIXTIME(timestamp))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(timestamp)) AS timestamp, COUNT(*) AS num_interactions
+                 FROM journal_comments
+                 GROUP BY DATE(FROM_UNIXTIME(timestamp))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(ub.timestamp)) AS timestamp, -COUNT(*) AS num_interactions
+                 FROM upload_comments c
+                 INNER JOIN user_bans ub ON c.author = ub.user
+                 GROUP BY DATE(FROM_UNIXTIME(ub.timestamp))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(ub.timestamp)) AS timestamp, -COUNT(*) AS num_interactions
+                 FROM user_profile_comments c
+                 INNER JOIN user_bans ub ON c.author = ub.user
+                 GROUP BY DATE(FROM_UNIXTIME(ub.timestamp))
+
+                 UNION ALL
+
+                 SELECT DATE(FROM_UNIXTIME(ub.timestamp)) AS timestamp, -COUNT(*) AS num_interactions
+                 FROM journal_comments c
+                 INNER JOIN user_bans ub ON c.author = ub.user
+                 GROUP BY DATE(FROM_UNIXTIME(ub.timestamp))
+             ) AS all_events
+             GROUP BY timestamp
+         ) AS combined_data
+         ORDER BY timestamp"
     ));
 }
 
@@ -134,10 +241,10 @@ foreach ($thingsToCount as $table => $uiName) {
     ];
 }
 
-$user_graph = make_running_total_graph($database, 'users', 'joined');
-$upload_graph = make_running_total_graph($database, 'uploads', 'timestamp');
-$comment_graph = make_running_total_graph_from_comment_tables($database);
-$journal_graph = make_running_total_graph($database, 'journals', 'timestamp');
+$user_graph = make_running_total_graph_from_users($database);
+$upload_graph = make_running_total_graph_from_uploads($database);
+$comment_graph = make_running_total_graph_from_comments($database);
+$journal_graph = make_running_total_graph_from_journals($database);
 $view_graph = make_running_total_graph_from_views($database);
 
 // chart.js data
