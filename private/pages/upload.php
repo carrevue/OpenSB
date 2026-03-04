@@ -297,9 +297,34 @@ if (
         if ($sb->isDiscordWebhookEnabled()) {
             discord_webhook_notify($sb, $new, $title, $desc, $auth);
         }
+        
+        // ugh. -chaziz 03/04/2026
+        $reupload_suspect = [
+            "Copyright Disclaimer under section 107",
+            "Fair use is a use permitted by copyright statute",
+            "No copyright infringement intended",
+            "All rights belong to the",
+            "Credit goes to",
+            "Credits to",
+        ];
 
-        Utilities::notifyBanner("notify_upload_success", "/view/$new", "success");
+        if ($sb->isChazizInstance()) {
+            $is_suspected_reupload = false;
+            foreach ($reupload_suspect as $phrase) {
+                if (str_contains($desc, $phrase)) {
+                    $is_suspected_reupload = true;
+                    break;
+                }
+            }
 
+            if ($is_suspected_reupload) {
+                Utilities::notifyBanner("notify_upload_success_suspected_reupload", "/view/$new", "warning");
+            } else {
+                Utilities::notifyBanner("notify_upload_success", "/view/$new", "success");
+            }
+        } else {
+            Utilities::notifyBanner("notify_upload_success", "/view/$new", "success");
+        }
     } catch (Exception $e) {
         if ($sb->isDebug()) {
             die("DEBUG: " . $e->getMessage());

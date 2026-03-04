@@ -324,6 +324,7 @@
 
     "new_upload_intro": "Make sure you have read the <a href=\"%s\">community guidelines</a> first. Failure to comply with the community guidelines will result in your upload being taken down.",
     "reupload_warning": "Do not reupload content that does not belong to you.",
+    "reupload_warning_hitchhiker": "Do NOT reupload anything. Fair use does not apply to reuploading content. Reuploading may risk in your account getting banned.",
     "title": "Title",
     "description": "Description",
     "tags": "Tags",
@@ -435,6 +436,7 @@
     "notify_upload_disabled": "The ability to upload has been disabled.",
     "notify_upload_ratelimit": "Please wait at least %s minutes before uploading again.",
     "notify_upload_success": "Your upload has been posted.",
+    "notify_upload_success_suspected_reupload": "Your upload has been posted, but please keep in mind that reuploads of COPYRIGHTED content that YOU HAVE NOT MADE and that DOES NOT BELONG TO YOU are not allowed. If this is a false positive, please ignore this message.",
     "notify_upload_technical_issue": "A problem has occurred while attempting to upload.",
     "notify_upload_audio_unimplemented": "Uploading audio is not yet implemented.",
     "notify_write_disabled": "The ability to write journals has been disabled.",
