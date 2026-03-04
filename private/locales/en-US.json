@@ -324,7 +324,7 @@
 
     "new_upload_intro": "Make sure you have read the <a href=\"%s\">community guidelines</a> first. Failure to comply with the community guidelines will result in your upload being taken down.",
     "reupload_warning": "Do not reupload content that does not belong to you.",
-    "reupload_warning_hitchhiker": "Do NOT reupload anything. Fair use does not apply to reuploading well-known content. Reuploading may risk in your account getting banned.",
+    "reupload_warning_hitchhiker": "Do NOT reupload anything. Fair use does not apply to reuploading well-known content.",
     "title": "Title",
     "description": "Description",
     "tags": "Tags",
