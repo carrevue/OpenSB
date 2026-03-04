@@ -14,6 +14,9 @@ The upload must be less than [size_limit] in size. There is no limit on the leng
 <!-- fulptube start -->
 ## Is this the original FulpTube?
 No. The original incarnation of FulpTube, made by an individual who previously went under the alias "Chief Bazinga", shut down many years ago. However, this website is ran by a few people who were users of the original FulpTube at the time. This website does not have any affiliation and endorsement from the original staff members (except for magnum22, who is a co-owner here).
+
+## Are reuploads allowed?
+No. We have a strict no tolerance policy for reuploads. We'd prefer if you create original content of your own.
 <!-- fulptube end -->
 
 ## Is this part of the "OYC" / "Alt-Vid Community"?

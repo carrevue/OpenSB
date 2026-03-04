@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Last updated on (not on prod).
+Last updated on March 1st 2026.
 
 This is the privacy policy for the website FulpTube (``fulptube.rocks``), alternatively known as squareBracket (``squarebracket.pw``).
 

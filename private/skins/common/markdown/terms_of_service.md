@@ -1,6 +1,6 @@
 # Terms of Service
 
-Last updated on (not on prod).
+Last updated on March 1st 2026.
 
 <!-- chazizsb start -->
 <!-- fulptube start -->
