@@ -631,8 +631,8 @@ class SquareBracket
      */
     public function isHitchhiker(): bool
     {
-        return ($this->getLocalOptions()['skin'] ?? '') === 'finalium'
-            && ($this->getLocalOptions()['theme'] ?? '') === 'hitchhiker';
+        return ($this->options['skin'] ?? '') === 'finalium'
+            && ($this->options['theme'] ?? '') === 'hitchhiker';
     }
 
     /**
@@ -650,7 +650,7 @@ class SquareBracket
 
         $isOnFulpTubeDomain = str_contains($_SERVER['HTTP_HOST'], 'fulptube.rocks') || $_SERVER['HTTP_HOST'] == "localhost-fulptube";
 
-        $isDebugMode = ($this->getLocalOptions()['debug_fulptube_branding'] ?? false) && $this->isDebug();
+        $isDebugMode = ($this->options['debug_fulptube_branding'] ?? false) && $this->isDebug();
 
         if ($this->is_chaziz_instance && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
             return true;

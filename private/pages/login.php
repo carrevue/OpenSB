@@ -134,6 +134,10 @@ if (isset($_POST["loginsubmit"])) {
                 */
 
                 if (!$error) {
+                    session_regenerate_id(true);
+                    $_SESSION["SBTOKEN"] = $logindata['token'];
+                    $_SESSION["SB_STAFF_AUTHED"] = null;
+
                     if (isset($_COOKIE['SBACCOUNTS'])) {
                         $raw = $_COOKIE['SBACCOUNTS'];
                         if (strpos($raw, $warning) === 0) {
@@ -171,10 +175,6 @@ if (isset($_POST["loginsubmit"])) {
 
                         $signed = Utilities::makeSignedCookiePayload($safe_accounts);
                         Utilities::setSafeCookie('SBACCOUNTS', $warning . $signed, time() + (30 * 24 * 60 * 60));
-
-                        session_regenerate_id(true);
-                        $_SESSION["SBTOKEN"] = $logindata['token'];
-                        $_SESSION["SB_STAFF_AUTHED"] = null;
 
                         $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
                         $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);

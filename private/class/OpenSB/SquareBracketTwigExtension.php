@@ -116,10 +116,10 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('thumbnail', [$this, 'getUploadThumbnail']),
             new TwigFunction('user_link', [$this, $userlink_function_name], ['is_safe' => ['html']]),
             new TwigFunction('profile_picture', function ($user) {
-                return $this->storage->getUserProfilePicture($user, $this->authentication->userHasRole(UserRoleEnum::Moderator));
+                return $this->storage->getUserProfilePicture($user ?? 0, $this->authentication->userHasRole(UserRoleEnum::Moderator));
             }),
             new TwigFunction('profile_banner', function ($user) {
-                return $this->storage->getUserProfileBanner($user);
+                return $this->storage->getUserProfileBanner($user ?? 0);
             }),
             new TwigFunction('profiler_stats', function () {
                 $this->profiler->getStats();
