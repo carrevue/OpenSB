@@ -6,24 +6,20 @@
         <div class="section">
             <div class="admin-user-actions">
                 <form id="banForm" method="post" enctype="multipart/form-data">
-                    {% if user.powerlevel <= 1 %}
-                        {% if user.is_banned %}
-                            <button name="ban_user" value="{{ user.name }}" class="button warning" onclick="if (!confirm('Are you sure you want to unban this user?')) { return false }">Unban</button>
-                        {% else %}
-                            <button name="ban_user" value="{{ user.name }}" class="button danger" onclick="if (!confirm('Are you sure you want to ban this user?')) { return false }">Ban</button>
+                    {% for key, button in buttons %}
+                        {% if button.condition %}
+                            {% for state in button.states %}
+                                {% if state.condition %}
+                                    <button
+                                        name="{{ state.name }}"
+                                        value="{{ state.value }}"
+                                        class="{{ state.class }}"
+                                        onclick="if (!confirm('{{ state.confirm }}')) { return false }"
+                                    >{{ state.label }}</button>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
-                        {# <div name="ban_user" class="button danger" onclick="alert('Not implemented')">IP Ban</div> #}
-                        {% if not flags.unverified %}
-                            <button name="verify_user" value="{{ user.name }}" class="button secondary" onclick="if (!confirm('Are you sure you want to unverify this user?')) { return false }">Unverify</button>
-                        {% else %}
-                            <button name="verify_user" value="{{ user.name }}" class="button success" onclick="if (!confirm('Are you sure you want to verify this user?')) { return false }">Verify</button>
-                        {% endif %}
-                    {% endif %}
-                    {% if flags.featured %}
-                        <button name="feature_user" value="{{ user.name }}" class="button secondary" onclick="if (!confirm('Are you sure you want to unfeature this user?')) { return false }">Unfeature</button>
-                    {% else %}
-                        <button name="feature_user" value="{{ user.name }}" class="button accent" onclick="if (!confirm('Are you sure you want to feature this user?')) { return false }">Feature</button>
-                    {% endif %}
+                    {% endfor %}
                 </form>
             </div>
         </div>
@@ -36,77 +32,20 @@
                     </div>
                     <table class="styled">
                         <tbody>
-                        <tr>
-                            <td>{{ localize('user_id') }}</td>
-                            <td>{{ user.id }}</td>
-                        </tr>
-                        {% if user_data.powerlevel > 2 %}
-                            <tr>
-                                <td>IP address</td>
-                                <td>{{ user.ip }}</td>
-                            <tr>
-                            <tr>
-                                <td>{{ localize('email_address') }}</td>
-                                <td>{{ user.email }}</td>
-                            </tr>
-                        {% endif %}
-                        <tr>
-                            <td>{{ localize('username') }}</td>
-                            <td>{{ user.name }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ localize('profile_name') }}</td>
-                            <td>{{ user.title }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ localize('user_role') }}</td>
-                            <td>
-                                {% set role = 
-                                    user.powerlevel == 1 ? localize('user_role_normal') :
-                                    user.powerlevel == 2 ? localize('user_role_moderator') :
-                                    user.powerlevel == 3 ? localize('user_role_administrator') :
-                                    user.powerlevel == 4 ? localize('user_role_owner') :
-                                    localize('user_role_unknown') ~ ' (' ~ user.powerlevel ~ ')'
-                                %}
-                                {{ role }}
-                            </td>
-                        </tr>
-                        {% if user.birthdate %}
-                        <tr>
-                            <td>{{ localize('age') }}/{{ localize('birthdate') }}</td>
-                            <td>{{ user.birthdate | calculate_age }} / {{ user.birthdate | format_date('long', 'none') }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ localize('registered') }}</td>
-                            <td>{{ user.joined | format_date('long', 'medium') }}
-                                <br>({{ user.birthdate | calculate_age_from(user.joined) }} years old)
-                                {% if flags.fulptube_account %}
-                                <br><small>{{ localize('fulptube_account') }}</small>
+                            {% for row in user_info_table %}
+                                {% if row.condition %}
+                                    <tr>
+                                        <td>{{ row.label }}</td>
+                                        <td {% if row.style is defined %}style="{{ row.style }}"{% endif %}>
+                                            {% if row.raw_html is defined and row.raw_html %}
+                                                {{ row.value | raw }}
+                                            {% else %}
+                                                {{ row.value }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
                                 {% endif %}
-                            </td>
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td>{{ localize('registered') }}</td>
-                            <td>{{ user.joined | format_date('long', 'medium') }}
-                                {% if flags.fulptube_account %}
-                                <br><small>{{ localize('fulptube_account') }}</small>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endif %}
-                        <tr>
-                            <td>{{ localize('last_seen') }}</td>
-                            <td>{{ user.last_seen | format_date('long', 'medium') }}</td>
-                        </tr>
-                        {#<tr>
-                            <td>{{ localize('comfortable_rating') }}</td>
-                            <td>{{ user.comfortable_rating }}</td>
-                        </tr>#}
-                        <tr>
-                            <td>{{ localize('user_link_color') }}</td>
-                            <td style="background:{{ user.userlink_color }};"></td>
-                        </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

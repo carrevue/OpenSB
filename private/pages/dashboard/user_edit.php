@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -213,6 +213,139 @@ if ($sb->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Administrator))
     $ip_info = [];
 }
 
+$localization = $sb->getLocalizationClass();
+
+// frontend stuff defined here so we can reuse this between
+// trinium and finalium
+$buttons = [
+    'ban_user' => [
+        'condition' => $user['powerlevel'] <= 1,
+        'states' => [
+            'banned' => [
+                'condition' => $user['is_banned'],
+                'name' => 'ban_user',
+                'value' => $user['name'],
+                'class' => 'button warning',
+                'label' => 'Unban',
+                'confirm' => 'Are you sure you want to unban this user?',
+            ],
+            'not_banned' => [
+                'condition' => !$user['is_banned'],
+                'name' => 'ban_user',
+                'value' => $user['name'],
+                'class' => 'button danger',
+                'label' => 'Ban',
+                'confirm' => 'Are you sure you want to ban this user?',
+            ],
+        ],
+    ],
+    'verify_user' => [
+        'condition' => $user['powerlevel'] <= 1,
+        'states' => [
+            'verified' => [
+                'condition' => !($flags & UserFlags::FLAG_UNVERIFIED->value),
+                'name' => 'verify_user',
+                'value' => $user['name'],
+                'class' => 'button secondary',
+                'label' => 'Unverify',
+                'confirm' => 'Are you sure you want to unverify this user?',
+            ],
+            'unverified' => [
+                'condition' => $flags & UserFlags::FLAG_UNVERIFIED->value,
+                'name' => 'verify_user',
+                'value' => $user['name'],
+                'class' => 'button success',
+                'label' => 'Verify',
+                'confirm' => 'Are you sure you want to verify this user?',
+            ],
+        ],
+    ],
+    'feature_user' => [
+        'condition' => true,
+        'states' => [
+            'featured' => [
+                'condition' => $flags & UserFlags::FLAG_FEATURED->value,
+                'name' => 'feature_user',
+                'value' => $user['name'],
+                'class' => 'button secondary',
+                'label' => 'Unfeature',
+                'confirm' => 'Are you sure you want to unfeature this user?',
+            ],
+            'not_featured' => [
+                'condition' => !($flags & UserFlags::FLAG_FEATURED->value),
+                'name' => 'feature_user',
+                'value' => $user['name'],
+                'class' => 'button accent',
+                'label' => 'Feature',
+                'confirm' => 'Are you sure you want to feature this user?',
+            ],
+        ],
+    ],
+];
+
+$user_info_table = [
+    'user_id' => [
+        'condition' => true,
+        'label' => $localization->translate('user_id'),
+        'value' => $user['id'],
+    ],
+    'ip_address' => [
+        'condition' => $auth->userHasRole(UserRoleEnum::Administrator),
+        'label' => 'IP address',
+        'value' => $user['ip'],
+    ],
+    'email_address' => [
+        'condition' => $auth->userHasRole(UserRoleEnum::Administrator),
+        'label' => $localization->translate('email_address'),
+        'value' => $user['email'],
+    ],
+    'username' => [
+        'condition' => true,
+        'label' => $localization->translate('username'),
+        'value' => $user['name'],
+    ],
+    'profile_name' => [
+        'condition' => true,
+        'label' => $localization->translate('profile_name'),
+        'value' => $user['title'],
+    ],
+    'user_role' => [
+        'condition' => true,
+        'label' => $localization->translate('user_role'),
+        'value' => match($user['powerlevel']) {
+            1 => $localization->translate('user_role_normal'),
+            2 => $localization->translate('user_role_moderator'),
+            3 => $localization->translate('user_role_administrator'),
+            4 => $localization->translate('user_role_owner'),
+            default => $localization->translate('user_role_unknown') . ' (' . $user['powerlevel'] . ')',
+        },
+    ],
+    'age_birthdate' => [
+        'condition' => !empty($user['birthdate']),
+        'label' => $localization->translate('age') . '/' . $localization->translate('birthdate'),
+        'value' => Utilities::calculateAge($user['birthdate']) . ' / ' . $localization->formatDate($user['birthdate'], 'long', 'none'),
+    ],
+    'registered' => [
+        'condition' => true,
+        'label' => $localization->translate('registered'),
+        'value' => $localization->formatDate($user['joined'], 'long', 'medium')
+            . (!empty($user['birthdate']) ? '<br>(' . Utilities::calculateAgeFrom($user['birthdate'], $user['joined']) . ' years old)' : '')
+            . ($flags & UserFlags::FLAG_FULPTUBE_ACCOUNT->value ? '<br><small>' . $localization->translate('fulptube_account') . '</small>' : ''),
+        'raw_html' => true,
+    ],
+    'last_seen' => [
+        'condition' => true,
+        'label' => $localization->translate('last_seen'),
+        'value' => $localization->formatDate($user['last_seen'], 'long', 'medium'),
+    ],
+    'user_link_color' => [
+        'condition' => true,
+        'label' => $localization->translate('user_link_color'),
+        'value' => null,
+        'style' => 'background:' . $user['userlink_color'] . ';',
+    ],
+];
+
 echo $twig->render("dashboard_user_edit.twig", [
     'user' => $user,
     'flags' => $flags_array,
@@ -220,4 +353,6 @@ echo $twig->render("dashboard_user_edit.twig", [
     'notes' => $notes_proper,
     'old_names' => $old_username_data,
     'ip_info' => $ip_info,
+    'buttons' => $buttons,
+    'user_info_table' => $user_info_table,
 ]);
