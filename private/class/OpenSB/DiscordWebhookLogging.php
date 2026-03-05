@@ -128,7 +128,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -168,7 +168,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -219,7 +219,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -246,7 +246,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::SUCCESS);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -273,21 +273,21 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::DANGER);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 
     /**
-     * function recountViewsHook
+     * function scriptSuccessHook
      *
-     * Trigger the recount views hook.
+     * Trigger the script ran hook.
      *
      * @return void
      */
-    public function recountViewsHook()
+    public function scriptSuccessHook()
     {
         $this->initClient();
 
-        $title = 'Views have been recounted.';
+        $title = 'Script ran successfully: ' . basename(__FILE__);
 
         $username = exec('whoami');
         $hostname = gethostname();
@@ -305,7 +305,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::SUCCESS);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -332,7 +332,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 
     /**
@@ -384,6 +384,6 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color($color);
 
-        @$this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send();
     }
 }

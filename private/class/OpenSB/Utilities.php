@@ -558,10 +558,10 @@ class Utilities
     /**
      * function formatBytes
      *
-     * @param mixed $value
-     * @param mixed $decimals
+     * @param int $value
+     * @param int $decimals
      *
-     * @return mixed
+     * @return string
      */
     public static function formatBytes($value, $decimals = 0)
     {
@@ -597,7 +597,7 @@ class Utilities
      * 
      * if you're using cloudflare, make sure you've properly configured your server so ips arent cloudflare ips.
      *
-     * @return mixed|string
+     * @return string|null
      */
     public static function getIpAddress()
     {
@@ -608,6 +608,28 @@ class Utilities
         if ($ip == "127.0.0.1" | $ip == "::1" | $ip == "localhost") return "localhost";
 
         return $ip;
+    }
+
+    /**
+     * function isTorExitNode
+     *
+     * @param string ip
+     * 
+     * @return bool
+     */
+    public static function isTorExitNode(string $ip): bool {
+        $cache_file = sys_get_temp_dir() . '/sb_tor_' . md5($ip) . ".cache";
+        $ttl = 86400; // 1 day
+
+        if (file_exists($cache_file) && (time() - filemtime($cache_file)) < $ttl) {
+            return (bool) file_get_contents($cache_file);
+        }
+
+        $reversed_ip = implode('.', array_reverse(explode('.', $ip)));
+        $result = checkdnsrr($reversed_ip . '.dnsel.torproject.org', 'A');
+
+        file_put_contents($cache_file, (int) $result);
+        return $result;
     }
 
     /**

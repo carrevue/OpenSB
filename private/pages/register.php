@@ -44,6 +44,10 @@ if ($sb->isIpLookupEnabled() && $sb->isChazizInstance()) {
     }
 }
 
+if (Utilities::isTorExitNode(Utilities::getIpAddress())) {
+    die();
+}
+
 $captcha = $sb->getCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some

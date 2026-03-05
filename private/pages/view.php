@@ -103,7 +103,7 @@ $upload = new UploadData($database, $id);
 // check if the upload has been taken down.
 if ($upload->isTakenDown() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
     // go back to homepage with a notification
-    Utilities::notifyBanner("notify_taken_down_upload", "/");
+    handle_error("notify_taken_down_upload", "/");
 }
 
 if ($upload->isDeleted()) {
@@ -140,14 +140,6 @@ if (isset($data["tags"])) {
 
 $author_info = $upload->getAuthorData();
 
-/*
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    if ($author_info["flags"]["unverified"] || !$owner) {
-        Utilities::notifyBanner("notify_upload_unverified", "/");
-    }
-}
-*/
-
 $tags = $upload->getTags();
 
 $followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["author"]]);
@@ -173,7 +165,7 @@ $CrawlerDetect = new CrawlerDetect;
 $type = $auth->isUserLoggedIn() ? "user" : "guest";
 
 // probably shit
-if (!$CrawlerDetect->isCrawler()) {
+if (!$CrawlerDetect->isCrawler() && !Utilities::isTorExitNode(Utilities::getIpAddress())) {
     $ratelimit = false;
 
     // add a limit of one view per minute on guests. this is to deter other forms of crawlers/bots that may

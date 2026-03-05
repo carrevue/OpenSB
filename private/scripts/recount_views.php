@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -36,25 +36,8 @@ $uploads = $database->fetchArray($database->query("SELECT * FROM uploads ORDER B
 // hardcoded shit from the sb db! wow!
 const POKTUBE_TIMESTAMP = 1619236800; // poktube from 2021 views were not properly counted and are fucked
 const SB_2022_TIMESTAMP = 1662664200; // sb views from 2021-2022 were not counted properly
-const QTV_TIMESTAMP = 1709269200; // qtv views from 2023 were FUCKED and had a lot of botting.
-const SB_2024_TIMESTAMP = 1730782800; // qtv views from 2023 were FUCKED and had a lot of botting.
-
-// some of these view counts are a little too fishy
-// i cant actually get the code to fix these so just hardcode some of the shit
-const PENALIZED_UPLOADS = [
-    "kLTc06kfmmD" => 0.10, // Millions of players are doing the stupidest sh- on Roblox
-    "IHqkcCdlTNq" => 0.10, // Sparta Remix Tutorial #1: Pitch Patterns!
-    "HKMmeNcyiUI" => 0.10, // youtube whenever gamerappa uploads a video
-    "yoc7poNGzzp" => 0.08, // this site works on the wii
-    "i0ygjnoOSIX" => 0.05, // Charla Serbia
-    "SoESPPtBKym" => 0.05, // bluey dialer
-    "hfBv-jEq39y" => 0.03, // BANDIT AND PAT ARE GAY (PROOF)T
-    "VoFUj4A7lbW" => 0.02, // Genuine™ Chip Chilla™ Plushies™
-    "h5KVbDgrctS" => 0.02, // Woke™ Chip Chilla™ Plushies™
-    "07z4X_T-ZqA" => 0.01, // Chip Chilla Redraw Attempt
-    "qSvVjP2nx4w" => 0.01, // Alfie (Bluey) x Rocky (Several Robloxians)
-    "d3F-g9LtnZI" => 0.01, // Chazgame2's Transformation
-];
+const QOBO_TIMESTAMP = 1709269200; // qobo views from 2023 were FUCKED and had a lot of botting.
+const SB_2024_TIMESTAMP = 1730782800; // 2024 squarebracket (pre-nov5)
 
 foreach ($uploads as $upload) {
     $views = $database->fetchArray($database->query("
@@ -82,50 +65,43 @@ foreach ($uploads as $upload) {
             // sb did not count the exact timestamp of views until about april 2024.
             if ($timestamp === POKTUBE_TIMESTAMP) {
                 $adjustedViews += 0.1;
-            } elseif ($timestamp === QTV_TIMESTAMP) {
+            } elseif ($timestamp === QOBO_TIMESTAMP) {
                 $adjustedViews += 0.05;
             } elseif ($timestamp === SB_2022_TIMESTAMP) {
                 $adjustedViews += 0.25;
             } else {
-                // penalize certain uploads
-                if (array_key_exists($upload["upload_id"], PENALIZED_UPLOADS)) {
-                    $adjustedViews += PENALIZED_UPLOADS[$upload["upload_id"]];
-                } else {
+                $ratio_penalty = 5;
+
+                // crawlerdetect was kinda fucky during this time
+                if ($timestamp == QOBO_TIMESTAMP) {
+                    $ratio_penalty = 25;
+                }
+
+                // crawlerdetect was kinda fucky during this time
+                if ($timestamp > QOBO_TIMESTAMP || $timestamp < SB_2024_TIMESTAMP) {
+                    $ratio_penalty = 10;
+                }
+
+                // these videos were directly linked onto youtube, so most of the guest views are genuine.
+                if ($upload["upload_id"] === "rpdCM7mawrL" || $upload["upload_id"] === "I6Dhqvit5rd") {
                     $ratio_penalty = 5;
+                }
 
-                    // crawlerdetect was kinda fucky during this time
-                    if ($timestamp == QTV_TIMESTAMP) {
-                        $ratio_penalty = 25;
-                    }
-
-                    // crawlerdetect was kinda fucky during this time
-                    if ($timestamp > QTV_TIMESTAMP || $timestamp < SB_2024_TIMESTAMP) {
-                        $ratio_penalty = 10;
-                    }
-
-                    // these videos were directly linked onto youtube, so most of the guest views are genuine.
-                    if ($upload["upload_id"] === "rpdCM7mawrL" || $upload["upload_id"] === "I6Dhqvit5rd") {
-                        $ratio_penalty = 5;
-                    }
-
-                    if ($loggedIn > 0) {
-                        // ratio. PHP_INT_MAX is there to avoid division by zero errors.
-                        $ratio = $loggedIn ? (1 + ($ratio_penalty / ($loggedIn + 1))) : PHP_INT_MAX;
-                        $adjustedViews += (1 / $ratio);
-                    } else {
-                        $adjustedViews += 0.05;
-                    }
+                if ($loggedIn > 0) {
+                    // ratio. PHP_INT_MAX is there to avoid division by zero errors.
+                    $ratio = $loggedIn ? (1 + ($ratio_penalty / ($loggedIn + 1))) : PHP_INT_MAX;
+                    $adjustedViews += (1 / $ratio);
+                } else {
+                    $adjustedViews += 0.05;
                 }
             }
         }
     }
 
-    if (SB_CLI) {
-        if (getenv('TERM')) {
-            // debug output shit
-            echo "ID: {$upload["upload_id"]} ";
-            echo "Views (U/G/O/N): {$loggedIn}/{$loggedOut}/{$upload["views"]}/" . round($adjustedViews) . PHP_EOL;
-        }
+    if (SB_CLI && getenv('TERM')) {
+        // debug output shit
+        echo "ID: {$upload["upload_id"]} ";
+        echo "Views (U/G/O/N): {$loggedIn}/{$loggedOut}/{$upload["views"]}/" . round($adjustedViews) . PHP_EOL;
     }
 
     // now push that shit to the database
@@ -136,5 +112,5 @@ foreach ($uploads as $upload) {
 }
 
 if ($sb->isDiscordWebhookEnabled()) {
-    $sb->getDiscordWebhookClass()->recountViewsHook();
+    $sb->getDiscordWebhookClass()->scriptSuccessHook();
 }
