@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="form-input">
-                        {{ localize('visibility') }}
+                        <label for="visibility">{{ localize('visibility') }}</label>
                         <select name="visibility" id="visibility">
                             <option value="public"  {{ data.visibility == 0 ? 'selected' : '' }}>
                                 {{ localize('public') }}
