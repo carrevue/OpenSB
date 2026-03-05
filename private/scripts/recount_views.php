@@ -112,5 +112,5 @@ foreach ($uploads as $upload) {
 }
 
 if ($sb->isDiscordWebhookEnabled()) {
-    $sb->getDiscordWebhookClass()->scriptSuccessHook();
+    $sb->getDiscordWebhookClass()->scriptSuccessHook(__FILE__);
 }

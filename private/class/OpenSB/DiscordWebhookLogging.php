@@ -283,11 +283,11 @@ class DiscordWebhookLogging
      *
      * @return void
      */
-    public function scriptSuccessHook()
+    public function scriptSuccessHook($file)
     {
         $this->initClient();
 
-        $title = 'Script ran successfully: ' . basename(__FILE__);
+        $title = 'Script ran successfully: ' . basename($file);
 
         $username = exec('whoami');
         $hostname = gethostname();

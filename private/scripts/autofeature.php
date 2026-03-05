@@ -61,7 +61,7 @@ $featured = $database->fetchArray($database->query(
 $featured_views = array_column($featured, 'views');
 sort($featured_views);
 $median = $featured_views[intval(count($featured_views) / 2)];
-$threshold = round($median / 2);
+$threshold = round($median / 1.5);
 
 echo "Threshold: " . $threshold . PHP_EOL;
 
@@ -104,5 +104,5 @@ if (!$found) {
 }
 
 if ($sb->isDiscordWebhookEnabled()) {
-    $sb->getDiscordWebhookClass()->scriptSuccessHook();
+    $sb->getDiscordWebhookClass()->scriptSuccessHook(__FILE__);
 }
