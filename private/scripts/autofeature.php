@@ -65,8 +65,6 @@ $threshold = round($median / 1.5);
 
 echo "Threshold: " . $threshold . PHP_EOL;
 
-$threshold = 1;
-
 foreach ($uploads as $upload) {
     // check if the author is
     // * not banned
