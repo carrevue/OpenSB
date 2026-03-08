@@ -5,7 +5,7 @@
         "ext-curl": "*",
         "ext-xml": "*",
         "twig/twig": "3.23.0",
-        "intervention/image": "3.11.5",
+        "intervention/image": "3.11.7",
         "erusev/parsedown": "dev-master",
         "php-ffmpeg/php-ffmpeg": "1.4.0",
         "twig/string-extra": "3.23.0",
