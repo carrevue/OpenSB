@@ -24,6 +24,7 @@ namespace OpenSB;
 
 use Exception;
 use PDO;
+use PDOStatement;
 
 /**
  * PDO interface(?).
@@ -61,34 +62,27 @@ class Database
         }
     }
 
-    public function result($query, $params = [])
+    public function result(string $query, array $params = [])
     {
         $res = $this->query($query, $params);
         return $res->fetchColumn();
     }
 
-    public function query($query, $params = [])
+    public function query(string $query, array $params = []): bool|PDOStatement
     {
-        $startTime = 0;
-        $executionTime = 0;
-
-        if ($this->profilingEnabled) {
-            $startTime = microtime(true);
-        }
+        $startTime = $this->profilingEnabled ? microtime(true) : 0;
 
         $res = $this->sql->prepare($query);
         $res->execute($params);
 
         if ($this->profilingEnabled) {
-            $executionTime = microtime(true) - $startTime;
-
-            $this->logQueryForProfiler($query, $params, $startTime, $executionTime);
+            $this->logQueryForProfiler($query, $params, $startTime, microtime(true) - $startTime);
         }
 
         return $res;
     }
 
-    public function fetchArray($query): array
+    public function fetchArray(PDOStatement $query): array
     {
         $out = [];
         while ($record = $query->fetch()) {
@@ -97,13 +91,13 @@ class Database
         return $out;
     }
 
-    public function fetch($query, $params = [])
+    public function fetch(string $query, array $params = []): mixed
     {
         $res = $this->query($query, $params);
         return $res->fetch();
     }
 
-    public function insertId()
+    public function insertId(): bool|string
     {
         return $this->sql->lastInsertId();
     }
@@ -111,7 +105,7 @@ class Database
     /**
      * Helper function to insert a row into a table.
      */
-    public function insertInto($table, $data, $dry = false)
+    public function insertInto($table, $data, $dry = false): bool|PDOStatement|string
     {
         $fields = [];
         $placeholders = [];
@@ -145,7 +139,7 @@ class Database
     /**
      * Helper function to construct part of a query to set a lot of fields in one row
      */
-    public function updateRowQuery($fields)
+    public function updateRowQuery($fields): array
     {
         // Temp variables for dynamic query construction.
         $fieldquery = '';
@@ -182,32 +176,25 @@ class Database
         return $this->sql->getAttribute(PDO::ATTR_SERVER_VERSION);
     }
 
-    private function logQueryForProfiler($query, $params, $startTime, $executionTime)
+    private function logQueryForProfiler(string $query, array $params, float $startTime, float $executionTime): void
     {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-        $immediateCaller = $backtrace[0] ?? [];
-        $actualCaller = $backtrace[1] ?? [];
 
         // check if the caller isnt right here for queries done through fetch and fetchArray
-        $caller = (str_ends_with($immediateCaller['file'] ?? '', 'Database.php'))
-            ? $actualCaller
-            : $immediateCaller;
-
-        // remove root path so we have a shorter string
-        $file = str_replace(SB_ROOT_PATH, '', $caller['file'] ?? '');
-
-        $callerInfo = [
-            'file' => $file ?? 'unknown',
-            'line' => $caller['line'] ?? 'unknown',
-            'function' => $caller['function'] ?? 'unknown',
-        ];
+        $caller = str_ends_with($backtrace[0]['file'] ?? '', 'Database.php')
+            ? $backtrace[1] ?? []
+            : $backtrace[0] ?? [];
 
         $this->queryLog[] = [
-            'query' => $query,
-            'params' => $params,
+            'query'          => $query,
+            'params'         => $params,
             'execution_time' => $executionTime,
-            'timestamp' => microtime(true),
-            'caller_info' => $callerInfo,
+            'timestamp'      => microtime(true),
+            'caller_info'    => [
+                'file'     => str_replace(SB_ROOT_PATH, '', $caller['file'] ?? 'unknown'), 
+                'line'     => $caller['line'] ?? 'unknown',
+                'function' => $caller['function'] ?? 'unknown',
+            ],
         ];
     }
 
@@ -232,49 +219,26 @@ class Database
      */
     public function getProfilingReport(): array
     {
-        if (!$this->profilingEnabled) {
+        if (!$this->profilingEnabled || empty($this->queryLog)) {
             return [];
         }
 
-        $report = [
+        $totalTime = array_sum(array_column($this->queryLog, 'execution_time'));
+
+        return [
             'total_queries' => count($this->queryLog),
-            'total_time' => 0,
-            'queries' => [],
-            'slowest_query' => null,
-            'fastest_query' => null,
+            'total_time'    => $totalTime,
+            'average_time'  => $totalTime / count($this->queryLog),
+            'slowest_query' => array_reduce($this->queryLog, fn($c, $i) => 
+                !$c || $i['execution_time'] > $c['execution_time'] ? $i : $c),
+            'fastest_query' => array_reduce($this->queryLog, fn($c, $i) => 
+                !$c || $i['execution_time'] < $c['execution_time'] ? $i : $c),
+            'queries'       => array_map(fn($q) => [
+                'query'       => $q['query'],
+                'time'        => $q['execution_time'],
+                'params'      => $q['params'],
+                'caller_info' => $q['caller_info'],
+            ], $this->queryLog),
         ];
-
-        if (empty($this->queryLog)) {
-            return $report;
-        }
-
-        $slowest = $this->queryLog[0];
-        $fastest = $this->queryLog[0];
-
-        foreach ($this->queryLog as $query) {
-            $report['total_time'] += $query['execution_time'];
-
-            // find the slowest and fastest queries
-            if ($query['execution_time'] > $slowest['execution_time']) {
-                $slowest = $query;
-            }
-
-            if ($query['execution_time'] < $fastest['execution_time']) {
-                $fastest = $query;
-            }
-
-            $report['queries'][] = [
-                'query' => $query['query'],
-                'time' => $query['execution_time'],
-                'params' => $query['params'],
-                'caller_info' => $query['caller_info'],
-            ];
-        }
-
-        $report['slowest_query'] = $slowest;
-        $report['fastest_query'] = $fastest;
-        $report['average_time'] = $report['total_time'] / $report['total_queries'];
-
-        return $report;
     }
 }

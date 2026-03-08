@@ -40,11 +40,11 @@ if (!options.timezone) {
     });
 }
 
-function toggleElementDisplay(element) {
-    if (element.style.display === "block") {
+function toggleElementDisplay(element, display = "block") {
+    if (element.style.display === display) {
         element.style.display = "none";
     } else {
-        element.style.display = "block";
+        element.style.display = display;
     }
 }
 

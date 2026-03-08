@@ -137,29 +137,17 @@ class UserData
      */
     public function getUserArray(): array
     {
-        if ($this->data) {
-            return [
-                "username" => $this->data["name"],
-                "displayname" => $this->data["title"],
-                "color" => $this->data["userlink_color"],
-                "joined" => $this->data["joined"],
-                "connected" => $this->data["last_seen"],
-                "following" => $this->data["following"],
-                // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
-                "powerlevel" => $this->data["powerlevel"],
-                "flags" => UserFlags::toArray($this->data["flags"]), // stupid i think
-            ];
-        } else {
-            return [
-                "username" => "InvalidUser!",
-                "displayname" => "Invalid user!",
-                "color" => "#FF0000",
-                "joined" => 0,
-                "connected" => 0,
-                "following" => false,
-                "powerlevel" => 1,
-            ];
-        }
+        return [
+            "username" => $this->data["name"],
+            "displayname" => $this->data["title"],
+            "color" => $this->data["userlink_color"],
+            "joined" => $this->data["joined"],
+            "connected" => $this->data["last_seen"],
+            "following" => $this->data["following"],
+            // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
+            "powerlevel" => $this->data["powerlevel"],
+            "flags" => UserFlags::toArray($this->data["flags"]), // stupid i think
+        ];
     }
 
     /**
