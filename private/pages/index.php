@@ -105,7 +105,7 @@ if ($type == "wavelet" && $enable_wavelet) {
 
 if ($options["skin"] == "trinium") {
     $user_query = new UserQuery($sb);
-    $users_recent = Utilities::makeUserArray($database, $user_query->query("u.last_seen DESC", 5));
+    $users_recent = Utilities::makeUserArray($database, $user_query->query("u.last_seen DESC", 5, "u_num != 0"));
 } else {
     $users_recent = [];
 }

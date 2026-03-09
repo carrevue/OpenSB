@@ -52,20 +52,22 @@ class UserQuery
     /**
      * function query
      *
-     * @param mixed $order
-     * @param mixed $limit
-     * @param mixed $whereCondition
-     * @param mixed $params
+     * @param string $order
+     * @param int $limit
+     * @param string $whereCondition
+     * @param array $params
      *
-     * @return mixed
+     * @return array
      */
     public function query($order, $limit, $whereCondition = null, $params = [])
     {
-        $query = "SELECT u.id, u.about, u.title,
-                (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num,
+        $query = "SELECT * FROM (
+            SELECT u.id, u.about, u.title, u.flags, u.joined, u.last_seen,
+                (SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT id from upload_takedowns)) AS u_num,
                 (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
-                (SELECT COUNT(user) FROM user_follows WHERE id = u.id) AS f_num
-                FROM users u";
+                (SELECT COUNT(user) FROM user_follows WHERE id = u.id AND user NOT IN (SELECT user from user_bans)) AS f_num
+            FROM users u
+        ) AS u";
         $whereClauses = [];
         $baseParams = [UserFlags::FLAG_UNVERIFIED->value];
 

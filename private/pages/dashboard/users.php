@@ -51,7 +51,7 @@ $usersDataQuery = $database->fetchArray(
     $database->query(
         "
         SELECT u.id, u.title, u.powerlevel,
-            (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS s_num, 
+            (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS u_num, 
             (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
             (SELECT COUNT(*) FROM user_bans WHERE user = u.id) AS is_banned
         FROM users u
@@ -74,7 +74,7 @@ foreach ($usersDataQuery as $user) {
         [
             "id" => $user["id"],
             "info" => $userData->getUserArray(),
-            "uploads" => $user["s_num"],
+            "uploads" => $user["u_num"],
             "journals" => $user["j_num"],
             "banned" => $user["is_banned"],
             "powerlevel" => $user["powerlevel"],

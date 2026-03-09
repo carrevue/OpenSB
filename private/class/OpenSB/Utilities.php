@@ -141,7 +141,7 @@ class Utilities
             $out[] = [
                 "id" => $user["id"],
                 "info" => $userData->getUserArray(),
-                "uploads" => $user["s_num"] ?? 0,
+                "uploads" => $user["u_num"] ?? 0,
                 "journals" => $user["j_num"] ?? 0,
                 "followers" => $user["f_num"] ?? 0,
                 "about" => $user["about"] ?? null,

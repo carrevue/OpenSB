@@ -80,13 +80,13 @@ class UploadQuery
     /**
      * function query
      *
-     * @param mixed $order
-     * @param mixed $limit
-     * @param mixed $whereCondition
-     * @param mixed $params
-     * @param mixed $adminPanel
+     * @param string $order
+     * @param int $limit
+     * @param string $whereCondition
+     * @param array $params
+     * @param bool $adminPanel
      *
-     * @return mixed
+     * @return array
      */
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false)
     {
