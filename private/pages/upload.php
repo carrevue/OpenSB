@@ -306,12 +306,15 @@ if (
             "All rights belong to the",
             "Credit goes to",
             "Credits to",
+            "Credit to",
+            "Found this",
+            "my fyp",
         ];
 
         if ($sb->isChazizInstance()) {
             $is_suspected_reupload = false;
             foreach ($reupload_suspect as $phrase) {
-                if (str_contains($desc, $phrase)) {
+                if (str_contains(strtolower($desc), strtolower($phrase))) {
                     $is_suspected_reupload = true;
                     break;
                 }
