@@ -47,22 +47,12 @@ $journal_count = $database->result(
 // this part is fucking ugly.
 $journal_data = Utilities::makeJournalArray($database, $journal_array);
 
-$page_data = [
-    "id" => $data["id"],
-    "username" => $data["name"],
-    "displayname" => $data["title"],
-    "color" => $data["userlink_color"],
-    "about" => ($data["about"] ?? null),
-    "is_staff" => ($data["powerlevel"] > 1),
-    "customization" => $profile_customization_data?->getData() ?? false,
-];
-
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapSkinProfileGradient($data["userlink_color"]);
 }
 
 echo $twig->render('profile_journals.twig', [
-    'data' => $page_data,
+    'common' => $common_data,
     'journals' => $journal_data,
     'page' => $page,
     'count' => $journal_count

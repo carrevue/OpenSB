@@ -1,5 +1,7 @@
 {% extends "_layout.twig" %}
 
+{% set banner_picture = profile_banner(common.id) %}
+
 {% set cssVars = {
     'bg-page': 'background_color',
     'link-color': 'link_color',
@@ -17,34 +19,34 @@
 {% block style %}
         <style>
         :root {
-        {% if data.customization %}
+        {% if common.customization %}
             {% for cssVar, key in cssVars %}
-                {% if data.customization[key] is not empty %}
-            --{{ cssVar }}: {{ data.customization[key] }};
-                    {% if data.customization[key ~ '_rgb'] is defined %}
-            --{{ cssVar }}-rgb: {{ data.customization[key ~ '_rgb'] }};
+                {% if common.customization[key] is not empty %}
+            --{{ cssVar }}: {{ common.customization[key] }};
+                    {% if common.customization[key ~ '_rgb'] is defined %}
+            --{{ cssVar }}-rgb: {{ common.customization[key ~ '_rgb'] }};
                     {% endif %}
                 {% endif %}
             {% endfor %}
 
-            {% if data.customization.font %}
-            --page-font: {{ data.customization.font | raw }};
+            {% if common.customization.font %}
+            --page-font: {{ common.customization.font | raw }};
             {% endif %}
         {% endif %}
 
-            --username-color: {{ data.color }};
+            --username-color: {{ common.color }};
         }
 
         {% if banner_picture %}
         .jumbotron.profile-banner {
-        {% if data.customization %}
-            background-color: {{ data.customization.background_color }};
+        {% if common.customization %}
+            background-color: {{ common.customization.background_color }};
         {% endif %}
             background-image: url('{{ banner_picture }}');
         }
         {% endif %}
 
-        {% if data.customization %}
+        {% if common.customization %}
         body {
             background: var(--bg-page);
         }

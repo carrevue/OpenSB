@@ -124,24 +124,10 @@ $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$
 $featured_upload = handleFeaturedUpload($database, $data);
 
 $page_data = [
-    "id" => $data["id"],
-    "username" => $data["name"],
-    "displayname" => $data["title"],
-    "color" => $data["userlink_color"],
-    "about" => ($data['about'] ?? false),
-    "is_staff" => ($data["powerlevel"] > 1),
-    "joined" => $data["joined"],
-    "connected" => $data["last_seen"],
-    "is_current" => $is_own_profile,
     "featured_upload" => $featured_upload,
     "uploads" => Utilities::makeUploadArray($database, $user_uploads),
     "journals" => Utilities::makeJournalArray($database, $user_journals),
     "comments" => $comments,
-    "followers" => $followers,
-    "following" => $followed,
-    "views" => $views,
-    "customization" => $profile_customization_data?->getData() ?? false,
-    "ban_data" => $user_ban_data ?? [],
 ];
 
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
@@ -162,5 +148,6 @@ if ($username == "Chaziz" && $sb->getLocalOptions()["skin"] == "trinium") {
 */
 
 echo $twig->render("profile.twig", [
+    'common' => $common_data,
     'data' => $page_data,
 ]);

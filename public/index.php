@@ -207,8 +207,8 @@ $router->add('/my_uploads', 'my_uploads.php');
 $router->add('/news', 'news.php');
 $router->add('/notifications', 'notifications.php');
 $router->add('/privacy', 'privacy.php');
-$router->add('/read', 'read.php');
-$router->add('/read/{id}', 'read.php');
+//$router->add('/read', 'read.php'); TODO
+//$router->add('/read/{id}', 'read.php'); TODO
 $router->add('/search', 'search.php');
 $router->add('/settings', 'settings.php');
 $router->redirect('/staff', '/about');
@@ -247,8 +247,10 @@ $router->add('/user', function () {
 $router->add('/user/{username}', 'profile/overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile/uploads.php'); // uploads
 $router->add('/user/{username}/comments', 'profile/comments.php'); // comments
-$router->add('/user/{username}/journals', 'profile/journals.php'); // journals
+$router->add('/user/{username}/posts', 'profile/posts.php'); // posts
 $router->add('/user/{username}/about', 'profile/about.php'); // about (mainly fulphiker-specific)
+
+$router->add('/user/{username}/post/{id}', 'profile/post.php');
 
 // api
 $router->add('/api/skin/comment_load', 'api/skin/comment_load.php'); // finalium-only

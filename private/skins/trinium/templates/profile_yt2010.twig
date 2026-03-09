@@ -1,14 +1,12 @@
 {% extends "_layout_profile.twig" %}
 
-{% set banner_picture = profile_banner(data.id) %}
-
-{% set title = data.username %}
+{% set title = common.username %}
 
 {% block scripts %}
     <script>
         comment_type = 'profile';
-        comment_id = '{{ data.id }}'
-        user_id = '{{ data.id }}'
+        comment_id = '{{ common.id }}'
+        user_id = '{{ common.id }}'
     </script>
 {% endblock %}
 
@@ -25,106 +23,4 @@
 {% endblock %}
 
 {% block content %}
-    <div class="section">
-        <div class="content-box highlight-box">
-            Todo
-        </div>
-    </div>
-    <div class="grid">
-        <div class="col-4">
-            <div class="section">
-                <div class="content-box basic-box">
-                    <div class="section-header">
-                        <h2 class="section-title">{{ data.displayname }}</h2>
-                    </div>
-                    <div class="profile-box">
-                        <div class="profile-box-pfp">
-                            <div class="profile-picture">
-                                <img src="{{ profile_picture(data.id) }}" class="pfp" alt="{{ data.username }}">
-                            </div>
-                        </div>
-                        <div class="profile-box-info">
-                            <div class="profile-box-username">
-                                <span>@{{ data.username }}</span>
-                                {% if data.is_staff %}
-                                    <span class="profile-box-icon use-tooltip" title="{{ localize('staff') }}">{{ icon('staff') }}</span>
-                                {% endif %}
-                            </div>
-                            <div class="profile-box-follow">
-                                {% if is_user_logged_in %}
-                                    {% if not data.is_current %}
-                                        <button class="button secondary small" id="follow-user">
-                                            {% if data.following %}
-                                                {{ localize('unfollow') }}
-                                            {% else %}
-                                                {{ localize('follow') }}
-                                            {% endif %}
-                                        </button>
-                                    {% else %}
-                                        <a href="/settings">
-                                            {{ localize('edit') }}
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                            <div class="profile-box-details">
-                                <span id="follower_count">{{ data.followers }}</span> followers
-                            </div>
-                        </div>
-                        <div class="profile-box-follow">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section">
-                <div class="content-box basic-box">
-                    <div class="section-header">
-                        <h2 class="section-title">{{ localize('profile') }}</h2>
-                    </div>
-                    {% if data.about | trim is not empty %}
-                        <div class="profile-about">
-                            {{ data.about | markdown_user_written }}
-                            <hr>
-                        </div>
-                    {% endif %}
-                    <div class="profile-details">
-                        <ul class="profile-details-list">
-                            <li class="detail-item">
-                                <span class="detail-label">{{ localize('registered') }}:</span>
-                                <span class="detail-value">{{ data.joined | format_date('long', 'none') }}</span>
-                            </li>
-                            <li class="detail-item">
-                                <span class="detail-label">{{ localize('last_seen') }}:</span>
-                                <span class="detail-value">{{ data.connected | relative_time() }}</span>
-                            </li>
-                        </ul>
-                        {% if user_is_authenticated_admin %}
-                            <hr>
-                            <a href="/dashboard/users/{{ data.username }}">{{ localize('dashboard_lookup') }}</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-8">
-            <div class="section">
-                <div class="content-box basic-box">
-                    <div class="section-header flex">
-                        <div class="section-header-left">
-                            <h2 class="section-title">{{ localize('comments') }}</h2>
-                        </div>
-                        <div class="section-header-right">
-                            <a href="/user/{{ data.username }}/comments">
-                                {{ localize('more') }}
-                            </a>
-                        </div>
-                    </div>
-                    {{ include('/components/_comment_input.twig') }}
-                    {% for comment in data.comments %}
-                        {{ include('/components/_comment.twig') }}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}

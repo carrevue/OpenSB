@@ -66,13 +66,6 @@ $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limi
 $upload_count = $upload_query->count("v.author = ?", [$data["id"]]);
 
 $page_data = [
-    "id" => $data["id"],
-    "username" => $data["name"],
-    "displayname" => $data["title"],
-    "color" => $data["userlink_color"],
-    "about" => ($data["about"] ?? null),
-    "is_staff" => ($data["powerlevel"] > 1),
-    "customization" => $profile_customization_data?->getData() ?? false,
     "uploads" => Utilities::makeUploadArray($database, $uploads),
     "count" => $upload_count,
 ];
@@ -82,6 +75,7 @@ if ($sb->getLocalOptions()["skin"] == "bootstrap") {
 }
 
 echo $twig->render('profile_browse.twig', [
+    'common' => $common_data,
     'data' => $page_data,
     'page' => $page,
     'type' => $type,

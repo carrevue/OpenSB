@@ -31,7 +31,7 @@ include_once('_include.php');
 
 // page-specific shit Here.
 if ($sb->getLocalOptions()["skin"] != "finalium") {
-    $comments = new CommentData($database, CommentLocation::Profile, $id);
+    $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
 
     $comment_data = $comments->getComments();
     $comment_count = $comments->getCommentCount();
@@ -40,15 +40,9 @@ if ($sb->getLocalOptions()["skin"] != "finalium") {
     $comment_count = 0;
 }
 
+// ???
 $page_data = [
-    "id" => $data["id"],
-    "username" => $data["name"],
-    "displayname" => $data["title"],
-    "color" => $data["userlink_color"],
-    "about" => ($data["about"] ?? null),
-    "is_staff" => ($data["powerlevel"] > 1),
-    "customization" => $profile_customization_data?->getData() ?? false,
-    "comments" => $comment_data,
+    'comments' => $comment_data,
 ];
 
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
@@ -56,5 +50,6 @@ if ($sb->getLocalOptions()["skin"] == "bootstrap") {
 }
 
 echo $twig->render("profile_comments.twig", [
+    'common' => $common_data,
     'data' => $page_data,
 ]);

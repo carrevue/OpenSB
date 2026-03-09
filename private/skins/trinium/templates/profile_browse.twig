@@ -1,8 +1,6 @@
 {% extends "_layout_profile.twig" %}
 
-{% set banner_picture = profile_banner(data.id) %}
-
-{% set title = data.username ~ "'s uploads" %}
+{% set title = common.username ~ "'s uploads" %}
 
 {% block content %}
     {% set total_pages = (data.count / items_per_page) | round(0, 'ceil') %}
@@ -17,7 +15,7 @@
         </div>
         <div class="tabs">
             {% for key, tab in tabs %}
-                <a class="tablink {% if type==key %}active{% endif %}" href="/user/{{data.username}}/uploads?type={{key}}">
+                <a class="tablink {% if type==key %}active{% endif %}" href="/user/{{common.username}}/uploads?type={{key}}">
                     {{ localize(tab.name) }}
                 </a>                
             {% endfor %}
@@ -29,9 +27,9 @@
         </div>
 
         {% if type == 'recent' %}
-            {% set le_url = '/user/' ~ data.username ~ '/uploads?page=%s' %}
+            {% set le_url = '/user/' ~ common.username ~ '/uploads?page=%s' %}
         {% else %}
-            {% set le_url = '/user/' ~ data.username ~ '/uploads?type=' ~ type ~ '&page=%s' %}
+            {% set le_url = '/user/' ~ common.username ~ '/uploads?type=' ~ type ~ '&page=%s' %}
         {% endif %}
 
         {{ pagination(data.count, items_per_page, le_url, current_page) }}

@@ -72,7 +72,11 @@ if ($flags["profile_customization_enabled"]) {
     $profile_customization_data = null;
 }
 
-$is_own_profile = $data["id"] == $auth->getUserID();
+$is_own_profile = ($data["id"] == $auth->getUserID());
+
+$followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["id"]]);
+$followed = Utilities::isFollowingUser($data["id"]);
+$views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
 
 // right. cheat "related channels" on finalium profiles by using featured users
 if ($sb->getLocalOptions()["skin"] == "finalium") {
@@ -105,3 +109,19 @@ $twig->setPageMeta([
     "opengraph_image" => $storage->getUserProfilePicture($data["id"], false),
     "opengraph_section" => "Profile",
 ]);
+
+$common_data = [
+    "id" => $data["id"],
+    "username" => $data["name"],
+    "displayname" => $data["title"],
+    "color" => $data["userlink_color"],
+    "about" => ($data['about'] ?? false),
+    "is_staff" => ($data["powerlevel"] > 1),
+    "joined" => $data["joined"],
+    "connected" => $data["last_seen"],
+    "is_current" => $is_own_profile,
+    "followers" => $followers,
+    "following" => $followed,
+    "views" => $views,
+    "customization" => $profile_customization_data?->getData() ?? false,
+];

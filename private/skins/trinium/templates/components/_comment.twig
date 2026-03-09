@@ -25,6 +25,8 @@
             <div class="post-actions">
                 {% if comment.id and is_user_logged_in %}
                 <a class="action-button reply-button" data-comment-id="{{ comment.id }}">{{ localize('reply_action') }}</a>
+                <a class="action-button like-button" data-comment-id="{{ comment.id }}">{{ localize('like') }}</a>
+                <a class="action-button dislike-button" data-comment-id="{{ comment.id }}">{{ localize('dislike') }}</a>
                 {% endif %}
             </div>
 

@@ -35,6 +35,11 @@ $tabs = [
         "order" => "u.last_seen DESC",
         "where" => null,
     ],
+    "new" => [
+        "name" => "new",
+        "order" => "u.joined DESC",
+        "where" => null,
+    ],
     "popular" => [
         "name" => "popular",
         "order" => "f_num DESC",

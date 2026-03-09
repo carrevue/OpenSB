@@ -30,6 +30,8 @@ use OpenSB\JournalData;
 use OpenSB\UserCustomizationData;
 use OpenSB\UserRoleEnum;
 
+include_once('_include.php');
+
 if ($_GET['j'] ?? null) {
     Utilities::redirect('/read/' . $_GET['j'], 301);
 }
@@ -86,6 +88,7 @@ $data = [
     "customization" => $profile_color_data?->getData() ?? false,
 ];
 
-echo $twig->render('read_journal.twig', [
+echo $twig->render('profile_post.twig', [
+    'common' => $common_data,
     'data' => $data,
 ]);

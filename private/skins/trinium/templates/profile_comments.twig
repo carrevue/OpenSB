@@ -1,14 +1,12 @@
 {% extends "_layout_profile.twig" %}
 
-{% set banner_picture = profile_banner(data.id) %}
-
-{% set title = data.username %}
+{% set title = common.username %}
 
 {% block scripts %}
     <script>
         comment_type = 'profile';
-        comment_id = '{{ data.id }}'
-        user_id = '{{ data.id }}'
+        comment_id = '{{ common.id }}'
+        user_id = '{{ common.id }}'
     </script>
 {% endblock %}
 
