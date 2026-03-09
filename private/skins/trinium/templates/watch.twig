@@ -163,14 +163,6 @@
                                     {% else %}
                                         <span class="text-faded">{{ localize('none') }}</span>
                                     {% endfor %}
-                                    {# TODO:
-                                    {% if is_user_logged_in %}
-                                        <form class="form-flex">
-                                            <input type="text" class="form-submit">
-                                            <input type="submit" value="Add" class="button secondary">
-                                        </form>
-                                    {% endif %}
-                                    #}
                                 </div>
                             </div>
                         {% endif %}
@@ -203,27 +195,34 @@
             </div>
         </div>
         <div class="col-medium-12 col-large-4 col-huge-3">
-            {% if upload.recommended %}
-                <div class="section">
-                    <div class="section-header flex">
-                        <h2>{{ localize('related_uploads') }}</h2>
+            {% if upload.recommended or upload.other_by_author %}
+                <div class="tab-group">
+                    <div class="tabs">
+                        {# spaceless removes html whitespace that causes unnecessary margins #}
+                        {% apply spaceless %}
+                            {% if upload.recommended %}
+                                <div class="tablink" data-tab="tab_related">{{ localize('related_uploads') }}</div>
+                            {% endif %}
+                            {% if upload.other_by_author %}
+                                <div class="tablink" data-tab="tab_author">{{ localize('uploads_from_user', upload.author.info.displayname) }}</div>
+                            {% endif %}
+                        {% endapply %}
                     </div>
-                    <div class="content-box related-uploads">
-                        {% for upload in upload.recommended %}
-                            {{ include('/components/_upload_vertical_small.twig') }}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-            {% if upload.other_by_author %}
-                <div class="section">
-                    <div class="section-header flex">
-                        <h2>{{ localize('uploads_from_user', upload.author.info.displayname) }}</h2>
-                    </div>
-                    <div class="content-box related-uploads">
-                        {% for upload in upload.other_by_author %}
-                            {{ include('/components/_upload_vertical_small.twig') }}
-                        {% endfor %}
+                    <div class="content-box no-border-top">
+                        {% if upload.recommended %}
+                        <div id="tab_related" class="tabcontent">
+                            {% for upload in upload.recommended %}
+                                {{ include('/components/_upload_vertical_small.twig') }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        {% if upload.other_by_author %}
+                        <div id="tab_author" class="tabcontent">
+                            {% for upload in upload.other_by_author %}
+                                {{ include('/components/_upload_vertical_small.twig') }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
