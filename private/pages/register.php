@@ -48,6 +48,12 @@ if (Utilities::isTorExitNode(Utilities::getIpAddress())) {
     die();
 }
 
+$ipcheck = file_get_contents("https://api.stopforumspam.org/api?ip=" . Utilities::getIpAddress());
+
+if (str_contains($ipcheck, "<appears>yes</appears>") && !$isDebug) {
+    Utilities::notifyBanner("notify_register_ip_suspicious", "/");
+}
+
 $captcha = $sb->getCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
