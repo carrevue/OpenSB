@@ -74,6 +74,9 @@
     "new_journal": "New journal",
     "add_account": "Add account",
 
+    "manager": "Manager",
+    "manager_hitchhiker": "Creator Studio",
+
     "my_profile_hitchhiker": "My channel",
     "my_collections_hitchhiker": "My playlists",
     "new_upload_hitchhiker": "Upload",
