@@ -1,0 +1,74 @@
+{% extends "_layout.twig" %}
+
+{% set title = localize('new_upload') %}
+
+{% block content %}
+    <div class="banner danger">THIS DOES NOT WORK YET.</div>
+    <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">{{ localize('new_upload') }}</h1>
+            <div>
+                {{ localize('new_upload_intro', '/guidelines') | raw }}
+            </div>
+            <div class="text-danger">
+                {{ localize('reupload_warning') }}
+            </div>
+        </div>
+        <div class="content-box">
+            <div id="dropZone" onclick="document.getElementById('fileInput').click()">
+                <div>Select files to upload</div>
+                <input type="file" id="fileInput" style="display:none" onchange="applyFile(this.files[0])">
+            </div>
+            <div id="uploadingView" style="display:none;">
+                <div class="grid">
+                    <div class="col-2">
+                        <div id="thumbWrap">preview here</div>
+                        <div id="statusMsg"></div>
+                        <progress id="progressBar" value="0" max="100"></progress>
+                    </div>
+
+                    <div class="col-10">
+                        <div class="form-input">
+                            <label for="title">{{ localize('title') }} <span>{{ localize('form_required') }}</span></label>
+                            <input type="text" class="form-submit" id="title" name="title" required>
+                        </div>
+
+                        <div class="form-input">
+                            <label for="desc">{{ localize('description') }} <span>{{ localize('form_optional') }}</span></label>
+                            <textarea class="form-submit" name="desc" maxlength="65535"
+                                    form="uploadForm"
+                                    style="overflow-x:hidden;resize:vertical" rows="8"></textarea>
+                        </div>
+
+                        <div class="form-input">
+                            <label for="tags">{{ localize('tags') }} <span>{{ localize('form_optional') }}</span></label>
+                            <input type="text" class="form-submit" name="tags">
+                        </div>
+
+                        <div class="form-input">
+                            <label for="visibility">{{ localize('visibility') }}</label>
+                            <select name="visibility" id="visibility">
+                                <option value="public">{{ localize('public') }}</option>
+                                <option value="unlisted">{{ localize('unlisted') }}</option>
+                                <option value="private">{{ localize('private') }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-input">
+                            <input type="checkbox" name="rating" id="rating" value="true">
+                            <label for="rating">{{ localize('mark_as_sensitive') }}
+                            <span>{{ localize('mark_as_sensitive_description') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-button-container">
+                    <button class="button accent" id="uploadBtn" onclick="startUpload()">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/upload_page.js?r={{ get_css_file_date() }}"></script>
+{% endblock %}

@@ -19,7 +19,7 @@
     <style>
         {# this is done through twig because css does not support string addition #}
         :root {
-            {% if current_theme starts with 'dark' %}
+            {% if current_theme starts with 'dark' or not (current_theme ends with 'flat') %}
             --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background_dark.jpg');
             {% else %}
             --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background.jpg');
