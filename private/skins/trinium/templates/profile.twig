@@ -11,14 +11,36 @@
 {% endblock %}
 
 {% block precontentappend %}
-    {% if common.is_current and enable_incomplete_features %}
-    <div class="profile-edit-container">
-        <div class="profile-edit">
-            <div class="button secondary">Settings</div>
-            <div class="button secondary">Colors</div>
-            <div class="text-danger">Subject to change</div>
+    {% if common.is_current %}
+        {#<div class="subheader-container">
+            <div class="subheader" id="profile-edit-toolbar">
+                <div class="button toolbar">Settings</div>
+                <div class="button toolbar">Colors</div>
+                <div class="text-danger">Subject to change</div>
+            </div>
+        </div>#}
+        <div class="profile-edit-container" style="">
+            <div class="profile-edit">
+                <div class="tab-group">
+                    <div class="tabs">
+                        {# spaceless removes html whitespace that causes unnecessary margins #}
+                        {% apply spaceless %}
+                            <div class="tablink" data-tab="tab_pfedit_settings">Settings</div>
+                            <div class="tablink" data-tab="tab_pfedit_colors">Colors</div>
+                        {% endapply %}
+                    </div>
+                    <div class="content-box no-border-top">
+                        <div id="tab_pfedit_settings" class="tabcontent">
+                            <div>URL: <a href="{{ page_url }}">{{ page_url }}</a></div>
+                        </div>
+                        <div id="tab_pfedit_colors" class="tabcontent">
+                            <div class="banner secondary">Not implemented!</div>
+                        </div>
+                        <div class="button accent">Save</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
     {% endif %}
 {% endblock %}
 
@@ -42,9 +64,9 @@
                                         {% endif %}
                                     </button>
                                 {% else %}
-                                    <a href="/settings">
+                                    <button class="button secondary small" id="edit-profile">
                                         {{ localize('edit') }}
-                                    </a>
+                                    </button>
                                 {% endif %}
                             {% endif %}
                         </div>

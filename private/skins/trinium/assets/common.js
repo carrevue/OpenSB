@@ -465,6 +465,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setUpModal(view_report_button, view_report_dialog, view_report_close_button);
 
+    // EDIT PROFILE
+    let edit_profile_button = document.getElementById('edit-profile');
+    let edit_profile_container = document.getElementsByClassName('profile-edit-container')[0];
+
+    if (edit_profile_button && edit_profile_container) {
+        // awkward shit!
+        edit_profile_button.onclick = function () {
+            if (edit_profile_container.style.maxHeight && edit_profile_container.style.maxHeight !== "0px") {
+                edit_profile_container.style.maxHeight = "0px";
+            } else {
+                edit_profile_container.style.visibility = "hidden";
+                edit_profile_container.style.maxHeight = "none";
+                const fullHeight = edit_profile_container.scrollHeight;
+                edit_profile_container.style.maxHeight = "0px";
+                edit_profile_container.style.visibility = "";
+                // Force reflow before re-applying so transition fires
+                edit_profile_container.getBoundingClientRect();
+                edit_profile_container.style.maxHeight = fullHeight + "px";
+            }
+        };
+    }
+
     // SETTINGS
     let settings_display_name_input = (document.getElementById('settings-display-name-input'));
     let settings_display_name = (document.getElementById('settings-display-name'));
@@ -476,6 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // DEBUG DIALOG
     let debug_button = (document.getElementById('debug-button'));
     let debug_dialog = (document.getElementById('debug-dialog'));
     let debug_close_button = (document.getElementById('debug-close-button'));

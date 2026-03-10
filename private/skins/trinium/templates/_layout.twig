@@ -1,4 +1,9 @@
-{% set logo_suffix = current_theme starts with 'dark' ? '-dark' : '' %}
+{% if not (current_theme ends with 'flat') %}
+    {% set logo_suffix = '-dark' %}
+{% else %}
+    {% set logo_suffix = current_theme starts with 'dark' ? '-dark' : '' %}
+{% endif %}
+
 {% set logo_extension = website_branding.is_vector ? '.svg' : '.png' %}
 {% set logo_type = website_branding.use_wordmark ? 'logo-wordmark' : 'logo' %}
 
@@ -71,8 +76,8 @@
     </span>
     </div>
 {% endif %}
-{% block precontent %}{% endblock %}
 <div class="page {% if data.customization or banner_picture or page_name == "home" %}no-padding{% endif %}">
+    {% block precontent %}{% endblock %}
     <div class="page-contents">
         <div class="container {{ page_name }} {% if banner_picture %}has-profile-banner{% endif %}">
             <div class="sidebar-page-grid">

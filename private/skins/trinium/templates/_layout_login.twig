@@ -1,9 +1,16 @@
-{% set logo_suffix = current_theme starts with 'dark' ? '-dark' : '' %}
+{% if not (current_theme ends with 'flat') %}
+    {% set logo_suffix = '-dark' %}
+{% else %}
+    {% set logo_suffix = current_theme starts with 'dark' ? '-dark' : '' %}
+{% endif %}
+
 {% set logo_extension = website_branding.is_vector ? '.svg' : '.png' %}
 {% set logo_type = website_branding.use_wordmark ? 'logo-wordmark' : 'logo' %}
 
+{% set logo = website_branding.assets_location ~ '/' ~ logo_type ~ logo_suffix ~ logo_extension %}
+
 {% if is_chaziz_sb %}
-{% set logo_type = 'logo-wordmark' %}
+    {% set logo_type = 'logo-wordmark' %}
 {% endif %}
 
 {% set logo = website_branding.assets_location ~ '/' ~ logo_type ~ logo_suffix ~ logo_extension %}
