@@ -22,7 +22,7 @@
 
 namespace OpenSB\Tools;
 
-define("SB_ROOT_PATH", dirname(__DIR__));
+define("SB_ROOT_PATH", dirname(__DIR__, 2));
 define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
 define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');

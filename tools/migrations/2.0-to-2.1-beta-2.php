@@ -22,7 +22,7 @@
 
 namespace OpenSB\Tools;
 
-define("SB_ROOT_PATH", dirname(__DIR__));
+define("SB_ROOT_PATH", dirname(__DIR__, 2));
 define("SB_PUBLIC_PATH", SB_ROOT_PATH . '/public'); // we need this for SquareBracketTwigExtension
 define("SB_PRIVATE_PATH", SB_ROOT_PATH . '/private');
 define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
@@ -32,35 +32,8 @@ global $database;
 
 require_once SB_PRIVATE_PATH . '/common.php';
 
-// migrate from opensb 2.0 table schema to opensb 2.1 table schema
+// migrate from opensb 2.1 beta 1 table schema to opensb 2.1 beta 2 table schema
 
-// TODO: migrate mature-rated uploads from rating to flag
-
-// add visiblity type
-$database->query("ALTER TABLE `uploads`
-ADD `visibility` int(11) NOT NULL DEFAULT '0' AFTER `type`;");
-
-// add username blocklist
-$database->query("CREATE TABLE `username_blocklist` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  `use_regex` tinyint(1) NOT NULL,
-  `timestamp` int(11) NOT NULL,
-  `author` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-);");
-
-// update ip bans
-$database->query("ALTER TABLE `ip_bans`
-CHANGE `reason` `reason` text COLLATE 'utf8mb4_general_ci' NOT NULL DEFAULT 'No reason specified' AFTER `ip`,
-ADD `author` int NOT NULL DEFAULT '-1000';"); // -1000 is System
-
-// mail verification token
-$database->query("CREATE TABLE `email_verification_token` (
-  `user` int NOT NULL,
-  `token` varchar(128) NOT NULL,
-  `created` int NOT NULL,
-  `expiration` int NOT NULL,
-  `last_sent` int NOT NULL,
-  PRIMARY KEY (`token`)
-);");
+// add profile type (this is different from the one seen in early beta versions of 2.0)
+$database->query("ALTER TABLE `user_profile_customization`
+ADD `type` tinyint NOT NULL DEFAULT '0' AFTER `user`;");
