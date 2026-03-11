@@ -79,6 +79,24 @@
                 </div>
             </div>
             {% endif %}
+            {% if data.uploads_featured %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <div class="section-header-left">
+                            <h2 class="section-title">{{ localize('featured_uploads') }}</h2>
+                            <div class="section-desc">{{ localize('featured_uploads_desc') }}</div>
+                        </div>
+                        <div class="section-header-right">
+                            <a href="/browse">{{ localize('more') }}</a>
+                        </div>
+                    </div>
+                    <div class="content-box">
+                        {% for upload in data.uploads_featured %}
+                            {{ include('/components/_upload_vertical_small.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
             {% if data.users_recent %}
             <div class="section">
                 <div class="section-header flex">

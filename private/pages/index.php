@@ -56,15 +56,21 @@ if ($options["skin"] == "trinium") {
     $type = "list"; // avoid undefined warning
 }
 
-$uploads_featured_query_limit = 12;
-$uploads_recent_query_limit = 12; // only used on bootstrap skin's classic theme
+$uploads_query_limit = 12;
+
+if ($options["skin"] == "trinium") {
+    $uploads_featured_query_limit = 3;
+} else {
+    $uploads_featured_query_limit = 12;
+}
+
 $news_recent_query_limit = 1;
 
-if ($options["skin"] == "bootstrap" && $options["theme"] == "classic") {
-    $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_recent_query_limit);
-} else {
-    $uploads_recent = [];
-}
+//if ($options["skin"] == "bootstrap" && $options["theme"] == "classic") {
+    $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit);
+//} else {
+//    $uploads_recent = [];
+//}
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
@@ -90,7 +96,7 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
 
         $uploads_following = $upload_query->query(
             "v.timestamp DESC",
-            $uploads_featured_query_limit,
+            $uploads_query_limit,
             sprintf("v.author in (%s)", $query)
         );
     } else {
