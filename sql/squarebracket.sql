@@ -63,6 +63,17 @@ CREATE TABLE `journal_comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `posts` text NOT NULL,
+  `author` int(11) NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  `reply_to` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 DROP TABLE IF EXISTS `private_messages`;
 CREATE TABLE `private_messages` (
   `id` int(11) NOT NULL,
@@ -72,7 +83,7 @@ CREATE TABLE `private_messages` (
   `author` int(11) NOT NULL,
   `recipient` int(11) NOT NULL,
   `date` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `uploads`;
@@ -171,7 +182,7 @@ CREATE TABLE `username_blocklist` (
   `timestamp` int(11) NOT NULL,
   `author` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `users`;
@@ -270,6 +281,7 @@ CREATE TABLE `user_profile_comments` (
 DROP TABLE IF EXISTS `user_profile_customization`;
 CREATE TABLE `user_profile_customization` (
   `user` int(11) NOT NULL,
+  `type` tinyint(4) NOT NULL DEFAULT 0,
   `font` text DEFAULT '',
   `background_color` varchar(7) NOT NULL DEFAULT '#FFFFFF',
   `title_color` varchar(7) NOT NULL DEFAULT '#333333',
@@ -281,7 +293,7 @@ CREATE TABLE `user_profile_customization` (
   `highlight_box_background_color` varchar(7) NOT NULL DEFAULT '#E6E6E6',
   `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `user_staff_notes`;
@@ -295,4 +307,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-02-27 16:28:36 UTC
+-- 2026-03-11 10:44:02 UTC

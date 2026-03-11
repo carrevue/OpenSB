@@ -37,3 +37,12 @@ require_once SB_PRIVATE_PATH . '/common.php';
 // add profile type (this is different from the one seen in early beta versions of 2.0)
 $database->query("ALTER TABLE `user_profile_customization`
 ADD `type` tinyint NOT NULL DEFAULT '0' AFTER `user`;");
+
+// add wavelet posts
+$database->query("CREATE TABLE `posts` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `posts` text NOT NULL,
+  `author` int NOT NULL,
+  `timestamp` int NOT NULL,
+  `reply_to` int NULL
+);");

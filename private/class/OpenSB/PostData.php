@@ -25,14 +25,12 @@ use OpenSB\Database;
 use OpenSB\UserData;
 
 /**
- * class JournalData
+ * class PostData
  *
- * This class handles journal data in an uniform and consistent way, which can 
+ * This class handles post data in an uniform and consistent way, which can 
  * be reused on pages.
- * 
- * @deprecated
  */
-class JournalData
+class PostData
 {
     /**
      * @var Database The database class
@@ -45,7 +43,7 @@ class JournalData
     private UserData $author;
 
     /** 
-     * @var array|false|null Journal data 
+     * @var array|false|null Post data 
      */
     private array|false|null $data = null;
 
@@ -53,7 +51,7 @@ class JournalData
     {
         $this->database = $database;
 
-        $this->data = $this->database->fetch("SELECT j.* FROM journals j WHERE j.id = ?", [$id]);
+        $this->data = $this->database->fetch("SELECT p.* FROM posts p WHERE p.id = ?", [$id]);
 
         if ($this->data != []) {
             $this->author = new UserData($database, $this->data["author"]);
@@ -61,9 +59,9 @@ class JournalData
     }
 
     /**
-     * Get the journal data.
+     * Get the post data.
      *
-     * @return array|null Array containing journal data, or null if not found.
+     * @return array|null Array containing post data, or null if not found.
      */
     public function getData()
     {
@@ -71,7 +69,7 @@ class JournalData
     }
 
     /**
-     * Get the journal author's data.
+     * Get the post author's data.
      *
      * @return array
      */
@@ -81,7 +79,7 @@ class JournalData
     }
 
     /**
-     * Check whether this journal's author is banned.
+     * Check whether this post's author is banned.
      *
      * @return bool
      */
