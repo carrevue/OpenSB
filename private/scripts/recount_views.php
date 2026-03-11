@@ -64,27 +64,17 @@ foreach ($uploads as $upload) {
             // these timestamps are hardcoded within the db.
             // sb did not count the exact timestamp of views until about april 2024.
             if ($timestamp === POKTUBE_TIMESTAMP) {
-                $adjustedViews += 0.1;
-            } elseif ($timestamp === QOBO_TIMESTAMP) {
                 $adjustedViews += 0.05;
+            } elseif ($timestamp === QOBO_TIMESTAMP) {
+                $adjustedViews += 0.025;
             } elseif ($timestamp === SB_2022_TIMESTAMP) {
-                $adjustedViews += 0.25;
+                $adjustedViews += 0.075;
             } else {
                 $ratio_penalty = 5;
 
                 // crawlerdetect was kinda fucky during this time
-                if ($timestamp == QOBO_TIMESTAMP) {
-                    $ratio_penalty = 25;
-                }
-
-                // crawlerdetect was kinda fucky during this time
                 if ($timestamp > QOBO_TIMESTAMP || $timestamp < SB_2024_TIMESTAMP) {
                     $ratio_penalty = 10;
-                }
-
-                // these videos were directly linked onto youtube, so most of the guest views are genuine.
-                if ($upload["upload_id"] === "rpdCM7mawrL" || $upload["upload_id"] === "I6Dhqvit5rd") {
-                    $ratio_penalty = 5;
                 }
 
                 if ($loggedIn > 0) {
