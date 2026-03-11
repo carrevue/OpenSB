@@ -37,9 +37,14 @@ if (!$sb->isAccountRegistrationEnabled()) {
 }
 
 if ($sb->isIpLookupEnabled() && $sb->isChazizInstance()) {
+    $blocked_asns = [
+        'AS212238',
+        'AS9009'
+    ];
+
     $ipLookup = $sb->getIpLookupClass();
     $ipInfo = $ipLookup->getInfo(Utilities::getIpAddress());
-    if ($ipInfo && $ipInfo['asn'] === 'AS212238') {
+    if ($ipInfo && in_array($ipInfo['asn'], $blocked_asns, true)) {
         die();
     }
 }
