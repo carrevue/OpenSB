@@ -1,18 +1,17 @@
-{% if enable_incomplete_features %}
-<div class="post" id="post-{{ journal.id }}">
-    <a href="/user/{{ journal.author.info.username }}">
-        <div class="profile-picture user-id-{{ journal.author.id }}">
-            <img src="{{ profile_picture(journal.author.id) }}" class="pfp" alt="{{ journal.author.info.username }}">
+<div class="post" id="post-{{ post.id }}">
+    <a href="/user/{{ post.author.info.username }}">
+        <div class="profile-picture user-id-{{ post.author.id }}">
+            <img src="{{ profile_picture(post.author.id) }}" class="pfp" alt="{{ post.author.info.username }}">
         </div>
     </a>
     <div class="post-body">
         <div class="post-author">
-            {{ user_link(journal.author) }}
-            <span class="post-timestamp use-tooltip" title="{{ journal.published | format_date('long', 'medium') }}">{{ journal.published | relative_time }}</span>
+            {{ user_link(post.author) }}
+            <span class="post-timestamp use-tooltip" title="{{ post.published | format_date('long', 'medium') }}">{{ post.published | relative_time }}</span>
         </div>
         <div class="post-contents">
-            {% if journal.contents | trim is not empty %}
-                {{ journal.contents | markdown_user_written }}
+            {% if post.contents | trim is not empty %}
+                {{ post.contents | markdown_user_written }}
             {% endif %}
         </div>
         <div class="post-actions">
@@ -23,19 +22,3 @@
         </div>
     </div>
 </div>
-{% else %}
-<div class="content-entry journal">
-    <div class="content-info">
-        <div class="content-title">
-            <a href="/user/{{ journal.author.info.username }}/post/{{ journal.id }}">
-                {{ journal.title }}
-            </a>
-        </div>
-        <div class="content-author">{{ user_link(journal.author) }}</div>
-        <div class="content-detail">{{ journal.published | relative_time }}</div>
-        <div class="content-description clamp">
-            {{ journal.contents }}
-        </div>
-    </div>
-</div>
-{% endif %}

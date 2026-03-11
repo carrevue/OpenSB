@@ -41,7 +41,7 @@ ADD `type` tinyint NOT NULL DEFAULT '0' AFTER `user`;");
 // add wavelet posts
 $database->query("CREATE TABLE `posts` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `posts` text NOT NULL,
+  `contents` text NOT NULL,
   `author` int NOT NULL,
   `timestamp` int NOT NULL,
   `reply_to` int NULL

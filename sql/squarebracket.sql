@@ -66,7 +66,7 @@ CREATE TABLE `journal_comments` (
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `posts` text NOT NULL,
+  `contents` text NOT NULL,
   `author` int(11) NOT NULL,
   `timestamp` int(11) NOT NULL,
   `reply_to` int(11) DEFAULT NULL,

@@ -25,6 +25,7 @@ namespace OpenSB\Pages;
 
 global $twig, $database, $sb, $auth;
 
+use OpenSB\PostQuery;
 use OpenSB\UploadFlags;
 use OpenSB\UploadQuery;
 use OpenSB\UserQuery;
@@ -39,6 +40,10 @@ if ($options["skin"] == "finalium") {
 }
 
 $enable_wavelet = $options["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled();
+
+if ($enable_wavelet) {
+    $post_query = new PostQuery($sb);
+}
 
 $upload_query = new UploadQuery($sb);
 if ($options["skin"] == "trinium") {
@@ -98,7 +103,8 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
 
 if ($type == "wavelet" && $enable_wavelet) {
-    $posts = $database->fetchArray($database->query("SELECT j.* FROM journals j ORDER BY j.timestamp DESC LIMIT 12"));
+    //$posts = $database->fetchArray($database->query("SELECT j.* FROM journals j ORDER BY j.timestamp DESC LIMIT 12"));
+    $posts = $post_query->query("p.timestamp", 12);
 } else {
     $posts = [];
 }
@@ -115,7 +121,8 @@ $data = [
     "uploads_featured" => Utilities::makeUploadArray($database, $uploads_featured) ?? [],
     "uploads_following" => Utilities::makeUploadArray($database, $uploads_following) ?? [],
     "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
-    "posts" => Utilities::makeJournalArray($database, $posts) ?? [],
+    //"posts" => Utilities::makeJournalArray($database, $posts) ?? [],
+    "posts" => $posts,
     "users_recent" => $users_recent ?? [],
 ];
 

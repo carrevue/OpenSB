@@ -24,7 +24,7 @@
             {{ localize('please_login_to_comment') }}
         </div>
         {% endif %}
-        {% for journal in data.posts %}
+        {% for post in data.posts %}
             {{ include('/components/_post.twig') }}
         {% endfor %}
     </div>
