@@ -36,18 +36,6 @@
                 <div class="jumbotron-right-date">
                     {{ date() | format_date('long', 'none') }}
                 </div>
-                {% if enable_incomplete_features %}
-                <div class="jumbotron-right-buttons">
-                    <div class="tabs homepage">
-                        <div class="tablink homepage {% if type=='list' %}active{% endif %}" id="index-list-button">
-                            {{ icon('homepage-list', 24) }}
-                        </div>
-                        <div class="tablink homepage {% if type =='wavelet' %}active{% endif %}" id="index-wavelet-button">
-                            {{ icon('homepage-wavelet', 24) }}
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -57,6 +45,16 @@
 {% block content %}
     <div class="grid cluster">
         <div class="col-8">
+            {% if enable_incomplete_features %}
+                <div class="tabs">
+                    <div class="tablink has-icon {% if type=='list' %}active{% endif %}" id="index-list-button">
+                        {{ icon('homepage-list', 24) }} {{ localize('uploads') }}
+                    </div>
+                    <div class="tablink has-icon {% if type =='wavelet' %}active{% endif %}" id="index-wavelet-button">
+                        {{ icon('homepage-wavelet', 24) }} {{ localize('posts') }}
+                    </div>
+                </div>
+            {% endif %}
             {% if enable_incomplete_features and type == 'wavelet' %}
                 {{ include('/components/_index_wavelet.twig') }}
             {% else %}

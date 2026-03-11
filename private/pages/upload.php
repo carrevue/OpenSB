@@ -257,7 +257,7 @@ if (
                 $uploadFilePath = "dynamic/videos/$new";
                 break;
 
-            case 'image':
+            /*case 'image':
                 $uploadTypeEnum = UploadTypeEnum::Image;
 
                 $sb->getStorageClass()->processImageUpload($temp, $new);
@@ -267,7 +267,7 @@ if (
 
             case 'audio':
                 Utilities::notifyBanner("notify_upload_audio_unimplemented", "/upload");
-                return;
+                return;*/
 
             default:
                 Utilities::notifyBanner("notify_invalid_format", "/upload");

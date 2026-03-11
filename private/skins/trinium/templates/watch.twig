@@ -130,6 +130,9 @@
                         </div>
                         <hr>
                         <div class="watch-box-description">
+                            {% if upload.type != 0 %}
+                                <div class="text-danger">non-video uploads are deprecated.</div>
+                            {% endif %}
                             <div class="flex">
                                 <div class="watch-box-description-info">
                                     {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
