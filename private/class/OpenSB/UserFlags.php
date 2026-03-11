@@ -46,6 +46,11 @@ enum UserFlags: int
      * 00001000: Enable access to mature content
      */
     case FLAG_MATURE_CONTENT_ACCESS = 8;
+
+    /**
+     * 00010000: Hide from recommendations
+     */
+    case FLAG_SHADOW_BAN = 16;
     
     /**
      * 01000000: Account was created on FulpTube.rocks

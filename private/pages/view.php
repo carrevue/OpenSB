@@ -269,16 +269,23 @@ if (!empty($candidates)) {
             }
         }
 
-        // penalize uploads from authors with a high number of uploads, so we can actually show other uploads
         if ($row["author"] !== $data["author"]) {
             $authorCount = $authorUploadCounts[$row["author"]] ?? 0;
+
+            // penalize uploads from authors with a high number of uploads, so we can actually show other uploads
             if ($authorCount > 50) {
-                $penalty += min(0.15, ($authorCount - 50) * 0.005);
+                $penalty += min(0.05, ($authorCount - 50) * 0.005);
             }
 
-            // penalize unverified authors
-            if ($row["author_flags"] & UserFlags::FLAG_UNVERIFIED->value) {
+            // penalize uploads from authors with just One upload, this is usually those who've uploaded a
+            // "welcome to my channel" video and nothing else.
+            if ($authorCount = 1) {
                 $penalty += 0.5;
+            }
+
+            // if the author is shadow banned, just penalize that shit completely.
+            if ($row["author_flags"] & UserFlags::FLAG_SHADOW_BAN->value) {
+                $penalty = 100;
             }
         }
 
@@ -287,7 +294,7 @@ if (!empty($candidates)) {
                 ($jaccard * 0.75) +
                 (recommendation_string_similarity($data["title"], $row["title"]) * 0.075) +
                 (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05) +
-                (mt_rand(0, 100) / 250.0)
+                (mt_rand(0, 100) / 500.0)
             ) * min(2.0, max(1.0, $row["views"] / 20))
             - $penalty;
     }
