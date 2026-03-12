@@ -62,23 +62,6 @@
             {% endif %}
         </div>
         <div class="col-4">
-            {% if data.news_recent %}
-            <div class="section">
-                {# work around awkwardly defined array #}
-                {% set news = data.news_recent|first %}
-                <div class="content-box">
-                    <div class="content-entry">
-                        <div class="content-info">
-                            <div class="content-title">{{ news.title }}</div>
-                            <div class="content-author">{{ user_link(news.author) }}</div>
-                            <div class="content-detail">{{ news.published | format_date('long', 'none') }}</div>
-                            <div class="content-text">{{ news.contents | markdown_user_written(true) }}</div>
-                            <a href="/posts/news">{{ localize('site_news_previous') }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
             {% if data.uploads_featured %}
                 <div class="section">
                     <div class="section-header flex">
@@ -96,6 +79,23 @@
                         {% endfor %}
                     </div>
                 </div>
+            {% endif %}
+            {% if data.news_recent %}
+            <div class="section">
+                {# work around awkwardly defined array #}
+                {% set news = data.news_recent|first %}
+                <div class="content-box">
+                    <div class="content-entry">
+                        <div class="content-info">
+                            <div class="content-title">{{ news.title }}</div>
+                            <div class="content-author">{{ user_link(news.author) }}</div>
+                            <div class="content-detail">{{ news.published | format_date('long', 'none') }}</div>
+                            <div class="content-text">{{ news.contents | markdown_user_written(true) }}</div>
+                            <a href="/posts/news">{{ localize('site_news_previous') }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endif %}
             {% if data.users_recent %}
             <div class="section">

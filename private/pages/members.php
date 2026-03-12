@@ -58,7 +58,7 @@ $limit = $database->paginate($page, 20);
 
 $queryData = $user_query->query($tabs[$type]["order"] ?? "u.last_seen DESC", $limit, "u_num != 0");
 $countData = $user_query->count("(SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT id from upload_takedowns)) != 0");
-$usersData = Utilities::makeUserArray($database, $queryData);
+$usersData = $user_query->toArray($queryData);
 
 $data = [
     'users' => $usersData,

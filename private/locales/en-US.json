@@ -40,6 +40,7 @@
     "views": "{count, plural, one {# view} other {# views}}",
     "star_ratings": "{count, plural, one {# rating} other {# ratings}}",
     "upload_count": "{count, plural, one {# upload} other {# uploads}}",
+    "post_count": "{count, plural, one {# post} other {# posts}}",
 
     "followers_hitchhiker": "{count, plural, one {# subscriber} other {# subscribers}}",
 

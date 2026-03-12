@@ -19,10 +19,6 @@
                 </div>
             </div>
         </div>
-        {% else %}
-        <div id="new-comment-button">
-            {{ localize('please_login_to_comment') }}
-        </div>
         {% endif %}
         {% for post in data.posts %}
             {{ include('/components/_post.twig') }}

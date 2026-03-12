@@ -64,7 +64,7 @@ class UserQuery
         $query = "SELECT * FROM (
             SELECT u.id, u.about, u.title, u.flags, u.joined, u.last_seen,
                 (SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT id from upload_takedowns)) AS u_num,
-                (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
+                (SELECT COUNT(*) FROM posts WHERE author = u.id) AS p_num,
                 (SELECT COUNT(user) FROM user_follows WHERE id = u.id AND user NOT IN (SELECT user from user_bans)) AS f_num
             FROM users u
         ) AS u";
@@ -116,5 +116,24 @@ class UserQuery
         $allParams = array_merge($baseParams, $params);
 
         return $this->database->result($query, $allParams);
+    }
+
+    public function toArray($data) {
+        if (!$data) {
+            return [];
+        }
+        $out = [];
+        foreach ($data as $user) {
+            $userData = new UserData($this->database, $user["id"]);
+            $out[] = [
+                "id" => $user["id"],
+                "info" => $userData->getUserArray(),
+                "uploads" => $user["u_num"] ?? 0,
+                "posts" => $user["p_num"] ?? 0,
+                "followers" => $user["f_num"] ?? 0,
+                "about" => $user["about"] ?? null,
+            ];
+        }
+        return $out;
     }
 }

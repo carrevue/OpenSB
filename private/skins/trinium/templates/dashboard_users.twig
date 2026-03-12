@@ -42,7 +42,7 @@
                         {{ user_link(user) }}
                     </div>
                     <div class="content-detail">
-                        {{ user.uploads }} uploads · {{ user.journals }} journals
+                        {{ localize('upload_count', user.uploads) }} · {{ localize('post_count', user.posts) }}
                     </div>
                     <div class="content-detail">
                         Role:

@@ -33,7 +33,7 @@ $user_query = new UserQuery($sb);
 
 $queryData = $user_query->query("u.last_seen DESC", 64);
 $countData = $user_query->count();
-$usersData = Utilities::makeUserArray($database, $queryData);
+$usersData = $user_query->toArray($queryData);
 
 echo $twig->render('debug/follow_buttons.twig', [
     'users' => $usersData,
