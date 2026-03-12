@@ -18,6 +18,7 @@ dynamic/art_thumbnails/*
 dynamic/custom_thumbnails/*
 dynamic/music/*
 dynamic/emojis/*
+dynamic/attachments/*
 
 ## Upload processor logs
 private/upload_processor_logs/*.log

@@ -69,6 +69,8 @@ CREATE TABLE `posts` (
   `contents` text NOT NULL,
   `author` int(11) NOT NULL,
   `timestamp` int(11) NOT NULL,
+  `type` tinyint(1) NOT NULL DEFAULT '0',
+  `attachment` varchar(64) NULL,
   `reply_to` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

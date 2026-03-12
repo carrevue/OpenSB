@@ -44,5 +44,7 @@ $database->query("CREATE TABLE `posts` (
   `contents` text NOT NULL,
   `author` int NOT NULL,
   `timestamp` int NOT NULL,
+  `type` tinyint(1) NOT NULL DEFAULT '0',
+  `attachment` varchar(64) NULL,
   `reply_to` int NULL
 );");

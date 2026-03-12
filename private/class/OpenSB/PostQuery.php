@@ -23,6 +23,7 @@ namespace OpenSB;
 
 use OpenSB\SquareBracket;
 use OpenSB\Database;
+use OpenSB\PostTypeEnum;
 
 /**
  * class PostQuery
@@ -120,5 +121,28 @@ class PostQuery
         }
 
         return $this->database->result($query, $params);
+    }
+
+    public function toArray($data) {
+        if (!$data) {
+            return [];
+        }
+        $out = [];
+        foreach ($data as $post) {
+            $userData = new UserData($this->database, $post["author"]);
+            $out[] =
+                [
+                    "type" => PostTypeEnum::from($post["type"])->toString(),
+                    "id" => $post["id"],
+                    "contents" => $post["contents"],
+                    "published" => $post["timestamp"],
+                    "attachment" => $post["attachment"],
+                    "author" => [
+                        "id" => $post["author"],
+                        "info" => $userData->getUserArray(),
+                    ],
+                ];
+        }
+        return $out;
     }
 }

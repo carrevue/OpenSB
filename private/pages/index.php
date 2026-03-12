@@ -110,7 +110,7 @@ $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals 
 
 if ($type == "wavelet" && $enable_wavelet) {
     //$posts = $database->fetchArray($database->query("SELECT j.* FROM journals j ORDER BY j.timestamp DESC LIMIT 12"));
-    $posts = $post_query->query("p.timestamp", 12);
+    $posts = $post_query->query("p.timestamp DESC", 12);
 } else {
     $posts = [];
 }
@@ -128,7 +128,7 @@ $data = [
     "uploads_following" => Utilities::makeUploadArray($database, $uploads_following) ?? [],
     "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
     //"posts" => Utilities::makeJournalArray($database, $posts) ?? [],
-    "posts" => $posts,
+    "posts" => $post_query->toArray($posts),
     "users_recent" => $users_recent ?? [],
 ];
 
