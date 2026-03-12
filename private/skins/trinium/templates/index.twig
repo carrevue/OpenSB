@@ -48,10 +48,10 @@
             {% if enable_incomplete_features %}
                 <div class="tabs">
                     <div class="tablink has-icon {% if type=='list' %}active{% endif %}" id="index-list-button">
-                        {{ icon('homepage-list', 24) }} {{ localize('uploads') }}
+                        {{ icon('homepage-following', 24) }} {{ localize('uploads') }}
                     </div>
                     <div class="tablink has-icon {% if type =='wavelet' %}active{% endif %}" id="index-wavelet-button">
-                        {{ icon('homepage-wavelet', 24) }} {{ localize('posts') }}
+                        {{ icon('homepage-public', 24) }} {{ localize('posts') }}
                     </div>
                 </div>
             {% endif %}

@@ -291,7 +291,7 @@
     "mark_as_sensitive": "Marquer comme mature",
     "mark_as_sensitive_description": "Rendez votre publication accessible uniquement aux utilisateurs majeurs.",
     "upload_limit": "Limite de taille du fichier : %s",
-    "supported_files": "Les formats vidéo et image commun sont compatibles.",
+    "supported_files": "Les formats vidéo commun sont compatibles.",
     "upload_action": "Publier",
     "new_journal_intro": "Écrivez un nouveau journal qui sera affiché sur votre profil. Le formatage du texte Markdown est compatible.",
     "content": "Contenu",

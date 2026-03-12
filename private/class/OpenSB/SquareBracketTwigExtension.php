@@ -414,14 +414,14 @@ class SquareBracketTwigExtension extends AbstractExtension
         if (mb_strtolower($username) === mb_strtolower($displayName)) {
             // if username matches display name
             $displayText = sprintf(
-                '<div class="userlink"><span>@%s</span>%s</div>',
+                '<div class="userlink"><span class="userlink-name">@%s</span>%s</div>',
                 $username,
                 $icon
             );
         } else {
             // if theyre different
             $displayText = sprintf(
-                '<div class="userlink"><span>%s</span><span class="userlink-handle">@%s</span>%s</div>',
+                '<div class="userlink"><span class="userlink-name">%s</span><span class="userlink-handle">@%s</span>%s</div>',
                 $displayName,
                 $username,
                 $icon

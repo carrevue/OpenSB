@@ -339,7 +339,7 @@
     "mark_as_sensitive": "Mark as mature",
     "mark_as_sensitive_description": "Marks the upload as being only accessible to logged-in users over 18.",
     "upload_limit": "Upload limit: %s",
-    "supported_files": "Common video and image formats are supported.",
+    "supported_files": "Common video formats are supported.",
     "upload_action": "Upload",
     "new_journal_intro": "Write a new journal entry that will be publicly shown on your profile. Markdown formatting is supported.",
     "content": "Content",
@@ -361,6 +361,7 @@
 
     "save_action": "Save",
     "apply_action": "Apply",
+    "save_changes": "Save changes",
 
     "notifications": "Notifications",
     "clear_all": "Clear all",
