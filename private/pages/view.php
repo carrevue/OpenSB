@@ -26,15 +26,15 @@ namespace Pages;
 global $twig, $database, $auth, $sb;
 
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
-use OpenSB\UploadData;
-use OpenSB\UploadQuery;
-use OpenSB\UserRoleEnum;
+use Data\Comment\CommentData;
+use Data\Comment\CommentLocation;
+use Data\Upload\UploadData;
+use Data\Upload\UploadQuery;
+use Data\User\UserRoleEnum;
 use Core\Utilities;
-use OpenSB\UploadVisibilityEnum;
-use OpenSB\UploadFlags;
-use OpenSB\UserFlags;
+use Data\Upload\UploadVisibilityEnum;
+use Data\Upload\UploadFlags;
+use Data\User\UserFlags;
 
 $options = $sb->getLocalOptions();
 

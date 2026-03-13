@@ -24,7 +24,7 @@ namespace Pages;
 
 global $twig, $database, $sb;
 
-use OpenSB\UserQuery;
+use Data\User\UserQuery;
 use Core\Utilities;
 
 $user_query = new UserQuery($sb);

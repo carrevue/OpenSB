@@ -25,8 +25,8 @@ namespace Pages;
 global $twig, $sb, $database;
 
 use Core\Utilities;
-use OpenSB\UploadQuery;
-use OpenSB\UploadFlags;
+use Data\Upload\UploadQuery;
+use Data\Upload\UploadFlags;
 
 $upload_query = new UploadQuery($sb);
 

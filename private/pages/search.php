@@ -25,7 +25,7 @@ namespace Pages;
 global $twig, $sb, $database;
 
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
-use OpenSB\UploadQuery;
+use Data\Upload\UploadQuery;
 use Core\Utilities;
 
 $CrawlerDetect = new CrawlerDetect;

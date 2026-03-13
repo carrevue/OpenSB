@@ -35,7 +35,7 @@ if (!$auth->isUserLoggedIn()) {
     die("NOT LOGGED IN");
 }
 
-use OpenSB\UserData;
+use Data\User\UserData;
 
 // think of this as data from the database.
 $database_data = [

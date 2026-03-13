@@ -26,7 +26,7 @@ namespace OpenSB;
 
 global $sb, $database;
 
-use OpenSB\VersionNumber;
+use Core\VersionNumber;
 
 use DivisionByZeroError;
 use Alchemy\BinaryDriver\Exception\ExecutionFailureException;

@@ -23,7 +23,7 @@ namespace Pages\SkinAPI;
 
 global $auth, $sb;
 
-use OpenSB\NotificationEnum;
+use Data\Notification\NotificationEnum;
 use Core\Utilities;
 
 header('Content-Type: application/json');

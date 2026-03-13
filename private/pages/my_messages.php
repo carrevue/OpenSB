@@ -23,7 +23,7 @@ namespace Pages;
 
 global $twig, $database, $auth, $twig_error, $sb;
 
-use OpenSB\UserData;
+use Data\User\UserData;
 use Core\Utilities;
 
 if (!$auth->isUserLoggedIn()) {

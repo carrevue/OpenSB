@@ -23,7 +23,7 @@ namespace Pages\DataAPI;
 
 global $database;
 
-use OpenSB\VersionNumber;
+use Core\VersionNumber;
 
 header('Content-Type: application/json');
 

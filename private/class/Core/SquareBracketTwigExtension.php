@@ -30,11 +30,10 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-use OpenSB\UserRoleEnum;
-use OpenSB\UploadTypeEnum;
-use OpenSB\UserData;
-use OpenSB\UserFlags;
-use OpenSB\ParsedownExtension;
+use Data\User\UserRoleEnum;
+use Data\Upload\UploadTypeEnum;
+use Data\User\UserData;
+use Data\User\UserFlags;
 
 /**
  * class SquareBracketTwigExtension

@@ -24,8 +24,8 @@ namespace Pages\SkinAPI;
 global $sb, $database, $twig;
 
 use Exception;
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
+use Data\Comment\CommentData;
+use Data\Comment\CommentLocation;
 
 header('Content-Type: application/json');
 

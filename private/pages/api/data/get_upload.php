@@ -23,8 +23,8 @@ namespace Pages\DataAPI;
 
 global $database;
 
-use OpenSB\UploadData;
-use OpenSB\UserData;
+use Data\Upload\UploadData;
+use Data\User\UserData;
 
 header('Content-Type: application/json');
 

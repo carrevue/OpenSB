@@ -24,7 +24,7 @@ namespace Pages;
 global $auth, $twig, $database, $sb, $path;
 
 use Core\Utilities;
-use OpenSB\UserRoleEnum;
+use Data\User\UserRoleEnum;
 use Composer\ComposerInstalled;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {

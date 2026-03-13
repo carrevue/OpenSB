@@ -26,10 +26,10 @@ namespace Pages;
 global $auth, $database, $twig, $sb;
 
 use Core\Utilities;
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
-use OpenSB\UploadData;
-use OpenSB\UploadQuery;
+use Data\Comment\CommentData;
+use Data\Comment\CommentLocation;
+use Data\Upload\UploadData;
+use Data\Upload\UploadQuery;
 
 $upload_query = new UploadQuery($sb);
 

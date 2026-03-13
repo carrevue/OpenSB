@@ -25,9 +25,9 @@ use DateTime;
 use Exception;
 use Random\Randomizer;
 
-use OpenSB\UploadFlags;
-use OpenSB\UploadRatingData;
-use OpenSB\UserData;
+use Data\Upload\UploadFlags;
+use Data\Upload\UploadRatingData;
+use Data\User\UserData;
 
 /**
  * class Utilities

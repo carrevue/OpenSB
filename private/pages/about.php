@@ -23,9 +23,9 @@ namespace Pages;
 
 global $twig, $database;
 
-use OpenSB\UserData;
-use OpenSB\UserRoleEnum;
-use OpenSB\VersionNumber;
+use Data\User\UserData;
+use Data\User\UserRoleEnum;
+use Core\VersionNumber;
 
 // STAFF
 

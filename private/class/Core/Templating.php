@@ -23,7 +23,7 @@
 
 namespace Core;
 
-use OpenSB\UserFlags;
+use Data\User\UserFlags;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;

@@ -24,8 +24,8 @@ namespace Pages\LegacySkinAPI;
 
 global $auth, $database, $twig, $sb;
 
-use OpenSB\UploadFlags;
-use OpenSB\UserData;
+use Data\Upload\UploadFlags;
+use Data\User\UserData;
 
 // simple shit fix for shitty finalium bug that dates from 2021 -chaziz 4/12/2023
 if ($_POST["comment"] == "") {

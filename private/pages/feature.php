@@ -25,7 +25,7 @@ global $database, $auth;
 
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025
 
-use OpenSB\UploadData;
+use Data\Upload\UploadData;
 use Core\Utilities;
 
 $id = ($_GET['v'] ?? null);

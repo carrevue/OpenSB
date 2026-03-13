@@ -25,10 +25,10 @@ namespace Pages;
 
 global $twig, $database, $sb, $auth;
 
-use OpenSB\PostQuery;
-use OpenSB\UploadFlags;
-use OpenSB\UploadQuery;
-use OpenSB\UserQuery;
+use Data\Post\PostQuery;
+use Data\Upload\UploadFlags;
+use Data\Upload\UploadQuery;
+use Data\User\UserQuery;
 use Core\Utilities;
 
 $options = $sb->getLocalOptions();

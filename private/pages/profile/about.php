@@ -24,7 +24,7 @@ namespace Pages;
 global $auth, $database, $twig, $sb;
 
 use Core\Utilities;
-use OpenSB\UploadQuery;
+use Data\Upload\UploadQuery;
 $options = $sb->getLocalOptions();
 
 // if we're not on finalium, redirect to the normal profile page.

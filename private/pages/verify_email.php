@@ -23,7 +23,7 @@ namespace Pages;
 
 global $twig, $database, $sb, $auth;
 
-use OpenSB\UserFlags;
+use Data\User\UserFlags;
 use Core\Utilities;
 
 if (isset($_GET["token"])) {

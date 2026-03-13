@@ -21,7 +21,7 @@
 
 namespace Core;
 
-use OpenSB\UploadTypeEnum;
+use Data\Upload\UploadTypeEnum;
 
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;

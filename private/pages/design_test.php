@@ -23,7 +23,7 @@ namespace Pages\Debug;
 
 global $twig, $sb, $database;
 
-use OpenSB\UploadQuery;
+use Data\Upload\UploadQuery;
 use Core\Utilities;
 
 $upload_query = new UploadQuery($sb);

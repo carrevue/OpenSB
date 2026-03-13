@@ -26,13 +26,13 @@ namespace Pages;
 global $sb, $twig, $auth, $database;
 
 use Random\RandomException;
-use OpenSB\UserFlags;
+use Data\User\UserFlags;
 use Core\Utilities;
-use OpenSB\UserCustomizationFont;
+use Data\UserProfile\CustomizationFontEnum;
 
 $options = $sb->getLocalOptions();
 
-$trinium_fonts_array = UserCustomizationFont::getAll();
+$trinium_fonts_array = CustomizationFontEnum::getAll();
 
 if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");

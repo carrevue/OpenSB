@@ -23,8 +23,8 @@ namespace Pages\DataAPI;
 
 global $sb, $database;
 
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
+use Data\Comment\CommentData;
+use Data\Comment\CommentLocation;
 
 header('Content-Type: application/json');
 

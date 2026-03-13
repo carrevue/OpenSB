@@ -24,7 +24,7 @@ namespace Pages;
 global $auth, $twig, $sb;
 
 use Core\Utilities;
-use OpenSB\UserRoleEnum;
+use Data\User\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");

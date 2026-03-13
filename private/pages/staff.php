@@ -23,8 +23,8 @@ namespace Pages;
 
 global $twig, $database, $sb;
 
-use OpenSB\UserData;
-use OpenSB\UserRoleEnum;
+use Data\User\UserData;
+use Data\User\UserRoleEnum;
 
 $staffQueryData = $database->fetchArray(
     $database->query(

@@ -24,10 +24,10 @@ namespace Pages;
 
 global $twig, $database, $auth, $sb;
 
-use OpenSB\UploadData;
-use OpenSB\UploadFlags;
+use Data\Upload\UploadData;
+use Data\Upload\UploadFlags;
 use Core\Utilities;
-use OpenSB\UploadVisibilityEnum;
+use Data\Upload\UploadVisibilityEnum;
 
 if (isset($_POST['upload'])) {
     $id = ($_POST['vid_id'] ?? null);

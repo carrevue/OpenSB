@@ -21,8 +21,8 @@
 
 namespace Core;
 
-use OpenSB\UserRoleEnum;
-use OpenSB\UserFlags;
+use Data\User\UserRoleEnum;
+use Data\User\UserFlags;
 
 /**
  * Authentication stuff.

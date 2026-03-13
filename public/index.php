@@ -28,7 +28,7 @@ define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 use Core\Utilities;
-use OpenSB\Router;
+use Core\Router;
 
 require_once SB_PRIVATE_PATH . '/common.php';
 

@@ -23,7 +23,7 @@ namespace Pages;
 
 global $sb, $database, $twig;
 
-use OpenSB\UserQuery;
+use Data\User\UserQuery;
 use Core\Utilities;
 use RuntimeException;
 

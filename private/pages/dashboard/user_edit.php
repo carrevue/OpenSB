@@ -23,10 +23,10 @@ namespace Pages;
 
 global $auth, $twig, $database, $sb, $path;
 
-use OpenSB\UserData; // only used for staff notes authors, do NOT use this for actual user data
-use OpenSB\UserFlags;
+use Data\User\UserData; // only used for staff notes authors, do NOT use this for actual user data
+use Data\User\UserFlags;
 use Core\Utilities;
-use OpenSB\UserRoleEnum;
+use Data\User\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");

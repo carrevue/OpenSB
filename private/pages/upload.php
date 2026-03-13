@@ -29,10 +29,10 @@ global $sb, $database, $twig, $auth;
 use \Exception;
 
 use Core\Utilities;
-use OpenSB\UserRoleEnum;
-use OpenSB\UploadFlags;
-use OpenSB\UploadTypeEnum;
-use OpenSB\UploadVisibilityEnum;
+use Data\User\UserRoleEnum;
+use Data\Upload\UploadFlags;
+use Data\Upload\UploadTypeEnum;
+use Data\Upload\UploadVisibilityEnum;
 
 // supported extensions
 $supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];

@@ -24,8 +24,8 @@ namespace Pages;
 global $auth, $database, $twig, $sb;
 
 use Core\Utilities;
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
+use Data\Comment\CommentData;
+use Data\Comment\CommentLocation;
 
 include_once('_include.php');
 

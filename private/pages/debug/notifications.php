@@ -21,7 +21,7 @@
 
 namespace Pages\Debug;
 
-use OpenSB\NotificationEnum;
+use Data\Notification\NotificationEnum;
 use Core\Utilities;
 
 global $sb, $database, $auth;

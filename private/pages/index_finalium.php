@@ -23,10 +23,10 @@ namespace Pages;
 
 global $twig, $database, $sb;
 
-use OpenSB\UploadFlags;
-use OpenSB\UploadQuery;
+use Data\Upload\UploadFlags;
+use Data\Upload\UploadQuery;
 use Core\Utilities;
-use OpenSB\UserFlags;
+use Data\User\UserFlags;
 
 $is_hitchhiker = $sb->isHitchhiker();
 

@@ -30,7 +30,7 @@ use DateMalformedStringException;
 use DateTime;
 use Core\Utilities;
 use Random\RandomException;
-use OpenSB\UserFlags;
+use Data\User\UserFlags;
 
 if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");

@@ -23,9 +23,9 @@ namespace Pages\SkinAPI;
 
 global $auth, $sb, $twig;
 
-use OpenSB\NotificationEnum;
-use OpenSB\UploadFlags;
-use OpenSB\UserData;
+use Data\Notification\NotificationEnum;
+use Data\Upload\UploadFlags;
+use Data\User\UserData;
 use Core\Utilities;
 
 header('Content-Type: application/json');

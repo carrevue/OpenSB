@@ -23,7 +23,7 @@ namespace Pages\Debug;
 
 global $twig, $sb;
 
-use OpenSB\FakeUser;
+use Data\User\FakeUser;
 
 if (isset($_POST['submit'])) {
     $auth = $sb->getAuthenticationClass();

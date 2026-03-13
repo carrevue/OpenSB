@@ -23,8 +23,8 @@ namespace Pages;
 
 global $twig, $database, $auth;
 
-use OpenSB\NotificationEnum;
-use OpenSB\UserData;
+use Data\Notification\NotificationEnum;
+use Data\User\UserData;
 use Core\Utilities;
 
 // TODO: localize all of this shit

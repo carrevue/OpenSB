@@ -21,8 +21,8 @@
 
 namespace Pages;
 
-use OpenSB\CollectionData;
-use OpenSB\UploadQuery;
+use Data\Collection\CollectionData;
+use Data\Upload\UploadQuery;
 use Core\Utilities;
 
 global $sb, $database, $twig;

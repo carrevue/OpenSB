@@ -23,7 +23,7 @@ namespace Pages;
 
 global $auth, $sb, $database;
 
-use OpenSB\UploadData;
+use Data\Upload\UploadData;
 use Core\Utilities;
 
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025

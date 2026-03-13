@@ -21,7 +21,7 @@
 
 namespace Pages\Debug;
 
-use OpenSB\UserData;
+use Data\User\UserData;
 use Core\Utilities;
 
 global $database;

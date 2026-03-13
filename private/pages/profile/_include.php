@@ -24,11 +24,11 @@ namespace Pages;
 global $auth, $database, $twig, $sb;
 
 use Core\Utilities;
-use OpenSB\UserRoleEnum;
-use OpenSB\UserData;
-use OpenSB\UserFlags;
-use OpenSB\UserCustomizationData;
-use OpenSB\FakeUser;
+use Data\User\UserRoleEnum;
+use Data\User\UserData;
+use Data\User\UserFlags;
+use Data\UserProfile\CustomizationData;
+use Data\User\FakeUser;
 
 $data = $database->fetch("SELECT * FROM users u WHERE u.name = ?", [$username]);
 
@@ -67,7 +67,7 @@ if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", 
 $flags = UserFlags::toArray($data["flags"]);
 
 if ($flags["profile_customization_enabled"]) {
-    $profile_customization_data = new UserCustomizationData($database, $data["id"]);
+    $profile_customization_data = new CustomizationData($database, $data["id"]);
 } else {
     $profile_customization_data = null;
 }

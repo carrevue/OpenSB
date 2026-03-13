@@ -25,8 +25,8 @@ namespace Pages;
 
 global $twig, $database, $auth, $sb;
 
-use OpenSB\UserRoleEnum;
-use OpenSB\UserFlags;
+use Data\User\UserRoleEnum;
+use Data\User\UserFlags;
 use Core\Utilities;
 
 $warning = $sb->getWarningString();

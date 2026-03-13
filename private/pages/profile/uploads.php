@@ -24,8 +24,8 @@ namespace Pages;
 global $auth, $database, $twig, $sb;
 
 use Core\Utilities;
-use OpenSB\UploadQuery;
-use OpenSB\UploadFlags;
+use Data\Upload\UploadQuery;
+use Data\Upload\UploadFlags;
 
 include_once('_include.php');
 

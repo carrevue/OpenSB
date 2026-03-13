@@ -24,11 +24,11 @@ namespace Pages;
 global $sb, $twig, $database, $auth;
 
 use Core\Utilities;
-use OpenSB\CommentData;
-use OpenSB\CommentLocation;
-use OpenSB\JournalData;
-use OpenSB\UserCustomizationData;
-use OpenSB\UserRoleEnum;
+use Data\Comment\CommentData;
+use Data\Comment\CommentLocation;
+use Data\Journal\JournalData;
+use Data\UserProfile\CustomizationData;
+use Data\User\UserRoleEnum;
 
 include_once('_include.php');
 
@@ -69,7 +69,7 @@ if ($sb->getLocalOptions()["skin"] != "finalium") {
 }
 
 if ($author_info["flags"]["profile_customization_enabled"]) {
-    $profile_color_data = new UserCustomizationData($database, $data["author"]);
+    $profile_color_data = new CustomizationData($database, $data["author"]);
 } else {
     $profile_color_data = null;
 }
