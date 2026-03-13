@@ -20,10 +20,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
-
-use OpenSB\Database;
-use OpenSB\Profiler;
+namespace Core;
 
 /**
  * class SquareBracket

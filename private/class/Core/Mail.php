@@ -19,11 +19,9 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace Core;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
 /**
  * class Mail

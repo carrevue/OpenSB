@@ -20,11 +20,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $sb, $database;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 use OpenSB\UploadQuery;
 use OpenSB\UploadFlags;
 

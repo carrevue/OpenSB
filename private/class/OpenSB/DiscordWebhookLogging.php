@@ -22,8 +22,8 @@
 
 namespace OpenSB;
 
-use OpenSB\Database;
-use OpenSB\Utilities;
+use Core\Database;
+use Core\Utilities;
 
 use \DiscordWebhooks\Client;
 use \DiscordWebhooks\Embed;

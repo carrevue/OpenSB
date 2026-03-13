@@ -21,8 +21,8 @@
 
 namespace OpenSB;
 
-use OpenSB\SquareBracket;
-use OpenSB\Database;
+use Core\SquareBracket;
+use Core\Database;
 use OpenSB\UploadVisibilityEnum;
 
 /**
@@ -38,9 +38,9 @@ class UploadQuery
     private Database $database;
 
     /**
-     * @var Authentication
+     * @var \Core\Authentication
      */
-    private Authentication $auth;
+    private \Core\Authentication $auth;
 
     /**
      * @var string
@@ -134,7 +134,7 @@ class UploadQuery
         }
 
         if (str_contains($limit, "LIMIT")) {
-            // compatibility with OpenSB\Database::paginate()
+            // compatibility with Core\Database::paginate()
             $query .= " ORDER BY $order $limit";
         } else {
             $query .= " ORDER BY $order LIMIT $limit";

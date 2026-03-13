@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $sb, $auth;
 
 use OpenSB\UserFlags;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 if (isset($_GET["token"])) {
     $token = $_GET["token"];

@@ -21,9 +21,9 @@
 
 namespace OpenSB;
 
-use OpenSB\Database;
+use Core\Database;
 use OpenSB\FakeUser;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 /**
  * class UserData

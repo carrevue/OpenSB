@@ -19,10 +19,10 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\Debug;
+namespace Pages\Debug;
 
 use OpenSB\NotificationEnum;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 global $sb, $database, $auth;
 // and nope, no twig here. this is a quick and dirty page meant to test out notifications.

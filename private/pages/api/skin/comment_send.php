@@ -19,14 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\SkinAPI;
+namespace Pages\SkinAPI;
 
 global $auth, $sb, $twig;
 
 use OpenSB\NotificationEnum;
 use OpenSB\UploadFlags;
 use OpenSB\UserData;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 header('Content-Type: application/json');
 

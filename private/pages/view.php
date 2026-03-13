@@ -21,7 +21,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $auth, $sb;
 
@@ -31,7 +31,7 @@ use OpenSB\CommentLocation;
 use OpenSB\UploadData;
 use OpenSB\UploadQuery;
 use OpenSB\UserRoleEnum;
-use OpenSB\Utilities;
+use Core\Utilities;
 use OpenSB\UploadVisibilityEnum;
 use OpenSB\UploadFlags;
 use OpenSB\UserFlags;

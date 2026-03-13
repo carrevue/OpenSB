@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\Debug;
+namespace Pages\Debug;
 
 global $sb, $database, $auth;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 
 if (!$sb->isDebug()) {
     http_response_code(403);

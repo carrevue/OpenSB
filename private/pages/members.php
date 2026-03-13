@@ -20,12 +20,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $sb;
 
 use OpenSB\UserQuery;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 $user_query = new UserQuery($sb);
 

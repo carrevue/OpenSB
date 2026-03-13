@@ -20,11 +20,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $sb, $auth, $database;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 
 $type = ($_GET['type'] ?? 'recent');
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);

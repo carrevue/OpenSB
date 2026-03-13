@@ -21,7 +21,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace Core;
 
 use Exception;
 use Parsedown;
@@ -30,11 +30,11 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-use OpenSB\Database;
-use OpenSB\Profiler;
-
 use OpenSB\UserRoleEnum;
 use OpenSB\UploadTypeEnum;
+use OpenSB\UserData;
+use OpenSB\UserFlags;
+use OpenSB\ParsedownExtension;
 
 /**
  * class SquareBracketTwigExtension
@@ -344,7 +344,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * function uploadView
      *
-     * @param mixed $upload_data
+     * @param int $upload_data
      *
      * @return void
      */

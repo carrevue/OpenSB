@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\Debug;
+namespace Pages\Debug;
 
 global $twig, $sb, $database;
 
 use OpenSB\UploadQuery;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 $upload_query = new UploadQuery($sb);
 $uploads = $upload_query->query("v.id DESC", 2);

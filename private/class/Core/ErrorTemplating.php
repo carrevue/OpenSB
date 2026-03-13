@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2026 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace Core;
 
 use Exception;
 use Twig\Environment;
@@ -31,11 +31,11 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
 /**
- * class MailTemplating
+ * class ErrorTemplating
  * 
- * Alternate Twig wrapper for the Mail class.
+ * Alternate Twig wrapper for certain errors, like 404 or geoblocking.
  */
-class MailTemplating
+class ErrorTemplating
 {
     /**
      * @var SquareBracket The core SquareBracket class.
@@ -53,11 +53,6 @@ class MailTemplating
     private Environment $twig;
 
     /**
-     * @var Localization The Localization class.
-     */
-    private Localization $localization;
-
-    /**
      * function __construct
      *
      * @param SquareBracket $sb
@@ -69,8 +64,9 @@ class MailTemplating
         chdir(SB_PRIVATE_PATH);
 
         $this->sb = $sb;
+        //$options = $this->sb->getLocalOptions();
 
-        $skinPath = 'skins/mail';
+        $skinPath = 'skins/error';
 
         $templatePath = $skinPath . '/templates';
 
@@ -78,22 +74,25 @@ class MailTemplating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            throw new Exception("The mail skin does not exist.");
+            throw new Exception("The error skin does not exist.");
         }
 
         $this->twig = new Environment($this->loader, ['debug' => $sb->isDebug(), 'cache' => false]);
 
-        $this->localization = $this->sb->getLocalizationClass();
-
-        if ($sb->isChazizInstance() && !$sb->isFulpTubeMode()) {
-            // for emails intended for squarebracket.pw users, refer to the site
-            // like this, as the emails come from fulptube.rocks.
-            $name = $this->localization->translate('site1_aka_site2', 'squareBracket', 'FulpTube');
+        if ($sb->isDebug()) {
+            $this->twig->addExtension(new DebugExtension());
         } else {
-            $name = $sb->getBrandingSettings()["name"];
+            $this->twig->addFunction(new TwigFunction('dump', function () {
+                return "This function is not available outside of debug mode.";
+            }));
         }
 
-        $this->twig->addGlobal('website_name', $name);
+        $versionNumber = new VersionNumber;
+
+        $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizInstance());
+        $this->twig->addGlobal('is_fulptube', $sb->isFulpTubeMode());
+        $this->twig->addGlobal('opensb_version', $versionNumber->getVersionArray());
+        $this->twig->addGlobal('website_branding', $sb->getBrandingSettings());
 
         $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));
     }

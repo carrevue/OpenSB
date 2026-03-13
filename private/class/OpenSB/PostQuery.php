@@ -21,9 +21,9 @@
 
 namespace OpenSB;
 
-use OpenSB\SquareBracket;
-use OpenSB\Database;
-use OpenSB\PostTypeEnum;
+use Core\SquareBracket;
+use Core\Database;
+use OpenSB\PostResult;
 
 /**
  * class PostQuery
@@ -38,9 +38,9 @@ class PostQuery
     private Database $database;
 
     /**
-     * @var Authentication
+     * @var \Core\Authentication
      */
-    private Authentication $auth;
+    private \Core\Authentication $auth;
 
     /**
      * function __construct
@@ -64,7 +64,7 @@ class PostQuery
      * @param array $params
      * @param bool $adminPanel
      *
-     * @return array
+     * @return PostResult
      */
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false)
     {
@@ -85,13 +85,13 @@ class PostQuery
         }
 
         if (str_contains($limit, "LIMIT")) {
-            // compatibility with OpenSB\Database::paginate()
+            // compatibility with Core\Database::paginate()
             $query .= " ORDER BY $order $limit";
         } else {
             $query .= " ORDER BY $order LIMIT $limit";
         }
 
-        return $this->database->fetchArray($this->database->query($query, $params));
+        return new PostResult($this->database, $this->database->fetchArray($this->database->query($query, $params)));
     }
 
     /**
@@ -121,28 +121,5 @@ class PostQuery
         }
 
         return $this->database->result($query, $params);
-    }
-
-    public function toArray($data) {
-        if (!$data) {
-            return [];
-        }
-        $out = [];
-        foreach ($data as $post) {
-            $userData = new UserData($this->database, $post["author"]);
-            $out[] =
-                [
-                    "type" => PostTypeEnum::from($post["type"])->toString(),
-                    "id" => $post["id"],
-                    "contents" => $post["contents"],
-                    "published" => $post["timestamp"],
-                    "attachment" => $post["attachment"],
-                    "author" => [
-                        "id" => $post["author"],
-                        "info" => $userData->getUserArray(),
-                    ],
-                ];
-        }
-        return $out;
     }
 }

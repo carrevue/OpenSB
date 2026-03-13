@@ -19,13 +19,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $auth;
 
 use OpenSB\NotificationEnum;
 use OpenSB\UserData;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 // TODO: localize all of this shit
 

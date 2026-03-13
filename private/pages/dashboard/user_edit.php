@@ -19,13 +19,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $auth, $twig, $database, $sb, $path;
 
 use OpenSB\UserData; // only used for staff notes authors, do NOT use this for actual user data
 use OpenSB\UserFlags;
-use OpenSB\Utilities;
+use Core\Utilities;
 use OpenSB\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {

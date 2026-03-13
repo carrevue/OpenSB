@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $auth, $twig_error, $sb;
 
 use OpenSB\UserData;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 if (!$auth->isUserLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");

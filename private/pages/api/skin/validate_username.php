@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages\SkinAPI;
+namespace Pages\SkinAPI;
 
 global $database;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 
 header('Content-Type: application/json');
 

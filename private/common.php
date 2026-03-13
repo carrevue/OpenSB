@@ -53,10 +53,10 @@ $config = include_once(SB_PRIVATE_PATH . '/config/config.php');
 
 require_once(SB_VENDOR_PATH . '/autoload.php');
 
-use OpenSB\ErrorTemplating;
-use OpenSB\SquareBracket;
-use OpenSB\Utilities;
-use OpenSB\VersionNumber;
+use Core\ErrorTemplating;
+use Core\SquareBracket;
+use Core\Utilities;
+use Core\VersionNumber;
 
 ini_set('session.gc_maxlifetime', 86400);
 

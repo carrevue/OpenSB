@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $sb, $database, $twig;
 
 use OpenSB\UserQuery;
-use OpenSB\Utilities;
+use Core\Utilities;
 use RuntimeException;
 
 if ($sb->getLocalOptions()['skin'] != "finalium") { throw new RuntimeException("You should be using Finalium!"); }

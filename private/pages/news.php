@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 
 $journal_count = 0;
 $data = [];

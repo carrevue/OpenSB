@@ -19,13 +19,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $sb;
 
 use OpenSB\UploadFlags;
 use OpenSB\UploadQuery;
-use OpenSB\Utilities;
+use Core\Utilities;
 use OpenSB\UserFlags;
 
 $is_hitchhiker = $sb->isHitchhiker();

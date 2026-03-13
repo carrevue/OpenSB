@@ -2,10 +2,10 @@
 
 // uhh temporary
 
-namespace OpenSB\Pages\Debug;
+namespace Pages\Debug;
 
 global $sb, $database, $twig, $auth;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 
 echo $twig->render('upload_new.twig');

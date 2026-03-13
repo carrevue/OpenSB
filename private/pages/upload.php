@@ -22,13 +22,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $sb, $database, $twig, $auth;
 
 use \Exception;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 use OpenSB\UserRoleEnum;
 use OpenSB\UploadFlags;
 use OpenSB\UploadTypeEnum;

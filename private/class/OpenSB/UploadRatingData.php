@@ -21,7 +21,7 @@
 
 namespace OpenSB;
 
-use OpenSB\Database;
+use Core\Database;
 
 /**
  * class UploadRatingData

@@ -22,13 +22,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $sb, $twig, $database;
 
 use DateMalformedStringException;
 use DateTime;
-use OpenSB\Utilities;
+use Core\Utilities;
 use Random\RandomException;
 use OpenSB\UserFlags;
 

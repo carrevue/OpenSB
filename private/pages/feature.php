@@ -19,14 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $database, $auth;
 
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025
 
 use OpenSB\UploadData;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 $id = ($_GET['v'] ?? null);
 

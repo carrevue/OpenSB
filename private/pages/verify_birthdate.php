@@ -19,14 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $auth, $sb;
 
 use DateMalformedStringException;
 use DateTime;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 
 if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {
     Utilities::redirect("/");

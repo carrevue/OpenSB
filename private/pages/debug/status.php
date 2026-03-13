@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenSB\Pages\Debug;
+namespace Pages\Debug;
 
 global $sb, $database, $twig, $auth;
 

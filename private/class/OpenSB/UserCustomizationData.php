@@ -21,7 +21,8 @@
 
 namespace OpenSB;
 
-use OpenSB\Database;
+use Core\Database;
+use Core\Utilities;
 use OpenSB\UserCustomizationFont;
 
 /**

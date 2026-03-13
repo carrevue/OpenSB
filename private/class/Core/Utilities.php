@@ -19,11 +19,15 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace Core;
 
 use DateTime;
 use Exception;
 use Random\Randomizer;
+
+use OpenSB\UploadFlags;
+use OpenSB\UploadRatingData;
+use OpenSB\UserData;
 
 /**
  * class Utilities

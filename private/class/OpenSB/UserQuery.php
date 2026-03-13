@@ -21,8 +21,8 @@
 
 namespace OpenSB;
 
-use OpenSB\SquareBracket;
-use OpenSB\Database;
+use Core\SquareBracket;
+use Core\Database;
 use OpenSB\UserFlags;
 
 /**

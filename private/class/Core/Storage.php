@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace Core;
+
+use OpenSB\UploadTypeEnum;
 
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
-
-use OpenSB\Database;
 
 /**
  * class Storage

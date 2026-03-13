@@ -21,13 +21,13 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $sb, $twig, $auth, $database;
 
 use Random\RandomException;
 use OpenSB\UserFlags;
-use OpenSB\Utilities;
+use Core\Utilities;
 use OpenSB\UserCustomizationFont;
 
 $options = $sb->getLocalOptions();

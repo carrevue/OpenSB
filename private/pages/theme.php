@@ -19,11 +19,11 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $sb, $twig;
 
-use OpenSB\Utilities;
+use Core\Utilities;
 
 // scan for all locales
 $localesPath = SB_PRIVATE_PATH . "/locales/";

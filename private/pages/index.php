@@ -21,7 +21,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $twig, $database, $sb, $auth;
 
@@ -29,7 +29,7 @@ use OpenSB\PostQuery;
 use OpenSB\UploadFlags;
 use OpenSB\UploadQuery;
 use OpenSB\UserQuery;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 $options = $sb->getLocalOptions();
 
@@ -109,8 +109,7 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
 
 if ($type == "wavelet" && $enable_wavelet) {
-    //$posts = $database->fetchArray($database->query("SELECT j.* FROM journals j ORDER BY j.timestamp DESC LIMIT 12"));
-    $posts = $post_query->query("p.timestamp DESC", 12);
+    $posts = $post_query->query("p.timestamp DESC", 12)->toCleanArray();
 } else {
     $posts = [];
 }
@@ -128,7 +127,7 @@ $data = [
     "uploads_following" => Utilities::makeUploadArray($database, $uploads_following) ?? [],
     "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
     //"posts" => Utilities::makeJournalArray($database, $posts) ?? [],
-    "posts" => $post_query->toArray($posts),
+    "posts" => $posts,
     "users_recent" => $users_recent ?? [],
 ];
 

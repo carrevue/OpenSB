@@ -2,7 +2,7 @@
 
 // uhh temporary, this will be merged into /upload.php soon
 
-namespace OpenSB\Pages\Debug;
+namespace Pages\Debug;
 
 global $sb, $auth;
 

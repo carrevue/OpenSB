@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $auth, $sb, $database;
 
 use OpenSB\UploadData;
-use OpenSB\Utilities;
+use Core\Utilities;
 
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025
 

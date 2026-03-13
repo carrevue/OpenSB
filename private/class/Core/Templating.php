@@ -21,10 +21,9 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB;
+namespace Core;
 
-use OpenSB\Utilities;
-use OpenSB\SpfDOMExtractor;
+use OpenSB\UserFlags;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;
