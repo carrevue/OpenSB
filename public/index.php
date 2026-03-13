@@ -30,6 +30,9 @@ define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() I
 use Core\Utilities;
 use Core\Router;
 
+use Data\User\UserRoleEnum;
+use Data\User\UserFlags;
+
 require_once SB_PRIVATE_PATH . '/common.php';
 
 global $sb;
