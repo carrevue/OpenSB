@@ -299,7 +299,26 @@ if (
         }
         
         // ugh. -chaziz 03/04/2026
-        $reupload_suspect = [
+        $reupload_suspect_title = [
+            "nickelodeon",
+            "nicktoons",
+            "nicktoon",
+            "nickjr",
+            "nick jr",
+            "noggin",
+            "disney channel",
+            "playhouse disney",
+            "disney junior",
+            "disney jr",
+            "disneyjr",
+            "cartoon network",
+            "cartoonito",
+            "20th century fox",
+            "20th century studios",
+            "twentieth century fox",
+        ];
+
+        $reupload_suspect_description = [
             "Copyright Disclaimer under section 107",
             "Fair use is a use permitted by copyright statute",
             "No copyright infringement intended",
@@ -313,7 +332,13 @@ if (
 
         if ($sb->isChazizInstance()) {
             $is_suspected_reupload = false;
-            foreach ($reupload_suspect as $phrase) {
+            foreach ($reupload_suspect_title as $phrase) {
+                if (str_contains(strtolower($title), strtolower($phrase))) {
+                    $is_suspected_reupload = true;
+                    break;
+                }
+            }
+            foreach ($reupload_suspect_description as $phrase) {
                 if (str_contains(strtolower($desc), strtolower($phrase))) {
                     $is_suspected_reupload = true;
                     break;
