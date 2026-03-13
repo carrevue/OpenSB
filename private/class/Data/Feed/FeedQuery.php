@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2026 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,18 +19,18 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Data\Post;
+namespace Data\Feed;
 
 use Core\SquareBracket;
 use Core\Database;
 use Core\Authentication;
 
 /**
- * class PostQuery
- *
- * This class allows for uniform post-related queries within the codebase.
+ * class FeedQuery
+ * 
+ * Gets the feed data. This is a hybrid of UploadQuery and PostQuery.
  */
-class PostQuery
+class FeedQuery
 {
     /**
      * @var Database
@@ -64,7 +64,7 @@ class PostQuery
      * @param array $params
      * @param bool $adminPanel
      *
-     * @return PostResult
+     * @return array
      */
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false)
     {
@@ -90,36 +90,5 @@ class PostQuery
         } else {
             $query .= " ORDER BY $order LIMIT $limit";
         }
-
-        return new PostResult($this->database, $this->database->fetchArray($this->database->query($query, $params)));
-    }
-
-    /**
-     * function count
-     * 
-     * used in the browse page
-     *
-     * @param mixed $whereCondition
-     * @param mixed $params
-     *
-     * @return mixed
-     */
-    public function count($whereCondition = null, $params = [])
-    {
-        $query = "SELECT COUNT(*) FROM posts p";
-        $whereClauses = [];
-
-        // if author isn't banned
-        $whereClauses[] = "p.author NOT IN (SELECT user FROM user_bans)";
-
-        if (!empty($whereCondition)) {
-            $whereClauses[] = $whereCondition;
-        }
-
-        if (!empty($whereClauses)) {
-            $query .= " WHERE " . implode(" AND ", $whereClauses);
-        }
-
-        return $this->database->result($query, $params);
     }
 }

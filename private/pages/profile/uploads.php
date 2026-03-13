@@ -66,7 +66,7 @@ $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limi
 $upload_count = $upload_query->count("v.author = ?", [$data["id"]]);
 
 $page_data = [
-    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "uploads" => $uploads->toCleanArray(),
     "count" => $upload_count,
 ];
 

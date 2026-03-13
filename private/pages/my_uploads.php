@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2021-2025 Chaziz
+  Copyright (C) 2021-2026 Chaziz
   Copyright (C) 2021-2022 icanttellyou
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
@@ -25,6 +25,7 @@ namespace Pages;
 global $twig, $sb, $auth, $database;
 
 use Core\Utilities;
+use Data\Upload\UploadResult;
 
 $type = ($_GET['type'] ?? 'recent');
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
@@ -40,8 +41,10 @@ $database = $sb->getDatabaseClass();
 $uploads = $database->fetchArray($database->query("SELECT v.* FROM uploads v WHERE v.upload_id NOT IN (SELECT upload FROM upload_takedowns) AND v.author = ? ORDER BY v.id DESC $limit", [$auth->getUserID()]));
 $upload_count = $database->result("SELECT COUNT(*) FROM uploads u where u.author = ?", [$auth->getUserID()]);
 
+$upload_result = new UploadResult($database, $uploads);
+
 $data = [
-    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "uploads" => $upload_result->toCleanArray(),
     "count" => $upload_count,
 ];
 

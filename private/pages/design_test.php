@@ -27,7 +27,7 @@ use Data\Upload\UploadQuery;
 use Core\Utilities;
 
 $upload_query = new UploadQuery($sb);
-$uploads = $upload_query->query("v.id DESC", 2);
+$uploads = $upload_query->query("v.id DESC", 2)->toCleanArray();
 
 if ($sb->getLocalOptions()["skin"] === "finalium") {
     $data["button_color_types"] = [
@@ -52,6 +52,6 @@ foreach (glob($iconPattern) as $filePath) {
     }
 }
 
-$data["uploads"] = Utilities::makeUploadArray($database, $uploads);
+$data["uploads"] = $uploads;
 
 echo $twig->render('design_test.twig', $data);

@@ -67,7 +67,7 @@ if ($options["skin"] == "trinium") {
 $news_recent_query_limit = 1;
 
 //if ($options["skin"] == "bootstrap" && $options["theme"] == "classic") {
-    $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit);
+    $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit)->toCleanArray();
 //} else {
 //    $uploads_recent = [];
 //}
@@ -76,7 +76,7 @@ $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
     $uploads_featured_query_limit,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
-);
+)->toCleanArray();
 
 if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstrap had this too back then
     // copied from SquareBracketTwigExtension
@@ -98,7 +98,7 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
             "v.timestamp DESC",
             $uploads_query_limit,
             sprintf("v.author in (%s)", $query)
-        );
+        )->toCleanArray();
     } else {
         $uploads_following = [];
     }
@@ -122,9 +122,9 @@ if ($options["skin"] == "trinium") {
 }
 
 $data = [
-    "uploads_new" => Utilities::makeUploadArray($database, $uploads_recent) ?? [],
-    "uploads_featured" => Utilities::makeUploadArray($database, $uploads_featured) ?? [],
-    "uploads_following" => Utilities::makeUploadArray($database, $uploads_following) ?? [],
+    "uploads_new" => $uploads_recent,
+    "uploads_featured" => $uploads_featured,
+    "uploads_following" => $uploads_following,
     "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
     //"posts" => Utilities::makeJournalArray($database, $posts) ?? [],
     "posts" => $posts,

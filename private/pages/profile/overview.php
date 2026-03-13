@@ -30,6 +30,7 @@ use Data\Comment\CommentData;
 use Data\Comment\CommentLocation;
 use Data\Upload\UploadData;
 use Data\Upload\UploadQuery;
+use Data\Upload\UploadResult;
 
 $upload_query = new UploadQuery($sb);
 
@@ -88,11 +89,14 @@ function handleFeaturedUpload($database, $data): false|array
     } else {
         // HACK: we have to use Utilities::makeUploadArray since there is somehow
         // no standardized way to handle upload arrays.
-        return Utilities::makeUploadArray($database, [0 => $upload_data])[0];
+        // return Utilities::makeUploadArray($database, [0 => $upload_data])[0];
+
+        // uh yeah, fuck. look into this later. -chaziz 03/13/2026
+        return new UploadResult($database, [0 => $upload_data])->toCleanArray()[0];
     }
 }
 
-$user_uploads = $upload_query->query("v.timestamp desc", $user_uploads_query_limit, "v.author = ?", [$data["id"]]);
+$user_uploads = $upload_query->query("v.timestamp desc", $user_uploads_query_limit, "v.author = ?", [$data["id"]])->toCleanArray();
 
 if ($options["skin"] == "bootstrap") {
     $user_journal_limit = 3;
@@ -125,7 +129,7 @@ $featured_upload = handleFeaturedUpload($database, $data);
 
 $page_data = [
     "featured_upload" => $featured_upload,
-    "uploads" => Utilities::makeUploadArray($database, $user_uploads),
+    "uploads" => $user_uploads,
     "journals" => Utilities::makeJournalArray($database, $user_journals),
     "comments" => $comments,
 ];

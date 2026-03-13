@@ -23,6 +23,7 @@ namespace Data\Upload;
 
 use Core\SquareBracket;
 use Core\Database;
+use Core\Authentication;
 
 use Data\User\UserFlags;
 
@@ -39,9 +40,9 @@ class UploadQuery
     private Database $database;
 
     /**
-     * @var \Core\Authentication
+     * @var Authentication
      */
-    private \Core\Authentication $auth;
+    private Authentication $auth;
 
     /**
      * @var string
@@ -87,9 +88,9 @@ class UploadQuery
      * @param array $params
      * @param bool $adminPanel
      *
-     * @return array
+     * @return UploadResult
      */
-    public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false)
+    public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false): UploadResult
     {
         $query = "SELECT v.* FROM uploads v";
         $whereClauses = [];
@@ -141,7 +142,7 @@ class UploadQuery
             $query .= " ORDER BY $order LIMIT $limit";
         }
 
-        return $this->database->fetchArray($this->database->query($query, $params));
+        return new UploadResult($this->database, $this->database->fetchArray($this->database->query($query, $params)));
     }
 
     /**

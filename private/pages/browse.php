@@ -62,12 +62,12 @@ $limit = $database->paginate($page, pp: 20);
 if ($user) {
     Utilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);
 } else {
-    $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limit, $tabs[$type]["where"] ?? null);
+    $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limit, $tabs[$type]["where"] ?? null)->toCleanArray();
     $upload_count = $upload_query->count($tabs[$type]["where"] ?? null);
 }
 
 $data = [
-    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "uploads" => $uploads,
     "count" => $upload_count,
 ];
 

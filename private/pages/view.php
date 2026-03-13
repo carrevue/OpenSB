@@ -35,6 +35,7 @@ use Core\Utilities;
 use Data\Upload\UploadVisibilityEnum;
 use Data\Upload\UploadFlags;
 use Data\User\UserFlags;
+use Data\Upload\UploadResult;
 
 $options = $sb->getLocalOptions();
 
@@ -310,13 +311,13 @@ if (!empty($candidates)) {
 }
 
 if ($recommended) {
-    $recommended_upload_array = Utilities::makeUploadArray($database, $recommended);
+    $recommended_upload_array = new UploadResult($database, $recommended)->toCleanArray();
 } else {
     $recommended_upload_array = [];
 }
 
 if ($uploads_by_author) {
-    $uploads_by_author_array = Utilities::makeUploadArray($database, $uploads_by_author);
+    $uploads_by_author_array = $uploads_by_author->toCleanArray();
 } else {
     $uploads_by_author_array = [];
 }
@@ -325,7 +326,7 @@ if ($uploads_by_author) {
 if (!$recommended && !$uploads_by_author) {
     $random_uploads = $upload_query->query("RAND()", 20, "v.upload_id != ?", [$data["upload_id"]]);
     if ($random_uploads) {
-        $random_uploads_array = Utilities::makeUploadArray($database, $random_uploads);
+        $random_uploads_array = $random_uploads->toCleanArray();
     } else {
         $random_uploads_array = [];
     }

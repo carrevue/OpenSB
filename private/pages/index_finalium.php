@@ -36,7 +36,7 @@ $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
     15,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
-);
+)->toCleanArray();
 
 $featured_users = $database->fetchArray(
     $database->query(
@@ -57,7 +57,7 @@ $feed = [
                 : "/assets/skin/finalium/homepage_featured.svg",
         "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),
         "label" => $localization->translate('featured_uploads_desc'),
-        "uploads" => Utilities::makeUploadArray($database, $uploads_featured),
+        "uploads" => $uploads_featured,
     ],
 ];
 
@@ -69,14 +69,11 @@ foreach ($featured_users as $user) {
         "title" => $user["name"],
         "label" => $localization->translate('featured_member'),
         "link" => "/user/" . $user["name"],
-        "uploads" => Utilities::makeUploadArray(
-            $database,
-            $upload_query->query(
-                "RAND()",
-                10,
-                sprintf("v.author = %d", $user["id"])
-            )
-        ),
+        "uploads" => $upload_query->query(
+            "RAND()",
+            10,
+            sprintf("v.author = %d", $user["id"])
+        )->toCleanArray(),
     ];
 }
 

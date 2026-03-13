@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -24,6 +24,7 @@ namespace Pages;
 global $auth, $twig, $database, $sb;
 
 use Data\Upload\UploadQuery;
+use Data\Upload\UploadResult;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
@@ -59,7 +60,7 @@ $count = $search !== ""
     : (int) $database->result("SELECT COUNT(*) FROM uploads v");
 $uploads = $upload_query->query('v.timestamp DESC', $limit, $whereCondition, $params, true);
 
-$uploads_array = Utilities::makeUploadArray($database, $uploads);
+$uploads_array = $uploads->toCleanArray();
 
 $new_fucking_array = [];
 

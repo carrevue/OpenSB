@@ -72,7 +72,7 @@ $upload_count = $upload_query->count("(v.tags LIKE CONCAT('%', ?, '%')
     OR v.description LIKE CONCAT('%', ?, '%'))", [$query, $query, $query]);
 
 $data = [
-    "uploads" => Utilities::makeUploadArray($database, $uploads),
+    "uploads" => $uploads->toCleanArray(),
     "count" => $upload_count,
     "query" => $query,
 ];

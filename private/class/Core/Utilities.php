@@ -25,6 +25,7 @@ use DateTime;
 use Exception;
 use Random\Randomizer;
 
+use Data\Notification\NotificationEnum;
 use Data\Upload\UploadFlags;
 use Data\Upload\UploadRatingData;
 use Data\User\UserData;
@@ -77,53 +78,6 @@ class Utilities
         }
 
         return false;
-    }
-
-    /**
-     * function makeUploadArray
-     * 
-     * @todo i think this should be refactored into UploadQuery? i should look into this later. -chaziz 1/4/2025
-     *
-     * @param mixed $database
-     * @param mixed $uploads
-     *
-     * @return array
-     */
-    public static function makeUploadArray($database, $uploads): array
-    {
-        if (!$uploads) return [];
-
-        $uploadArray = [];
-        foreach ($uploads as $upload) {
-            $flags = UploadFlags::toArray($upload["flags"]);
-
-            $ratings = new UploadRatingData($database, $upload["id"]);
-
-            $userData = new UserData($database, $upload["author"]);
-            $uploadArray[] =
-                [
-                    "id" => $upload["upload_id"],
-                    "title" => $upload["title"],
-                    "description" => $upload["description"],
-                    "published" => $upload["timestamp"],
-                    "published_originally" => $upload["original_timestamp"],
-                    "original_site" => $upload["original_site"],
-                    "type" => $upload["type"],
-                    "content_rating" => $upload["rating"],
-                    "views" => $upload["views"],
-                    "flags" => $flags,
-                    "length" => $upload["video_length"],
-                    "author" => [
-                        "id" => $upload["author"],
-                        "info" => $userData->getUserArray(),
-                    ],
-                    "interactions" => [
-                        "ratings" => $ratings->calculateRatingData(),
-                    ],
-                ];
-        }
-
-        return $uploadArray;
     }
 
     /**

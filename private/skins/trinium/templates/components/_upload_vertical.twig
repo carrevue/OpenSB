@@ -19,9 +19,11 @@
                  alt="{{ upload.title }}" class="content-image thumbnail">
         </a>
         <div class="content-thumbnail-badge-container">
+            {% if upload.type != 0 %}
             <div class="content-thumbnail-badge">
                 {{ icon(icon) }}
             </div>
+            {% endif %}
             {% if upload.flags.mature %}
                 <div class="content-thumbnail-badge timestamp">
                     MATURE

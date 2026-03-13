@@ -19,9 +19,11 @@
                  alt="{{ upload.title }}" class="content-image thumbnail small">
         </a>
         <div class="content-thumbnail-badge-container">
+            {% if upload.type != 0 %}
             <div class="content-thumbnail-badge">
                 {{ icon(icon) }}
             </div>
+            {% endif %}
             {% if upload.type == 0 %}
                 <div class="content-thumbnail-badge timestamp">
                     {{ convert_time(upload.length) }}

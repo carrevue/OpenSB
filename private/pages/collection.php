@@ -55,9 +55,9 @@ $uploads = $upload_query->query(
     "v.timestamp DESC",
     100, // TODO: pagination
     sprintf("v.id in (%s)", $query)
-);
+)->toCleanArray();
 
 echo $twig->render('collection.twig', [
     'data' => $data,
-    'uploads' => Utilities::makeUploadArray($database, $uploads),
+    'uploads' => $uploads,
 ]);
