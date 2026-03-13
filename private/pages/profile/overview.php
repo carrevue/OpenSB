@@ -87,10 +87,6 @@ function handleFeaturedUpload($database, $data): false|array
     ) {
         return false;
     } else {
-        // HACK: we have to use Utilities::makeUploadArray since there is somehow
-        // no standardized way to handle upload arrays.
-        // return Utilities::makeUploadArray($database, [0 => $upload_data])[0];
-
         // uh yeah, fuck. look into this later. -chaziz 03/13/2026
         return new UploadResult($database, [0 => $upload_data])->toCleanArray()[0];
     }

@@ -30,6 +30,7 @@ use Data\Upload\UploadFlags;
 use Data\Upload\UploadQuery;
 use Data\User\UserQuery;
 use Core\Utilities;
+use Data\Feed\FeedQuery;
 
 $options = $sb->getLocalOptions();
 
@@ -57,20 +58,10 @@ if ($options["skin"] == "trinium") {
 }
 
 $uploads_query_limit = 12;
-
-if ($options["skin"] == "trinium") {
-    $uploads_featured_query_limit = 3;
-} else {
-    $uploads_featured_query_limit = 12;
-}
-
+$uploads_featured_query_limit = 3;
 $news_recent_query_limit = 1;
 
-//if ($options["skin"] == "bootstrap" && $options["theme"] == "classic") {
-    $uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit)->toCleanArray();
-//} else {
-//    $uploads_recent = [];
-//}
+$uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit)->toCleanArray();
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
@@ -121,6 +112,9 @@ if ($options["skin"] == "trinium") {
     $users_recent = [];
 }
 
+$feed_query = new FeedQuery($sb);
+$feed = $feed_query->query("timestamp DESC", $uploads_query_limit)->toCleanArray();
+
 $data = [
     "uploads_new" => $uploads_recent,
     "uploads_featured" => $uploads_featured,
@@ -128,6 +122,7 @@ $data = [
     "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
     //"posts" => Utilities::makeJournalArray($database, $posts) ?? [],
     "posts" => $posts,
+    "feed" => $feed,
     "users_recent" => $users_recent ?? [],
 ];
 

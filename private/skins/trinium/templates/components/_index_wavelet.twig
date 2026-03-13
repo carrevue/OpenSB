@@ -20,8 +20,14 @@
             </div>
         </div>
         {% endif %}
-        {% for post in data.posts %}
-            {{ include('/components/_post.twig') }}
+        {% for entry in data.feed %}
+            {% if entry.item_type == "post" %}
+                {{ include('/components/_post.twig', {post: entry}) }}
+            {% elseif entry.item_type == "upload" %}
+                {{ include('/components/_upload_vertical.twig', {upload: entry}) }}
+            {% else %}
+                <div>Unknown feed item with type {{ entry.item_type }}</div>
+            {% endif %}
         {% endfor %}
     </div>
 </div>

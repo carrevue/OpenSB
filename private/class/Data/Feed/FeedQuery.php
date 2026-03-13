@@ -25,6 +25,9 @@ use Core\SquareBracket;
 use Core\Database;
 use Core\Authentication;
 
+use Data\Upload\UploadQuery;
+use Data\Post\PostQuery;
+
 /**
  * class FeedQuery
  * 
@@ -33,14 +36,9 @@ use Core\Authentication;
 class FeedQuery
 {
     /**
-     * @var Database
+     * @var SquareBracket
      */
-    private Database $database;
-
-    /**
-     * @var Authentication
-     */
-    private Authentication $auth;
+    private SquareBracket $sb;
 
     /**
      * function __construct
@@ -51,8 +49,7 @@ class FeedQuery
      */
     public function __construct(SquareBracket $sb)
     {
-        $this->database = $sb->getDatabaseClass();
-        $this->auth = $sb->getAuthenticationClass();
+        $this->sb = $sb;
     }
 
     /**
@@ -64,31 +61,25 @@ class FeedQuery
      * @param array $params
      * @param bool $adminPanel
      *
-     * @return array
+     * @return FeedResult
      */
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false)
     {
-        $query = "SELECT p.* FROM posts p";
-        $whereClauses = [];
+        preg_match('/LIMIT\s*(\d+)(?:\s*OFFSET\s*(\d+))?/i', str_contains($limit, "LIMIT") ? $limit : "LIMIT $limit", $matches);
+        $actualLimit = (int)($matches[1] ?? $limit);
+        $offset = (int)($matches[2] ?? 0);
+        $fetchLimit = $actualLimit + $offset;
 
-        if (!$adminPanel) {
-            // if author isn't banned
-            $whereClauses[] = "p.author NOT IN (SELECT user FROM user_bans)";
-        }
+        $postQuery = new PostQuery($this->sb);
+        $uploadQuery = new UploadQuery($this->sb);
 
-        if (!empty($whereCondition)) {
-            $whereClauses[] = $whereCondition;
-        }
+        $posts    = array_map(fn($r) => ['item_type' => 'post'] + $r, $postQuery->query($order, (string)$fetchLimit, $whereCondition, $params, $adminPanel)->raw());
+        $uploads  = array_map(fn($r) => ['item_type' => 'upload'] + $r, $uploadQuery->query($order, (string)$fetchLimit, $whereCondition, $params, $adminPanel)->raw());
 
-        if (!empty($whereClauses)) {
-            $query .= " WHERE " . implode(" AND ", $whereClauses);
-        }
+        $combined = array_merge($posts, $uploads);
+        usort($combined, fn($a, $b) => $b['timestamp'] - $a['timestamp']);
+        $combined = array_slice($combined, $offset, $actualLimit);
 
-        if (str_contains($limit, "LIMIT")) {
-            // compatibility with Core\Database::paginate()
-            $query .= " ORDER BY $order $limit";
-        } else {
-            $query .= " ORDER BY $order LIMIT $limit";
-        }
+        return new FeedResult($this->sb->getDatabaseClass(), $combined);
     }
 }
