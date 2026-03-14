@@ -36,16 +36,28 @@ if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
 }
 
+// somewhat temporary and half-assed code. will be improved on in the future.
+// -chaziz 3/14/2026
 if ($sb->isIpLookupEnabled() && $sb->isChazizInstance()) {
-    $blocked_asns = [
+    $blocked_asn_ids = [
         'AS212238',
-        'AS9009'
+        'AS60068',
+        'AS9009',
+        'AS43357',
+    ];
+
+    $blocked_asn_names = [
+        'Datacamp Limited',
     ];
 
     $ipLookup = $sb->getIpLookupClass();
     $ipInfo = $ipLookup->getInfo(Utilities::getIpAddress());
-    if ($ipInfo && in_array($ipInfo['asn'], $blocked_asns, true)) {
-        die();
+
+    $ipInfo = $ipLookup->getInfo('2a02:6ea0:dc06::e032');
+
+    if ($ipInfo && in_array($ipInfo['asn'], $blocked_asn_ids, true)
+        || $ipInfo && in_array($ipInfo['as_name'], $blocked_asn_names, true)) {
+        die("Please turn off your VPN.");
     }
 }
 
