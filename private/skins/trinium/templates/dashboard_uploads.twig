@@ -8,10 +8,15 @@
 
 {% set title = "Uploads" %}
 
-	{% block dashboard_content %}
-        {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
-        {% set current_page = page %}
+{% set breadcrumbs = [
+    { url: '/dashboard/uploads', label: "Uploads" },
+] %}
 
+{% block dashboard_content %}
+    {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
+    {% set current_page = page %}
+
+    <div class="content-box">
         <div class="form-flex">
             <form action="/dashboard/uploads/" method="GET" id="num_change" class="admin-form-select">
                 <select name="amount" onchange="this.form.submit()">
@@ -63,4 +68,5 @@
         {% endfor %}
 
         {{ pagination(count, amount, le_url, current_page) }}
-    {% endblock %}
+    </div>
+{% endblock %}

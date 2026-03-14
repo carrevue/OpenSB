@@ -2,13 +2,14 @@
 
 {% set title = "Invite keys" %}
 
-	{% block dashboard_content %}
+{% block dashboard_content %}
+    <div class="content-box">
         <div class="inviteKeyGenerationForm">
         <form name="inviteKeyGenerationForm" id="inviteKeyGenerationForm" method="post"
-              action="/dashboard/invite_keys" enctype="multipart/form-data">
+                action="/dashboard/invite_keys" enctype="multipart/form-data">
             <input type="hidden" id="action" name="action" value="generate_invite_key"/>
             <input class="button accent large" type="submit" id="generate" name="generate"
-                   value="Generate invite key">
+                    value="Generate invite key">
         </form>
         </div>
         <hr>
@@ -45,4 +46,5 @@
                 {% endfor %}
             </table>
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}

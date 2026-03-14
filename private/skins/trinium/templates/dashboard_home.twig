@@ -2,7 +2,8 @@
 
 {% set title = "Dashboard" %}
 
-	{% block dashboard_content %}
+{% block dashboard_content %}
+    <div class="content-box">
         <ul>
             <li><a href="/dashboard/statistics">Statistics</a></li>
             <li><a href="/dashboard/server">Server details</a></li>
@@ -15,7 +16,8 @@
             {% endif %}
             <li><a href="/dashboard/uploads">Uploads</a></li>
             <li><a href="/dashboard/posts">Journals</a></li>
-            <li><a href="/dashboard/interactions">Interactions</a></li>
+            <li><a href="/dashboard/posts">Posts</a></li>
             <li><a href="/dashboard/filtering">Filtering</a></li>
         </ul>
-    {% endblock %}
+    </div>
+{% endblock %}

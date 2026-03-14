@@ -251,7 +251,7 @@ $router->add('/user/{username}', 'profile/overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile/uploads.php'); // uploads
 $router->add('/user/{username}/comments', 'profile/comments.php'); // comments
 $router->add('/user/{username}/posts', 'profile/posts.php'); // posts
-$router->add('/user/{username}/about', 'profile/about.php'); // about (mainly fulphiker-specific)
+$router->add('/user/{username}/about', 'profile/about.php'); // about (mainly finalium-specific)
 
 $router->add('/user/{username}/post/{id}', 'profile/post.php');
 
@@ -290,7 +290,7 @@ $router->add('/dashboard/users/{username}', 'dashboard/user_edit.php');
 $router->redirect('/dashboard/overview', '/dashboard');
 $router->add('/dashboard/uploads', 'dashboard/uploads.php');
 $router->add('/dashboard/uploads/{id}', 'dashboard/upload_edit.php');
-$router->add('/dashboard/interactions', 'dashboard/interactions.php');
+$router->add('/dashboard/posts', 'dashboard/posts.php');
 $router->add('/dashboard/invite_keys', 'dashboard/invite_keys.php');
 $router->add('/dashboard/ip_bans', 'dashboard/ip_bans.php');
 $router->add('/dashboard/filtering', 'dashboard/filtering.php');

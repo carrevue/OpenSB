@@ -2,94 +2,100 @@
 
 {% set title = "Server details" %}
 
-	{% block dashboard_content %}
-            <div class+"section">
-                {% if system.is_windows %}
-                    <div class="text-danger">
-                        Windows is no longer officially supported. If you are using XAMPP, please switch to Windows
-                        Subsystem for Linux.
-                    </div>
+{% set breadcrumbs = [
+    { url: '/dashboard/server', label: "Server details" },
+] %}
+
+{% block dashboard_content %}
+    <div class="content-box">
+        <div class+"section">
+            {% if system.is_windows %}
+                <div class="text-danger">
+                    Windows is no longer officially supported. If you are using XAMPP, please switch to Windows
+                    Subsystem for Linux.
+                </div>
+            {% endif %}
+            <ul>
+                {% if system.os_name %}
+                    <li>Operating System: {{ system.os_name }}</li>
                 {% endif %}
-                <ul>
-                    {% if system.os_name %}
-                        <li>Operating System: {{ system.os_name }}</li>
-                    {% endif %}
-                    <li>Uname: <code>{{ system.uname }}</code></li>
-                    {% if not system.is_windows %}
-                    <li>Processor: {{ system.cpu }}</li>
-                    <li>Memory: {{ system.memory.used }} used of {{ system.memory.total }} ({{ system.memory.percentage }} used)</li>
-                    <li>Uptime: {{ system.uptime }}</li>
-                    <li>Load average (1, 5, 15 min): {{ system.avg[0] }}, {{ system.avg[1] }}, {{ system.avg[2] }}</li>
-                    <li>Storage: {{ system.disk.free }} free of {{ system.disk.total }} ({{ system.disk.percentage }} used)</li>
-                    <li>Instance size: {{ system.disk.instance_size }}</li>
-                    {% endif %}
-                </ul>
+                <li>Uname: <code>{{ system.uname }}</code></li>
+                {% if not system.is_windows %}
+                <li>Processor: {{ system.cpu }}</li>
+                <li>Memory: {{ system.memory.used }} used of {{ system.memory.total }} ({{ system.memory.percentage }} used)</li>
+                <li>Uptime: {{ system.uptime }}</li>
+                <li>Load average (1, 5, 15 min): {{ system.avg[0] }}, {{ system.avg[1] }}, {{ system.avg[2] }}</li>
+                <li>Storage: {{ system.disk.free }} free of {{ system.disk.total }} ({{ system.disk.percentage }} used)</li>
+                <li>Instance size: {{ system.disk.instance_size }}</li>
+                {% endif %}
+            </ul>
+        </div>
+        <hr>
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Installed skins</h1>
             </div>
-            <hr>
-            <div class="section">
-                <div class="section-header">
-                    <h1 class="section-title">Installed skins</h1>
-                </div>
-                <table class="styled">
-                    <tr class="table-header">
-                        <th>Skin/Author</th>
-                        <th>Description</th>
+            <table class="styled">
+                <tr class="table-header">
+                    <th>Skin/Author</th>
+                    <th>Description</th>
+                </tr>
+                {% for skin in skins %}
+                    <tr>
+                        <td class="a">{{ skin.metadata.name }}<br><small>by {{ skin.metadata.author }}</small></td>
+                        <td class="b">
+                            <div>
+                            {{ skin.metadata.description }}
+                            </div>
+                            <div>
+                                <ul>
+                                    {% for theme in skin.metadata.themes %}
+                                        <li>{{ theme.name }}: {{ theme.description }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </td>
                     </tr>
-                    {% for skin in skins %}
-                        <tr>
-                            <td class="a">{{ skin.metadata.name }}<br><small>by {{ skin.metadata.author }}</small></td>
-                            <td class="b">
-                                <div>
-                                {{ skin.metadata.description }}
-                                </div>
-                                <div>
-                                    <ul>
-                                        {% for theme in skin.metadata.themes %}
-                                            <li>{{ theme.name }}: {{ theme.description }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+                {% endfor %}
+            </table>
+        </div>
+        <hr>
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Installed libraries</h1>
             </div>
-            <hr>
-            <div class="section">
-                <div class="section-header">
-                    <h1 class="section-title">Installed libraries</h1>
-                </div>
-                <table class="styled">
-                    <tr class="table-header">
-                        <th>Library</th>
-                        <th>Version</th>
-                        <th>License</th>
-                        <th>Description</th>
-                        <th>Authors</th>
+            <table class="styled">
+                <tr class="table-header">
+                    <th>Library</th>
+                    <th>Version</th>
+                    <th>License</th>
+                    <th>Description</th>
+                    <th>Authors</th>
+                </tr>
+                {% for key, package in packages %}
+                    <tr>
+                        <td class="a" width="200">{{ key }}</td>
+                        <td class="b" width="100">{{ package.version }}</td>
+                        <td class="b" width="90">
+                            {% for license in package.licenses %}
+                                {{ license }}{{ not loop.last ? ',' }}
+                            {% endfor %}
+                        </td>
+                        <td class="b">
+                            {{ package.description }}
+                        </td>
+                        <td class="b">
+                            {% for author in package.authors %}
+                                {% if author.homepage %}
+                                    <a href="{{ author.homepage }}">{{ author.name }}</a>{{ not loop.last ? ',' }}
+                                {% else %}
+                                    {{ author.name }}{{ not loop.last ? ',' }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                     </tr>
-                    {% for key, package in packages %}
-                        <tr>
-                            <td class="a" width="200">{{ key }}</td>
-                            <td class="b" width="100">{{ package.version }}</td>
-                            <td class="b" width="90">
-                                {% for license in package.licenses %}
-                                    {{ license }}{{ not loop.last ? ',' }}
-                                {% endfor %}
-                            </td>
-                            <td class="b">
-                                {{ package.description }}
-                            </td>
-                            <td class="b">
-                                {% for author in package.authors %}
-                                    {% if author.homepage %}
-                                        <a href="{{ author.homepage }}">{{ author.name }}</a>{{ not loop.last ? ',' }}
-                                    {% else %}
-                                        {{ author.name }}{{ not loop.last ? ',' }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-    {% endblock %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

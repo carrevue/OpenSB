@@ -4,40 +4,36 @@
     <div class="section">
         <div class="section-header flex">
             <div class="section-header-left">
-                <nav class="section-header-crumbs">
-                    <ol>
-                        <li><a href="/dashboard">{{ localize('dashboard') }}</a></li>
-                        <li><a href="#">{{ title }}</a></li>
-                    </ol>
-                </nav>
+                {% if breadcrumbs is defined and breadcrumbs %}
+                    <nav class="section-header-crumbs">
+                        <ol>
+                            <li><a href="/dashboard">{{ localize('dashboard') }}</a></li>
+                            {% for crumb in breadcrumbs %}
+                                <li>
+                                    {% if not loop.last %}
+                                        <a href="{{ crumb.url }}">{{ crumb.label }}</a>
+                                    {% else %}
+                                        <span>{{ crumb.label }}</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </nav>
+                {% else %}
+                    <h1 class="section-title">{{ title }}</h1>
+                {% endif %}
+                {% if section_desc is defined and section_desc %}
+                    <div class="section-desc">{{ section_desc }}</div>
+                {% endif %}
             </div>
             <div class="section-header-right">
-                Right
+                {% if section_header_right is defined and section_header_right %}
+                    <a href="{{ section_header_right.url }}">{{ section_header_right.label }}</a>
+                {% endif %}
             </div>
-            {#<div class="section-header-left">
-                <h1 class="section-title">{{ localize('my_account') }}</h1>
-                <div class="section-desc">{{ localize('page_num_of_num', current_page, total_pages )}}</div>
-            </div>#}
         </div>
-        <div class="content-box">
-            {% block dashboard_content %}
-            {% endblock %}
-        </div>
-    </div>
-{% endblock %}
 
-{#
-{% block content %}
-    <div class="section">
-        <div class="section-header">
-            <h1 class="section-title">
-                {{ title }}
-            </h1>
-        </div>
-    </div>
-    <div class="content-box">
         {% block dashboard_content %}
         {% endblock %}
     </div>
 {% endblock %}
-#}

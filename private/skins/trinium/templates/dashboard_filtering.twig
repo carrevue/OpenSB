@@ -2,7 +2,12 @@
 
 {% set title = "Filtering" %}
 
-	{% block dashboard_content %}
+{% set breadcrumbs = [
+    { url: '/dashboard/filtering', label: "Filtering" },
+] %}
+
+{% block dashboard_content %}
+    <div class="content-box">
         <div class="section">
             <div class="section-header">
                 <h2>Blocked usernames</h2>
@@ -18,4 +23,5 @@
                 {% endfor %}
             </table>
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}

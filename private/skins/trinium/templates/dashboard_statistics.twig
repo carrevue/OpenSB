@@ -2,7 +2,12 @@
 
 {% set title = "Statistics" %}
 
-	{% block dashboard_content %}
+{% set breadcrumbs = [
+    { url: '/dashboard/server', label: "Statistics" },
+] %}
+
+{% block dashboard_content %}
+    <div class="content-box">
         <div class="section">
             <div class="section-header flex">
                 <div class="section-header-left">
@@ -30,7 +35,8 @@
                 {% endfor %}
             </ul>
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}
 
 {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

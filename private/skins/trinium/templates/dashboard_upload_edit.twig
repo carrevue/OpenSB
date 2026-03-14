@@ -2,7 +2,13 @@
 
 {% set title = "Checking " ~ upload.id %}
 
-	{% block dashboard_content %}
+{% set breadcrumbs = [
+    { url: '/dashboard/uploads', label: "Uploads" },
+    { url: '/dashboard/uploads/' ~ upload.id, label: upload.title },
+] %}
+
+{% block dashboard_content %}
+    <div class="content-box">
         <div class="grid">
             <div class="col-6">
                 <div class="section">
@@ -121,4 +127,5 @@
                 </div>
             </div>
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}
