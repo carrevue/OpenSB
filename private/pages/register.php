@@ -44,6 +44,9 @@ if ($sb->isIpLookupEnabled() && $sb->isChazizInstance()) {
         'AS60068',
         'AS9009',
         'AS43357',
+        'AS39351',
+        'AS394256',
+        'AS51852',
     ];
 
     $blocked_asn_names = [
@@ -106,6 +109,14 @@ if (isset($_POST['registersubmit'])) {
     $birthdate = $_POST['birthdate'] ?? '';
     if ($enableInviteKeys) {
         $invite = $_POST['invite'];
+    }
+
+    if ($sb->isMailEnabled()) {
+        $mailcheck = file_get_contents("https://api.stopforumspam.org/api?email=" . $email_address);
+
+        if (str_contains($mailcheck, "<appears>yes</appears>") && !$isDebug) {
+            Utilities::notifyBanner("notify_register_email_suspicious", "/");
+        }
     }
 
     $error .= Utilities::validateUsername($username, $database);

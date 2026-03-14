@@ -434,6 +434,7 @@
     "notify_register_email_token_success": "Your email has been verified!",
     "notify_register_email_ratelimit": "Please wait at least %s minutes before requesting another verification email. You should have received an email already, so please check your inbox and spam folder.",
     "notify_register_ip_suspicious": "Your IP address has been previously flagged as suspicious.",
+    "notify_register_email_suspicious": "Your email address has been previously flagged as suspicious.",
     "notify_invalid_csrf": "The CSRF token is invalid. Please try again.",
     "notify_notifications_cleared": "You have successfully cleared your notifications.",
     "notify_invalid_journal": "This journal does not exist.",
