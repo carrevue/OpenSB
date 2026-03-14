@@ -532,11 +532,11 @@ class Utilities
         }
 
         // this is going to become inefficient eventually -chaziz 02/20/2026
-        $blocklist = $database->query("SELECT name, use_regex FROM username_blocklist");
+        $blocklist = $database->fetchArray($database->query("SELECT name, use_regex FROM username_blocklist"));
 
         foreach ($blocklist as $entry) {
-            if ($entry['use_regex']) {
-                if (@preg_match($entry['name'], $username) === 1) {
+            if ($entry['use_regex'] == 1) {
+                if (preg_match($entry['name'], $username) === 1) {
                     return "This username is not appropriate.";
                 }
             } else {
