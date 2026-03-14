@@ -177,7 +177,12 @@ if (isset($_POST["loginsubmit"])) {
                         Utilities::setSafeCookie('SBACCOUNTS', $warning . $signed, time() + (30 * 24 * 60 * 60));
 
                         $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
-                        $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
+                        
+                        if ($logindata['flags'] & UserFlags::FLAG_STEALTH->value) {
+                            $database->query("UPDATE users SET ip = ? WHERE id = ?", [Utilities::getIpAddress(), $nid]);
+                        } else {
+                            $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
+                        }
                     } else {
                         $payload = [['userid' => $auth->getUserID(), 'token' => $_SESSION['SBTOKEN']]];
                         $signed = Utilities::makeSignedCookiePayload($payload);

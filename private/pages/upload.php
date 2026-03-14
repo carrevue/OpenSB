@@ -297,6 +297,8 @@ if (
         if ($sb->isDiscordWebhookEnabled()) {
             discord_webhook_notify($sb, $new, $title, $desc, $auth);
         }
+
+        $auth->bumpLastActive();
         
         // ugh. -chaziz 03/04/2026
         $reupload_suspect_title = [

@@ -81,7 +81,7 @@ class Authentication
                     }
                 }
 
-                $this->database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $this->user_id]);
+                $this->database->query("UPDATE users SET ip = ? WHERE id = ?", [Utilities::getIpAddress(), $this->user_id]);
 
                 // if "comfortable rating" is questionable, reset it back to general. this is because opensb now uses
                 // "general" and "sensitive" instead of the old "general", "questionable" and "mature" ratings, but the
@@ -97,6 +97,11 @@ class Authentication
                 $this->has_authenticated_as_staff = $_SESSION["SB_STAFF_AUTHED"] ?? null;
             }
         }
+    }
+
+    public function bumpLastActive()
+    {
+        $this->database->query("UPDATE users SET last_seen = ? WHERE id = ?", [Utilities::getIpAddress(), $this->user_id]);
     }
 
     /**

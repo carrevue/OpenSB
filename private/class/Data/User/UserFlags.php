@@ -51,6 +51,11 @@ enum UserFlags: int
      * 00010000: Hide from recommendations
      */
     case FLAG_SHADOW_BAN = 16;
+
+    /**
+     * 00100000: Don't update "last active" timestamp when logging in
+     */
+    case FLAG_STEALTH = 32;
     
     /**
      * 01000000: Account was created on FulpTube.rocks

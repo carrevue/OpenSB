@@ -38,6 +38,11 @@ $apiOutput = [
     "error" => "This request is invalid."
 ];
 
+if (!$auth->isUserLoggedIn()) {
+    echo json_encode(["error" => "You are not logged in."]);
+    exit;
+}
+
 if ($auth->isBanned()) {
     echo json_encode(["error" => "You are banned."]);
     exit;
@@ -201,5 +206,7 @@ $apiOutput = [
     "comment" => $comment,
     "html" => $html,
 ];
+
+$auth->bumpLastActive();
 
 echo json_encode($apiOutput);
