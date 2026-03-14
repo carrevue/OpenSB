@@ -107,6 +107,14 @@ if (isset($_POST['registersubmit'])) {
         $invite = $_POST['invite'];
     }
 
+    if ($sb->isMailEnabled()) {
+        $mailcheck = file_get_contents("https://api.stopforumspam.org/api?email=" . $email_address);
+
+        if (str_contains($mailcheck, "<appears>yes</appears>") && !$isDebug) {
+            Utilities::notifyBanner("notify_register_email_suspicious", "/");
+        }
+    }
+
     $error .= Utilities::validateUsername($username, $database);
     if ($database->result("SELECT COUNT(*) FROM users WHERE email = ?", [$email_address]) > 0) $error .= "This email address is used by another account. ";
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
