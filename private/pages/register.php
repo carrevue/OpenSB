@@ -44,6 +44,7 @@ if ($sb->isIpLookupEnabled() && $sb->isChazizInstance()) {
         'AS60068',
         'AS9009',
         'AS43357',
+        'AS39351',
     ];
 
     $blocked_asn_names = [
