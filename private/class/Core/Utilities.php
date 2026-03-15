@@ -394,11 +394,11 @@ class Utilities
     /**
      * function calculateAge
      *
-     * @param mixed $birthdate
+     * @param ?string $birthdate
      *
      * @return int
      */
-    public static function calculateAge(string $birthdate): int
+    public static function calculateAge(?string $birthdate): int
     {
         if (!$birthdate) {
             return 0;
@@ -416,12 +416,12 @@ class Utilities
     /**
      * function calculateAgeFrom
      *
-     * @param mixed $birthdate
-     * @param mixed $date
+     * @param ?string $birthdate
+     * @param ?string $date
      *
      * @return int
      */
-    public static function calculateAgeFrom($birthdate, $date): int
+    public static function calculateAgeFrom(?string $birthdate, ?string $date): int
     {
         if (empty($birthdate) || empty($date)) {
             return 0;
