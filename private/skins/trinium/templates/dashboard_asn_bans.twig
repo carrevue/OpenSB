@@ -6,23 +6,21 @@
     {% set le_url = '?page=%s&amount=' ~ amount %}
 {% endif %}
 
-{% set title = "IP bans" %}
+{% set title = "ASN bans" %}
 
 	{% block dashboard_content %}
         {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
         {% set current_page = page %}
 
         <div style="text-align:center;">
-            <form method="POST" action="/dashboard/ip_bans/">
-                <input type="text" name="ip" placeholder="IP">
-                <input type="text" name="reason" placeholder="Reason">
+            <form method="POST" action="/dashboard/asn_bans/">
+                <input type="text" name="asn" placeholder="ASN">
                 <button type="submit" class="button danger">Ban</button>
             </form>
-            <div>CIDR ranges are supported. If the IP is a VPN, instead ban its ASN if available <a href="/dashboard/asn_bans">here.</a></div>
         </div>
         <hr>
         <div class="form-flex">
-            <form action="/dashboard/ip_bans/" method="GET" id="num_change" class="admin-form-select">
+            <form action="/dashboard/asn_bans/" method="GET" id="num_change" class="admin-form-select">
                 <select name="amount" onchange="this.form.submit()">
                     {% for option in [8, 16, 24, 32, 48, 64, 96, 128, 256] %}
                         <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
@@ -30,7 +28,7 @@
                 </select>
             </form>
 
-            <form method="GET" asction="/dashboard/ip_bans/" class="admin-form-search">
+            <form method="GET" asction="/dashboard/asn_bans/" class="admin-form-search">
                 <input type="hidden" name="amount" value="{{ amount }}">
                 <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
                 <button type="submit" class="button secondary">
@@ -39,15 +37,14 @@
             </form>
         </div>
         <hr>
-        {% for ip in ips %}
+        {% for asn in asns %}
             <div class="content-entry">
                 <div class="content-info">
                     <div class="content-title">
-                        {{ ip.ip }}
+                        {{ asn.asn }}
                     </div>
-                    <div class="content-detail">By: {{ ip.author }}</div>
-                    <div class="content-detail">Time: {{ ip.timestamp | format_date('long', 'medium') }} ({{ ip.timestamp | relative_time() }})</div>
-                    <div class="content-detail">Reason: {{ ip.reason }}</div>
+                    <div class="content-detail">By: {{ asn.author }}</div>
+                    <div class="content-detail">Time: {{ asn.timestamp | format_date('long', 'medium') }} ({{ asn.timestamp | relative_time() }})</div>
                 </div>
             </div>
         {% endfor %}
