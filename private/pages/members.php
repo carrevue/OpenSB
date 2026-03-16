@@ -31,7 +31,7 @@ $user_query = new UserQuery($sb);
 
 $tabs = [
     "recent" => [
-        "name" => "last_seen",
+        "name" => "last_active",
         "order" => "u.last_seen DESC",
         "where" => null,
     ],

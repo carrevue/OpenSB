@@ -333,9 +333,9 @@ $user_info_table = [
             . ($flags & UserFlags::FLAG_FULPTUBE_ACCOUNT->value ? '<br><small>' . $localization->translate('fulptube_account') . '</small>' : ''),
         'raw_html' => true,
     ],
-    'last_seen' => [
+    'last_active' => [
         'condition' => true,
-        'label' => $localization->translate('last_seen'),
+        'label' => $localization->translate('last_active'),
         'value' => $localization->formatDate($user['last_seen'], 'long', 'medium'),
     ],
     'user_link_color' => [

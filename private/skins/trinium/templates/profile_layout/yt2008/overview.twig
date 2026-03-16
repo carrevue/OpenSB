@@ -58,10 +58,12 @@
                             <span class="detail-label">{{ localize('registered') }}:</span>
                             <span class="detail-value">{{ common.joined | format_date('long', 'none') }}</span>
                         </li>
-                        <li class="detail-item">
-                            <span class="detail-label">{{ localize('last_active') }}:</span>
-                            <span class="detail-value">{{ common.connected | relative_time() }}</span>
-                        </li>
+                        {% if common.last_active %}
+                            <li class="detail-item">
+                                <span class="detail-label">{{ localize('last_active') }}:</span>
+                                <span class="detail-value">{{ common.last_active | relative_time() }}</span>
+                            </li>
+                        {% endif %}
                     </ul>
                     {% if user_is_authenticated_admin %}
                         <hr>

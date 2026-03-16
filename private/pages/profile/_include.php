@@ -64,6 +64,10 @@ if ($user_ban_data = $database->fetch("SELECT * FROM user_bans WHERE user = ?", 
     }
 }
 
+if ($data["powerlevel"] > UserRoleEnum::Normal->value) {
+    $data["last_seen"] = 0;
+}
+
 $flags = UserFlags::toArray($data["flags"]);
 
 if ($flags["profile_customization_enabled"]) {
@@ -118,7 +122,7 @@ $common_data = [
     "about" => ($data['about'] ?? false),
     "is_staff" => ($data["powerlevel"] > 1),
     "joined" => $data["joined"],
-    "connected" => $data["last_seen"],
+    "last_active" => $data["last_seen"],
     "is_current" => $is_own_profile,
     "followers" => $followers,
     "following" => $followed,

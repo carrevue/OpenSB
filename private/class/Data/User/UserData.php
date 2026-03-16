@@ -98,6 +98,10 @@ class UserData
             ];   
         }
 
+        if ($data["powerlevel"] > UserRoleEnum::Normal->value) {
+            $data["last_seen"] = 0;
+        }
+
         $this->data = $data;
         $this->data["following"] = Utilities::isFollowingUser($id);
 
@@ -142,7 +146,7 @@ class UserData
             "displayname" => $this->data["title"],
             "color" => $this->data["userlink_color"],
             "joined" => $this->data["joined"],
-            "connected" => $this->data["last_seen"],
+            "last_active" => $this->data["last_seen"],
             "following" => $this->data["following"],
             // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
             "powerlevel" => $this->data["powerlevel"],

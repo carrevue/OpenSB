@@ -101,7 +101,7 @@ class Authentication
 
     public function bumpLastActive()
     {
-        $this->database->query("UPDATE users SET last_seen = ? WHERE id = ?", [Utilities::getIpAddress(), $this->user_id]);
+        $this->database->query("UPDATE users SET last_seen = ? WHERE id = ?", [time(), $this->user_id]);
     }
 
     /**
