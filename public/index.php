@@ -147,14 +147,19 @@ function automatic_ip_ban()
     global $database;
 
     $ip = Utilities::getIpAddress();
+
     if ($ip !== null) {
-        $database->query("INSERT INTO ip_bans (ip, reason, timestamp) VALUES (?, ?, ?)", [
-            $ip,
-            "Automated by OpenSB: Likely a bot.",
-            time()
-        ]);
-        http_response_code(403);
-        die();
+        $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ip = ?", [Utilities::getIpAddress()]);
+
+        if (!$ipban) {
+            $database->query("INSERT INTO ip_bans (ip, reason, timestamp) VALUES (?, ?, ?)", [
+                $ip,
+                "Automated by OpenSB: Likely a bot.",
+                time()
+            ]);
+            http_response_code(403);
+            die();
+        }
     }
 }
 
@@ -285,6 +290,7 @@ $router->redirect('/admin/{page}', '/dashboard'); // just redirect to /dashboard
 // dashboard routes
 $router->add('/dashboard', 'dashboard/index.php');
 $router->add('/dashboard/login', 'dashboard/login.php');
+$router->add('/dashboard/asn_bans', 'dashboard/asn_bans.php');
 $router->add('/dashboard/users', 'dashboard/users.php');
 $router->add('/dashboard/users/{username}', 'dashboard/user_edit.php');
 $router->redirect('/dashboard/overview', '/dashboard');

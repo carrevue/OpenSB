@@ -38,6 +38,10 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
+if (!$sb->isInviteKeysEnabled()) {
+    die(); // temporary, FUCK
+}
+
 // Get the invite keys
 $inviteKeys = $database->fetchArray($database->query("SELECT * FROM invite_keys"));
 

@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025-2026 Chaziz
+  Copyright (C) 2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace OpenSB\Pages;
 
 global $auth, $twig, $database, $sb;
 
-use Core\Utilities;
-use Data\User\UserRoleEnum;
+use OpenSB\Utilities;
+use OpenSB\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
     Utilities::notifyBanner("notify_no_permission", "/");
@@ -38,26 +38,21 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
-if (!$sb->isIpLookupEnabled()) {
-    die(); // temporary, FUCK
-}
+if (isset($_POST['asn'])) {
+    $asn = preg_replace('/[a-zA-Z]/', '', $_POST['asn']);
 
-if (isset($_POST['ip'])) {
-    $reason = $_POST['reason'] ?? "No reason specified";
+    $asnban = $database->fetch("SELECT * FROM asn_bans WHERE asn = ?", [$asn]);
 
-    $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ip = ?", [$ip]);
-
-    if ($ipban) {
-        Utilities::notifyBanner("notify_dashboard_ip_ban_already", "/dashboard/ip_bans");
+    if ($asnban) {
+        Utilities::notifyBanner("notify_dashboard_asn_ban_already", "/dashboard/asn_bans");
     } else {
-        $database->query("INSERT INTO ip_bans (ip, reason, timestamp, author) VALUES (?, ?, ?, ?)", [
-            $_POST['ip'],
-            $reason,
+        $database->query("INSERT INTO asn_bans (asn, timestamp, author) VALUES (?, ?, ?)", [
+            $asn,
             time(),
             $auth->getUserID()
         ]);
 
-        Utilities::notifyBanner("notify_dashboard_ip_ban_success", "/dashboard/ip_bans", "success");
+        Utilities::notifyBanner("notify_dashboard_asn_ban_success", "/dashboard/asn_bans", "success");
     }
 }
 
@@ -67,11 +62,11 @@ $page = $_GET["page"] ?? 1;
 
 $limit = $database->paginate($page, $amount);
 
-$ipData = $database->fetchArray(
+$asnData = $database->fetchArray(
     $database->query(
         "SELECT *
-        FROM ip_bans
-        WHERE (ip LIKE CONCAT('%', ?, '%'))
+        FROM asn_bans
+        WHERE (asn LIKE CONCAT('%', ?, '%'))
         ORDER BY timestamp DESC $limit
         ",
         [$search]
@@ -80,14 +75,14 @@ $ipData = $database->fetchArray(
 
 $count = $database->result(
     "SELECT COUNT(*)
-        FROM ip_bans
-        WHERE (ip LIKE CONCAT('%', ?, '%'))
+        FROM asn_bans
+        WHERE (asn LIKE CONCAT('%', ?, '%'))
         ",
     [$search]
 );
 
-echo $twig->render("dashboard_ip_bans.twig", [
-    "ips" => $ipData,
+echo $twig->render("dashboard_asn_bans.twig", [
+    "asns" => $asnData,
     "amount" => $amount,
     "page" => $page,
     "count" => $count,
