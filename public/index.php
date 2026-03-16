@@ -285,6 +285,7 @@ $router->redirect('/admin/{page}', '/dashboard'); // just redirect to /dashboard
 // dashboard routes
 $router->add('/dashboard', 'dashboard/index.php');
 $router->add('/dashboard/login', 'dashboard/login.php');
+$router->add('/dashboard/asn_bans', 'dashboard/asn_bans.php');
 $router->add('/dashboard/users', 'dashboard/users.php');
 $router->add('/dashboard/users/{username}', 'dashboard/user_edit.php');
 $router->redirect('/dashboard/overview', '/dashboard');
