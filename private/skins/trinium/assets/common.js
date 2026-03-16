@@ -56,21 +56,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // get those tabs in the homepage
-    function bindIndexTabToggle(id, type) {
+    function bindHomeTabToggle(id, type) {
         const btn = document.getElementById(id);
         if (!btn) return;
 
         btn.addEventListener('click', () => {
             setOptions({
-                trinium_homepage_type: type
+                home_type: type
             });
 
             location.reload();
         });
     }
 
-    bindIndexTabToggle('index-list-button', 'list');
-    bindIndexTabToggle('index-wavelet-button', 'wavelet');
+    bindHomeTabToggle('home-following-button', 'following');
+    bindHomeTabToggle('home-public-button', 'public');
+    bindHomeTabToggle('home-featured-button', 'featured');
 
     // Get all tab groups
     const tabGroups = document.querySelectorAll(".tab-group");

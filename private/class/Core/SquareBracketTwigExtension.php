@@ -686,10 +686,6 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "name" => $this->localize("new_upload"), // Upload (New upload)
                     "url" => "/upload",
                 ],
-                "write" => [
-                    "name" => $this->localize("new_journal"), // Write (New journal)
-                    "url" => "/write",
-                ],
                 "logout" => [
                     "name" => $this->localize("logout"), // Logout
                     "url" => "/logout",

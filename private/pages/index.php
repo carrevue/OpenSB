@@ -25,11 +25,12 @@ namespace Pages;
 
 global $twig, $database, $sb, $auth;
 
+use Core\Utilities;
 use Data\Post\PostQuery;
 use Data\Upload\UploadFlags;
 use Data\Upload\UploadQuery;
 use Data\User\UserQuery;
-use Core\Utilities;
+use Data\User\UserFlags;
 use Data\Feed\FeedQuery;
 
 $options = $sb->getLocalOptions();
@@ -40,28 +41,19 @@ if ($options["skin"] == "finalium") {
     exit;
 }
 
-$enable_wavelet = $options["skin"] == "trinium" && $sb->isIncompleteFeaturesEnabled();
-
-if ($enable_wavelet) {
-    $post_query = new PostQuery($sb);
-}
-
-$upload_query = new UploadQuery($sb);
-if ($options["skin"] == "trinium") {
-    $type = isset($options["trinium_homepage_type"]) && $options["trinium_homepage_type"] !== "list" ? $options["trinium_homepage_type"] : "list";
-
-    if ($type == "wavelet" && !$enable_wavelet) {
-        $type = "list";
-    }
+if ($auth->isUserLoggedIn()) {
+    $type = isset($options["home_type"]) && $options["home_type"] !== "following" ? $options["home_type"] : "following";
 } else {
-    $type = "list"; // avoid undefined warning
+    $type = "featured";
 }
 
-$uploads_query_limit = 12;
+$post_query = new PostQuery($sb);
+$upload_query = new UploadQuery($sb);
+$feed_query = new FeedQuery($sb);
+
+$post_query_limit = 12;
 $uploads_featured_query_limit = 3;
 $news_recent_query_limit = 1;
-
-$uploads_recent = $upload_query->query("v.timestamp DESC", $uploads_query_limit)->toCleanArray();
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
@@ -69,41 +61,58 @@ $uploads_featured = $upload_query->query(
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
 
-if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstrap had this too back then
-    // copied from SquareBracketTwigExtension
-    $rows = $database->fetchArray(
-        $database->query(
-            "SELECT s.* FROM user_follows s
-            JOIN users u ON s.user = u.id
-            WHERE s.user = ?
-            AND s.id NOT IN (SELECT user FROM user_bans)",
-            [$auth->getUserID()]
-        )
-    );
+// well this is going to be fucking stupid, but oh well.
 
-    if ($rows) {
-        $users = array_map('intval', array_column($rows, 'id'));
+switch ($type) {
+    case "featured":
+        $featured_users = $database->fetchArray(
+            $database->query(
+                "SELECT u.id, u.name
+                FROM users u 
+                WHERE u.flags & ? = ?
+                ORDER BY RAND() LIMIT 6",
+                [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
+            )
+        );
+
+        $users = array_map('intval', array_column($featured_users, 'id'));
         $query = implode(', ', $users);
 
-        $uploads_following = $upload_query->query(
-            "v.timestamp DESC",
-            $uploads_query_limit,
-            sprintf("v.author in (%s)", $query)
+        $feed = $feed_query->query(
+            "timestamp DESC",
+            $post_query_limit,
+            sprintf("author in (%s)", $query)
         )->toCleanArray();
-    } else {
-        $uploads_following = [];
-    }
-} else {
-    $uploads_following = [];
+        break;
+    case "following":
+        $following_users = $database->fetchArray(
+            $database->query(
+                "SELECT s.* FROM user_follows s
+                JOIN users u ON s.user = u.id
+                WHERE s.user = ?
+                AND s.id NOT IN (SELECT user FROM user_bans)",
+                [$auth->getUserID()]
+            )
+        );
+
+        $users = array_map('intval', array_column($following_users, 'id'));
+        $query = implode(', ', $users);
+
+        $feed = $feed_query->query(
+            "timestamp DESC",
+            $post_query_limit,
+            sprintf("author in (%s)", $query)
+        )->toCleanArray();
+        break;
+    case "public":
+        $feed = $feed_query->query(
+            "timestamp DESC",
+            $post_query_limit
+        )->toCleanArray();
+        break;
 }
 
 $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
-
-if ($type == "wavelet" && $enable_wavelet) {
-    $posts = $post_query->query("p.timestamp DESC", 12)->toCleanArray();
-} else {
-    $posts = [];
-}
 
 if ($options["skin"] == "trinium") {
     $user_query = new UserQuery($sb);
@@ -112,16 +121,9 @@ if ($options["skin"] == "trinium") {
     $users_recent = [];
 }
 
-$feed_query = new FeedQuery($sb);
-$feed = $feed_query->query("timestamp DESC", $uploads_query_limit)->toCleanArray();
-
 $data = [
-    "uploads_new" => $uploads_recent,
     "uploads_featured" => $uploads_featured,
-    "uploads_following" => $uploads_following,
     "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
-    //"posts" => Utilities::makeJournalArray($database, $posts) ?? [],
-    "posts" => $posts,
     "feed" => $feed,
     "users_recent" => $users_recent ?? [],
 ];
