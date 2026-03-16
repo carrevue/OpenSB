@@ -19,12 +19,12 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace OpenSB\Pages;
+namespace Pages;
 
 global $auth, $twig, $database, $sb;
 
-use OpenSB\Utilities;
-use OpenSB\UserRoleEnum;
+use Core\Utilities;
+use Data\User\UserRoleEnum;
 
 if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
     Utilities::notifyBanner("notify_no_permission", "/");
