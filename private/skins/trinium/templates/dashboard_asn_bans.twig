@@ -8,10 +8,11 @@
 
 {% set title = "ASN bans" %}
 
-	{% block dashboard_content %}
-        {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
-        {% set current_page = page %}
+{% block dashboard_content %}
+    {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
+    {% set current_page = page %}
 
+    <div class="content-box">
         <div style="text-align:center;">
             <form method="POST" action="/dashboard/asn_bans/">
                 <input type="text" name="asn" placeholder="ASN">
@@ -49,4 +50,5 @@
             </div>
         {% endfor %}
         {{ pagination(count, amount, le_url, current_page) }}
-    {% endblock %}
+    </div>
+{% endblock %}
