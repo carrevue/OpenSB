@@ -458,5 +458,7 @@
     "notify_dashboard_verify_success": "Successfully verified %s.",
     "notify_dashboard_unverify_success": "Successfully unverified %s.",
     "notify_dashboard_feature_user_success": "Successfully featured %s.",
-    "notify_dashboard_unfeature_user_success": "Successfully unfeatured %s."
+    "notify_dashboard_unfeature_user_success": "Successfully unfeatured %s.",
+    "notify_dashboard_ip_ban_already": "IP already banned.",
+    "notify_dashboard_ip_ban_success": "IP successfully banned."
 }

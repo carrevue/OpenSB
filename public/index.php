@@ -144,14 +144,19 @@ function automatic_ip_ban()
     global $database;
 
     $ip = Utilities::getIpAddress();
+
     if ($ip !== null) {
-        $database->query("INSERT INTO ip_bans (ip, reason, timestamp) VALUES (?, ?, ?)", [
-            $ip,
-            "Automated by OpenSB: Likely a bot.",
-            time()
-        ]);
-        http_response_code(403);
-        die();
+        $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ip = ?", [Utilities::getIpAddress()]);
+
+        if (!$ipban) {
+            $database->query("INSERT INTO ip_bans (ip, reason, timestamp) VALUES (?, ?, ?)", [
+                $ip,
+                "Automated by OpenSB: Likely a bot.",
+                time()
+            ]);
+            http_response_code(403);
+            die();
+        }
     }
 }
 
