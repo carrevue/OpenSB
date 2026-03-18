@@ -5,7 +5,9 @@
 OpenSB (Open SquareBracket) is a free and open-source PHP-based video/image sharing website script. Compared to other "video sharing site scripts", OpenSB aims to be lightweight and customizable. It is primarily used by the FulpTube/squareBracket platform.
 
 ## MAKE SURE YOU'RE GETTING OPENSB FROM THE CARREVUE DEVELOPMENT GITHUB!
-We've gotten reports about an unofficial malicious backdoored version of OpenSB originating from Eastern Europe. The only official source for OpenSB is and will always be the Carrevue Development GitHub organization. We are not responsible for anything that happens using that unofficial backdoored version.
+We've gotten reports about an unofficial malicious backdoored version of OpenSB originating from Eastern Europe being uploaded on random Gitea/GitLab instances and Codeberg. Claiming to be a "fixed" or "patched" version, it adds crude password stealing functionality and may also include other nasty things.
+
+The only official source for OpenSB is and will always be the Carrevue Development GitHub organization. We are not responsible nor liable for anything that happens using that unofficial backdoored version.
 
 ## How to setup an OpenSB instance.
 
