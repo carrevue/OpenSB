@@ -79,7 +79,7 @@ if (isset($_POST["submit"])) {
             "username" => $username,
             "email" => $email_address,
             "ip" => Utilities::getIpAddress(),
-            "asn" => $ipInfo['asn'] ?? "Unknown",
+            "asn" => $ipInfo['as_name'] ?? "Unknown" . " (" . $ipInfo['asn'] ?? "Unknown" . ")",
         ];
 
         $sb->getDiscordWebhookClass()->newUserHook($data);
