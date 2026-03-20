@@ -288,7 +288,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     private function parseUserMentions($string): array|string|null
     {
-        return preg_replace('/(?<!=|\b|&)@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $string);
+        return preg_replace('/(?<![=\/\w&])@([a-z0-9_]+(?:@[a-z0-9.-]+)?)/i', '<a href="/user/$1">@$1</a>', $string);
     }
 
     /**
