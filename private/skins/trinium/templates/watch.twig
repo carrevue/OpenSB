@@ -175,6 +175,9 @@
             <div class="section">
                 <div id="comments">
                     <div class="content-box">
+                        {% if options.exp_use_wavelet_for_comments %}
+                            <div class="banner secondary"><code>exp_use_wavelet_for_comments</code> is enabled.</div>
+                        {% endif %}
                         <div class="section-header flex">
                             <div class="section-header-left">
                                 <h2 class="section-title">{{ localize('comments' )}}</h2>
@@ -190,9 +193,15 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% for comment in upload.comments %}
-                            {{ include('/components/_comment.twig') }}
-                        {% endfor %}
+                        {% if options.exp_use_wavelet_for_comments %}
+                            {% for comment in upload.comments %}
+                                {{ include('/components/_post.twig', {post: comment}) }}
+                            {% endfor %}
+                        {% else %}
+                            {% for comment in upload.comments %}
+                                {{ include('/components/_comment.twig') }}
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>

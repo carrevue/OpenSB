@@ -36,6 +36,7 @@ use Data\Upload\UploadVisibilityEnum;
 use Data\Upload\UploadFlags;
 use Data\User\UserFlags;
 use Data\Upload\UploadResult;
+use Data\Post\PostQuery;
 
 $options = $sb->getLocalOptions();
 
@@ -335,10 +336,20 @@ if (!$recommended && !$uploads_by_author) {
 }
 
 if ($sb->getLocalOptions()["skin"] != "finalium") {
-    $comments = new CommentData($database, CommentLocation::Upload, $id);
+    if (isset($options["exp_use_wavelet_for_comments"]) && $options["exp_use_wavelet_for_comments"]) {
+        $post_query = new PostQuery($sb);
 
-    $comment_data = $comments->getComments();
-    $comment_count = $comments->getCommentCount();
+        // 1 is PostTypeEnum::UploadComment, im just trying to set this shit up quickly -chaziz 03/20/2026
+        $comments = $post_query->query("timestamp DESC", 20, "type = 1 AND reply_to = ?", [$upload->getData()["id"]]);
+
+        $comment_data = $comments->toCleanArray();
+        $comment_count = 0;
+    } else {
+        $comments = new CommentData($database, CommentLocation::Upload, $id);
+
+        $comment_data = $comments->getComments();
+        $comment_count = $comments->getCommentCount();
+    }
 } else {
     $comment_data = [];
     $comment_count = 0;

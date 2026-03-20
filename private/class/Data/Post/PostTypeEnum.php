@@ -26,14 +26,14 @@ use InvalidArgumentException;
 enum PostTypeEnum: int
 {
     case Post = 0;
-    case Upload = 1;
+    case UploadComment = 1;
     case ProfileComment = 2;
 
     public function toString(): string
     {
         return match ($this) {
             self::Post => 'post',
-            self::Upload => 'upload',
+            self::UploadComment => 'upload',
             self::ProfileComment => 'post',
             default => throw new InvalidArgumentException("invalid post type")
         };

@@ -13,11 +13,7 @@
             {% if post.contents | trim is not empty %}
                 {{ post.contents | markdown_user_written }}
             {% endif %}
-            {% if post.type == "upload" %}
-                {% if post.attachment %}
-                    <div>Upload</div>
-                {% endif %}
-            {% else %}
+            {% if post.type == "post" %}
                 {% if post.attachment %}
                     <img class="post-attachment" src="/dynamic/attachments/{{ post.attachment }}"></img>
                 {% endif %}
