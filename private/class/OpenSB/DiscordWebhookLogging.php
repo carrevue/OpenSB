@@ -321,14 +321,16 @@ class DiscordWebhookLogging
     {
         $this->initClient();
 
-        $title = 'New account created';
-
-        $author = $data['username'];
+        $author = 'New account created';
+        $title = $data['username'];
 
         $mbd = new Embed();
 
         $mbd->title($title)
             ->author($author)
+            ->field("Email", $data['email'])
+            ->field("IP", $data['ip'])
+            ->field("ASN", $data['asn'])
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 

@@ -184,6 +184,9 @@ if (isset($_POST['registersubmit'])) {
         if ($sb->isDiscordWebhookEnabled()) {
             $data = [
                 "username" => $username,
+                "email" => $email_address,
+                "ip" => Utilities::getIpAddress(),
+                "asn" => $ipInfo['asn'] ?? "Unknown",
             ];
 
             $sb->getDiscordWebhookClass()->newUserHook($data);
