@@ -1,4 +1,9 @@
-{% set logo_suffix = current_theme starts with 'dark' ? '-dark' : '' %}
+{% if not (current_theme ends with 'flat') %}
+    {% set logo_suffix = '-dark' %}
+{% else %}
+    {% set logo_suffix = current_theme starts with 'dark' ? '-dark' : '' %}
+{% endif %}
+
 {% set logo_extension = website_branding.is_vector ? '.svg' : '.png' %}
 {% set logo_type = website_branding.use_wordmark ? 'logo-wordmark' : 'logo' %}
 
@@ -14,7 +19,7 @@
     <style>
         {# this is done through twig because css does not support string addition #}
         :root {
-            {% if current_theme starts with 'dark' %}
+            {% if current_theme starts with 'dark' or not (current_theme ends with 'flat') %}
             --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background_dark.jpg');
             {% else %}
             --jumbotron: url('{{ website_branding.assets_location }}/jumbotron_background.jpg');
