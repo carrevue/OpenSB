@@ -51,7 +51,7 @@ function handle_error(string $message, string ...$args) {
         die();
     } else {
         // go back to homepage with a notification (or something else if specified)
-        Utilities::notifyBanner($message, "/", "danger", ...$args);
+        Utilities::notifyBanner($message, "/", "danger", $args);
     }
 }
 
