@@ -22,17 +22,6 @@
 
 {% block content %}
 {% include('components/report_dialog.twig') %}
-    {% if upload.takedown %}
-        <div class="banner secondary">
-            This upload was taken down on {{ upload.takedown.time | format_date('long', 'medium') }}
-            by {{ upload.takedown.takedownee }} for the following reason: {{ upload.takedown.reason }}
-        </div>
-    {% endif %}
-    {% if upload.author_banned %}
-        <div class="banner secondary">
-            The author of this upload is banned.
-        </div>
-    {% endif %}
     <div class="grid">
         <div class="col-medium-12 col-large-8 col-huge-9">
             <div class="section">

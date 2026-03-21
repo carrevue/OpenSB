@@ -9,13 +9,14 @@
             <li><a href="/dashboard/users">Users</a></li>
             {% if user_data.powerlevel > 2 %}
                 <li><a href="/dashboard/ip_bans">IP bans</a></li>
+                <li><a href="/dashboard/asn_bans">ASN bans</a></li>
             {% endif %}
             {% if invite_keys_enabled %}
                 <li><a href="/dashboard/invite_keys">Invite keys</a></li>
             {% endif %}
             <li><a href="/dashboard/uploads">Uploads</a></li>
-            <li><a href="/dashboard/journals">Journals</a></li>
-            <li><a href="/dashboard/interactions">Interactions</a></li>
+            <li><a href="/dashboard/posts">Journals</a></li>
+            <li><a href="/dashboard/posts">Posts</a></li>
             <li><a href="/dashboard/filtering">Filtering</a></li>
         </ul>
     {% endblock %}

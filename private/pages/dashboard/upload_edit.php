@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -47,6 +47,20 @@ $data = $upload->getData();
 if (!$data) {
     Utilities::notifyBanner("notify_invalid_upload", "/dashboard/uploads");
 }
+
+$takedown = $upload->getTakedownData();
+
+// kind of awkward
+if ($takedown) {
+    $takedown_data = $takedown[0];
+    $takedown_data["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
+    $takedown_data["author_banned"] = $author->isUserBanned();
+} else {
+    $takedown_data = [];
+    $takedown_data["author_banned"] = false;
+}
+
+var_dump($takedown_data);
 
 $flags = $upload->getFlagArray();
 
@@ -121,6 +135,7 @@ $page_data = [
     //"random" => $random_uploads_array,
     //"tags" => $tags,
     "log" => $log,
+    "takedown" => $takedown_data,
 ];
 
 echo $twig->render("dashboard_upload_edit.twig", [
