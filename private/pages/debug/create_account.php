@@ -37,7 +37,7 @@ if (isset($_POST["submit"])) {
     // dont validate shit (except already taken names and birthdates)
 
     $username = trim($_POST['name'] ?? '');
-    $email = $_POST['email'] ?? ''; //filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $email_address = $_POST['email'] ?? ''; //filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $pass = $_POST['password'] ?? ''; //$pass2 = $_POST['pass2'] ?? '';
     $title = trim($_POST['title']) === '' ? $username : $_POST['title'];
     $birthdate = $_POST['birthdate'] ?? '';
@@ -71,12 +71,15 @@ if (isset($_POST["submit"])) {
     $database->query(
         "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [$username, $hashedPassword, $token, time(), time(), $username, $email, "ip", $dobDateTime->format('Y-m-d')]
+        [$username, $hashedPassword, $token, time(), time(), $username, $email_address, "ip", $dobDateTime->format('Y-m-d')]
     );
 
     if ($sb->isDiscordWebhookEnabled()) {
         $data = [
             "username" => $username,
+            "email" => $email_address,
+            "ip" => Utilities::getIpAddress(),
+            "asn" => $ipInfo['as_name'] ?? "Unknown" . " (" . $ipInfo['asn'] ?? "Unknown" . ")",
         ];
 
         $sb->getDiscordWebhookClass()->newUserHook($data);

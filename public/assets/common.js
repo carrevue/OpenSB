@@ -55,6 +55,7 @@ function setUpModal(trigger_button, modal, close_button) {
         });
 
         close_button.addEventListener("click", () => {
+            event.preventDefault();
             modal.close();
         });
         console.debug("Modal set up for", modal.id);

@@ -318,14 +318,16 @@ class DiscordWebhookLogging
     {
         $this->initClient();
 
-        $title = 'New account created';
-
-        $author = $data['username'];
+        $author = 'New account created';
+        $title = $data['username'];
 
         $mbd = new Embed();
 
         $mbd->title($title)
             ->author($author)
+            ->field("Email", $data['email'])
+            ->field("IP", $data['ip'])
+            ->field("ASN", $data['asn'])
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
@@ -382,5 +384,42 @@ class DiscordWebhookLogging
             ->color($color);
 
         $this->webhook->embed($mbd)->send();
+    }
+
+    /**
+     * function dashboardUploadHook
+     *
+     * Trigger the dashboard upload webhook.
+     *
+     * @param mixed $data
+     *
+     * @return void
+     */
+    function dashboardUploadHook($data)
+    {
+        $this->initClient();
+
+        switch ($data['action']) {
+            case "takedown":
+                $author = 'Upload taken down by ' . $data['author'];
+                $color = Colors::DANGER;
+                break;
+            case "restore":
+                $author = 'Upload restored by ' . $data['author'];
+                $color = Colors::WARNING;
+                break;
+        }
+
+        $title = $data['title'];
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->author($author)
+            ->field("Takedown reason", $data['reason'] ?? "")
+            ->footer($this->footer_text)
+            ->color($color);
+
+        @$this->webhook->embed($mbd)->send();
     }
 }

@@ -62,7 +62,7 @@ $uploads = $upload_query->query('v.timestamp DESC', $limit, $whereCondition, $pa
 
 $uploads_array = $uploads->toCleanArray();
 
-$new_fucking_array = [];
+$upload_array = [];
 
 $unique_author_ids = [];
 
@@ -123,17 +123,17 @@ foreach ($uploads_array as $upload) {
 
         if ($is_banned) {
             $upload["status"] = [
-                "text" => "Author banned",
+                "text" => "Taken down (Author banned)",
                 "color" => "danger",
             ];
         }
     }
 
-    $new_fucking_array[] = $upload;
+    $upload_array[] = $upload;
 };
 
 echo $twig->render("dashboard_uploads.twig", [
-    "uploads" => $new_fucking_array,
+    "uploads" => $upload_array,
     "amount" => $amount,
     "page" => $page,
     "count" => $count,

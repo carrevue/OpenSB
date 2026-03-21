@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -40,6 +40,18 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
+function discord_webhook_notify($sb, $auth, $title, $action, $reason = '')
+{
+    $data = [
+        'title' => $title,
+        'author' => $auth->getUserData()["name"],
+        'reason' => $reason ?? "",
+        'action' => $action,
+    ];
+
+    $sb->getDiscordWebhookClass()->dashboardUploadHook($data);
+}
+
 $upload = new UploadData($database, $id);
 
 $data = $upload->getData();
@@ -48,7 +60,64 @@ if (!$data) {
     Utilities::notifyBanner("notify_invalid_upload", "/dashboard/uploads");
 }
 
+if ($upload->isTakenDown()) {
+    $takedown = $upload->getTakedownData();
+
+    if ($takedown) {
+        $takedown_data = $takedown[0];
+        $takedown_data["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
+    } else {
+        $takedown_data = [];
+    }
+} else {
+    $takedown_data = [];
+}
+
+// temporary, will return the user's ban details when that'll be the time -chaziz 03/21/2026
+if ($upload->isAuthorBanned()) {
+    $author_banned = true;
+} else {
+    $author_banned = false;
+}
+
 $flags = $upload->getFlagArray();
+
+if (isset($_POST['takedown_submit'])) {
+    $upload_title_for_webhook = $upload->getData()["title"] . " (" . $upload->getData()["upload_id"] . ")";
+    $reason = $_POST["reason"] ?? "No reason provided.";
+
+    if ($upload->isTakenDown()) {
+        Utilities::notifyBanner("notify_dashboard_upload_takedown_already", $_SERVER['REQUEST_URI']);
+    }
+
+    $database->query("
+        INSERT INTO upload_takedowns (upload, time, reason, sender)
+        VALUES (?,?,?,?);
+    ", [$id, time(), $reason, $auth->getUserID()]);
+
+    // ok this shit is very fucking stupid i do not know why is it like this
+    discord_webhook_notify($sb, $auth, $upload_title_for_webhook, "takedown", $reason);
+
+    Utilities::notifyBanner("notify_dashboard_upload_takedown_success", $_SERVER['REQUEST_URI'], "success");
+}
+
+if (isset($_POST['restore'])) {
+    if (!$upload->isTakenDown()) {
+        Utilities::notifyBanner("notify_dashboard_upload_restore_failed", $_SERVER['REQUEST_URI']);
+    }
+
+    $upload_title_for_webhook = $upload->getData()["title"] . " (" . $upload->getData()["upload_id"] . ")";
+    $reason = $takedown[0]["reason"] ?? "No reason provided.";
+
+    $database->query("
+        DELETE FROM upload_takedowns
+        WHERE upload = ?
+    ", [$id]);
+
+    discord_webhook_notify($sb, $auth, $upload_title_for_webhook, "restore", $reason);
+
+    Utilities::notifyBanner("notify_dashboard_upload_restore_success", $_SERVER['REQUEST_URI'], "success");
+}
 
 // Update flags
 if (isset($_POST['flagsubmit'])) {
@@ -104,6 +173,7 @@ $page_data = [
     "author" => [
         "id" => $data["author"],
         "info" => $upload->getAuthorData(),
+        "banned" => $author_banned,
         //"followers" => $followers,
         //"following" => $followed,
     ],
@@ -121,6 +191,7 @@ $page_data = [
     //"random" => $random_uploads_array,
     //"tags" => $tags,
     "log" => $log,
+    "takedown" => $takedown_data,
 ];
 
 echo $twig->render("dashboard_upload_edit.twig", [

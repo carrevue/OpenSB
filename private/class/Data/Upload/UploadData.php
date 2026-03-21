@@ -63,7 +63,7 @@ class UploadData
     private array|false|null $tags = null;
 
     /** 
-     * @var bool Indicates if the upload was deleted as a failsafe measure
+     * @var bool Indicates if the upload is deleted
      */
     private bool $is_deleted = false;
 
@@ -133,13 +133,23 @@ class UploadData
     }
 
     /**
-     * Check whether this upload has been taken down or if the author is banned.
+     * Returns true if the upload's author has been banned.
+     *
+     * @return bool
+     */
+    public function isAuthorBanned()
+    {
+        return $this->author?->isUserBanned();
+    }
+
+    /**
+     * Returns true if the upload has been taken down.
      *
      * @return bool
      */
     public function isTakenDown()
     {
-        return $this->takedown || $this->author?->isUserBanned();
+        return $this->takedown;
     }
 
     /**

@@ -40,17 +40,20 @@ use Data\Post\PostQuery;
 
 $options = $sb->getLocalOptions();
 
-function handle_error(string $message, string $redirect = "/") {
+function handle_error(string $message, string ...$args) {
     global $sb, $twig; // Lol
 
     if ($sb->isHitchhiker()) {
+        $localization = $sb->getLocalizationClass();
+        $bullshit = $localization->translate($message, ...$args);
+
         echo $twig->render('watch_error.twig', [
-            'error' => $message,
+            'error' => $bullshit,
         ]);
         die();
     } else {
         // go back to homepage with a notification (or something else if specified)
-        Utilities::notifyBanner($message, $redirect);
+        Utilities::notifyBanner($message, "/", "danger", ...$args);
     }
 }
 
@@ -103,9 +106,17 @@ if ($sb->isFulpTubeMode()) {
 $upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
-if ($upload->isTakenDown() && !$auth->userHasRole(UserRoleEnum::Moderator)) {
-    // go back to homepage with a notification
-    handle_error("notify_taken_down_upload", "/");
+$isStaff = $auth->userHasRole(UserRoleEnum::Moderator) && $auth->hasUserAuthenticatedAsStaff();
+
+if ($upload->isTakenDown() || $upload->isAuthorBanned()) {
+    if ($isStaff) {
+        Utilities::redirect('/dashboard/uploads/' . $id);
+    }
+
+    if (!$isStaff) {
+        if ($upload->isTakenDown()) handle_error("notify_taken_down_upload");
+        if ($upload->isAuthorBanned()) handle_error("notify_upload_author_banned", $sb->getBrandingSettings()["name"]);
+    }
 }
 
 if ($upload->isDeleted()) {
@@ -153,7 +164,7 @@ $followed = Utilities::isFollowingUser($data["author"]);
 $flags = $upload->getFlagArray();
 
 if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
-    handle_error("notify_login_required_view_upload", "/login");
+    handle_error("notify_login_required_view_upload");
 }
 
 if ($flags["mature"] && !$auth->getUserFlags(true)["mature_content_access"]) {
@@ -249,7 +260,7 @@ if (!empty($candidates)) {
 }
 
 // avoid recommending masturbatory uploads, uploads about other sites, and "my first video" uploads, -chaziz 02/27/2025
-$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'betacast', 'first video', 'first upload'];
+$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'betacast', 'eracast', 'kamtape', 'first video', 'first upload'];
 
 // now score this shit
 if (!empty($candidates)) {
