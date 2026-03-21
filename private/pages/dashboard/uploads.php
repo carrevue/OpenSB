@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2024-2025 Chaziz
+  Copyright (C) 2024-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -61,7 +61,7 @@ $uploads = $upload_query->query('v.timestamp DESC', $limit, $whereCondition, $pa
 
 $uploads_array = Utilities::makeUploadArray($database, $uploads);
 
-$new_fucking_array = [];
+$upload_array = [];
 
 $unique_author_ids = [];
 
@@ -122,17 +122,17 @@ foreach ($uploads_array as $upload) {
 
         if ($is_banned) {
             $upload["status"] = [
-                "text" => "Author banned",
+                "text" => "Taken down (Author banned)",
                 "color" => "danger",
             ];
         }
     }
 
-    $new_fucking_array[] = $upload;
+    $upload_array[] = $upload;
 };
 
 echo $twig->render("dashboard_uploads.twig", [
-    "uploads" => $new_fucking_array,
+    "uploads" => $upload_array,
     "amount" => $amount,
     "page" => $page,
     "count" => $count,

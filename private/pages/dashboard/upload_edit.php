@@ -48,19 +48,25 @@ if (!$data) {
     Utilities::notifyBanner("notify_invalid_upload", "/dashboard/uploads");
 }
 
-$takedown = $upload->getTakedownData();
+if ($upload->isTakenDown()) {
+    $takedown = $upload->getTakedownData();
 
-// kind of awkward
-if ($takedown) {
-    $takedown_data = $takedown[0];
-    $takedown_data["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
-    $takedown_data["author_banned"] = $author->isUserBanned();
+    if ($takedown) {
+        $takedown_data = $takedown[0];
+        $takedown_data["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
+    } else {
+        $takedown_data = [];
+    }
 } else {
     $takedown_data = [];
-    $takedown_data["author_banned"] = false;
 }
 
-var_dump($takedown_data);
+// temporary, will return the user's ban details when that'll be the time -chaziz 03/21/2026
+if ($upload->isAuthorBanned()) {
+    $author_banned = true;
+} else {
+    $author_banned = false;
+}
 
 $flags = $upload->getFlagArray();
 
@@ -118,6 +124,7 @@ $page_data = [
     "author" => [
         "id" => $data["author"],
         "info" => $upload->getAuthorData(),
+        "banned" => $author_banned,
         //"followers" => $followers,
         //"following" => $followed,
     ],

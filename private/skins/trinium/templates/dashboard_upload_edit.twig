@@ -3,17 +3,6 @@
 {% set title = "Checking " ~ upload.id %}
 
 	{% block dashboard_content %}
-    {% if upload.takedown %}
-        <div class="banner secondary">
-            This upload was taken down on {{ upload.takedown.time | format_date('long', 'medium') }}
-            by {{ upload.takedown.takedownee }} for the following reason: {{ upload.takedown.reason }}
-        </div>
-    {% endif %}
-    {% if upload.takedown.author_banned %}
-        <div class="banner secondary">
-            The author of this upload is banned.
-        </div>
-    {% endif %}
         <div class="grid">
             <div class="col-6">
                 <div class="section">
@@ -28,12 +17,29 @@
                         </tr>
                         <tr>
                             <td>Author</td>
-                            <td><a href="/dashboard/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a></td>
+                            <td>
+                                <a href="/dashboard/users/{{ upload.author.info.username }}">{{ upload.author.info.username }}</a>
+                                {% if upload.author.banned %}<span class="text-danger">(Banned)</span>{% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>Uploaded</td>
                             <td>{{ upload.published | format_date('long', 'medium') }}</td>
                         </tr>
+                        {% if upload.takedown %}
+                        <tr>
+                            <td>Taken down by</td>
+                            <td><a href="/dashboard/users/{{ upload.takedown.takedownee }}">{{ upload.takedown.takedownee }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>Time of takedown</td>
+                            <td>{{ upload.takedown.time | format_date('long', 'medium') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Reason</td>
+                            <td>{{ upload.takedown.reason }}</td>
+                        </tr>
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
