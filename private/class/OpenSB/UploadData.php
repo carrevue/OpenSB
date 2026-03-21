@@ -63,7 +63,7 @@ class UploadData
     private array|false|null $tags = null;
 
     /** 
-     * @var bool Indicates if the upload was deleted as a failsafe measure
+     * @var bool Indicates if the upload is deleted
      */
     private bool $is_deleted = false;
 

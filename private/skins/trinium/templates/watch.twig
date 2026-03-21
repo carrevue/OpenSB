@@ -21,7 +21,9 @@
 {% endif %}
 
 {% block content %}
+{% if enable_incomplete_features %}
 {% include('components/report_dialog.twig') %}
+{% endif %}
     <div class="grid">
         <div class="col-medium-12 col-large-8 col-huge-9">
             <div class="section">

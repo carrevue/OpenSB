@@ -266,7 +266,7 @@ if (!empty($candidates)) {
 }
 
 // avoid recommending masturbatory uploads, uploads about other sites, and "my first video" uploads, -chaziz 02/27/2025
-$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'betacast', 'first video', 'first upload'];
+$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'betacast', 'eracast', 'kamtape', 'first video', 'first upload'];
 
 // now score this shit
 if (!empty($candidates)) {

@@ -2,7 +2,47 @@
 
 {% set title = "Checking " ~ upload.id %}
 
+    {% block scripts %}
+        <script>
+            let takedown_button = (document.getElementById('takedown-button'));
+            let takedown_dialog = (document.getElementById('takedown-dialog'));
+            let takedown_close_button = (document.getElementById('takedown-close-button'));
+
+            setUpModal(takedown_button, takedown_dialog, takedown_close_button);
+        </script>
+    {% endblock %}
+
 	{% block dashboard_content %}
+        <dialog class="content-box report-dialog" id="takedown-dialog">
+            <form id="takedownForm" method="post" method="dialog">
+                <div class="section">
+                    <div class="section-header">
+                        <h1 class="section-title">Takedown the upload</h1>
+                    </div>
+                </div>
+                <div class="text-danger">This currently does not notify the author.</div>
+                <div class="form-input">
+                    <label for="takedown-reason" class="form-label">Reason</label>
+                    <textarea id="takedown-reason" name="reason" class="form-submit" rows="6" required></textarea>
+                </div>
+                <div class="form-button-container">
+                    <button class="button secondary" type="cancel" id="takedown-close-button">Close</button>
+                    <button class="button accent" name="takedown_submit" type="submit" value="Submit" id="takedown-submit-button">Submit</button>
+                </div>
+            </form>
+        </dialog>
+        <div class="section">
+            <div class="admin-user-actions">
+                {% if upload.takedown %}
+                    <form id="takedownForm" method="post" enctype="multipart/form-data">
+                        <button name="restore" value="{{ upload.id }}" class="button warning" onclick="if (!confirm('Are you sure you want to restore this upload?')) { return false }">Restore</button>
+                    </form>
+                {% else %}
+                    <div id="takedown-button" class="button danger">Takedown</button>
+                {% endif %}
+            </div>
+        </div>
+        <hr>
         <div class="grid">
             <div class="col-6">
                 <div class="section">

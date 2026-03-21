@@ -40,6 +40,18 @@ if ($sb->getLocalOptions()["skin"] != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
+function discord_webhook_notify($sb, $auth, $title, $action, $reason = '')
+{
+    $data = [
+        'title' => $title,
+        'author' => $auth->getUserData()["name"],
+        'reason' => $reason ?? "",
+        'action' => $action,
+    ];
+
+    $sb->getDiscordWebhookClass()->dashboardUploadHook($data);
+}
+
 $upload = new UploadData($database, $id);
 
 $data = $upload->getData();
@@ -69,6 +81,43 @@ if ($upload->isAuthorBanned()) {
 }
 
 $flags = $upload->getFlagArray();
+
+if (isset($_POST['takedown_submit'])) {
+    $upload_title_for_webhook = $upload->getData()["title"] . " (" . $upload->getData()["upload_id"] . ")";
+    $reason = $_POST["reason"] ?? "No reason provided.";
+
+    if ($upload->isTakenDown()) {
+        Utilities::notifyBanner("notify_dashboard_upload_takedown_already", $_SERVER['REQUEST_URI']);
+    }
+
+    $database->query("
+        INSERT INTO upload_takedowns (upload, time, reason, sender)
+        VALUES (?,?,?,?);
+    ", [$id, time(), $reason, $auth->getUserID()]);
+
+    // ok this shit is very fucking stupid i do not know why is it like this
+    discord_webhook_notify($sb, $auth, $upload_title_for_webhook, "takedown", $reason);
+
+    Utilities::notifyBanner("notify_dashboard_upload_takedown_success", $_SERVER['REQUEST_URI'], "success");
+}
+
+if (isset($_POST['restore'])) {
+    if (!$upload->isTakenDown()) {
+        Utilities::notifyBanner("notify_dashboard_upload_restore_failed", $_SERVER['REQUEST_URI']);
+    }
+
+    $upload_title_for_webhook = $upload->getData()["title"] . " (" . $upload->getData()["upload_id"] . ")";
+    $reason = $takedown[0]["reason"] ?? "No reason provided.";
+
+    $database->query("
+        DELETE FROM upload_takedowns
+        WHERE upload = ?
+    ", [$id]);
+
+    discord_webhook_notify($sb, $auth, $upload_title_for_webhook, "restore", $reason);
+
+    Utilities::notifyBanner("notify_dashboard_upload_restore_success", $_SERVER['REQUEST_URI'], "success");
+}
 
 // Update flags
 if (isset($_POST['flagsubmit'])) {
