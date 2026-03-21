@@ -92,7 +92,7 @@ function make_running_total_graph_from_uploads($database): array
 
                  SELECT DATE(FROM_UNIXTIME(ut.time)) AS timestamp, -COUNT(*) AS num_interactions
                  FROM upload_takedowns ut
-                 INNER JOIN uploads u ON ut.upload = u.id
+                 INNER JOIN uploads u ON ut.upload = u.upload_id
                  GROUP BY DATE(FROM_UNIXTIME(ut.time))
 
                  UNION ALL
