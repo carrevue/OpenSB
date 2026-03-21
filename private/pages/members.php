@@ -57,7 +57,7 @@ $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 
 $limit = $database->paginate($page, 20);
 
 $queryData = $user_query->query($tabs[$type]["order"] ?? "u.last_seen DESC", $limit, "u_num != 0");
-$countData = $user_query->count("(SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT id from upload_takedowns)) != 0");
+$countData = $user_query->count("(SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT upload from upload_takedowns)) != 0");
 $usersData = $user_query->toArray($queryData);
 
 $data = [
