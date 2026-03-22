@@ -30,10 +30,6 @@ $flags = [
         "name" => "Structured Page Fragments",
         "description" => "Use SPF. Only works under Finalium."
     ],
-    "debug_fulptube_branding" => [
-        "name" => "[DEBUG] FulpTube branding override",
-        "description" => "Overrides squareBracket branding with FulpTube branding. Only works under Chaziz mode."
-    ],
     "exp_wavelet" => [
         "name" => "Enable Wavelet",
         "description" => "Replace journals with social media-styled posts."

@@ -607,12 +607,12 @@ class SquareBracket
      */
     public function isIncompleteFeaturesEnabled(): bool
     {
-        if ($this->is_chaziz_instance && !$this->is_test_instance && !$this->is_debug) {
-            return false;
-        }
-
         if ($this->is_test_instance) {
             return true;
+        }
+
+        if ($this->is_chaziz_instance && !$this->is_debug) {
+            return false;
         }
 
         return $this->options['enable_incomplete_features'] ?? false;
@@ -647,7 +647,7 @@ class SquareBracket
 
         $isOnFulpTubeDomain = str_contains($_SERVER['HTTP_HOST'], 'fulptube.rocks') || $_SERVER['HTTP_HOST'] == "localhost-fulptube";
 
-        $isDebugMode = ($this->options['debug_fulptube_branding'] ?? false) && $this->isDebug();
+        $isDebugMode = ($this->options['debug_fulptube_branding'] ?? false) && ($this->isTestInstance() || $this->isDebug());
 
         if ($this->is_chaziz_instance && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
             return true;

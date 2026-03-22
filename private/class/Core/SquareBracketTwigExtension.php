@@ -808,13 +808,6 @@ class SquareBracketTwigExtension extends AbstractExtension
             ];
         }
 
-        if ($this->sb->isTestInstance()) {
-            $array["test"] = [
-                "name" => "Custom Footer Link",
-                "url" => "/",
-            ];
-        }
-
         return $array;
     }
 
