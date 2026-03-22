@@ -21,7 +21,7 @@
 {% endif %}
 
 {% block content %}
-{% if enable_incomplete_features %}
+{% if enable_incomplete_features and options.exp_report %}
 {% include('components/report_dialog.twig') %}
 {% endif %}
     <div class="grid">
@@ -61,7 +61,7 @@
                                             <span>{{ localize('dashboard_lookup') }}</span>
                                         </a>
                                     {% endif %}
-                                    {% if enable_incomplete_features %}
+                                    {% if enable_incomplete_features and options.exp_report %}
                                     <a class="menu-item-button" id="report-button">
                                         <span>{{ localize('report') }}</span>
                                     </a>
@@ -166,8 +166,8 @@
             <div class="section">
                 <div id="comments">
                     <div class="content-box">
-                        {% if options.exp_use_wavelet_for_comments %}
-                            <div class="banner secondary"><code>exp_use_wavelet_for_comments</code> is enabled.</div>
+                        {% if options.exp_wavelet_comments %}
+                            <div class="banner secondary"><code>exp_wavelet_comments</code> is enabled.</div>
                         {% endif %}
                         <div class="section-header flex">
                             <div class="section-header-left">
@@ -184,7 +184,7 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if options.exp_use_wavelet_for_comments %}
+                        {% if options.exp_wavelet_comments %}
                             {% for comment in upload.comments %}
                                 {{ include('/components/_post.twig', {post: comment}) }}
                             {% endfor %}

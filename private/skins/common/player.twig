@@ -136,7 +136,7 @@
                     },
                 ],
                 poster: '{{ thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) }}',
-                {% if enable_incomplete_features %}
+                {% if enable_incomplete_features and options.exp_player %}
                 previewThumbnails: {
                     enabled: true,
                     src: '/assets/thumbnails_sample.vtt',

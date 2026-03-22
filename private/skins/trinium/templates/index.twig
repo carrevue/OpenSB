@@ -50,9 +50,11 @@
                     <div class="tablink has-icon {% if type=='following' %}active{% endif %}" id="home-following-button">
                         {{ icon('homepage-following', 24) }} {{ localize('following') }}
                     </div>
+                    {% if enable_incomplete_features and exp_wavelet %}
                     <div class="tablink has-icon {% if type =='public' %}active{% endif %}" id="home-public-button">
                         {{ icon('homepage-public', 24) }} {{ localize('public') }}
                     </div>
+                    {% endif %}
                     <div class="tablink has-icon {% if type =='featured' %}active{% endif %}" id="home-featured-button">
                         {{ icon('star', 24) }} {{ localize('featured') }}
                     </div>
@@ -60,7 +62,7 @@
             {% endif %}
             <div class="section">
                 <div class="content-box">
-                    {% if is_user_logged_in %}
+                    {% if is_user_logged_in and enable_incomplete_features and exp_wavelet %}
                     <div class="new-post" id="post_field">
                         <div class="profile-picture">
                             <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
@@ -80,15 +82,21 @@
                         </div>
                     </div>
                     {% endif %}
-                    {% for entry in data.feed %}
-                        {% if entry.item_type == "post" %}
-                            {{ include('/components/_post.twig', {post: entry}) }}
-                        {% elseif entry.item_type == "upload" %}
+                    {% if enable_incomplete_features and exp_wavelet %}
+                        {% for entry in data.feed %}
+                            {% if entry.item_type == "post" %}
+                                {{ include('/components/_post.twig', {post: entry}) }}
+                            {% elseif entry.item_type == "upload" %}
+                                {{ include('/components/_upload_vertical.twig', {upload: entry}) }}
+                            {% else %}
+                                <div>Unknown feed item with type {{ entry.item_type }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% for entry in data.feed %}
                             {{ include('/components/_upload_vertical.twig', {upload: entry}) }}
-                        {% else %}
-                            <div>Unknown feed item with type {{ entry.item_type }}</div>
-                        {% endif %}
-                    {% endfor %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>

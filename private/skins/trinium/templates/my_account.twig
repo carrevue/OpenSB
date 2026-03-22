@@ -27,7 +27,7 @@
         <hr>
         <ul>
             <li><a href="/my_uploads">{{ localize('uploads') }}</a></li>
-            {% if enable_incomplete_features %}
+            {% if enable_incomplete_features and options.exp_inbox %}
             <li><a href="/my_messages">{{ localize('messages') }}</a></li>
             {% endif %}
             {% if invite_keys_enabled %}

@@ -230,6 +230,10 @@ $router->redirect('/version', '/about');
 $router->add('/write', 'write.php');
 $router->add('/view/{id}', 'view.php');
 
+if ($sb->isIncompleteFeaturesEnabled()) {
+    $router->add('/experiment_flags', 'experiment_flags.php');
+}
+
 if (Utilities::isClassicSkin()) {
     $router->add('/watch', 'view.php');
 } else {

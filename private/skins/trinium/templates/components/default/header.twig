@@ -27,7 +27,7 @@
                     </div>
                     <div class="menu" id="create-menu">
                         <a class="menu-item-button" href="/upload">{{ localize('new_upload') }}</a>
-                        <a class="menu-item-button" href="/write">{{ localize('new_journal') }} (Legacy)</a>
+                        <a class="menu-item-button" href="/write">{{ localize('new_journal') }} {% if enable_incomplete_features and exp_wavelet %}(Legacy){% endif %}</a>
                     </div>
                 </div>
                 {# notifications #}
@@ -37,7 +37,7 @@
                     </div>
                     <div class="menu" id="notify-menu">
                         <a class="menu-item-button" href="/notifications">{{ localize('notifications') }} ({{ user_stat_data.notifications }})</a>
-                        {% if enable_incomplete_features %}
+                        {% if enable_incomplete_features and options.exp_inbox %}
                         <a class="menu-item-button" href="/my_messages">Messages (0)</a>
                         {% endif %}
                     </div>

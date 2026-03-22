@@ -347,7 +347,7 @@ if (!$recommended && !$uploads_by_author) {
 }
 
 if ($sb->getLocalOptions()["skin"] != "finalium") {
-    if (isset($options["exp_use_wavelet_for_comments"]) && $options["exp_use_wavelet_for_comments"]) {
+    if (isset($options["exp_wavelet_comments"]) && $options["exp_wavelet_comments"]) {
         $post_query = new PostQuery($sb);
 
         // 1 is PostTypeEnum::UploadComment, im just trying to set this shit up quickly -chaziz 03/20/2026

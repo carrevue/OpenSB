@@ -26,7 +26,6 @@ namespace Pages;
 global $twig, $database, $sb, $auth;
 
 use Core\Utilities;
-use Data\Post\PostQuery;
 use Data\Upload\UploadFlags;
 use Data\Upload\UploadQuery;
 use Data\User\UserQuery;
@@ -47,9 +46,13 @@ if ($auth->isUserLoggedIn()) {
     $type = "featured";
 }
 
-$post_query = new PostQuery($sb);
+$enable_wavelet = $sb->isIncompleteFeaturesEnabled() && (isset($options["exp_wavelet"]) && $options["exp_wavelet"] == true);
+
 $upload_query = new UploadQuery($sb);
-$feed_query = new FeedQuery($sb);
+
+if ($enable_wavelet) {
+    $feed_query = new FeedQuery($sb);
+}
 
 $post_query_limit = 12;
 $uploads_featured_query_limit = 3;
@@ -78,11 +81,19 @@ switch ($type) {
         $users = array_map('intval', array_column($featured_users, 'id'));
         $query = implode(', ', $users);
 
-        $feed = $feed_query->query(
-            "timestamp DESC",
-            $post_query_limit,
-            sprintf("author in (%s)", $query)
-        )->toCleanArray();
+        if ($enable_wavelet) {
+            $feed = $feed_query->query(
+                "timestamp DESC",
+                $post_query_limit,
+                sprintf("author in (%s)", $query)
+            )->toCleanArray();        
+        } else {
+            $feed = $upload_query->query(
+                "timestamp DESC",
+                $post_query_limit,
+                sprintf("author in (%s)", $query)
+            )->toCleanArray();
+        }
         break;
     case "following":
         $following_users = $database->fetchArray(
@@ -98,17 +109,32 @@ switch ($type) {
         $users = array_map('intval', array_column($following_users, 'id'));
         $query = implode(', ', $users);
 
-        $feed = $feed_query->query(
-            "timestamp DESC",
-            $post_query_limit,
-            sprintf("author in (%s)", $query)
-        )->toCleanArray();
+        if ($enable_wavelet) {
+            $feed = $feed_query->query(
+                "timestamp DESC",
+                $post_query_limit,
+                sprintf("author in (%s)", $query)
+            )->toCleanArray();        
+        } else {
+            $feed = $upload_query->query(
+                "timestamp DESC",
+                $post_query_limit,
+                sprintf("author in (%s)", $query)
+            )->toCleanArray();
+        }
         break;
     case "public":
-        $feed = $feed_query->query(
-            "timestamp DESC",
-            $post_query_limit
-        )->toCleanArray();
+        if ($enable_wavelet) {
+            $feed = $feed_query->query(
+                "timestamp DESC",
+                $post_query_limit,
+            )->toCleanArray();        
+        } else {
+            $feed = $upload_query->query(
+                "timestamp DESC",
+                $post_query_limit,
+            )->toCleanArray();
+        }
         break;
 }
 

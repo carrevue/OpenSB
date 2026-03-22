@@ -787,6 +787,13 @@ class SquareBracketTwigExtension extends AbstractExtension
             ],
         ];
 
+        if ($this->sb->isIncompleteFeaturesEnabled()) {
+            $array["experiment_flags"] = [
+                "name" => $this->localize("experiment_flags"),
+                "url"  => "/experiment_flags",
+            ];
+        }
+
         if ($this->sb->isChazizInstance()) {
             if (!$this->sb->isFulpTubeMode()) {
                 $array["brickface"] = [

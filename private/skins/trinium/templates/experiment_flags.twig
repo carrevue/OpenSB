@@ -1,0 +1,26 @@
+{% extends "_layout.twig" %}
+
+{% set title = localize("experiment_flags") %}
+
+{% block content %}
+    <div class="section">
+        <div class="section-header">
+            <h1 class="section-title">{{ title }}</h1>
+            <div class="text-danger">Not all functionality listed here is complete.</div>
+        </div>
+        <div class="content-box">
+            <form name="devFlagForm" id="devFlagForm" method="post" action="/experiment_flags">
+                {% for key, flag in flags %}
+                    <div class="form-input">
+                        <input type="checkbox" id="{{ key }}" name="{{ key }}" class="form-submit" value="true" {% if attribute(options, key) %}checked{% endif %}></input>
+                        <label for="{{ key }}">{{ flag.name }}{% if flag.description %}<span>{{ flag.description }}</span>{% endif %}</label>
+                    </div>
+                {% endfor %}
+                <br>
+                <div class="form-button-container">
+                    <input type="submit" id="apply" name="apply" value="{{ localize('apply_action') }}" class="button accent">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -10,6 +10,8 @@
         <div class="content-description clamp">
             {{ journal.contents }}
         </div>
+        {% if enable_incomplete_features and options.exp_wavelet %}
         <div class="text-danger">DEPRECATED!!!</div>
+        {% endif %}
     </div>
 </div>

@@ -21,7 +21,7 @@
 
 namespace Pages;
 
-global $twig, $database, $auth, $twig_error, $sb;
+global $twig, $database, $auth, $sb;
 
 use Data\User\UserData;
 use Core\Utilities;

@@ -6,7 +6,7 @@
             </a>
         </li>
     {% endfor %}
-    {% if is_user_logged_in and enable_incomplete_features %}
+    {% if is_user_logged_in and enable_incomplete_features and options.exp_collections %}
         <li class="list-header">{{ localize('library') }}</li>
         {% for key, link in sidebar_library_links() %}
             <li class="list-link">

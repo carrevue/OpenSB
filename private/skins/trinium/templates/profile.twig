@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block precontentappend %}
-    {% if common.is_current %}
+    {% if common.is_current and enable_incomplete_features and options.exp_trinium_profile_settings %}
         {#<div class="subheader-container">
             <div class="subheader" id="profile-edit-toolbar">
                 <div class="button toolbar">Settings</div>
@@ -45,9 +45,9 @@
 {% endblock %}
 
 {% block content %}
-    {% if common.customization %}
-        {% include 'profile_layout/yt2008/overview.twig' %}
-    {% else %}
+    {% if enable_incomplete_features and options.exp_trinium_wavelet_profile and not common.customization %}
         {% include 'profile_layout/default/overview.twig' %}
+    {% else %}
+        {% include 'profile_layout/yt2008/overview.twig' %}
     {% endif %}
 {% endblock %}
