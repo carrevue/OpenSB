@@ -279,6 +279,7 @@ try {
     $h264->setKiloBitrate($bitrate);
 
     $video->filters()->custom('format=yuv420p');
+    $video->filters()->custom('scale=trunc(iw/2)*2:trunc(ih/2)*2');
 
     log("Converting video...");
     $video->save($h264, $path . '/videos/' . $new . '.converted.mp4');
