@@ -31,7 +31,7 @@ include_once('_include.php');
 
 // page-specific shit Here.
 if ($sb->getLocalOptions()["skin"] != "finalium") {
-    $comments = new CommentData($database, CommentLocation::Profile, $id);
+    $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
 
     $comment_data = $comments->getComments();
     $comment_count = $comments->getCommentCount();
