@@ -1,14 +1,14 @@
 # Community Guidelines 
-Last updated on January 13th 2026.
+Last updated on April 15th 2026.
 
 ## Users
 
-* Do not impersonate known figures from other online platforms, known real-world figures, and/or known online predators.
+Do not impersonate known figures from other online platforms, known real-world figures, and/or known predators.
 
 ### Off-platform
 Unlike other simillar platforms, this platform does not care about what you do outside of it. This includes its official Discord server. However, we have exceptions.
 
-* You may not create an account if you have a history of being exposed for sexually exploiting/abusing/manipulating/harassing minors (individuals below the age of 18), and/or for possessing/distributing CSAM. If you already had an account and are caught in such behavior with proper evidence, you will be banned from the platform.
+* You may not create an account if you have a history of being exposed for sexually exploiting/grooming minors (individuals below the age of 18), and/or for possessing/distributing CSAM. If you already had an account and are caught in such behavior with proper evidence, you will be banned from the platform.
 
 ## Uploads
 
