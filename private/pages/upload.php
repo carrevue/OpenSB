@@ -303,9 +303,10 @@ if (
             "Copyright Disclaimer under section 107",
             "Fair use is a use permitted by copyright statute",
             "No copyright infringement intended",
-            "All rights belong to the",
+            "All rights belong to",
             "Credit goes to",
             "Credits to",
+            "I do not own",
         ];
 
         if ($sb->isChazizInstance()) {
