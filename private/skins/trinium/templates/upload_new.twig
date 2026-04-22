@@ -30,19 +30,19 @@
                     <div class="col-10">
                         <div class="form-input">
                             <label for="title">{{ localize('title') }} <span>{{ localize('form_required') }}</span></label>
-                            <input type="text" class="form-submit" id="title" name="title" required>
+                            <input type="text" id="title" name="title" required>
                         </div>
 
                         <div class="form-input">
                             <label for="desc">{{ localize('description') }} <span>{{ localize('form_optional') }}</span></label>
-                            <textarea class="form-submit" name="desc" maxlength="65535"
+                            <textarea name="desc" maxlength="65535"
                                     form="uploadForm"
                                     style="overflow-x:hidden;resize:vertical" rows="8"></textarea>
                         </div>
 
                         <div class="form-input">
                             <label for="tags">{{ localize('tags') }} <span>{{ localize('form_optional') }}</span></label>
-                            <input type="text" class="form-submit" name="tags">
+                            <input type="text" name="tags">
                         </div>
 
                         <div class="form-input">

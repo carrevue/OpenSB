@@ -19,13 +19,13 @@
                 <div class="col-8">
                     <div class="form-input">
                         {{ localize('title') }}
-                        <input type="text" class="form-submit" name="title"
+                        <input type="text" name="title"
                             value="{{ data.title }}">
                     </div>
 
                     <div class="form-input">
                         {{ localize('description') }}
-                        <textarea class="form-submit" name="desc" maxlength="65535"
+                        <textarea name="desc" maxlength="65535"
                                 form="uploadForm"
                                 style="overflow:hidden;resize:vertical" rows="8">{{ data.description }}</textarea>
                     </div>
@@ -47,7 +47,7 @@
 
                     <div class="form-input">
                         <label for="thumbnail">{{ localize('custom_thumbnail') }}</label>
-                        <input class="form-submit" type="file" name="thumbnail" id="thumbnail">
+                        <input type="file" name="thumbnail" id="thumbnail">
                     </div>
 
                     <div class="form-input">

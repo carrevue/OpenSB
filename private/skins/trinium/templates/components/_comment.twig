@@ -37,7 +37,7 @@
                             <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
                         </div>
                         <div class="new-reply-form">
-                            <textarea class="form-submit" id="reply_contents_{{ comment.id }}" placeholder="{{ localize('write_reply') }}" maxlength="1000" rows="3"></textarea>
+                            <textarea id="reply_contents_{{ comment.id }}" placeholder="{{ localize('write_reply') }}" maxlength="1000" rows="3"></textarea>
                             <div class="new-post-bottom">
                                 <div class="text-danger post-form-error" id="reply-form-error-{{ comment.id }}"></div>
                                 <div class="new-post-buttons">

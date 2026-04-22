@@ -12,7 +12,7 @@
             <form name="devFlagForm" id="devFlagForm" method="post" action="/experiment_flags">
                 {% for key, flag in flags %}
                     <div class="form-input">
-                        <input type="checkbox" id="{{ key }}" name="{{ key }}" class="form-submit" value="true" {% if attribute(options, key) %}checked{% endif %}></input>
+                        <input type="checkbox" id="{{ key }}" name="{{ key }}" value="true" {% if attribute(options, key) %}checked{% endif %}></input>
                         <label for="{{ key }}">{{ flag.name }}{% if flag.description %}<span>{{ flag.description }}</span>{% endif %}</label>
                     </div>
                 {% endfor %}

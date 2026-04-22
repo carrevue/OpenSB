@@ -16,12 +16,12 @@
                         <div class="panel-body">
                             <div class="form-input">
                                 <label for="title">{{ localize('title') }} <span>{{ localize('form_required') }}</span></label>
-                                <input type="text" class="form-submit" id="title" name="title" required>
+                                <input type="text" id="title" name="title" required>
                             </div>
 
                             <div class="form-input">
                                 <label for="desc">{{ localize('content') }} <span>{{ localize('form_required') }}</span></label>
-                                <textarea class="form-submit" name="desc" maxlength="65535"
+                                <textarea name="desc" maxlength="65535"
                                           form="uploadForm"
                                           style="overflow-x:hidden;resize:vertical" rows="16" required></textarea>
                             </div>

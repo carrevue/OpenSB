@@ -29,7 +29,7 @@
             <form name="themeForm" id="themeForm" method="post" action="/theme">
                 <div class="form-input">
                     <label for="skin">{{ localize('skin') }}</label>
-                    <select id="skin" name="skin" class="form-submit" onchange="updateSkinThemes()">
+                    <select id="skin" name="skin" onchange="updateSkinThemes()">
                         {% for skin in skins %}
                             <option value="{{ skin.metadata.id }}" 
                                     data-description='{{ skin.metadata.description }}' 
@@ -43,13 +43,13 @@
                 </div>
                 <div class="form-input">
                     <label for="theme">{{ localize('theme') }}</label>
-                    <select id="theme" name="theme" class="form-submit" onchange="updatePreview()">
+                    <select id="theme" name="theme" onchange="updatePreview()">
                     </select>
                 </div>
                 <hr>
                 <div class="form-input">
                     <label for="locale">{{ localize('language') }}</label>
-                    <select id="locale" name="locale" class="form-submit">
+                    <select id="locale" name="locale">
                         {% for locale in locales %}
                             <option value="{{ locale.id }}"
                                     {% if options.locale == locale.id %} selected{% endif %}>
