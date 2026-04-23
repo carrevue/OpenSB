@@ -205,7 +205,12 @@ if (isset($_POST['save'])) {
         $name = $_FILES['profileBanner']['name'];
         $temp_name = $_FILES['profileBanner']['tmp_name'];
         $ext = pathinfo($_FILES['profileBanner']['name'], PATHINFO_EXTENSION);
-        $sb->getStorageClass()->processProfileBanner($temp_name, $auth->getUserData()["id"]);
+
+        if ($sb->getLocalOptions()["skin"] == "finalium") {
+            $sb->getStorageClass()->processFinaliumProfileBanner($temp_name, $auth->getUserData()["id"]);
+        } else {
+            $sb->getStorageClass()->processTriniumProfileBanner($temp_name, $auth->getUserData()["id"]);
+        }
     }
 
     if (!$error) {

@@ -8,7 +8,7 @@
 
 {% block my_account_content %}
     {% if error %}
-    <div class="banner danger">{{ error }}</div>
+    <div class="alert danger">{{ error }}</div>
     {% endif %}
     <div class="content-box">
         <div class="profile-box">
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="form-input">
-                    <label for="profileBanner">{{ localize('profile_banner') }} <span>{{ localize('recommended_resolution', "2500x300") }}</span></label>
+                    <label for="profileBanner">{{ localize('profile_banner') }} <span>{{ localize('recommended_resolution', "2500x300") }}</span> <a href="/assets/banner_template_trinium.png" target="_blank">Download template</a></label>
                     <input type="file" name="profileBanner" id="settings-banner">
                 </div>
 

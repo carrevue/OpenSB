@@ -6,10 +6,10 @@
     <div class="section">
         {% for color in color_types %}
             {% set article = color|first|lower in ['a','e','i','o','u'] ? 'an' : 'a' %}
-            <div class="banner {{ color }}">
+            <div class="alert {{ color }}">
                 {{ notification_icon(color) }}
-                <span class="banner-text">
-                This is {{ article }} {{ color }} banner. <a href="/">Go back home</a>.
+                <span class="alert-text">
+                This is {{ article }} {{ color }} alert. <a href="/">Go back home</a>.
                 </span>
             </div>
         {% endfor %}

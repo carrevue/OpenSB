@@ -206,16 +206,16 @@ class Storage
     }
 
     /**
-     * function processProfileBanner
+     * function processTriniumProfileBanner
      * 
-     * Scales profile banners to a height of 300 pixels
+     * Scales Trinium profile banners to a height of 300 pixels.
      *
      * @param string $temp_name
      * @param string $new
      *
      * @return void
      */
-    public function processProfileBanner(string $temp_name, string $new): void
+    public function processTriniumProfileBanner(string $temp_name, string $new): void
     {
         $target_file = $this->path . '/banners/' . $new . '.png';
 
@@ -225,6 +225,21 @@ class Storage
         $img->toPng()->save($target_file);
 
         unlink($temp_name);
+    }
+
+    /**
+     * function processFinaliumProfileBanner
+     * 
+     * Scales Finalium profile banners.
+     *
+     * @param string $temp_name
+     * @param string $new
+     *
+     * @return void
+     */
+    public function processFinaliumProfileBanner(string $temp_name, string $new): void
+    {
+        throw new \Exception("Method not implemented.");
     }
 
     /**
@@ -313,12 +328,19 @@ class Storage
     {
         if ($this->disabled) return false;
 
-        $path = $this->path . '/banners/' . $user . '.png';
+        $folder = 'banners';
+
+        if ($this->sb->getLocalOptions()["skin"] == "finalium") {
+            $folder = 'banners_finalium';
+        }
+
+        $path = $this->path . '/' . $folder . '/' . $user . '.png';
 
         if (file_exists($path)) {
-            return '/dynamic/banners/' . $user . '.png';
+            return '/dynamic/' . $folder . '/' . $user . '.png';
         } else {
-            return $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
+            //return $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
+            return $this->sb->isHitchhiker() ? "/assets/banner_template_finalium.png" : false;
         }
     }
 
