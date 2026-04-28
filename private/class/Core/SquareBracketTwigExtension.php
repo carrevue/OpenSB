@@ -773,6 +773,10 @@ class SquareBracketTwigExtension extends AbstractExtension
                 "name" => $this->localize("help"),
                 "url" => "/help",
             ],
+            "news" => [
+                "name" => $this->localize("site_news"),
+                "url" => "/news",
+            ],
             "tos" => [
                 "name" => $this->localize("terms_of_service"),
                 "url" => "/tos",
