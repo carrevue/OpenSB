@@ -673,6 +673,11 @@ class Utilities
             '://squarebracket.pw' => '://fulptube.rocks',
             '://squarebracket.veselcraft.ru' => '://fulptube.rocks',
         ]);
+
+        // fucking bullshit for 01/02/2026 announcement -chaziz 04/27/2026
+        $output = strtr($output, [
+            'Accounts registered on FulpTube in 2021-2022 and 2024-current.' => 'Accounts registered on squareBracket in 2021-2022 and 2024-current.',
+        ]);
         
         return $output;
     }
