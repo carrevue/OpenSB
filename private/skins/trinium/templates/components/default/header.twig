@@ -21,8 +21,8 @@
         <div class="header-links">
             {% if is_user_logged_in %}
                 {# create #}
-                <div class="user-menu-container">
-                    <div class="menu-button user-menu-button" data-menu-id="create-menu">
+                <div class="header-menu-container">
+                    <div class="menu-button" data-menu-id="create-menu">
                         {{ icon('upload') }}
                     </div>
                     <div class="menu" id="create-menu">
@@ -31,8 +31,8 @@
                     </div>
                 </div>
                 {# notifications #}
-                <div class="user-menu-container">
-                    <div class="menu-button user-menu-button" data-menu-id="notify-menu">
+                <div class="header-menu-container">
+                    <div class="menu-button" data-menu-id="notify-menu">
                         {{ icon('bell') }}
                     </div>
                     <div class="menu" id="notify-menu">
@@ -43,8 +43,8 @@
                     </div>
                 </div>
                 {# user #}
-                <div class="user-menu-container">
-                    <div class="menu-button user-menu-button" data-menu-id="user-menu">
+                <div class="header-menu-container">
+                    <div class="menu-button" data-menu-id="user-menu">
                         <div class="profile-picture user-menu-pfp">
                             <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
                         </div>
@@ -90,9 +90,9 @@
                 {#{% for link in header_user_links() %}
                     <a class="menulink" href="{{ link.url }}">{{ link.name }}</a>
                 {% endfor %}#}
-                <div class="user-menu-container">
-                    <div class="menu-button user-menu-button" data-menu-id="login-menu">
-                        <span class="have-an-account">{{ localize('have_an_account') }}</span> {{ localize('login') }}
+                <div class="header-menu-container">
+                    <div class="menu-button" data-menu-id="login-menu">
+                        <div class="menu-button-text"><span class="have-an-account">{{ localize('have_an_account') }}</span> {{ localize('login') }}</div>
                         <div class="menu-caret-container">
                             {{ icon('caret-closed', 16, 'menu-caret') }}
                         </div>

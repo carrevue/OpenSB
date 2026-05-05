@@ -28,7 +28,6 @@
     "welcome_logged_in": "Bienvenue, %s",
     "welcome_logged_out": "Bienvenue sur %s",
     "welcome_slogan": "Votre contenu, votre narration, votre place sur le Web.",
-    "welcome_its_free": "C'est simple!",
     "welcome_get_started": "Commencez",
 
     "followers": "{count, plural, one {# abonné} other {# abonnés}}",

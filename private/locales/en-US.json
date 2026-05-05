@@ -33,7 +33,6 @@
     "welcome_logged_in": "Welcome, %s",
     "welcome_logged_out": "Welcome to %s",
     "welcome_slogan": "Your content, your narration, your niche on the web.",
-    "welcome_its_free": "It's free!",
     "welcome_get_started": "Get started",
 
     "followers": "{count, plural, one {# follower} other {# followers}}",

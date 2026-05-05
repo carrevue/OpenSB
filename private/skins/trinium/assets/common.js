@@ -138,8 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const menuId = button.getAttribute('data-menu-id');
         const menu = document.getElementById(menuId);
 
-        // check if this menu button is the one in the header.
-        const isThisTheHeaderUserMenu = button.classList.contains("user-menu-button");
+        // check if this menu button is part of a header menu container.
+        const isThisInAHeaderMenuContainer = button.parentElement.classList.contains("header-menu-container");
 
         // get the caret if that exists. this is primarily for the one in the header.
         const menuCaret = button.getElementsByClassName("menu-caret");
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (actualCaret) {
                     actualCaret.querySelector('use').setAttribute('href', menuCaretOn);
                 }
-                if (isThisTheHeaderUserMenu) {
+                if (isThisInAHeaderMenuContainer) {
                     button.classList.add("selected");
                 }
                 menu.style.display = 'block';
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (actualCaret) {
                 actualCaret.querySelector('use').setAttribute('href', menuCaretOff);
             }
-            if (isThisTheHeaderUserMenu) {
+            if (isThisInAHeaderMenuContainer) {
                 button.classList.remove("selected");
             }
             menu.style.display = 'none';

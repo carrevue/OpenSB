@@ -11,7 +11,6 @@
     "welcome_logged_in": "Bienvenid@, %s",
     "welcome_logged_out": "Bienvenid@ a %s",
     "welcome_slogan": "Tu contenido, tu narrativa, tu espacio en la web.",
-    "welcome_its_free": "¡Es gratis!",
     "welcome_get_started": "Comenzar",
 
     "followers": "{count, plural, one {# seguidor} other {# seguidores}}",
