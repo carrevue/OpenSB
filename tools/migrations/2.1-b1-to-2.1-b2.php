@@ -41,3 +41,7 @@ ADD `type` tinyint NOT NULL DEFAULT '0' AFTER `user`;");
 // add indexed follower count
 $database->query("ALTER TABLE `users`
 ADD `f_index` bigint unsigned NOT NULL DEFAULT '0' AFTER `flags`;");
+
+// add indexed upload count
+$database->query("ALTER TABLE `users`
+ADD `u_index` bigint unsigned NOT NULL DEFAULT '0' AFTER `f_index`;");

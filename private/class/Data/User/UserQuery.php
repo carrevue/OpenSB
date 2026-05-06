@@ -60,11 +60,7 @@ class UserQuery
      */
     public function query($order, $limit, $whereCondition = null, $params = [])
     {
-        $query = "SELECT * FROM (
-            SELECT u.id, u.about, u.title, u.flags, u.joined, u.last_seen, u.f_index,
-                (SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT upload from upload_takedowns)) AS u_num
-            FROM users u
-        ) AS u";
+        $query = "SELECT u.id, u.about, u.title, u.flags, u.joined, u.last_seen, u.f_index, u.u_index FROM users u";
         $whereClauses = [];
         $baseParams = [UserFlags::FLAG_UNVERIFIED->value];
 
@@ -125,7 +121,7 @@ class UserQuery
             $out[] = [
                 "id" => $user["id"],
                 "info" => $userData->getUserArray(),
-                "uploads" => $user["u_num"] ?? 0,
+                "uploads" => $user["u_index"] ?? 0,
                 "followers" => $user["f_index"] ?? 0,
                 "about" => $user["about"] ?? null,
             ];

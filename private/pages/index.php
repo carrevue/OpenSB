@@ -112,7 +112,7 @@ $news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals 
 
 if ($options["skin"] == "trinium") {
     $user_query = new UserQuery($sb);
-    $users_recent = $user_query->toArray($user_query->query("u.last_seen DESC", 5, "u_num != 0"));
+    $users_recent = $user_query->toArray($user_query->query("u.last_seen DESC", 5, "u.u_index != 0"));
 } else {
     $users_recent = [];
 }
