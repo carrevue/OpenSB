@@ -583,7 +583,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             ],
         ];
 
-        if ($options["skin"] == "trinium" && $options["trinium_old_header"]) {
+        if (isset($options["trinium_old_header"]) && $options["trinium_old_header"] == true) {
             unset($array["home"]);
         }
 
@@ -674,6 +674,8 @@ class SquareBracketTwigExtension extends AbstractExtension
     {
         $options = $this->sb->getLocalOptions();
 
+        $old_trinium_header = isset($options["trinium_old_header"]) && $options["trinium_old_header"] == true;
+
         if ($this->authentication->isUserLoggedIn()) {
             $username = $this->authentication->getUserData()["name"];
 
@@ -702,13 +704,13 @@ class SquareBracketTwigExtension extends AbstractExtension
 
             // remove upload link on finalium, bootstrap and trinium
             if ($options["skin"] != "bootstrap" && $options["theme"] != "classic") {
-                if (Utilities::isClassicSkin() || ($options["skin"] == "trinium" && !$options["trinium_old_header"])) {
+                if (Utilities::isClassicSkin() || ($options["skin"] == "trinium" && !$old_trinium_header)) {
                     unset($array["upload"]);
                 }
             }
 
             // remove write link on trinium
-            if ($options["skin"] == "trinium" && !$options["trinium_old_header"]) {
+            if ($options["skin"] == "trinium" && !$old_trinium_header) {
                 unset($array["write"]);
             }
 
