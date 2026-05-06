@@ -78,7 +78,7 @@ class UserData
         } else {
             // fetch the data from the db
             $data = $this->database->fetch(
-                "SELECT id, name, title, userlink_color, joined, last_seen, powerlevel, flags FROM users WHERE id = ?",
+                "SELECT id, name, title, userlink_color, joined, last_seen, powerlevel, flags, f_index FROM users WHERE id = ?",
                 [$id]
             );
         }
@@ -94,6 +94,7 @@ class UserData
                 "last_seen" => 1,
                 "powerlevel" => 0,
                 "flags" => 0, // we don't need any flags to be set.
+                "f_index" => 0,
                 "following" => false,
             ];   
         }
@@ -147,6 +148,7 @@ class UserData
             "color" => $this->data["userlink_color"],
             "joined" => $this->data["joined"],
             "last_active" => $this->data["last_seen"],
+            "followers" => $this->data["f_index"],
             "following" => $this->data["following"],
             // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
             "powerlevel" => $this->data["powerlevel"],

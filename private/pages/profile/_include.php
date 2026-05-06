@@ -78,7 +78,6 @@ if ($flags["profile_customization_enabled"]) {
 
 $is_own_profile = ($data["id"] == $auth->getUserID());
 
-$followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["id"]]);
 $followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
 
@@ -119,12 +118,12 @@ $common_data = [
     "username" => $data["name"],
     "displayname" => $data["title"],
     "color" => $data["userlink_color"],
-    "about" => ($data['about'] ?? false),
+    "about" => ($data["about"] ?? false),
     "is_staff" => ($data["powerlevel"] > 1),
     "joined" => $data["joined"],
     "last_active" => $data["last_seen"],
     "is_current" => $is_own_profile,
-    "followers" => $followers,
+    "followers" => $data["f_index"],
     "following" => $followed,
     "views" => $views,
     "customization" => $profile_customization_data?->getData() ?? false,

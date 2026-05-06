@@ -100,10 +100,10 @@
                                                     {{ localize('follow') }}
                                                 {% endif %}
                                             </button>
-                                            <span id="follower_count">{{ upload.author.followers }}</span>
+                                            <span id="follower_count">{{ upload.author.info.followers }}</span>
                                         {% else %}
                                             <span class="watch-box-followers-logged-out">
-                                                {{ localize('followers', upload.author.followers) }}
+                                                {{ localize('followers', upload.author.info.followers) }}
                                             </span>
                                         {% endif %}
                                     </div>

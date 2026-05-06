@@ -29,7 +29,6 @@ use Data\User\UserFlags;
  */
 class Authentication
 {
-    private string $accountfields = "id, ip, name, title, email, token, about, powerlevel, joined, last_seen, birthdate, comfortable_rating, userlink_color, blacklisted_tags, flags";
     private Database $database;
     private bool $is_logged_in = false;
     private int $user_id;
@@ -42,30 +41,48 @@ class Authentication
     {
         $this->database = $sb->getDatabaseClass();
 
+        $account_fields = [
+            "id", 
+            "ip", 
+            "name", 
+            "title", 
+            "email", 
+            "token",
+            "about", 
+            "powerlevel", 
+            "joined", 
+            "last_seen", 
+            "birthdate", 
+            "comfortable_rating", 
+            "userlink_color", 
+            "blacklisted_tags",
+            "flags",
+            "f_index",
+        ];
+
         if (isset($token)) {
-            $this->user_data = $this->database->fetch("SELECT $this->accountfields FROM users WHERE token = ?", [$token]);
+            $fields = implode(", ", $account_fields);
+            $this->user_data = $this->database->fetch("SELECT $fields FROM users WHERE token = ?", [$token]);
 
             if ($this->user_data) {
                 $this->is_logged_in = true;
                 $this->user_id = $this->user_data["id"];
                 $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$this->user_id]);
 
-                // moved from homepage
-                $followers = $this->database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$this->user_id]);
+                //$followers = $this->database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$this->user_id]);
                 $views = $this->database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$this->user_id]);
                 $notifications = $this->database->result("SELECT COUNT(*) FROM user_notifications WHERE recipient = ?", [$this->user_id]);
 
                 $this->user_stat_data = [
-                    "followers" => $followers,
-                    "views" => $views ?? 0, // hacky fix otherwise on trinium if you have no views then it looks fucked
-                    "notifications" => $notifications,
+                    "followers" => $this->user_data["f_index"] ?? 0,
+                    "views" => $views ?? 0,
+                    "notifications" => $notifications ?? 0,
                 ];
-                // -------------------
 
                 if (!isset($this->user_data['blacklisted_tags'])) {
                     $this->user_data['blacklisted_tags'] = [];
                 } else {
-                    $this->user_data['blacklisted_tags'] = json_decode($this->user_data['blacklisted_tags']); // decode this shit on the fly
+                    $this->user_data['blacklisted_tags'] = json_decode($this->user_data['blacklisted_tags']);
                 }
 
                 // if the current logged-in user doesnt have a birthdate, redirect them to the
