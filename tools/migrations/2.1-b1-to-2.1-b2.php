@@ -38,17 +38,6 @@ require_once SB_PRIVATE_PATH . '/common.php';
 $database->query("ALTER TABLE `user_profile_customization`
 ADD `type` tinyint NOT NULL DEFAULT '0' AFTER `user`;");
 
-// add wavelet posts
-$database->query("CREATE TABLE `posts` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `contents` text NOT NULL,
-  `author` int NOT NULL,
-  `timestamp` int NOT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT '0',
-  `attachment` varchar(64) NULL,
-  `reply_to` int NULL
-);");
-
 // add indexed follower count
 $database->query("ALTER TABLE `users`
 ADD `f_index` bigint unsigned NOT NULL DEFAULT '0' AFTER `flags`;");

@@ -347,20 +347,10 @@ if (!$recommended && !$uploads_by_author) {
 }
 
 if ($sb->getLocalOptions()["skin"] != "finalium") {
-    if (isset($options["exp_wavelet_comments"]) && $options["exp_wavelet_comments"]) {
-        $post_query = new PostQuery($sb);
+    $comments = new CommentData($database, CommentLocation::Upload, $id);
 
-        // 1 is PostTypeEnum::UploadComment, im just trying to set this shit up quickly -chaziz 03/20/2026
-        $comments = $post_query->query("timestamp DESC", 20, "type = 1 AND reply_to = ?", [$upload->getData()["id"]]);
-
-        $comment_data = $comments->toCleanArray();
-        $comment_count = 0;
-    } else {
-        $comments = new CommentData($database, CommentLocation::Upload, $id);
-
-        $comment_data = $comments->getComments();
-        $comment_count = $comments->getCommentCount();
-    }
+    $comment_data = $comments->getComments();
+    $comment_count = $comments->getCommentCount();
 } else {
     $comment_data = [];
     $comment_count = 0;

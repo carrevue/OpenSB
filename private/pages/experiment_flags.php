@@ -30,21 +30,13 @@ $flags = [
         "name" => "Structured Page Fragments",
         "description" => "Use SPF. Only works under Finalium."
     ],
-    "exp_wavelet" => [
-        "name" => "Enable Wavelet",
-        "description" => "Replace journals with social media-styled posts."
-    ],
-    "exp_wavelet_comments" => [
-        "name" => "Use Wavelet for comments",
-        "description" => "Use new Wavelet posts as comments rather than the current comments system."
-    ],
     "exp_trinium_profile_settings" => [
         "name" => "New Trinium profile settings",
         "description" => "Moves profile settings from account settings to your profile."
     ],
-    "exp_trinium_wavelet_profile" => [
+    "exp_trinium_new_profile" => [
         "name" => "New Trinium profile layout",
-        "description" => "Experimental redesign meant to coincidence with Wavelet."
+        "description" => "Experimental profile redesign."
     ],
     "exp_collections" => [
         "name" => "Collections/Playlists",

@@ -44,60 +44,46 @@
 {% block content %}
     <div class="grid cluster">
         <div class="col-8">
-            {% if is_user_logged_in %}
-                <div class="tabs">
-                    <div class="tablink has-icon {% if type=='following' %}active{% endif %}" id="home-following-button">
-                        {{ icon('homepage-following', 24) }} {{ localize('following') }}
+            {% if data.uploads_following %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <div class="section-header-left">
+                            <h2 class="section-title">{{ localize('following') }}</h2>
+                            <div class="section-desc">{{ localize('following_uploads_desc') }}</div>
+                        </div>
+                        <div class="section-header-right">
+                            <a href="/browse">{{ localize('more') }}</a>
+                        </div>
                     </div>
-                    {% if enable_incomplete_features and options.exp_wavelet %}
-                    <div class="tablink has-icon {% if type =='public' %}active{% endif %}" id="home-public-button">
-                        {{ icon('homepage-public', 24) }} {{ localize('public') }}
+                    <div class="content-box">
+                        {% for upload in data.uploads_following %}
+                            {{ include('/components/_upload_vertical.twig') }}
+                        {% endfor %}
                     </div>
-                    {% endif %}
-                    <div class="tablink has-icon {% if type =='featured' %}active{% endif %}" id="home-featured-button">
-                        {{ icon('star', 24) }} {{ localize('featured') }}
+                </div>
+            {% elseif data.uploads_new %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <div class="section-header-left">
+                            <h2 class="section-title">{{ localize('homepage_recent_uploads') }}</h2>
+                            <div class="section-desc">{{ localize('homepage_recent_uploads_desc') }}</div>
+                        </div>
+                        <div class="section-header-right">
+                            <a href="/browse">{{ localize('more') }}</a>
+                        </div>
                     </div>
+                    <div class="content-box">
+                        {% for upload in data.uploads_new %}
+                            {{ include('/components/_upload_vertical.twig') }}
+                        {% endfor %}
+                    </div>
+                    {#<div class="content-box content-grid content-grid-uploads">
+                        {% for upload in data.uploads_featured %}
+                            {{ include('/components/_upload_vertical_home.twig') }}
+                        {% endfor %}
+                    </div>#}
                 </div>
             {% endif %}
-            <div class="section">
-                <div class="content-box">
-                    {% if is_user_logged_in and enable_incomplete_features and options.exp_wavelet %}
-                    <div class="new-post" id="post_field">
-                        <div class="profile-picture">
-                            <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
-                        </div>
-                        <div id="new-post-form">
-                            <textarea id="post_contents" placeholder="{{ localize('write_post') }}" name="post" maxlength="1000" rows="3"></textarea>
-                            <div class="new-post-bottom">
-                                <div class="text-danger post-form-error" id="post-form-error">
-                                    this doesn't work yet
-                                </div>
-                                <div class="new-post-buttons">
-                                    <button type="submit" id="post_post_button" name="post" class="button accent">
-                                        {{ localize('post_action') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% if enable_incomplete_features and options.exp_wavelet %}
-                        {% for entry in data.feed %}
-                            {% if entry.item_type == "post" %}
-                                {{ include('/components/_post.twig', {post: entry}) }}
-                            {% elseif entry.item_type == "upload" %}
-                                {{ include('/components/_upload_vertical.twig', {upload: entry}) }}
-                            {% else %}
-                                <div>Unknown feed item with type {{ entry.item_type }}</div>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {% for entry in data.feed %}
-                            {{ include('/components/_upload_vertical.twig', {upload: entry}) }}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
         </div>
         <div class="col-4">
             {% if data.uploads_featured %}

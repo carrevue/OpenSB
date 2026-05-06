@@ -148,7 +148,7 @@ class UserData
             "color" => $this->data["userlink_color"],
             "joined" => $this->data["joined"],
             "last_active" => $this->data["last_seen"],
-            "followers" => $this->data["f_index"],
+            "followers" => $this->data["f_index"] ?? 0,
             "following" => $this->data["following"],
             // TODO: rename powerlevel to role and make this use the strings on UserRoleEnum
             "powerlevel" => $this->data["powerlevel"],
