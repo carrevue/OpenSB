@@ -22,8 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function handleMediaQueryChange(event) {
         if (event.matches) {
             isMobile = false;
-            if (hamburgerMenu.classList.contains("active")) {
-                hamburgerMenu.classList.toggle("active");
+            if (hamburgerMenu) {
+                if (hamburgerMenu.classList.contains("active")) {
+                    hamburgerMenu.classList.toggle("active");
+                }   
             }
         } else {
             isMobile = true;
@@ -47,12 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         profile_banner.classList.toggle("sidebar-active");
                     }
                 }
-            } else {
-                error("at least one of the two sidebars are missing");
             }
         }
-    } else {
-        error("where is the sidebar button");
     }
 
     // get those tabs in the homepage
@@ -69,9 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    bindHomeTabToggle('home-following-button', 'following');
+    /*bindHomeTabToggle('home-following-button', 'following');
     bindHomeTabToggle('home-public-button', 'public');
-    bindHomeTabToggle('home-featured-button', 'featured');
+    bindHomeTabToggle('home-featured-button', 'featured');*/
 
     // Get all tab groups
     const tabGroups = document.querySelectorAll(".tab-group");

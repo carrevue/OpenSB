@@ -259,10 +259,10 @@ $router->add('/user', function () {
 $router->add('/user/{username}', 'profile/overview.php'); // overview
 $router->add('/user/{username}/uploads', 'profile/uploads.php'); // uploads
 $router->add('/user/{username}/comments', 'profile/comments.php'); // comments
-$router->add('/user/{username}/posts', 'profile/posts.php'); // posts
+$router->add('/user/{username}/journals', 'profile/journals.php'); // journals
 $router->add('/user/{username}/about', 'profile/about.php'); // about (mainly finalium-specific)
 
-$router->add('/user/{username}/post/{id}', 'profile/post.php');
+$router->add('/user/{username}/journal/{id}', 'profile/journal.php');
 
 // api
 $router->add('/api/skin/comment_load', 'api/skin/comment_load.php'); // finalium-only

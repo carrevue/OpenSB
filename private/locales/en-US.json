@@ -39,7 +39,7 @@
     "views": "{count, plural, one {# view} other {# views}}",
     "star_ratings": "{count, plural, one {# rating} other {# ratings}}",
     "upload_count": "{count, plural, one {# upload} other {# uploads}}",
-    "post_count": "{count, plural, one {# post} other {# posts}}",
+    "journal_count": "{count, plural, one {# journal} other {# journals}}",
 
     "followers_hitchhiker": "{count, plural, one {# subscriber} other {# subscribers}}",
 
@@ -189,7 +189,6 @@
     "site_news_previous": "Previous news »",
 
     "no_journals": "There are currently no journals.",
-    "no_posts": "There are currently no posts.",
 
     "more": "More",
     "edit": "Edit",
@@ -198,7 +197,6 @@
 
     "delete_upload_confirm": "Are you sure you want to delete this upload?",
     "delete_journal_confirm": "Are you sure you want to delete this journal?",
-    "delete_post_confirm": "Are you sure you want to delete this post?",
     "feature_on_profile_confirm": "Are you sure you want to feature this upload on your profile?",
 
     "new": "New",
@@ -218,8 +216,6 @@
     "write_comment_hitchhiker": "Add a public comment...",
 
     "comment": "Comment",
-
-    "write_post": "What's on your mind?",
 
     "reply_action": "Reply",
     "post_action": "Post",
@@ -340,7 +336,7 @@
     "upload_limit": "Upload limit: %s",
     "supported_files": "Common video formats are supported.",
     "upload_action": "Upload",
-    "new_journal_intro": "Write a new journal entry that will be publicly shown on your profile. Markdown formatting is supported.",
+    "new_journal_intro": "What's on your mind? Markdown formatting is supported.",
     "content": "Content",
     "publish_as_news": "Publish as site announcement",
 
@@ -355,7 +351,7 @@
 
     "block_guests_from_upload": "Block guests from viewing this upload",
     "disable_comments_from_upload": "Disable comments on this upload",
-    "block_guests_from_journal": "Block guests from reading this journal",
+    "block_guests_from_journal": "Block guests from seeing this journal",
     "disable_comments_from_journal": "Disable comments on this journal",
 
     "save_action": "Save",

@@ -259,8 +259,8 @@ if (!empty($candidates)) {
     }
 }
 
-// avoid recommending masturbatory uploads, uploads about other sites, and "my first video" uploads, -chaziz 02/27/2025
-$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'betacast', 'eracast', 'kamtape', 'first video', 'first upload'];
+// avoid recommending masturbatory uploads, uploads about other sites, -chaziz 02/27/2025
+$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'vlare', 'betacast', 'eracast', 'kamtape'];
 
 // now score this shit
 if (!empty($candidates)) {
@@ -288,12 +288,6 @@ if (!empty($candidates)) {
             // penalize uploads from authors with a high number of uploads, so we can actually show other uploads
             if ($authorCount > 50) {
                 $penalty += min(0.05, ($authorCount - 50) * 0.005);
-            }
-
-            // penalize uploads from authors with just One upload, this is usually those who've uploaded a
-            // "welcome to my channel" video and nothing else.
-            if ($authorCount = 1) {
-                $penalty += 0.5;
             }
 
             // if the author is shadow banned, just penalize that shit completely.

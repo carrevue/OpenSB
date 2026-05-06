@@ -29,8 +29,6 @@ use Data\User\UserData;
  *
  * This class handles journal data in an uniform and consistent way, which can 
  * be reused on pages.
- * 
- * @deprecated
  */
 class JournalData
 {

@@ -80,6 +80,7 @@
     {% block precontent %}{% endblock %}
     <div class="page-contents">
         <div class="container {{ page_name }} {% if banner_picture %}has-profile-banner{% endif %}">
+            {% if not options.trinium_old_header %}
             <div class="sidebar-page-grid">
                 <div class="sidebar-container {% if options.trinium_show_sidebar %}active{% endif %}" id="sidebar">
                     <div class="sidebar
@@ -88,12 +89,15 @@
                         {% include('components/_sidebar.twig') %}
                     </div>
                 </div>
+            {% endif %}
                 <div class="content">
                     {{ include(component('banners')) }}
                     {% block content %}{% endblock %}
                     {{ include(component('footer')) }}
                 </div>
+            {% if not options.trinium_old_header %}
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 {% extends "_layout_profile.twig" %}
 
-{% set title = common.username ~ "'s posts" %}
+{% set title = common.username ~ "'s journals" %}
 
 {% block content %}
     {% set total_pages = (count / items_per_page) | round(0, 'ceil') %}

@@ -1,7 +1,7 @@
 # Help
 
 ## What can I upload?
-[OpenSBInstanceName] supports common video formats, including but not limited to:
+[OpenSBInstanceName] supports common video and image formats, including but not limited to:
 
 * MP4
 * MKV
@@ -10,6 +10,9 @@
 * AVI
 * MOV
 * 3GP
+* PNG
+* JPG
+* WEBP
 
 ## What's the upload limit?
 The upload must be less than [size_limit] in size. There is no limit on the length of a video.

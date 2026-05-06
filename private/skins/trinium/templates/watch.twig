@@ -77,7 +77,7 @@
                         </div>
                         <div class="watch-box-below-title">
                             {{ rating_text }}
-                            {% if upload.flags.featured %}• <span class="watch-box-below-title-featured">{{ localize('featured') }}</span>{% endif %}
+                            {% if upload.flags.featured %}• <span class="text-warning">{{ localize('featured') }}</span>{% endif %}
                         </div>
                         <hr>
                         <div class="watch-box-row">
@@ -121,9 +121,9 @@
                         </div>
                         <hr>
                         <div class="watch-box-description">
-                            {% if upload.type != 0 %}
+                            {#{% if upload.type != 0 %}
                                 <div class="text-danger">non-video uploads are deprecated.</div>
-                            {% endif %}
+                            {% endif %}#}
                             <div class="flex">
                                 <div class="watch-box-description-info">
                                     {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
