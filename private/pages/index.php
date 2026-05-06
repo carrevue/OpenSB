@@ -47,7 +47,7 @@ if ($auth->isUserLoggedIn()) {
 
 $upload_query = new UploadQuery($sb);
 
-$post_query_limit = 12;
+$uploads_query_limit = 12;
 $uploads_featured_query_limit = 3;
 $news_recent_query_limit = 1;
 
@@ -73,9 +73,11 @@ if (!$auth->isUserLoggedIn() && $featured_users) {
 
     $uploads_new = $upload_query->query(
         "v.timestamp DESC",
-        $uploads_featured_query_limit,
+        $uploads_query_limit,
         sprintf("v.author in (%s)", $query)
     )->toCleanArray();
+} else {
+    $uploads_new = [];
 }
 
 if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstrap had this too back then
@@ -96,7 +98,7 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
 
         $uploads_following = $upload_query->query(
             "v.timestamp DESC",
-            $uploads_featured_query_limit,
+            $uploads_query_limit,
             sprintf("v.author in (%s)", $query)
         )->toCleanArray();
     } else {
