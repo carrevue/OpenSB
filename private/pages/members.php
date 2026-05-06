@@ -42,7 +42,7 @@ $tabs = [
     ],
     "popular" => [
         "name" => "popular",
-        "order" => "f_num DESC",
+        "order" => "u.f_index DESC",
         "where" => null,
     ],
     "random" => [

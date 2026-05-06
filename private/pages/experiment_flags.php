@@ -46,10 +46,6 @@ $flags = [
         "name" => "New Trinium profile layout",
         "description" => "Experimental redesign meant to coincidence with Wavelet."
     ],
-    "trinium_link_coloring" => [
-        "name" => "Trinium link coloring",
-        "description" => "Leftover of scrapped 2024 Charla functionality."
-    ],
     "exp_collections" => [
         "name" => "Collections/Playlists",
         "description" => "Enables collections/playlists. Currently does not do anything."
@@ -65,6 +61,14 @@ $flags = [
     "exp_player" => [
         "name" => "Player thumbnails/captions",
         "description" => "Currently does not do anything."
+    ],
+    "trinium_link_coloring" => [
+        "name" => "Trinium link coloring",
+        "description" => "Leftover of scrapped 2024 Charla functionality."
+    ],
+    "trinium_old_header" => [
+        "name" => "Trinium old header",
+        "description" => "Uses the older header layout with no sidebar."
     ],
 ];
 

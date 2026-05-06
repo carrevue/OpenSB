@@ -1,16 +1,25 @@
 <div class="header">
     <div class="header-container {% if not is_user_logged_in %}logged-out{% endif %}">
         <div class="header-main">
-            <div class="header-button">
-                <div class="button toolbar no-padding transparent" id="button-sidebar">
-                    {{ icon('hamburger', 32) }}
+            {% if not options.trinium_old_header %}
+                <div class="header-button">
+                    <div class="button toolbar no-padding transparent" id="button-sidebar">
+                        {{ icon('hamburger', 32) }}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="header-logo">
                 <a href="/">
                     <img alt="{{ website_branding.name }}" class="logo" src="{{ logo }}">
                 </a>
             </div>
+            {% if options.trinium_old_header %}
+                <div class="header-links">
+                    {% for key, link in sidebar_main_links() %}
+                        <a href="{{ link.url }}">{{ link.name }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <form class="header-search" action="/search">
                 <input id="header-search-input" type="text" name="query" placeholder="{{ localize('search') }}">
                 <button id="header-search-button">
@@ -20,36 +29,44 @@
         </div>
         <div class="header-links">
             {% if is_user_logged_in %}
+                {% if not options.trinium_old_header %}
                 {# create #}
-                <div class="header-menu-container">
-                    <div class="menu-button" data-menu-id="create-menu">
-                        {{ icon('upload') }}
+                    <div class="header-menu-container">
+                        <div class="menu-button" data-menu-id="create-menu">
+                            {{ icon('upload') }}
+                        </div>
+                        <div class="menu" id="create-menu">
+                            <a class="menu-item-button" href="/upload">{{ localize('new_upload') }}</a>
+                            <a class="menu-item-button" href="/write">{{ localize('new_journal') }} {% if enable_incomplete_features and options.exp_wavelet %}(Legacy){% endif %}</a>
+                        </div>
                     </div>
-                    <div class="menu" id="create-menu">
-                        <a class="menu-item-button" href="/upload">{{ localize('new_upload') }}</a>
-                        <a class="menu-item-button" href="/write">{{ localize('new_journal') }} {% if enable_incomplete_features and options.exp_wavelet %}(Legacy){% endif %}</a>
+                    {# notifications #}
+                    <div class="header-menu-container">
+                        <div class="menu-button" data-menu-id="notify-menu">
+                            {{ icon('bell') }}
+                        </div>
+                        <div class="menu" id="notify-menu">
+                            <a class="menu-item-button" href="/notifications">{{ localize('notifications') }} ({{ user_stat_data.notifications }})</a>
+                            {% if enable_incomplete_features and options.exp_inbox %}
+                            <a class="menu-item-button" href="/my_messages">Messages (0)</a>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-                {# notifications #}
-                <div class="header-menu-container">
-                    <div class="menu-button" data-menu-id="notify-menu">
-                        {{ icon('bell') }}
-                    </div>
-                    <div class="menu" id="notify-menu">
-                        <a class="menu-item-button" href="/notifications">{{ localize('notifications') }} ({{ user_stat_data.notifications }})</a>
-                        {% if enable_incomplete_features and options.exp_inbox %}
-                        <a class="menu-item-button" href="/my_messages">Messages (0)</a>
-                        {% endif %}
-                    </div>
-                </div>
+                {% endif %}
                 {# user #}
                 <div class="header-menu-container">
                     <div class="menu-button" data-menu-id="user-menu">
                         <div class="profile-picture user-menu-pfp">
                             <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
                         </div>
+                        {% if options.trinium_old_header %}
+                            <div class="menu-caret-container">
+                                {{ icon('caret-closed', 16, 'menu-caret') }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="menu" id="user-menu">
+                        {% if not options.trinium_old_header %}
                             <div class="user-menu-intro">
                                 <div class="user-menu-intro-left">
                                     <div class="profile-picture">
@@ -70,6 +87,7 @@
                                 </div>
                             </div>
                             <hr>
+                        {% endif %}
                         {% for link in header_user_links() %}
                             <a class="menu-item-button" href="{{ link.url }}">{{ link.name }}</a>
                         {% endfor %}
@@ -87,42 +105,45 @@
                     </div>
                 </div>
             {% else %}
-                {#{% for link in header_user_links() %}
-                    <a class="menulink" href="{{ link.url }}">{{ link.name }}</a>
-                {% endfor %}#}
-                <div class="header-menu-container">
-                    <div class="menu-button" data-menu-id="login-menu">
-                        <div class="menu-button-text"><span class="have-an-account">{{ localize('have_an_account') }}</span> {{ localize('login') }}</div>
-                        <div class="menu-caret-container">
-                            {{ icon('caret-closed', 16, 'menu-caret') }}
+                {% if options.trinium_old_header %}
+                    {% for link in header_user_links() %}
+                        <a href="{{ link.url }}">{{ link.name }}</a>
+                    {% endfor %}
+                {% else %}
+                    <div class="header-menu-container">
+                        <div class="menu-button" data-menu-id="login-menu">
+                            <div class="menu-button-text"><span class="have-an-account">{{ localize('have_an_account') }}</span> {{ localize('login') }}</div>
+                            <div class="menu-caret-container">
+                                {{ icon('caret-closed', 16, 'menu-caret') }}
+                            </div>
+                        </div>
+                        <div class="menu" id="login-menu">
+                            <form method="post" name="loginForm" id="loginForm" action="/login" class="form-login">
+                                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
+                                <div class="form-input">
+                                    <label for="username">{{ localize('username') }}</label>
+                                    <input type="text" name="username">
+                                </div>
+
+                                <div class="form-input">
+                                    <label for="password">{{ localize('password') }}</label>
+                                    <input type="password" name="password">
+                                </div>
+
+                                <div class="login-bottom">
+                                    <div class="login-text">
+                                        {{ localize('dont_have_an_account') }} <a href="/register">{{ localize('register') }}</a>
+                                    </div>
+
+                                    <div class="form-button-container">
+                                        <input type="submit" class="button accent button-login" value="{{ localize('login') }}" name="loginsubmit">
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="menu" id="login-menu">
-                        <form method="post" name="loginForm" id="loginForm" action="/login" class="form-login">
-                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-
-                            <div class="form-input">
-                                <label for="username">{{ localize('username') }}</label>
-                                <input type="text" name="username">
-                            </div>
-
-                            <div class="form-input">
-                                <label for="password">{{ localize('password') }}</label>
-                                <input type="password" name="password">
-                            </div>
-
-                            <div class="login-bottom">
-                                <div class="login-text">
-                                    {{ localize('dont_have_an_account') }} <a href="/register">{{ localize('register') }}</a>
-                                </div>
-
-                                <div class="form-button-container">
-                                    <input type="submit" class="button accent button-login" value="{{ localize('login') }}" name="loginsubmit">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                {% endif %}
             {% endif %}
         </div>
     </div>

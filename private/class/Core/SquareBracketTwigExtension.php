@@ -583,6 +583,10 @@ class SquareBracketTwigExtension extends AbstractExtension
             ],
         ];
 
+        if ($options["skin"] == "trinium" && $options["trinium_old_header"]) {
+            unset($array["home"]);
+        }
+
         return $array;
     }
 
@@ -686,21 +690,25 @@ class SquareBracketTwigExtension extends AbstractExtension
                     "name" => $this->localize("new_upload"), // Upload (New upload)
                     "url" => "/upload",
                 ],
+                "write" => [
+                    "name" => $this->localize("new_journal"), // Write (New journal)
+                    "url" => "/write",
+                ],
                 "logout" => [
                     "name" => $this->localize("logout"), // Logout
                     "url" => "/logout",
                 ],
             ];
 
-            // remove upload link on finalium 1, bootstrap and trinium
+            // remove upload link on finalium, bootstrap and trinium
             if ($options["skin"] != "bootstrap" && $options["theme"] != "classic") {
-                if (Utilities::isClassicSkin() || $options["skin"] == "trinium") {
+                if (Utilities::isClassicSkin() || ($options["skin"] == "trinium" && !$options["trinium_old_header"])) {
                     unset($array["upload"]);
                 }
             }
 
             // remove write link on trinium
-            if ($options["skin"] == "trinium") {
+            if ($options["skin"] == "trinium" && !$options["trinium_old_header"]) {
                 unset($array["write"]);
             }
 
