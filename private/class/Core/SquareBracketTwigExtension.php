@@ -71,14 +71,20 @@ class SquareBracketTwigExtension extends AbstractExtension
     private Environment $twig;
 
     /**
+     * @var array The current skin's options.
+     */
+    private array $skin_options;
+
+    /**
      * function __construct
      *
      * @param SquareBracket $sb
-     * @param mixed $twig
+     * @param Templating $templating
+     * @param Environment $twig
      *
      * @return void
      */
-    public function __construct(SquareBracket $sb, $twig)
+    public function __construct(SquareBracket $sb, Templating $templating, Environment $twig)
     {
         $this->sb = $sb;
         $this->database = $this->sb->getDatabaseClass();
@@ -86,6 +92,8 @@ class SquareBracketTwigExtension extends AbstractExtension
         $this->storage = $this->sb->getStorageClass();
         $this->authentication = $this->sb->getAuthenticationClass();
         $this->twig = $twig;
+        
+        $this->skin_options = $templating->getCurrentSkinOptions();
     }
 
     /**
@@ -95,19 +103,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
-        $options = $this->sb->getLocalOptions();
-        $forceOldUserlink = $options['useOldUserlinkImplementation'] ?? null;
-
-        if (isset($forceOldUserlink)) {
-            // user preference
-            $userlink_function_name = $forceOldUserlink ? "userLinkLegacy" : "userLink";
-        } elseif ($options["skin"] == "trinium") {
-            // default to new implementation on trinium (this logic should be swapped later)
-            $userlink_function_name = "userLink";
-        } else { // Utilities::isClassicSkin()
-            // otherwise use the old implementation.
-            $userlink_function_name = "userLinkLegacy";
-        }
+        $userlink_function_name = ($this->skin_options["use_old_userlink"] ?? false) ? "userLinkLegacy" : "userLink";
 
         // TODO: clean this up HOLY SHIT -chaziz 4/7/2025
         return [
@@ -343,7 +339,9 @@ class SquareBracketTwigExtension extends AbstractExtension
     /**
      * function uploadView
      *
-     * @param int $upload_data
+     * @param array $upload_data
+     * 
+     * @note This is fucking stupid.
      *
      * @return void
      */

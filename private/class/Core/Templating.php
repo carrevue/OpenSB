@@ -56,6 +56,11 @@ class Templating
     private string $theme;
 
     /**
+     * @var array The current skin's options
+     */
+    private array $skin_options = [];
+
+    /**
      * @var boolean If this is a SPF request.
      */
     private bool $is_spf;
@@ -126,20 +131,18 @@ class Templating
 
         //if ($this->skin === null || trim($this->skin) === '' || !is_dir('skins/' . $this->skin . '/templates')) {
         if ($this->skin === null || trim($this->skin) === '') {
-            /*trigger_error("Current skin is invalid", E_USER_WARNING);
-            $this->skin = "trinium";*/
             $this->resetToDefault();
         }
 
         $skinPath = 'skins/' . $this->skin;
 
         // load in the skin metadata
-        $metadata = $this->getSkinMetadata($skinPath);
+        $metadata = $this->getSkinMetadata($skinPath)["metadata"];
         if (!$metadata) {
-            /*trigger_error("Failed to load skin", E_USER_WARNING);
-            $this->skin = "trinium";*/
             $this->resetToDefault();
         }
+
+        $this->skin_options = $metadata["options"] ?? [];
 
         $templatePath = $skinPath . '/templates';
 
@@ -147,14 +150,6 @@ class Templating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            /*
-            trigger_error("Failed to load skin", E_USER_WARNING);
-
-            $this->skin = "trinium";
-            $this->theme = "default";
-            $templatePath = "skins/trinium/templates";
-            $this->loader = new FilesystemLoader($templatePath);
-            */
             $this->resetToDefault();
         }
 
@@ -254,7 +249,7 @@ class Templating
             $this->twig->addGlobal('domain', Utilities::getURL(false));
         }
 
-        $this->twigExtension = new SquareBracketTwigExtension($sb, $this->twig);
+        $this->twigExtension = new SquareBracketTwigExtension($sb, $this, $this->twig);
 
         $this->twig->addExtension($this->twigExtension);
         $this->twig->addExtension(new StringExtension());
@@ -314,9 +309,9 @@ class Templating
     /**
      * function getSkinMetadata
      *
-     * Get the skin's JSON metadata.
+     * Get the specified skin's metadata.
      *
-     * @param mixed $skin
+     * @param string $skin
      *
      * @return array
      */
@@ -361,6 +356,17 @@ class Templating
             trigger_error(sprintf("The metadata for skin %s is missing", $skin_name), E_USER_WARNING);
             return null;
         }
+    }
+
+    /**
+     * function getCurrentSkinOptions
+     *
+     * Get the current skin's options.
+     *
+     * @return array
+     */
+    public function getCurrentSkinOptions() {
+        return $this->skin_options ?? [];
     }
 
     /**

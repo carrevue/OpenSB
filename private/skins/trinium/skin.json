@@ -37,6 +37,9 @@
                 "author": "Carrevue Development",
                 "incomplete": true
             }
-        ]
+        ],
+        "options": {
+            "use_old_userlink": false
+        }
     }
 }
