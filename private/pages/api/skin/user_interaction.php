@@ -47,6 +47,8 @@ function follow($member): array
     // cant put this outside here otherwise it shits out, so thats definitely something
     $localization = $sb->getLocalizationClass();
 
+    $number = $database->result("SELECT f_index FROM users WHERE id = ?", [$member]);
+
     if ($member == $auth->getUserID()) {
         return [
             "error" => "You cannot follow yourself."
@@ -56,14 +58,16 @@ function follow($member): array
     if ($database->result("SELECT COUNT(user) FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $member]) != 0) {
         $database->query("DELETE FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $member]);
         $result = false;
+        $number--;
     } else {
         $database->query("INSERT INTO user_follows (id, user) VALUES (?,?)", [$member, $auth->getUserID()]);
         $result = true;
+        $number++;
 
         Utilities::notifyUser($database, $member, 0, 0, NotificationEnum::Follow);
     }
 
-    $number = $database->fetch("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$member])['COUNT(user)'];
+    $database->query("UPDATE users SET f_index = ? WHERE id = ?", [$number, $member]);
 
     if ($result) {
         $text = $localization->translate("unfollow");

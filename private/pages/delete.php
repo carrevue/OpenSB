@@ -44,6 +44,9 @@ if ($auth->getUserID() != $data["author"]) {
 $database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["timestamp"], time()]);
 $database->query("DELETE FROM uploads WHERE upload_id = ?", [$id]);
 
+$auth->bumpLastActive();
+$database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"]--, $member]);
+
 $sb->getStorageClass()->deleteUploadFile($data);
 
 Utilities::notifyBanner("notify_successfully_deleted_upload", "/my_uploads", "success");

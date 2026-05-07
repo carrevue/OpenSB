@@ -154,8 +154,7 @@ $author_info = $upload->getAuthorData();
 
 $tags = $upload->getTags();
 
-$followers = $database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$data["author"]]);
-$followed = Utilities::isFollowingUser($data["author"]);
+$following = Utilities::isFollowingUser($data["author"]);
 
 // TODO: this feature is unused.
 //$favorites = $database->result("SELECT COUNT(upload_id) FROM user_favorites WHERE upload_id=?", [$id]);
@@ -363,8 +362,7 @@ $page_data = [
     "author" => [
         "id" => $data["author"],
         "info" => $author_info,
-        "followers" => $followers,
-        "following" => $followed,
+        "following" => $following,
     ],
     "interactions" => [
         "views" => $data["views"],

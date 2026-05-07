@@ -300,6 +300,7 @@ if (
         }
 
         $auth->bumpLastActive();
+        $database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"]++, $member]);
         
         // ugh. -chaziz 03/04/2026
         $reupload_suspect_title = [

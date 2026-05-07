@@ -29,6 +29,7 @@ $localization = $sb->getLocalizationClass();
 if (!isset($_POST['subscription']) or $_POST['subscription'] == '') {
     die();
 }
+
 if ($database->result("SELECT COUNT(user) FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $_POST['subscription']]) != 0) {
     $database->query("DELETE FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $_POST['subscription']]);
     echo $localization->translate("follow");
