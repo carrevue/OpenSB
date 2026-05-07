@@ -29,6 +29,8 @@ return [
     "cache" => false,
     "enable_registration" => true,
     "invite_keys" => false,
+    "disable_assets" => false,
+    "enable_mature_uploads" => false,
     "branding" => [
         "name" => "OpenSB Instance",
         "assets" => "/assets/placeholder",

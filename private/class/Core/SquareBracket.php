@@ -135,6 +135,11 @@ class SquareBracket
     private bool $disable_assets = false;
 
     /**
+     * @var bool
+     */
+    private bool $enable_mature_uploads = false;
+
+    /**
      * @var array
      */
     private array $branding_settings;
@@ -222,6 +227,8 @@ class SquareBracket
 
         $this->disable_assets = (bool)($config["disable_assets"] ?? false);
         $this->storage = new Storage($this, $storage_path);
+
+        $this->enable_mature_uploads = (bool)($config["enable_mature_uploads"] ?? false);
 
         $this->captcha_settings = $config["captcha"];
 
@@ -730,9 +737,22 @@ class SquareBracket
     }
 
     /**
+     * function isAssetsDisabled
+     *
+     * Returns boolean for if mature uploads are enabled.
+     *
+     * @return bool
+     */
+    public function isMatureUploadsEnabled(): bool
+    {
+        return $this->enable_mature_uploads;
+    }
+
+    /**
      * function isChazizInstance
      *
-     * Returns a bool that indicates if the instance is set to "Chaziz" mode.
+     * Returns a bool that indicates if the instance is set to "Chaziz" mode. this is the
+     * mode used on squarebracket.pw and fulptube.rocks.
      *
      * @return bool
      */
@@ -744,7 +764,8 @@ class SquareBracket
     /**
      * function isTestInstance
      *
-     * Returns a bool that indicates if the instance is set to "Test" mode.
+     * Returns a bool that indicates if the instance is set to "Test" mode. this is the
+     * mode used on web-orange-qa.squarebracket.pw and web-orange-qa.fulptube.rocks.
      *
      * @return bool
      */

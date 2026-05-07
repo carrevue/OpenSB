@@ -54,6 +54,10 @@ $flags = [
         "name" => "Player thumbnails/captions",
         "description" => "Currently does not do anything."
     ],
+    "exp_comment_rating" => [
+        "name" => "Comment rating",
+        "description" => "Enables ability to rate comments. Currently does not do anything."
+    ],
     "trinium_link_coloring" => [
         "name" => "Trinium link coloring",
         "description" => "Leftover of scrapped 2024 Charla functionality."

@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% if upload.rating == 'mature' or upload.flags.mature %}
-    {% set rating_text = localize('sensitive_rating') %}
+    {% set rating_text = localize('mature_rating') %}
 {% else %}
     {% set rating_text = localize('general_rating') %}
 {% endif %}
@@ -45,7 +45,7 @@
                                 </h1>
                             </div>
                             <div class="section-header-right">
-                                {% if upload.is_owner or user_is_authenticated_admin or enable_incomplete_features %}
+                                {% if upload.is_owner or user_is_authenticated_admin and enable_incomplete_features %}
                                 <div class="menu-button button secondary transparent button-caret"
                                     data-menu-id="upload-{{ upload.id }}">
                                     {{ icon('three-dots', 16) }}
@@ -76,8 +76,12 @@
                             {% endif %}#}
                         </div>
                         <div class="watch-box-below-title">
-                            {{ rating_text }}
-                            {% if upload.flags.featured %}• <span class="text-warning">{{ localize('featured') }}</span>{% endif %}
+                            {% if mature_uploads_enabled and rating_text is not empty %}
+                                <span class="rating">{{ rating_text }}</span>
+                            {% endif %}
+                            {% if upload.flags.featured %}
+                                <span class="text-warning">• {{ localize('featured') }}</span>
+                            {% endif %}
                         </div>
                         <hr>
                         <div class="watch-box-row">
@@ -121,9 +125,6 @@
                         </div>
                         <hr>
                         <div class="watch-box-description">
-                            {#{% if upload.type != 0 %}
-                                <div class="text-danger">non-video uploads are deprecated.</div>
-                            {% endif %}#}
                             <div class="flex">
                                 <div class="watch-box-description-info">
                                     {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}

@@ -263,7 +263,7 @@
     "featured": "Featured",
     "none": "None",
     "general_rating": "General",
-    "sensitive_rating": "Mature",
+    "mature_rating": "Mature",
 
     "404_not_found": "404 Not Found",
     "ip_banned_intro": "You have been IP banned from %s",
@@ -331,8 +331,8 @@
     "description": "Description",
     "tags": "Tags",
     "file": "File",
-    "mark_as_sensitive": "Mark as mature",
-    "mark_as_sensitive_description": "Marks the upload as being only accessible to logged-in users over 18.",
+    "mark_as_mature": "Mark as mature",
+    "mark_as_mature_description": "Marks the upload as being only accessible to logged-in users over 18.",
     "upload_limit": "Upload limit: %s",
     "supported_files": "Common video formats are supported.",
     "upload_action": "Upload",
@@ -366,8 +366,8 @@
     "search_results_for": "Results for \"%s\"",
 
     "filtering": "Filtering",
-    "enable_sensitive_content": "Enable access to mature content",
-    "restricted_sensitive_content": "Based on your birthdate, access to mature content is restricted. If you have entered an incorrect birthdate, please contact the %s staff team.",
+    "enable_mature_content": "Enable access to mature content",
+    "restricted_mature_content": "Based on your birthdate, access to mature content is restricted. If you have entered an incorrect birthdate, please contact the %s staff team.",
     "blocked_tags": "Blocked tags",
     
     "about_site": "About %s",

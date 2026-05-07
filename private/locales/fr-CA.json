@@ -220,7 +220,7 @@
     "featured": "En vedette",
     "none": "Aucun",
     "general_rating": "Générale",
-    "sensitive_rating": "Mature",
+    "mature_rating": "Mature",
 
     "404_not_found": "404 Non Trouvé",
     "ip_banned_intro": "Votre addresse IP a été bannie de %s",
@@ -287,8 +287,8 @@
     "description": "Description",
     "tags": "Mots-clés",
     "file": "Fichier",
-    "mark_as_sensitive": "Marquer comme mature",
-    "mark_as_sensitive_description": "Rendez votre publication accessible uniquement aux utilisateurs majeurs.",
+    "mark_as_mature": "Marquer comme mature",
+    "mark_as_mature_description": "Rendez votre publication accessible uniquement aux utilisateurs majeurs.",
     "upload_limit": "Limite de taille du fichier : %s",
     "supported_files": "Les formats vidéo commun sont compatibles.",
     "upload_action": "Publier",
@@ -321,8 +321,8 @@
     "search_results_for": "Résultats pour \"%s\"",
 
     "filtering": "Filtrage",
-    "enable_sensitive_content": "Permettre l'accès au contenu mature",
-    "restricted_sensitive_content": "L'accès au contenu mature est restreint pour ce compte. Si vous avez entré une date de naissance incorrecte, veuillez contacter l'équipe %s.",
+    "enable_mature_content": "Permettre l'accès au contenu mature",
+    "restricted_mature_content": "L'accès au contenu mature est restreint pour ce compte. Si vous avez entré une date de naissance incorrecte, veuillez contacter l'équipe %s.",
     "blocked_tags": "Blocage des étiquettes",
 
     "about_site": "À propos de %s",

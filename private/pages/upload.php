@@ -213,7 +213,8 @@ if (
     // mature flag
     if (
         $auth->isUserOver18() &&
-        !empty($_POST['rating'])
+        !empty($_POST['rating']) &&
+        $sb->isMatureUploadsEnabled()
     ) {
         $flags |= UploadFlags::FLAG_MATURE->value;
     }

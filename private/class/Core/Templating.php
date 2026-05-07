@@ -223,6 +223,7 @@ class Templating
         $this->twig->addGlobal('enable_incomplete_features', $this->sb->isIncompleteFeaturesEnabled());
         $this->twig->addGlobal('is_spf', $sb->isSpfRequest());
         $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
+        $this->twig->addGlobal('mature_uploads_enabled', $sb->isMatureUploadsEnabled());
 
         if ($this->skin == "finalium") {
             // fi = finalium icon

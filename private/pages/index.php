@@ -46,6 +46,7 @@ $journal_query = new JournalQuery($sb);
 $uploads_query_limit = 12;
 $uploads_featured_query_limit = 3;
 $news_recent_query_limit = 1;
+$journals_query_limit = 5;
 
 $uploads_featured = $upload_query->query(
     "v.timestamp DESC",
@@ -100,7 +101,7 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
 
         $journals_following = $journal_query->query(
             "j.timestamp DESC",
-            $uploads_query_limit,
+            $journals_query_limit,
             sprintf("j.author in (%s)", $query)
         )->toCleanArray();
     } else {

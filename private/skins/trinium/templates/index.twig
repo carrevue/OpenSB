@@ -104,71 +104,71 @@
                     </div>
                 </div>
             {% endif %}
+            {% if data.journals_following %}
+                <div class="section">
+                    <div class="section-header flex">
+                        <div class="section-header-left">
+                            <h2 class="section-title">{{ localize('journals') }}</h2>
+                            <div class="section-desc">{{ localize('following_desc') }}</div>
+                        </div>
+                    </div>
+                    <div class="content-box">
+                        {% for journal in data.journals_following %}
+                            {{ include('/components/_journal.twig') }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
             {% if data.news_recent %}
-            <div class="section">
-                {# work around awkwardly defined array #}
-                {% set news = data.news_recent|first %}
-                <div class="content-box">
-                    <div class="content-entry">
-                        <div class="content-info">
-                            <div class="content-title">{{ news.title }}</div>
-                            <div class="content-author">{{ user_link(news.author) }}</div>
-                            <div class="content-detail">{{ news.published | format_date('long', 'none') }}</div>
-                            <div class="content-text">{{ news.contents | markdown_user_written(true) }}</div>
-                            <a href="/news">{{ localize('site_news_previous') }}</a>
+                <div class="section">
+                    {# work around awkwardly defined array #}
+                    {% set news = data.news_recent|first %}
+                    <div class="content-box">
+                        <div class="content-entry">
+                            <div class="content-info">
+                                <div class="content-title">{{ news.title }}</div>
+                                <div class="content-author">{{ user_link(news.author) }}</div>
+                                <div class="content-detail">{{ news.published | format_date('long', 'none') }}</div>
+                                <div class="content-text">{{ news.contents | markdown_user_written(true) }}</div>
+                                <a href="/news">{{ localize('site_news_previous') }}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {% endif %}
-            {% if data.journals_following %}
-            <div class="section">
-                <div class="section-header flex">
-                    <div class="section-header-left">
-                        <h2 class="section-title">{{ localize('journals') }}</h2>
-                        <div class="section-desc">{{ localize('following_desc') }}</div>
-                    </div>
-                </div>
-                <div class="content-box">
-                    {% for journal in data.journals_following %}
-                        {{ include('/components/_journal.twig') }}
-                    {% endfor %}
-                </div>
-            </div>
             {% endif %}
             {% if data.users_recent %}
-            <div class="section">
-                <div class="section-header flex">
-                    <div class="section-header-left">
-                        <h2 class="section-title">{{ localize('recent_members') }}</h2>
-                        <div class="section-desc">{{ localize('recent_members_desc') }}</div>
-                    </div>
-                    <div class="section-header-right">
-                        <a href="/users">{{ localize('more') }}</a>
-                    </div>
-                </div>
-                <div class="content-box">
-                    {% for user in data.users_recent %}
-                        <div class="content-entry centered index-user user-id-{{ user.id }}">
-                            <div class="content-thumbnail">
-                                <a href="/user/{{ user.info.username }}">
-                                    <div class="content-image profile-picture">
-                                        <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp">
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="content-info">
-                                <div class="content-title">
-                                    {{ user_link(user) }}
-                                </div>
-                                <div class="content-detail">
-                                    {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.uploads) }}
-                                </div>
-                            </div>
+                <div class="section">
+                    <div class="section-header flex">
+                        <div class="section-header-left">
+                            <h2 class="section-title">{{ localize('recent_members') }}</h2>
+                            <div class="section-desc">{{ localize('recent_members_desc') }}</div>
                         </div>
-                    {% endfor %}
+                        <div class="section-header-right">
+                            <a href="/users">{{ localize('more') }}</a>
+                        </div>
+                    </div>
+                    <div class="content-box">
+                        {% for user in data.users_recent %}
+                            <div class="content-entry centered index-user user-id-{{ user.id }}">
+                                <div class="content-thumbnail">
+                                    <a href="/user/{{ user.info.username }}">
+                                        <div class="content-image profile-picture">
+                                            <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp">
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="content-info">
+                                    <div class="content-title">
+                                        {{ user_link(user) }}
+                                    </div>
+                                    <div class="content-detail">
+                                        {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.uploads) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
             {% endif %}
         </div>
     </div>

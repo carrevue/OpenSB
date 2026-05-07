@@ -43,12 +43,14 @@
                                 </select>
                             </div>
 
-                            <div class="form-input">
-                                <input type="checkbox" name="rating" id="rating" value="true">
-                                <label for="rating">{{ localize('mark_as_sensitive') }}
-                                <span>{{ localize('mark_as_sensitive_description') }}</span>
-                                </label>
-                            </div>
+                            {% if mature_uploads_enabled %}
+                                <div class="form-input">
+                                    <input type="checkbox" name="rating" id="rating" value="true">
+                                    <label for="rating">{{ localize('mark_as_mature') }}
+                                    <span>{{ localize('mark_as_mature_description') }}</span>
+                                    </label>
+                                </div>
+                            {% endif %}
 
                             <div class="form-input">
                                 <label for="fileToUpload">{{ localize('file') }} <span>{{ localize('form_required') }}</span></label>
