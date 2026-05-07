@@ -73,3 +73,6 @@ $database->query("CREATE TABLE upload_number_history (
 // from after the inital release of 2.1.0 beta 2
 $database->query("ALTER TABLE `user_number_history`
 ADD `banned` tinyint(1) NOT NULL;");
+
+$database->query("ALTER TABLE `upload_number_history`
+CHANGE `upload` `upload` varchar(11) NOT NULL FIRST;");

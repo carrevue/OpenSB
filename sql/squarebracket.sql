@@ -141,7 +141,7 @@ CREATE TABLE `upload_deleted` (
 
 DROP TABLE IF EXISTS `upload_number_history`;
 CREATE TABLE `upload_number_history` (
-  `upload` int(11) NOT NULL,
+  `upload` varchar(11) NOT NULL,
   `date` date NOT NULL,
   `views` int(11) NOT NULL,
   `views_raw` int(11) NOT NULL,

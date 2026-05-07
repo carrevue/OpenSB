@@ -104,11 +104,11 @@ foreach ($uploads as $upload) {
         [round($adjustedViews), $upload["upload_id"]]
     );
 
-    if (!$database->result("SELECT upload FROM upload_number_history WHERE upload = ? AND date = ?", [$upload["id"], date('Y-m-d')])) {
+    if (!$database->result("SELECT upload FROM upload_number_history WHERE upload = ? AND date = ?", [$upload["upload_id"], date('Y-m-d')])) {
         $database->query(
         "INSERT INTO upload_number_history (upload, date, views, views_raw)
         VALUES (?,?,?,?)",
-            [$upload["id"], date('Y-m-d'), round($adjustedViews), $total]
+            [$upload["upload_id"], date('Y-m-d'), round($adjustedViews), $total]
         );
     }
 }
