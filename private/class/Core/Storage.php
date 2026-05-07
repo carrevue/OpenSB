@@ -239,7 +239,47 @@ class Storage
      */
     public function processFinaliumProfileBanner(string $temp_name, string $new): void
     {
-        throw new \Exception("Method not implemented.");
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read($temp_name);
+
+        // save backup for later
+        $img->toPng()->save($this->path . '/banners_finalium/' . $new . '@backup.png');
+
+        // force images to be in 16:9
+        $w = $img->width();
+        $h = $img->height();
+        if ($w / $h !== 16 / 9) {
+            $targetH = (int) round($w * 9 / 16);
+            $targetW = $w;
+            if ($targetH > $h) {
+                $targetW = (int) round($h * 16 / 9);
+                $targetH = $h;
+            }
+            $img->crop(
+                width:    $targetW,
+                height:   $targetH,
+                offset_x: (int) round(($w - $targetW) / 2),
+                offset_y: (int) round(($h - $targetH) / 2),
+            );
+        }
+
+        // based on the parameters of google's image processing url:
+        // fcrop64=1,00005a57ffffa5a8
+        $h  = $img->height();
+        $y1 = (int) round((0x5a57 / 0xFFFF) * $h);
+        $y2 = (int) round((0xa5a8 / 0xFFFF) * $h);
+        $img->crop(
+            width:    $img->width(),
+            height:   $y2 - $y1,
+            offset_x: 0,
+            offset_y: $y1,
+        );
+
+        // save as 1060px and 2120px (for hidpi)
+        (clone $img)->scaleDown(width: 1060)->toPng()->save($this->path . '/banners_finalium/' . $new . '.png');
+        (clone $img)->scaleDown(width: 2120)->toPng()->save($this->path . '/banners_finalium/' . $new . '@2x.png');
+
+        unlink($temp_name);
     }
 
     /**
@@ -322,26 +362,23 @@ class Storage
      *
      * @param int $user User's ID
      *
-     * @return bool|string
+     * @return array
      */
-    public function getUserProfileBanner(int $user): bool|string
+    public function getUserProfileBanner(int $user): array
     {
-        if ($this->disabled) return false;
+        $default_finalium = $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
 
-        $folder = 'banners';
+        $path_trinium = '/banners/' . $user . '.png';
+        $path_finalium = '/banners_finalium/' . $user . '.png';
+        $path_finalium2x = '/banners_finalium/' . $user . '@2x.png';
 
-        if ($this->sb->getLocalOptions()["skin"] == "finalium") {
-            $folder = 'banners_finalium';
-        }
+        $fuckass_array = [
+            "trinium" => file_exists($this->path . $path_trinium) ? '/dynamic' . $path_trinium : false,
+            "finalium" => file_exists($this->path . $path_finalium) ? '/dynamic' . $path_finalium : $default_finalium,
+            "finalium_2x" => file_exists($this->path . $path_finalium2x) ? '/dynamic' . $path_finalium2x : $default_finalium,
+        ];
 
-        $path = $this->path . '/' . $folder . '/' . $user . '.png';
-
-        if (file_exists($path)) {
-            return '/dynamic/' . $folder . '/' . $user . '.png';
-        } else {
-            //return $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
-            return $this->sb->isHitchhiker() ? "/assets/banner_template_finalium.png" : false;
-        }
+        return $fuckass_array;
     }
 
     /**

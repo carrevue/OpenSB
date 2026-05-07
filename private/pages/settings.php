@@ -110,10 +110,12 @@ if (isset($_POST['save'])) {
         $flags &= ~UserFlags::FLAG_MATURE_CONTENT_ACCESS->value;
     }
 
-    if ($enable_customization) {
-        $flags |= UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
-    } else {
-        $flags &= ~UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
+    if ($options["skin"] == "trinium") {
+        if ($enable_customization) {
+            $flags |= UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
+        } else {
+            $flags &= ~UserFlags::FLAG_PROFILE_CUSTOMIZATION_ENABLED->value;
+        }
     }
 
     $error = '';
