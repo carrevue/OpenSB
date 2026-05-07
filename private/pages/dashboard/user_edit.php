@@ -207,7 +207,7 @@ foreach ($notes as $note) {
     ];
 }
 
-if ($sb->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Administrator)) {
+if ($sb->isIpLookupEnabled() && $auth->userHasRole(UserRoleEnum::Moderator)) {
     $ip_info = $sb->getIpLookupClass()->getInfo($user["ip"]);
 } else {
     $ip_info = [];
@@ -290,14 +290,14 @@ $user_info_table = [
         'value' => $user['id'],
     ],
     'ip_address' => [
-        'condition' => $auth->userHasRole(UserRoleEnum::Administrator),
+        'condition' => $auth->userHasRole(UserRoleEnum::Moderator),
         'label' => 'IP address',
         'value' => $user['ip'],
     ],
     'email_address' => [
-        'condition' => $auth->userHasRole(UserRoleEnum::Administrator),
+        'condition' => $auth->userHasRole(UserRoleEnum::Moderator),
         'label' => $localization->translate('email_address'),
-        'value' => $user['email'],
+        'value' => $auth->userHasRole(UserRoleEnum::Administrator) ? $user['email'] : strstr($user['email'], '@'),
     ],
     'username' => [
         'condition' => true,

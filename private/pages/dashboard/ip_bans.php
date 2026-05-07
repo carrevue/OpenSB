@@ -26,7 +26,7 @@ global $auth, $twig, $database, $sb;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Administrator)) {
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
