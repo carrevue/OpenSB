@@ -16,8 +16,11 @@
                     </div>
                     <div class="jumbotron-logged-in-text">
                         <h1>{{ localize('welcome_logged_in', user_data.title) }}</h1>
-                        <div>@{{ user_data.name }} • {{ localize('followers', user_stat_data.followers) }}
-                            • {{ localize('views', user_stat_data.views) }}</div>
+                        <div class="jumbotron-details">
+                            <span>@{{ user_data.name }}</span>
+                            <span>{{ localize('followers', user_stat_data.followers) }}</span>
+                            <span>{{ localize('views', user_stat_data.views) }}</span>
+                        </div>
                     </div>
                 {% else %}
                     <h1>{{ localize('welcome_logged_out', website_branding.name) }}</h1>
@@ -162,7 +165,8 @@
                                         {{ user_link(user) }}
                                     </div>
                                     <div class="content-detail">
-                                        {{ localize('followers', user.followers) }} • {{ localize('upload_count', user.uploads) }}
+                                        <span>{{ localize('followers', user.followers) }}</span>
+                                        <span>{{ localize('upload_count', user.uploads) }}</span>
                                     </div>
                                 </div>
                             </div>

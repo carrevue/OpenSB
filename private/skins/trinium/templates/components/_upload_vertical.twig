@@ -19,11 +19,9 @@
                  alt="{{ upload.title }}" class="content-image thumbnail">
         </a>
         <div class="content-thumbnail-badge-container">
-            {% if upload.type != 0 %}
             <div class="content-thumbnail-badge">
                 {{ icon(icon) }}
             </div>
-            {% endif %}
             {% if upload.flags.mature %}
                 <div class="content-thumbnail-badge timestamp">
                     MATURE
@@ -53,10 +51,10 @@
             {{ user_link(upload.author) }}
         </div>
         <div class="content-detail">
-            {{ localize('views', upload.views) }} • <span class="use-tooltip" title="{{ time | format_date('long', 'none') }}">{{ time | relative_time }}</span>
-            {% if upload.published_originally and upload.original_site %}
-                <span class="text-faded">on {{ upload.original_site }}</span>
-            {% endif %}
+            <span>{{ localize('views', upload.views) }}</span>
+            <span class="use-tooltip" title="{{ time | format_date('long', 'none') }}">
+                {{ time | relative_time }} {% if upload.published_originally and upload.original_site %}<span class="text-faded">on {{ upload.original_site }}</span>{% endif %}
+            </span>
         </div>
         {% if upload.description|trim is not empty %}
         <div class="content-description clamp">
