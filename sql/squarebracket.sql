@@ -71,6 +71,18 @@ CREATE TABLE `journal_comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `contents` text NOT NULL,
+  `author` int(11) NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  `type` tinyint(1) NOT NULL DEFAULT 0,
+  `reply_to` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 DROP TABLE IF EXISTS `private_messages`;
 CREATE TABLE `private_messages` (
   `id` int(11) NOT NULL,
@@ -246,6 +258,16 @@ CREATE TABLE `user_notifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE IF EXISTS `user_number_history`;
+CREATE TABLE `user_number_history` (
+  `user` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `followers` int(11) NOT NULL,
+  `uploads` int(11) NOT NULL,
+  PRIMARY KEY (`user`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+
 DROP TABLE IF EXISTS `user_old_names`;
 CREATE TABLE `user_old_names` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -306,4 +328,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-05-07 11:02:53 UTC
+-- 2026-05-07 11:47:00 UTC

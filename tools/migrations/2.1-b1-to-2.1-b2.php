@@ -52,3 +52,12 @@ ADD `f_index` bigint unsigned NOT NULL DEFAULT '0' AFTER `flags`;");
 // add indexed upload count
 $database->query("ALTER TABLE `users`
 ADD `u_index` bigint unsigned NOT NULL DEFAULT '0' AFTER `f_index`;");
+
+// add user number history table
+$database->query("CREATE TABLE user_number_history (
+    user INT NOT NULL,
+    date DATE  NOT NULL,
+    followers INT NOT NULL,
+    uploads INT NOT NULL,
+    PRIMARY KEY (user, date)
+);");

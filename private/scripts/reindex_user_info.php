@@ -34,17 +34,37 @@ global $database;
 $users = $database->fetchArray($database->query("SELECT * FROM users"));
 
 foreach ($users as $user) {
-    $numbers = $database->fetch("SELECT * FROM (
-        SELECT u.id,
-            (SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT upload from upload_takedowns)) AS u_num,
-            (SELECT COUNT(user) FROM user_follows WHERE id = u.id AND user NOT IN (SELECT user from user_bans)) AS f_num
-        FROM users u
-    ) AS u where u.id = ?", [$user["id"]]);
-
-    $database->query(
-        "UPDATE users SET u_index = ?, f_index = ? WHERE id = ?",
-        [$numbers["u_num"], $numbers["f_num"], $user["id"]]
+    $numbers = $database->fetch("
+        SELECT
+            (SELECT COUNT(*) FROM uploads WHERE author = u.id AND upload_id NOT IN (SELECT upload FROM upload_takedowns)) AS u_num,
+            (SELECT COUNT(user) FROM user_follows WHERE id = u.id AND user NOT IN (SELECT user FROM user_bans)) AS f_num
+        FROM users u WHERE u.id = ?",
+        [$user["id"]]
     );
+
+    if (!($numbers["u_num"] == 0 && $numbers["f_num"] == 0)) { // if the upload/follow numbers are both 0, don't bother.
+        $database->query(
+            "UPDATE users SET u_index = ?, f_index = ? WHERE id = ?",
+            [$numbers["u_num"], $numbers["f_num"], $user["id"]]
+        );
+
+        $last = $database->fetch(
+            "SELECT followers, uploads FROM user_number_history WHERE user = ? ORDER BY date DESC LIMIT 1",
+            [$user["id"]]
+        );
+
+        $today_exists = $database->result(
+            "SELECT user FROM user_number_history WHERE user = ? AND date = ?",
+            [$user["id"], date('Y-m-d')]
+        );
+
+        if (!$today_exists && (!$last || $last["followers"] != $numbers["f_num"] || $last["uploads"] != $numbers["u_num"])) {
+            $database->query(
+                "INSERT INTO user_number_history (user, date, followers, uploads) VALUES (?,?,?,?)",
+                [$user["id"], date('Y-m-d'), $numbers["f_num"], $numbers["u_num"]]
+            );
+        }
+    }
 }
 
 if ($sb->isDiscordWebhookEnabled()) {
