@@ -21,19 +21,17 @@
 
 namespace Pages;
 
-global $sb, $database, $twig;
+global $sb, $twig;
 
 use Data\User\UserQuery;
-use Core\Utilities;
 use RuntimeException;
 
 if ($sb->getLocalOptions()['skin'] != "finalium") { throw new RuntimeException("You should be using Finalium!"); }
 
 $user_query = new UserQuery($sb);
 
-$queryData = $user_query->query("u.last_seen DESC", 64);
+$usersData = $user_query->query("u.last_seen DESC", 64)->toCleanArray();
 $countData = $user_query->count();
-$usersData = $user_query->toArray($queryData);
 
 echo $twig->render('debug/follow_buttons.twig', [
     'users' => $usersData,

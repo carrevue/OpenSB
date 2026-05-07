@@ -30,6 +30,7 @@ use Data\Upload\UploadFlags;
 use Data\Upload\UploadQuery;
 use Data\User\UserQuery;
 use Data\User\UserFlags;
+use Data\Journal\JournalQuery;
 
 $options = $sb->getLocalOptions();
 
@@ -39,13 +40,8 @@ if ($options["skin"] == "finalium") {
     exit;
 }
 
-if ($auth->isUserLoggedIn()) {
-    $type = isset($options["home_type"]) && $options["home_type"] !== "following" ? $options["home_type"] : "following";
-} else {
-    $type = "featured";
-}
-
 $upload_query = new UploadQuery($sb);
+$journal_query = new JournalQuery($sb);
 
 $uploads_query_limit = 12;
 $uploads_featured_query_limit = 3;
@@ -108,11 +104,11 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
     $uploads_following = [];
 }
 
-$news_recent = $database->fetchArray($database->query("SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC LIMIT $news_recent_query_limit"));
+$news_recent = $journal_query->query("j.timestamp DESC", $news_recent_query_limit, "j.is_news = 1")->toCleanArray();
 
 if ($options["skin"] == "trinium") {
     $user_query = new UserQuery($sb);
-    $users_recent = $user_query->toArray($user_query->query("u.last_seen DESC", 5, "u.u_index != 0"));
+    $users_recent = $user_query->query("u.last_seen DESC", 5, "u.u_index != 0")->toCleanArray();
 } else {
     $users_recent = [];
 }
@@ -121,12 +117,11 @@ $data = [
     "uploads_new" => $uploads_new,
     "uploads_featured" => $uploads_featured,
     "uploads_following" => $uploads_following,
-    "news_recent" => Utilities::makeJournalArray($database, $news_recent) ?? [],
+    "news_recent" => $news_recent,
     "users_recent" => $users_recent ?? [],
 ];
 
 echo $twig->render('index.twig', [
     'data' => $data,
-    'type' => $type,
     'slogan' => Utilities::getRandomSlogan() ?? null,
 ]);

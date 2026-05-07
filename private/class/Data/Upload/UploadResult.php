@@ -41,27 +41,26 @@ class UploadResult
             $ratings = new UploadRatingData($this->database, $upload["id"]);
 
             $userData = new UserData($this->database, $upload["author"]);
-            $out[] =
-                [
-                    "id" => $upload["upload_id"],
-                    "title" => $upload["title"],
-                    "description" => $upload["description"],
-                    "published" => $upload["timestamp"],
-                    "published_originally" => $upload["original_timestamp"],
-                    "original_site" => $upload["original_site"],
-                    "type" => $upload["type"],
-                    "content_rating" => $upload["rating"],
-                    "views" => $upload["views"],
-                    "flags" => $flags,
-                    "length" => $upload["video_length"],
-                    "author" => [
-                        "id" => $upload["author"],
-                        "info" => $userData->getUserArray(),
-                    ],
-                    "interactions" => [
-                        "ratings" => $ratings->calculateRatingData(),
-                    ],
-                ];
+            $out[] = [
+                "id" => $upload["upload_id"],
+                "title" => $upload["title"],
+                "description" => $upload["description"],
+                "published" => $upload["timestamp"],
+                "published_originally" => $upload["original_timestamp"],
+                "original_site" => $upload["original_site"],
+                "type" => $upload["type"],
+                "content_rating" => $upload["rating"],
+                "views" => $upload["views"],
+                "flags" => $flags,
+                "length" => $upload["video_length"],
+                "author" => [
+                    "id" => $upload["author"],
+                    "info" => $userData->getUserArray(),
+                ],
+                "interactions" => [
+                    "ratings" => $ratings->calculateRatingData(),
+                ],
+            ];
         }
 
         return $out;

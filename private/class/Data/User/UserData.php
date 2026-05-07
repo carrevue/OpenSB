@@ -58,11 +58,11 @@ class UserData
      * function __construct
      *
      * @param Database $database
-     * @param mixed $id
+     * @param int $id
      *
      * @return void
      */
-    public function __construct(Database $database, $id)
+    public function __construct(Database $database, int $id)
     {
         $this->database = $database;
         $this->id = $id;

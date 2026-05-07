@@ -19,34 +19,41 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Data\Post;
+namespace Data\Journal;
 
 use Core\Database;
+use Core\Utilities;
 use Data\User\UserData;
 
-class PostResult
+class JournalResult
 {
     public function __construct(
         private Database $database,
-        private array $rows
+        private array $rows,
+        private bool $isFulpTube
     ) {}
 
     public function toCleanArray(): array
     {
         $out = [];
 
-        foreach ($this->rows as $post) {
-            $userData = new UserData($this->database, $post['author']);
+        foreach ($this->rows as $journal) {
+            //$flags = JournalFlags::toArray($journal["flags"]);
 
+            if ($this->isFulpTube && $journal["is_news"]) {
+                $journal["title"] = Utilities::replaceSquareBracketWithFulpTube($journal["title"]);
+                $journal["post"] = Utilities::replaceSquareBracketWithFulpTube($journal["post"]);
+            }
+
+            $userData = new UserData($this->database, $journal["author"]);
             $out[] = [
-                'type'       => PostTypeEnum::from($post['type'])->toString(),
-                'id'         => $post['id'],
-                'contents'   => $post['contents'],
-                'published'  => $post['timestamp'],
-                'attachment' => $post['attachment'],
-                'author'     => [
-                    'id'   => $post['author'],
-                    'info' => $userData->getUserArray(),
+                "id" => $journal["id"],
+                "title" => $journal["title"],
+                "contents" => $journal["post"],
+                "published" => $journal["timestamp"],
+                "author" => [
+                    "id" => $journal["author"],
+                    "info" => $userData->getUserArray(),
                 ],
             ];
         }

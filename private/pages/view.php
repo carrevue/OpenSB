@@ -36,7 +36,6 @@ use Data\Upload\UploadVisibilityEnum;
 use Data\Upload\UploadFlags;
 use Data\User\UserFlags;
 use Data\Upload\UploadResult;
-use Data\Post\PostQuery;
 
 $options = $sb->getLocalOptions();
 

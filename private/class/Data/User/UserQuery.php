@@ -56,7 +56,7 @@ class UserQuery
      * @param string $whereCondition
      * @param array $params
      *
-     * @return array
+     * @return UserResult
      */
     public function query($order, $limit, $whereCondition = null, $params = [])
     {
@@ -81,7 +81,7 @@ class UserQuery
             $query .= " LIMIT " . (int) $limit;
         }
 
-        return $this->database->fetchArray($this->database->query($query, $allParams));
+        return new UserResult($this->database, $this->database->fetchArray($this->database->query($query, $allParams)));
     }
 
     /**
@@ -109,23 +109,5 @@ class UserQuery
         $allParams = array_merge($baseParams, $params);
 
         return $this->database->result($query, $allParams);
-    }
-
-    public function toArray($data) {
-        if (!$data) {
-            return [];
-        }
-        $out = [];
-        foreach ($data as $user) {
-            $userData = new UserData($this->database, $user["id"]);
-            $out[] = [
-                "id" => $user["id"],
-                "info" => $userData->getUserArray(),
-                "uploads" => $user["u_index"] ?? 0,
-                "followers" => $user["f_index"] ?? 0,
-                "about" => $user["about"] ?? null,
-            ];
-        }
-        return $out;
     }
 }

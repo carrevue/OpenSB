@@ -81,42 +81,6 @@ class Utilities
     }
 
     /**
-     * function makeJournalArray
-     *
-     * @param Database $database
-     * @param array $journals
-     *
-     * @return array
-     */
-    public static function makeJournalArray($database, $journals): array
-    {
-        global $sb;
-
-        $journalsData = [];
-        foreach ($journals as $journal) {
-            if ($sb->isFulpTubeMode() && $journal["is_news"]) {
-                $journal["title"] = self::replaceSquareBracketWithFulpTube($journal["title"]);
-                $journal["post"] = self::replaceSquareBracketWithFulpTube($journal["post"]);
-            }
-
-            $userData = new UserData($database, $journal["author"]);
-            $journalsData[] =
-                [
-                    "id" => $journal["id"],
-                    "title" => $journal["title"],
-                    "contents" => $journal["post"],
-                    "published" => $journal["timestamp"],
-                    "author" => [
-                        "id" => $journal["author"],
-                        "info" => $userData->getUserArray(),
-                    ],
-                ];
-        }
-
-        return $journalsData;
-    }
-
-    /**
      * function notifyUser
      *
      * Not to be confused with notifyBanner, which makes a banner.
