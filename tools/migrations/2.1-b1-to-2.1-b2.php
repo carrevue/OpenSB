@@ -34,6 +34,13 @@ require_once SB_PRIVATE_PATH . '/common.php';
 
 // migrate from opensb 2.1 beta 1 table schema to opensb 2.1 beta 2 table schema
 
+// asn bans (this is from opensb 2.1 beta 1.1 but Whatever)
+$database->query("CREATE TABLE `asn_bans` (
+  `asn` int(11) NOT NULL,
+  `timestamp` bigint(20) NOT NULL,
+  `author` int(11) NOT NULL
+);");
+
 // add profile type (this is different from the one seen in early beta versions of 2.0)
 $database->query("ALTER TABLE `user_profile_customization`
 ADD `type` tinyint NOT NULL DEFAULT '0' AFTER `user`;");

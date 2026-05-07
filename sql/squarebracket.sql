@@ -1,4 +1,4 @@
--- Adminer 5.4.1 MariaDB 11.8.3-MariaDB-0+deb13u1 from Debian dump
+-- Adminer 5.4.1 MariaDB 11.8.6-MariaDB-0+deb13u1 from Debian dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -6,6 +6,14 @@ SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS `asn_bans`;
+CREATE TABLE `asn_bans` (
+  `asn` int(11) NOT NULL,
+  `timestamp` bigint(20) NOT NULL,
+  `author` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 DROP TABLE IF EXISTS `email_verification_token`;
 CREATE TABLE `email_verification_token` (
@@ -59,19 +67,6 @@ CREATE TABLE `journal_comments` (
   `comment` text NOT NULL,
   `author` bigint(20) NOT NULL,
   `timestamp` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-DROP TABLE IF EXISTS `posts`;
-CREATE TABLE `posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `contents` text NOT NULL,
-  `author` int(11) NOT NULL,
-  `timestamp` int(11) NOT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT '0',
-  `attachment` varchar(64) NULL,
-  `reply_to` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -205,6 +200,8 @@ CREATE TABLE `users` (
   `avatar` tinyint(1) NOT NULL DEFAULT 0,
   `ip` varchar(48) DEFAULT '999.999.999.999',
   `flags` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '8 bools to determine certain user properties',
+  `f_index` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `u_index` bigint(20) unsigned NOT NULL DEFAULT 0,
   `powerlevel` tinyint(3) unsigned NOT NULL DEFAULT 1 COMMENT '0 - banned. 1 - normal user. 2 - moderator. 3 - administrator',
   `comfortable_rating` enum('general','questionable','mature') NOT NULL,
   `blacklisted_tags` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`blacklisted_tags`)),
@@ -295,7 +292,7 @@ CREATE TABLE `user_profile_customization` (
   `highlight_box_background_color` varchar(7) NOT NULL DEFAULT '#E6E6E6',
   `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `user_staff_notes`;
@@ -309,4 +306,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-03-11 10:44:02 UTC
+-- 2026-05-07 11:02:53 UTC
