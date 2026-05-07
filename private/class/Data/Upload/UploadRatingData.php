@@ -22,6 +22,7 @@
 namespace Data\Upload;
 
 use Core\Database;
+use Core\Utilities;
 
 /**
  * class UploadRatingData
