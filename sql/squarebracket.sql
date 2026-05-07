@@ -274,7 +274,7 @@ CREATE TABLE `user_number_history` (
   `date` date NOT NULL,
   `followers` int(11) NOT NULL,
   `uploads` int(11) NOT NULL,
-  `banned` bit(1) NOT NULL,
+  `banned` tinyint(1) NOT NULL,
   PRIMARY KEY (`user`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

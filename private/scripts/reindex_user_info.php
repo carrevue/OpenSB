@@ -44,30 +44,28 @@ foreach ($users as $user) {
         [$user["id"]]
     );
 
-    if (!($numbers["u_num"] == 0 && $numbers["f_num"] == 0)) { // if the upload/follow numbers are both 0, don't bother.
-        $is_banned = (bool) $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$user["id"]]);
+    $is_banned = (int)(bool)$database->result("SELECT id FROM user_bans WHERE user = ?", [$user["id"]]);
 
+    $database->query(
+        "UPDATE users SET u_index = ?, f_index = ? WHERE id = ?",
+        [$numbers["u_num"], $numbers["f_num"], $user["id"]]
+    );
+
+    $last = $database->fetch(
+        "SELECT followers, uploads FROM user_number_history WHERE user = ? ORDER BY date DESC LIMIT 1",
+        [$user["id"]]
+    );
+
+    $today_exists = $database->result(
+        "SELECT user FROM user_number_history WHERE user = ? AND date = ?",
+        [$user["id"], date('Y-m-d')]
+    );
+
+    if (!$today_exists && (!$last || $last["followers"] != $numbers["f_num"] || $last["uploads"] != $numbers["u_num"])) {
         $database->query(
-            "UPDATE users SET u_index = ?, f_index = ? WHERE id = ?",
-            [$numbers["u_num"], $numbers["f_num"], $user["id"]]
+            "INSERT INTO user_number_history (user, date, followers, uploads, banned) VALUES (?,?,?,?,?)",
+            [$user["id"], date('Y-m-d'), $numbers["f_num"], $numbers["u_num"], $is_banned]
         );
-
-        $last = $database->fetch(
-            "SELECT followers, uploads FROM user_number_history WHERE user = ? ORDER BY date DESC LIMIT 1",
-            [$user["id"]]
-        );
-
-        $today_exists = $database->result(
-            "SELECT user FROM user_number_history WHERE user = ? AND date = ?",
-            [$user["id"], date('Y-m-d')]
-        );
-
-        if (!$today_exists && (!$last || $last["followers"] != $numbers["f_num"] || $last["uploads"] != $numbers["u_num"])) {
-            $database->query(
-                "INSERT INTO user_number_history (user, date, followers, uploads, banned) VALUES (?,?,?,?,?)",
-                [$user["id"], date('Y-m-d'), $numbers["f_num"], $numbers["u_num"], $is_banned]
-            );
-        }
     }
 }
 
