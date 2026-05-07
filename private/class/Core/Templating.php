@@ -129,11 +129,6 @@ class Templating
         $this->skin = $this->options["skin"] ?? $default_skin;
         $this->theme = $this->options["theme"] ?? $default_theme;
 
-        if (str_contains($_SERVER['HTTP_USER_AGENT'], 'Windows NT 5.1')) {
-            $this->skin = "retro";
-            $this->theme = "default";
-        }
-
         if ($this->skin === null || trim($this->skin) === '') {
             $this->resetToDefault();
         }
