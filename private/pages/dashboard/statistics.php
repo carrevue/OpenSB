@@ -208,7 +208,7 @@ if ($sb->isChazizInstance()) {
 $thingsToCount = [
     'users' => 'Users',
     'uploads' => 'Uploads',
-    'journals' => 'Posts',
+    'journals' => 'Journals',
     'upload_comments' => 'Upload comments',
     'user_profile_comments' => 'Profile comments',
     'journal_comments' => 'Journal comments',
@@ -286,7 +286,7 @@ $chartData = [
                 'yAxisID' => 'n',
             ],
             [
-                'label' => 'Posts',
+                'label' => 'Journals',
                 'data' => array_map(function ($graph) {
                     return [
                         'x' => $graph['timestamp'],

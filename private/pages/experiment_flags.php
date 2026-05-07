@@ -58,6 +58,10 @@ $flags = [
         "name" => "Comment rating",
         "description" => "Enables ability to rate comments. Currently does not do anything."
     ],
+    "exp_finalium_sidebars" => [
+        "name" => "Finalium sidebars",
+        "description" => "Enables Creator Studio and Account settings sidebars."
+    ],
     "trinium_link_coloring" => [
         "name" => "Trinium link coloring",
         "description" => "Leftover of scrapped 2024 Charla functionality."

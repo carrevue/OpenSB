@@ -47,7 +47,8 @@
                         {{ user_link(user) }}
                     </div>
                     <div class="content-detail">
-                        {{ localize('upload_count', user.uploads) }} · {{ localize('journal_count', user.journals) }}
+                        <span>{{ localize('upload_count', user.uploads) }}</span>
+                        <span>{{ localize('journal_count', user.journals) }}</span>
                     </div>
                     <div class="content-detail">
                         Role:

@@ -52,7 +52,7 @@ $usersDataQuery = $database->fetchArray(
         "
         SELECT u.id, u.title, u.powerlevel,
             (SELECT COUNT(*) FROM uploads WHERE author = u.id) AS u_num, 
-            (SELECT COUNT(*) FROM posts WHERE author = u.id) AS p_num,
+            (SELECT COUNT(*) FROM journals WHERE author = u.id) AS j_num,
             (SELECT COUNT(*) FROM user_bans WHERE user = u.id) AS is_banned
         FROM users u
         WHERE u.name LIKE CONCAT('%', ?, '%')
@@ -75,7 +75,7 @@ foreach ($usersDataQuery as $user) {
             "id" => $user["id"],
             "info" => $userData->getUserArray(),
             "uploads" => $user["u_num"],
-            "posts" => $user["p_num"],
+            "journals" => $user["j_num"],
             "banned" => $user["is_banned"],
             "powerlevel" => $user["powerlevel"],
         ];
