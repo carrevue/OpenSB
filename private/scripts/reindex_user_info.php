@@ -45,6 +45,8 @@ foreach ($users as $user) {
     );
 
     if (!($numbers["u_num"] == 0 && $numbers["f_num"] == 0)) { // if the upload/follow numbers are both 0, don't bother.
+        $is_banned = (bool) $database->fetch("SELECT * FROM user_bans WHERE user = ?", [$user["id"]]);
+
         $database->query(
             "UPDATE users SET u_index = ?, f_index = ? WHERE id = ?",
             [$numbers["u_num"], $numbers["f_num"], $user["id"]]
@@ -62,8 +64,8 @@ foreach ($users as $user) {
 
         if (!$today_exists && (!$last || $last["followers"] != $numbers["f_num"] || $last["uploads"] != $numbers["u_num"])) {
             $database->query(
-                "INSERT INTO user_number_history (user, date, followers, uploads) VALUES (?,?,?,?)",
-                [$user["id"], date('Y-m-d'), $numbers["f_num"], $numbers["u_num"]]
+                "INSERT INTO user_number_history (user, date, followers, uploads, banned) VALUES (?,?,?,?,?)",
+                [$user["id"], date('Y-m-d'), $numbers["f_num"], $numbers["u_num"], $is_banned]
             );
         }
     }

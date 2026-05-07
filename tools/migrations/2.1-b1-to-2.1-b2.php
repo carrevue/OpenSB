@@ -69,3 +69,7 @@ $database->query("CREATE TABLE upload_number_history (
     views_raw INT NOT NULL,
     PRIMARY KEY (upload, date)
 );");
+
+// from after the inital release of 2.1.0 beta 2
+$database->query("ALTER TABLE `user_number_history`
+ADD `banned` bit(1) NOT NULL;");
