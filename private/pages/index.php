@@ -97,11 +97,19 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
             $uploads_query_limit,
             sprintf("v.author in (%s)", $query)
         )->toCleanArray();
+
+        $journals_following = $journal_query->query(
+            "j.timestamp DESC",
+            $uploads_query_limit,
+            sprintf("j.author in (%s)", $query)
+        )->toCleanArray();
     } else {
         $uploads_following = [];
+        $journals_following = [];
     }
 } else {
     $uploads_following = [];
+    $journals_following = [];
 }
 
 $news_recent = $journal_query->query("j.timestamp DESC", $news_recent_query_limit, "j.is_news = 1")->toCleanArray();
@@ -118,7 +126,8 @@ $data = [
     "uploads_featured" => $uploads_featured,
     "uploads_following" => $uploads_following,
     "news_recent" => $news_recent,
-    "users_recent" => $users_recent ?? [],
+    "journals_following" => $journals_following,
+    "users_recent" => $users_recent,
 ];
 
 echo $twig->render('index.twig', [

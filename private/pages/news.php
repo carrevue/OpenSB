@@ -21,9 +21,9 @@
 
 namespace Pages;
 
-global $twig, $database;
+global $sb, $twig, $database;
 
-use Core\Utilities;
+use Data\Journal\JournalQuery;
 
 $journal_count = 0;
 $data = [];
@@ -31,18 +31,13 @@ $data = [];
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 $limit = $database->paginate($page, 20);
 
-$journal_array = $database->fetchArray($database->query(
-    "SELECT j.* FROM journals j WHERE j.is_news = 1 ORDER BY j.timestamp DESC $limit"
-));
+$journal_query = new JournalQuery($sb);
 
-$journal_count = $database->result(
-    "SELECT COUNT(*) FROM journals j WHERE j.is_news = 1"
-);
-
-$data = Utilities::makeJournalArray($database, $journal_array);
+$journals = $journal_query->query("j.timestamp DESC", $limit, "j.is_news = 1")->toCleanArray();
+$count = $journal_query->count("j.is_news = 1");
 
 echo $twig->render('news.twig', [
-    'data' => $data,
+    'data' => $journals,
     'page' => $page,
-    'count' => $journal_count
+    'count' => $count,
 ]);

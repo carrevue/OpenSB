@@ -49,7 +49,7 @@
                     <div class="section-header flex">
                         <div class="section-header-left">
                             <h2 class="section-title">{{ localize('following') }}</h2>
-                            <div class="section-desc">{{ localize('following_uploads_desc') }}</div>
+                            <div class="section-desc">{{ localize('following_desc') }}</div>
                         </div>
                         <div class="section-header-right">
                             <a href="/browse">{{ localize('more') }}</a>
@@ -118,6 +118,21 @@
                             <a href="/news">{{ localize('site_news_previous') }}</a>
                         </div>
                     </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if data.journals_following %}
+            <div class="section">
+                <div class="section-header flex">
+                    <div class="section-header-left">
+                        <h2 class="section-title">{{ localize('journals') }}</h2>
+                        <div class="section-desc">{{ localize('following_desc') }}</div>
+                    </div>
+                </div>
+                <div class="content-box">
+                    {% for journal in data.journals_following %}
+                        {{ include('/components/_journal.twig') }}
+                    {% endfor %}
                 </div>
             </div>
             {% endif %}

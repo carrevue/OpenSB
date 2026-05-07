@@ -58,7 +58,7 @@ class UserQuery
      *
      * @return UserResult
      */
-    public function query($order, $limit, $whereCondition = null, $params = [])
+    public function query($order, $limit, $whereCondition = null, $params = []): UserResult
     {
         $query = "SELECT u.id, u.about, u.title, u.flags, u.joined, u.last_seen, u.f_index, u.u_index FROM users u";
         $whereClauses = [];

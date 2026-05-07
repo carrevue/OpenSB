@@ -45,16 +45,6 @@ class JournalQuery
     private Authentication $auth;
 
     /**
-     * @var string
-     */
-    private string $whereRatings;
-
-    /**
-     * @var string
-     */
-    private string $whereTagBlacklist;
-
-    /**
      * @var int
      */
     private int $userFlags;
@@ -75,8 +65,6 @@ class JournalQuery
     {
         $this->database = $sb->getDatabaseClass();
         $this->auth = $sb->getAuthenticationClass();
-        $this->whereRatings = $sb->getAuthenticationClass()->databaseWhereRatingsHelper();
-        $this->whereTagBlacklist = $sb->getAuthenticationClass()->databaseWhereTagBlacklistHelper();
         if ($this->auth->isUserLoggedIn()) {
             $this->userFlags = $this->auth->getUserFlags();
         } else {
@@ -93,11 +81,10 @@ class JournalQuery
      * @param int $limit
      * @param string $whereCondition
      * @param array $params
-     * @param bool $adminPanel
      *
      * @return JournalResult
      */
-    public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false): JournalResult
+    public function query($order, $limit, $whereCondition = null, $params = []): JournalResult
     {
         $query = "SELECT j.* FROM journals j";
         $whereClauses = [];
@@ -129,8 +116,6 @@ class JournalQuery
 
     /**
      * function count
-     * 
-     * used in the browse page
      *
      * @param mixed $whereCondition
      * @param mixed $params
@@ -139,40 +124,18 @@ class JournalQuery
      */
     public function count($whereCondition = null, $params = [])
     {
-        $query = "SELECT COUNT(*) FROM uploads v";
+        $query = "SELECT COUNT(*) FROM journals j";
         $whereClauses = [];
 
-        //if (!$adminPanel) {
-        // if upload isnt taken down
-        $whereClauses[] = "v.upload_id NOT IN (SELECT upload FROM upload_takedowns)";
-        // if upload does not belong to someone who has been banned
-        $whereClauses[] = "v.author NOT IN (SELECT user FROM user_bans)";
-        $whereClauses[] = "v.visibility = " . UploadVisibilityEnum::Public->value;
-        //}
-
+        /*
         if (!$this->auth->isUserLoggedIn()) {
-            $blocked_guest_flag = UploadFlags::FLAG_BLOCK_GUESTS->value;
-
-            $whereClauses[] = "v.flags & $blocked_guest_flag != $blocked_guest_flag";
+            $blocked_guest_flag = JournalFlags::FLAG_BLOCK_GUESTS->value;
+            $whereClauses[] = "j.flags & $blocked_guest_flag != $blocked_guest_flag";
         }
+        */
 
         if (!empty($whereCondition)) {
             $whereClauses[] = $whereCondition;
-        }
-
-        if (!($this->userFlags & UserFlags::FLAG_MATURE_CONTENT_ACCESS->value)) {
-            $matureFlag = UploadFlags::FLAG_MATURE->value;
-
-            $whereClauses[] = "v.flags & $matureFlag != $matureFlag";
-        }
-
-        // OLD RATINGS (this will be removed later)
-        if (!empty($this->whereRatings)) {
-            $whereClauses[] = $this->whereRatings;
-        }
-
-        if (!empty($this->whereTagBlacklist)) {
-            $whereClauses[] = $this->whereTagBlacklist;
         }
 
         if (!empty($whereClauses)) {

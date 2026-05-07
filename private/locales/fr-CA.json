@@ -141,7 +141,7 @@
     "homepage_recent_uploads_desc": "Les plus récents publications",
 
     "following": "Abonnements",
-    "following_uploads_desc": "Par qui vous êtes abonné",
+    "following_desc": "Par qui vous êtes abonné",
 
     "best_of_site": "Le meilleur de %s",
     "featured_on_site": "En vedette sur %s",

@@ -31,8 +31,10 @@ use Data\Comment\CommentLocation;
 use Data\Upload\UploadData;
 use Data\Upload\UploadQuery;
 use Data\Upload\UploadResult;
+use Data\Journal\JournalQuery;
 
 $upload_query = new UploadQuery($sb);
+$journal_query = new JournalQuery($sb);
 
 $options = $sb->getLocalOptions();
 
@@ -100,13 +102,7 @@ if ($options["skin"] == "bootstrap") {
     $user_journal_limit = 8;
 }
 
-$user_journals =
-    $database->fetchArray(
-        $database->query("SELECT j.* FROM journals j WHERE
-                         j.author = ? 
-                         ORDER BY j.timestamp 
-                         DESC LIMIT ?", [$data["id"], $user_journal_limit])
-    );
+$user_journals = $journal_query->query("j.timestamp DESC", $user_journal_limit, "j.author = ?", [$data["id"]])->toCleanArray();
 
 if (
     $sb->getLocalOptions()["skin"] != "bootstrap" && $sb->getLocalOptions()["skin"] != "finalium"
@@ -126,7 +122,7 @@ $featured_upload = handleFeaturedUpload($database, $data);
 $page_data = [
     "featured_upload" => $featured_upload,
     "uploads" => $user_uploads,
-    "journals" => Utilities::makeJournalArray($database, $user_journals),
+    "journals" => $user_journals,
     "comments" => $comments,
 ];
 

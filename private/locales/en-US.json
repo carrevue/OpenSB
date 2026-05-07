@@ -167,10 +167,10 @@
     "homepage_recent_uploads_desc": "Most recent uploads",
 
     "following": "Following",
-    "following_uploads_desc": "From users you follow",
+    "following_desc": "From users you follow",
 
     "following_hitchhiker": "Subscriptions",
-    "following_uploads_desc_hitchhiker": "From channels you're subscribed to",
+    "following_desc_hitchhiker": "From channels you're subscribed to",
 
     "best_of_site": "Best of %s",
     "featured_on_site": "Featured on %s",

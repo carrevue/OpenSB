@@ -24,6 +24,7 @@ namespace Pages;
 global $twig, $database, $auth, $sb;
 
 use Core\Utilities;
+use Data\Journal\JournalQuery;
 
 include_once('_include.php');
 
@@ -34,18 +35,10 @@ $journal_count = 0;
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 $limit = $database->paginate($page, 20);
 
-$journal_array = $database->fetchArray($database->query(
-    "SELECT j.* FROM journals j WHERE j.author = ? ORDER BY j.timestamp DESC $limit",
-    [$data["id"]]
-));
+$journal_query = new JournalQuery($sb);
 
-$journal_count = $database->result(
-    "SELECT COUNT(*) FROM journals j WHERE j.author = ?",
-    [$data["id"]]
-);
-
-// this part is fucking ugly.
-$journal_data = Utilities::makeJournalArray($database, $journal_array);
+$journals = $journal_query->query("j.timestamp DESC", $limit, "j.author = ?", [$data["id"]])->toCleanArray();
+$count = $journal_query->count("j.author = ?", [$data["id"]]);
 
 if ($sb->getLocalOptions()["skin"] == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapSkinProfileGradient($data["userlink_color"]);
@@ -53,7 +46,7 @@ if ($sb->getLocalOptions()["skin"] == "bootstrap") {
 
 echo $twig->render('profile_journals.twig', [
     'common' => $common_data,
-    'journals' => $journal_data,
+    'journals' => $journals,
     'page' => $page,
-    'count' => $journal_count
+    'count' => $count
 ]);
