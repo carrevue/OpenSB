@@ -102,6 +102,21 @@ class Database
         return $this->sql->lastInsertId();
     }
 
+    public function beginTransaction(): bool
+    {
+        return $this->sql->beginTransaction();
+    }
+
+    public function commitTransaction(): bool
+    {
+        return $this->sql->commit();
+    }
+
+    public function rollbackTransaction(): bool
+    {
+        return $this->sql->rollBack();
+    }
+
     /**
      * Helper function to insert a row into a table.
      */

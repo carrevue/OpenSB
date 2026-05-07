@@ -33,6 +33,8 @@ global $database;
 
 $users = $database->fetchArray($database->query("SELECT * FROM users"));
 
+$database->beginTransaction();
+
 foreach ($users as $user) {
     $numbers = $database->fetch("
         SELECT
@@ -66,6 +68,8 @@ foreach ($users as $user) {
         }
     }
 }
+
+$database->commitTransaction();
 
 if ($sb->isDiscordWebhookEnabled()) {
     $sb->getDiscordWebhookClass()->scriptSuccessHook(__FILE__);

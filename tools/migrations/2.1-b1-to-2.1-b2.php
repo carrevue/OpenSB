@@ -53,11 +53,19 @@ ADD `f_index` bigint unsigned NOT NULL DEFAULT '0' AFTER `flags`;");
 $database->query("ALTER TABLE `users`
 ADD `u_index` bigint unsigned NOT NULL DEFAULT '0' AFTER `f_index`;");
 
-// add user number history table
+// add user/upload number history table
 $database->query("CREATE TABLE user_number_history (
     user INT NOT NULL,
-    date DATE  NOT NULL,
+    date DATE NOT NULL,
     followers INT NOT NULL,
     uploads INT NOT NULL,
     PRIMARY KEY (user, date)
+);");
+
+$database->query("CREATE TABLE upload_number_history (
+    upload INT NOT NULL,
+    date DATE NOT NULL,
+    views INT NOT NULL,
+    views_raw INT NOT NULL,
+    PRIMARY KEY (upload, date)
 );");

@@ -139,6 +139,16 @@ CREATE TABLE `upload_deleted` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE IF EXISTS `upload_number_history`;
+CREATE TABLE `upload_number_history` (
+  `upload` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `views` int(11) NOT NULL,
+  `views_raw` int(11) NOT NULL,
+  PRIMARY KEY (`upload`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 DROP TABLE IF EXISTS `upload_ratings`;
 CREATE TABLE `upload_ratings` (
   `user` bigint(20) unsigned NOT NULL COMMENT 'User that does the rating.',
@@ -265,7 +275,7 @@ CREATE TABLE `user_number_history` (
   `followers` int(11) NOT NULL,
   `uploads` int(11) NOT NULL,
   PRIMARY KEY (`user`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `user_old_names`;

@@ -39,12 +39,16 @@ const SB_2022_TIMESTAMP = 1662664200; // sb views from 2021-2022 were not counte
 const QOBO_TIMESTAMP = 1709269200; // qobo views from 2023 were FUCKED and had a lot of botting.
 const SB_2024_TIMESTAMP = 1730782800; // 2024 squarebracket (pre-nov5)
 
+$database->beginTransaction();
+
 foreach ($uploads as $upload) {
     $views = $database->fetchArray($database->query("
-        SELECT type, timestamp 
+        SELECT type, timestamp
         FROM upload_views 
         WHERE upload_id = ?
     ", [$upload["upload_id"]]));
+
+    $total = $database->result("SELECT COUNT(*) FROM upload_views WHERE upload_id = ?", [$upload["upload_id"]]);
 
     $loggedIn = 0;
     $loggedOut = 0;
@@ -99,7 +103,17 @@ foreach ($uploads as $upload) {
         "UPDATE uploads SET views = ? WHERE upload_id = ?",
         [round($adjustedViews), $upload["upload_id"]]
     );
+
+    if (!$database->result("SELECT upload FROM upload_number_history WHERE upload = ? AND date = ?", [$upload["id"], date('Y-m-d')])) {
+        $database->query(
+        "INSERT INTO upload_number_history (upload, date, views, views_raw)
+        VALUES (?,?,?,?)",
+            [$upload["id"], date('Y-m-d'), round($adjustedViews), $total]
+        );
+    }
 }
+
+$database->commitTransaction();
 
 if ($sb->isDiscordWebhookEnabled()) {
     $sb->getDiscordWebhookClass()->scriptSuccessHook(__FILE__);
