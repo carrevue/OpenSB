@@ -300,7 +300,9 @@ if (
         }
 
         $auth->bumpLastActive();
+
         $database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"]++, $member]);
+        $database->query("INSERT INTO upload_number_history (upload, date, views, views_raw) VALUES (?,?,?,?)", [$new, date('Y-m-d'), 0, 0]);
         
         // ugh. -chaziz 03/04/2026
         $reupload_suspect_title = [

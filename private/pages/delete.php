@@ -49,4 +49,10 @@ $database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserDat
 
 $sb->getStorageClass()->deleteUploadFile($data);
 
+if (!$database->result("SELECT upload FROM upload_number_history WHERE upload = ? AND date = ?", [$id, date('Y-m-d')])) {
+    $database->query("INSERT INTO upload_number_history (upload, date, views, views_raw) VALUES (?,?,?,?)", [$id, date('Y-m-d'), 0, 0]);
+} else {
+    $database->query("UPDATE upload_number_history set views = ?, views_raw = ? WHERE upload = ? AND date = ?", [0, 0, $id, date('Y-m-d')]);
+}
+
 Utilities::notifyBanner("notify_successfully_deleted_upload", "/my_uploads", "success");
