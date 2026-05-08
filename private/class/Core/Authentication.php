@@ -58,6 +58,7 @@ class Authentication
             "blacklisted_tags",
             "flags",
             "f_index",
+            "u_index",
         ];
 
         if (isset($token)) {

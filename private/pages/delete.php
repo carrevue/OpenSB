@@ -45,7 +45,7 @@ $database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) V
 $database->query("DELETE FROM uploads WHERE upload_id = ?", [$id]);
 
 $auth->bumpLastActive();
-$database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"]--, $member]);
+$database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"] - 1, $member]);
 
 $sb->getStorageClass()->deleteUploadFile($data);
 
