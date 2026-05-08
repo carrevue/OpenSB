@@ -37,7 +37,7 @@ $uploads = $database->fetchArray($database->query("SELECT * FROM uploads ORDER B
 const POKTUBE_TIMESTAMP = 1619236800; // poktube from 2021 views were not properly counted and are fucked
 const SB_2022_TIMESTAMP = 1662664200; // sb views from 2021-2022 were not counted properly
 const QOBO_TIMESTAMP = 1709269200; // qobo views from 2023 were FUCKED and had a lot of botting.
-const SB_2024_TIMESTAMP = 1730782800; // 2024 squarebracket (pre-nov5)
+const SB_2024_TIMESTAMP = 1735707600; // 2024 squarebracket views
 
 $database->beginTransaction();
 
@@ -66,7 +66,7 @@ foreach ($uploads as $upload) {
             $loggedOut++;
 
             // these timestamps are hardcoded within the db.
-            // sb did not count the exact timestamp of views until about april 2024.
+            // sb did not count the exact timestamp of views until april 2024.
             if ($timestamp === POKTUBE_TIMESTAMP) {
                 $adjustedViews += 0.05;
             } elseif ($timestamp === QOBO_TIMESTAMP) {
