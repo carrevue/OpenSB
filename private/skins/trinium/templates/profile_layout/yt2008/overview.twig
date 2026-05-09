@@ -67,7 +67,7 @@
                             </li>
                         {% endif %}
                     </ul>
-                    {% if user_is_authenticated_admin %}
+                    {% if user_is_authenticated_staff %}
                         <hr>
                         <a href="/dashboard/users/{{ common.username }}">{{ localize('dashboard_lookup') }}</a>
                     {% endif %}

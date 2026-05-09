@@ -299,7 +299,7 @@ if (!empty($candidates)) {
                 ($jaccard * 0.75) +
                 (recommendation_string_similarity($data["title"], $row["title"]) * 0.075) +
                 (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05) +
-                (mt_rand(0, 100) / 250.0)
+                (rand(0, 100) / 200.0)
             ) * min(2.0, max(1.0, $row["views"] / 20))
             - $penalty;
     }

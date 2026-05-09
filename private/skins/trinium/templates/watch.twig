@@ -45,7 +45,7 @@
                                 </h1>
                             </div>
                             <div class="section-header-right">
-                                {% if upload.is_owner or user_is_authenticated_admin and enable_incomplete_features %}
+                                {% if upload.is_owner or user_is_authenticated_staff and enable_incomplete_features %}
                                 <div class="menu-button button secondary transparent button-caret"
                                     data-menu-id="upload-{{ upload.id }}">
                                     {{ icon('three-dots', 16) }}
@@ -56,7 +56,7 @@
                                             <span>{{ localize('edit') }}</span>
                                         </a>
                                     {% endif %}
-                                    {% if user_is_authenticated_admin %}
+                                    {% if user_is_authenticated_staff %}
                                         <a class="menu-item-button" href="/dashboard/uploads/{{ upload.id }}">
                                             <span>{{ localize('dashboard_lookup') }}</span>
                                         </a>

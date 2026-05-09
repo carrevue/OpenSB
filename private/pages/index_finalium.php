@@ -38,11 +38,17 @@ $uploads_featured = $upload_query->query(
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
 
-$featured_users = $database->fetchArray(
+// select users if they're featured, are in the top 20 of being most followed, and are not banned.
+$recommended_users = $database->fetchArray(
     $database->query(
         "SELECT u.id, u.name
-        FROM users u 
-        WHERE u.flags & ? = ?
+        FROM users u
+        WHERE u.u_index >= 6
+        AND (
+            (u.flags & ? = ?)
+            OR (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 20) t))
+            AND u.id NOT IN (SELECT user FROM user_bans)
+        )
         ORDER BY RAND() LIMIT 6",
         [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
     )
@@ -62,12 +68,12 @@ $feed = [
 ];
 
 // this feels somewhat inefficient?
-foreach ($featured_users as $user) {
+foreach ($recommended_users as $user) {
     $feed_key = "user_" . $user["id"];
     $feed[$feed_key] = [
         "icon" => $sb->getStorageClass()->getUserProfilePicture($user["id"]),
         "title" => $user["name"],
-        "label" => $localization->translate('featured_member'),
+        "label" => $localization->translate('recommended_member'),
         "link" => "/user/" . $user["name"],
         "uploads" => $upload_query->query(
             "RAND()",

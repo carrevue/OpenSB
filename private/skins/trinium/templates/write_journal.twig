@@ -26,7 +26,7 @@
                                           style="overflow-x:hidden;resize:vertical" rows="16" required></textarea>
                             </div>
 
-                            {% if user_is_authenticated_admin %}
+                            {% if user_is_authenticated_staff %}
                                 <div class="form-input">
                                     <input type="checkbox" id="news" name="news" value="true">
                                     <label for="news">{{ localize('publish_as_news') }}</label><br>
