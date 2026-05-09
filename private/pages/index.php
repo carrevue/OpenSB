@@ -58,8 +58,7 @@ $featured_users = $database->fetchArray(
     $database->query(
         "SELECT u.id, u.name
         FROM users u 
-        WHERE u.flags & ? = ?
-        ORDER BY RAND() LIMIT 6",
+        WHERE u.flags & ? = ?",
         [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
     )
 );
