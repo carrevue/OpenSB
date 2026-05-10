@@ -42,12 +42,12 @@ $options = $sb->getLocalOptions();
 function handle_error(string $message, string ...$args) {
     global $sb, $twig; // Lol
 
-    if ($sb->isHitchhiker()) {
+    if ($sb->getSkinThemeOptions()["view_use_error_page"] ?? false) {
         $localization = $sb->getLocalizationClass();
-        $bullshit = $localization->translate($message, ...$args);
+        $text = $localization->translate($message, ...$args);
 
         echo $twig->render('watch_error.twig', [
-            'error' => $bullshit,
+            'error' => $text,
         ]);
         die();
     } else {

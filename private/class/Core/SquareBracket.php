@@ -167,14 +167,19 @@ class SquareBracket
     private string $theme = "default";
 
     /**
-     * @var SkinInfo
+     * @var array
      */
-    private SkinInfo $skinInfo;
+    private array $skinInfo;
 
     /**
      * @var array
      */
     private array $themeInfo;
+
+    /**
+     * @var array
+     */
+    private array $skinThemeOptions;
 
     /**
      * @var array
@@ -275,7 +280,7 @@ class SquareBracket
         $this->theme = $this->options["theme"] ?? "default";
 
         try {
-            $this->skinInfo = new SkinInfo($this->skin);
+            $this->skinInfo = new SkinInfo($this->skin)->getInfo();
         } catch (Exception $e) {
             if ($this->skin == "trinium") {
                 http_response_code(500);
@@ -286,10 +291,10 @@ class SquareBracket
 
             $this->skin = "trinium";
             $this->theme = "default";
-            $this->skinInfo = new SkinInfo($this->skin);
+            $this->skinInfo = new SkinInfo($this->skin)->getInfo();
         }
 
-        if (!isset($this->skinInfo->getInfo()["metadata"]["themes"][$this->theme])) {
+        if (!isset($this->skinInfo["metadata"]["themes"][$this->theme])) {
             if ($this->theme == "default") {
                 $this->skin = "trinium";
                 $this->theme = "default";
@@ -299,7 +304,9 @@ class SquareBracket
             $this->theme = "default";
         }
 
-        $this->themeInfo = $this->skinInfo->getInfo()["metadata"]["themes"][$this->theme] ?? [];
+        $this->themeInfo = $this->skinInfo["metadata"]["themes"][$this->theme] ?? [];
+
+        $this->skinThemeOptions = array_merge($this->skinInfo["metadata"]["options"] ?? [], $this->themeInfo["options"] ?? []);
 
         $storage_use_custom_path = (bool)($config['storage']['use_custom_path'] ?? false);
         $storage_path = $storage_use_custom_path
@@ -677,7 +684,7 @@ class SquareBracket
      */
     public function getCurrentSkinInfo(): array
     {
-        return $this->skinInfo->getInfo();
+        return $this->skinInfo;
     }
 
     /**
@@ -690,6 +697,18 @@ class SquareBracket
     public function getCurrentThemeInfo(): array
     {
         return $this->themeInfo;
+    }
+
+    /**
+     * function getSkinThemeOptions
+     *
+     * Returns array of the current skin/theme's options.
+     *
+     * @return array
+     */
+    public function getSkinThemeOptions(): array
+    {
+        return $this->skinThemeOptions;
     }
 
     /**

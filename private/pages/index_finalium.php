@@ -28,8 +28,6 @@ use Data\Upload\UploadQuery;
 use Core\Utilities;
 use Data\User\UserFlags;
 
-$is_hitchhiker = $sb->isHitchhiker();
-
 $upload_query = new UploadQuery($sb);
 
 $uploads_featured = $upload_query->query(
@@ -58,7 +56,7 @@ $localization = $sb->getLocalizationClass();
 
 $feed = [
     "featured" => [
-        "icon" => $is_hitchhiker
+        "icon" => $sb->getCurrentThemeName() === 'hitchhiker'
                 ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
                 : "/assets/skin/finalium/homepage_featured.svg",
         "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),

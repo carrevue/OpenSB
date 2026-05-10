@@ -73,7 +73,7 @@ class Storage
 
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
-        $this->overrides = $this->sb->getCurrentThemeInfo()["options"]["storage"] ?? [];
+        $this->overrides = $this->sb->getSkinThemeOptions()["storage"] ?? [];
         $this->disabled = $sb->isAssetsDisabled();
         $this->path = $path ?? $default_path;
     }
@@ -104,12 +104,7 @@ class Storage
      */
     public function processVideoUpload(string $new, string $target_file, string $type = "video"): void
     {
-        // on QA, we'll have to put them in prod's /dynamic/videos for now
-        if ($this->sb->isTestInstance()) {
-            $log_path = $this->path . '/videos/' . $new . '.log';
-        } else {
-            $log_path = SB_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log';
-        }
+        $log_path = SB_PRIVATE_PATH . '/upload_processor_logs/' . $new . '.log';
 
         // this uses the version of php on path. if the upload processor errors
         // out with "OpenSB is not compatible with your PHP version.", then 
@@ -341,9 +336,10 @@ class Storage
      */
     public function getUserProfilePicture(int $user, bool $isStaff = false): string
     {
+        $asset_path = isset($this->overrides["default_pfp_override"]) ? ('/assets/skin/' . $this->sb->getCurrentSkinName() . '/') : '/assets/';
         $placeholder = $this->overrides["default_pfp_override"] ?? "profiledef.svg";
 
-        if ($this->disabled) return '/assets/' . $placeholder;
+        if ($this->disabled) return $asset_path . $placeholder;
 
         $path = $this->path . '/pfp/' . $user . '.png';
 
@@ -351,14 +347,14 @@ class Storage
         $is_banned = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$user]);
 
         if ($is_banned && !$isStaff) {
-            return '/assets/' . $placeholder;
+            return $asset_path . $placeholder;
         }
 
         if (file_exists($path)) {
             return '/dynamic/pfp/' . $user . '.png';
         }
 
-        return '/assets/' . $placeholder;
+        return $asset_path . $placeholder;
     }
 
     /**
@@ -399,16 +395,17 @@ class Storage
      */
     private function getVideoUploadThumbnail(string $id, bool $custom): string
     {
+        $asset_path = isset($this->overrides["default_video_thumbnail_override"]) ? ('/assets/skin/' . $this->sb->getCurrentSkinName() . '/') : '/assets/';
         $placeholder = $this->overrides["default_video_thumbnail_override"] ?? "placeholder_video.svg";
 
-        if ($this->disabled) return '/assets/' . $placeholder;
+        if ($this->disabled) return $asset_path . $placeholder;
 
         return $this->getThumbnailPath(
             $id,
             $custom,
             'thumbnails',
             'png',
-            $placeholder
+            $asset_path . $placeholder,
         );
     }
 
@@ -424,6 +421,7 @@ class Storage
      */
     private function getImageUploadThumbnail(string $id, bool $custom): string
     {
+        $asset_path = isset($this->overrides["default_image_thumbnail_override"]) ? ('/assets/skin/' . $this->sb->getCurrentSkinName() . '/') : '/assets/';
         $placeholder = $this->overrides["default_image_thumbnail_override"] ?? "placeholder_image.svg";
 
         if ($this->disabled) return '/assets/' . $placeholder;
@@ -433,7 +431,7 @@ class Storage
             $custom,
             'art_thumbnails',
             'jpg',
-            $placeholder
+            $asset_path . $placeholder,
         );
     }
 
@@ -453,7 +451,7 @@ class Storage
         ?bool $custom,
         string $defaultFolder,
         string $defaultExtension,
-        string $fallback
+        string $fallback,
     ): string {
         $customPath = $this->path . '/custom_thumbnails/' . $id . '.jpg';
         $defaultPath = $this->path . '/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
@@ -467,6 +465,6 @@ class Storage
             return '/dynamic/' . $defaultFolder . '/' . $id . '.' . $defaultExtension;
         }
 
-        return '/assets/' . $fallback;
+        return $fallback;
     }
 }
