@@ -299,7 +299,7 @@ class SquareBracket
             $this->theme = "default";
         }
 
-        $this->themeInfo = $this->skinInfo->getInfo()["metadata"]["themes"][$this->theme];
+        $this->themeInfo = $this->skinInfo->getInfo()["metadata"]["themes"][$this->theme] ?? [];
 
         $storage_use_custom_path = (bool)($config['storage']['use_custom_path'] ?? false);
         $storage_path = $storage_use_custom_path
