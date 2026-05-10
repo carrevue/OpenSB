@@ -69,10 +69,10 @@
     {% include('components/debug_dialog.twig') %}
 {% endif %}
 {{ include(component('header')) }}
-{% if show_warning_banner %}
+{% if banner_text %}
     <div class="alert accent full-screen">
     <span class="alert-text">
-    {{ warning_banner_text | raw }}
+    {{ banner_text | raw }}
     </span>
     </div>
 {% endif %}

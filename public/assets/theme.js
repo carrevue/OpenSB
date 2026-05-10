@@ -9,43 +9,31 @@ function updateSkinThemes() {
     const skinSelect = document.getElementById('skin');
     const themeSelect = document.getElementById('theme');
     const selectedSkin = skinSelect.options[skinSelect.selectedIndex];
+    const skinValue = selectedSkin.value;
     const themes = JSON.parse(selectedSkin.getAttribute('data-themes'));
 
     themeSelect.innerHTML = '';
 
     // get all themes within skin
-    themes.forEach(theme => {
-        const option = document.createElement('option');
-        const skinThemeValue = `${selectedSkin.value},${theme.id}`;
-
-        option.value = skinThemeValue;
-        option.textContent = theme.name;
-        option.setAttribute('data-preview-url', `/assets/previews/${selectedSkin.value}_${theme.id}.png`);
-        option.setAttribute('data-name', theme.name);
-        option.setAttribute('data-description', theme.description);
-        option.setAttribute('data-author', theme.author);
-
-        if (skinThemeValue === currentSkinAndTheme) {
-            option.selected = true;
-        }
-
+    Object.entries(themes).forEach(([id, theme]) => {
+        const skinThemeValue = `${skinValue},${id}`;
+        const option = new Option(theme.name, skinThemeValue);
+        option.selected = skinThemeValue === currentSkinAndTheme;
+        option.dataset.previewUrl = `/assets/previews/${skinValue}_${id}.png`;
+        option.dataset.name = theme.name;
+        option.dataset.description = theme.description;
+        option.dataset.author = theme.author;
         themeSelect.appendChild(option);
     });
 
     if (typeof weOnTrinium !== "undefined" && weOnTrinium) {
-        const theWarning = document.getElementById('notFullySupported');
-
-        if (selectedSkin.value == "bootstrap") {
-            theWarning.style.display = "inline";
-        } else {
-            theWarning.style.display = "none";
-        }
+        document.getElementById('notFullySupported').style.display =
+            skinValue === "bootstrap" ? "inline" : "none";
     }
 
-    // update skin/theme info
     document.getElementById('skinName').textContent = selectedSkin.textContent;
-    document.getElementById('skinDescription').textContent = selectedSkin.getAttribute('data-description') || 'No description available.';
-    document.getElementById('skinAuthor').textContent = selectedSkin.getAttribute('data-author') ? `By ${selectedSkin.getAttribute('data-author')}` : '';
+    document.getElementById('skinDescription').textContent = selectedSkin.dataset.description || 'No description available.';
+    document.getElementById('skinAuthor').textContent = selectedSkin.dataset.author ? `By ${selectedSkin.dataset.author}` : '';
     updatePreview();
 }
 

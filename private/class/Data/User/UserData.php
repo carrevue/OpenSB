@@ -50,9 +50,9 @@ class UserData
     private array $data;
 
     /**
-     * @var mixed The user data cache
+     * @var array The user data cache
      */
-    private static array $userDataCache = [];
+    private static array $cache = [];
 
     /**
      * function __construct
@@ -68,8 +68,8 @@ class UserData
         $this->id = $id;
 
         // check if user data has already been cached before doing anything
-        if (isset(self::$userDataCache[$id])) {
-            $this->data = self::$userDataCache[$id];
+        if (isset(self::$cache[$id])) {
+            $this->data = self::$cache[$id];
             return;
         }
         
@@ -107,7 +107,7 @@ class UserData
         $this->data["following"] = Utilities::isFollowingUser($id);
 
         // cache the data
-        self::$userDataCache[$id] = $this->data;
+        self::$cache[$id] = $this->data;
     }
 
     /**
@@ -120,8 +120,8 @@ class UserData
     public function isUserBanned(): bool
     {
         // also cache if a user is banned (if needed in the future)
-        if (isset(self::$userDataCache["banned_$this->id"])) {
-            return self::$userDataCache["banned_$this->id"];
+        if (isset(self::$cache["banned_$this->id"])) {
+            return self::$cache["banned_$this->id"];
         }
 
         $isBanned = (bool) $this->database->fetch(
@@ -129,7 +129,7 @@ class UserData
             [$this->id]
         );
 
-        self::$userDataCache["banned_$this->id"] = $isBanned;
+        self::$cache["banned_$this->id"] = $isBanned;
         return $isBanned;
     }
 
@@ -157,14 +157,14 @@ class UserData
     }
 
     /**
-     * function getUserDataCache
+     * function getcache
      * 
      * Returns the user data caches for debugging purposes.
      *
      * @return array
      */
-    public static function getUserDataCache(): array
+    public static function getCache(): array
     {
-        return self::$userDataCache;
+        return self::$cache;
     }
 }

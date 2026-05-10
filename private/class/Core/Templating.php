@@ -23,6 +23,8 @@
 
 namespace Core;
 
+use RuntimeException;
+
 use Data\User\UserFlags;
 
 use Twig\Environment;
@@ -31,8 +33,6 @@ use Twig\Extension\DebugExtension;
 use Twig\Extra\String\StringExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
-
-use RuntimeException;
 
 /**
  * class Templating
@@ -109,39 +109,21 @@ class Templating
      */
     public function __construct(SquareBracket $sb)
     {
-        chdir(SB_PRIVATE_PATH);
-
+        // todo: clean a lot of this up.
         $this->sb = $sb;
         $this->authentication = $this->sb->getAuthenticationClass();
 
-        $this->options = $sb->getLocalOptions();
-
-        $default_skin = "trinium";
-        $default_theme = "default";
-
-        if ($this->sb->isFulpTubeMode()) {
-            $default_skin = "finalium";
-            $default_theme = "hitchhiker";
-        }
+        $this->skin = $sb->getCurrentSkinName();
+        $this->theme = $sb->getCurrentThemeName();
 
         $this->is_spf = $this->sb->isSpfRequest();
 
-        $this->skin = $this->options["skin"] ?? $default_skin;
-        $this->theme = $this->options["theme"] ?? $default_theme;
-
-        if ($this->skin === null || trim($this->skin) === '') {
-            $this->resetToDefault();
-        }
-
         $skinPath = 'skins/' . $this->skin;
 
-        // load in the skin metadata
-        $metadata = $this->getSkinMetadata($skinPath)["metadata"];
-        if (!$metadata) {
-            $this->resetToDefault();
-        }
+        // load in the skin info
+        $info = $this->getSkinInfo($this->skin);
 
-        $this->skin_options = $metadata["options"] ?? [];
+        $this->skin_options = $info["metadata"]["options"] ?? [];
 
         $templatePath = $skinPath . '/templates';
 
@@ -149,7 +131,8 @@ class Templating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            $this->resetToDefault();
+            //$this->resetToDefault();
+            die("fuck, gotta figure this out. -chaziz 05/10/2026");
         }
 
         $doCache = !$sb->isTemplateCachingEnabled() ? false : 'skins/cache/';
@@ -176,16 +159,14 @@ class Templating
         $isFulpTubeMode = $sb->isFulpTubeMode();
         $branding = $sb->getBrandingSettings();
 
-        // TODO: make this dynamically changeable through the admin panel.
-        $showWarningBanner = false;
-        $warningBannerText = null;
+        // TODO: make this dynamically changeable through the dashboard.
+        $bannerText = null;
 
         if ($this->authentication->isUserLoggedIn() && 
             $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value) {
             $localization = $sb->getLocalizationClass();
 
-            $showWarningBanner = true;
-            $warningBannerText = sprintf(
+            $bannerText = sprintf(
                 '%s <a href="/verify_email?resend">%s</a>',
                 $localization->translate('heads_up'),
                 $localization->translate('heads_up_link')
@@ -195,30 +176,41 @@ class Templating
         $this->version_number = new VersionNumber();
 
         // TODO: this should be cleaned up on 2.1 or maybe 3.0
-        $this->twig->addGlobal('is_chaziz_sb', $sb->isChazizInstance());
+        $this->twig->addGlobal('is_chaziz_sb',  $sb->isChazizInstance());
         $this->twig->addGlobal('is_test_instance', $sb->isTestInstance());
         $this->twig->addGlobal('is_fulptube', $isFulpTubeMode);
         $this->twig->addGlobal('is_debug', $sb->isDebug());
+        $this->twig->addGlobal('is_spf', $sb->isSpfRequest());
+        $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
+        $this->twig->addGlobal('opensb_version', $this->version_number->getVersionArray());
+
+        // user/auth
         $this->twig->addGlobal('is_user_logged_in', $this->authentication->isUserLoggedIn());
         $this->twig->addGlobal('user_data', $this->authentication->getUserData());
         $this->twig->addGlobal('user_stat_data', $this->authentication->getUserStatData());
         $this->twig->addGlobal('user_is_authenticated_staff', $this->authentication->hasUserAuthenticatedAsStaff());
-        $this->twig->addGlobal('skins', $this->getAllSkinsMetadata());
-        $this->twig->addGlobal('opensb_version', $this->version_number->getVersionArray());
         $this->twig->addGlobal('session', $_SESSION);
+
+        // branding
         $this->twig->addGlobal('website_branding', $branding);
-        $this->twig->addGlobal('current_theme', $this->theme); // the current skin in the current theme
-        $this->twig->addGlobal('invite_keys_enabled', $sb->isInviteKeysEnabled());
-        $this->twig->addGlobal('items_per_page', 20); // principia-web leftover, probably remove this shit
+
+        // skin/theme/locale
+        $this->twig->addGlobal('current_theme', $this->theme);
         $this->twig->addGlobal('current_skin', $this->skin);
-        $this->twig->addGlobal('show_warning_banner', $showWarningBanner);
-        $this->twig->addGlobal('warning_banner_text', $warningBannerText);
-        $this->twig->addGlobal('options', $this->options);
+        $this->twig->addGlobal('skins', $this->getAllSkinsInfo());
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
+        $this->twig->addGlobal('skin_options', $this->sb->getCurrentSkinInfo()["options"] ?? []);
+        $this->twig->addGlobal('theme_options', $this->sb->getCurrentThemeInfo()["options"] ?? []);
+
+        // options/settings
+        $this->twig->addGlobal('options', $sb->getLocalOptions());
+        $this->twig->addGlobal('invite_keys_enabled', $sb->isInviteKeysEnabled());
+        $this->twig->addGlobal('mature_uploads_enabled',   $sb->isMatureUploadsEnabled());
         $this->twig->addGlobal('enable_incomplete_features', $this->sb->isIncompleteFeaturesEnabled());
-        $this->twig->addGlobal('is_spf', $sb->isSpfRequest());
-        $this->twig->addGlobal('is_goanna', $this->areWeOnGoanna());
-        $this->twig->addGlobal('mature_uploads_enabled', $sb->isMatureUploadsEnabled());
+        $this->twig->addGlobal('items_per_page', 20); // principia-web leftover
+
+        // banner
+        $this->twig->addGlobal('banner_text', $bannerText);
 
         if ($this->skin == "finalium") {
             // fi = finalium icon
@@ -299,7 +291,7 @@ class Templating
             $skinName = basename($skin);
 
             if (!in_array($skinName, $excludedSkins)) {
-                $skins[] = $skin;
+                $skins[] = $skinName;
             }
         }
 
@@ -307,53 +299,21 @@ class Templating
     }
 
     /**
-     * function getSkinMetadata
+     * function getSkinInfo
      *
-     * Get the specified skin's metadata.
+     * Get a skin's metadata.
      *
      * @param string $skin
      *
      * @return array
      */
-    public function getSkinMetadata($skin): ?array
+    public function getSkinInfo($skin): ?array
     {
-        $skin_name = substr($skin, strrpos($skin, '/') + 1);
-
-        if (file_exists($skin . "/skin.json")) {
-            $metadata = file_get_contents($skin . "/skin.json");
-
-            if ($metadata === false) {
-                trigger_error(sprintf("Could not read the metadata for skin %s", $skin_name), E_USER_WARNING);
-                return null;
-            }
-
-            $metadata = json_decode($metadata, true);
-
-            // awkward leftover from the opensb 1.2 beta era, when there was
-            // gonna be a secondary site to sb called "soos" which died in
-            // very early development.
-            if (isset($metadata["site"]) && $metadata["site"] !== "squarebracket") {
-                trigger_error(sprintf("%s is incompatible", $skin_name), E_USER_WARNING);
-                return null;
-            }
-
-            // anti-stupid check
-            if (isset($metadata["requires"]["MediaWiki"])) {
-                trigger_error(sprintf("%s is incompatible", $skin_name), E_USER_WARNING);
-                return null;
-            }
-
-            /*
-            // version check (very crude for now)
-            if (!isset($metadata["version"])) {
-                trigger_error(sprintf("%s is too old", $skin_name), E_USER_WARNING);
-                return null;
-            }
-            */
-
-            return $metadata;
-        } else {
-            trigger_error(sprintf("The metadata for skin %s is missing", $skin_name), E_USER_WARNING);
+        try {
+            $skinInfo = new SkinInfo($skin);
+            return $skinInfo->getInfo();
+        } catch (RuntimeException $e) {
+            trigger_error(sprintf($e->getMessage()), E_USER_WARNING);
             return null;
         }
     }
@@ -370,37 +330,36 @@ class Templating
     }
 
     /**
-     * function getAllSkinsMetadata
+     * function getAllSkinsInfo
      * 
-     * Get all installed skins' JSON metadata.
+     * Get all installed skins' info.
      *
      * @return array
      */
-    public function getAllSkinsMetadata(): array
+    public function getAllSkinsInfo(): array
     {
         // kinda ugly but if i dont do this then it fucks up
         $isDebug = $this->sb->isDebug();
 
         $skins = [];
         foreach ($this->getAllSkins() as $skin) {
-            $metadata = $this->getSkinMetadata($skin);
+            $info = $this->getSkinInfo($skin);
 
-            $incomplete = $this->sb->isDebug() ? false : ($metadata["metadata"]["incomplete"] ?? false);
+            $incomplete = $this->sb->isDebug() ? false : ($info["metadata"]["incomplete"] ?? false);
 
             // dont show incomplete skins
             if (!$incomplete) {
                 // dont show incomplete themes
-                if (isset($metadata["metadata"]["themes"]) && is_array($metadata["metadata"]["themes"])) {
-                    $metadata["metadata"]["themes"] = array_filter($metadata["metadata"]["themes"], function ($theme)
-                    use ($isDebug) {
+                if (isset($info["metadata"]["themes"]) && is_array($info["metadata"]["themes"])) {
+                    $info["metadata"]["themes"] = array_filter($info["metadata"]["themes"], function ($theme) use ($isDebug) {
                         return $isDebug || !($theme["incomplete"] ?? false);
                     });
                 }
-                $skins[] = $metadata;
+                $skins[] = $info;
             }
         }
 
-        // sort by metadata name
+        // sort by name
         usort($skins, function ($a, $b) {
             return strcmp($a["metadata"]["name"], $b["metadata"]["name"]);
         });
@@ -515,24 +474,6 @@ class Templating
         if (!isset($_SERVER['HTTP_USER_AGENT'])) { return false; }
         if (str_contains($_SERVER['HTTP_USER_AGENT'], "Goanna/")) { return true; }
         return false;
-    }
-
-    /**
-     * function resetToDefault
-     * 
-     * Resets the current theme to Trinium Default and then attempts to refresh.
-     * 
-     * @note On FulpTube mode, this should stay as is.
-     * 
-     * @return void
-     */
-    private function resetToDefault(): void {
-        $this->options["skin"] = "trinium";
-        $this->options["theme"] = "default";
-
-        $this->sb->setOptionCookie($this->options);
-        header("Refresh: 0");
-        die();
     }
 
     /**

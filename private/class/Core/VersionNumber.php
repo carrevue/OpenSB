@@ -33,28 +33,28 @@ use Exception;
 class VersionNumber
 {
     /**
-     * @var string The version name,
+     * @var string The version name.
      */
-    private string $versionName = "Fitzgerald";
+    private static string $versionName = "Fitzgerald";
 
     /**
      * @var string The version number, which tries to follow Semantic versioning.
      */
-    private string $versionNumber = "2.1.0-beta.2";
+    private static string $versionNumber = "2.1.0-beta.2";
 
     /**
      * @var string The current Git branch.
      */
-    private string $branch;
+    private static string $branch;
     /**
      * @var string The current Git commit hash.
      */
-    private string $hash;
+    private static string $hash;
 
     /**
      * @var string The full complete version string.
      */
-    private string $versionString;
+    private static string $versionString;
 
     /**
      * function __construct
@@ -65,15 +65,15 @@ class VersionNumber
     {
         try {
             $gitInfo = new GitInfo();
-            $this->branch = $gitInfo->getGitBranch();
-            $this->hash = $gitInfo->getGitCommitHash();
+            self::$branch = $gitInfo->getGitBranch();
+            self::$hash = $gitInfo->getGitCommitHash();
 
-            $this->versionString = $this->makeVersionString();
+            self::$versionString = $this->makeVersionString();
         } catch (Exception) {
-            $this->branch = "unknown";
-            $this->hash = "unknown";
+            self::$branch = "unknown";
+            self::$hash = "unknown";
 
-            $this->versionString = $this->versionNumber;
+            self::$versionString = self::$versionNumber;
         }
     }
 
@@ -86,7 +86,15 @@ class VersionNumber
      */
     private function makeVersionString(): string
     {
-        return sprintf('%s.%s-%s', $this->versionNumber, $this->branch, $this->hash);
+        if (preg_match('/^(\d+\.\d+)/', self::$versionNumber, $matches)) {
+            $majorMinor = $matches[1];
+
+            if (str_starts_with(self::$branch, 'opensb-' . $majorMinor)) {
+                return sprintf('%s-%s', self::$versionNumber, self::$hash);
+            }
+        } else {
+            return sprintf('%s.%s-%s', self::$versionNumber, self::$branch, self::$hash);
+        }
     }
 
     /**
@@ -111,10 +119,10 @@ class VersionNumber
     public function getVersionArray(): array
     {
         return [
-            "name" => $this->versionName,
-            "number" => $this->versionNumber,
-            "string" => $this->versionString,
-            "hash" => $this->hash,
+            "name" => self::$versionName,
+            "number" => self::$versionNumber,
+            "string" => self::$versionString,
+            "hash" => self::$hash,
         ];
     }
 
@@ -127,7 +135,7 @@ class VersionNumber
      */
     public function getVersionName(): string
     {
-        return $this->versionName;
+        return self::$versionName;
     }
 
     /**
@@ -139,7 +147,7 @@ class VersionNumber
      */
     public function getVersionNumber(): string
     {
-        return $this->versionNumber;
+        return self::$versionNumber;
     }
 
     /**
@@ -151,6 +159,6 @@ class VersionNumber
      */
     public function getVersionString(): string
     {
-        return $this->versionString;
+        return self::$versionString;
     }
 }

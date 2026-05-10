@@ -46,6 +46,11 @@ class Storage
     private Database $database;
 
     /**
+     * @var array Overrides
+     */
+    private array $overrides;
+
+    /**
      * @var bool If assets are disabled.
      */
     private bool $disabled;
@@ -68,6 +73,7 @@ class Storage
 
         $this->sb = $sb;
         $this->database = $sb->getDatabaseClass();
+        $this->overrides = $this->sb->getCurrentThemeInfo()["options"]["storage"] ?? [];
         $this->disabled = $sb->isAssetsDisabled();
         $this->path = $path ?? $default_path;
     }
@@ -335,7 +341,7 @@ class Storage
      */
     public function getUserProfilePicture(int $user, bool $isStaff = false): string
     {
-        $placeholder = $this->sb->isHitchhiker() ? "profiledef_hitchhiker.svg" : "profiledef.svg";
+        $placeholder = $this->overrides["default_pfp_override"] ?? "profiledef.svg";
 
         if ($this->disabled) return '/assets/' . $placeholder;
 
@@ -393,7 +399,7 @@ class Storage
      */
     private function getVideoUploadThumbnail(string $id, bool $custom): string
     {
-        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_video.svg";
+        $placeholder = $this->overrides["default_video_thumbnail_override"] ?? "placeholder_video.svg";
 
         if ($this->disabled) return '/assets/' . $placeholder;
 
@@ -418,7 +424,7 @@ class Storage
      */
     private function getImageUploadThumbnail(string $id, bool $custom): string
     {
-        $placeholder = $this->sb->isHitchhiker() ? "placeholder_hitchhiker.svg" : "placeholder_image.svg";
+        $placeholder = $this->overrides["default_image_thumbnail_override"] ?? "placeholder_image.svg";
 
         if ($this->disabled) return '/assets/' . $placeholder;
 

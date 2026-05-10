@@ -22,6 +22,8 @@
 
 namespace Core;
 
+use Exception;
+
 /**
  * class SquareBracket
  *
@@ -157,6 +159,26 @@ class SquareBracket
     /**
      * @var array
      */
+    private string $skin = "trinium";
+
+    /**
+     * @var array
+     */
+    private string $theme = "default";
+
+    /**
+     * @var SkinInfo
+     */
+    private SkinInfo $skinInfo;
+
+    /**
+     * @var array
+     */
+    private array $themeInfo;
+
+    /**
+     * @var array
+     */
     private array|null $accounts = [];
 
     /**
@@ -220,6 +242,65 @@ class SquareBracket
 
         //$this->version_number = new VersionNumber();
 
+        $this->options = [];
+
+        if (isset($_COOKIE["SBOPTIONS"])) {
+            $this->options = $this->getOptionsCookie();
+
+            if (!empty($this->options['timezone'])
+                && in_array($this->options['timezone'], timezone_identifiers_list(), true)
+            ) {
+                date_default_timezone_set($this->options['timezone']);
+            }
+        } else {
+            // predefine these options
+            $defaultSkin = "trinium";
+            $defaultTheme = "default";
+
+            if ($this->isFulpTubeMode()) {
+                $defaultSkin = "finalium";
+                $defaultTheme = "hitchhiker";
+            }
+
+            $this->options = [
+                "skin" => $defaultSkin,
+                "theme" => $defaultTheme,
+                "locale" => "en-US",
+            ];
+            
+            $this->setOptionCookie($this->options);
+        }
+
+        $this->skin = $this->options["skin"] ?? "trinium";
+        $this->theme = $this->options["theme"] ?? "default";
+
+        try {
+            $this->skinInfo = new SkinInfo($this->skin);
+        } catch (Exception $e) {
+            if ($this->skin == "trinium") {
+                http_response_code(500);
+                die("The Trinium skin is not installed.");
+            } elseif ($this->isFulpTubeMode() && $this->skin == "finalium") {
+                trigger_error("The Finalium skin is not installed.", E_USER_WARNING);
+            }
+
+            $this->skin = "trinium";
+            $this->theme = "default";
+            $this->skinInfo = new SkinInfo($this->skin);
+        }
+
+        if (!isset($this->skinInfo->getInfo()["metadata"]["themes"][$this->theme])) {
+            if ($this->theme == "default") {
+                $this->skin = "trinium";
+                $this->theme = "default";
+                $this->skinInfo = new SkinInfo($this->skin);
+            }
+
+            $this->theme = "default";
+        }
+
+        $this->themeInfo = $this->skinInfo->getInfo()["metadata"]["themes"][$this->theme];
+
         $storage_use_custom_path = (bool)($config['storage']['use_custom_path'] ?? false);
         $storage_path = $storage_use_custom_path
             ? ($config['storage']['custom_path'] ?? null)
@@ -234,41 +315,12 @@ class SquareBracket
 
         $this->template_caching_enabled = (bool)($config["cache"] ?? false);
 
-        // TODO: port these into settings that can be changed through the admin panel
+        // TODO: port these into settings that can be changed through the dashboard
         $this->under_maintenance = (bool)($config["maintenance"] ?? false);
         $this->enable_account_registration = ($config["enable_registration"] ?? false);
         $this->enable_invite_keys = (bool)($config["invite_keys"] ?? false);
         $this->enable_lockdown = (bool)($config["lockdown"] ?? false);
         //
-
-        $this->options = [];
-
-        // predefine these options
-        $defaultSkin = "trinium";
-        $defaultTheme = "default";
-
-        if ($this->isFulpTubeMode()) {
-            $defaultSkin = "finalium";
-            $defaultTheme = "hitchhiker";
-        }
-
-        $this->options = [
-            "skin" => $defaultSkin,
-            "theme" => $defaultTheme,
-            "locale" => "en-US",
-        ];
-
-        if (isset($_COOKIE["SBOPTIONS"])) {
-            $this->options = $this->getOptionsCookie();
-
-            if (!empty($this->options['timezone'])
-                && in_array($this->options['timezone'], timezone_identifiers_list(), true)
-            ) {
-                date_default_timezone_set($this->options['timezone']);
-            }
-        } else {
-            $this->setOptionCookie($this->options);
-        }
 
         $this->localization = new Localization($this->options);
 
@@ -593,6 +645,54 @@ class SquareBracket
     }
 
     /**
+     * function getCurrentSkinName
+     *
+     * Returns current skin name
+     *
+     * @return string
+     */
+    public function getCurrentSkinName(): string
+    {
+        return $this->skin;
+    }
+
+    /**
+     * function getCurrentThemeName
+     *
+     * Returns current theme name
+     *
+     * @return string
+     */
+    public function getCurrentThemeName(): string
+    {
+        return $this->theme;
+    }
+
+    /**
+     * function getCurrentSkinInfo
+     *
+     * Returns array of the current skin.
+     *
+     * @return array
+     */
+    public function getCurrentSkinInfo(): array
+    {
+        return $this->skinInfo->getInfo();
+    }
+
+    /**
+     * function getCurrentSkinInfo
+     *
+     * Returns array of the current skin's current theme.
+     *
+     * @return array
+     */
+    public function getCurrentThemeInfo(): array
+    {
+        return $this->themeInfo;
+    }
+
+    /**
      * function isDebug
      *
      * Returns boolean that indicates if debug is enabled.
@@ -630,13 +730,15 @@ class SquareBracket
      *
      * Returns boolean for if hitchhiker is enabled.
      * THIS IS SEPERATE FROM isFulpTubeMode()
+     * 
+     * @deprecated this will be removed in a future commit
      *
      * @return bool
      */
     public function isHitchhiker(): bool
     {
-        return ($this->options['skin'] ?? '') === 'finalium'
-            && ($this->options['theme'] ?? '') === 'hitchhiker';
+        return $this->skin === 'finalium'
+            && $this->theme === 'hitchhiker';
     }
 
     /**

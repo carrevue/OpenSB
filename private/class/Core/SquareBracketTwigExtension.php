@@ -25,6 +25,7 @@ namespace Core;
 
 use Exception;
 use Parsedown;
+
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -964,6 +965,6 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getUserDataCache(): array
     {
-        return UserData::getUserDataCache();
+        return UserData::getCache();
     }
 }

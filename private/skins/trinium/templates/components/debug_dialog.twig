@@ -11,6 +11,7 @@
         {# spaceless removes html whitespace that causes unnecessary margins #}
         {% apply spaceless %}
             <div class="tablink" data-tab="tab_db">Database</div>
+            <div class="tablink" data-tab="tab_skintheme">Skin/Theme</div>
             <div class="tablink" data-tab="tab_user">User Data Cache</div>
         {% endapply %}
     </div>
@@ -60,6 +61,13 @@
                     {% if not loop.last %}<br>{% endif %}
                 {% endfor %}
             </div>
+        </div>
+        <div id="tab_skintheme" class="tabcontent">
+            <h1>Skin</h1>
+            <p>{{ dump(skin_options) }}
+            <hr>
+            <h1>Theme</h1>
+            <p>{{ dump(theme_options) }}
         </div>
         <div id="tab_user" class="tabcontent">
             {% if user_data_cache %}

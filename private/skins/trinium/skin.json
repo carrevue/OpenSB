@@ -5,39 +5,34 @@
         "author": "Carrevue Development",
         "description": "The default look of OpenSB.",
         "site": "squarebracket",
-        "themes": [
-            {
-                "id": "default",
+        "themes": {
+            "default": {
                 "name": "Light (Glossy)",
                 "description": "The default user experience.",
                 "author": "Carrevue Development"
             },
-            {
-                "id": "dark",
+            "dark": {
                 "name": "Dark (Glossy)",
                 "description": "The dark theme.",
                 "author": "Carrevue Development"
             },
-            {
-                "id": "default-flat",
+            "default-flat": {
                 "name": "Light (Matte)",
                 "description": "The default user experience, but it's flat.",
                 "author": "Carrevue Development"
             },
-            {
-                "id": "dark-flat",
+            "dark-flat": {
                 "name": "Dark (Matte)",
                 "description": "The dark theme, but it's flat.",
                 "author": "Carrevue Development"
             },
-            {
-                "id": "test",
+            "test": {
                 "name": "Test",
                 "description": "Test",
                 "author": "Carrevue Development",
                 "incomplete": true
             }
-        ],
+        },
         "options": {
             "use_old_userlink": false
         }
