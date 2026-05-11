@@ -59,7 +59,7 @@ function handleFeaturedUpload($database, $data): false|array
 
     if ($featured_id == 0 || !$featured_id) {
         $featured_id = $database->fetch(
-            "SELECT upload_id FROM uploads v WHERE v.author = ? ORDER BY uploaded DESC",
+            "SELECT upload_id FROM uploads v WHERE v.author = ? ORDER BY v.timestamp DESC",
             [$data["id"]]
         );
         if (!isset($featured_id["upload_id"])) {
