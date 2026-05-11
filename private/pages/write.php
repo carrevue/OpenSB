@@ -68,7 +68,7 @@ if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isUserL
         $sb->getDiscordWebhookClass()->newJournalHook($data);
     }
 
-    Utilities::notifyBanner("notify_write_success", "/read/" . $journal_id, "success");
+    Utilities::notifyBanner("notify_write_success", "/user/" . $auth->getUserData()["name"] . '/journal/' . $journal_id, "success");
 }
 
 echo $twig->render('write_journal.twig');
