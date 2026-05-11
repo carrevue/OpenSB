@@ -28,6 +28,8 @@ global $sb, $database;
 
 use Core\VersionNumber;
 
+use Data\Upload\UploadFlags;
+
 use DivisionByZeroError;
 use Alchemy\BinaryDriver\Exception\ExecutionFailureException;
 
@@ -46,6 +48,8 @@ define("SB_VENDOR_PATH", SB_ROOT_PATH . '/vendor');
 define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() IN SquareBracket CLASS.
 
 require_once SB_PRIVATE_PATH . '/common.php';
+
+$supported_types = ['video', 'video_thumbnail_only', 'video_duration_only'];
 
 function log(string $message): void
 {
@@ -104,12 +108,9 @@ $target_file = $argv[2];
 $upload_type =  $argv[3];
 $for_website = $argv[4] ?? 0;
 
-if ($sb->isTestInstance()) {
-}
-
 log("Upload type: " .  $upload_type);
 
-if ($upload_type != "video" && $upload_type != "video_thumbnail_only") {
+if (!in_array($upload_type, $supported_types)) {
     log("Unsupported type.");
     die();
 }
@@ -190,102 +191,104 @@ try {
         $fucked = true;
     }
 
-    log("Resolution: " . $videoWidth . "x" . $videoHeight);
-    log("Creating thumbnail...");
+    if ($upload_type != "video_duration_only") {
+        log("Resolution: " . $videoWidth . "x" . $videoHeight);
+        log("Creating thumbnail...");
 
-    // Thumbnail
+        // Thumbnail
 
-    // calculate thumbnail resolution in a way that wont fuck up the aspect ratio
-    $resolution = downscale_video_for_thumbnail($videoWidth, $videoHeight);
+        // calculate thumbnail resolution in a way that wont fuck up the aspect ratio
+        $resolution = downscale_video_for_thumbnail($videoWidth, $videoHeight);
 
-    log("Resolution for thumbnail: " . $resolution["width"] . "x" . $resolution["height"]);
+        log("Resolution for thumbnail: " . $resolution["width"] . "x" . $resolution["height"]);
 
-    if ($fucked) {
-        log("Taking thumbnail from first frame");
-        $frame = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
-    } else {
-        // this is fucked. look into this later. -chaziz 6/9/2025
-        /*
-        log("Figuring out thumbnail");
-        //$cloned_video_for_thumbnail = clone $video;
-        $cloned_video_for_thumbnail = $ffmpeg->open($target_file);
-        $cloned_video_for_thumbnail->addFilter(new CustomFilter(
-            'select=gt(scene\,0.1),' .
-            'thumbnail=n=50,' .
-            'blackframe=0'
-        ));
-        $frame = $cloned_video_for_thumbnail->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
-        */
+        if ($fucked) {
+            log("Taking thumbnail from first frame");
+            $frame = $video->frame(new Coordinate\TimeCode(0, 0, 0, 1));
+        } else {
+            // this is fucked. look into this later. -chaziz 6/9/2025
+            /*
+            log("Figuring out thumbnail");
+            //$cloned_video_for_thumbnail = clone $video;
+            $cloned_video_for_thumbnail = $ffmpeg->open($target_file);
+            $cloned_video_for_thumbnail->addFilter(new CustomFilter(
+                'select=gt(scene\,0.1),' .
+                'thumbnail=n=50,' .
+                'blackframe=0'
+            ));
+            $frame = $cloned_video_for_thumbnail->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
+            */
 
-        $thumbnailTime = $duration * 0.33;
-        log("Taking thumbnail from frame " . $thumbnailTime);
+            $thumbnailTime = $duration * 0.33;
+            log("Taking thumbnail from frame " . $thumbnailTime);
 
-        $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
-    }
-    $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
+            $frame = $video->frame(Coordinate\TimeCode::fromSeconds($thumbnailTime / $framerate));
+        }
+        $frame->filters()->custom('scale=' . $resolution["width"] . 'x' . $resolution["height"]);
 
-    log("Saving thumbnail...");
+        log("Saving thumbnail...");
 
-    //Thumbnails
-    $frame->save($path . '/thumbnails/' . $new . '.png');
+        //Thumbnails
+        $frame->save($path . '/thumbnails/' . $new . '.png');
 
-    log("Thumbnail saved!");
+        log("Thumbnail saved!");
 
-    if ($upload_type == "video_thumbnail_only") {
-        log("Only processing thumbnail, exiting...");
-        log("OpenSB Video Upload Processor Success!");
+        if ($upload_type == "video_thumbnail_only") {
+            log("Only processing thumbnail, exiting...");
+            log("OpenSB Video Upload Processor Success!");
 
-        if ($sb->isDiscordWebhookEnabled()) {
-            $data = [
-                'id' => $new,
-            ];
+            if ($sb->isDiscordWebhookEnabled()) {
+                $data = [
+                    'id' => $new,
+                ];
 
-            $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+                $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+            }
+
+            die();
         }
 
-        die();
+        // Video
+
+        // bitrate stuff
+        $isHD = ($videoWidth >= 1280 || $videoHeight >= 720);
+        $isFullHD = ($videoWidth >= 1920 || $videoHeight >= 1080);
+
+        // calculate bitrate for video based on the resolution.
+        if ($isFullHD) {
+            $videoScaleFactor = min($videoWidth / 1920, $videoHeight / 1080);
+            $bitrate = (int)min(4500, max(3000, 3000 * $videoScaleFactor));
+        } elseif ($isHD) {
+            $videoScaleFactor = min($videoWidth / 1280, $videoHeight / 720);
+            $bitrate = (int)min(2500, max(1000, 1000 * $videoScaleFactor));
+        } else {
+            $videoScaleFactor = min($videoWidth / 640, $videoHeight / 360);
+            $bitrate = (int)min(1200, max(600, 600 * $videoScaleFactor));
+        }
+
+        log("Video bitrate: " . $bitrate);
+
+        // if the video is higher than 1920x1080 then scale it down to 1080p.
+        if ($videoWidth > 1920 || $videoHeight > 1080) {
+            log("Scaling down video to 1080p.");
+            $video->filters()->resize(
+                new Coordinate\Dimension(1920, 1080),
+                Filters\Video\ResizeFilter::RESIZEMODE_INSET,
+                true
+            );
+        }
+
+        $h264->setKiloBitrate($bitrate);
+
+        $video->filters()->custom('format=yuv420p');
+        $video->filters()->custom('scale=trunc(iw/2)*2:trunc(ih/2)*2');
+
+        log("Converting video...");
+        $video->save($h264, $path . '/videos/' . $new . '.converted.mp4');
+
+        debug_print_backtrace();
+        unlink($target_file);
     }
-
-    // Video
-
-    // bitrate stuff
-    $isHD = ($videoWidth >= 1280 || $videoHeight >= 720);
-    $isFullHD = ($videoWidth >= 1920 || $videoHeight >= 1080);
-
-    // calculate bitrate for video based on the resolution.
-    if ($isFullHD) {
-        $videoScaleFactor = min($videoWidth / 1920, $videoHeight / 1080);
-        $bitrate = (int)min(4500, max(3000, 3000 * $videoScaleFactor));
-    } elseif ($isHD) {
-        $videoScaleFactor = min($videoWidth / 1280, $videoHeight / 720);
-        $bitrate = (int)min(2500, max(1000, 1000 * $videoScaleFactor));
-    } else {
-        $videoScaleFactor = min($videoWidth / 640, $videoHeight / 360);
-        $bitrate = (int)min(1200, max(600, 600 * $videoScaleFactor));
-    }
-
-    log("Video bitrate: " . $bitrate);
-
-    // if the video is higher than 1920x1080 then scale it down to 1080p.
-    if ($videoWidth > 1920 || $videoHeight > 1080) {
-        log("Scaling down video to 1080p.");
-        $video->filters()->resize(
-            new Coordinate\Dimension(1920, 1080),
-            Filters\Video\ResizeFilter::RESIZEMODE_INSET,
-            true
-        );
-    }
-
-    $h264->setKiloBitrate($bitrate);
-
-    $video->filters()->custom('format=yuv420p');
-    $video->filters()->custom('scale=trunc(iw/2)*2:trunc(ih/2)*2');
-
-    log("Converting video...");
-    $video->save($h264, $path . '/videos/' . $new . '.converted.mp4');
-
-    debug_print_backtrace();
-    unlink($target_file);
 
     if ($for_website) {
         log("Updating database...");
@@ -300,15 +303,17 @@ try {
 
         $database->query(
             "UPDATE uploads SET video_length = ?, flags = ? WHERE upload_id = ?",
-            [$length, $videoData['flags'] ^ 0x2, $new]
+            [$length, $videoData['flags'] &= ~UploadFlags::FLAG_UNPROCESSED->value, $new]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
-            $data = [
-                'id' => $new,
-            ];
+        if ($upload_type != "video_duration_only") {
+            if ($sb->isDiscordWebhookEnabled()) {
+                $data = [
+                    'id' => $new,
+                ];
 
-            $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+                $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+            }
         }
     } else {
         log("Not a website video, skipping.");

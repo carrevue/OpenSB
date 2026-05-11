@@ -94,7 +94,7 @@ function handleFeaturedUpload($database, $data): false|array
     }
 }
 
-$user_uploads = $upload_query->query("v.timestamp desc", $user_uploads_query_limit, "v.author = ?", [$data["id"]])->toCleanArray();
+$user_uploads = $upload_query->query("uploaded desc", $user_uploads_query_limit, "v.author = ?", [$data["id"]])->toCleanArray();
 
 if ($options["skin"] == "bootstrap") {
     $user_journal_limit = 3;

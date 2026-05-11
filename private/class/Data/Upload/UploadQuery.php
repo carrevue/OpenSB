@@ -92,7 +92,7 @@ class UploadQuery
      */
     public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false): UploadResult
     {
-        $query = "SELECT v.* FROM uploads v";
+        $query = "SELECT v.*, COALESCE(NULLIF(original_timestamp, 0), `timestamp`) AS uploaded FROM uploads v";
         $whereClauses = [];
 
         if (!$adminPanel) {

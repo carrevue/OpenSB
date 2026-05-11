@@ -54,7 +54,7 @@ $uploads = $upload_query->query(
      )
      + (LOG10(v.views + 1) * 5)
      DESC,
-     v.timestamp DESC",
+     uploaded DESC",
     $limit,
     "(v.tags LIKE CONCAT('%', ?, '%')
       OR v.title LIKE CONCAT('%', ?, '%')

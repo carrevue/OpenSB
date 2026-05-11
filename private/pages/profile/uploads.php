@@ -36,7 +36,7 @@ $upload_query = new UploadQuery($sb);
 $tabs = [
     "recent" => [
         "name" => "new",
-        "order" => "timestamp DESC",
+        "order" => "uploaded DESC",
         "where" => "v.author = ?",
     ],
     "popular" => [
@@ -46,7 +46,7 @@ $tabs = [
     ],
     "featured" => [
         "name" => "featured",
-        "order" => "v.timestamp DESC",
+        "order" => "uploaded DESC",
         "where" => sprintf("v.author = ? AND (v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value),
     ],
     "random" => [
