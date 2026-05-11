@@ -50,19 +50,26 @@ $recommended_users = $database->fetchArray(
         FROM users u
         WHERE u.u_index >= 6
         AND (
-            (u.flags & ?) = ? AND (u.flags & ?) != ?
+            (u.flags & ?) = ?
+        )
+        AND (
+            (u.flags & ?) != ?
         )
         AND (
             (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 20) t))
         )
         AND (
-            u.powerlevel <= 1 OR u.last_seen < ?
+            u.powerlevel != 1 OR u.last_seen > ?
         )
         AND (
             u.id NOT IN (SELECT user FROM user_bans)
         )
         ORDER BY RAND() LIMIT 6",
-        [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value, strtotime('-1 month')]
+        [
+            UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value, 
+            UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value, 
+            strtotime('-1 month')
+        ]
     )
 );
 
