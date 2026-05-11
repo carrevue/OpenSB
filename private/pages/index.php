@@ -49,7 +49,7 @@ $news_recent_query_limit = 1;
 $journals_query_limit = 5;
 
 $uploads_featured = $upload_query->query(
-    "v.timestamp DESC",
+    "uploaded DESC",
     $uploads_featured_query_limit,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
@@ -68,7 +68,7 @@ if (!$auth->isUserLoggedIn() && $featured_users) {
     $query = implode(', ', $users);
 
     $uploads_new = $upload_query->query(
-        "v.timestamp DESC",
+        "uploaded DESC",
         $uploads_query_limit,
         sprintf("v.author in (%s)", $query)
     )->toCleanArray();
@@ -93,7 +93,7 @@ if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstra
         $query = implode(', ', $users);
 
         $uploads_following = $upload_query->query(
-            "v.timestamp DESC",
+            "uploaded DESC",
             $uploads_query_limit,
             sprintf("v.author in (%s)", $query)
         )->toCleanArray();

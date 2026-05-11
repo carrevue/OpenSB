@@ -33,12 +33,12 @@ $upload_query = new UploadQuery($sb);
 $tabs = [
     "recent" => [
         "name" => "new",
-        "order" => "timestamp DESC",
+        "order" => "uploaded DESC",
         "where" => null,
     ],
     "featured" => [
         "name" => "featured",
-        "order" => "v.timestamp DESC",
+        "order" => "uploaded DESC",
         "where" => sprintf("(v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value),
     ],
     "popular" => [

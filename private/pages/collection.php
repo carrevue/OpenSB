@@ -52,7 +52,7 @@ $query = implode(', ', $upload_map);
 
 
 $uploads = $upload_query->query(
-    "v.timestamp DESC",
+    "uploaded DESC",
     100, // TODO: pagination
     sprintf("v.id in (%s)", $query)
 )->toCleanArray();

@@ -33,7 +33,7 @@ $is_hitchhiker = $sb->isHitchhiker();
 $upload_query = new UploadQuery($sb);
 
 $uploads_featured = $upload_query->query(
-    "v.timestamp DESC",
+    "uploaded DESC",
     15,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
