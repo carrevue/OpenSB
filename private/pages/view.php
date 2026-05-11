@@ -215,7 +215,7 @@ $uploads_by_author = $upload_query->query("RAND()", 20, "v.author = ? AND v.uplo
 
 // this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
 $candidateQuery = "
-    SELECT v.*, u.flags AS author_flags
+    SELECT v.*, u.flags AS author_flags, u.last_seen
     FROM uploads v
     JOIN users u ON u.id = v.author
     WHERE v.upload_id != ?
@@ -257,8 +257,22 @@ if (!empty($candidates)) {
     }
 }
 
-// avoid recommending masturbatory uploads, uploads about other sites, -chaziz 02/27/2025
-$recommendation_title_penality = ['squarebracket', 'opensb', 'fulptube', 'subrocks', 'poktube', 'vidlii', 'bitview', 'vlare', 'betacast', 'eracast', 'kamtape'];
+// avoid recommending masturbatory uploads and dramaslop.
+// this should *probably* be moved to settings
+$recommendation_title_penality = [
+    // websites
+    'squarebracket', 
+    'opensb', 
+    'fulptube', 
+    'subrocks', 
+    'poktube', 
+    'vidlii', 
+    'bitview', 
+    'vlare', 
+    'betacast', 
+    'eracast', 
+    'kamtape',
+];
 
 // now score this shit
 if (!empty($candidates)) {
@@ -276,16 +290,21 @@ if (!empty($candidates)) {
 
         foreach ($recommendation_title_penality as $word) {
             if (str_contains($titleLower, $word)) {
-                $penalty += 0.75;
+                $penalty += 1;
             }
         }
 
         if ($row["author"] !== $data["author"]) {
             $authorCount = $authorUploadCounts[$row["author"]] ?? 0;
 
-            // penalize uploads from authors with a high number of uploads, so we can actually show other uploads
-            if ($authorCount > 50) {
-                $penalty += min(0.05, ($authorCount - 50) * 0.005);
+            // if the author hasn't logged in over a year, penalize.
+           if ($row["last_seen"] < strtotime('-1 year')) {
+                $penalty = 10;
+            }
+
+            // if the author has one upload, penalize.
+            if ($authorCount == 1) {
+                $penalty = 50;
             }
 
             // if the author is shadow banned, just penalize that shit completely.
@@ -297,20 +316,19 @@ if (!empty($candidates)) {
         $row["relevance_score"] =
             (
                 ($jaccard * 0.75) +
-                (recommendation_string_similarity($data["title"], $row["title"]) * 0.075) +
-                (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05) +
-                (rand(0, 100) / 200.0)
-            ) * min(2.0, max(1.0, $row["views"] / 20))
+                (recommendation_string_similarity($data["title"], $row["title"]) * 0.1) +
+                (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05)
+            )
             - $penalty;
     }
     unset($row);
 
     usort($candidates, fn($a, $b) => $b["relevance_score"] <=> $a["relevance_score"]);
-    $relevant   = array_values(array_filter($candidates, fn($row) => $row["relevance_score"] > 0.05));
-    $irrelevant = array_values(array_filter($candidates, fn($row) => $row["relevance_score"] <= 0.05));
-    // randomize irrelevant uploads so it doesn't list the same shit every time
-    shuffle($irrelevant);
-    $recommended = array_slice(array_merge($relevant, $irrelevant), 0, 20);
+
+    $relevant = array_values(array_filter($candidates, fn($row) => $row["relevance_score"] > 0.005));
+
+    shuffle($relevant);
+    $recommended = array_slice($relevant, 0, 20);
     $recommended = !empty($recommended) ? $recommended : false;
 }
 
