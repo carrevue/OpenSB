@@ -21,4 +21,10 @@
 
 global $twig, $database, $auth, $sb;
 
+use Core\Utilities;
+
+if (!$auth->isUserLoggedIn()) {
+    Utilities::notifyBanner("notify_login_required", "/login");
+}
+
 echo $twig->render('my_account.twig');
