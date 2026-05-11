@@ -82,7 +82,7 @@ $followed = Utilities::isFollowingUser($data["id"]);
 $views = $database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$data["id"]]);
 
 // right. cheat "related channels" on finalium profiles by using featured users
-if ($sb->getLocalOptions()["skin"] == "finalium") {
+if ($sb->getCurrentSkinName() == "finalium") {
     // ripped from SquareBracketTwigExtension
     $users = $database->fetchArray(
         $database->query(

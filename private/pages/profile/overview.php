@@ -105,7 +105,7 @@ if ($options["skin"] == "bootstrap") {
 $user_journals = $journal_query->query("j.timestamp DESC", $user_journal_limit, "j.author = ?", [$data["id"]])->toCleanArray();
 
 if (
-    $sb->getLocalOptions()["skin"] != "bootstrap" && $sb->getLocalOptions()["skin"] != "finalium"
+    $sb->getCurrentSkinName() != "bootstrap" && $sb->getCurrentSkinName() != "finalium"
 ) {
     $comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
     $comments = $comment_data->getComments(10);
@@ -126,13 +126,13 @@ $page_data = [
     "comments" => $comments,
 ];
 
-if ($sb->getLocalOptions()["skin"] == "bootstrap") {
+if ($sb->getCurrentSkinName() == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapSkinProfileGradient($data["userlink_color"]);
 }
 
 // temporary code
 /*
-if ($username == "Chaziz" && $sb->getLocalOptions()["skin"] == "trinium") {
+if ($username == "Chaziz" && $sb->getCurrentSkinName() == "trinium") {
     echo $twig->render("profile_yt2010.twig", [
         'data' => $page_data,
     ]);

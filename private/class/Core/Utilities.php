@@ -162,8 +162,8 @@ class Utilities
             }
 
             if (method_exists($sb, 'getLocalOptions')) {
-                $isFinalium = $sb->getLocalOptions()["skin"] == "finalium";
-                $isBootstrap = $sb->getLocalOptions()["skin"] == "bootstrap";
+                $isFinalium = $sb->getCurrentSkinName() == "finalium";
+                $isBootstrap = $sb->getCurrentSkinName() == "bootstrap";
             }
         }
 

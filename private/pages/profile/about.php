@@ -28,7 +28,7 @@ use Data\Upload\UploadQuery;
 $options = $sb->getLocalOptions();
 
 // if we're not on finalium, redirect to the normal profile page.
-if ($sb->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getCurrentSkinName() != "finalium") {
     Utilities::redirect("/user/$username");
 }
 

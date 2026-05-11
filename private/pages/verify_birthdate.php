@@ -32,7 +32,7 @@ if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {
     Utilities::redirect("/");
 }
 
-if ($sb->getLocalOptions()["skin"] != "trinium") {
+if ($sb->getCurrentSkinName() != "trinium") {
     $options = $sb->getOptionsCookie();
 
     $options["skin"] = "trinium";

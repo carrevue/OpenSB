@@ -35,7 +35,7 @@ if (!$auth->hasUserAuthenticatedAsStaff()) {
     Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
 }
 
-if ($sb->getLocalOptions()["skin"] != "trinium") {
+if ($sb->getCurrentSkinName() != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 

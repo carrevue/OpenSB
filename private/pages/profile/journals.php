@@ -40,7 +40,7 @@ $journal_query = new JournalQuery($sb);
 $journals = $journal_query->query("j.timestamp DESC", $limit, "j.author = ?", [$data["id"]])->toCleanArray();
 $count = $journal_query->count("j.author = ?", [$data["id"]]);
 
-if ($sb->getLocalOptions()["skin"] == "bootstrap") {
+if ($sb->getCurrentSkinName() == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapSkinProfileGradient($data["userlink_color"]);
 }
 

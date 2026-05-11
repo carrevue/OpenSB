@@ -208,7 +208,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $parsed_text = $this->parseCustomEmojis($parsed_text);
 
                 // on finalium, replace paragraphs with breaks
-                if ($this->sb->getLocalOptions()["skin"] == "finalium") {
+                if ($this->sb->getCurrentSkinName() == "finalium") {
                     $parsed_text = str_replace('</p>', '<br><br>', $parsed_text);
                     $parsed_text = str_replace('<p>', '', $parsed_text);
                     // remove the last breaks
@@ -455,14 +455,14 @@ class SquareBracketTwigExtension extends AbstractExtension
         $userlink = sprintf(
             '<a class="userlink userlink-%s %s" %shref="/user/%s">%s</a>',
             $username,
-            $this->sb->getLocalOptions()["skin"] == "finalium" ? 'spf-link' : '',
+            $this->sb->getCurrentSkinName() == "finalium" ? 'spf-link' : '',
             $this->sb->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
             $username,
             $username
         );
 
         if ($powerlevel > 1) {
-            if ($this->sb->getLocalOptions()["skin"] == "finalium") {
+            if ($this->sb->getCurrentSkinName() == "finalium") {
                 // this STINKS. look into this later -chaziz 02/22/2026
                 $staff_icon = $this->getIcon($this->sb->getTemplatingClass()->getFinaliumIconMap()["userlink_staff"], [12, 9]);
             } else {
@@ -596,7 +596,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function sidebarLibraryLinks()
     {
-        if ($this->sb->getLocalOptions()["skin"] === "finalium") {
+        if ($this->sb->getCurrentSkinName() === "finalium") {
             $collection_icon = "guide_collection"; // tied to finalium icon map
         } else {
             $collection_icon = "collection";
@@ -860,10 +860,10 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getIcon($icon, $size = "16", $class = null)
     {
-        if ($this->sb->getLocalOptions()["skin"] === "bootstrap" || ($this->sb->getLocalOptions()["skin"] === "finalium" && $this->sb->getLocalOptions()["theme"] !== "hitchhiker")) {
+        if ($this->sb->getCurrentSkinName() === "bootstrap" || ($this->sb->getCurrentSkinName() === "finalium" && $this->sb->getCurrentThemeName() !== "hitchhiker")) {
             $root_class = "bi";
             $svg = "bootstrap-icons.svg";
-        } elseif ($this->sb->getLocalOptions()["skin"] === "finalium" && $this->sb->getLocalOptions()["theme"] === "hitchhiker") {
+        } elseif ($this->sb->getCurrentSkinName() === "finalium" && $this->sb->getCurrentThemeName() === "hitchhiker") {
             $root_class = "icon";
             $svg = "skin/finalium/icons.svg";
         } else {

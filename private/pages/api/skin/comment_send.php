@@ -132,7 +132,7 @@ $comment = [
 ];
 
 // temporary code, will be removed in beta 2. -chaziz 2/28/2026
-if ($sb->getLocalOptions()["skin"] == "trinium") {
+if ($sb->getCurrentSkinName() == "trinium") {
     $template = 'components/_comment.twig';
 } else {
     $template = 'components/comment.twig';

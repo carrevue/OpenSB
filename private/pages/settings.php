@@ -208,7 +208,7 @@ if (isset($_POST['save'])) {
         $temp_name = $_FILES['profileBanner']['tmp_name'];
         $ext = pathinfo($_FILES['profileBanner']['name'], PATHINFO_EXTENSION);
 
-        if ($sb->getLocalOptions()["skin"] == "finalium") {
+        if ($sb->getCurrentSkinName() == "finalium") {
             $sb->getStorageClass()->processFinaliumProfileBanner($temp_name, $auth->getUserData()["id"]);
         } else {
             $sb->getStorageClass()->processTriniumProfileBanner($temp_name, $auth->getUserData()["id"]);

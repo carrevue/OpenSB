@@ -29,7 +29,7 @@ use Core\Utilities;
 $upload_query = new UploadQuery($sb);
 $uploads = $upload_query->query("v.id DESC", 2)->toCleanArray();
 
-if ($sb->getLocalOptions()["skin"] === "finalium") {
+if ($sb->getCurrentSkinName() === "finalium") {
     $data["button_color_types"] = [
         "primary", "default", "destructive", "dark", "light",
     ];

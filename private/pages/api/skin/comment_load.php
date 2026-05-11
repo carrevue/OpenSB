@@ -29,7 +29,7 @@ use Data\Comment\CommentLocation;
 
 header('Content-Type: application/json');
 
-if ($sb->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getCurrentSkinName() != "finalium") {
     $apiOutput = [
         "error" => "Not supported here."
     ];

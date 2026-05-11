@@ -58,7 +58,7 @@ if ($sb->isFulpTubeMode() && $data["is_news"]) {
 
 $author_info = $journal->getAuthorData();
 
-if ($sb->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getCurrentSkinName() != "finalium") {
     $comments = new CommentData($database, CommentLocation::Journal, $id);
 
     $comment_data = $comments->getComments();

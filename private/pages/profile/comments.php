@@ -30,7 +30,7 @@ use Data\Comment\CommentLocation;
 include_once('_include.php');
 
 // page-specific shit Here.
-if ($sb->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getCurrentSkinName() != "finalium") {
     $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
 
     $comment_data = $comments->getComments();
@@ -45,7 +45,7 @@ $page_data = [
     'comments' => $comment_data,
 ];
 
-if ($sb->getLocalOptions()["skin"] == "bootstrap") {
+if ($sb->getCurrentSkinName() == "bootstrap") {
     $page_data["bootstrap_profile_css"] = Utilities::makeBootstrapSkinProfileGradient($data["userlink_color"]);
 }
 

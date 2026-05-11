@@ -338,7 +338,7 @@ if (!$recommended && !$uploads_by_author) {
     $random_uploads_array = [];
 }
 
-if ($sb->getLocalOptions()["skin"] != "finalium") {
+if ($sb->getCurrentSkinName() != "finalium") {
     $comments = new CommentData($database, CommentLocation::Upload, $id);
 
     $comment_data = $comments->getComments();
