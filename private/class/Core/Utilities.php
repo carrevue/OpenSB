@@ -39,8 +39,8 @@ class Utilities
 {
     public static function getURL(bool $includeURI = false): ?string
     {
-        if (!isset($_SERVER['HTTP_HOST'])) {
-            return null;
+        if (!isset($_SERVER['HTTP_HOST']) || SB_CLI) {
+            return '';
         }
 
         $protocol = self::isThisHttps() ? 'https' : 'http';

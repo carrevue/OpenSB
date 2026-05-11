@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -31,19 +31,18 @@ global $database, $sb;
 
 require_once SB_PRIVATE_PATH . '/common.php';
 
-$uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE type = 0"));
+$uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE type = 0 AND video_length = 0"));
 $storage = $sb->getStorageClass();
 $path = $storage->getPath();
 
 foreach ($uploads as $upload) {
     $video_path = $path . "/videos/" . $upload["upload_id"] . ".converted.mp4";
-    $thumbnail_path = $path . "/thumbnails/" . $upload["upload_id"] . ".png";
 
-    if (!file_exists($thumbnail_path) && file_exists($video_path)) {
+    if (file_exists($video_path)) {
         $storage->processVideoUpload(
             $upload["upload_id"],
             $video_path,
-            "video_thumbnail_only"
+            "video_duration_only"
         );
         sleep(5);
     }
