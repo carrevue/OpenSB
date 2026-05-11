@@ -39,24 +39,21 @@ $uploads_featured = $upload_query->query(
 )->toCleanArray();
 
 // select users if they're 
-// 1. featured
-// 2. not shadowbanned
-// 3. are in the top 20 of being most followed
-// 4. have last logged in the last month (this does not apply to staff)
-// 5. are not banned
+// 1. not shadowbanned
+// 2. are in the top 20 of being most followed or are featured
+// 3. have last logged in the last month (this does not apply to staff)
+// 4. not banned
 $recommended_users = $database->fetchArray(
     $database->query(
         "SELECT u.id, u.name
         FROM users u
         WHERE u.u_index >= 6
         AND (
-            (u.flags & ?) = ?
-        )
-        AND (
             (u.flags & ?) != ?
         )
         AND (
             (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 20) t))
+            OR (u.flags & ?) = ?
         )
         AND (
             u.powerlevel != 1 OR u.last_seen > ?
@@ -66,8 +63,8 @@ $recommended_users = $database->fetchArray(
         )
         ORDER BY RAND() LIMIT 6",
         [
-            UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value, 
-            UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value, 
+            UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value,
+            UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value,
             strtotime('-1 month')
         ]
     )
