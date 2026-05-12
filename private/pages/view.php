@@ -434,7 +434,7 @@ $localization = $sb->getLocalizationClass();
 $storage = $sb->getStorageClass();
 
 $twig->setPageMeta([
-    "opengraph_description" => (!empty(trim($data["description"])) ? $data["description"] : $localization->translate("upload_no_description")),
+    "opengraph_description" => (!empty(trim($data["description"])) ? $data["description"] : $localization->translate("no_description")),
     "opengraph_image" => $storage->getUploadThumbnail($data["id"], $data["type"], $flags["custom_thumbnail"]),
     "opengraph_type" => "article",
     "opengraph_published" => date("c", strtotime($data["timestamp"])),

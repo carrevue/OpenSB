@@ -194,7 +194,8 @@
     "upload_video": "Vidéo",
 
     "upload_no_title": "Aucun titre",
-    "upload_no_description": "Cette publication n'a pas de description.",
+
+    "no_description": "Aucun description disponible.",
 
     "add_to": "Ajouter à",
     "share": "Partager",
@@ -259,7 +260,6 @@
     "profile_highlight_box_text_color": "Couleur du texte de l'introduction",
 
     "profile_featured": "Épinglé",
-    "profile_no_description": "Cet utilisateur n'a pas de description.",
     "recommended_resolution": "Résolution recommandée : %s",
 
     "user_role_unknown": "Inconnu",

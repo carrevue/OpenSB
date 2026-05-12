@@ -144,7 +144,7 @@
                                 {% if upload.description | trim is not empty %}
                                     {{ upload.description | markdown_user_written }}
                                 {% else %}
-                                    <span class="text-faded">{{ localize('upload_no_description') }}</span>
+                                    <span class="text-faded">{{ localize('no_description') }}</span>
                                 {% endif %}
                             </div>
                         </div>
