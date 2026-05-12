@@ -135,7 +135,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('pagination', [$this, 'pagination'], ['is_safe' => ['html']]),
             new TwigFunction('sidebar_main_links', [$this, 'sidebarMainLinks']),
             new TwigFunction('sidebar_library_links', [$this, 'sidebarLibraryLinks']),
-            new TwigFunction('sidebar_following_users', [$this, 'sidebarFollowingUsers']),
+            new TwigFunction('sidebar_user_links', [$this, 'sidebarUserLinks']),
             new TwigFunction('header_user_links', [$this, 'headerUserLinks']),
             new TwigFunction('header_user_account_links', [$this, 'headerUserAccountLinks']),
             new TwigFunction('footer_links', [$this, 'footerLinks']),
@@ -448,6 +448,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function userLinkLegacy($user): string
     {
         $username = htmlspecialchars($user['info']['username']);
+        $displayName = htmlspecialchars($user["info"]["displayname"]);
         $color = $user["info"]["color"];
         // the old userlink function used to show if someone was staff, this was implemented around april 2023.
         $powerlevel = $user["info"]["powerlevel"];
@@ -458,7 +459,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             $this->sb->getCurrentSkinName() == "finalium" ? 'spf-link' : '',
             $this->sb->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
             $username,
-            $username
+            $displayName
         );
 
         if ($powerlevel > 1) {
@@ -614,54 +615,43 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     /**
-     * function sidebarFollowingUsers
+     * function sidebarUserLinks
      *
      * @return array
      */
-    public function sidebarFollowingUsers()
+    public function sidebarUserLinks(): array
     {
-        $userid = $this->authentication->getUserID();
-
         if ($this->authentication->isUserLoggedIn()) {
             // logged in: following
             $users = $this->database->fetchArray(
                 $this->database->query(
-                    "SELECT s.*
-                    FROM user_follows s
-                    JOIN users follower ON s.user = follower.id
-                    JOIN users followed ON s.id = followed.id
-                    WHERE s.user = ?
+                    "SELECT followed.id, followed.name, followed.title
+                    FROM user_follows uf
+                    JOIN users follower ON uf.user = follower.id
+                    JOIN users followed ON uf.id = followed.id
+                    WHERE uf.user = ?
                     AND followed.id NOT IN (SELECT user FROM user_bans)
-                    ORDER BY followed.name
-                    ",
-                    [$userid]
+                    ORDER BY followed.title",
+                    [$this->authentication->getUserID()]
                 )
             );
         } else {
             // logged out: featured
             $users = $this->database->fetchArray(
                 $this->database->query(
-                    "SELECT u.id
-                    FROM users u 
+                    "SELECT u.id, u.name, u.title
+                    FROM users u
                     WHERE u.flags & ? = ?
-                    ORDER BY u.name",
+                    ORDER BY u.title",
                     [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
                 )
             );
         }
 
-        $array = [];
-
-        foreach ($users as $user) {
-            $data = $this->database->result("SELECT name FROM users WHERE id = ?", [$user["id"]]);
-
-            $array[] = [
-                "id" => $user["id"],
-                "username" => $data,
-            ];
-        }
-
-        return $array;
+        return array_map(
+            fn($user) => ['id' => $user['id'], 'username' => $user['name'], 'displayname' => $user['title']],
+            $users
+        );
     }
 
     /**

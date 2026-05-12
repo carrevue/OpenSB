@@ -42,6 +42,13 @@ if ($auth->isBanned() || $auth->getUserFlags(true)["unverified"]) {
     Utilities::notifyBanner("notify_no_permission", "/");
 }
 
+$unicode_blacklist = [
+    // checkmarks
+    "☑", "☑️", "✅", "✓", "✔", "✔", 
+    // shields
+    "🛡️", "⛉", "⛊", "⛨",
+];
+
 if ($options["skin"] == "trinium") {
     // check if this user has an entry in the profile customization table
     $profile_color_data = $database->fetch(
@@ -57,6 +64,7 @@ if (isset($_POST['save'])) {
 
     // if display name is set to empty, fallback to our current username.
     $title = trim($title) === '' ? $auth->getUserData()["name"] : $title;
+    $title = str_replace($unicode_blacklist, '', $title);
 
     $about = $_POST['about'] ?? null;
 
@@ -100,7 +108,7 @@ if (isset($_POST['save'])) {
 
     // kinda fucking stupid way to do this but whatever
     $access_mature_content = $auth->isUserOver18() && 
-                            !$sb->isChazizInstance() && 
+                            $sb->isMatureUploadsEnabled() && 
                             isset($_POST['rating']) && 
                             $_POST['rating'];
 
