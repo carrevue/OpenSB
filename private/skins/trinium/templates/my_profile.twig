@@ -1,0 +1,156 @@
+{% extends "_layout_my_account.twig" %}
+
+{% set title = localize('my_profile') %}
+
+{% set breadcrumbs = [
+    { url: '/my_profile', label: localize('my_profile') },
+] %}
+
+{% block my_account_content %}
+    {% if error %}
+    <div class="alert danger">{{ error }}</div>
+    {% endif %}
+    <div class="content-box">
+        <div class="profile-box">
+            <div class="profile-box-pfp">
+                <div class="profile-picture">
+                    <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+                </div>
+            </div>
+            <div class="profile-box-info">
+                <div class="profile-box-username">
+                    <span style="color:{{ user_data.userlink_color }}" id="settings-display-name">
+                        {{ user_data.title }}
+                    </span>
+                </div>
+                <div class="profile-box-handle">
+                    @{{ user_data.name }}
+                </div>
+                <div class="profile-box-handle">
+                    {{ user_data.email }}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <form action="/my_profile" method="post" enctype="multipart/form-data">
+            <div class="section">
+                <div class="section-header flex">
+                    <div class="section-header-left">
+                        <h2 class="section-title">{{ localize('profile') }}</h2>
+                        <div class="section-desc">{{ localize('profile_settings_header_desc') }}</div>
+                    </div>
+                </div>
+
+                <div class="form-input">
+                    <label for="title">{{ localize('profile_name') }}</label>
+                    <input id="settings-display-name-input" type="text" name="title" maxlength="50" value="{{ user_data.title }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="about">{{ localize('profile_description') }}</label>
+                    <textarea name="about" rows="4">{{ user_data.about }}</textarea>
+                </div>
+
+                <div class="form-input">
+                    <label for="profilePicture">{{ localize('profile_picture') }} <span>{{ localize('recommended_resolution', "512x512") }}</span></label>
+                    <input type="file" name="profilePicture" id="setting-pfp">
+                </div>
+
+                <div class="form-input">
+                    <label for="profileBanner">{{ localize('profile_banner') }} <span>{{ localize('recommended_resolution', "2500x300") }}</span> <a href="/assets/banner_template_trinium.png" target="_blank">Download template</a></label>
+                    <input type="file" name="profileBanner" id="settings-banner">
+                </div>
+
+                <div class="form-input">
+                    <label for="userlink_color">{{ localize('userlink_color') }}</label>
+                    <input name="userlink_color" id="settings-color" type="color"
+                    value="{{ user_data.userlink_color | default('#0069B4') }}">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="section">
+                <div class="section-header flex">
+                    <div class="section-header-left">
+                        <h2 class="section-title">{{ localize('profile_customization') }}</h2>
+                        <div class="section-desc">{{ localize('profile_customization_desc') }}</div>
+                    </div>
+                </div>
+
+                <div class="form-input">
+                    <input type="checkbox" name="enable_customization" id="enable_customization"
+                    value="true" {% if flags.profile_customization_enabled %}checked{% endif %}>
+                    <label for="enable_customization">{{ localize('enable_profile_customization') }}</label>
+                </div>
+
+                <div class="form-input">
+                    <label for="font">Font</label>
+                    <select id="font" name="font">
+                        {% for key, font in trinium_fonts %}
+                            <option value="{{ key }}" {% if profile_color_data.font == key %} selected{% endif %}>{{ font.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-input">
+                    <label for="title_color">{{ localize('profile_title_color') }}</label>
+                    <input name="title_color" id="settings-title-color" type="color"
+                    value="{{ profile_color_data.title_color | default('#333333') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="link_color">{{ localize('profile_link_color') }}</label>
+                    <input name="link_color" id="settings-link-color" type="color"
+                    value="{{ profile_color_data.link_color | default('#0033cc') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="background_color">{{ localize('profile_background_color') }}</label>
+                    <input name="background_color" id="settings-background-color" type="color"
+                    value="{{ profile_color_data.background_color | default('#ffffff') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="basic_box_border_color">{{ localize('profile_basic_box_border_color') }}</label>
+                    <input name="basic_box_border_color" id="settings-basic-box-border-color" type="color"
+                    value="{{ profile_color_data.basic_box_border_color | default('#666666') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="basic_box_background_color">{{ localize('profile_basic_box_background_color') }}</label>
+                    <input name="basic_box_background_color" id="settings-basic-box-background-color" type="color"
+                    value="{{ profile_color_data.basic_box_background_color | default('#FFFFFF') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="basic_box_text_color">{{ localize('profile_basic_box_text_color') }}</label>
+                    <input name="basic_box_text_color" id="settings-basic-box-text-color" type="color"
+                    value="{{ profile_color_data.basic_box_text_color | default('#000000') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="highlight_box_border_color">{{ localize('profile_highlight_box_border_color') }}</label>
+                    <input name="highlight_box_border_color" id="settings-highlight-box-border-color" type="color"
+                    value="{{ profile_color_data.highlight_box_border_color | default('#666666') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="highlight_box_background_color">{{ localize('profile_highlight_box_background_color') }}</label>
+                    <input name="highlight_box_background_color" id="settings-highlight-box-background-color" type="color"
+                    value="{{ profile_color_data.highlight_box_background_color | default('#E6E6E6') }}">
+                </div>
+
+                <div class="form-input">
+                    <label for="highlight_box_text_color">{{ localize('profile_highlight_box_text_color') }}</label>
+                    <input name="highlight_box_text_color" id="settings-highlight-box-text-color" type="color"
+                    value="{{ profile_color_data.highlight_box_text_color | default('#000000') }}">
+                </div>
+            </div>
+            <hr>
+            <div class="form-button-container">
+                <input type="submit" id="upload" name="save" class="button accent" value="{{ localize('save_action') }}">
+            </div>
+        </form>
+    </div>
+{% endblock %}
