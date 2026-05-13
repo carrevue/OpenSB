@@ -23,14 +23,27 @@ namespace OpenSB\Pages\Debug;
 
 global $sb, $database;
 
-use Core\Utilities;
+$data = $database->fetchArray($database->query("SELECT accounts.*, GROUP_CONCAT(users.name SEPARATOR ', ') AS users
+FROM accounts
+LEFT JOIN users ON users.account_id = accounts.id
+GROUP BY accounts.id"));
+?>
 
-$name = "Lenhardt";
+<h1>Accounts <span style="color:gold;">NEW!</span></h1>
 
-$fuck = Utilities::validateUsername($name, $database);
-
-if ($fuck) {
-    echo $fuck;
-} else {
-    echo $name . " is valid";
-}
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Registered</th>
+        <th>Users</th>
+    </tr>
+    <?php foreach ($data as $n): ?>
+        <tr>
+            <td><?= $n['id'] ?></td>
+            <td><?= $n['email'] ?></td>
+            <td><?= date('Y-m-d H:i:s', $n['registered']) ?></td>
+            <td><?= $n['users'] ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>

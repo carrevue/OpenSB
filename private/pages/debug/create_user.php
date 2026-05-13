@@ -3,7 +3,7 @@
 /*
   OpenSB: The Open SquareBracket Software
 
-  Copyright (C) 2025 Chaziz
+  Copyright (C) 2025-2026 Chaziz
 
   OpenSB is free software: you can redistribute it and/or modify it under the 
   terms of the GNU Affero General Public License as published by the Free 
@@ -71,7 +71,7 @@ if (isset($_POST["submit"])) {
     $database->query(
         "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate)
                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [$username, $hashedPassword, $token, time(), time(), $username, $email_address, "ip", $dobDateTime->format('Y-m-d')]
+        [$username, $hashedPassword, $token, time(), time(), $title, $email_address, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d')]
     );
 
     if ($sb->isDiscordWebhookEnabled()) {
@@ -86,8 +86,8 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
-<h1>Create account</h1>
-<form action="/debug/create_account" method="post">
+<h1>Create user</h1>
+<form action="/debug/create_user" method="post">
     <fieldset>
         <legend>Basic Information</legend>
         <label for="name">Username:</label>

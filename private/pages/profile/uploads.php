@@ -82,4 +82,5 @@ echo $twig->render('profile_browse.twig', [
     'page' => $page,
     'type' => $type,
     'tabs' => $tabs,
+    'items_per_page' => $limit_num,
 ]);

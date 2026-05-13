@@ -43,7 +43,7 @@ $uploads_featured = $upload_query->query(
 // 4. not banned
 $recommended_users = $database->fetchArray(
     $database->query(
-        "SELECT u.id, u.name
+        "SELECT u.id, u.name, u.title
         FROM users u
         WHERE u.u_index >= 6
         AND (
@@ -86,7 +86,7 @@ foreach ($recommended_users as $user) {
     $feed_key = "user_" . $user["id"];
     $feed[$feed_key] = [
         "icon" => $sb->getStorageClass()->getUserProfilePicture($user["id"]),
-        "title" => $user["name"],
+        "title" => $user["title"],
         "label" => $localization->translate('recommended_member'),
         "link" => "/user/" . $user["name"],
         "uploads" => $upload_query->query(

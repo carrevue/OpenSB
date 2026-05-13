@@ -7,6 +7,21 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
+DROP TABLE IF EXISTS `accounts`;
+CREATE TABLE `accounts` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `email` varchar(254) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `token` varchar(128) NOT NULL,
+  `registered` bigint(20) NOT NULL DEFAULT 0,
+  `last_login` bigint(20) NOT NULL DEFAULT 0,
+  `ip` varchar(48) NOT NULL DEFAULT '999.999.999.999',
+  `birthdate` date NOT NULL,
+  `flags` tinyint(4) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 DROP TABLE IF EXISTS `asn_bans`;
 CREATE TABLE `asn_bans` (
   `asn` int(11) NOT NULL,
@@ -92,7 +107,7 @@ CREATE TABLE `private_messages` (
   `author` int(11) NOT NULL,
   `recipient` int(11) NOT NULL,
   `date` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `uploads`;
@@ -207,6 +222,7 @@ CREATE TABLE `username_blocklist` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Incrementing ID for internal purposes.',
+  `account_id` bigint(20) DEFAULT NULL,
   `name` varchar(128) NOT NULL COMMENT 'Username, chosen by the user',
   `email` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL COMMENT 'Password, hashed in bcrypt.',
@@ -325,7 +341,7 @@ CREATE TABLE `user_profile_customization` (
   `highlight_box_background_color` varchar(7) NOT NULL DEFAULT '#E6E6E6',
   `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `user_staff_notes`;
@@ -339,4 +355,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-05-07 11:47:00 UTC
+-- 2026-05-13 00:35:17 UTC
