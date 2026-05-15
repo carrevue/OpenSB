@@ -28,6 +28,10 @@ use DateTime;
 
 use Core\Utilities;
 
+if (!$auth->isUserLoggedIn()) {
+    Utilities::notifyBanner("notify_login_required", "/login");
+}
+
 if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {
     Utilities::redirect("/");
 }

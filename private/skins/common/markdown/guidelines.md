@@ -1,5 +1,5 @@
 # Community Guidelines 
-Last updated on April 15th 2026.
+Last updated on May 11th 2026.
 
 ## Users
 
@@ -12,7 +12,8 @@ Unlike other simillar platforms, this platform does not care about what you do o
 
 ## Uploads
 
-* Do not upload anything that is under copyright according to U.S. law (and does not fall under the U.S. definiton of fair use), or that is a known video/image that already exists on another platform. If you did not make it, you cannot upload it. This does not apply to transformative content that you have made yourself.
+* Do not upload anything that is under copyright according to U.S. law (and does not fall under the proper U.S. definiton of fair use). If you did not make it, you cannot upload it. This does not apply to transformative content that you have made yourself.
+    * You may reupload your old content from other sites.
 * Do not upload shock content, including gore.
 * Do not upload pornographic/sexually explicit content.
 * Do not upload content that promotes, endorses and/or depicts incest/consanguinity, pedophilia, zoophilia, and/or necrophilia. This includes real depictions (eg: CSAM) and fictional drawn/cartoon depictions (eg: lolisho, feral).

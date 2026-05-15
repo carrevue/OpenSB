@@ -26,6 +26,10 @@ global $twig, $database, $sb, $auth;
 use Data\User\UserFlags;
 use Core\Utilities;
 
+if (!$auth->isUserLoggedIn()) {
+    Utilities::notifyBanner("notify_login_required", "/login");
+}
+
 if (isset($_GET["token"])) {
     $token = $_GET["token"];
     $result = $database->fetch("SELECT * FROM email_verification_token WHERE token = ?", [$token]);

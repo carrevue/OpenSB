@@ -88,7 +88,7 @@ class Authentication
 
                 // if the current logged-in user doesnt have a birthdate, redirect them to the
                 // "specify your birthdate" verification page.
-                if (!isset($this->user_data['birthdate'])) {
+                if (!isset($this->user_data['birthdate']) && !$this->isBanned()) {
                     // dumbass hack, this is because we cant access the global $path variable
                     // set in /public/index.php since it probably hasnt been defined yet at this
                     // point in the code.

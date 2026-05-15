@@ -31,7 +31,7 @@ global $database, $sb;
 
 require_once SB_PRIVATE_PATH . '/common.php';
 
-$uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE type = 0 AND video_length = 0"));
+$uploads = $database->fetchArray($database->query("SELECT * FROM uploads WHERE type = 0 AND (video_length = 0 OR video_length IS NULL)"));
 $storage = $sb->getStorageClass();
 $path = $storage->getPath();
 

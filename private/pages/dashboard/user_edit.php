@@ -290,7 +290,7 @@ $user_info_table = [
         'value' => $user['id'],
     ],
     'ip_address' => [
-        'condition' => $auth->userHasRole(UserRoleEnum::Moderator),
+        'condition' => $auth->userHasRole(UserRoleEnum::Administrator),
         'label' => 'IP address',
         'value' => $user['ip'],
     ],
