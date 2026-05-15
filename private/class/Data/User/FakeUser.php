@@ -39,6 +39,8 @@ class FakeUser
             "about" => "This is the system user.",
             "userlink_color" => "#ff0000",
             "flags" => 0,
+            "u_index" => 0,
+            "f_index" => 0,
             "powerlevel" => 4, // owner
         ]
     ];
@@ -50,12 +52,9 @@ class FakeUser
 
     public static function getFakeUserFromName(string $name): ?array
     {
-        foreach (self::$fakeUsers as $user) { // kind of ass?
-            if (strcasecmp($user['name'], $name) === 0) {
-                return $user;
-            }
-        }
-
-        return null;
+        return array_values(array_filter(
+            self::$fakeUsers,
+            fn($user) => strcasecmp($user['name'], $name) === 0
+        ))[0] ?? null;
     }
 }
