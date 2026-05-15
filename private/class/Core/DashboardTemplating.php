@@ -31,11 +31,11 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 
 /**
- * class ErrorTemplating
+ * class DashboardTemplating
  * 
- * Alternate Twig wrapper for certain errors, like 404 or geoblocking.
+ * Alternate Twig wrapper for the dashboard.
  */
-class ErrorTemplating
+class DashboardTemplating
 {
     /**
      * @var SquareBracket The core SquareBracket class.
@@ -66,7 +66,7 @@ class ErrorTemplating
         $this->sb = $sb;
         //$options = $this->sb->getLocalOptions();
 
-        $skinPath = 'skins/error';
+        $skinPath = 'skins/dashboard';
 
         $templatePath = $skinPath . '/templates';
 
@@ -74,7 +74,7 @@ class ErrorTemplating
         try {
             $this->loader = new FilesystemLoader($templatePath);
         } catch (LoaderError) {
-            throw new Exception("The error skin does not exist.");
+            throw new Exception("The dashboard skin does not exist.");
         }
 
         $doCache = !$sb->isTemplateCachingEnabled() ? false : 'skins/cache/';
@@ -98,6 +98,7 @@ class ErrorTemplating
         $this->twig->addGlobal('website_branding', $sb->getBrandingSettings());
 
         $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));
+        $this->twig->addFunction(new TwigFunction('get_css_file_timestamp', [$sb, 'getCurrentSkinCssTimestamp']));
     }
 
     // copied from squarebrackettwigextension

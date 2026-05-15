@@ -13,7 +13,7 @@
 <html lang="{{ language_code }}" dir="ltr" class="{{ page_name|split(' ')|first }}">
 <head>
     {{ include('_html_head.twig') }}
-    <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_date() }}">
+    <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_timestamp() }}">
     <link rel="preload" href="/assets/icons.svg" as="image" type="image/svg+xml">
 
     <style>
@@ -104,8 +104,8 @@
 <script>
     opensb_version = '{{ opensb_version.name }} {{ opensb_version.string }}';
 </script>
-<script src="/assets/common.js?r={{ get_css_file_date() }}"></script>
-<script src="/assets/skin/trinium/common.js?r={{ get_css_file_date() }}"></script>
+<script src="/assets/common.js?r={{ get_css_file_timestamp() }}"></script>
+<script src="/assets/skin/trinium/common.js?r={{ get_css_file_timestamp() }}"></script>
 {% block scripts %}{% endblock %}
 <!-- {{ version_banner() }} -->
 </body>

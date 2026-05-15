@@ -19,7 +19,7 @@
 <html lang="{{ language_code }}" dir="ltr" class="{{ page_name|split(' ')|first }}">
 <head>
     {{ include('_html_head.twig') }}
-    <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_date() }}">
+    <link rel="stylesheet" href="/assets/css/trinium-{{ current_theme }}.css?r={{ get_css_file_timestamp() }}">
     {% if page_name == "register" and captcha_public_token %}
         <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     {% endif %}
@@ -61,8 +61,8 @@
 <script>
     opensb_version = '{{ opensb_version.name }} {{ opensb_version.string }}';
 </script>
-<script src="/assets/common.js?r={{ get_css_file_date() }}"></script>
-<script src="/assets/skin/trinium/common_login_register.js?r={{ get_css_file_date() }}"></script> {# don't use normal common.js #}
+<script src="/assets/common.js?r={{ get_css_file_timestamp() }}"></script>
+<script src="/assets/skin/trinium/common_login_register.js?r={{ get_css_file_timestamp() }}"></script> {# don't use normal common.js #}
 <!-- {{ version_banner() }} -->
 </body>
 </html>

@@ -139,7 +139,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('header_user_links', [$this, 'headerUserLinks']),
             new TwigFunction('header_user_account_links', [$this, 'headerUserAccountLinks']),
             new TwigFunction('footer_links', [$this, 'footerLinks']),
-            new TwigFunction('get_css_file_date', [$this, 'getCssFileDate']),
+            new TwigFunction('get_css_file_timestamp', [$this->sb, 'getCurrentSkinCssTimestamp']),
             new TwigFunction('upload_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
             new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
             new TwigFunction('localize', [$this, 'localize']),
@@ -812,31 +812,6 @@ class SquareBracketTwigExtension extends AbstractExtension
         }
 
         return $array;
-    }
-
-    /**
-     * function getCssFileDate
-     * 
-     * Returns timestamp of the current skin's theme.
-     *
-     * @return int
-     */
-    public function getCssFileDate(): int
-    {
-        $options = $this->sb->getLocalOptions();
-        $skin = $options["skin"] ?? "trinium";
-        $theme = $options["theme"] ?? "default";
-        $base = SB_PUBLIC_PATH . "/assets/css";
-        $candidates = [
-            $base . "/" . $skin . "-" . $theme . ".css",
-            $base . "/" . $skin . "_" . $theme . ".css",
-        ];
-        foreach ($candidates as $path) {
-            if (file_exists($path)) {
-                return filemtime($path);
-            }
-        }
-        return filemtime($base . "/trinium-default.css");
     }
 
     /**

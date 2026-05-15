@@ -463,6 +463,29 @@ class SquareBracket
     }
 
     /**
+     * function getCurrentSkinCssTimestamp
+     * 
+     * Returns timestamp of the current skin's theme.
+     *
+     * @return int 
+     */
+    public function getCurrentSkinCssTimestamp(string $skin = "", string $theme = ""): int
+    {
+        $skin  = $skin  ?: ($this->options["skin"]  ?? "trinium");
+        $theme = $theme ?: ($this->options["theme"] ?? "default");
+        $base  = SB_PUBLIC_PATH . "/assets/css";
+
+        foreach (["-", "_"] as $sep) {
+            $path = "{$base}/{$skin}{$sep}{$theme}.css";
+            if (file_exists($path)) {
+                return filemtime($path);
+            }
+        }
+
+        return filemtime("{$base}/trinium-default.css");
+    }
+
+    /**
      * function getDatabaseClass
      *
      * Returns the database class for other classes to use.
