@@ -34,41 +34,39 @@ use Data\Upload\UploadFlags;
 use Data\Upload\UploadTypeEnum;
 use Data\Upload\UploadVisibilityEnum;
 
-// supported extensions
-$supportedVideoFormats = ["mp4", "mkv", "wmv", "flv", "avi", "mov", "3gp"];
-$supportedImageFormats = ["png", "jpg", "jpeg", "bmp", "webp"];
-$supportedAudioFormats = ["mp3", "wav", "flac", "aiff", "ogg", "wma", "m4a"];
-
-// supported mime types
-function detectUploadType(string $tmpPath, string $extension, array $videoExts, array $imageExts, array $audioExts): ?string
+function detectUploadType(string $tmpPath, string $extension): ?string
 {
     $ext = strtolower($extension);
-    $mimeToType = [
-        'video/mp4' => 'video', 'video/x-matroska' => 'video', 'video/x-ms-wmv' => 'video',
-        'video/x-flv' => 'video', 'video/x-msvideo' => 'video', 'video/quicktime' => 'video',
-        'video/3gpp' => 'video', 'video/webm' => 'video',
-        'image/png' => 'image', 'image/jpeg' => 'image', 'image/bmp' => 'image', 'image/webp' => 'image', 'image/gif' => 'image',
-        'audio/mpeg' => 'audio', 'audio/wav' => 'audio', 'audio/flac' => 'audio', 'audio/aiff' => 'audio',
-        'audio/ogg' => 'audio', 'audio/x-ms-wma' => 'audio', 'audio/mp4' => 'audio', 'audio/x-m4a' => 'audio',
+
+    $extToType = [
+        'mp4' => 'video', 'mkv' => 'video', 'wmv' => 'video', 'flv' => 'video',
+        'avi' => 'video', 'mov' => 'video', '3gp' => 'video', 'm4v' => 'video',
+        'png' => 'image', 'jpg' => 'image', 'jpeg' => 'image', 'bmp' => 'image', 'webp' => 'image',
+        'mp3' => 'audio', 'wav' => 'audio', 'flac' => 'audio', 'aiff' => 'audio',
+        'ogg' => 'audio', 'wma' => 'audio', 'm4a' => 'audio',
     ];
+
+    $ambiguousMimes = ['audio/mp4', 'audio/x-m4a', 'video/mp4'];
+
+    $mimeToType = [
+        'video/quicktime' => 'video', 'video/x-matroska' => 'video', 'video/x-ms-wmv' => 'video',
+        'video/x-flv'     => 'video', 'video/x-msvideo'  => 'video', 'video/3gpp'     => 'video',
+        'video/webm'      => 'video', 'image/png'        => 'image', 'image/jpeg'     => 'image',
+        'image/bmp'       => 'image', 'image/webp'       => 'image', 'image/gif'      => 'image',
+        'audio/mpeg'      => 'audio', 'audio/wav'        => 'audio', 'audio/flac'     => 'audio',
+        'audio/aiff'      => 'audio', 'audio/ogg'        => 'audio', 'audio/x-ms-wma' => 'audio',
+    ];
+
     if (file_exists($tmpPath)) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime = $finfo ? @finfo_file($finfo, $tmpPath) : null;
+        $mime = $finfo ? finfo_file($finfo, $tmpPath) : null;
 
-        if ($mime && isset($mimeToType[$mime])) {
+        if ($mime && !in_array($mime, $ambiguousMimes, true) && isset($mimeToType[$mime])) {
             return $mimeToType[$mime];
         }
     }
-    if (in_array($ext, $videoExts, true)) {
-        return 'video';
-    }
-    if (in_array($ext, $imageExts, true)) {
-        return 'image';
-    }
-    if (in_array($ext, $audioExts, true)) {
-        return 'audio';
-    }
-    return null;
+
+    return $extToType[$ext] ?? null;
 }
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
@@ -232,10 +230,7 @@ if (
 
     $type = detectUploadType(
         $temp,
-        $ext,
-        $supportedVideoFormats,
-        $supportedImageFormats,
-        $supportedAudioFormats
+        $ext
     );
 
     $uploadFilePath = null;
