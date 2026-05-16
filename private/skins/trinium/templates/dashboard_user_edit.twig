@@ -142,19 +142,32 @@
                     <div class="section-header">
                         <h2 class="section-title">Assets</h2>
                     </div>
+                    {% set banner = profile_banner(user.id) %}
                     <table class="styled">
                         <tbody>
                         <tr class="table-header">
-                            <th style="width:25%;">Profile picture</th>
-                            <th style="width:75%;">Banner</th>
+                            <th>Profile picture</th>
+                            {% if banner.trinium %}
+                                <th>Trinium Banner</th>
+                            {% endif %}
+                            {% if banner.finalium %}
+                                <th>Finalium Banner</th>
+                            {% endif %}
                         </tr>
                         <tr>
                             <td>
-                                <img src="{{ profile_picture(user.id) }}" style="width:100%;" alt="{{ user.username }}">
+                                <img src="{{ profile_picture(user.id) }}" style="width:96px;" alt="{{ user.username }}">
                             </td>
-                            <td>
-                                <img src="{{ profile_banner(user.id) }}" style="width:100%;" alt="{{ user.username }}">
-                            </td>
+                            {% if banner.trinium %}
+                                <td>
+                                    <img src="{{ banner.trinium }}" style="width:100%;" alt="{{ user.username }}">
+                                </td>
+                            {% endif %}
+                            {% if banner.finalium %}
+                                <td>
+                                    <img src="{{ banner.finalium }}" style="width:100%;" alt="{{ user.username }}">
+                                </td>
+                            {% endif %}
                         </tr>
                         </tbody>
                     </table>

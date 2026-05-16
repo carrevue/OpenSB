@@ -38,6 +38,25 @@ if ($sb->getCurrentSkinName() != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
+function make_running_total_graph_from_accounts($database): array
+{
+    $database->query("SET @runningTotal = 0;");
+    return $database->fetchArray($database->query(
+        "SELECT date AS registered, num_interactions,
+                @runningTotal := @runningTotal + num_interactions AS runningTotal
+         FROM (
+             SELECT date, SUM(num_interactions) AS num_interactions
+             FROM (
+                 SELECT DATE(FROM_UNIXTIME(registered)) AS date, COUNT(*) AS num_interactions
+                 FROM accounts
+                 GROUP BY DATE(FROM_UNIXTIME(registered))
+             ) AS all_events
+             GROUP BY date
+         ) AS totals
+         ORDER BY date"
+    ));
+}
+
 function make_running_total_graph_from_users($database): array
 {
     $database->query("SET @runningTotal = 0;");
@@ -206,6 +225,7 @@ if ($sb->isChazizInstance()) {
 }
 
 $thingsToCount = [
+    'accounts' => 'Accounts',
     'users' => 'Users',
     'uploads' => 'Uploads',
     'journals' => 'Journals',
@@ -241,6 +261,7 @@ foreach ($thingsToCount as $table => $uiName) {
     ];
 }
 
+$account_graph = make_running_total_graph_from_accounts($database);
 $user_graph = make_running_total_graph_from_users($database);
 $upload_graph = make_running_total_graph_from_uploads($database);
 $comment_graph = make_running_total_graph_from_comments($database);
@@ -260,6 +281,17 @@ $chartData = [
                         'y' => $graph['runningTotal'],
                     ];
                 }, $upload_graph),
+                'borderWidth' => 1,
+                'yAxisID' => 'n',
+            ],
+            [
+                'label' => 'Accounts',
+                'data' => array_map(function ($graph) {
+                    return [
+                        'x' => $graph['registered'],
+                        'y' => $graph['runningTotal'],
+                    ];
+                }, $account_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'n',
             ],
@@ -322,6 +354,10 @@ $chartData = [
         ]
     ],
     'options' => [
+        'time' => [
+            'unit' => 'day',
+            'tooltipFormat' => 'MMMM d, yyyy',
+        ],
         'elements' => [
             'point' => [
                 'radius' => 2
