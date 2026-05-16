@@ -33,7 +33,7 @@ $id = ($_GET['v'] ?? null);
 $upload = new UploadData($sb->getDatabaseClass(), $id);
 $data = $upload->getData();
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 

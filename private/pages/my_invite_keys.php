@@ -26,7 +26,7 @@ global $sb, $twig, $twig_error, $database, $auth;
 use Data\User\UserData;
 use Core\Utilities;
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 

@@ -30,7 +30,7 @@ use Data\Upload\UploadResult;
 $type = ($_GET['type'] ?? 'recent');
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 

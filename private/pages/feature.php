@@ -30,7 +30,7 @@ use Core\Utilities;
 
 $id = ($_GET['v'] ?? null);
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 

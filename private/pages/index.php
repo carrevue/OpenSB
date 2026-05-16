@@ -63,7 +63,7 @@ $featured_users = $database->fetchArray(
     )
 );
 
-if (!$auth->isUserLoggedIn() && $featured_users) {
+if (!$auth->isLoggedIn() && $featured_users) {
     $users = array_map('intval', array_column($featured_users, 'id'));
     $query = implode(', ', $users);
 
@@ -76,7 +76,7 @@ if (!$auth->isUserLoggedIn() && $featured_users) {
     $uploads_new = [];
 }
 
-if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) { // TODO: bootstrap had this too back then
+if ($options["skin"] == "trinium" & $auth->isLoggedIn()) { // TODO: bootstrap had this too back then
     // copied from SquareBracketTwigExtension
     $rows = $database->fetchArray(
         $database->query(

@@ -38,7 +38,7 @@ $apiOutput = [
     "error" => "This request is invalid."
 ];
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     echo json_encode(["error" => "You are not logged in."]);
     exit;
 }

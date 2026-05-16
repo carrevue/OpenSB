@@ -172,14 +172,14 @@ if ($sb->isTestInstance())
 
     // if the user is still logged in but isnt staff (or doesnt have QA access flag), log them out.
     if (
-        $auth->isUserLoggedIn()
+        $auth->isLoggedIn()
         && !$auth->userHasRole(UserRoleEnum::Moderator)
         && !($auth->getUserFlags() & UserFlags::FLAG_QA_ACCESS->value)
     ) {
         $auth->logOut();
     }
 
-    if (Utilities::getIpAddress() != "localhost" && !$auth->isUserLoggedIn() && $path[1] != "login") {
+    if (Utilities::getIpAddress() != "localhost" && !$auth->isLoggedIn() && $path[1] != "login") {
         Utilities::redirect("/login");
     }
 }

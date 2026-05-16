@@ -140,7 +140,7 @@ if (isset($data["tags"])) {
     if ($decodedTags !== null) {
         foreach ($decodedTags as $tag) {
             if (in_array($tag, $tagBlacklist)) {
-                if ($auth->isUserLoggedIn()) {
+                if ($auth->isLoggedIn()) {
                     handle_error("notify_upload_tag_blacklist_logged_in");
                 } else {
                     handle_error("notify_upload_tag_blacklist_logged_out");
@@ -161,7 +161,7 @@ $following = Utilities::isFollowingUser($data["author"]);
 
 $flags = $upload->getFlagArray();
 
-if ($flags["block_guests"] && !$auth->isUserLoggedIn()) {
+if ($flags["block_guests"] && !$auth->isLoggedIn()) {
     handle_error("notify_login_required_view_upload");
 }
 
@@ -173,7 +173,7 @@ $ip = Utilities::getIpAddress();
 
 $CrawlerDetect = new CrawlerDetect;
 
-$type = $auth->isUserLoggedIn() ? "user" : "guest";
+$type = $auth->isLoggedIn() ? "user" : "guest";
 
 // probably shit
 if (!$CrawlerDetect->isCrawler() && !Utilities::isTorExitNode(Utilities::getIpAddress())) {
@@ -182,7 +182,7 @@ if (!$CrawlerDetect->isCrawler() && !Utilities::isTorExitNode(Utilities::getIpAd
     // add a limit of one view per minute on guests. this is to deter other forms of crawlers/bots that may
     // not be properly caught by crawlerdetect.
     if (
-        !$auth->isUserLoggedIn() &&
+        !$auth->isLoggedIn() &&
         $database->result("SELECT COUNT(*) FROM upload_views WHERE user=? AND timestamp > 60", [$ip])
     ) {
         $ratelimit = true;
@@ -399,7 +399,7 @@ $page_data = [
 
 // if we are on bootstrap or on finalium 1, emulate the old like/dislike system.
 if (Utilities::isClassicSkin()) {
-    if ($auth->isUserLoggedIn()) {
+    if ($auth->isLoggedIn()) {
         $current_rating_from_db = $database->result("SELECT rating FROM upload_ratings WHERE upload=? AND user=?", [$data["id"], $auth->getUserID()]);
 
         if (($current_rating_from_db == "4") || ($current_rating_from_db == "5")) {

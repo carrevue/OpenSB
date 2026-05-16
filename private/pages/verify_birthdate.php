@@ -28,7 +28,7 @@ use DateTime;
 
 use Core\Utilities;
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 

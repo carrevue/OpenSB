@@ -75,7 +75,7 @@ function detectUploadType(string $tmpPath, string $extension): ?string
 // restorecon -Rv /var/www/opensb/dynamic
 // -chaziz 4/20/2025
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
@@ -190,7 +190,7 @@ function discord_webhook_notify($sb, $new, $title, $description, $auth)
 
 if (
     (isset($_POST['upload']) || isset($_POST['upload_video'])) &&
-    $auth->isUserLoggedIn()
+    $auth->isLoggedIn()
 ) {
     $new = Utilities::generateRandomString(11, true);
     $uploader = $auth->getUserID();

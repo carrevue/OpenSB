@@ -40,7 +40,7 @@ $data = $upload->getData();
 
 $flags = $data["flags"];
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 

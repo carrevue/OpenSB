@@ -25,7 +25,7 @@ global $sb;
 
 $auth = $sb->getAuthenticationClass();
 
-$logged = $auth->isUserLoggedIn();
+$logged = $auth->isLoggedIn();
 $adult = $auth->isUserOver18();
 $stats = $auth->getUserStatData();
 $banned = $auth->isBanned();

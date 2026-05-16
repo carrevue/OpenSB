@@ -25,7 +25,7 @@ global $sb, $twig, $database, $auth;
 
 use Core\Utilities;
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
@@ -41,7 +41,7 @@ if ($database->result("SELECT COUNT(*) FROM journals WHERE timestamp > ? AND aut
     Utilities::notifyBanner("notify_write_ratelimit", "/");
 }
 
-if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isUserLoggedIn()) {
+if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isLoggedIn()) {
     $uploader = $auth->getUserID();
 
     $title = ($_POST['title'] ?? "No title");

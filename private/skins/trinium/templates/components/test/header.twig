@@ -10,8 +10,8 @@
     {% endfor %}
     <br>
     {% if is_user_logged_in %}
-        {% for link in header_user_account_links() %}
-            <a href="/login/{{ link.username }}">Login as {{ link.username }}</a>
+        {% for link in header_user_switcher_links() %}
+            <a href="/login/{{ link.name }}">Login as {{ link.name }}</a>
         {% endfor %}
     {% endif %}
 </div>

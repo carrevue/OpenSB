@@ -32,16 +32,37 @@ class Authentication
     private Database $database;
     private bool $is_logged_in = false;
     private int $user_id;
+    private array|false $account_data;
     private array|false $user_data;
     private $user_ban_data;
     private $user_stat_data;
     private $has_authenticated_as_staff = false;
+    private string $cookie_warning_string = "DO-NOT-SHARE-THIS-WITH-ANYONE-";
 
-    public function __construct(SquareBracket $sb, $token)
+    public function __construct(Database $database)
     {
-        $this->database = $sb->getDatabaseClass();
+        $this->database = $database;
 
-        $account_fields = [
+        if (isset($_COOKIE["SBAUTH"])) {
+            $cookie_raw = $_COOKIE["SBAUTH"];
+
+            // get rid of warning string
+            if (str_starts_with($cookie_raw, $this->cookie_warning_string)) {
+                $cookie_raw = substr($cookie_raw, strlen($this->cookie_warning_string));
+            }
+
+            $decoded = Utilities::verifySignedCookiePayload($cookie_raw);
+
+            if ($decoded !== false && is_array($decoded)) {
+                $active = $decoded;
+            } else {
+                return;
+            }
+        } else {
+            return;
+        }
+
+        $user_fields = [
             "id", 
             "ip", 
             "name", 
@@ -61,16 +82,27 @@ class Authentication
             "u_index",
         ];
 
-        if (isset($token)) {
-            $fields = implode(", ", $account_fields);
-            $this->user_data = $this->database->fetch("SELECT $fields FROM users WHERE token = ?", [$token]);
+        if (isset($active["token"])) {
+            $fields = implode(", ", $user_fields);
+
+            $this->account_data = $this->database->fetch("SELECT * FROM accounts WHERE token = ?", [$active["token"]]);
+
+            $role_row = $this->database->fetch(
+                "SELECT role FROM account_user_roles WHERE account = ? AND user = ?",
+                [$this->account_data['id'], $active["user_id"]]
+            );
+
+            if (!$role_row) {
+                return; // user doesn't belong to this account
+            }
+
+            $this->user_data = $this->database->fetch("SELECT $fields FROM users WHERE id = ?", [$active["user_id"]]);
 
             if ($this->user_data) {
                 $this->is_logged_in = true;
                 $this->user_id = $this->user_data["id"];
                 $this->user_ban_data = $this->database->fetch("SELECT * FROM user_bans WHERE user = ?", [$this->user_id]);
 
-                //$followers = $this->database->result("SELECT COUNT(user) FROM user_follows WHERE id = ?", [$this->user_id]);
                 $views = $this->database->result("SELECT SUM(views) FROM uploads WHERE author = ?", [$this->user_id]);
                 $notifications = $this->database->result("SELECT COUNT(*) FROM user_notifications WHERE recipient = ?", [$this->user_id]);
 
@@ -117,24 +149,37 @@ class Authentication
         }
     }
 
+    /**
+     * function getWarningString
+     *
+     * Returns warning string for auth cookie.
+     *
+     * @return string
+     */
+    public function getWarningString(): string
+    {
+        return $this->cookie_warning_string;
+    }
+
     public function bumpLastActive()
     {
         $this->database->query("UPDATE users SET last_seen = ? WHERE id = ?", [time(), $this->user_id]);
     }
 
     /**
-     * Logs out the user.
+     * Logs out.
      */
     public function logOut(): void
     {
         session_destroy();
+        setcookie("SBAUTH", "", time() - 3600);
         Utilities::redirect('./');
     }
 
     /**
-     * Checks if the user is logged in or not
+     * Returns if logged in or not.
      */
-    public function isUserLoggedIn(): bool
+    public function isLoggedIn(): bool
     {
         return $this->is_logged_in;
     }
@@ -230,6 +275,8 @@ class Authentication
 
     /**
      * Checks if the logged-in user is over 18.
+     * 
+     * TODO: port this over to accounts
      */
     public function isUserOver18(): bool
     {
@@ -243,11 +290,27 @@ class Authentication
     }
 
     /**
+     * Get all users from an account.
+     */
+    public function getUsersFromAccount(): array
+    {
+        if (!$this->account_data) return [];
+
+        return $this->database->fetchArray($this->database->query(
+            "SELECT u.id, u.name
+             FROM users u
+             JOIN account_user_roles r ON r.user = u.id
+             WHERE r.account = ?",
+            [$this->account_data['id']]
+        ));
+    }
+
+    /**
      * Database helper for the user's comfortable rating.
      */
     public function databaseWhereRatingsHelper(): string
     {
-        if ($this->isUserLoggedIn()) {
+        if ($this->isLoggedIn()) {
             $rating = $this->user_data["comfortable_rating"];
 
             $return_value = match ($rating) {

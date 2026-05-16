@@ -92,13 +92,13 @@
                             <a class="menu-item-button" href="{{ link.url }}">{{ link.name }}</a>
                         {% endfor %}
                         <hr>
-                        {% for link in header_user_account_links() %}
-                            <a class="menu-item-button" href="/login/{{ link.username }}">
+                        {% for link in header_user_switcher_links() %}
+                            <a class="menu-item-button" href="/login/{{ link.name }}">
                                 <div class="menu-item-profile-picture profile-picture">
                                     <img src="{{ profile_picture(link.id) }}" class="pfp"
-                                         alt="{{ link.username }}">
+                                         alt="{{ link.name }}">
                                 </div>
-                                <span>{{ link.username }}</span>
+                                <span>{{ link.name }}</span>
                             </a>
                         {% endfor %}
                         <a class="menu-item-button small" href="/login"><span>{{ localize('add_account') }}</span></a>

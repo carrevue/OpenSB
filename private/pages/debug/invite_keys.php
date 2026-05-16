@@ -30,7 +30,7 @@ if (!$sb->isDebug()) {
     die();
 }
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     die("NOT LOGGED IN");
 }
 

@@ -2,8 +2,6 @@
 
 {% set title = localize('login') %}
 
-{% set other_accs = header_user_account_links() %}
-
 	{% block content %}
         <div class="section">
             <div class="section-header">
@@ -21,14 +19,6 @@
                         <div>
                             <div class="login-currently-logged-in-text">
                                 {{ localize('currently_logged_in_as', user_data.name) }}
-                            </div>
-                            <div class="login-currently-logged-in-other-accs">
-                                {% if other_accs %}
-                                    <span>{{ localize('other_accounts') }}</span>
-                                    {% for link in other_accs %}
-                                        <a href="/login/{{ link.username }}">{{ link.username }}</a>{{ not loop.last ? ',' }}
-                                    {% endfor %}
-                                {% endif %}
                             </div>
                         </div>
                     </div>

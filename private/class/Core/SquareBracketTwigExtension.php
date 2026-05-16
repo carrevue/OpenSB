@@ -137,7 +137,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('sidebar_library_links', [$this, 'sidebarLibraryLinks']),
             new TwigFunction('sidebar_user_links', [$this, 'sidebarUserLinks']),
             new TwigFunction('header_user_links', [$this, 'headerUserLinks']),
-            new TwigFunction('header_user_account_links', [$this, 'headerUserAccountLinks']),
+            new TwigFunction('header_user_switcher_links', [$this->authentication, 'getUsersFromAccount']),
             new TwigFunction('footer_links', [$this, 'footerLinks']),
             new TwigFunction('get_css_file_timestamp', [$this->sb, 'getCurrentSkinCssTimestamp']),
             new TwigFunction('upload_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
@@ -556,7 +556,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 ],
             ];
 
-            if ($this->authentication->isUserLoggedIn()) {
+            if ($this->authentication->isLoggedIn()) {
                 $menu["top"]["profile"] = [
                     "name" => $this->localize("my_profile"),
                     "url"  => "/user/" . $user_data["name"],
@@ -621,7 +621,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function sidebarUserLinks(): array
     {
-        if ($this->authentication->isUserLoggedIn()) {
+        if ($this->authentication->isLoggedIn()) {
             // logged in: following
             $users = $this->database->fetchArray(
                 $this->database->query(
@@ -665,7 +665,7 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         $old_trinium_header = isset($options["trinium_old_header"]) && $options["trinium_old_header"] == true;
 
-        if ($this->authentication->isUserLoggedIn()) {
+        if ($this->authentication->isLoggedIn()) {
             $username = $this->authentication->getUserData()["name"];
 
             $array = [
@@ -730,26 +730,13 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     /**
-     * function headerUserAccountLinks
+     * function headerUserSwitcherLinks
      *
      * @return array
      */
-    public function headerUserAccountLinks()
+    public function headerUserSwitcherLinks()
     {
-        $accountsArray = $this->sb->getAccountsArray();
-
-        $array = [];
-
-        foreach ($accountsArray as $account) {
-            $data = $this->database->result("SELECT name FROM users WHERE id = ?", [$account["userid"]]);
-
-            $array[] = [
-                "id" => $account["userid"],
-                "username" => $data,
-            ];
-        }
-
-        return $array;
+        return $this->authentication->getUsersFromAccount();
     }
 
     /**

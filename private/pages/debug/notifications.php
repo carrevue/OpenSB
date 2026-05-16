@@ -51,7 +51,7 @@ if (isset($_POST["submit"])) {
 <h1>Notifications</h1>
 <div>
     <?php
-    if ($auth->isUserLoggedIn()) {
+    if ($auth->isLoggedIn()) {
         echo "Logged in";
     } else {
         echo "NOT LOGGED IN";

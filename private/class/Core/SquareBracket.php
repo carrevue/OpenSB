@@ -187,16 +187,6 @@ class SquareBracket
     private array $skinThemeOptions;
 
     /**
-     * @var array
-     */
-    private array|null $accounts = [];
-
-    /**
-     * @var string
-     */
-    private string $accounts_cookie_warning = "DO-NOT-SHARE-THIS-WITH-ANYONE-";
-
-    /**
      * function __construct
      *
      * Initialize the core OpenSB classes.
@@ -235,11 +225,11 @@ class SquareBracket
         $this->is_debug = ($config["mode"] ?? '') === "DEV";
 
         $this->database = new Database($host, $user, $pass, $db);
-        $this->authentication = new Authentication($this, $_SESSION["SBTOKEN"] ?? null);
+        $this->authentication = new Authentication($this->database);
 
         if (
             $this->is_test_instance &&
-            $this->authentication->isUserLoggedIn() &&
+            $this->authentication->isLoggedIn() &&
             $this->authentication->hasUserAuthenticatedAsStaff()
         ) {
             $this->is_debug = true;
@@ -337,31 +327,6 @@ class SquareBracket
         //
 
         $this->localization = new Localization($this->options);
-
-        if (isset($_COOKIE["SBACCOUNTS"])) {
-            $cookie_raw = $_COOKIE["SBACCOUNTS"];
-
-            // get rid of warning string
-            if (str_starts_with($cookie_raw, $this->accounts_cookie_warning)) {
-                $cookie_raw = substr($cookie_raw, strlen($this->accounts_cookie_warning));
-            }
-
-            $decoded = Utilities::verifySignedCookiePayload($cookie_raw);
-
-            if ($decoded !== false && is_array($decoded)) {
-                $this->accounts = $decoded;
-            } else {
-                // if invalid, reset to empty array
-                $this->accounts = [];
-                Utilities::setSafeCookie(
-                    'SBACCOUNTS',
-                    $this->accounts_cookie_warning . Utilities::makeSignedCookiePayload([]),
-                    time() + (30 * 24 * 60 * 60)
-                );
-            }
-        } else {
-            $this->accounts = [];
-        }
 
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
         if ($this->isFulpTubeMode()) {
@@ -495,7 +460,7 @@ class SquareBracket
     /**
      * function getDatabaseClass
      *
-     * Returns the database class for other classes to use.
+     * Returns the database class.
      *
      * @return Database
      */
@@ -507,7 +472,7 @@ class SquareBracket
     /**
      * function getProfilerClass
      *
-     * Returns the profiler class for other OpenSB classes to use.
+     * Returns the profiler class.
      *
      * @return Profiler
      */
@@ -519,7 +484,7 @@ class SquareBracket
     /**
      * function getStorageClass
      *
-     * Returns the storage class for other OpenSB classes to use.
+     * Returns the storage class.
      *
      * @return Storage
      */
@@ -531,7 +496,7 @@ class SquareBracket
     /**
      * function getAuthenticationClass
      *
-     * Returns the authentication class for other OpenSB classes to use.
+     * Returns the authentication class.
      *
      * @return Authentication
      */
@@ -543,7 +508,7 @@ class SquareBracket
     /**
      * function getLocalizationClass
      *
-     * Returns the localization class for other OpenSB classes to use.
+     * Returns the localization class.
      *
      * @return Localization
      */
@@ -655,30 +620,6 @@ class SquareBracket
     public function getLocalOptions(): array
     {
         return $this->options;
-    }
-
-    /**
-     * function getWarningString
-     *
-     * Returns warning string for accounts cookie.
-     *
-     * @return string
-     */
-    public function getWarningString(): string
-    {
-        return $this->accounts_cookie_warning;
-    }
-
-    /**
-     * function getAccountsArray
-     *
-     * Returns array for changing accounts.
-     *
-     * @return array|string
-     */
-    public function getAccountsArray(): array|string
-    {
-        return $this->accounts ?? [];
     }
 
     /**

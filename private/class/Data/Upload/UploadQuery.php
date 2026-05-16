@@ -72,7 +72,7 @@ class UploadQuery
         $this->auth = $sb->getAuthenticationClass();
         $this->whereRatings = $sb->getAuthenticationClass()->databaseWhereRatingsHelper();
         $this->whereTagBlacklist = $sb->getAuthenticationClass()->databaseWhereTagBlacklistHelper();
-        if ($this->auth->isUserLoggedIn()) {
+        if ($this->auth->isLoggedIn()) {
             $this->userFlags = $this->auth->getUserFlags();
         } else {
             $this->userFlags = 0;
@@ -104,7 +104,7 @@ class UploadQuery
             $whereClauses[] = "v.visibility = " . UploadVisibilityEnum::Public->value;
         }
 
-        if (!$this->auth->isUserLoggedIn()) {
+        if (!$this->auth->isLoggedIn()) {
             $blocked_guest_flag = UploadFlags::FLAG_BLOCK_GUESTS->value;
 
             $whereClauses[] = "v.flags & $blocked_guest_flag != $blocked_guest_flag";
@@ -168,7 +168,7 @@ class UploadQuery
         $whereClauses[] = "v.visibility = " . UploadVisibilityEnum::Public->value;
         //}
 
-        if (!$this->auth->isUserLoggedIn()) {
+        if (!$this->auth->isLoggedIn()) {
             $blocked_guest_flag = UploadFlags::FLAG_BLOCK_GUESTS->value;
 
             $whereClauses[] = "v.flags & $blocked_guest_flag != $blocked_guest_flag";

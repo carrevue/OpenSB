@@ -162,7 +162,13 @@ class Templating
         // TODO: make this dynamically changeable through the dashboard.
         $bannerText = null;
 
-        if ($this->authentication->isUserLoggedIn() && 
+        if ($sb->isTestInstance()) {
+            $bannerText = "hey sorry i'm reworking the auth system so there will be issues. 
+                           if you find any issues (user switching is unsupported atm)
+                           then please report it to me -chaziz";
+        }
+
+        if ($this->authentication->isLoggedIn() && 
             $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value) {
             $localization = $sb->getLocalizationClass();
 
@@ -185,7 +191,7 @@ class Templating
         $this->twig->addGlobal('opensb_version', $this->version_number->getVersionArray());
 
         // user/auth
-        $this->twig->addGlobal('is_user_logged_in', $this->authentication->isUserLoggedIn());
+        $this->twig->addGlobal('is_user_logged_in', $this->authentication->isLoggedIn());
         $this->twig->addGlobal('user_data', $this->authentication->getUserData());
         $this->twig->addGlobal('user_stat_data', $this->authentication->getUserStatData());
         $this->twig->addGlobal('user_is_authenticated_staff', $this->authentication->hasUserAuthenticatedAsStaff());

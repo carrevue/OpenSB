@@ -32,6 +32,7 @@ use Core\Utilities;
 use Random\RandomException;
 use Data\User\UserFlags;
 
+die("unsupported for now. -chaziz 05/16/2026");
 if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
 }

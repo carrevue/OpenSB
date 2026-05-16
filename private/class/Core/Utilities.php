@@ -97,7 +97,7 @@ class Utilities
     {
         global $sb, $database;
 
-        if (!$sb->getAuthenticationClass()->isUserLoggedIn()) {
+        if (!$sb->getAuthenticationClass()->isLoggedIn()) {
             throw new Exception("NotifyUser should not be called if the current user is logged off.");
         }
 

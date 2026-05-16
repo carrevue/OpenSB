@@ -85,7 +85,7 @@ function handleFeaturedUpload($database, $data): false|array
         $upload->isTakenDown()
         || !$upload_data
         || ($upload_data["author"] != $data["id"])
-        || ($bools["block_guests"] && !$auth->isUserLoggedIn())
+        || ($bools["block_guests"] && !$auth->isLoggedIn())
     ) {
         return false;
     } else {

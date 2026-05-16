@@ -65,7 +65,7 @@ class JournalQuery
     {
         $this->database = $sb->getDatabaseClass();
         $this->auth = $sb->getAuthenticationClass();
-        if ($this->auth->isUserLoggedIn()) {
+        if ($this->auth->isLoggedIn()) {
             $this->userFlags = $this->auth->getUserFlags();
         } else {
             $this->userFlags = 0;
@@ -90,7 +90,7 @@ class JournalQuery
         $whereClauses = [];
 
         /*
-        if (!$this->auth->isUserLoggedIn()) {
+        if (!$this->auth->isLoggedIn()) {
             $blocked_guest_flag = JournalFlags::FLAG_BLOCK_GUESTS->value;
             $whereClauses[] = "j.flags & $blocked_guest_flag != $blocked_guest_flag";
         }
@@ -128,7 +128,7 @@ class JournalQuery
         $whereClauses = [];
 
         /*
-        if (!$this->auth->isUserLoggedIn()) {
+        if (!$this->auth->isLoggedIn()) {
             $blocked_guest_flag = JournalFlags::FLAG_BLOCK_GUESTS->value;
             $whereClauses[] = "j.flags & $blocked_guest_flag != $blocked_guest_flag";
         }

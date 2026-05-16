@@ -29,7 +29,19 @@ use Data\User\UserRoleEnum;
 use Data\User\UserFlags;
 use Core\Utilities;
 
-$warning = $sb->getWarningString();
+$warning = $auth->getWarningString();
+
+function updateCookie($user_id, $account_token) {
+    global $warning;
+
+    $cookie = [
+        "user_id" => $user_id,
+        "token" => $account_token,
+    ];
+
+    $signed = Utilities::makeSignedCookiePayload($cookie);
+    Utilities::setSafeCookie('SBAUTH', $warning . $signed, time() + (30 * 24 * 60 * 60));
+}
 
 if (!isset($_SESSION['login_attempts'])) {
     $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
@@ -41,7 +53,22 @@ if (time() - $_SESSION['login_attempts']['first'] > $attempt_window) {
 }
 
 if (isset($user)) {
-    if ($auth->isUserLoggedIn() && $user == $auth->getUserData()["name"]) {
+    die("unsupported for now. -chaziz 05/16/2026");
+    /* NEW CODE
+    if (!$auth->isLoggedIn()) {
+        Utilities::redirect('./');
+    }
+
+    if ($user == $auth->getUserData()["name"]) {
+        Utilities::notifyBanner("notify_login_same_account", "/");
+    }
+
+    // check if we have accessss
+    $permission = $database->result("SELECT user FROM account_user_roles WHERE account = ? AND user ? =", [$acc_logindata["id"]]);
+    */
+
+    /* OLD CODE
+    if ($auth->isLoggedIn() && $user == $auth->getUserData()["name"]) {
         Utilities::notifyBanner("notify_login_same_account", "/");
     }
 
@@ -78,6 +105,7 @@ if (isset($user)) {
     } else {
         Utilities::notifyBanner("You are not logged into this account.", '/login');
     }
+    */
 }
 
 if (isset($_POST["loginsubmit"])) {
@@ -94,18 +122,24 @@ if (isset($_POST["loginsubmit"])) {
         $error = true;
     }
 
+    // TEMPORARY !!!!!!!!!! -chaziz 05/16/2026
     $username = (isset($_POST['username']) ? trim($_POST['username']) : null);
     $password = (isset($_POST['password']) ? $_POST['password'] : null);
 
     if (!$username) $error = true;
     if (!$password) $error = true;
 
-    if ($auth->isUserLoggedIn() && $username == $auth->getUserData()["name"]) {
+    if ($auth->isLoggedIn() && $username == $auth->getUserData()["name"]) {
         Utilities::notifyBanner("notify_login_same_account", "/");
     }
 
     if (!$error) {
-        $logindata = $database->fetch("SELECT password,token,ip,id,flags,powerlevel FROM users WHERE name = ?", [$username]);
+        $acc_logindata = $database->fetch("SELECT password, token, ip, id FROM accounts WHERE email = ?", [$username]);
+
+        // get the first user of an account, this is temporary and will be fixed soon.
+        $oh_god_temporary_hack = $database->result("SELECT user FROM account_user_roles WHERE account = ? LIMIT 1", [$acc_logindata["id"]]);
+
+        $logindata = $database->fetch("SELECT ip, id, flags, powerlevel FROM users WHERE id = ?", [$oh_god_temporary_hack]);
 
         if ($logindata) {
             if (
@@ -116,10 +150,10 @@ if (isset($_POST["loginsubmit"])) {
                 Utilities::notifyBanner("notify_login_test_instance", "/login");
             }
 
-            if ((password_verify($password, $logindata['password']))) {
-                if (password_needs_rehash($logindata['password'], PASSWORD_BCRYPT)) {
+            if ((password_verify($password, $acc_logindata['password']))) {
+                if (password_needs_rehash($acc_logindata['password'], PASSWORD_BCRYPT)) {
                     $new_password_hash = password_hash($password, PASSWORD_BCRYPT);
-                    $database->query("UPDATE users SET password = ? WHERE id = ?", [$new_password_hash, $logindata['id']]);
+                    $database->query("UPDATE accounts SET password = ? WHERE id = ?", [$new_password_hash, $acc_logindata['id']]);
                 }
 
                 /*
@@ -135,59 +169,9 @@ if (isset($_POST["loginsubmit"])) {
 
                 if (!$error) {
                     session_regenerate_id(true);
-                    $_SESSION["SBTOKEN"] = $logindata['token'];
                     $_SESSION["SB_STAFF_AUTHED"] = null;
 
-                    if (isset($_COOKIE['SBACCOUNTS'])) {
-                        $raw = $_COOKIE['SBACCOUNTS'];
-                        if (strpos($raw, $warning) === 0) {
-                            $raw = substr($raw, strlen($warning));
-                        }
-                        $decoded_accounts = Utilities::verifySignedCookiePayload($raw);
-                        if ($decoded_accounts === false) {
-                            $decoded_accounts = [];
-                        }
-                        $safe_accounts = [];
-                        foreach ($decoded_accounts as $entry) {
-                            if (!is_array($entry)) continue;
-                            if (!isset($entry['userid'], $entry['token'])) continue;
-                            if (!ctype_digit((string)$entry['userid'])) continue;
-                            $uid = (int)$entry['userid'];
-                            $tok = (string)$entry['token'];
-                            if (strlen($tok) < 10) continue;
-                            $already = false;
-                            foreach ($safe_accounts as $sa) {
-                                if ($sa['userid'] === $uid) {
-                                    $already = true;
-                                    break;
-                                }
-                            }
-                            if (!$already) $safe_accounts[] = ['userid' => $uid, 'token' => $tok];
-                        }
-
-                        $current_userid = $auth->getUserID();
-                        if ($current_userid && ($current_userid !== (int)$logindata['id'])) {
-                            $safe_accounts[] = [
-                                'userid' => $current_userid,
-                                'token' => $_SESSION['SBTOKEN'],
-                            ];
-                        }
-
-                        $signed = Utilities::makeSignedCookiePayload($safe_accounts);
-                        Utilities::setSafeCookie('SBACCOUNTS', $warning . $signed, time() + (30 * 24 * 60 * 60));
-
-                        $nid = $database->result("SELECT id FROM users WHERE token = ?", [$logindata['token']]);
-                        
-                        if ($logindata['flags'] & UserFlags::FLAG_STEALTH->value) {
-                            $database->query("UPDATE users SET ip = ? WHERE id = ?", [Utilities::getIpAddress(), $nid]);
-                        } else {
-                            $database->query("UPDATE users SET last_seen = ?, ip = ? WHERE id = ?", [time(), Utilities::getIpAddress(), $nid]);
-                        }
-                    } else {
-                        $payload = [['userid' => $auth->getUserID(), 'token' => $_SESSION['SBTOKEN']]];
-                        $signed = Utilities::makeSignedCookiePayload($payload);
-                        Utilities::setSafeCookie('SBACCOUNTS', $warning . $signed, time() + (30 * 24 * 60 * 60));
-                    }
+                    updateCookie($oh_god_temporary_hack, $acc_logindata["token"]);
 
                     $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
 

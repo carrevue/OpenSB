@@ -27,7 +27,7 @@ use Data\User\FakeUser;
 
 if (isset($_POST['submit'])) {
     $auth = $sb->getAuthenticationClass();
-    if ($auth->isUserLoggedIn()) {
+    if ($auth->isLoggedIn()) {
         $userData = $auth->getUserData();
     } else {
         $userData = FakeUser::getFakeUserFromID(-1000);

@@ -6,7 +6,7 @@ namespace Pages\Debug;
 
 global $sb, $auth;
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     http_response_code(403);
     exit("You are either not logged in, or you were logged in. Please log in again.");
 }

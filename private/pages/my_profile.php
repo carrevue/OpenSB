@@ -32,7 +32,7 @@ $options = $sb->getLocalOptions();
 
 $trinium_fonts_array = CustomizationFontEnum::getAll();
 
-if (!$auth->isUserLoggedIn()) {
+if (!$auth->isLoggedIn()) {
     Utilities::notifyBanner("notify_login_required", "/login");
 }
 
