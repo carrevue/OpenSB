@@ -86,12 +86,14 @@ function downscale_video_for_thumbnail($videoWidth, $videoHeight, $targetWidth =
 
 echo (new VersionNumber)->outputVersionBanner();
 
+$ffpath = $sb->getFFmpegPath() ?? '';
+
 // this is hardcoded, Fuck.
 $config = [
     'timeout' => 3600, // The timeout for the underlying process (1 hour)
     'ffmpeg.threads' => get_cpu_cores(),   // The number of threads that FFmpeg should use
-    'ffmpeg.binaries' => 'ffmpeg',
-    'ffprobe.binaries' => 'ffprobe',
+    'ffmpeg.binaries' => $ffpath . 'ffmpeg',
+    'ffprobe.binaries' => $ffpath . 'ffprobe',
 ];
 
 // Here's an example of the required parameters for the upload processor:

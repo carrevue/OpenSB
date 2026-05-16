@@ -253,6 +253,10 @@ if ($sb->isHitchhiker()) {
 }
 
 // user profiles
+$router->add('/channel', function () {
+    if (isset($_GET['n'])) Utilities::redirect('/user/' . $_GET['n'], 301); // og fulptube
+});
+
 $router->add('/user', function () {
     if (isset($_GET['name'])) Utilities::redirect('/user/' . $_GET['name'], 301); // old sb
     if (isset($_GET['n'])) Utilities::redirect('/user/' . $_GET['n'], 301); // og fulptube

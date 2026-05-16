@@ -77,6 +77,11 @@ class SquareBracket
     private Templating $templating;
 
     /**
+     * @var string
+     */
+    private string $ffmpeg_path = '';
+
+    /**
      * @var bool
      */
     private bool $is_debug = false;
@@ -207,6 +212,8 @@ class SquareBracket
         $db = $config["mysql"]["database"];
         $user = $config["mysql"]["username"];
         $pass = $config["mysql"]["password"];
+
+        $this->ffmpeg_path = $config["ffmpeg"]["path"] ?? '';
 
         $allowedSites = ['default', 'test', 'chaziz'];
         if (!in_array($config["site"], $allowedSites)) {
@@ -928,6 +935,18 @@ class SquareBracket
     public function isSpfRequest(): bool
     {
         return isset($_SERVER['HTTP_X_SPF_REQUEST']) || isset($_GET["spf"]);
+    }
+
+    /**
+     * function getFFmpegPath
+     *
+     * Returns path for ffmpeg I Guess Lmao Fuck this fucking shit
+     *
+     * @return string
+     */
+    public function getFFmpegPath(): string
+    {
+        return $this->ffmpeg_path;
     }
 
     /**
