@@ -47,5 +47,21 @@ $database->query("CREATE TABLE `accounts` (
   PRIMARY KEY (`id`)
 )");
 
-$database->query("ALTER TABLE `users`
-ADD `account_id` bigint NULL AFTER `id`;");
+
+// TODO: use foreign keys for every table, also fix inconsistent ints for users. -chaziz 05/15/2026
+$database->query("CREATE TABLE `account_user_roles` (
+  `account` bigint(20) NOT NULL,
+  `user` int(11) NOT NULL,
+  `role` tinyint(4) NOT NULL,
+  UNIQUE KEY `unique_account_user` (`account`,`user`),
+  KEY `idx_user` (`user`),
+  CONSTRAINT `1` FOREIGN KEY (`account`) REFERENCES `accounts` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
+)");
+
+// btw for any of the bluds reading this for their fuckass site
+// you would be better off using peertube than to try adding
+// activitypub support on opensb. i tried it 2 years ago and the
+// protocol sucks ass. opensb is not built for this and you'll end
+// up with a horrifying unoptimized pile of shit. -chaziz 05/15/2026
+

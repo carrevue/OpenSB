@@ -25,7 +25,8 @@ global $sb, $database;
 
 $data = $database->fetchArray($database->query("SELECT accounts.*, GROUP_CONCAT(users.name SEPARATOR ', ') AS users
 FROM accounts
-LEFT JOIN users ON users.account_id = accounts.id
+LEFT JOIN account_user_roles ON account_user_roles.account = accounts.id
+LEFT JOIN users ON users.id = account_user_roles.user
 GROUP BY accounts.id"));
 ?>
 

@@ -1,4 +1,4 @@
--- Adminer 5.4.1 MariaDB 11.8.6-MariaDB-0+deb13u1 from Debian dump
+-- Adminer 5.3.0 MariaDB 12.2.2-MariaDB dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -19,6 +19,18 @@ CREATE TABLE `accounts` (
   `birthdate` date NOT NULL,
   `flags` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+DROP TABLE IF EXISTS `account_user_roles`;
+CREATE TABLE `account_user_roles` (
+  `account` bigint(20) NOT NULL,
+  `user` int(11) NOT NULL,
+  `role` tinyint(4) NOT NULL,
+  UNIQUE KEY `unique_account_user` (`account`,`user`),
+  KEY `idx_user` (`user`),
+  CONSTRAINT `1` FOREIGN KEY (`account`) REFERENCES `accounts` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -86,18 +98,6 @@ CREATE TABLE `journal_comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-DROP TABLE IF EXISTS `posts`;
-CREATE TABLE `posts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `contents` text NOT NULL,
-  `author` int(11) NOT NULL,
-  `timestamp` int(11) NOT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT 0,
-  `reply_to` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 DROP TABLE IF EXISTS `private_messages`;
 CREATE TABLE `private_messages` (
   `id` int(11) NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE `private_messages` (
   `author` int(11) NOT NULL,
   `recipient` int(11) NOT NULL,
   `date` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `uploads`;
@@ -125,21 +125,21 @@ CREATE TABLE `uploads` (
   `upload_file` text DEFAULT NULL COMMENT 'Upload file path',
   `video_length` bigint(20) unsigned DEFAULT NULL COMMENT 'Length of the video in seconds',
   `tags` text DEFAULT NULL COMMENT 'Upload tags, serialized in JSON',
-  `type` int(11) NOT NULL DEFAULT 0 COMMENT 'The upload type, 0 is a video, 1 is a legacy video, 2 is art, and 3 is music.',
+  `type` int(11) NOT NULL DEFAULT 0 COMMENT 'The upload type, 0 is a video, 1 is unused, 2 is image, and 3 is music.',
   `visibility` int(11) NOT NULL DEFAULT 0,
   `rating` enum('general','questionable','mature') NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`,`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `upload_comments`;
 CREATE TABLE `upload_comments` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `location_id` text NOT NULL COMMENT 'ID to video or user.',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `location_id` text NOT NULL,
   `reply_to` bigint(20) NOT NULL DEFAULT 0,
   `comment` text NOT NULL COMMENT 'The comment itself, formatted in Markdown.',
   `author` bigint(20) NOT NULL COMMENT 'Numerical ID of comment author.',
-  `timestamp` bigint(20) NOT NULL COMMENT 'UNIX timestamp when the comment was posted.',
+  `timestamp` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -203,8 +203,8 @@ DROP TABLE IF EXISTS `upload_views`;
 CREATE TABLE `upload_views` (
   `upload_id` text NOT NULL,
   `user` text NOT NULL,
-  `timestamp` int(11) NOT NULL,
-  `type` enum('guest','user') NOT NULL
+  `timestamp` int(11) NOT NULL DEFAULT 0,
+  `type` enum('guest','user') NOT NULL DEFAULT 'guest'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -222,7 +222,6 @@ CREATE TABLE `username_blocklist` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Incrementing ID for internal purposes.',
-  `account_id` bigint(20) DEFAULT NULL,
   `name` varchar(128) NOT NULL COMMENT 'Username, chosen by the user',
   `email` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL COMMENT 'Password, hashed in bcrypt.',
@@ -234,7 +233,7 @@ CREATE TABLE `users` (
   `featured_upload` bigint(20) unsigned NOT NULL DEFAULT 0,
   `title` text NOT NULL COMMENT 'Display Name',
   `about` text DEFAULT NULL COMMENT 'User''s description',
-  `userlink_color` varchar(7) DEFAULT '#0069B4' COMMENT 'The color that the user has set for their profile',
+  `userlink_color` varchar(7) DEFAULT '#0069B4' COMMENT 'The color that the user has set for their username',
   `avatar` tinyint(1) NOT NULL DEFAULT 0,
   `ip` varchar(48) DEFAULT '999.999.999.999',
   `flags` tinyint(3) unsigned NOT NULL DEFAULT 0 COMMENT '8 bools to determine certain user properties',
@@ -243,7 +242,7 @@ CREATE TABLE `users` (
   `powerlevel` tinyint(3) unsigned NOT NULL DEFAULT 1 COMMENT '0 - banned. 1 - normal user. 2 - moderator. 3 - administrator',
   `comfortable_rating` enum('general','questionable','mature') NOT NULL,
   `blacklisted_tags` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`blacklisted_tags`)),
-  PRIMARY KEY (`id`)
+  UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -341,7 +340,7 @@ CREATE TABLE `user_profile_customization` (
   `highlight_box_background_color` varchar(7) NOT NULL DEFAULT '#E6E6E6',
   `highlight_box_text_color` varchar(7) NOT NULL DEFAULT '#000000',
   PRIMARY KEY (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 DROP TABLE IF EXISTS `user_staff_notes`;
@@ -355,4 +354,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-05-13 00:35:17 UTC
+-- 2026-05-16 06:32:09 UTC
