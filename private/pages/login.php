@@ -31,9 +31,7 @@ use Core\Utilities;
 
 $warning = $auth->getWarningString();
 
-function setAccUser($user_id, $account_token) {
-    global $warning;
-
+function setAccUser($user_id, $account_token, $warning) {
     session_regenerate_id(true);
     $_SESSION["SB_STAFF_AUTHED"] = null;
 
@@ -42,6 +40,7 @@ function setAccUser($user_id, $account_token) {
         "token" => $account_token,
     ];
 
+    // TODO: redo this. this is ass. -chaziz 05/17/2026
     $signed = Utilities::makeSignedCookiePayload($cookie);
     Utilities::setSafeCookie('SBAUTH', $warning . $signed, time() + (30 * 24 * 60 * 60));
 
@@ -75,8 +74,7 @@ if (isset($user)) {
     $permission = $database->result("SELECT user FROM account_user_roles WHERE account = ? AND user = ?", [$auth->getAccountID(), $uid]);
 
     if ($permission) {
-        die(var_dump($uid));
-        setAccUser($uid, $auth->getAccountData()["token"]);
+        setAccUser($uid, $auth->getAccountData()["token"], $warning);
         Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$user]);
     } else {
         Utilities::redirect('./');
@@ -183,7 +181,7 @@ if (isset($_POST["loginsubmit"])) {
                 */
 
                 if (!$error) {
-                    setAccUser($oh_god_temporary_hack, $acc_logindata["token"]);
+                    setAccUser($oh_god_temporary_hack, $acc_logindata["token"], $warning);
 
                     Utilities::redirect('./');
                 }

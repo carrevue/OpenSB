@@ -279,7 +279,7 @@ if (!SB_CLI) {
 
     $twig = $sb->getTemplatingClass();
 
-    
+    /* temporarily commented out due to user switcher
     if ($sb->getAuthenticationClass()->isBanned()) {
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $segments = array_values(array_filter(explode('/', $path)));
@@ -293,4 +293,5 @@ if (!SB_CLI) {
             die();
         }
     }
+    */
 }

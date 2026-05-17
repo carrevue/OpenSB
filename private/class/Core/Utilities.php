@@ -244,8 +244,8 @@ class Utilities
      */
     public static function usernameToUserID($database, $username)
     {
-        if ($data = $database->fetch("SELECT id FROM users WHERE name = ?", [$username])) {
-            return $data["id"];
+        if ($data = $database->result("SELECT id FROM users WHERE name = ?", [$username])) {
+            return $data;
         } else {
             return false;
         }
@@ -261,8 +261,8 @@ class Utilities
      */
     public static function userIDToUsername($database, $id)
     {
-        if ($data = $database->fetch("SELECT name FROM users WHERE id = ?", [$id])) {
-            return $data["name"];
+        if ($data = $database->result("SELECT name FROM users WHERE id = ?", [$id])) {
+            return $data;
         } else {
             return false;
         }
@@ -746,6 +746,7 @@ class Utilities
     public static function setSafeCookie(string $name, string $value, int $expire = 0)
     {
         $secure = self::isThisHttps();
+        
         setcookie($name, $value, [
             'expires' => $expire,
             'path' => '/',

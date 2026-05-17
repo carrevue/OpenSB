@@ -164,8 +164,7 @@ class Templating
 
         if ($sb->isTestInstance()) {
             $bannerText = "hey sorry i'm reworking the auth system so there will be issues. 
-                           if you find any issues (user switching is unsupported atm)
-                           then please report it to me -chaziz";
+                           if you find any issues then please report it to me -chaziz";
         }
 
         if ($this->authentication->isLoggedIn() && 

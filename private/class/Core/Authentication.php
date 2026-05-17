@@ -32,6 +32,7 @@ class Authentication
     private Database $database;
     private bool $is_logged_in = false;
     private int $user_id;
+    private int $account_id;
     private array|false $account_data;
     private array|false $user_data;
     private $user_ban_data;
@@ -49,6 +50,8 @@ class Authentication
             // get rid of warning string
             if (str_starts_with($cookie_raw, $this->cookie_warning_string)) {
                 $cookie_raw = substr($cookie_raw, strlen($this->cookie_warning_string));
+            } else {
+                return;
             }
 
             $decoded = Utilities::verifySignedCookiePayload($cookie_raw);
@@ -86,6 +89,7 @@ class Authentication
             $fields = implode(", ", $user_fields);
 
             $this->account_data = $this->database->fetch("SELECT * FROM accounts WHERE token = ?", [$active["token"]]);
+            $this->account_id = $this->account_data["id"];
 
             $role_row = $this->database->fetch(
                 "SELECT role FROM account_user_roles WHERE account = ? AND user = ?",
@@ -93,6 +97,7 @@ class Authentication
             );
 
             if (!$role_row) {
+                die("YOUR SHIT FUCKED.");
                 return; // user doesn't belong to this account
             }
 
@@ -164,6 +169,7 @@ class Authentication
     public function bumpLastActive()
     {
         $this->database->query("UPDATE users SET last_seen = ? WHERE id = ?", [time(), $this->user_id]);
+        $this->database->query("UPDATE accounts SET last_login = ? WHERE id = ?", [time(), $this->ac]);
     }
 
     /**
@@ -185,7 +191,15 @@ class Authentication
     }
 
     /**
-     * Returns only the user's id
+     * Returns only the current user's id
+     */
+    public function getAccountID(): ?int
+    {
+        return $this->is_logged_in ? $this->account_id : null;
+    }
+
+    /**
+     * Returns only the current account's id
      */
     public function getUserID(): ?int
     {
@@ -193,7 +207,17 @@ class Authentication
     }
 
     /**
-     * Returns user data
+     * Returns current account data
+     */
+    public function getAccountData(): ?array
+    {
+        return $this->is_logged_in
+            ? $this->account_data
+            : [];
+    }
+
+    /**
+     * Returns current user data
      */
     public function getUserData(): ?array
     {
