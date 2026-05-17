@@ -31,8 +31,11 @@ use Core\Utilities;
 
 $warning = $auth->getWarningString();
 
-function updateCookie($user_id, $account_token) {
+function setAccUser($user_id, $account_token) {
     global $warning;
+
+    session_regenerate_id(true);
+    $_SESSION["SB_STAFF_AUTHED"] = null;
 
     $cookie = [
         "user_id" => $user_id,
@@ -41,20 +44,22 @@ function updateCookie($user_id, $account_token) {
 
     $signed = Utilities::makeSignedCookiePayload($cookie);
     Utilities::setSafeCookie('SBAUTH', $warning . $signed, time() + (30 * 24 * 60 * 60));
+
+    $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
 }
 
 if (!isset($_SESSION['login_attempts'])) {
     $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
 }
+
 $max_attempts = 8;
 $attempt_window = 300; // 5 minutes
+
 if (time() - $_SESSION['login_attempts']['first'] > $attempt_window) {
     $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
 }
 
 if (isset($user)) {
-    die("unsupported for now. -chaziz 05/16/2026");
-    /* NEW CODE
     if (!$auth->isLoggedIn()) {
         Utilities::redirect('./');
     }
@@ -63,9 +68,19 @@ if (isset($user)) {
         Utilities::notifyBanner("notify_login_same_account", "/");
     }
 
-    // check if we have accessss
-    $permission = $database->result("SELECT user FROM account_user_roles WHERE account = ? AND user ? =", [$acc_logindata["id"]]);
-    */
+    // get user id
+    $uid = Utilities::usernameToUserID($database, $user);
+
+    // check if we have access
+    $permission = $database->result("SELECT user FROM account_user_roles WHERE account = ? AND user = ?", [$auth->getAccountID(), $uid]);
+
+    if ($permission) {
+        die(var_dump($uid));
+        setAccUser($uid, $auth->getAccountData()["token"]);
+        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$user]);
+    } else {
+        Utilities::redirect('./');
+    }
 
     /* OLD CODE
     if ($auth->isLoggedIn() && $user == $auth->getUserData()["name"]) {
@@ -168,12 +183,7 @@ if (isset($_POST["loginsubmit"])) {
                 */
 
                 if (!$error) {
-                    session_regenerate_id(true);
-                    $_SESSION["SB_STAFF_AUTHED"] = null;
-
-                    updateCookie($oh_god_temporary_hack, $acc_logindata["token"]);
-
-                    $_SESSION['login_attempts'] = ['count' => 0, 'first' => time()];
+                    setAccUser($oh_god_temporary_hack, $acc_logindata["token"]);
 
                     Utilities::redirect('./');
                 }
