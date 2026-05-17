@@ -192,6 +192,8 @@ if (
     (isset($_POST['upload']) || isset($_POST['upload_video'])) &&
     $auth->isLoggedIn()
 ) {
+    $auth->bumpLastActive();
+
     $new = Utilities::generateRandomString(11, true);
     $uploader = $auth->getUserID();
     $title = $_POST['title'] ?? null;
@@ -244,10 +246,6 @@ if (
                 $flags |= UploadFlags::FLAG_UNPROCESSED->value;
                 $target = "$path/videos/$new.$ext";
 
-                if (!move_uploaded_file($temp, $target)) {
-                    throw new Exception("Failed to move uploaded file.");
-                }
-
                 $sb->getStorageClass()->processVideoUpload($new, $target);
 
                 $uploadFilePath = "dynamic/videos/$new";
@@ -255,8 +253,6 @@ if (
 
             case 'image':
                 $uploadTypeEnum = UploadTypeEnum::Image;
-
-                $sb->getStorageClass()->processImageUpload($temp, $new);
 
                 $uploadFilePath = "/dynamic/art/$new.png";
                 break;
@@ -294,11 +290,28 @@ if (
             discord_webhook_notify($sb, $new, $title, $desc, $auth);
         }
 
-        $auth->bumpLastActive();
-
         $database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"] + 1, $auth->getUserID()]);
         $database->query("INSERT INTO upload_number_history (upload, date, views, views_raw) VALUES (?,?,?,?)", [$new, date('Y-m-d'), 0, 0]);
-        
+
+        // move this here to avoid processing videos that failed to be inserted in the db
+        // as apparantly this is an issue that can happen. -chaziz 05/16/2026 
+        switch ($type) {
+            case 'video':
+                if (!move_uploaded_file($temp, $target)) {
+                    throw new Exception("Failed to move uploaded file.");
+                }
+
+                $sb->getStorageClass()->processVideoUpload($new, $target);
+                break;
+
+            case 'image':
+                $sb->getStorageClass()->processImageUpload($temp, $new);
+                break;
+
+            default:
+                return;
+        }
+
         // ugh. -chaziz 03/04/2026
         $reupload_suspect_title = [
             "nickelodeon",
