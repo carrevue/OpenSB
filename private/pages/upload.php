@@ -246,8 +246,6 @@ if (
                 $flags |= UploadFlags::FLAG_UNPROCESSED->value;
                 $target = "$path/videos/$new.$ext";
 
-                $sb->getStorageClass()->processVideoUpload($new, $target);
-
                 $uploadFilePath = "dynamic/videos/$new";
                 break;
 
