@@ -30,6 +30,7 @@ define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() I
 use Core\Utilities;
 use Core\Router;
 
+use Data\Account\AccountFlags;
 use Data\User\UserRoleEnum;
 use Data\User\UserFlags;
 
@@ -174,7 +175,7 @@ if ($sb->isTestInstance())
     if (
         $auth->isLoggedIn()
         && !$auth->userHasRole(UserRoleEnum::Moderator)
-        && !($auth->getUserFlags() & UserFlags::FLAG_QA_ACCESS->value)
+        && !($auth->getAccountFlags() & AccountFlags::FLAG_QA_ACCESS->value)
     ) {
         $auth->logOut();
     }

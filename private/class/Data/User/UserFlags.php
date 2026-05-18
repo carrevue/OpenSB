@@ -34,6 +34,8 @@ enum UserFlags: int
      * @note In earlier versions of OpenSB, this was only used for 
      * squareBracket/FulpTube's manual Discord verification. Since
      * OpenSB 2.1, this has changed to be used for email verification.
+     * 
+     * @deprecated Moved to AccountFlags
      */
     case FLAG_UNVERIFIED = 2;
 
@@ -59,11 +61,15 @@ enum UserFlags: int
     
     /**
      * 01000000: Account was created on FulpTube.rocks
+     * 
+     * @deprecated Moved to AccountFlags
      */
     case FLAG_FULPTUBE_ACCOUNT = 64;
 
     /**
      * 10000000: Account has access to the QA instance
+     * 
+     * @deprecated Moved to AccountFlags
      */
     case FLAG_QA_ACCESS = 128;
 

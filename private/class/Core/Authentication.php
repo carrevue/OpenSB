@@ -21,6 +21,7 @@
 
 namespace Core;
 
+use Data\Account\AccountFlags;
 use Data\User\UserRoleEnum;
 use Data\User\UserFlags;
 
@@ -285,7 +286,7 @@ class Authentication
     }
 
     /**
-     * Returns the current user's list of flags.
+     * Returns the current user's flags.
      */
     public function getUserFlags($array = false)
     {
@@ -293,6 +294,18 @@ class Authentication
             return UserFlags::toArray($this->user_data['flags']);
         } else {
             return $this->user_data['flags'];
+        }
+    }
+
+    /**
+     * Returns the current account's flags.
+     */
+    public function getAccountFlags($array = false)
+    {
+        if ($array) {
+            return AccountFlags::toArray($this->account_data['flags']);
+        } else {
+            return $this->account_data['flags'];
         }
     }
 

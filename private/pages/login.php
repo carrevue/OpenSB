@@ -25,8 +25,8 @@ namespace Pages;
 
 global $twig, $database, $auth, $sb;
 
+use Data\Account\AccountFlags;
 use Data\User\UserRoleEnum;
-use Data\User\UserFlags;
 use Core\Utilities;
 
 $warning = $auth->getWarningString();
@@ -136,29 +136,29 @@ if (isset($_POST["loginsubmit"])) {
     }
 
     // TEMPORARY !!!!!!!!!! -chaziz 05/16/2026
-    $username = (isset($_POST['username']) ? trim($_POST['username']) : null);
+    $email = (isset($_POST['email']) ? trim($_POST['email']) : null);
     $password = (isset($_POST['password']) ? $_POST['password'] : null);
 
-    if (!$username) $error = true;
+    if (!$email) $error = true;
     if (!$password) $error = true;
 
-    if ($auth->isLoggedIn() && $username == $auth->getUserData()["name"]) {
+    if ($auth->isLoggedIn() && $email == $auth->getUserData()["name"]) {
         Utilities::notifyBanner("notify_login_same_account", "/");
     }
 
     if (!$error) {
-        $acc_logindata = $database->fetch("SELECT password, token, ip, id FROM accounts WHERE email = ?", [$username]);
+        $acc_logindata = $database->fetch("SELECT password, token, ip, id, flags FROM accounts WHERE email = ?", [$email]);
 
         // get the first user of an account, this is temporary and will be fixed soon.
         $oh_god_temporary_hack = $database->result("SELECT user FROM account_user_roles WHERE account = ? LIMIT 1", [$acc_logindata["id"]]);
 
-        $logindata = $database->fetch("SELECT ip, id, flags, powerlevel FROM users WHERE id = ?", [$oh_god_temporary_hack]);
+        $logindata = $database->fetch("SELECT ip, id, powerlevel FROM users WHERE id = ?", [$oh_god_temporary_hack]);
 
         if ($logindata) {
             if (
                 $sb->isTestInstance()
                 && $logindata['powerlevel'] < UserRoleEnum::Moderator->value
-                && !($logindata['flags'] & UserFlags::FLAG_QA_ACCESS->value)
+                && !($acc_logindata['flags'] & AccountFlags::FLAG_QA_ACCESS->value)
             ) {
                 Utilities::notifyBanner("notify_login_test_instance", "/login");
             }
