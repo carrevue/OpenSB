@@ -1,6 +1,6 @@
 {% extends "_layout.twig" %}
 
-{% if is_user_logged_in %}
+{% if logged_in %}
     {% set jumbotronClassName = "homepage-logged-in" %}
 {% else %}
     {% set jumbotronClassName = "homepage-logged-out" %}
@@ -10,7 +10,7 @@
     <div class="jumbotron page-banner homepage">
         <div class="jumbotron-container {{ jumbotronClassName }}">
             <div class="jumbotron-welcome">
-                {% if is_user_logged_in %}
+                {% if logged_in %}
                     <div class="profile-picture">
                         <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
                     </div>

@@ -1,5 +1,5 @@
 <div class="header">
-    <div class="header-container {% if not is_user_logged_in %}logged-out{% endif %}">
+    <div class="header-container {% if not logged_in %}logged-out{% endif %}">
         <div class="header-main">
             {% if not options.trinium_old_header %}
                 <div class="header-button">
@@ -28,7 +28,7 @@
             </form>
         </div>
         <div class="header-links">
-            {% if is_user_logged_in %}
+            {% if logged_in %}
                 {% if not options.trinium_old_header %}
                 {# create #}
                     <div class="header-menu-container">
@@ -67,6 +67,7 @@
                     </div>
                     <div class="menu" id="user-menu">
                         {% if not options.trinium_old_header %}
+                            <div>{{ account_data.email }}</div>
                             <div class="user-menu-intro">
                                 <div class="user-menu-intro-left">
                                     <div class="profile-picture">
@@ -76,7 +77,7 @@
                                 </div>
                                 <div class="user-menu-intro-right">
                                     <div class="user-menu-intro-name">
-                                        {{ user_data.name }}
+                                        {{ user_data.title }}
                                     </div>
                                     <div class="user-menu-intro-stat">
                                         {{ localize('followers', user_stat_data.followers) }}
@@ -96,12 +97,12 @@
                             <a class="menu-item-button" href="/login/{{ link.name }}">
                                 <div class="menu-item-profile-picture profile-picture">
                                     <img src="{{ profile_picture(link.id) }}" class="pfp"
-                                         alt="{{ link.name }}">
+                                         alt="{{ link.title }}">
                                 </div>
-                                <span>{{ link.name }}</span>
+                                <span>{{ link.title }}</span>
                             </a>
                         {% endfor %}
-                        <a class="menu-item-button small" href="/login"><span>{{ localize('add_account') }}</span></a>
+                        <a class="menu-item-button small" href="/logout"><span>{{ localize('logout') }}</span></a>
                     </div>
                 </div>
             {% else %}

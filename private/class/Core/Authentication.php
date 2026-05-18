@@ -97,7 +97,6 @@ class Authentication
             );
 
             if (!$role_row) {
-                die("YOUR SHIT FUCKED.");
                 return; // user doesn't belong to this account
             }
 
@@ -169,7 +168,7 @@ class Authentication
     public function bumpLastActive()
     {
         $this->database->query("UPDATE users SET last_seen = ? WHERE id = ?", [time(), $this->user_id]);
-        $this->database->query("UPDATE accounts SET last_login = ? WHERE id = ?", [time(), $this->ac]);
+        $this->database->query("UPDATE accounts SET last_login = ? WHERE id = ?", [time(), $this->account_id]);
     }
 
     /**
@@ -321,7 +320,7 @@ class Authentication
         if (!$this->account_data) return [];
 
         return $this->database->fetchArray($this->database->query(
-            "SELECT u.id, u.name
+            "SELECT u.id, u.name, u.title
              FROM users u
              JOIN account_user_roles r ON r.user = u.id
              WHERE r.account = ?",

@@ -9,6 +9,8 @@
 !error/**
 !mail/
 !mail/**
+!dashboard/
+!dashboard/**
 
 # vsc is kinda fucking stupid and treats finalium and bootstrap as git modules
 bootstrap/

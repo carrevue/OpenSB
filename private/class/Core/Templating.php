@@ -190,7 +190,8 @@ class Templating
         $this->twig->addGlobal('opensb_version', $this->version_number->getVersionArray());
 
         // user/auth
-        $this->twig->addGlobal('is_user_logged_in', $this->authentication->isLoggedIn());
+        $this->twig->addGlobal('logged_in', $this->authentication->isLoggedIn());
+        $this->twig->addGlobal('account_data', $this->authentication->getAccountData());
         $this->twig->addGlobal('user_data', $this->authentication->getUserData());
         $this->twig->addGlobal('user_stat_data', $this->authentication->getUserStatData());
         $this->twig->addGlobal('user_is_authenticated_staff', $this->authentication->hasUserAuthenticatedAsStaff());

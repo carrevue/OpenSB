@@ -6,7 +6,7 @@
             </a>
         </li>
     {% endfor %}
-    {% if is_user_logged_in and enable_incomplete_features and options.exp_collections %}
+    {% if logged_in and enable_incomplete_features and options.exp_collections %}
         <li class="list-header">{{ localize('library') }}</li>
         {% for key, link in sidebar_library_links() %}
             <li class="list-link">
@@ -19,7 +19,7 @@
     {% endif %}
     {% if sidebar_user_links() %}
         <li class="list-header">
-            {% if is_user_logged_in %}
+            {% if logged_in %}
                 {{ localize('following') }}
             {% else %}
                 {{ localize('best_of_site', website_branding.name )}}

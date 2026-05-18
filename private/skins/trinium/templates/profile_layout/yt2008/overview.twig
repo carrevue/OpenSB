@@ -7,7 +7,7 @@
                         <h2 class="section-title">{{ common.displayname }}</h2>
                     </div>
                     <div class="section-header-right">
-                        {% if is_user_logged_in %}
+                        {% if logged_in %}
                             {% if not common.is_current %}
                                 <button class="button secondary small" id="follow-user">
                                     {% if common.following %}

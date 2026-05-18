@@ -96,7 +96,7 @@
                                         {{ user_link(upload.author) }}
                                     </div>
                                     <div class="watch-box-author-follow">
-                                        {% if not upload.is_owner and not upload.author_banned and is_user_logged_in %}
+                                        {% if not upload.is_owner and not upload.author_banned and logged_in %}
                                             <button class="button secondary small" id="follow-user">
                                                 {% if upload.author.following %}
                                                     {{ localize('unfollow') }}

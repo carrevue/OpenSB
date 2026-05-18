@@ -21,7 +21,7 @@
             done();
         }
     });
-    {% if not is_user_logged_in %}
+    {% if not logged_in %}
     starRating.disable();
     {% endif %}
 </script>

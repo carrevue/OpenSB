@@ -23,7 +23,7 @@
             {% endif %}
 
             <div class="post-actions">
-                {% if comment.id and is_user_logged_in %}
+                {% if comment.id and logged_in %}
                 <a class="action-button reply-button" data-comment-id="{{ comment.id }}">{{ localize('reply_action') }}</a>
                     {% if options.exp_comment_rating %}
                         <a class="action-button like-button" data-comment-id="{{ comment.id }}">{{ localize('like') }}</a>
@@ -33,7 +33,7 @@
             </div>
 
             <div class="replies" id="replies-{{ comment.id }}">
-                {% if comment.id and is_user_logged_in %}
+                {% if comment.id and logged_in %}
                     <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
                         <div class="profile-picture">
                             <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">

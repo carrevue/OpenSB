@@ -27,7 +27,7 @@
         }
     </style>
 
-    {% if is_user_logged_in and options.trinium_link_coloring %}
+    {% if logged_in and options.trinium_link_coloring %}
         <style>
             :root {
                 --link-color: {{ user_data.userlink_color }};

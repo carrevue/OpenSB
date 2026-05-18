@@ -698,9 +698,10 @@ class SquareBracketTwigExtension extends AbstractExtension
                 }
             }
 
-            // remove write link on trinium
+            // remove write and logout link on trinium
             if ($options["skin"] == "trinium" && !$old_trinium_header) {
                 unset($array["write"]);
+                unset($array["logout"]);
             }
 
             if ($this->authentication->userHasRole(UserRoleEnum::Moderator)) {

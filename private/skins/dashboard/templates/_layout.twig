@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="{{ language_code }}" dir="ltr" class="{{ page_name|split(' ')|first }}">
+<head>
+    {{ include('_html_head.twig') }} {# TODO: THEMES #}
+    <link rel="stylesheet" href="/assets/css/trinium-default.css?r={{ get_css_file_timestamp() }}">
+</head>
+<body>
+<div class="headers">
+    <div class="header">
+        <div class="header-container">
+            <div class="header-main">
+                <div class="header-logo">
+                    {{ website_branding.name }} Dashboard
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page">
+        <div class="container">
+            <div class="content">
+                <div class="page">
+                    <div class="page-contents">
+                        {% block content %}{% endblock %}
+                        <footer class="footer">
+                            <div class="footer-container">
+                                <div class="footer-powered-by">
+                                    <span>{{ localize('powered_by') }} OpenSB {{ opensb_version.name }} {{ opensb_version.number }}</span>
+                                </div>
+                                <div class="footer-copyright">
+                                    <span>{{ localize('footer_copyright', ('now' | date('Y'))) }}</span>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    opensb_version = '{{ opensb_version.name }} {{ opensb_version.string }}';
+</script>
+<script src="/assets/common.js?r={{ get_css_file_timestamp() }}"></script>
+</body>
+</html>
