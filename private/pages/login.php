@@ -75,50 +75,9 @@ if (isset($user)) {
 
     if ($permission) {
         setAccUser($uid, $auth->getAccountData()["token"], $warning);
-        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$user]);
-    } else {
-        Utilities::redirect('./');
     }
 
-    /* OLD CODE
-    if ($auth->isLoggedIn() && $user == $auth->getUserData()["name"]) {
-        Utilities::notifyBanner("notify_login_same_account", "/");
-    }
-
-    $is_the_account_in_the_accounts_array = false;
-    $id = Utilities::usernameToUserID($database, $user);
-    $accounts = $sb->getAccountsArray();
-    $new_array = [];
-    $token = null;
-
-    foreach ($accounts as $account) {
-        if (!isset($account['userid'], $account['token'])) continue;
-        if ($account['userid'] == $id) {
-            if (!$is_the_account_in_the_accounts_array) {
-                $is_the_account_in_the_accounts_array = true;
-                $token = $account['token'];
-                $new_array[] = [
-                    'userid' => $auth->getUserID(),
-                    'token' => $_SESSION['SBTOKEN'] ?? null,
-                ];
-            }
-        } else {
-            $new_array[] = $account;
-        }
-    }
-
-    if ($is_the_account_in_the_accounts_array) {
-        $_SESSION["SBTOKEN"] = $token;
-        $_SESSION["SB_STAFF_AUTHED"] = null;
-
-        $signed = Utilities::makeSignedCookiePayload($new_array);
-        Utilities::setSafeCookie('SBACCOUNTS', $warning . $signed, time() + (30 * 24 * 60 * 60));
-
-        Utilities::notifyBanner("notify_login_switched_account", '/', "success", [$user]);
-    } else {
-        Utilities::notifyBanner("You are not logged into this account.", '/login');
-    }
-    */
+    Utilities::redirect(Utilities::getURL());
 }
 
 if (isset($_POST["loginsubmit"])) {

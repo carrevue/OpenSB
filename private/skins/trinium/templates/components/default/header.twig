@@ -67,7 +67,7 @@
                     </div>
                     <div class="menu" id="user-menu">
                         {% if not options.trinium_old_header %}
-                            <div>{{ account_data.email }}</div>
+                            <div class="user-menu-email">{{ account_data.email }}</div>
                             <div class="user-menu-intro">
                                 <div class="user-menu-intro-left">
                                     <div class="profile-picture">
@@ -93,15 +93,18 @@
                             <a class="menu-item-button" href="{{ link.url }}">{{ link.name }}</a>
                         {% endfor %}
                         <hr>
-                        {% for link in header_user_switcher_links() %}
-                            <a class="menu-item-button" href="/login/{{ link.name }}">
-                                <div class="menu-item-profile-picture profile-picture">
-                                    <img src="{{ profile_picture(link.id) }}" class="pfp"
-                                         alt="{{ link.title }}">
-                                </div>
-                                <span>{{ link.title }}</span>
-                            </a>
-                        {% endfor %}
+                        <div class="user-switcher">
+                            {% for link in header_user_switcher_links() %}
+                                <a class="menu-item-button" href="/login/{{ link.name }}">
+                                    <div class="menu-item-profile-picture profile-picture">
+                                        <img src="{{ profile_picture(link.id) }}" class="pfp"
+                                            alt="{{ link.title }}">
+                                    </div>
+                                    <span>{{ link.title }}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                        <hr>
                         <a class="menu-item-button small" href="/logout"><span>{{ localize('logout') }}</span></a>
                     </div>
                 </div>

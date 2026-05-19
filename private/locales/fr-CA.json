@@ -366,7 +366,6 @@
     "notify_upload_tag_blacklist_logged_out": "Cette publication n'est pas accessible.",
     "notify_upload_unverified": "L'auteur de ce publication n'a pas été vérifié.",
     "notify_updated_featured_upload": "La publication épinglée de votre profil a été remplacée avec succès.",
-    "notify_login_switched_account": "Vous êtes maintenant connecté à %s.",
     "notify_login_not_logged_in": "Vous n'êtes pas connecté à ce compte.",
     "notify_login_same_account": "Vous êtes présentement connecté à ce compte.",
     "notify_login_banned_account": "Ce compte est banni.",

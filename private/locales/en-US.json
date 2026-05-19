@@ -422,7 +422,6 @@
     "notify_upload_tag_blacklist_logged_out": "This upload contains tags that are blacklisted by default.",
     "notify_upload_unverified": "This upload's author has not been verified.",
     "notify_updated_featured_upload": "You have successfully changed your profile's featured upload.",
-    "notify_login_switched_account": "You have successfully switched to %s.",
     "notify_login_not_logged_in": "You are not logged into this account.",
     "notify_login_same_account": "You're already logged into this account.",
     "notify_login_banned_account": "This account is banned.",

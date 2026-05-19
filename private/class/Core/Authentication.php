@@ -333,7 +333,7 @@ class Authentication
         if (!$this->account_data) return [];
 
         return $this->database->fetchArray($this->database->query(
-            "SELECT u.id, u.name, u.title
+            "SELECT u.id, u.name, u.title, u.f_index
              FROM users u
              JOIN account_user_roles r ON r.user = u.id
              WHERE r.account = ?",

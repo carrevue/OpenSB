@@ -170,7 +170,6 @@
     "notify_upload_tag_blacklist_logged_out": "Este video contiene etiquetas que están bloqueadas por defecto.",
     "notify_upload_unverified": "El autor de este video no ha sido verificado.",
     "notify_updated_featured_upload": "Has cambiado exitosamente el video destacado de tu perfil.",
-    "notify_login_switched_account": "Has cambiado exitosamente a %s.",
     "notify_login_same_account": "Actualmente estás conectado en esta cuenta.",
     "notify_login_banned_account": "Esta cuenta está bloqueada.",
     "notify_login_incorrect": "Credenciales incorrectas.",
