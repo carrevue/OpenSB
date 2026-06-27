@@ -38,50 +38,74 @@ $uploads_featured = $upload_query->query(
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
 
-// select users if they're 
-// 1. not shadowbanned
-// 2. are in the top 20 of being most followed or are featured
-// 3. have last logged in the last month (this does not apply to staff)
-// 4. not banned
-$recommended_users = $database->fetchArray(
-    $database->query(
-        "SELECT u.id, u.name
-        FROM users u
-        WHERE u.u_index >= 6
-        AND (
-            (u.flags & ?) != ?
+if ($auth->isUserLoggedIn()) {
+    $following_users = $database->fetchArray(
+        $database->query(
+            "SELECT u.id, u.name
+            FROM users u
+            WHERE u.u_index >= 1
+            AND (
+                u.id IN (SELECT id FROM user_follows WHERE user = ?)
+            )
+            AND (
+                u.id NOT IN (SELECT user FROM user_bans)
+            )
+            ORDER BY RAND() LIMIT 6",
+            [$auth->getUserId()]
         )
-        AND (
-            (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 20) t))
-            OR (u.flags & ?) = ?
+    );
+}
+
+if (!empty($following_users)) {
+    $recommended_users = $following_users;
+} else {
+    // select users if they're 
+    // 1. not shadowbanned
+    // 2. are in the top 20 of being most followed or are featured
+    // 3. have last logged in the last month (this does not apply to staff)
+    // 4. not banned
+    $recommended_users = $database->fetchArray(
+        $database->query(
+            "SELECT u.id, u.name
+            FROM users u
+            WHERE u.u_index >= 6
+            AND (
+                (u.flags & ?) != ?
+            )
+            AND (
+                (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 20) t))
+                OR (u.flags & ?) = ?
+            )
+            AND (
+                u.powerlevel != 1 OR u.last_seen > ?
+            )
+            AND (
+                u.id NOT IN (SELECT user FROM user_bans)
+            )
+            ORDER BY RAND() LIMIT 6",
+            [
+                UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value,
+                UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value,
+                strtotime('-1 month')
+            ]
         )
-        AND (
-            u.powerlevel != 1 OR u.last_seen > ?
-        )
-        AND (
-            u.id NOT IN (SELECT user FROM user_bans)
-        )
-        ORDER BY RAND() LIMIT 6",
-        [
-            UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value,
-            UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value,
-            strtotime('-1 month')
-        ]
-    )
-);
+    );
+}
 
 $localization = $sb->getLocalizationClass();
 
-$feed = [
-    "featured" => [
+$feed = [];
+
+if (empty($following_users)) {
+    $feed["featured"] = [
         "icon" => $is_hitchhiker
                 ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
                 : "/assets/skin/finalium/homepage_featured.svg",
         "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),
         "label" => $localization->translate('featured_uploads_desc'),
         "uploads" => $uploads_featured,
-    ],
-];
+    ];
+}
 
 // this feels somewhat inefficient?
 foreach ($recommended_users as $user) {
@@ -92,7 +116,7 @@ foreach ($recommended_users as $user) {
         "label" => $localization->translate('recommended_member'),
         "link" => "/user/" . $user["name"],
         "uploads" => $upload_query->query(
-            "RAND()",
+            "uploaded DESC",
             10,
             sprintf("v.author = %d", $user["id"])
         )->toCleanArray(),

@@ -102,6 +102,10 @@ if ($sb->isFulpTubeMode()) {
     }
 }
 
+if (!isset($id)) {
+    handle_error("notify_invalid_upload");
+}
+
 $upload = new UploadData($database, $id);
 
 // check if the upload has been taken down.
