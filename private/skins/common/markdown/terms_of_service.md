@@ -1,6 +1,6 @@
 # Terms of Service
 
-Last updated on March 1st 2026.
+Last updated on May 31st 2026.
 
 <!-- chazizsb start -->
 <!-- fulptube start -->
@@ -8,6 +8,13 @@ Last updated on March 1st 2026.
 
 This website has no affiliation with, and is not endorsed by Alphabet Inc., Google LLC, nor Newgrounds.com, Inc. The FulpTube interface, also known as the "Finalium skin", is a libre recreation of the old YouTube hitchhiker interface. This is an enthusiast project. We do not run on advertisements, and we have no plans for any form of monetization.
 <!-- fulptube end -->
+
+## Off-platform
+Unlike other simillar platforms, we do not care about off-platform behavior.
+
+However, there is an important exception:
+
+* You are prohibited from using the platform if you have a history of sexually exploiting or grooming minors (individuals under 18), or possessing/distributing CSAM.
 <!-- chazizsb end -->
 
 ## Agreement
