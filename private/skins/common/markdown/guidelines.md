@@ -1,5 +1,5 @@
 # Community Guidelines 
-Last updated on July 1st 2026.
+Last updated on July 2nd 2026.
 
 ## Users
 
