@@ -157,9 +157,6 @@
     "ban_filed_temporary": "Your ban was filed on %s, and will expire on %s.",
     "ban_filed_permanent": "Your ban was filed on %s, and will not expire.",
 
-    "list": "List",
-    "grid": "Grid",
-
     "homepage_random_uploads": "Random",
     "homepage_random_uploads_desc": "Random selection of uploads",
 
@@ -175,14 +172,19 @@
     "best_of_site": "Best of %s",
     "featured_on_site": "Featured on %s",
 
+    "recommended": "Recommended",
+
     "featured_uploads": "Featured",
-    "featured_uploads_desc": "Curated by staff",
+    "featured_uploads_desc": "Uploads curated by staff",
 
     "recent_members": "Members",
     "recent_members_desc": "Last 5 members online",
 
     "recommended_member": "Recommended member",
     "recommended_member_hitchhiker": "Recommended channel",
+
+    "recommended_member_for_you": "Recommended for you",
+    "recommended_member_for_you_hitchhiker": "Recommended channel for you",
 
     "site_news": "News",
     "site_news_desc": "Site announcements",

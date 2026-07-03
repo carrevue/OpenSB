@@ -100,7 +100,12 @@ if (empty($following_users)) {
                 ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
                 : "/assets/skin/finalium/homepage_featured.svg",
         "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),
-        "label" => $localization->translate('featured_uploads_desc'),
+        "desc" => $localization->translate('featured_uploads_desc'),
+        "uploads" => $uploads_featured,
+    ];
+} else {
+    $feed["recommended"] = [
+        "title" => $localization->translate('recommended'),
         "uploads" => $uploads_featured,
     ];
 }
@@ -111,7 +116,7 @@ foreach ($recommended_users as $user) {
     $feed[$feed_key] = [
         "icon" => $sb->getStorageClass()->getUserProfilePicture($user["id"]),
         "title" => $user["title"],
-        "label" => $localization->translate('recommended_member'),
+        "label" => $auth->isLoggedIn() ? $localization->translate('recommended_member_for_you') : $localization->translate('recommended_member'),
         "link" => "/user/" . $user["name"],
         "uploads" => $upload_query->query(
             "uploaded DESC",

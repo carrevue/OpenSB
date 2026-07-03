@@ -115,7 +115,7 @@
                             </div>
                             <div class="watch-box-right">
                                 <div class="watch-box-views">
-                                    {{ upload.interactions.views | format_number }}
+                                    {{ localize('views', upload.interactions.views) }}
                                 </div>
                                 <div id="rater"></div>
                                 <div class="watch-box-ratings-number">
@@ -129,7 +129,6 @@
                                 <div class="watch-box-description-info">
                                     {{ localize('uploaded_on', upload.published | format_date('long', 'short')) }}
                                 </div>
-                                {#<div class="button danger small">Favorite</div>#}
                             </div>
                             {% if upload.published_originally and upload.original_site %}
                                 <div class="watch-box-description-info-small">

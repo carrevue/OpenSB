@@ -45,6 +45,11 @@ $tabs = [
         "order" => "u.f_index DESC",
         "where" => null,
     ],
+    "uploads" => [
+        "name" => "uploads",
+        "order" => "u.u_index DESC",
+        "where" => null,
+    ],
     "random" => [
         "name" => "random",
         "order" => "RAND()",
