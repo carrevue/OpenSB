@@ -1,8 +1,8 @@
 # Privacy Policy
 
-Last updated on March 1st 2026.
+Last updated on July 4th 2026.
 
-This is the privacy policy for the website FulpTube (``fulptube.rocks``), alternatively known as squareBracket (``squarebracket.pw``).
+This is the privacy policy for the website FulpTube (``fulptube.rocks``), alternatively known as squareBracket (``squarebracket.pw``, ``squarebracket.me``).
 
 The only people who have full server and database access are Chaziz, Jack/shiypc and magnum22, who are the website owners and server operators. Staff members do not have full server or database access and can only use tools provided from the dashboard.
 
