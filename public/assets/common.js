@@ -61,3 +61,18 @@ function setUpModal(trigger_button, modal, close_button) {
         console.debug("Modal set up for", modal.id);
     }
 }
+
+async function fetchWithRetry(url, options = {}, maxRetries = 3, baseDelayMs = 500) {
+    console.debug(`Fetching ${url}`);
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        const response = await fetch(url, options);
+
+        if (response.status !== 429 || attempt === maxRetries) {
+            return response;
+        }
+
+        const delayMs = baseDelayMs * 2 ** attempt;
+        console.log(`Rate limited while trying to fetch ${url}. Retrying in ${delayMs}ms (attempt ${attempt + 1}/${maxRetries})`);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+}

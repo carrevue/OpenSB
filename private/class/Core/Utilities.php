@@ -581,12 +581,14 @@ class Utilities
         // de-fuck urls
         $output = strtr($output, [
             'fulptube.pw' => 'squarebracket.pw',
+            'fulptube.me' => 'squarebracket.me',
             'fulptube.veselcraft.ru' => 'squarebracket.veselcraft.ru', // this domain still works lol
         ]);
 
         // now replace all *actual* squarebracket urls with fulptube.rocks
         $output = strtr($output, [
             '://squarebracket.pw' => '://fulptube.rocks',
+            '://squarebracket.me' => '://fulptube.rocks',
             '://squarebracket.veselcraft.ru' => '://fulptube.rocks',
         ]);
 

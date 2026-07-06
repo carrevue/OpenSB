@@ -1,7 +1,7 @@
 <div class="post" id="comment-{{ comment.id }}">
     <a href="/user/{{ comment.author.info.username }}">
         <div class="profile-picture user-id-{{ comment.author.id }}">
-            <img src="{{ profile_picture(comment.author.id) }}" class="pfp" alt="{{ comment.author.info.username }}">
+            <img src="{{ profile_picture(comment.author.id) }}" class="pfp" alt="{{ comment.author.info.username }}" loading="lazy">
         </div>
     </a>
     <div class="post-body">
@@ -36,7 +36,7 @@
                 {% if comment.id and logged_in %}
                     <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
                         <div class="profile-picture">
-                            <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+                            <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}" loading="lazy">
                         </div>
                         <div class="new-reply-form">
                             <textarea id="reply_contents_{{ comment.id }}" placeholder="{{ localize('write_reply') }}" maxlength="1000" rows="3"></textarea>

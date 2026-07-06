@@ -38,10 +38,10 @@
         {% for upload in uploads %}
             <div class="content-entry">
                 <div class="content-thumbnail">
-                    <img src="{{ thumbnail(upload.id, upload.type, true) }}" alt="{{ upload.title }}" class="content-image thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, true) }}" alt="{{ upload.title }}" class="content-image thumbnail" loading="lazy">
                 </div>
                 <div class="content-thumbnail">
-                    <img src="{{ thumbnail(upload.id, upload.type, false) }}" alt="{{ upload.title }}" class="content-image thumbnail">
+                    <img src="{{ thumbnail(upload.id, upload.type, false) }}" alt="{{ upload.title }}" class="content-image thumbnail" loading="lazy">
                 </div>
                 <div class="content-info">
                     <div class="content-title">

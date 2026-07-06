@@ -238,7 +238,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $branding = $this->sb->getBrandingSettings();
                 $markdown = new Parsedown();
 
-                // hide sections not meant to be seen outside of squarebracket.pw / fulptube.rocks
+                // hide sections not meant to be seen outside of squarebracket / fulptube.rocks
                 if (!$this->sb->isChazizInstance()) {
                     $text = preg_replace('/<!--\s*chazizsb\s+start\s*-->.*?<!--\s*chazizsb\s+end\s*-->/s', '', $text);
                 }

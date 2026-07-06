@@ -1,7 +1,7 @@
 {% if logged_in %}
 <div class="new-post" id="comment_field">
     <div class="profile-picture">
-        <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+        <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}" loading="lazy">
     </div>
     <div id="new-comment-button">
         {{ localize('write_comment') }}

@@ -1,7 +1,7 @@
 <div class="post" id="post-{{ post.id }}">
     <a href="/user/{{ post.author.info.username }}">
         <div class="profile-picture user-id-{{ post.author.id }}">
-            <img src="{{ profile_picture(post.author.id) }}" class="pfp" alt="{{ post.author.info.username }}">
+            <img src="{{ profile_picture(post.author.id) }}" class="pfp" alt="{{ post.author.info.username }}" loading="lazy">
         </div>
     </a>
     <div class="post-body">

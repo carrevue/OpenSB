@@ -844,7 +844,7 @@ class SquareBracket
      * function isChazizInstance
      *
      * Returns a bool that indicates if the instance is set to "Chaziz" mode. this is the
-     * mode used on squarebracket.pw and fulptube.rocks.
+     * mode used on squarebracket and fulptube.rocks.
      *
      * @return bool
      */
