@@ -120,10 +120,7 @@ class Templating
 
         $skinPath = 'skins/' . $this->skin;
 
-        // load in the skin info
-        $info = $this->getSkinInfo($this->skin);
-
-        $this->skin_options = $info["metadata"]["options"] ?? [];
+        $this->skin_options = $this->sb->getSkinThemeOptions();
 
         $templatePath = $skinPath . '/templates';
 
@@ -205,8 +202,7 @@ class Templating
         $this->twig->addGlobal('current_skin', $this->skin);
         $this->twig->addGlobal('skins', $this->getAllSkinsInfo());
         $this->twig->addGlobal('language_code', $this->sb->getLocalizationClass()->getLanguageCode());
-        $this->twig->addGlobal('skin_options', $this->sb->getCurrentSkinInfo()["options"] ?? []);
-        $this->twig->addGlobal('theme_options', $this->sb->getCurrentThemeInfo()["options"] ?? []);
+        $this->twig->addGlobal('skin_theme_options', $this->skin_options);
 
         // options/settings
         $this->twig->addGlobal('options', $sb->getLocalOptions());
@@ -322,17 +318,6 @@ class Templating
             trigger_error(sprintf($e->getMessage()), E_USER_WARNING);
             return null;
         }
-    }
-
-    /**
-     * function getCurrentSkinOptions
-     *
-     * Get the current skin's options.
-     *
-     * @return array
-     */
-    public function getCurrentSkinOptions() {
-        return $this->skin_options ?? [];
     }
 
     /**
@@ -494,7 +479,7 @@ class Templating
             throw new RuntimeException("generateFinaliumIconMap() called when the current skin isn't Finalium");
         }
 
-        if ($this->theme == "hitchhiker") {
+        if ($this->skin_options["finalium_hitchhiker_icons"] ?? false) {
             $this->finalium_icon_map = [
                 'account_settings' => 'account-settings',
                 'alert_info' => 'alert-info',

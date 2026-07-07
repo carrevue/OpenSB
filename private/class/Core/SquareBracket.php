@@ -748,7 +748,11 @@ class SquareBracket
 
         $isDebugMode = ($this->options['debug_fulptube_branding'] ?? false) && ($this->isTestInstance() || $this->isDebug());
 
-        if ($this->is_chaziz_instance && ($isOnFulpTubeDomain || $this->isHitchhiker() || $isDebugMode)) {
+        if ($this->is_chaziz_instance && (
+                $isOnFulpTubeDomain ||
+                ($this->skinThemeOptions["fulptube_branding"] ?? false) || 
+                $isDebugMode)
+            ) {
             return true;
         } else {
             return false;

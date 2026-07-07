@@ -94,7 +94,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $this->authentication = $this->sb->getAuthenticationClass();
         $this->twig = $twig;
         
-        $this->skin_options = $templating->getCurrentSkinOptions();
+        $this->skin_options = $this->sb->getSkinThemeOptions();
     }
 
     /**
@@ -813,12 +813,12 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getIcon($icon, $size = "16", $class = null)
     {
-        if ($this->sb->getCurrentSkinName() === "bootstrap" || ($this->sb->getCurrentSkinName() === "finalium" && $this->sb->getCurrentThemeName() !== "hitchhiker")) {
-            $root_class = "bi";
-            $svg = "bootstrap-icons.svg";
-        } elseif ($this->sb->getCurrentSkinName() === "finalium" && $this->sb->getCurrentThemeName() === "hitchhiker") {
+        if ($this->sb->getCurrentSkinName() === "finalium" && ($this->sb->getSkinThemeOptions()["finalium_hitchhiker_icons"] ?? false)) {
             $root_class = "icon";
             $svg = "skin/finalium/icons.svg";
+        } elseif ($this->sb->getCurrentSkinName() === "bootstrap" || $this->sb->getCurrentSkinName() === "finalium") {
+            $root_class = "bi";
+            $svg = "bootstrap-icons.svg";
         } else {
             $root_class = "icon";
             $svg = "icons.svg";

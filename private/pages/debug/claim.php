@@ -34,7 +34,7 @@ if (!$auth->isLoggedIn()) {
     die("NOT LOGGED IN");
 }
 ?>
-<h1>Claim a channel (non-functional)</h1>
+<h1>Claim a channel</h1>
 <p>If you have a channel made before Mayvember 32th 5259, you can claim it here. It will be linked to your <?php echo $sb->getBrandingSettings()["name"]; ?> account <?php echo $auth->getAccountData()["email"]; ?>.</p>
 <p>This does not include accounts made on the original FulpTube during 2020-2021.</p>
 <form action="/debug/claim" method="post">
