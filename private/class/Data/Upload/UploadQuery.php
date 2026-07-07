@@ -90,7 +90,7 @@ class UploadQuery
      *
      * @return UploadResult
      */
-    public function query($order, $limit, $whereCondition = null, $params = [], $adminPanel = false): UploadResult
+    public function query($order = null, $limit = null, $whereCondition = null, $params = [], $adminPanel = false): UploadResult
     {
         $query = "SELECT v.*, COALESCE(NULLIF(original_timestamp, 0), `timestamp`) AS uploaded FROM uploads v";
         $whereClauses = [];
@@ -135,11 +135,13 @@ class UploadQuery
             $query .= " WHERE " . implode(" AND ", $whereClauses);
         }
 
-        if (str_contains($limit, "LIMIT")) {
+        if ($order !== null) {
+            $query .= " ORDER BY $order";
+        }
+        
+        if ($limit !== null) {
             // compatibility with Core\Database::paginate()
-            $query .= " ORDER BY $order $limit";
-        } else {
-            $query .= " ORDER BY $order LIMIT $limit";
+            $query .= str_contains((string)$limit, "LIMIT") ? " $limit" : " LIMIT $limit";
         }
 
         return new UploadResult($this->database, $this->database->fetchArray($this->database->query($query, $params)));

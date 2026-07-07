@@ -83,7 +83,7 @@ class PlaylistData
 
         if ($this->data != []) {
             $this->uploads = array_column(
-                $this->database->fetchArray($this->database->query("SELECT upload FROM playlist_items WHERE playlist = ?", [$this->data["id"]])),
+                $this->database->fetchArray($this->database->query("SELECT upload FROM playlist_items WHERE playlist = ? ORDER BY position", [$this->data["id"]])),
                 'upload'
             );
         }

@@ -116,9 +116,9 @@ if (empty($following_users)) {
     if ($playlist->getData() != null) {
         $upload_map = $playlist->getUploads();
         $query = implode(', ', $upload_map);
-
+        
         $playlist_uploads = $upload_query->query(
-            "uploaded DESC",
+            sprintf("FIELD(v.id, %s)", implode(",", array_map('intval', $upload_map))),
             20,
             sprintf("v.id in (%s)", $query)
         )->toCleanArray();
