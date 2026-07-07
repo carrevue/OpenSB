@@ -34,6 +34,8 @@ global $database;
 // Oops! Temporarily Hardcoded!
 $playlist_id = 1;
 
+$database->query("DELETE FROM playlist_items WHERE playlist = ?", [$playlist_id]);
+
 // for the time being: this will only handle the "popular right now" playlist.
 // on youtube, the "popular right now" playlist was a list of 200 most viewed
 // videos posted within the last 3 days. i don't know the exact algorithm, but
