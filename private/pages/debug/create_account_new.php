@@ -33,6 +33,10 @@ if (!$sb->isDebug()) {
     die();
 }
 
+if ($sb->isIpLookupEnabled()) {
+    $ipInfo = $sb->getIpLookupClass()->getInfo(Utilities::getIpAddress());
+}
+
 if (isset($_POST["submit"])) {
     // dont validate shit (except already taken names and birthdates)
 
@@ -76,9 +80,17 @@ if (isset($_POST["submit"])) {
     $accid = $database->insertId();
 
     $database->query(
-        "INSERT INTO users (account_id, name, password, token, joined, last_seen, title, email, ip, birthdate)
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [$accid, $username, "", $token, time(), time(), $username, $email_address, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d')]
+        "INSERT INTO users (name, password, token, joined, last_seen, title, email, ip, birthdate)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [$username, "", $token, time(), time(), $username, $email_address, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d')]
+    );
+
+    $userid = $database->insertId();
+
+    $database->query(
+        "INSERT INTO account_user_roles (account, user, role)
+                          VALUES (?, ?, ?)",
+        [$accid, $userid, 3]
     );
 
     if ($sb->isDiscordWebhookEnabled()) {
@@ -86,7 +98,7 @@ if (isset($_POST["submit"])) {
             "username" => $username,
             "email" => $email_address,
             "ip" => Utilities::getIpAddress(),
-            "asn" => $ipInfo['as_name'] ?? "Unknown" . " (" . $ipInfo['asn'] ?? "Unknown" . ")",
+            "asn" => ($ipInfo['as_name'] ?? "Unknown") . " (" . ($ipInfo['asn'] ?? "Unknown") . ")",
         ];
 
         $sb->getDiscordWebhookClass()->newUserHook($data);
