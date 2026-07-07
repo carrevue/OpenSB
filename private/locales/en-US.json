@@ -14,10 +14,8 @@
 
     "library": "Library",
 
-    "collections": "Collections",
-    "collection": "Collection",
-    "collections_hitchhiker": "Playlists",
-    "collection_hitchhiker": "Playlist",
+    "playlists": "Playlists",
+    "playlist": "Playlist",
 
     "follow": "Follow",
     "followed": "Followed",
@@ -173,6 +171,7 @@
     "featured_on_site": "Featured on %s",
 
     "recommended": "Recommended",
+    "by_user": "by %s",
 
     "featured_uploads": "Featured",
     "featured_uploads_desc": "Uploads curated by staff",

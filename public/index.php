@@ -217,6 +217,8 @@ $router->add('/my_uploads', 'my_uploads.php');
 $router->add('/news', 'news.php');
 $router->add('/notifications', 'notifications.php');
 $router->add('/privacy', 'privacy.php');
+$router->add('/playlist', 'playlist.php');
+$router->add('/playlist/{id}', 'playlist.php');
 //$router->add('/read', 'read.php'); TODO
 //$router->add('/read/{id}', 'read.php'); TODO
 $router->add('/search', 'search.php');
@@ -241,15 +243,6 @@ if (Utilities::isClassicSkin()) {
 } else {
     $router->add('/watch', function () {
         if (isset($_GET['v'])) Utilities::redirect('/view/' . $_GET['v'], 301);
-    });
-}
-
-// well. this is awkward
-if ($sb->isHitchhiker()) {
-    $router->add('/playlist', 'collection.php');
-} else {
-    $router->add('/playlist', function () {
-        if (isset($_GET['list'])) Utilities::redirect('/collection/' . $_GET['list'], 301);
     });
 }
 

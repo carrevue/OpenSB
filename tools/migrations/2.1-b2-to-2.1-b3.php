@@ -65,3 +65,33 @@ $database->query("CREATE TABLE `account_user_roles` (
 // protocol sucks ass. opensb is not built for this and you'll end
 // up with a horrifying unoptimized pile of shit. -chaziz 05/15/2026
 
+
+// playlists
+$database->query("CREATE TABLE `playlists` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `playlist_id` varchar(11) NOT NULL,
+  `title` varchar(128) NOT NULL,
+  `description` text DEFAULT NULL,
+  `author` bigint(20) unsigned NOT NULL,
+  `timestamp` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `updated_timestamp` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `upload_count` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `flags` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `visibility` int(11) NOT NULL DEFAULT 0,
+  `thumbnail_upload` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_playlist_id` (`playlist_id`),
+  KEY `idx_author` (`author`),
+  KEY `idx_visibility` (`visibility`)
+)");
+
+$database->query("CREATE TABLE `playlist_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `playlist` bigint(20) unsigned NOT NULL,
+  `upload` bigint(20) unsigned NOT NULL,
+  `position` int(11) unsigned NOT NULL,
+  `timestamp` bigint(20) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_playlist_upload` (`playlist`,`upload`),
+  KEY `idx_playlist_position` (`playlist`,`position`)
+)");

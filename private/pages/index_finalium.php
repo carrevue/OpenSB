@@ -26,15 +26,19 @@ global $twig, $database, $sb;
 use Data\Upload\UploadFlags;
 use Data\Upload\UploadQuery;
 use Core\Utilities;
+use Data\User\UserData;
 use Data\User\UserFlags;
+use Data\Playlist\PlaylistData;
 
 $upload_query = new UploadQuery($sb);
 
+/*
 $uploads_featured = $upload_query->query(
     "uploaded DESC",
     15,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
+*/
 
 if ($auth->isLoggedIn()) {
     $following_users = $database->fetchArray(
@@ -95,6 +99,7 @@ $localization = $sb->getLocalizationClass();
 $feed = [];
 
 if (empty($following_users)) {
+    /*
     $feed["featured"] = [
         "icon" => $sb->getCurrentThemeName() === 'hitchhiker'
                 ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
@@ -103,11 +108,37 @@ if (empty($following_users)) {
         "desc" => $localization->translate('featured_uploads_desc'),
         "uploads" => $uploads_featured,
     ];
+    */
+
+    // temporary code for testing playlists -chaziz 07/07/2026
+    $playlist = new PlaylistData($database, "test");
+
+    if ($playlist->getData() != null) {
+        $upload_map = $playlist->getUploads();
+        $query = implode(', ', $upload_map);
+
+        $playlist_uploads = $upload_query->query(
+            "uploaded DESC",
+            20,
+            sprintf("v.id in (%s)", $query)
+        )->toCleanArray();
+
+        $author = new UserData($database, $playlist->getData()["author"]);
+
+        // temporary shit -chaziz 07/07/2026
+        $feed["playlist"] = [
+            "icon" => $sb->getStorageClass()->getUserProfilePicture($playlist->getData()["author"]),
+            "title" => $playlist->getData()["title"],
+            "author" => $author->getUserArray(),
+            "desc" => $playlist->getData()["description"],
+            "uploads" => $playlist_uploads,
+        ];
+    }
 } else {
-    $feed["recommended"] = [
+    /*$feed["recommended"] = [
         "title" => $localization->translate('recommended'),
         "uploads" => $uploads_featured,
-    ];
+    ];*/
 }
 
 // this feels somewhat inefficient?

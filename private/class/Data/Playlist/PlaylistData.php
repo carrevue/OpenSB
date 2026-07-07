@@ -19,17 +19,17 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Data\Collection;
+namespace Data\Playlist;
 
 use Core\Database;
 use Data\User\UserData;
 
 /**
- * class CollectionData
+ * class PlaylistData
  *
- * This class handles upload collection data.
+ * This class handles upload playlist data.
  */
-class CollectionData
+class PlaylistData
 {
     /**
      * @var Database The database class
@@ -37,14 +37,19 @@ class CollectionData
     private Database $database;
 
     /**
-     * @var UserData The collection's author
+     * @var UserData The playlist's author
      */
     private ?UserData $author;
 
     /** 
-     * @var array|false|null Collection data 
+     * @var array|false|null Playlist data 
      */
     private array|false|null $data = null;
+
+    /** 
+     * @var array|false|null List of uploads in the playlist
+     */
+    private array|false|null $uploads = null;
 
     /**
      * function __construct
@@ -57,9 +62,10 @@ class CollectionData
     public function __construct(Database $database, string $id)
     {
         $this->database = $database;
+        /*
         $this->data = [
-            "title" => "Collection Title",
-            "description" => "This is a collection of uploads.",
+            "title" => "Playlist Title",
+            "description" => "This is a playlist of uploads.",
             "author" => 1,
             "timestamp" => 0,
             "timestamp_updated" => time(),
@@ -71,20 +77,40 @@ class CollectionData
         if ($this->data != []) {
             $this->author = new UserData($database, $this->data["author"]);
         }
+        */
+        
+        $this->data = $this->database->fetch("SELECT * FROM playlists WHERE playlist_id = ?", [$id]);
+
+        if ($this->data != []) {
+            $this->uploads = array_column(
+                $this->database->fetchArray($this->database->query("SELECT upload FROM playlist_items WHERE playlist = ?", [$this->data["id"]])),
+                'upload'
+            );
+        }
     }
 
     /**
-     * Get the collection data.
+     * Get the playlist data.
      *
-     * @return array|null Array containing collection data, or null if not found.
+     * @return array|null Array containing playlist data, or null if not found.
      */
     public function getData()
     {
-        return $this->data;
+        return $this->data ?? [];
     }
 
     /**
-     * Get the collection author's data.
+     * Get the list of uploads in the playlist.
+     *
+     * @return array|null Array of upload integer IDs, or null if not found.
+     */
+    public function getUploads()
+    {
+        return $this->uploads ?? [];
+    }
+
+    /**
+     * Get the playlist author's data.
      *
      * @return array
      */
