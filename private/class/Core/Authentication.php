@@ -129,8 +129,7 @@ class Authentication
                     // dumbass hack, this is because we cant access the global $path variable
                     // set in /public/index.php since it probably hasnt been defined yet at this
                     // point in the code.
-                    $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-                    $path = explode('/', $uri);
+                    $path = Utilities::getPathAsArray();
                     if ($path[1] != "verify_birthdate") {
                         Utilities::redirect("/verify_birthdate");
                     }

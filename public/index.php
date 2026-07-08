@@ -166,8 +166,7 @@ function automatic_ip_ban()
 
 if ($sb->isTestInstance())
 {
-    $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-    $path = explode('/', $uri);
+    $path = Utilities::getPathAsArray();
 
     $auth = $sb->getAuthenticationClass();
 
@@ -219,8 +218,6 @@ $router->add('/notifications', 'notifications.php');
 $router->add('/privacy', 'privacy.php');
 $router->add('/playlist', 'playlist.php');
 $router->add('/playlist/{id}', 'playlist.php');
-//$router->add('/read', 'read.php'); TODO
-//$router->add('/read/{id}', 'read.php'); TODO
 $router->add('/search', 'search.php');
 $router->add('/settings', 'settings.php');
 $router->redirect('/staff', '/about');
@@ -256,7 +253,9 @@ $router->add('/user', function () {
     if (isset($_GET['n'])) Utilities::redirect('/user/' . $_GET['n'], 301); // og fulptube
 });
 $router->add('/user/{username}', 'profile/overview.php'); // overview
-$router->add('/user/{username}/uploads', 'profile/uploads.php'); // uploads
+$router->add('/user/{username}/uploads', 'profile/uploads.php'); // uploads (trinium)
+$router->add('/user/{username}/videos', 'profile/uploads.php'); // videos (finalium)
+$router->add('/user/{username}/images', 'profile/uploads.php'); // images (finalium)
 $router->add('/user/{username}/comments', 'profile/comments.php'); // comments
 $router->add('/user/{username}/journals', 'profile/journals.php'); // journals
 $router->add('/user/{username}/about', 'profile/about.php'); // about (mainly finalium-specific)
@@ -293,6 +292,9 @@ $router->redirect('/admin/{page}', '/dashboard'); // just redirect to /dashboard
 // dashboard routes
 $router->add('/dashboard', 'dashboard/index.php');
 $router->add('/dashboard/login', 'dashboard/login.php');
+
+$router->add('/dashboard/accounts', 'dashboard/accounts.php');
+$router->add('/dashboard/accounts/{id}', 'dashboard/account_edit.php');
 $router->add('/dashboard/asn_bans', 'dashboard/asn_bans.php');
 $router->add('/dashboard/users', 'dashboard/users.php');
 $router->add('/dashboard/users/{username}', 'dashboard/user_edit.php');

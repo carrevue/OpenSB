@@ -6,10 +6,10 @@
     {% set le_url = '?page=%s&amount=' ~ amount %}
 {% endif %}
 
-{% set title = "Users" %}
+{% set title = "Accounts" %}
 
 {% set breadcrumbs = [
-    { url: '/dashboard/users', label: "Users" },
+    { url: '/dashboard/accounts', label: "Accounts" },
 ] %}
 
 {% block dashboard_content %}
@@ -18,7 +18,7 @@
 
     <div class="content-box">
         <div class="form-flex">
-            <form action="/dashboard/users/" method="GET" id="num_change" class="admin-form-select">
+            <form action="/dashboard/accounts/" method="GET" id="num_change" class="admin-form-select">
                 <select name="amount" onchange="this.form.submit()">
                     {% for option in [8, 16, 24, 32, 48, 64, 96, 128, 256] %}
                         <option value="{{ option }}" {{ amount == option ? 'selected' }}>{{ option }}</option>
@@ -26,7 +26,7 @@
                 </select>
             </form>
 
-            <form method="GET" action="/dashboard/users/" class="admin-form-search">
+            <form method="GET" action="/dashboard/accounts/" class="admin-form-search">
                 <input type="hidden" name="amount" value="{{ amount }}">
                 <input type="text" name="search" value="{{ search }}" placeholder="{{ localize('search') }}...">
                 <button type="submit" class="button secondary">
@@ -35,38 +35,26 @@
             </form>
         </div>
         <hr>
-        {% for user in users %}
+        {% for account in accounts %}
             <div class="content-entry admin-entry">
                 <div class="content-image profile-picture">
-                    <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp">
+                    <img src="https://gravatar.com/avatar/{{ account.gravatar }}" alt="{{ account.email }}" class="pfp">
                 </div>
                 <div class="content-info">
                     <div class="content-title">
-                        {{ user_link(user) }}
+                        {{ account.email }} ({{ account.id }})
                     </div>
                     <div class="content-detail">
-                        <span>{{ localize('upload_count', user.uploads) }}</span>
-                        <span>{{ localize('journal_count', user.journals) }}</span>
+                        Default user:
                     </div>
                     <div class="content-detail">
-                        Role:
-                        {% set role = 
-                            user.powerlevel == 1 ? 'User' :
-                            user.powerlevel == 2 ? 'Moderator' :
-                            user.powerlevel == 3 ? 'Administrator' :
-                            user.powerlevel == 4 ? 'Owner' :
-                            'Unknown (' ~ user.powerlevel ~ ')'
-                        %}
-                        {{ role }}
+                        Registered: {{ account.registered | relative_time() }}
                     </div>
                     <div class="content-detail">
-                        Registered: {{ user.info.joined | relative_time() }}
+                        Last sign in: {{ account.last_login | relative_time() }}
                     </div>
                     <div class="content-detail">
-                        Last active: {{ user.info.last_active | relative_time() }}
-                    </div>
-                    <div class="content-detail">
-                        {% if user.info.flags.unverified and not user.banned %}
+                        {#{% if user.info.flags.unverified and not user.banned %}
                             <span class="text-faded">Unverified</span>
                         {% endif %}
                         {% if user.banned %}
@@ -74,11 +62,11 @@
                         {% endif %}
                         {% if user.info.flags.featured %}
                             <span class="text-success">Featured</span>
-                        {% endif %}
+                        {% endif %}#}
                     </div>
                 </div>
                 <div class="admin-user-buttons">
-                    <a class="button secondary" href="/dashboard/users/{{ user.info.username }}">
+                    <a class="button secondary" href="/dashboard/accounts/{{ account.id }}">
                         Manage
                     </a>
                 </div>

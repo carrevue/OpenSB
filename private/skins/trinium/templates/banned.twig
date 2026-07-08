@@ -8,11 +8,15 @@
             <h1 class="section-title">{{ localize('ban_title') }}</h1>
         </div>
         <div class="content-box">
-            <p>{{ localize('ban_intro_1', user_data.name) }}</p>
+            <p>{{ localize('ban_intro_1', account_data.email) }}</p>
             <p>{{ localize('ban_intro_2', '/tos', '/guidelines') | raw }}</p>
-            <p>{{ localize('ban_filed_permanent', timestamp | format_date('long', 'long') ) }}</p>
+            {% if expiration is not null %}
+                <p>{{ localize('ban_filed_temporary', timestamp | format_date('long', 'long'), expiration | format_date('long', 'long') ) }}</p>
+            {% else %}
+                <p>{{ localize('ban_filed_permanent', timestamp | format_date('long', 'long') ) }}</p>
+            {% endif %}
+            <p>{{ localize('ban_reason', reason) }}</p>
             <p>{{ localize('ban_evasion_warning') }}</p>
-            {#<p>Reason: {{ reason }}</p>#}
             <div class="form-button-container">
                 <a href="/logout" class="button accent">{{ localize('logout') }}</a>
             </div>

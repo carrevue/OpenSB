@@ -8,6 +8,10 @@
 
 {% set title = "ASN bans" %}
 
+{% set breadcrumbs = [
+    { url: '/dashboard/asn_bans', label: "ASN bans" },
+] %}
+
 {% block dashboard_content %}
     {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
     {% set current_page = page %}

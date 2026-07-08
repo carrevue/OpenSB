@@ -53,6 +53,17 @@ class Utilities
         return $protocol . '://' . $host;
     }
 
+    public static function getPathAsArray(): array
+    {
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            return [];
+        }
+
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = trim($path, '/');
+        return $path === '' ? [] : explode('/', $path);
+    }
+
     public static function redirect(string $url, int $statusCode = 302): never
     {
         header("Location: $url", true, $statusCode);

@@ -37,9 +37,12 @@ if (isset($_POST['submit'])) {
     $expirationTimestamp = !empty($_POST['expiration'])
         ? strtotime($_POST['expiration'])
         : null;
+    $banReason = !empty($_POST['reason'])
+        ? $_POST['reason']
+        : 'No reason specified.';
 
     $banData = [
-        'reason'     => 'Debug ban preview',
+        'reason'     => $banReason,
         'timestamp'  => $banTimestamp,
         'expiration' => $expirationTimestamp,
         'user_data'  => $userData, // override Templating's userdata
@@ -65,6 +68,11 @@ if (isset($_POST['submit'])) {
     <div>
         <label for="expiration">Expiration:</label>
         <input type="datetime-local" id="expiration" name="expiration"> 
+    </div>
+
+    <div>
+        <label for="reason">Reason:</label>
+        <input type="text" id="reason" name="reason">
     </div>
 
     <p style="color: red;">this does NOT ban you</p>
