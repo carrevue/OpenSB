@@ -368,7 +368,7 @@ class Storage
      */
     public function getUserProfileBanner(int $user): array
     {
-        $default_finalium = /*$this->sb->isHitchhiker() ? "/assets/default_banner.svg" :*/ false;
+        $default_finalium = $this->sb->isHitchhiker() ? "/assets/default_banner.svg" : false;
 
         $path_trinium = '/banners/' . $user . '.png';
         $path_finalium = '/banners_finalium/' . $user . '.png';
