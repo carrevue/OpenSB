@@ -57,7 +57,7 @@ $type = ($_GET['type'] ?? 'recent');
 $user = ($_GET['user'] ?? null);
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-$limit = $database->paginate($page, pp: 20);
+$limit = $database->paginate($page, 20);
 
 if ($user) {
     Utilities::redirect("/user/$user/uploads" . ($type !== 'recent' ? "?type=$type" : ''), 301);

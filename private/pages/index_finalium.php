@@ -28,7 +28,7 @@ use Data\Upload\UploadQuery;
 use Core\Utilities;
 use Data\User\UserData;
 use Data\User\UserFlags;
-use Data\Playlist\PlaylistData;
+use Data\Playlist\Playlist;
 
 $upload_query = new UploadQuery($sb);
 
@@ -99,39 +99,15 @@ $localization = $sb->getLocalizationClass();
 $feed = [];
 
 if (empty($following_users)) {
-    /*
-    $feed["featured"] = [
-        "icon" => $sb->getCurrentThemeName() === 'hitchhiker'
-                ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
-                : "/assets/skin/finalium/homepage_featured.svg",
-        "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),
-        "desc" => $localization->translate('featured_uploads_desc'),
-        "uploads" => $uploads_featured,
-    ];
-    */
-
-    // temporary code for testing playlists -chaziz 07/07/2026
-    $playlist = new PlaylistData($database, "test");
+    $playlist = new Playlist($sb, "test");
 
     if ($playlist->getData() != null) {
-        $upload_map = $playlist->getUploads();
-        $query = implode(', ', $upload_map);
-        
-        $playlist_uploads = $upload_query->query(
-            sprintf("FIELD(v.id, %s)", implode(",", array_map('intval', $upload_map))),
-            20,
-            sprintf("v.id in (%s)", $query)
-        )->toCleanArray();
-
-        $author = new UserData($database, $playlist->getData()["author"]);
-
-        // temporary shit -chaziz 07/07/2026
         $feed["playlist"] = [
             "icon" => $sb->getStorageClass()->getUserProfilePicture($playlist->getData()["author"]),
             "title" => $playlist->getData()["title"],
-            "author" => $author->getUserArray(),
+            "author" => $playlist->getAuthorData(),
             "desc" => $playlist->getData()["description"],
-            "uploads" => $playlist_uploads,
+            "uploads" => $playlist->getUploads(20),
         ];
     }
 } else {

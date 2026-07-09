@@ -21,7 +21,7 @@
 
 namespace Pages;
 
-use Data\Playlist\PlaylistData;
+use Data\Playlist\Playlist;
 use Data\Upload\UploadQuery;
 use Core\Utilities;
 
@@ -39,22 +39,14 @@ if (Utilities::isClassicSkin()) {
     }
 }
 
-$playlist = new PlaylistData($database, $id);
-$upload_query = new UploadQuery($sb);
+$playlist = new Playlist($sb, $id);
 
 $data = $playlist->getData();
 if (!$data) {
     Utilities::notifyBanner("invalid_playlist", "/");
 }
 
-$upload_map = $playlist->getUploads();
-$query = implode(', ', $upload_map);
-
-$uploads = $upload_query->query(
-    "uploaded DESC",
-    100, // TODO: pagination
-    sprintf("v.id in (%s)", $query)
-)->toCleanArray();
+$uploads = $playlist->getUploads(100);
 
 echo $twig->render('playlist.twig', [
     'data' => $data,

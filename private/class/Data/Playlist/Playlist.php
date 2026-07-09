@@ -21,16 +21,23 @@
 
 namespace Data\Playlist;
 
+use Core\SquareBracket;
 use Core\Database;
+use Data\Upload\UploadQuery;
 use Data\User\UserData;
 
 /**
- * class PlaylistData
+ * class Playlist
  *
- * This class handles upload playlist data.
+ * This class handles playlists.
  */
-class PlaylistData
+class Playlist
 {
+    /**
+     * @var SquareBracket
+     */
+    private SquareBracket $sb;
+
     /**
      * @var Database The database class
      */
@@ -54,30 +61,15 @@ class PlaylistData
     /**
      * function __construct
      *
-     * @param Database $database
+     * @param SquareBracket $sb
      * @param string $id
      *
      * @return void
      */
-    public function __construct(Database $database, string $id)
+    public function __construct(SquareBracket $sb, string $id)
     {
-        $this->database = $database;
-        /*
-        $this->data = [
-            "title" => "Playlist Title",
-            "description" => "This is a playlist of uploads.",
-            "author" => 1,
-            "timestamp" => 0,
-            "timestamp_updated" => time(),
-            "uploads" => [
-                1, 2, 3, 4, 5, // temporary, this will be kind of tricky to implement LOL
-            ],
-        ];
-
-        if ($this->data != []) {
-            $this->author = new UserData($database, $this->data["author"]);
-        }
-        */
+        $this->sb = $sb;
+        $this->database = $sb->getDatabaseClass();
         
         $this->data = $this->database->fetch("SELECT * FROM playlists WHERE playlist_id = ?", [$id]);
 
@@ -86,6 +78,8 @@ class PlaylistData
                 $this->database->fetchArray($this->database->query("SELECT upload FROM playlist_items WHERE playlist = ? ORDER BY position", [$this->data["id"]])),
                 'upload'
             );
+
+            $this->author = new UserData($this->database, $this->data["author"]);
         }
     }
 
@@ -104,9 +98,20 @@ class PlaylistData
      *
      * @return array|null Array of upload integer IDs, or null if not found.
      */
-    public function getUploads()
+    public function getUploads($limit = 100)
     {
-        return $this->uploads ?? [];
+        if ($this->uploads === null) {
+            return [];
+        }
+
+        $query = implode(', ', $this->uploads);
+
+        $upload_query = new UploadQuery($this->sb);
+        return $upload_query->query(
+            sprintf("FIELD(v.id, %s)", implode(",", array_map('intval', $this->uploads))),
+            $limit,
+            sprintf("v.id in (%s)", $query)
+        )->toCleanArray();
     }
 
     /**
