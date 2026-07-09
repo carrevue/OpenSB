@@ -479,7 +479,7 @@ class Templating
             throw new RuntimeException("generateFinaliumIconMap() called when the current skin isn't Finalium");
         }
 
-        if ($this->skin_options["finalium_hitchhiker_icons"] ?? false) {
+        if ($this->skin_options["finalium_icons"]["use_hitchhiker_icons"] ?? false) {
             $this->finalium_icon_map = [
                 'account_settings' => 'account-settings',
                 'alert_info' => 'alert-info',
@@ -509,6 +509,10 @@ class Templating
                 'watch_panel_dismiss' => 'watch-panel-dismiss',
                 'watch_creator_info' => 'watch-creator-info',
             ];
+
+            if ($this->skin_options["finalium_icons"]["watch_old_share_icon"] ?? false) {
+                $this->finalium_icon_map["watch_share"] = "watch-share-old";
+            }
         } else {
             $this->finalium_icon_map = [
                 'account_settings' => 'gear-fill',

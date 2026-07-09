@@ -457,7 +457,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             '<a class="userlink userlink-%s %s" %shref="/user/%s">%s</a>',
             $username,
             $this->sb->getCurrentSkinName() == "finalium" ? 'spf-link' : '',
-            $this->sb->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
+            ($this->skin_options["userlink_disable_colors"] ?? false) ? '' : "style=\"color:{$color};\" ",
             $username,
             $displayName
         );
@@ -487,8 +487,10 @@ class SquareBracketTwigExtension extends AbstractExtension
      * function displayUploadRatings
      *
      * @param array $ratings
+     * 
+     * @note trinium specific
      *
-     * @return mixed
+     * @return string
      */
     public function displayUploadRatings(array $ratings)
     {
@@ -606,7 +608,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $array = [
             "playlist1" => [
                 "name" => $this->localize("playlist"),
-                "url" => $this->sb->isHitchhiker() ? "/playlist?list=test" : "/playlist/test",
+                "url" => Utilities::isClassicSkin() ? "/playlist?list=test" : "/playlist/test",
                 "icon" => $playlist_icon,
             ],
         ];

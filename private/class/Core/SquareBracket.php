@@ -302,8 +302,8 @@ class SquareBracket
         }
 
         $this->themeInfo = $this->skinInfo["metadata"]["themes"][$this->theme] ?? [];
-
-        $this->skinThemeOptions = array_merge($this->skinInfo["metadata"]["options"] ?? [], $this->themeInfo["options"] ?? []);
+        $resolvedThemeOptions = $this->resolveThemeOptions($this->skinInfo["metadata"]["themes"], $this->theme);
+        $this->skinThemeOptions = array_merge($this->skinInfo["metadata"]["options"] ?? [], $resolvedThemeOptions);
 
         $storage_use_custom_path = (bool)($config['storage']['use_custom_path'] ?? false);
         $storage_path = $storage_use_custom_path
@@ -326,7 +326,7 @@ class SquareBracket
         $this->enable_lockdown = (bool)($config["lockdown"] ?? false);
         //
 
-        $this->localization = new Localization($this->options);
+        $this->localization = new Localization($this->options, $this->skinThemeOptions);
 
         // override squarebracket branding with fulptube branding if accessed via fulptube.rocks.
         if ($this->isFulpTubeMode()) {
@@ -378,6 +378,50 @@ class SquareBracket
         }
         
         $this->templating = new Templating($this);
+    }
+
+    /**
+     * function resolveThemeOptions
+     *
+     * @return void
+     */
+    private function resolveThemeOptions(array $themes, string $themeId, array $visited = []): array
+    {
+        if (in_array($themeId, $visited, true)) {
+            throw new \RuntimeException("Circular theme inheritance: {$themeId}");
+        }
+        if (!isset($themes[$themeId])) {
+            throw new \RuntimeException("Unknown theme: {$themeId}");
+        }
+
+        $options = $themes[$themeId]["options"] ?? [];
+
+        if (isset($options["inherit"])) {
+            $parentId = $options["inherit"];
+            unset($options["inherit"]);
+            $visited[] = $themeId;
+            $parentOptions = $this->resolveThemeOptions($themes, $parentId, $visited);
+            $options = $this->mergeOptionsRecursive($parentOptions, $options);
+        }
+
+        return $options;
+    }
+
+    /**
+     * function mergeOptionsRecursive
+     *
+     * @return void
+     */
+    private function mergeOptionsRecursive(array $base, array $override): array
+    {
+        foreach ($override as $key => $value) {
+            if (is_array($value) && isset($base[$key]) && is_array($base[$key]) && !array_is_list($value)) {
+                $base[$key] = $this->mergeOptionsRecursive($base[$key], $value);
+            } else {
+                $base[$key] = $value;
+            }
+        }
+        return $base;
     }
 
     /**
@@ -713,22 +757,6 @@ class SquareBracket
         }
 
         return $this->options['enable_incomplete_features'] ?? false;
-    }
-
-    /**
-     * function isHitchhiker
-     *
-     * Returns boolean for if hitchhiker is enabled.
-     * THIS IS SEPERATE FROM isFulpTubeMode()
-     * 
-     * @deprecated this will be removed in a future commit
-     *
-     * @return bool
-     */
-    public function isHitchhiker(): bool
-    {
-        return $this->skin === 'finalium'
-            && $this->theme === 'hitchhiker';
     }
 
     /**
