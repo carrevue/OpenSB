@@ -3,7 +3,10 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/private/icons" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/private/skins/bootstrap" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/private/skins/finalium" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/private/skins/finalium/spfjs" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/private/skins/trinium/scss" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/public/assets/player" vcs="Git" />
   </component>
 </project>

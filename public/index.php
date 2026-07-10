@@ -179,7 +179,7 @@ if ($sb->isTestInstance())
         $auth->logOut();
     }
 
-    if (Utilities::getIpAddress() != "localhost" && !$auth->isLoggedIn() && $path[1] != "login") {
+    if (Utilities::getIpAddress() != "localhost" && !$auth->isLoggedIn() && $path[0] != "login") {
         Utilities::redirect("/login");
     }
 }
@@ -230,6 +230,9 @@ $router->add('/verify_email', 'verify_email.php');
 $router->redirect('/version', '/about');
 $router->add('/write', 'write.php');
 $router->add('/view/{id}', 'view.php');
+
+// template
+$router->add('/html5_player_template', 'html5_player_template.php');
 
 if ($sb->isIncompleteFeaturesEnabled()) {
     $router->add('/experiment_flags', 'experiment_flags.php');
