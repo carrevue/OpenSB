@@ -328,6 +328,7 @@ if (
             "20th century fox",
             "20th century studios",
             "twentieth century fox",
+            "reupload",
         ];
 
         $reupload_suspect_description = [
@@ -341,6 +342,9 @@ if (
             "Found this",
             "my fyp",
             "I do not own",
+            "://youtube.com",
+            "://www.youtube.com",
+            "://youtu.be"
         ];
 
         if ($sb->isChazizInstance()) {
