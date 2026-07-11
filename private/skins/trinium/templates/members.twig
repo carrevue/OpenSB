@@ -19,6 +19,13 @@
                         {{ localize(tab.name) }}
                     </a>                
                 {% endfor %}
+                {# TODO #}
+                <div class="tablink has-icon {% if display=='list' %}active{% endif %}" id="members-list-button">
+                    {{ icon('homepage-list', 24) }}
+                </div>
+                <div class="tablink has-icon {% if display=='grid' %}active{% endif %}" id="members-grid-button">
+                    {{ icon('homepage-grid', 24) }}
+                </div>
 			</div>
 			<div class="content-box content-grid content-grid-users no-border-top">
 				{% for user in users.users %}

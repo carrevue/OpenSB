@@ -69,7 +69,7 @@ $data = [
     'count' => $countData,
 ];
 
-echo $twig->render('users.twig', [
+echo $twig->render('members.twig', [
     'users' => $data,
     'page' => $page,
     'type' => $type,

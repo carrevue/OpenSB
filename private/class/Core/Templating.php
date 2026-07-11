@@ -162,11 +162,6 @@ class Templating
         // TODO: make this dynamically changeable through the dashboard.
         $bannerText = null;
 
-        if ($sb->isTestInstance()) {
-            $bannerText = "hey sorry i'm reworking the auth system so there will be issues. 
-                           if you find any issues then please report it to me -chaziz";
-        }
-
         if ($this->authentication->isLoggedIn() && 
             $this->authentication->getUserFlags() & UserFlags::FLAG_UNVERIFIED->value) {
             $localization = $sb->getLocalizationClass();
