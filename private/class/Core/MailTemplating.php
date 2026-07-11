@@ -83,7 +83,7 @@ class MailTemplating
         $this->localization = $this->sb->getLocalizationClass();
 
         if ($sb->isChazizInstance() && !$sb->isFulpTubeMode()) {
-            // for emails intended for squarebracket.pw users, refer to the site
+            // for emails intended for squarebracket users, refer to the site
             // like this, as the emails come from fulptube.rocks.
             $name = $this->localization->translate('site1_aka_site2', 'squareBracket', 'FulpTube');
         } else {

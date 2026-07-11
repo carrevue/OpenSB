@@ -11,7 +11,7 @@
         {# spaceless removes html whitespace that causes unnecessary margins #}
         {% apply spaceless %}
             <div class="tablink" data-tab="tab_db">Database</div>
-            <div class="tablink" data-tab="tab_skintheme">Skin/Theme</div>
+            <div class="tablink" data-tab="tab_skintheme">Frontend</div>
             <div class="tablink" data-tab="tab_user">User Data Cache</div>
         {% endapply %}
     </div>
@@ -63,11 +63,63 @@
             </div>
         </div>
         <div id="tab_skintheme" class="tabcontent">
-            <h1>Skin</h1>
-            <p>{{ dump(skin_options) }}
+            <h1>Skin/Theme</h1>
+            <table class="styled">
+                <tr class="table-header">
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                {% for key, value in skin_theme_options %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>
+                            {% if value is iterable %}
+                                <ul>
+                                    {% for subkey, subvalue in value %}
+                                        <li>{{ subkey }}: {{ subvalue }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% elseif value is same as(true) %}
+                                true
+                            {% elseif value is same as(false) %}
+                                false
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
             <hr>
-            <h1>Theme</h1>
-            <p>{{ dump(theme_options) }}
+
+            <h1>User-Defined Options</h1>
+            <table class="styled">
+                <tr class="table-header">
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                {% for key, value in options %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>
+                            {% if value is iterable %}
+                                <ul>
+                                    {% for subkey, subvalue in value %}
+                                        <li>{{ subkey }}: {{ subvalue }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% elseif value is same as(true) %}
+                                true
+                            {% elseif value is same as(false) %}
+                                false
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
         <div id="tab_user" class="tabcontent">
             {% if user_data_cache %}

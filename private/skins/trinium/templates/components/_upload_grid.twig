@@ -4,7 +4,7 @@
             <img src="{{ thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) }}"
                  alt="{{ upload.title }}"
                  title="{{ upload.title }} by {{ upload.author.info.username }}"
-                 class="content-image thumbnail">
+                 class="content-image thumbnail" loading="lazy">
         </a>
     </div>
     <div class="content-title">

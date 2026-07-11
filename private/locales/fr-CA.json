@@ -125,8 +125,9 @@
     "unclaimed": "Personne",
 
     "ban_title": "Compte banni",
-    "ban_intro_1": "Votre compte (@%s) est banni.",
+    "ban_intro_1": "Votre compte (%s) est banni.",
     "ban_intro_2": "Vous avez été banni pour violation d'une ou plusieurs des <a href=\"%s\">Conditions de Service</a> et/ou des <a href=\"%s\">Règles Communautaires</a>.",
+    "ban_reason": "La raison de votre bannissement est: %s",
     "ban_evasion_warning": "Utiliser un autre compte pour contourner votre bannissement entraînera un bannissement permanent, si vous n'en possédez pas déjà un.",
     "ban_filed_temporary": "Vous êtes banni depuis le %s. Cela expirera le %s.",
     "ban_filed_permanent": "Vous êtes banni depuis le %s. Cela n'expirera pas.",

@@ -10,7 +10,7 @@
     <div class="content-thumbnail">
         <a href="/view/{{ upload.id }}">
             <img src="{{ thumbnail(upload.id, upload.type, upload.flags.custom_thumbnail) }}"
-                 alt="{{ upload.title }}" class="content-image thumbnail">
+                 alt="{{ upload.title }}" class="content-image thumbnail" loading="lazy">
         </a>
         <div class="content-thumbnail-badge-container">
             <div class="content-thumbnail-badge">

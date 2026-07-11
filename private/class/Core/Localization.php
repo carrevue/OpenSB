@@ -42,6 +42,11 @@ class Localization
     private array $options;
 
     /**
+     * @var array The skin/theme's options, inherited from the core SquareBracket class.
+     */
+    private array $skinThemeOptions;
+
+    /**
      * @var string The current locale.
      */
     protected string $locale;
@@ -65,12 +70,14 @@ class Localization
      * function __construct
      *
      * @param array $options
+     * @param array $skinThemeOptions
      *
      * @return void
      */
-    public function __construct(array $options)
+    public function __construct(array $options, array $skinThemeOptions)
     {
         $this->options = $options;
+        $this->skinThemeOptions = $skinThemeOptions;
         $this->locale = $options["locale"] ?? "en-US";
         $this->loadLocalizationData();
     }
@@ -251,10 +258,8 @@ class Localization
      */
     public function translate($key, ...$args)
     {
-        //$hitchhiker_string_debug = isset($this->options["localization_use_hitchhiker_strings"]) && $this->options["localization_use_hitchhiker_strings"] == "true";
-    
         // if we're on finalium hitchhiker, check if there's a hitchhiker-specific version of a string
-        if ($this->options["skin"] == "finalium" && $this->options["theme"] == "hitchhiker" /*|| $hitchhiker_string_debug*/) {
+        if ($this->skinThemeOptions["localization"]["hitchhiker_strings"] ?? false) {
             if (array_key_exists($key . "_hitchhiker", $this->messages)) {
                 $key .= "_hitchhiker";
             }

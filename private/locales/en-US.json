@@ -14,10 +14,8 @@
 
     "library": "Library",
 
-    "collections": "Collections",
-    "collection": "Collection",
-    "collections_hitchhiker": "Playlists",
-    "collection_hitchhiker": "Playlist",
+    "playlists": "Playlists",
+    "playlist": "Playlist",
 
     "follow": "Follow",
     "followed": "Followed",
@@ -151,8 +149,9 @@
     "unclaimed": "Unclaimed",
 
     "ban_title": "Account banned",
-    "ban_intro_1": "Your account (@%s) is banned.",
+    "ban_intro_1": "Your account (%s) is banned.",
     "ban_intro_2": "You have been banned due to a violation of one or more of the <a href=\"%s\">Terms of Service</a> and/or <a href=\"%s\">Community Guidelines</a>.",
+    "ban_reason": "The reason for your ban is: %s",
     "ban_evasion_warning": "Evading your ban using another account will result in a permanent ban (if you don't have one already).",
     "ban_filed_temporary": "Your ban was filed on %s, and will expire on %s.",
     "ban_filed_permanent": "Your ban was filed on %s, and will not expire.",
@@ -173,6 +172,7 @@
     "featured_on_site": "Featured on %s",
 
     "recommended": "Recommended",
+    "by_user": "by %s",
 
     "featured_uploads": "Featured",
     "featured_uploads_desc": "Uploads curated by staff",
@@ -205,6 +205,8 @@
     "popular": "Popular",
     "random": "Random",
     "uploads": "Uploads",
+    "videos": "Videos",
+    "images": "Images",
     "journals": "Journals",
     "posts": "Posts",
     "comments": "Comments",

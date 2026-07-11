@@ -37,7 +37,7 @@ if (!$sb->isAccountRegistrationEnabled()) {
     Utilities::notifyBanner("notify_register_disabled", "/");
 }
 
-if ($sb->isIpLookupEnabled() && $sb->isChazizInstance()) {
+if ($sb->isIpLookupEnabled()) {
     $ipLookup = $sb->getIpLookupClass();
     $ipInfo = $ipLookup->getInfo(Utilities::getIpAddress());
 
@@ -191,9 +191,8 @@ if (isset($_POST['registersubmit'])) {
                 "username" => $username,
                 "email" => $email_address,
                 "ip" => Utilities::getIpAddress(),
-                "asn" => $ipInfo['as_name'] ?? "Unknown" . " (" . $ipInfo['asn'] ?? "Unknown" . ")",
+                "asn" => ($ipInfo['as_name'] ?? "Unknown") . " (" . ($ipInfo['asn'] ?? "Unknown") . ")",
             ];
-
             $sb->getDiscordWebhookClass()->newUserHook($data);
         }
 

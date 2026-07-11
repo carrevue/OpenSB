@@ -26,15 +26,19 @@ global $twig, $database, $sb;
 use Data\Upload\UploadFlags;
 use Data\Upload\UploadQuery;
 use Core\Utilities;
+use Data\User\UserData;
 use Data\User\UserFlags;
+use Data\Playlist\Playlist;
 
 $upload_query = new UploadQuery($sb);
 
+/*
 $uploads_featured = $upload_query->query(
     "uploaded DESC",
     15,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
+*/
 
 if ($auth->isLoggedIn()) {
     $following_users = $database->fetchArray(
@@ -95,19 +99,22 @@ $localization = $sb->getLocalizationClass();
 $feed = [];
 
 if (empty($following_users)) {
-    $feed["featured"] = [
-        "icon" => $sb->getCurrentThemeName() === 'hitchhiker'
-                ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
-                : "/assets/skin/finalium/homepage_featured.svg",
-        "title" => $localization->translate('featured_on_site', $sb->getBrandingSettings()["name"]),
-        "desc" => $localization->translate('featured_uploads_desc'),
-        "uploads" => $uploads_featured,
-    ];
+    $playlist = new Playlist($sb, "test");
+
+    if ($playlist->getData() != null) {
+        $feed["playlist"] = [
+            "icon" => $sb->getStorageClass()->getUserProfilePicture($playlist->getData()["author"]),
+            "title" => $playlist->getData()["title"],
+            "author" => $playlist->getAuthorData(),
+            "desc" => $playlist->getData()["description"],
+            "uploads" => $playlist->getUploads(20),
+        ];
+    }
 } else {
-    $feed["recommended"] = [
+    /*$feed["recommended"] = [
         "title" => $localization->translate('recommended'),
         "uploads" => $uploads_featured,
-    ];
+    ];*/
 }
 
 // this feels somewhat inefficient?

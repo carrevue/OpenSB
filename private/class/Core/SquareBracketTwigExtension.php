@@ -94,7 +94,7 @@ class SquareBracketTwigExtension extends AbstractExtension
         $this->authentication = $this->sb->getAuthenticationClass();
         $this->twig = $twig;
         
-        $this->skin_options = $templating->getCurrentSkinOptions();
+        $this->skin_options = $this->sb->getSkinThemeOptions();
     }
 
     /**
@@ -238,7 +238,7 @@ class SquareBracketTwigExtension extends AbstractExtension
                 $branding = $this->sb->getBrandingSettings();
                 $markdown = new Parsedown();
 
-                // hide sections not meant to be seen outside of squarebracket.pw / fulptube.rocks
+                // hide sections not meant to be seen outside of squarebracket / fulptube.rocks
                 if (!$this->sb->isChazizInstance()) {
                     $text = preg_replace('/<!--\s*chazizsb\s+start\s*-->.*?<!--\s*chazizsb\s+end\s*-->/s', '', $text);
                 }
@@ -457,7 +457,7 @@ class SquareBracketTwigExtension extends AbstractExtension
             '<a class="userlink userlink-%s %s" %shref="/user/%s">%s</a>',
             $username,
             $this->sb->getCurrentSkinName() == "finalium" ? 'spf-link' : '',
-            $this->sb->isHitchhiker() ? '' : "style=\"color:{$color};\" ",
+            ($this->skin_options["userlink_disable_colors"] ?? false) ? '' : "style=\"color:{$color};\" ",
             $username,
             $displayName
         );
@@ -487,8 +487,10 @@ class SquareBracketTwigExtension extends AbstractExtension
      * function displayUploadRatings
      *
      * @param array $ratings
+     * 
+     * @note trinium specific
      *
-     * @return mixed
+     * @return string
      */
     public function displayUploadRatings(array $ratings)
     {
@@ -598,16 +600,16 @@ class SquareBracketTwigExtension extends AbstractExtension
     public function sidebarLibraryLinks()
     {
         if ($this->sb->getCurrentSkinName() === "finalium") {
-            $collection_icon = "guide_collection"; // tied to finalium icon map
+            $playlist_icon = "guide_collection"; // tied to finalium icon map
         } else {
-            $collection_icon = "collection";
+            $playlist_icon = "collection";
         }
 
         $array = [
-            "collection1" => [
-                "name" => $this->localize("collection"),
-                "url" => $this->sb->isHitchhiker() ? "/playlist?list=test" : "/collection/list",
-                "icon" => $collection_icon,
+            "playlist1" => [
+                "name" => $this->localize("playlist"),
+                "url" => Utilities::isClassicSkin() ? "/playlist?list=test" : "/playlist/test",
+                "icon" => $playlist_icon,
             ],
         ];
 
@@ -813,12 +815,12 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getIcon($icon, $size = "16", $class = null)
     {
-        if ($this->sb->getCurrentSkinName() === "bootstrap" || ($this->sb->getCurrentSkinName() === "finalium" && $this->sb->getCurrentThemeName() !== "hitchhiker")) {
-            $root_class = "bi";
-            $svg = "bootstrap-icons.svg";
-        } elseif ($this->sb->getCurrentSkinName() === "finalium" && $this->sb->getCurrentThemeName() === "hitchhiker") {
+        if ($this->sb->getCurrentSkinName() === "finalium" && ($this->sb->getSkinThemeOptions()["finalium_hitchhiker_icons"] ?? false)) {
             $root_class = "icon";
             $svg = "skin/finalium/icons.svg";
+        } elseif ($this->sb->getCurrentSkinName() === "bootstrap" || $this->sb->getCurrentSkinName() === "finalium") {
+            $root_class = "bi";
+            $svg = "bootstrap-icons.svg";
         } else {
             $root_class = "icon";
             $svg = "icons.svg";

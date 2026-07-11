@@ -41,7 +41,7 @@ class Mail
         $this->localization = $sb->getLocalizationClass();
 
         if ($sb->isChazizInstance() && !$sb->isFulpTubeMode()) {
-            // for emails intended for squarebracket.pw users, refer to the site
+            // for emails intended for squarebracket users, refer to the site
             // like this, as the emails come from fulptube.rocks.
             $name = $sb->getLocalizationClass()->translate('site1_aka_site2', 'squareBracket', 'FulpTube');
         } else {

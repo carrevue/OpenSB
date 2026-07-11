@@ -1,0 +1,86 @@
+{% extends "_layout_dashboard.twig" %}
+
+{% set title = account.email %}
+
+{% set breadcrumbs = [
+    { url: '/dashboard/accounts', label: "Accounts" },
+    { url: '/dashboard/accounts/' ~ account.id, label: account.email },
+] %}
+
+{% block dashboard_content %}
+    <div class="content-box">
+        <div>buttons</div>
+        <hr>
+        <div class="grid">
+            <div class="col-6">
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Details</h2>
+                    </div>
+                    <table class="styled">
+                        <tbody>
+                            {% for row in account_info_table %}
+                                {% if row.condition %}
+                                    <tr>
+                                        <td>{{ row.label }}</td>
+                                        <td {% if row.style is defined %}style="{{ row.style }}"{% endif %}>
+                                            {% if row.raw_html is defined and row.raw_html %}
+                                                {{ row.value | raw }}
+                                            {% else %}
+                                                {{ row.value }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if ip_info %}
+                    <hr>
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">IP info</h2>
+                        </div>
+                        <table class="styled">
+                            <tbody>
+                            {% for key, info in ip_info %}
+                                <tr>
+                                    <td>
+                                        {{ localize(key) }}
+                                    </td>
+                                    <td>
+                                        {{ info }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-6">
+                {% if notes %}
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Notes</h2>
+                    </div>
+                    {% for note in notes %}
+                        <div class="content-box">
+                            <div class="content-info">
+                                <div class="content-title">
+                                    {{ user_link(note.author) }}
+                                    {{ note.time | relative_time }}
+                                </div>
+                            </div>
+                            <div class="content-detail">
+                                {{ note.content | markdown_user_written(true) }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

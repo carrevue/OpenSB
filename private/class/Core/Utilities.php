@@ -53,6 +53,17 @@ class Utilities
         return $protocol . '://' . $host;
     }
 
+    public static function getPathAsArray(): array
+    {
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            return [];
+        }
+
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = trim($path, '/');
+        return $path === '' ? [] : explode('/', $path);
+    }
+
     public static function redirect(string $url, int $statusCode = 302): never
     {
         header("Location: $url", true, $statusCode);
@@ -581,12 +592,14 @@ class Utilities
         // de-fuck urls
         $output = strtr($output, [
             'fulptube.pw' => 'squarebracket.pw',
+            'fulptube.me' => 'squarebracket.me',
             'fulptube.veselcraft.ru' => 'squarebracket.veselcraft.ru', // this domain still works lol
         ]);
 
         // now replace all *actual* squarebracket urls with fulptube.rocks
         $output = strtr($output, [
             '://squarebracket.pw' => '://fulptube.rocks',
+            '://squarebracket.me' => '://fulptube.rocks',
             '://squarebracket.veselcraft.ru' => '://fulptube.rocks',
         ]);
 

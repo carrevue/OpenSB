@@ -1,4 +1,4 @@
--- Adminer 5.3.0 MariaDB 12.2.2-MariaDB dump
+-- Adminer 5.4.1 MariaDB 11.8.6-MariaDB-0+deb13u1 from Debian dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -17,7 +17,7 @@ CREATE TABLE `accounts` (
   `last_login` bigint(20) NOT NULL DEFAULT 0,
   `ip` varchar(48) NOT NULL DEFAULT '999.999.999.999',
   `birthdate` date NOT NULL,
-  `flags` tinyint(4) NOT NULL DEFAULT 0,
+  `flags` tinyint(4) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -95,6 +95,39 @@ CREATE TABLE `journal_comments` (
   `author` bigint(20) NOT NULL,
   `timestamp` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+DROP TABLE IF EXISTS `playlists`;
+CREATE TABLE `playlists` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `playlist_id` varchar(11) NOT NULL,
+  `title` varchar(128) NOT NULL,
+  `description` text DEFAULT NULL,
+  `author` bigint(20) unsigned NOT NULL,
+  `timestamp` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `updated_timestamp` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `upload_count` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `flags` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `visibility` int(11) NOT NULL DEFAULT 0,
+  `thumbnail_upload` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_playlist_id` (`playlist_id`),
+  KEY `idx_author` (`author`),
+  KEY `idx_visibility` (`visibility`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+DROP TABLE IF EXISTS `playlist_items`;
+CREATE TABLE `playlist_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `playlist` bigint(20) unsigned NOT NULL,
+  `upload` bigint(20) unsigned NOT NULL,
+  `position` int(11) unsigned NOT NULL,
+  `timestamp` bigint(20) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_playlist_upload` (`playlist`,`upload`),
+  KEY `idx_playlist_position` (`playlist`,`position`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -227,7 +260,7 @@ CREATE TABLE `users` (
   `password` varchar(128) NOT NULL COMMENT 'Password, hashed in bcrypt.',
   `admin_password` varchar(128) DEFAULT NULL,
   `token` varchar(128) NOT NULL COMMENT 'User token for cookie authentication.',
-  `joined` bigint(20) unsigned NOT NULL DEFAULT 0 COMMENT 'User''s join timestamp',
+  `joined` bigint(20) unsigned NOT NULL DEFAULT 0 COMMENT 'User''s join date',
   `last_seen` bigint(20) unsigned NOT NULL DEFAULT 0 COMMENT 'Timestamp of when they last logged in',
   `birthdate` date DEFAULT NULL,
   `featured_upload` bigint(20) unsigned NOT NULL DEFAULT 0,
@@ -354,4 +387,4 @@ CREATE TABLE `user_staff_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
--- 2026-05-16 06:32:09 UTC
+-- 2026-07-07 14:58:06 UTC
