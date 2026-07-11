@@ -1,8 +1,8 @@
-// hardcoded for now
-// TODO: stream map
-playerConfig = {
-    "url": "https://squarebracket.pw/dynamic/videos/V05kmlJpDzC.converted.mp4",
-};
+if (typeof playerConfig === 'undefined') {
+    playerConfig = {
+        "url": "https://squarebracket.pw/dynamic/videos/V05kmlJpDzC.converted.mp4",
+    };
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     console.debug("Video player");
@@ -25,8 +25,26 @@ function createVideoElement() {
     let container = document.querySelector('.video-container');
     let video = document.createElement('video');
     video.setAttribute('x-webkit-airplay', 'allow'); // allow airplay
-    video.setAttribute('controls', 'true'); // temporary
     video.className = 'video-stream main-video';
     video.src = playerConfig.url;
     container.appendChild(video);
+
+    let playButton = document.querySelector('.player-button-play');
+    playButton.addEventListener('click', () => {
+        if (video.paused) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    });
+
+    video.addEventListener('play', () => {
+        playButton.classList.remove('player-button-play');
+        playButton.classList.add('player-button-pause');
+    });
+
+    video.addEventListener('pause', () => {
+        playButton.classList.remove('player-button-pause');
+        playButton.classList.add('player-button-play');
+    });
 }

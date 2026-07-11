@@ -16,6 +16,11 @@
         This video is being processed. Try again later.
     </div>
 {% else %}
+    <script name="player-config">
+        playerConfig = {
+            "url": "{{ video }}",
+        };
+    </script>
     <script name="player" src="/assets/player.js"></script>
     <style name="dumb-bullshit-no-one-cares-about">
         #video-wrapper {
@@ -32,12 +37,5 @@
             display: block;
         }
     </style>
-    <div id="video-wrapper">
-        {#<video 
-            controls 
-            crossorigin 
-            playsinline 
-            src="{{ video }}">
-        </video>#}
-    </div>
+    <div id="video-wrapper"></div>
 {% endif %}
