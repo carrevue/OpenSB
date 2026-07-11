@@ -815,7 +815,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getIcon($icon, $size = "16", $class = null)
     {
-        if ($this->sb->getCurrentSkinName() === "finalium" && ($this->sb->getSkinThemeOptions()["finalium_hitchhiker_icons"] ?? false)) {
+        if ($this->sb->getCurrentSkinName() === "finalium" && ($this->sb->getSkinThemeOptions()["finalium_icons"]["use_hitchhiker_icons"] ?? false)) {
             $root_class = "icon";
             $svg = "skin/finalium/icons.svg";
         } elseif ($this->sb->getCurrentSkinName() === "bootstrap" || $this->sb->getCurrentSkinName() === "finalium") {
