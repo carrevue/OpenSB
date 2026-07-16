@@ -265,7 +265,7 @@ class Authentication
     /**
      * Database helper for the user's tag blacklist.
      */
-    public function databaseWhereTagBlacklistHelper(): string
+    public function databaseWhereTagBlacklistHelper(): array
     {
         $tagBlacklist = $this->getUserTagBlacklist();
 
@@ -273,10 +273,15 @@ class Authentication
         // upload-related queries into 20 fucking useless lines that slows the site down to a crawl.
         // -chaziz 6/23/2024
         $conditions = [];
+        $params = [];
         foreach ($tagBlacklist as $tag) {
-            $conditions[] = "JSON_CONTAINS(v.tags, '\"$tag\"') = 0";
+            $conditions[] = "JSON_CONTAINS(v.tags, JSON_QUOTE(?)) = 0";
+            $params[] = $tag;
         }
 
-        return implode(' AND ', $conditions);
+        return [
+            'sql' => implode(' AND ', $conditions),
+            'params' => $params,
+        ];
     }
 }
