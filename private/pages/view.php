@@ -229,16 +229,21 @@ $candidateQuery = "
     AND v.author NOT IN (SELECT user FROM user_bans)
 ";
 
+$candidateParams = [$data["upload_id"]];
+
 if (!empty($whereRatings)) {
     $candidateQuery .= " AND $whereRatings";
 }
 
-if (!empty($whereTagBlacklist)) {
-    $candidateQuery .= " AND $whereTagBlacklist";
+if (!empty($whereTagBlacklist['sql'])) {
+    $candidateQuery .= " AND " . $whereTagBlacklist['sql'];
+    // tag blacklist ?'s come after the upload_id ? in the query string,
+    // so params must be appended in the same order -chaziz 07/16/2026
+    $candidateParams = array_merge($candidateParams, $whereTagBlacklist['params']);
 }
 
 $candidates = $database->fetchArray(
-    $database->query($candidateQuery, [$data["upload_id"]])
+    $database->query($candidateQuery, $candidateParams)
 );
 
 // get the tags
@@ -252,9 +257,11 @@ $sourceTags = array_column(
 
 $allTags = [];
 if (!empty($candidates)) {
-    $ids = implode(',', array_column($candidates, 'id'));
+    $candidateIds = array_column($candidates, 'id');
+    $placeholders = implode(',', array_fill(0, count($candidateIds), '?'));
     $tagRows = $database->fetchArray($database->query(
-        "SELECT upload_id, tag_id FROM upload_tag_index WHERE upload_id IN ($ids)"
+        "SELECT upload_id, tag_id FROM upload_tag_index WHERE upload_id IN ($placeholders)",
+        $candidateIds
     ));
     foreach ($tagRows as $row) {
         $allTags[$row["upload_id"]][] = $row["tag_id"];
@@ -276,6 +283,8 @@ $recommendation_title_penality = [
     'betacast', 
     'eracast', 
     'kamtape',
+    'goodtube',
+    'rehike',
 ];
 
 // now score this shit
@@ -337,7 +346,7 @@ if (!empty($candidates)) {
 }
 
 if ($recommended) {
-    $recommended_upload_array = new UploadResult($database, $recommended)->toCleanArray();
+    $recommended_upload_array = (new UploadResult($database, $recommended))->toCleanArray();
 } else {
     $recommended_upload_array = [];
 }

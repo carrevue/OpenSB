@@ -50,9 +50,9 @@ class UploadQuery
     private string $whereRatings;
 
     /**
-     * @var string
+     * @var array
      */
-    private string $whereTagBlacklist;
+    private array $whereTagBlacklist;
 
     /**
      * @var int
@@ -126,8 +126,11 @@ class UploadQuery
                 $whereClauses[] = $this->whereRatings;
             }
 
-            if (!empty($this->whereTagBlacklist)) {
-                $whereClauses[] = $this->whereTagBlacklist;
+            if (!empty($this->whereTagBlacklist['sql'])) {
+                $whereClauses[] = $this->whereTagBlacklist['sql'];
+                // tag blacklist ?'s are appended after $whereCondition in the final
+                // query string, so their params must be appended after $params too -chaziz 07/16/2026
+                $params = array_merge($params, $this->whereTagBlacklist['params']);
             }
         }
 
@@ -191,8 +194,11 @@ class UploadQuery
             $whereClauses[] = $this->whereRatings;
         }
 
-        if (!empty($this->whereTagBlacklist)) {
-            $whereClauses[] = $this->whereTagBlacklist;
+        if (!empty($this->whereTagBlacklist['sql'])) {
+            $whereClauses[] = $this->whereTagBlacklist['sql'];
+            // tag blacklist ?'s are appended after $whereCondition in the final
+            // query string, so their params must be appended after $params too -chaziz 07/16/2026
+            $params = array_merge($params, $this->whereTagBlacklist['params']);
         }
 
         if (!empty($whereClauses)) {
