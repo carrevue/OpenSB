@@ -90,6 +90,11 @@ class Authentication
             $fields = implode(", ", $user_fields);
 
             $this->account_data = $this->database->fetch("SELECT * FROM accounts WHERE token = ?", [$active["token"]]);
+
+            if (!$this->account_data) {
+                return; // account doesn't exist/token is invalid
+            }
+
             $this->account_id = $this->account_data["id"];
 
             $role_row = $this->database->fetch(
