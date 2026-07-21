@@ -46,11 +46,6 @@ $tabs = [
         "order" => "views DESC",
         "where" => null,
     ],
-    "random" => [
-        "name" => "random",
-        "order" => "RAND()",
-        "where" => null,
-    ],
 ];
 
 $type = ($_GET['type'] ?? 'recent');
