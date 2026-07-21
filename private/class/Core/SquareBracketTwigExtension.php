@@ -806,20 +806,6 @@ class SquareBracketTwigExtension extends AbstractExtension
             ];
         }
 
-        if ($this->sb->isChazizInstance()) {
-            if (!$this->sb->isFulpTubeMode()) {
-                $array["brickface"] = [
-                    "name" => $this->localize("kylarz_link"),
-                    "url"  => "https://brickface.squarebracket.pw/",
-                ];
-            }
-
-            $array["discord"] = [
-                "name" => "Discord",
-                "url"  => "https://discord.gg/jG3DaRf6Rm",
-            ];
-        }
-
         return $array;
     }
 
