@@ -302,6 +302,27 @@ class Localization
         return strtolower($parts[0]);
     }
 
+    function parseDate(string $input): int|false
+    {
+        $input = trim($input);
+
+        if ($input === '') {
+            return false;
+        }
+
+        if (filter_var($input, FILTER_VALIDATE_INT) !== false) {
+            return (int) $input;
+        }
+
+        $timestamp = (new IntlDateFormatter(
+            null,
+            IntlDateFormatter::SHORT,
+            IntlDateFormatter::NONE
+        ))->parse($input);
+
+        return $timestamp === false ? false : (int) $timestamp;
+    }
+
     /**
      * function convertDateFormatterPattern
      * 

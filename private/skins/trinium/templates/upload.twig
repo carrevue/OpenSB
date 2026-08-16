@@ -52,6 +52,18 @@
                                 </div>
                             {% endif %}
 
+                            {% if user_is_authenticated_staff %}
+                                <div class="form-input">
+                                    <label for="original_site">Original site <span>{{ localize('form_optional') }}</span></label>
+                                    <input type="text" name="original_site" id="original_site">
+                                </div>
+
+                                <div class="form-input">
+                                    <label for="original_time">Original upload timestamp <span>{{ localize('form_optional') }}</span></label>
+                                    <input type="text" name="original_time" id="original_time">
+                                </div>
+                            {% endif %}
+
                             <div class="form-input">
                                 <label for="fileToUpload">{{ localize('file') }} <span>{{ localize('form_required') }}</span></label>
                                 <div>{{ localize('upload_limit', limit) }}</div>

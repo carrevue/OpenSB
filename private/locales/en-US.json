@@ -338,7 +338,7 @@
     "mark_as_mature": "Mark as mature",
     "mark_as_mature_description": "Marks the upload as being only accessible to logged-in users over 18.",
     "upload_limit": "Upload limit: %s",
-    "supported_files": "Common video formats are supported.",
+    "supported_files": "Common video and image formats are supported.",
     "upload_action": "Upload",
     "new_journal_intro": "What's on your mind? Markdown formatting is supported.",
     "content": "Content",

@@ -202,6 +202,14 @@ if (
     $tagsRaw = $_POST['tags'] ?? '';
     $flags = 0;
 
+    $originalSite = null;
+    $originalTime = 0;
+
+    if ($auth->hasUserAuthenticatedAsStaff()) {
+        $originalSite = $_POST['original_site'] ?? null;
+        $originalTime = $sb->getLocalizationClass()->parseDate($_POST['original_time'] ?? '') ?: null;
+    }
+
     // visibilty
     $visibility_type = match ($visibility) {
         'private' => UploadVisibilityEnum::Private,
@@ -266,14 +274,16 @@ if (
 
         $database->query(
             "INSERT INTO uploads 
-            (upload_id, title, description, author, timestamp, tags, upload_file, flags, type, visibility)
-            VALUES (?,?,?,?,?,?,?,?,?,?)",
+            (upload_id, title, description, author, timestamp, original_site, original_timestamp, tags, upload_file, flags, type, visibility)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
             [
                 $new,
                 $title,
                 $desc,
                 $uploader,
                 time(),
+                $originalSite ?? null,
+                $originalTime ?? null,
                 json_encode($tags),
                 $uploadFilePath,
                 $flags,
@@ -342,6 +352,7 @@ if (
             "Found this",
             "my fyp",
             "I do not own",
+            "Not my video",
             "://youtube.com",
             "://www.youtube.com",
             "://youtu.be"
