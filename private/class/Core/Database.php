@@ -172,7 +172,8 @@ class Database
 
     public function paginate($page, $pp)
     {
-        $page = (is_numeric($page) && $page > 0 ? $page : 1);
+        $page = (int)floor((float)$page); // don't do decimal pages
+        $page = ($page > 0 ? $page : 1);
 
         // if its too high just set it back to 1 to avoid a database error.
         // THIS IS BY DESIGN. -chaziz 9/13/2025
@@ -180,7 +181,7 @@ class Database
             $page = 1;
         }
 
-        $pp = (is_numeric($pp) && $pp > 0 ? (int) $pp : 20);
+        $pp = (is_numeric($pp) && $pp > 0 ? (int)$pp : 20);
         $pp = min($pp, 100);
 
         return sprintf(" LIMIT %s, %s", (($page - 1) * $pp), $pp);
