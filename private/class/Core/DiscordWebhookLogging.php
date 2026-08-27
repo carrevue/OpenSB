@@ -154,7 +154,7 @@ class DiscordWebhookLogging
             $author = 'New journal by ' . $data['author'];
         }
 
-        $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['id']);
+        $uploadUrl = sprintf("%s/user/%s/journal/%s", $this->domain, $data['author'], $data['id']);
 
         $mbd = new Embed();
 
@@ -198,7 +198,7 @@ class DiscordWebhookLogging
                 $author = 'New profile comment by ' . $data['author'];
                 $uploadUrl = sprintf("%s/user/%s", $this->domain, $title);
                 break;
-            case 'journal':
+            case 'journal': // TODO: i can't be fucking bothered with this rn, deal with this on marigold 2.2 -chaziz 08/27/2026
                 $title = Utilities::journalIDtoJournalTitle($this->database, $data['location_id']);
                 $author = 'New journal comment by ' . $data['author'];
                 $uploadUrl = sprintf("%s/read/%s", $this->domain, $data['location_id']);
