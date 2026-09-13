@@ -1,0 +1,64 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Forum" %}
+{% set description = "The Principia forums allow you to discuss about Principia, along with Apparatus and Tesla Plushies and general chitchat." %}
+{% set pagename = "/forum/" %}
+
+	{% block content %}
+        {% set category = -1 %}
+
+        {% if is_user_logged_in %}
+                <a class="float-right" href="/forum/?action=markread&fid=all">Mark all forums read</a>
+        {% endif %}
+
+        <div class="alert danger">THIS IS NOT SUPPORTED ON TRINIUM. SWITCH TO FINALIUM. -chaziz 09/13/2026</div>
+
+        <div class="section">
+            <div class="section-header">
+                <h1 class="section-title">Forum</h1>
+                <div>Welcome to the Principia forums. It is a place for longer-form discussions about Principia and related topics.</div>
+            </div>
+
+            {% for forum in forums %}
+                {% if forum.cat != category %}
+                    {% if category != -1 %}
+                        </table>
+                    {% endif %}
+
+                    {% set category = forum.cat %}
+
+                    <table class="styled">
+                        <tr class="h">
+                            <td class="left" colspan="2">{{ categories[forum.cat] }}</td>
+                            <td class="nom" style="width:60px">Threads</td>
+                            <td class="nom" style="width:60px">Posts</td>
+                            <td style="width:180px">Last post</td>
+                        </tr>
+                {% endif %}
+
+                <tr class="table-header">
+                    <td class="n1" style="width:30px">
+                        {% if is_user_logged_in and forum.lastdate > forum.rtime %}
+                            {{ new_status("n") }}
+                        {% endif %}
+                    </td>
+                    <td class="n2 left">
+                        {% if forum.minread > 0 %}({% endif %}<a href="forum?id={{ forum.id }}">{{ forum.title }}</a>{% if forum.minread > 0 %}){% endif %}
+                        <div style="margin-top:3px">{{ forum.descr | raw }}</div>
+                    </td>
+                    <td class="n1 nom">{{ forum.threads }}</td>
+                    <td class="n1 nom">{{ forum.posts }}</td>
+                    <td class="n2">
+                        {% if forum.posts > 0 and forum.lastdate > 0 %}
+                            <nobr>{{ forum.lastdate | date('Y-m-d H:i') }}</nobr>
+                            <br>
+                            <span>by {{ user_link(forum, 'u') }} <a href="thread?pid={{ forum.lastid }}#{{ forum.lastid }}">&raquo;</a></span>
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+	{% endblock %}

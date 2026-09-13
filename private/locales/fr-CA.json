@@ -12,6 +12,8 @@
     "browse_members": "Parcourir les membres",
     "browse_members_hitchhiker": "Parcourir les chaînes",
 
+    "community": "Communauté",
+
     "library": "Bibliothèque",
 
     "collections": "Collections",
@@ -336,7 +338,7 @@
 
     "skin": "Apparence",
     "theme": "Thème",
-    "language": "Langage",
+    "language": "Langue",
     "skin_unsupported": "Cette apparence n'est pas entièrement supporté et pourrait ne pas être entièrement fonctionnel.",
 
     "version": "Version",
