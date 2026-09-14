@@ -104,7 +104,7 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
-        $userlink_function_name = ($this->skin_options["use_old_userlink"] ?? false) ? "userLinkLegacy" : "userLink";
+        $userlink_function_name = ($this->skin_options["use_old_userlink"] ?? false) ? "userLinkClassic" : "userLink";
 
         // TODO: clean this up HOLY SHIT -chaziz 4/7/2025
         return [
@@ -385,17 +385,21 @@ class SquareBracketTwigExtension extends AbstractExtension
      * 
      * new userlink used on trinium
      *
-     * @param mixed $user
+     * @param array $user
      *
      * @return string
      */
     public function userLink($user): string
     {
+        if (!isset($user["info"])) {
+            trigger_error("userLink is missing data!", E_USER_WARNING);
+        }
+
         // get user info
-        $username = htmlspecialchars($user["info"]["username"]);
-        $displayName = htmlspecialchars($user["info"]["displayname"]);
-        $color = $user["info"]["color"];
-        $powerlevel =  $user["info"]["powerlevel"];
+        $username = htmlspecialchars($user["info"]["username"]) ?? "Username";
+        $displayName = htmlspecialchars($user["info"]["displayname"]) ?? "Display name";
+        $color = $user["info"]["color"] ?? "#00FF00";
+        $powerlevel =  $user["info"]["powerlevel"] ?? 0;
 
         // common values
         $href  = "/user/{$username}";
@@ -437,7 +441,7 @@ class SquareBracketTwigExtension extends AbstractExtension
     }
 
     /**
-     * function userLinkLegacy
+     * function userLinkClassic
      * 
      * old userlink used on bootstrap and finalium
      *
@@ -445,13 +449,17 @@ class SquareBracketTwigExtension extends AbstractExtension
      *
      * @return string
      */
-    public function userLinkLegacy($user): string
+    public function userLinkClassic($user): string
     {
-        $username = htmlspecialchars($user['info']['username']);
-        $displayName = htmlspecialchars($user["info"]["displayname"]);
-        $color = $user["info"]["color"];
+        if (!isset($user["info"])) {
+            trigger_error("userLinkClassic is missing data!", E_USER_WARNING);
+        }
+
+        $username = htmlspecialchars($user["info"]["username"]) ?? "Username";
+        $displayName = htmlspecialchars($user["info"]["displayname"]) ?? "Display name";
+        $color = $user["info"]["color"] ?? "#00FF00";
         // the old userlink function used to show if someone was staff, this was implemented around april 2023.
-        $powerlevel = $user["info"]["powerlevel"];
+        $powerlevel = $user["info"]["powerlevel"] ?? 0;
 
         $userlink = sprintf(
             '<a class="userlink userlink-%s %s" %shref="/user/%s">%s</a>',
