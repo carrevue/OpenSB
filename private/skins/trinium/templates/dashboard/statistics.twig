@@ -44,13 +44,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js"></script>
     <script>
         const cumulativeChart = document.getElementById('cumulativeChart');
-        const viewChart = document.getElementById('viewChart');
 
         const chart = new Chart(cumulativeChart, {{ data.graph_data|json_encode()|raw }});
 
         document.getElementById('resetZoom').addEventListener('click', function() {
             if (chart) {
-                chart.resetZoom(); // This is the correct method provided by the plugin
+                chart.resetZoom();
             }
         });
     </script>

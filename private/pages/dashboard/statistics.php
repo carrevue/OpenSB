@@ -285,6 +285,7 @@ $chartData = [
                 }, $upload_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'n',
+                'stepped' => true,
             ],
             [
                 'label' => 'Accounts',
@@ -296,6 +297,7 @@ $chartData = [
                 }, $account_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'n',
+                'stepped' => true,
             ],
             [
                 'label' => 'Users',
@@ -307,6 +309,7 @@ $chartData = [
                 }, $user_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'n',
+                'stepped' => true,
             ],
             [
                 'label' => 'Comments',
@@ -318,6 +321,7 @@ $chartData = [
                 }, $comment_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'n',
+                'stepped' => true,
             ],
             [
                 'label' => 'Journals',
@@ -329,6 +333,7 @@ $chartData = [
                 }, $journal_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'n',
+                'stepped' => true,
             ],
             [
                 'label' => 'Views (Users)',
@@ -340,6 +345,7 @@ $chartData = [
                 }, $view_graph),
                 'borderWidth' => 1,
                 'yAxisID' => 'v',
+                'stepped' => true,
             ],
             [
                 'label' => 'Views (Guests)',
@@ -352,6 +358,7 @@ $chartData = [
                 'borderWidth' => 1,
                 'yAxisID' => 'v',
                 'hidden' => true, // hide this by default
+                'stepped' => true,
             ],
         ]
     ],

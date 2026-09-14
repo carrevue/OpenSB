@@ -77,6 +77,6 @@ if (isset($_POST['submit'])) {
 
     <p style="color: red;">this does NOT ban you</p>
     <div>
-        <input type="submit" name="submit" value="Ill show you...">
+        <input type="submit" name="submit" value="Display">
     </div>
 </form>
