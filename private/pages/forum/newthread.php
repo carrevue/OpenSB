@@ -24,14 +24,18 @@
 
 namespace Pages\Forum;
 
+use Core\Utilities;
+
 include_once('_include.php');
+
+global $sb, $database, $twig;
 
 needsLogin();
 
 $action = $_POST['action'] ?? null;
 $fid = $_GET['id'] ?? null;
 
-$forum = fetch("SELECT * FROM z_forums WHERE id = ? AND ? >= minread", [$fid, $userdata['powerlevel']]);
+$forum = $database->fetch("SELECT * FROM z_forums WHERE id = ? AND ? >= minread", [$fid, $userdata['powerlevel']]);
 
 if (!$forum)
 	error('404');
@@ -44,13 +48,13 @@ $title = $_POST['title'] ?? '';
 $message = $_POST['message'] ?? '';
 
 if ($action == 'Submit') {
-	$lastpost = fetch("SELECT id, user, date FROM z_posts WHERE user = ? ORDER BY id DESC LIMIT 1", [$userdata['id']]);
+	$lastpost = $database->fetch("SELECT id, user, date FROM z_posts WHERE user = ? ORDER BY id DESC LIMIT 1", [$userdata['id']]);
 
 	if (strlen(trim($title)) < 15)
 		$error = "You need to enter a longer title.";
 	if (strlen(trim($message)) == 0)
 		$error = "You need to enter a message to your thread.";
-	if ($lastpost['date'] > time() - (10*60) && $action == 'Submit' && !IS_ROOT)
+	if ($lastpost['date'] > time() - (10*60) && $action == 'Submit' /*&& !IS_ROOT*/)
 		$error = "Don't post threads so fast, wait a little longer.";
 
 	if (!$error) {
@@ -62,7 +66,7 @@ if ($action == 'Submit') {
 			'u_name' => $userdata['name']
 		]);
 
-		redirect("thread?id=$tid");
+		Utilities::redirect("thread?id=$tid");
 	}
 }
 

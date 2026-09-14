@@ -11,8 +11,6 @@
                 <a class="float-right" href="/forum/?action=markread&fid=all">Mark all forums read</a>
         {% endif %}
 
-        <div class="alert danger">THIS IS NOT SUPPORTED ON TRINIUM. SWITCH TO FINALIUM. -chaziz 09/13/2026</div>
-
         <div class="section">
             <div class="section-header">
                 <h1 class="section-title">Forum</h1>
@@ -43,7 +41,7 @@
                         {% endif %}
                     </td>
                     <td class="n2 left">
-                        {% if forum.minread > 0 %}({% endif %}<a href="forum?id={{ forum.id }}">{{ forum.title }}</a>{% if forum.minread > 0 %}){% endif %}
+                        {% if forum.minread > 0 %}({% endif %}<a href="/forum/forum?id={{ forum.id }}">{{ forum.title }}</a>{% if forum.minread > 0 %}){% endif %}
                         <div style="margin-top:3px">{{ forum.descr | raw }}</div>
                     </td>
                     <td class="n1 nom">{{ forum.threads }}</td>

@@ -151,8 +151,8 @@ function newThread($data) {
 	$database->query("UPDATE z_forums SET threads = threads + 1 WHERE id = ?",
 		[$data['forum']]);
 
-	$database->query("UPDATE users SET threads = threads + 1 WHERE id = ?",
-		[$data['u_id']]);
+	/*$database->query("UPDATE users SET threads = threads + 1 WHERE id = ?",
+		[$data['u_id']]);*/
 
 	newPost($data);
 

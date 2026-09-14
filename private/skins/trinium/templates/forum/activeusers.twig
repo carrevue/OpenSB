@@ -1,0 +1,35 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Active users" %}
+{% set noindex = true %}
+
+	{% block content %}
+<h1>Active users</h1>
+
+<p>View who has been the most active on the forums for a given timespan.</p>
+
+<p>{{ timelinks('activeusers', time) }}</p>
+
+<table class="c1">
+	<tr class="h">
+		<td width="30">#</td>
+		<td>Username</td>
+		<td style="width:140px">Registered on</td>
+		<td width="50">Posts</td>
+		<td width="50">Total</td>
+	</tr>
+	{% set i = 1 %}
+	{% for user in users %}
+		<tr class="n{% if i % 2 %}1{% else %}2{% endif %} center">
+			<td>{{ i }}.</td>
+			<td class="left">{{ user_link(user) }}</td>
+			<td>{{ user.joined | date('Y-m-d H:i') }}</td>
+			<td><b>{{ user.num }}</b></td>
+			<td><b>{{ user.posts }}</b></td>
+		</tr>
+		{% set i = i + 1 %}
+	{% else %}
+		{{ if_empty_query("There are no active users in the given timespan.", 5) }}
+	{% endfor %}
+</table>
+	{% endblock %}

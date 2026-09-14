@@ -1,0 +1,18 @@
+{% extends "_layout.twig" %}
+
+{% if pmsg.title %}
+	{% set title = pmsg.title %}
+{% else %}
+	{% set title = '(untitled)' %}
+{% endif %}
+{% set noindex = true %}
+
+	{% block content %}
+{{ render_page_bar(pagebar) }}
+
+<h1>{{ title }}</h1>
+
+{{ threadpost(pmsg) }}
+
+{{ render_page_bar(pagebar) }}
+	{% endblock %}

@@ -428,9 +428,9 @@ class Utilities
         }
 
         if (
-            strcasecmp($username, 'news') === 0 ||
             strcasecmp($username, 'system') === 0 ||
             $username === 'InvalidUser!' ||
+            $username === 'InvalidUserlink!' ||
             str_starts_with($username, 'DummyAccount-')
         ) {
             return "Invalid username.";

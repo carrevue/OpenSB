@@ -1,0 +1,41 @@
+{% extends "_layout.twig" %}
+
+{% set title = "New reply" %}
+{% set noindex = true %}
+
+	{% block content %}
+{% if error %}
+	<div class="alert danger">{{ error }}</div>
+{% endif %}
+
+{{ render_page_bar(topbot) }}
+
+<h1>New reply</h1>
+
+{% if action == 'Preview' %}
+	{{ threadpost(post) }}
+{% endif %}
+
+<form action="newreply?id={{ tid }}" method="POST">
+	<table class="styled">
+		<tr class="table-header"><td colspan="2">Reply</td></tr>
+		<tr>
+			<td class="n2 center"><textarea name="message" rows="15" cols="80" style="width:90%">{{ message }}</textarea></td>
+		</tr><tr>
+			<td class="n1 center">
+				<input type="submit" name="action" value="Preview" class="button secondary">
+				<input type="submit" name="action" value="Submit" class="button secondary">
+			</td>
+		</tr>
+	</table>
+</form>
+
+<table class="styled threadpost">
+	<tr class="table-header"><td colspan="2">Thread preview</td></tr>
+	{% for post in newestposts %}
+		{{ minipost(post) }}
+	{% endfor %}
+</table>
+
+{{ render_page_bar(topbot) }}
+	{% endblock %}

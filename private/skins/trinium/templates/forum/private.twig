@@ -1,0 +1,42 @@
+{% extends "_layout.twig" %}
+
+{% if sent %}
+	{% set title = "Private messages (sent)" %}
+{% else %}
+	{% set title = "Private messages" %}
+{% endif %}
+{% set noindex = true %}
+
+	{% block content %}
+{{ render_page_bar(topbot) }}
+
+<h1>{{ title }}</h1>
+
+<table class="c1">
+	<tr class="h">
+		<td width="17">&nbsp;</td>
+		<td style="width:30px">&nbsp;</td>
+		<td>Title</td>
+		<td class="nom" width="130">{{ fieldn }}</td>
+		<td width="130">Sent on</td>
+	</tr>
+{% set i = 1 %}
+{% for pmsg in pmsgs %}
+	<tr class="n{% if i % 2 %}1{% else %}2{% endif %} center">
+		<td><a href="private?action=del&id={{ pmsg.id }}&view={{ view }}" class="delete">X</a></td>
+		<td >{% if pmsg.unread %}{{ new_status("n") }}{% endif %}</td>
+		<td class="left wbreak"><a href="showprivate?id={{ pmsg.id }}">{{ pmsg.title | default('(untitled)') }}</a></td>
+		<td class="nom">{{ user_link(pmsg, 'u') }}</td>
+		<td>{{ pmsg.date | date('Y-m-d H:i') }}</td>
+	</tr>
+	{% set i = i + 1 %}
+{% else %}
+	{{ if_empty_query("There are no private messages.", 5) }}
+{% endfor %}
+</table>
+
+{% set le_url = '/forum/private?view=' ~ view ~ '&page=%s' %}
+{{ pagination(pmsgc, constant('TPP'), le_url, page) }}
+
+{{ render_page_bar(topbot) }}
+	{% endblock %}

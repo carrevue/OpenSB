@@ -1,0 +1,62 @@
+{% extends "_layout.twig" %}
+
+{% set title = title %}
+{% if viewmode == "thread" %}
+	{% if pid %}
+		{% set noindex = true %}
+	{% endif %}
+	{% set pagename = "/forum/thread?id=" ~ tid %}
+{% elseif viewmode == "user" %}
+	{% set pagename = "/forum/thread?user=" ~ uid %}
+{% elseif viewmode == "time" %}
+	{% set pagename = "/forum/thread?time=" ~ time %}
+	{% set noindex = true %}
+{% endif %}
+
+	{% block content %}
+{{ render_page_bar(topbot) }}
+
+<h1>{{ title }}</h1>
+
+{% if time %}
+	<p>View the latest posts that have been made within the given timespan.</p>
+
+	<p>{{ timelinks('thread', time) }}</p>
+{% endif %}
+
+{{ modlinks | raw }}{{ pagelist | raw }}
+
+{% for post in posts %}
+	{% if uid or time %}
+		{% set pthread = {id: post.tid, title: post.ttitle} %}
+	{% endif %}
+
+	{% if thread.forum and userdata.rank > 1 and pin and post.id == pin %}
+		{% set post = post|merge({'deleted': false}) %}
+	{% endif %}
+
+	{{ threadpost(post, pthread) }}
+{% else %}
+	{{ if_empty_query("No posts were found.", 0, true) }}
+{% endfor %}
+
+{{ pagelist | raw }}
+
+{% if thread.id and userdata.rank >= faccess.minreply and not thread.closed %}
+<form action="newreply?id={{ tid }}" method="POST">
+	<table class="c1">
+		<tr class="h"><td colspan="2">Quick Reply</a></td>
+		<tr>
+			<td class="n2 center"><textarea name="message" id="message" rows="8" cols="80" style="width:90%"></textarea></td>
+		</tr><tr class="n1">
+			<td class="center">
+				<input type="submit" name="action" value="Preview">
+				<input type="submit" name="action" value="Submit">
+			</td>
+		</tr>
+	</table>
+</form>
+{% endif %}
+
+{{ render_page_bar(topbot) }}
+	{% endblock %}

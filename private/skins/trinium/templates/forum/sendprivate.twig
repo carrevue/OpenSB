@@ -1,0 +1,41 @@
+{% extends "_layout.twig" %}
+
+{% set title = "Send private message" %}
+{% set noindex = true %}
+
+	{% block content %}
+{% if error %}
+	<div class="alert danger">{{ error }}</div>
+{% endif %}
+
+{{ render_page_bar(topbot) }}
+
+<h1>Send a private message</h1>
+
+{% if action == 'Preview' %}
+	{{ threadpost(post) }}
+{% endif %}
+
+<form action="sendprivate" method="POST">
+	<table class="c1">
+		<tr class="h"><td colspan="2">Send message</td></tr>
+		<tr>
+			<td class="n1 center" width="120">Send to:</td>
+			<td class="n2"><input type="text" name="userto" size="30" maxlength="50" value="{{ userto }}"></td>
+		</tr><tr>
+			<td class="n1 center">Title:</td>
+			<td class="n2"><input type="text" name="title" size="75" maxlength="255" value="{{ messagetitle }}"></td>
+		</tr><tr>
+			<td class="n1 center">Message:</td>
+			<td class="n2"><textarea name="message" rows="15" cols="80">{{ message }}</textarea></td>
+		</tr><tr>
+			<td class="n1 center" colspan="2">
+				<input type="submit" name="action" value="Preview">
+				<input type="submit" name="action" value="Submit">
+			</td>
+		</tr>
+	</table>
+</form>
+
+{{ render_page_bar(topbot) }}
+	{% endblock %}
