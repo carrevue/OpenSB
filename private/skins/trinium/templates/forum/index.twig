@@ -28,7 +28,7 @@
                     {% set category = forum.cat %}
 
                     <table class="styled">
-                        <tr class="h">
+                        <tr class="table-header">
                             <td class="left" colspan="2">{{ categories[forum.cat] }}</td>
                             <td class="nom" style="width:60px">Threads</td>
                             <td class="nom" style="width:60px">Posts</td>
@@ -36,7 +36,7 @@
                         </tr>
                 {% endif %}
 
-                <tr class="table-header">
+                <tr>
                     <td class="n1" style="width:30px">
                         {% if is_user_logged_in and forum.lastdate > forum.rtime %}
                             {{ new_status("n") }}

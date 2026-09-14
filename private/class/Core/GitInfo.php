@@ -78,10 +78,26 @@ class GitInfo
             }
         } else {
             $gitHead = file_get_contents(SB_GIT_PATH . '/HEAD');
-            $this->gitBranch = rtrim(preg_replace("/(.*?\/){2}/", '', $gitHead));
-            $commit = file_get_contents(SB_GIT_PATH . '/refs/heads/' . $this->gitBranch); // kind of bad but hey it works
+            $this->gitBranch = basename(trim($gitHead));
 
-            $this->gitCommitHash = substr($commit, 0, 7);
+            $commitFile = SB_GIT_PATH . '/refs/heads/' . $this->gitBranch;
+
+            if (file_exists($commitFile)) {
+                $commit = file_get_contents($commitFile);
+                $this->gitCommitHash = substr(trim($commit), 0, 7);
+            } else {
+                $this->gitCommitHash = '';
+                $packedRefs = SB_GIT_PATH . '/packed-refs';
+
+                if (file_exists($packedRefs)) {
+                    foreach (file($packedRefs) as $line) {
+                        if (preg_match('/^([0-9a-f]{40}) refs\/heads\/' . preg_quote($this->gitBranch, '/') . '$/', trim($line), $matches)) {
+                            $this->gitCommitHash = substr($matches[1], 0, 7);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 
