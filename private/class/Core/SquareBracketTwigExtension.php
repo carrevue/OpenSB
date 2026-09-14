@@ -140,8 +140,6 @@ class SquareBracketTwigExtension extends AbstractExtension
             new TwigFunction('header_user_switcher_links', [$this->authentication, 'getUsersFromAccount']),
             new TwigFunction('footer_links', [$this, 'footerLinks']),
             new TwigFunction('get_css_file_timestamp', [$this->sb, 'getCurrentSkinCssTimestamp']),
-            new TwigFunction('upload_box', [$this, 'smallUploadBox'], ['is_safe' => ['html']]),
-            new TwigFunction('comment', [$this, 'comment'], ['is_safe' => ['html']]),
             new TwigFunction('localize', [$this, 'localize']),
             //new TwigFunction('truncate_number', [$this, 'truncateNumber']),
             new TwigFunction('convert_time', [$this, 'convertTime']),
@@ -391,14 +389,10 @@ class SquareBracketTwigExtension extends AbstractExtension
      */
     public function userLink($user): string
     {
-        if (!isset($user["info"])) {
-            trigger_error("userLink is missing data!", E_USER_WARNING);
-        }
-
         // get user info
-        $username = htmlspecialchars($user["info"]["username"]) ?? "Username";
-        $displayName = htmlspecialchars($user["info"]["displayname"]) ?? "Display name";
-        $color = $user["info"]["color"] ?? "#00FF00";
+        $username = htmlspecialchars($user["info"]["username"] ?? "InvalidUserlink!");
+        $displayName = htmlspecialchars($user["info"]["displayname"] ?? "InvalidUserLink!");
+        $color = $user["info"]["color"] ?? "#00FFFF";
         $powerlevel =  $user["info"]["powerlevel"] ?? 0;
 
         // common values
@@ -455,9 +449,9 @@ class SquareBracketTwigExtension extends AbstractExtension
             trigger_error("userLinkClassic is missing data!", E_USER_WARNING);
         }
 
-        $username = htmlspecialchars($user["info"]["username"]) ?? "Username";
-        $displayName = htmlspecialchars($user["info"]["displayname"]) ?? "Display name";
-        $color = $user["info"]["color"] ?? "#00FF00";
+        $username = htmlspecialchars($user["info"]["username"] ?? "InvalidUserlink!");
+        $displayName = htmlspecialchars($user["info"]["displayname"] ?? "InvalidUserLink!");
+        $color = $user["info"]["color"] ?? "#00FFFF";
         // the old userlink function used to show if someone was staff, this was implemented around april 2023.
         $powerlevel = $user["info"]["powerlevel"] ?? 0;
 
@@ -871,37 +865,6 @@ class SquareBracketTwigExtension extends AbstractExtension
 
         return $this->getIcon($icon, $size);
     }
-
-    /**
-     * function smallUploadBox
-     * 
-     * legacy function used by finalium and bootstrap skin only.
-     * apparantly this is used on finalium for Some reason.
-     *
-     * @param mixed $upload
-     *
-     * @return mixed
-     */
-    public function smallUploadBox($upload)
-    {
-        return $this->twig->render('components/smallvideobox.twig', ['data' => $upload]);
-    }
-
-    /**
-     * function comment
-     *
-     * legacy function used by finalium and bootstrap skin only.
-     * apparantly this is used on finalium for Some reason.
-     * 
-     * @param mixed $comment
-     *
-     * @return mixed
-     */
-    public function comment($comment)
-    {
-        return $this->twig->render('components/comment.twig', ['comment' => $comment]);
-    }
-    //
 
     /**
      * function localize

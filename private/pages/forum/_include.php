@@ -82,3 +82,79 @@ function needsLogin() {
         Utilities::notifyBanner("notify_login_required", "/login");
     }
 }
+
+/**
+ * this should be moved to a class
+ */
+function newPost($data) {
+    global $database;
+
+	if (!isset($data['time']))
+		$data['time'] = time();
+
+	$database->insertInto('z_posts', [
+		'user' => $data['u_id'],
+		'thread' => $data['thread'],
+		'date' => $data['time']
+	]);
+
+	$pid = $database->insertId();
+	$data['pid'] = $pid;
+	$database->insertInto('z_poststext', [
+		'id' => $pid,
+		'text' => $data['message']
+	]);
+
+	$database->query("UPDATE z_forums
+			SET posts = posts + 1,
+			lastdate = ?, lastuser = ?, lastid = ?
+			WHERE id = ?",
+		[$data['time'], $data['u_id'], $pid, $data['forum']]);
+
+	$database->query("UPDATE z_threads
+			SET posts = posts + 1,
+			lastdate = ?, lastuser = ?, lastid = ?
+			WHERE id = ?",
+		[$data['time'], $data['u_id'], $pid, $data['thread']]);
+
+	/*$database->query("UPDATE users SET posts = posts + 1 WHERE id = ?",
+		[$data['u_id']]);*/
+
+	if (!isset($data['newthread'])) {
+		// nuke entries of this thread in the "threadsread" table
+		$database->query("DELETE FROM z_threadsread WHERE tid = ? AND NOT (uid = ?)", [$data['thread'], $data['u_id']]);
+	}
+
+	//newForumPostHook($data, isset($data['newthread']) ? 'thread' : 'reply'); <-- DiscordWebhookLogging
+
+	return $pid;
+}
+
+/**
+ * this should be moved to a class
+ */
+function newThread($data) {
+    global $database;
+
+	$data['newthread'] = true;
+	if (!isset($data['time']))
+		$data['time'] = time();
+
+	$database->insertInto('z_threads', [
+		'title' => $data['title'],
+		'forum' => $data['forum'],
+		'user' => $data['u_id'],
+	]);
+	$tid = $database->insertId();
+	$data['thread'] = $tid;
+
+	$database->query("UPDATE z_forums SET threads = threads + 1 WHERE id = ?",
+		[$data['forum']]);
+
+	$database->query("UPDATE users SET threads = threads + 1 WHERE id = ?",
+		[$data['u_id']]);
+
+	newPost($data);
+
+	return $tid;
+}
