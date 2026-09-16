@@ -48,7 +48,7 @@ function discord_webhook_notify($sb, $auth, $user, $action)
         'action' => $action,
     ];
 
-    $sb->getDiscordWebhookClass()->dashboardUserHook($data);
+    $sb->getWebhookLoggerClass()->dashboardUserHook($data);
 }
 
 $user = $database->fetch("SELECT u.*, (SELECT COUNT(*) FROM user_bans WHERE user = u.id) AS is_banned FROM users u WHERE u.name = ?", [$username]);
@@ -86,7 +86,7 @@ if (isset($_POST['ban_user'])) {
     if ($database->fetch("SELECT b.user FROM user_bans b WHERE b.user = ?", [$user["id"]])) {
         $database->query("DELETE FROM user_bans WHERE user = ?", [$user["id"]]);
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["ban_user"], 'unbanned');
         }
 
@@ -97,7 +97,7 @@ if (isset($_POST['ban_user'])) {
             [$user["id"], "Banned by " . $auth->getUserData()["name"], time()]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["ban_user"], 'banned');
         }
 
@@ -123,7 +123,7 @@ if (isset($_POST['verify_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["verify_user"], 'verified');
         }
 
@@ -136,7 +136,7 @@ if (isset($_POST['verify_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["verify_user"], 'unverified');
         }
 
@@ -158,7 +158,7 @@ if (isset($_POST['feature_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'unfeatured');
         }
 
@@ -171,7 +171,7 @@ if (isset($_POST['feature_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'featured');
         }
 
@@ -193,7 +193,7 @@ if (isset($_POST['shadowban_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["shadowban_user"], 'unshadowbanned');
         }
 
@@ -206,7 +206,7 @@ if (isset($_POST['shadowban_user'])) {
             [$flags, $user["id"]]
         );
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $auth, $_POST["shadowban_user"], 'shadowbanned');
         }
 

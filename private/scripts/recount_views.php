@@ -115,6 +115,6 @@ foreach ($uploads as $upload) {
 
 $database->commitTransaction();
 
-if ($sb->isDiscordWebhookEnabled()) {
-    $sb->getDiscordWebhookClass()->scriptSuccessHook(__FILE__);
+if ($sb->isWebhookLoggerEnabled()) {
+    $sb->getWebhookLoggerClass()->scriptSuccessHook(__FILE__);
 }

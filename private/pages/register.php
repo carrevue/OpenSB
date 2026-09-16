@@ -186,14 +186,14 @@ if (isset($_POST['registersubmit'])) {
         );
         $userId = $database->insertId();
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             $data = [
                 "username" => $username,
                 "email" => $email_address,
                 "ip" => Utilities::getIpAddress(),
                 "asn" => ($ipInfo['as_name'] ?? "Unknown") . " (" . ($ipInfo['asn'] ?? "Unknown") . ")",
             ];
-            $sb->getDiscordWebhookClass()->newUserHook($data);
+            $sb->getWebhookLoggerClass()->newUserHook($data);
         }
 
         $_SESSION["SBTOKEN"] = $token;

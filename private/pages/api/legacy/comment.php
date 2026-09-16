@@ -125,7 +125,7 @@ $comment = [
     ],
 ];
 
-if ($sb->isDiscordWebhookEnabled()) {
+if ($sb->isWebhookLoggerEnabled()) {
     //$data = [
     $webhook_data = [
         'id' => $insertID,
@@ -135,7 +135,7 @@ if ($sb->isDiscordWebhookEnabled()) {
         'type' => $_POST['type'],
     ];
 
-    $sb->getDiscordWebhookClass()->newCommentHook($webhook_data, true);
+    $sb->getWebhookLoggerClass()->newCommentHook($webhook_data, true);
 }
 
 echo $twig->render('components/comment.twig', [

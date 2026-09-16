@@ -125,7 +125,7 @@ function newPost($data) {
 		$database->query("DELETE FROM z_threadsread WHERE tid = ? AND NOT (uid = ?)", [$data['thread'], $data['u_id']]);
 	}
 
-	//newForumPostHook($data, isset($data['newthread']) ? 'thread' : 'reply'); <-- DiscordWebhookLogging
+	//newForumPostHook($data, isset($data['newthread']) ? 'thread' : 'reply'); <-- WebhookLogger
 
 	return $pid;
 }

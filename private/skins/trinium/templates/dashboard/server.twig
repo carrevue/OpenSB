@@ -26,7 +26,7 @@
                 <li>Uptime: {{ system.uptime }}</li>
                 <li>Load average (1, 5, 15 min): {{ system.avg[0] }}, {{ system.avg[1] }}, {{ system.avg[2] }}</li>
                 <li>Storage: {{ system.disk.free }} free of {{ system.disk.total }} ({{ system.disk.percentage }} used)</li>
-                <li>Instance size: {{ system.disk.instance_size }}</li>
+                <li>Dynamic folder size: {{ system.disk.dynamic_size }}</li>
                 {% endif %}
             </ul>
         </div>

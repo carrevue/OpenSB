@@ -239,12 +239,12 @@ try {
             log("Only processing thumbnail, exiting...");
             log("OpenSB Video Upload Processor Success!");
 
-            if ($sb->isDiscordWebhookEnabled()) {
+            if ($sb->isWebhookLoggerEnabled()) {
                 $data = [
                     'id' => $new,
                 ];
 
-                $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+                $sb->getWebhookLoggerClass()->uploadProcessorSuccessHook($data);
             }
 
             die();
@@ -309,12 +309,12 @@ try {
         );
 
         if ($upload_type != "video_duration_only") {
-            if ($sb->isDiscordWebhookEnabled()) {
+            if ($sb->isWebhookLoggerEnabled()) {
                 $data = [
                     'id' => $new,
                 ];
 
-                $sb->getDiscordWebhookClass()->uploadProcessorSuccessHook($data);
+                $sb->getWebhookLoggerClass()->uploadProcessorSuccessHook($data);
             }
         }
     } else {
@@ -330,12 +330,12 @@ try {
         log($previous->getErrorOutput());
     }
 
-    if ($sb->isDiscordWebhookEnabled()) {
+    if ($sb->isWebhookLoggerEnabled()) {
         $data = [
             'id' => $new,
         ];
 
-        $sb->getDiscordWebhookClass()->uploadProcessorFailHook($data);
+        $sb->getWebhookLoggerClass()->uploadProcessorFailHook($data);
     }
 
     clearstatcache();

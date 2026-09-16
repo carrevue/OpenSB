@@ -93,7 +93,7 @@ if (isset($_POST["submit"])) {
         [$accid, $userid, 3]
     );
 
-    if ($sb->isDiscordWebhookEnabled()) {
+    if ($sb->isWebhookLoggerEnabled()) {
         $data = [
             "username" => $username,
             "email" => $email_address,
@@ -101,7 +101,7 @@ if (isset($_POST["submit"])) {
             "asn" => ($ipInfo['as_name'] ?? "Unknown") . " (" . ($ipInfo['asn'] ?? "Unknown") . ")",
         ];
 
-        $sb->getDiscordWebhookClass()->newUserHook($data);
+        $sb->getWebhookLoggerClass()->newUserHook($data);
     }
 }
 ?>

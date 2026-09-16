@@ -74,7 +74,7 @@ if (isset($_POST["submit"])) {
         [$username, $hashedPassword, $token, time(), time(), $title, $email_address, Utilities::getIpAddress(), $dobDateTime->format('Y-m-d')]
     );
 
-    if ($sb->isDiscordWebhookEnabled()) {
+    if ($sb->isWebhookLoggerEnabled()) {
         $data = [
             "username" => $username,
             "email" => $email_address,
@@ -82,7 +82,7 @@ if (isset($_POST["submit"])) {
             "asn" => $ipInfo['as_name'] ?? "Unknown" . " (" . $ipInfo['asn'] ?? "Unknown" . ")",
         ];
 
-        $sb->getDiscordWebhookClass()->newUserHook($data);
+        $sb->getWebhookLoggerClass()->newUserHook($data);
     }
 }
 ?>

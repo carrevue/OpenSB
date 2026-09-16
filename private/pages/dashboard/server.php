@@ -100,6 +100,7 @@ if (!$is_windows) {
             }
 
             // we have no clue, so fallback into showing the system's arch type
+            // TODO: handle virtualized apple M series processors
             if (stripos($line, 'processor') === 0) {
                 $cpu_name = php_uname('m');
             }
@@ -139,14 +140,14 @@ if (!$is_windows) {
     $disk_used = $disk_total - $disk_free;
     $disk_percentage = Utilities::calculatePercentage($disk_used, $disk_total);
 
-    $instance_size = get_folder_size(SB_ROOT_PATH);
+    $instance_size = get_folder_size($sb->getStorageClass()->getPath());
 
     $disk = [
         "total" => Utilities::formatBytes($disk_total, 2),
         "free" => Utilities::formatBytes($disk_free, 2),
         "used" => Utilities::formatBytes($disk_used, 2),
         "percentage" => $disk_percentage,
-        "instance_size" => Utilities::formatBytes($instance_size),
+        "dynamic_size" => Utilities::formatBytes($instance_size),
     ];
 } else {
     // maybe look into wmic in the future but not now -chaziz 2/6/2026

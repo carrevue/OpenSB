@@ -57,9 +57,9 @@ class SquareBracket
     private Localization $localization;
 
     /**
-     * @var DiscordWebhookLogging
+     * @var WebhookLogger
      */
-    private ?DiscordWebhookLogging $discord;
+    private ?WebhookLogger $discord;
 
     /**
      * @var IPLookup
@@ -352,7 +352,7 @@ class SquareBracket
         $this->enable_discord_webhook = $config["discord_webhook"]["enabled"] ?? false;
 
         if ($this->enable_discord_webhook) {
-            $this->discord = new DiscordWebhookLogging($this, $config["discord_webhook"]["url"]);
+            $this->discord = new WebhookLogger($this, $config["discord_webhook"]["url"]);
         } else {
             $this->discord = null;
         }
@@ -562,28 +562,28 @@ class SquareBracket
     }
 
     /**
-     * function isDiscordWebhookEnabled
+     * function isWebhookLoggerEnabled
      *
-     * Returns the bool that toggles the Discord webhook logging class.
+     * Returns the bool that toggles the webhook logging class.
      *
      * @return bool
      */
-    public function isDiscordWebhookEnabled(): bool
+    public function isWebhookLoggerEnabled(): bool
     {
         return $this->enable_discord_webhook;
     }
 
     /**
-     * function getDiscordWebhookClass
+     * function getWebhookLoggerClass
      *
-     * Returns the Discord webhook logging class.
+     * Returns the webhook logging class.
      *
-     * @return DiscordWebhookLogging
+     * @return WebhookLogger
      */
-    public function getDiscordWebhookClass(): DiscordWebhookLogging
+    public function getWebhookLoggerClass(): WebhookLogger
     {
         if (!$this->discord || !$this->enable_discord_webhook) {
-            throw new \RuntimeException("getDiscordWebhookClass() called while Discord webhook is disabled.");
+            throw new \RuntimeException("getWebhookLoggerClass() called while Discord webhook is disabled.");
         }
         return $this->discord;
     }

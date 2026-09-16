@@ -185,7 +185,7 @@ function discord_webhook_notify($sb, $new, $title, $description, $auth)
         'author' => $auth->getUserData()["name"]
     ];
 
-    $sb->getDiscordWebhookClass()->newUploadHook($data);
+    $sb->getWebhookLoggerClass()->newUploadHook($data);
 }
 
 if (
@@ -294,7 +294,7 @@ if (
 
         parse_tags($tags, $new, $database);
 
-        if ($sb->isDiscordWebhookEnabled()) {
+        if ($sb->isWebhookLoggerEnabled()) {
             discord_webhook_notify($sb, $new, $title, $desc, $auth);
         }
 

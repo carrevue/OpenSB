@@ -26,14 +26,13 @@ use \DiscordWebhooks\Client;
 use \DiscordWebhooks\Embed;
 
 /**
- * class DiscordWebhookLogging
+ * class WebhookLogger
  * 
- * The Discord Webhook Logging class.
+ * The Webhook Logging class.
  * 
- * @todo Turn this into an interface, so we can support
- * other webhook interfaces.
+ * @todo Turn this into an interface.
  */
-class DiscordWebhookLogging
+class WebhookLogger
 {
     /**
      * @var Database The database class.
@@ -93,7 +92,7 @@ class DiscordWebhookLogging
     public function initClient()
     {
         if (!$this->webhook instanceof Client) {
-            $this->webhook = new Client($this->url);
+            $this->webhook = new Client();
         }
     }
 
@@ -130,7 +129,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -170,7 +169,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -221,7 +220,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -248,7 +247,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::SUCCESS);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -275,7 +274,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::DANGER);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -307,7 +306,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::SUCCESS);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -336,7 +335,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color(Colors::ACCENT);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -400,7 +399,7 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color($color);
 
-        $this->webhook->embed($mbd)->send();
+        $this->webhook->embed($mbd)->send($this->url);
     }
 
     /**
@@ -437,6 +436,6 @@ class DiscordWebhookLogging
             ->footer($this->footer_text)
             ->color($color);
 
-        @$this->webhook->embed($mbd)->send();
+        @$this->webhook->embed($mbd)->send($this->url);
     }
 }

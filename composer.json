@@ -10,7 +10,7 @@
         "php-ffmpeg/php-ffmpeg": "1.4.0",
         "twig/string-extra": "3.24.0",
         "jaybizzle/crawler-detect": "1.4.1",
-        "nopjmp/discord-webhooks": "0.4.2",
+        "rollerozxa/discord-webhooks": "dev-master",
         "maxmind-db/reader": "1.13.1",
         "wikimedia/composer-merge-plugin": "^2.1",
         "phpmailer/phpmailer": "7.1.1"
@@ -32,6 +32,12 @@
     "require-dev": {
         "arokettu/pseudolocale": "^1.1"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/rollerozxa/discord-webhooks"
+        }
+    ],
     "extra": {
         "merge-plugin": {
             "include": [

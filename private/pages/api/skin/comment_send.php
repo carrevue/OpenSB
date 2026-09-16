@@ -190,7 +190,7 @@ switch ($post_data['type']) {
         exit;
 }
 
-if ($sb->isDiscordWebhookEnabled()) {
+if ($sb->isWebhookLoggerEnabled()) {
     $data = [
         'id' => $insertID,
         'location_id' => $post_data['id'],
@@ -199,7 +199,7 @@ if ($sb->isDiscordWebhookEnabled()) {
         'type' => $post_data['type']
     ];
 
-    $sb->getDiscordWebhookClass()->newCommentHook($data);
+    $sb->getWebhookLoggerClass()->newCommentHook($data);
 }
 
 $apiOutput = [

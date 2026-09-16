@@ -49,7 +49,7 @@ function discord_webhook_notify($sb, $auth, $title, $action, $reason = '')
         'action' => $action,
     ];
 
-    $sb->getDiscordWebhookClass()->dashboardUploadHook($data);
+    $sb->getWebhookLoggerClass()->dashboardUploadHook($data);
 }
 
 $upload = new UploadData($database, $id);

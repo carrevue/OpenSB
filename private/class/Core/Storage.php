@@ -79,7 +79,7 @@ class Storage
     }
 
     /**
-     * function processVideoUpload
+     * function getPath
      * 
      * Returns the storage path.
      * 

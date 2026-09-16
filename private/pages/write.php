@@ -56,7 +56,7 @@ if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isLogge
 
     $journal_id = $database->insertId();
 
-    if ($sb->isDiscordWebhookEnabled()) {
+    if ($sb->isWebhookLoggerEnabled()) {
         $data = [
             'id' => $journal_id,
             'name' => $title,
@@ -65,7 +65,7 @@ if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isLogge
             'is_news' => $isSiteNews,
         ];
 
-        $sb->getDiscordWebhookClass()->newJournalHook($data);
+        $sb->getWebhookLoggerClass()->newJournalHook($data);
     }
 
     Utilities::notifyBanner("notify_write_success", "/user/" . $auth->getUserData()["name"] . '/journal/' . $journal_id, "success");

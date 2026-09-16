@@ -42,14 +42,14 @@ if (isset($_GET["token"])) {
             $database->query("DELETE FROM email_verification_token WHERE token = ?", [$token]);
             $database->query("UPDATE users SET flags = flags & ~? WHERE id = ?", [UserFlags::FLAG_UNVERIFIED->value, $result['user']]);
 
-            if ($sb->isDiscordWebhookEnabled()) {
+            if ($sb->isWebhookLoggerEnabled()) {
                 $data = [
                     'user' => Utilities::userIDToUsername($database, $result['user']),
                     'author' => "System",
                     'action' => "verified",
                 ];
 
-                $sb->getDiscordWebhookClass()->dashboardUserHook($data);
+                $sb->getWebhookLoggerClass()->dashboardUserHook($data);
             }
 
             Utilities::notifyBanner("notify_register_email_token_success", "/", "success");
