@@ -176,7 +176,7 @@ function parse_tags(array $tags, string $upload_id, $database): void
         }
     }
 }
-function discord_webhook_notify($sb, $new, $title, $description, $auth)
+function notify_webhook($sb, $new, $title, $description, $auth)
 {
     $data = [
         'id' => $new,
@@ -295,7 +295,7 @@ if (
         parse_tags($tags, $new, $database);
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $new, $title, $desc, $auth);
+            notify_webhook($sb, $new, $title, $desc, $auth);
         }
 
         $database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"] + 1, $auth->getUserID()]);

@@ -57,7 +57,7 @@
                 <div class="header-menu-container">
                     <div class="menu-button" data-menu-id="user-menu">
                         <div class="profile-picture user-menu-pfp">
-                            <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+                            <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}" data-user="{{ user_data.id }}">
                         </div>
                         {% if options.trinium_old_header %}
                             <div class="menu-caret-container">
@@ -71,7 +71,7 @@
                             <div class="user-menu-intro">
                                 <div class="user-menu-intro-left">
                                     <div class="profile-picture">
-                                        <img src="{{ profile_picture(user_data.id) }}" class="pfp"
+                                        <img src="{{ profile_picture(user_data.id) }}" class="pfp" data-user="{{ user_data.id }}"
                                              alt="{{ user_data.name }}">
                                     </div>
                                 </div>
@@ -98,14 +98,16 @@
                                 <a class="menu-item-button" href="/login/{{ link.name }}">
                                     <div class="menu-item-profile-picture profile-picture">
                                         <img src="{{ profile_picture(link.id) }}" class="pfp"
-                                            alt="{{ link.title }}" loading="lazy">
+                                            alt="{{ link.title }}" loading="lazy" data-user="{{ link.id }}">
                                     </div>
                                     <span>{{ link.title }}</span>
                                 </a>
                             {% endfor %}
                         </div>
+                        {% if not options.trinium_old_header %}
                         <hr>
                         <a class="menu-item-button small" href="/logout"><span>{{ localize('logout') }}</span></a>
+                        {% endif %}
                     </div>
                 </div>
             {% else %}

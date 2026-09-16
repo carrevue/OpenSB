@@ -38,7 +38,7 @@
         {% for user in users %}
             <div class="content-entry admin-entry">
                 <div class="content-image profile-picture">
-                    <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp">
+                    <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp" data-user="{{ user.id }}">
                 </div>
                 <div class="content-info">
                     <div class="content-title">

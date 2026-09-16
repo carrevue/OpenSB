@@ -287,6 +287,8 @@ $recommendation_title_penality = [
     'rehike',
 ];
 
+$recommended = [];
+
 // now score this shit
 if (!empty($candidates)) {
     $sourceTagCount = count($sourceTags);
@@ -342,7 +344,7 @@ if (!empty($candidates)) {
 
     shuffle($relevant);
     $recommended = array_slice($relevant, 0, 20);
-    $recommended = !empty($recommended) ? $recommended : false;
+    $recommended = !empty($recommended) ? $recommended : [];
 }
 
 if ($recommended) {

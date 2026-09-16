@@ -17,7 +17,7 @@
             <div class="content-entry">
                 <div class="content-thumbnail">
                     <div class="content-image profile-picture">
-                        <img src="{{ profile_picture(notice.sender.id) }}"
+                        <img src="{{ profile_picture(notice.sender.id) }}" data-user="{{ notice.sender.id }}"
                                 alt="{{ notice.sender.info.username }}" class="pfp" loading="lazy">
                     </div>
                 </div>

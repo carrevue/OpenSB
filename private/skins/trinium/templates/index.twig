@@ -12,7 +12,7 @@
             <div class="jumbotron-welcome">
                 {% if logged_in %}
                     <div class="profile-picture">
-                        <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+                        <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}" data-user="{{ user_data.id }}">
                     </div>
                     <div class="jumbotron-logged-in-text">
                         <h1>{{ localize('welcome_logged_in', user_data.title) }}</h1>
@@ -158,7 +158,7 @@
                                 <div class="content-thumbnail">
                                     <a href="/user/{{ user.info.username }}">
                                         <div class="content-image profile-picture">
-                                            <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp">
+                                            <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp" data-user="{{ user.id }}">
                                         </div>
                                     </a>
                                 </div>

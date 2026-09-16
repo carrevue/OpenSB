@@ -150,7 +150,7 @@
     {% block precontentappend %}
     {% endblock %}
     {% if banner_picture %}
-    <div class="jumbotron profile-banner {% if options.trinium_show_sidebar %}sidebar-active{% endif %}" id="profile-banner"></div>
+    <div class="jumbotron profile-banner {% if options.trinium_show_sidebar %}sidebar-active{% endif %}" id="profile-banner" data-user="{{ common.id }}"></div>
     {% endif %}
 {% endblock %}
 

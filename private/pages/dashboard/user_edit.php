@@ -40,7 +40,7 @@ if ($sb->getCurrentSkinName() != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
-function discord_webhook_notify($sb, $auth, $user, $action)
+function notify_webhook($sb, $auth, $user, $action)
 {
     $data = [
         'user' => $user,
@@ -87,7 +87,7 @@ if (isset($_POST['ban_user'])) {
         $database->query("DELETE FROM user_bans WHERE user = ?", [$user["id"]]);
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["ban_user"], 'unbanned');
+            notify_webhook($sb, $auth, $_POST["ban_user"], 'unbanned');
         }
 
         Utilities::notifyBanner("notify_dashboard_unban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
@@ -98,7 +98,7 @@ if (isset($_POST['ban_user'])) {
         );
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["ban_user"], 'banned');
+            notify_webhook($sb, $auth, $_POST["ban_user"], 'banned');
         }
 
         Utilities::notifyBanner("notify_dashboard_ban_success", "/dashboard/users/{$username}", "success", [$_POST["ban_user"]]);
@@ -124,7 +124,7 @@ if (isset($_POST['verify_user'])) {
         );
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["verify_user"], 'verified');
+            notify_webhook($sb, $auth, $_POST["verify_user"], 'verified');
         }
 
         Utilities::notifyBanner("notify_dashboard_verify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
@@ -137,7 +137,7 @@ if (isset($_POST['verify_user'])) {
         );
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["verify_user"], 'unverified');
+            notify_webhook($sb, $auth, $_POST["verify_user"], 'unverified');
         }
 
         Utilities::notifyBanner("notify_dashboard_unverify_success", "/dashboard/users/{$username}", "success", [$_POST["verify_user"]]);
@@ -159,7 +159,7 @@ if (isset($_POST['feature_user'])) {
         );
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'unfeatured');
+            notify_webhook($sb, $auth, $_POST["feature_user"], 'unfeatured');
         }
 
         Utilities::notifyBanner("notify_dashboard_unfeature_user_success", "/dashboard/users/{$username}", "success", [$_POST["feature_user"]]);
@@ -172,7 +172,7 @@ if (isset($_POST['feature_user'])) {
         );
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["feature_user"], 'featured');
+            notify_webhook($sb, $auth, $_POST["feature_user"], 'featured');
         }
 
         Utilities::notifyBanner("notify_dashboard_feature_user_success", "/dashboard/users/{$username}", "success", [$_POST["feature_user"]]);
@@ -194,7 +194,7 @@ if (isset($_POST['shadowban_user'])) {
         );
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["shadowban_user"], 'unshadowbanned');
+            notify_webhook($sb, $auth, $_POST["shadowban_user"], 'unshadowbanned');
         }
 
         Utilities::notifyBanner("notify_dashboard_unshadowban_user_success", "/dashboard/users/{$username}", "success", [$_POST["shadowban_user"]]);
@@ -207,7 +207,7 @@ if (isset($_POST['shadowban_user'])) {
         );
 
         if ($sb->isWebhookLoggerEnabled()) {
-            discord_webhook_notify($sb, $auth, $_POST["shadowban_user"], 'shadowbanned');
+            notify_webhook($sb, $auth, $_POST["shadowban_user"], 'shadowbanned');
         }
 
         Utilities::notifyBanner("notify_dashboard_shadowban_user_success", "/dashboard/users/{$username}", "success", [$_POST["shadowban_user"]]);
@@ -365,15 +365,15 @@ $user_info_table = [
         'label' => $localization->translate('profile_name'),
         'value' => $user['title'],
     ],
-    'user_role' => [
+    'user_rank' => [
         'condition' => true,
-        'label' => $localization->translate('user_role'),
+        'label' => $localization->translate('user_rank'),
         'value' => match($user['powerlevel']) {
-            1 => $localization->translate('user_role_normal'),
-            2 => $localization->translate('user_role_moderator'),
-            3 => $localization->translate('user_role_administrator'),
-            4 => $localization->translate('user_role_owner'),
-            default => $localization->translate('user_role_unknown') . ' (' . $user['powerlevel'] . ')',
+            1 => $localization->translate('user_rank_normal'),
+            2 => $localization->translate('user_rank_moderator'),
+            3 => $localization->translate('user_rank_administrator'),
+            4 => $localization->translate('user_rank_owner'),
+            default => $localization->translate('user_rank_unknown') . ' (' . $user['powerlevel'] . ')',
         },
     ],
     'age_birthdate' => [

@@ -40,7 +40,7 @@ if ($sb->getCurrentSkinName() != "trinium") {
     Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
 }
 
-function discord_webhook_notify($sb, $auth, $title, $action, $reason = '')
+function notify_webhook($sb, $auth, $title, $action, $reason = '')
 {
     $data = [
         'title' => $title,
@@ -96,7 +96,7 @@ if (isset($_POST['takedown_submit'])) {
     ", [$id, time(), $reason, $auth->getUserID()]);
 
     // ok this shit is very fucking stupid i do not know why is it like this
-    discord_webhook_notify($sb, $auth, $upload_title_for_webhook, "takedown", $reason);
+    notify_webhook($sb, $auth, $upload_title_for_webhook, "takedown", $reason);
 
     Utilities::notifyBanner("notify_dashboard_upload_takedown_success", $_SERVER['REQUEST_URI'], "success");
 }
@@ -114,7 +114,7 @@ if (isset($_POST['restore'])) {
         WHERE upload = ?
     ", [$id]);
 
-    discord_webhook_notify($sb, $auth, $upload_title_for_webhook, "restore", $reason);
+    notify_webhook($sb, $auth, $upload_title_for_webhook, "restore", $reason);
 
     Utilities::notifyBanner("notify_dashboard_upload_restore_success", $_SERVER['REQUEST_URI'], "success");
 }

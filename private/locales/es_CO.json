@@ -102,7 +102,7 @@
     "username": "Nombre de usuario",
     "profile_name": "Nombre de perfil",
     "ip_address": "Dirección IP",
-    "user_role": "Rol",
+    "user_rank": "Rol",
     "age": "Edad",
     "birthdate": "Fecha de nacimiento",
     "registered": "Registrado",
@@ -113,11 +113,11 @@
 
     "profile_featured": "Destacado",
 
-    "user_role_unknown": "Desconocido",
-    "user_role_normal": "Normal",
-    "user_role_moderator": "Moderador",
-    "user_role_administrator": "Administrador",
-    "user_role_owner": "Propietario",
+    "user_rank_unknown": "Desconocido",
+    "user_rank_normal": "Normal",
+    "user_rank_moderator": "Moderador",
+    "user_rank_administrator": "Administrador",
+    "user_rank_owner": "Propietario",
 
     "as_domain": "Dominio ISP",
     "as_name": "ISP",
