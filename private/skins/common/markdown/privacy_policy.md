@@ -1,14 +1,14 @@
 # Privacy Policy
 
-Last updated on July 4th 2026.
+Last updated on September 19th 2026.
 
 This is the privacy policy for the website FulpTube (``fulptube.rocks``), alternatively known as squareBracket (``squarebracket.pw``, ``squarebracket.me``).
 
-The only people who have full server and database access are Chaziz, Jack/shiypc and magnum22, who are the website owners and server operators. Staff members do not have full server or database access and can only use tools provided from the dashboard.
+The only people who have full server and database access are Chaziz and Jack/shiypc, who are the website owners and server operators. Staff members do not have full server or database access and can only use tools provided from the dashboard.
 
 Currently, the website is hosted on a server provided by Endless Hosting in the United States. Periodic offline backups of the platform are stored by Chaziz in Canada.
 
-Whenever a request is sent, it is logged in the server's access logs. This will include your IP, user agent and HTTP referer. These access logs are only accessible to the server operators. They will be used for temporary statistics and for logging potential errors that occur. In the case of illegal activity (e.g. a DDoS attack), the offending parts of an access log may be saved for further analysis.
+Whenever a request is sent, it is logged in the server's access logs. This will include your IP, user agent and HTTP referrer. These access logs are only accessible to the server operators. They will be used for temporary statistics and for logging potential errors that occur. In the case of illegal activity (e.g. a DDoS attack), the offending parts of an access log may be saved for further analysis.
 
 This website consists of user generated content, and whenever you e.g. upload something or write a comment, you should be aware that this content will be publicly available and searchable on the Internet.
 
