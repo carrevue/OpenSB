@@ -11,7 +11,7 @@
         "twig/string-extra": "3.24.0",
         "jaybizzle/crawler-detect": "1.4.0",
         "nopjmp/discord-webhooks": "0.4.2",
-        "maxmind-db/reader": "1.13.1",
+        "maxmind-db/reader": "1.14.0",
         "wikimedia/composer-merge-plugin": "^2.1",
         "phpmailer/phpmailer": "7.1.1"
     },

@@ -41,17 +41,23 @@ $uploads_featured = $upload_query->query(
 if ($auth->isUserLoggedIn()) {
     $following_users = $database->fetchArray(
         $database->query(
-            "SELECT u.id, u.name
+            "SELECT u.id, u.name, u.title
             FROM users u
             WHERE u.u_index >= 1
             AND (
                 u.id IN (SELECT id FROM user_follows WHERE user = ?)
             )
             AND (
+                (u.flags & ?) != ?
+            )
+            AND (
                 u.id NOT IN (SELECT user FROM user_bans)
             )
             ORDER BY RAND() LIMIT 6",
-            [$auth->getUserId()]
+            [
+                $auth->getUserId(),
+                UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value,
+            ]
         )
     );
 }
@@ -59,25 +65,32 @@ if ($auth->isUserLoggedIn()) {
 if (!empty($following_users)) {
     $recommended_users = $following_users;
 } else {
-    // select users if they're 
-    // 1. not shadowbanned
-    // 2. are in the top 20 of being most followed or are featured
-    // 3. have last logged in the last month (this does not apply to staff)
-    // 4. not banned
+    // select users if they
+    // 1. have at least 6 uploads
+    // 2. are not shadowbanned (this appears to be broken)
+    // 3. are in the top 50 of being most followed or are featured
+    // 4. have uploaded something within the last month
+    // 5. are not banned
     $recommended_users = $database->fetchArray(
         $database->query(
-            "SELECT u.id, u.name
+            "SELECT u.id, u.name, u.title, lu.last_upload
             FROM users u
+            JOIN (
+                SELECT author, MAX(timestamp) AS last_upload
+                FROM uploads
+                WHERE visibility = 0
+                GROUP BY author
+            ) lu ON lu.author = u.id
             WHERE u.u_index >= 6
             AND (
                 (u.flags & ?) != ?
             )
             AND (
-                (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 20) t))
+                (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 50) t))
                 OR (u.flags & ?) = ?
             )
             AND (
-                u.powerlevel != 1 OR u.last_seen > ?
+                lu.last_upload > ?
             )
             AND (
                 u.id NOT IN (SELECT user FROM user_bans)
