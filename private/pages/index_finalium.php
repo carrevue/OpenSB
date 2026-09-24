@@ -62,9 +62,9 @@ if (!empty($following_users)) {
     $recommended_users = $following_users;
 } else {
     // select users if they're 
-    // 1. not shadowbanned
-    // 2. are in the top 20 of being most followed or are featured
-    // 3. have last logged in the last month (this does not apply to staff)
+    // 1. not shadowbanned (this appears to be broken)
+    // 2. are in the top 40 of being most followed or are featured
+    // 3. have last logged in the last month
     // 4. not banned
     $recommended_users = $database->fetchArray(
         $database->query(
@@ -75,11 +75,11 @@ if (!empty($following_users)) {
                 (u.flags & ?) != ?
             )
             AND (
-                (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 20) t))
+                (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 40) t))
                 OR (u.flags & ?) = ?
             )
             AND (
-                u.powerlevel != 1 OR u.last_seen > ?
+                u.last_seen > ?
             )
             AND (
                 u.id NOT IN (SELECT user FROM user_bans)

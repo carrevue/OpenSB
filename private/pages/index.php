@@ -35,7 +35,7 @@ use Data\Journal\JournalQuery;
 $options = $sb->getLocalOptions();
 
 // use different index for finalium skin
-if ($options["skin"] == "finalium") {
+if ($sb->getSkinThemeOptions()["homepage_use_finalium_version"] ?? false) {
     include_once "index_finalium.php";
     exit;
 }
