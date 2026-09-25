@@ -61,7 +61,9 @@ $type = ($_GET['type'] ?? 'recent');
 $user = ($_GET['user'] ?? null);
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? $_GET['page'] : 1);
 
-$limit = $database->paginate($page, 20);
+$limit_num = ($sb->getLocalOptions()["skin"] == "finalium") ? 30 : 20;
+
+$limit = $database->paginate($page, $limit_num);
 
 $uploads = $upload_query->query($tabs[$type]["order"] ?? "timestamp DESC", $limit, $tabs[$type]["where"] ?? null, [$data["id"]], UploadQueryTypeEnum::Profile);
 $upload_count = $upload_query->count("v.author = ?", [$data["id"]], UploadQueryTypeEnum::Profile);
