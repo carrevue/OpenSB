@@ -265,7 +265,7 @@ if (!SB_CLI) {
         die();
     }
 
-    if ($sb->isChazizInstance() && $sb->isIpLookupEnabled()) {
+    /*if ($sb->isChazizInstance() && $sb->isIpLookupEnabled()) {
         $ipLookup = $sb->getIpLookupClass();
         
         if (
@@ -275,7 +275,7 @@ if (!SB_CLI) {
             echo $twig_error->render("geoblock.twig", ["page" => "failwhale"]);
             die();
         }
-    }
+    }*/
 
     $twig = $sb->getTemplatingClass();
 

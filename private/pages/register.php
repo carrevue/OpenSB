@@ -66,6 +66,14 @@ if (str_contains($ipcheck, "<appears>yes</appears>") && !$isDebug) {
     Utilities::notifyBanner("notify_register_ip_suspicious", "/");
 }
 
+if ($sb->isIpLookupEnabled()) {
+    $age_requirement = Utilities::getMinimumAgeFromCountryCode($sb->getIpLookupClass()->getCountry(Utilities::getIpAddress()));
+} else {
+    $age_requirement = 13;
+}
+
+$age_limit = date('Y') - 120;
+
 $captcha = $sb->getCaptchaSettings();
 
 // tip: if youre hosting opensb on a linux distro with selinux included (eg: fedora) and you get some
@@ -142,13 +150,13 @@ if (isset($_POST['registersubmit'])) {
     } finally {
         $currentDate = new DateTime();
 
-        if ($dobDateTime->format('Y') < 1900 || $dobDateTime->format('Y') > date('Y')) {
+        if ($dobDateTime->format('Y') < $age_limit || $dobDateTime->format('Y') > date('Y')) {
             $error .= "You have an invalid birth date. ";
         } else {
             $age = $currentDate->diff($dobDateTime)->y;
 
-            if ($age < 13) {
-                $error .= "You are below the age of 13. ";
+            if ($age < $age_requirement) {
+                $error .= "You are below the age of " . $age_requirement . ". ";
             }
         }
     }
