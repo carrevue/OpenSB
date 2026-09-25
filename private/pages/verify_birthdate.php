@@ -36,6 +36,17 @@ if (isset($auth->getUserData()['birthdate']) && !$sb->isDebug()) {
     Utilities::redirect("/");
 }
 
+if ($sb->isIpLookupEnabled()) {
+    $country = $sb->getIpLookupClass()->getCountry(Utilities::getIpAddress());
+    $age_requirement = Utilities::getMinimumAgeFromCountryCode($country);
+    $ban_reason = "Failed birthdate verification check / Below " . $age_requirement . " in " . $sb->getIpLookupClass()->getCountry($country);
+} else {
+    $age_requirement = 13;
+    $ban_reason = "Failed birthdate verification check / Below 13";
+}
+
+$age_limit = date('Y') - 120;
+
 if ($sb->getCurrentSkinName() != "trinium") {
     $options = $sb->getOptionsCookie();
 
@@ -57,17 +68,16 @@ if (isset($_POST['birthdatesubmit'])) {
     } finally {
         $currentDate = new DateTime();
 
-        if ($dobDateTime->format('Y') < 1900 || $dobDateTime->format('Y') > date('Y')) {
+        if ($dobDateTime->format('Y') < $age_limit || $dobDateTime->format('Y') > date('Y')) {
             Utilities::notifyBanner("notify_birthdate_invalid", "/verify_birthdate");
         }
 
         $age = $currentDate->diff($dobDateTime)->y;
 
-        if ($age < 13) {
-            // TROLLED
+        if ($age < $age_requirement) {
             $database->query(
                 "INSERT INTO user_bans (userid, reason, time) VALUES (?,?,?)",
-                [$auth->getUserData()["id"], "Failed birthdate verification check / Below 13", time()]
+                [$auth->getUserData()["id"], $ban_reason, time()]
             );
         } else {
             Utilities::notifyBanner("notify_birthdate_success", false, "success");

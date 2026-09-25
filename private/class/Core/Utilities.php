@@ -367,6 +367,32 @@ class Utilities
     }
 
     /**
+     * function getMinimumAgeFromCountryCode
+     *
+     * @param string $country ISO 3166-1 alpha-2 country code
+     *
+     * @TODO: uk is considering bumping it to 16
+     * 
+     * @return int
+     */
+    public static function getMinimumAgeFromCountryCode($country)
+    {
+        static $ageMap = [
+            'AU' => 16, 'AW' => 16, 'BQ' => 16, 'HR' => 16, 'CW' => 16, 'DE' => 16,
+            'HU' => 16, 'IE' => 16, 'LU' => 16, 'NL' => 16, 'PL' => 16,
+            'RO' => 16, 'SM' => 16, 'SX' => 16, 'SK' => 16, 'SI' => 16,
+
+            'CZ' => 15, 'FR' => 15, 'GR' => 15, 'RS' => 15, 'VN' => 15,
+
+            'AT' => 14, 'BG' => 14, 'CL' => 14, 'CO' => 14, 'CY' => 14,
+            'IT' => 14, 'LT' => 14, 'PE' => 14, 'KR' => 14, 'ES' => 14,
+            'VE' => 14,
+        ];
+
+        return $ageMap[$country] ?? 13;
+    }
+
+    /**
      * function calculateAge
      *
      * @param ?string $birthdate
