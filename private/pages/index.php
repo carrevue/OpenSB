@@ -48,30 +48,107 @@ $uploads_featured_query_limit = 3;
 $news_recent_query_limit = 1;
 $journals_query_limit = 5;
 
+$wanted_uploads = $uploads_query_limit * 6;
+
+function organize_uploads($rows, $limit): array {
+    $max_per_author = 4;
+
+    $seen = [];
+    $array = [];
+
+    // avoid showing more than 4 uploads per author
+    foreach ($rows as $row) {
+        $author = is_array($row['author']) ? ($row['author']['id'] ?? null) : $row['author'];
+        if ($author === null) {
+            continue;
+        }
+
+        $seen[$author] = ($seen[$author] ?? 0) + 1;
+        if ($seen[$author] > $max_per_author) {
+            continue;
+        }
+
+        $array[] = $row;
+        if (count($array) >= $limit) {
+            break;
+        }
+    }
+
+    shuffle($array);
+    return $array;
+}
+
 $uploads_featured = $upload_query->query(
     "uploaded DESC",
     $uploads_featured_query_limit,
     sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
 )->toCleanArray();
 
-$featured_users = $database->fetchArray(
-    $database->query(
-        "SELECT u.id, u.name
-        FROM users u 
-        WHERE u.flags & ? = ?",
-        [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
-    )
-);
+if ($sb->isChazizInstance()) {
+    // select users if they
+    // 1. have at least 6 uploads
+    // 2. are not shadowbanned (this appears to be broken)
+    // 3. are in the top 50 of being most followed or are featured
+    // 4. have uploaded something within the last month
+    // 5. are not banned
+    $featured_users = $database->fetchArray(
+        $database->query(
+            "SELECT u.id, u.name, u.title, lu.last_upload
+            FROM users u
+            JOIN (
+                SELECT author, MAX(timestamp) AS last_upload
+                FROM uploads
+                WHERE visibility = 0
+                GROUP BY author
+            ) lu ON lu.author = u.id
+            WHERE u.u_index >= 6
+            AND (
+                (u.flags & ?) != ?
+            )
+            AND (
+                (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 100) t))
+                OR (u.flags & ?) = ?
+            )
+            AND (
+                lu.last_upload > ?
+            )
+            AND (
+                u.id NOT IN (SELECT user FROM user_bans)
+            )",
+            //ORDER BY RAND() LIMIT 6",
+            [
+                UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value,
+                UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value,
+                strtotime('-1 month')
+            ]
+        )
+    );
+} else {
+    $featured_users = $database->fetchArray(
+        $database->query(
+            "SELECT u.id, u.name
+            FROM users u 
+            WHERE u.flags & ? = ?",
+            [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
+        )
+    );
+}
 
 if (!$auth->isUserLoggedIn() && $featured_users) {
     $users = array_map('intval', array_column($featured_users, 'id'));
     $query = implode(', ', $users);
 
     $uploads_new = $upload_query->query(
-        "uploaded DESC",
-        $uploads_query_limit,
-        sprintf("v.author in (%s)", $query)
+        "RAND()",
+        $wanted_uploads,
+        sprintf(
+            "v.author IN (%s) AND v.timestamp > %d AND views > 1",
+            $query,
+            strtotime('-7 days')
+        )
     )->toCleanArray();
+
+    $uploads_new = organize_uploads($uploads_new, $uploads_query_limit);
 } else {
     $uploads_new = [];
 }

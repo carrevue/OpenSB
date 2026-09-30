@@ -67,6 +67,7 @@
                     </div>
                     <div class="menu" id="user-menu">
                         {% if not options.trinium_old_header %}
+                            <div class="user-menu-email">{{ user_data.email }}</div>
                             <div class="user-menu-intro">
                                 <div class="user-menu-intro-left">
                                     <div class="profile-picture">
@@ -101,7 +102,7 @@
                                 <span>{{ link.username }}</span>
                             </a>
                         {% endfor %}
-                        <a class="menu-item-button small" href="/login"><span>{{ localize('add_account') }}</span></a>
+                        <a class="menu-item-button small" href="/logout"><span>{{ localize('logout') }}</span></a>
                     </div>
                 </div>
             {% else %}
