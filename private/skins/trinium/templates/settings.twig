@@ -74,10 +74,9 @@
                     <input type="text" name="new_username" size="30" maxlength="256">
                 </div>
             </div>
-
-            <hr>
-
-            <div class="section">
+        </div>
+        <div class="section">
+            <div class="content-box">
                 <div class="section-header">
                     <h2 class="section-title">{{ localize('filtering') }}</h2>
                 </div>
@@ -106,12 +105,11 @@
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="form-button-container">
-                <input type="submit" id="upload" name="save" class="button accent" value="{{ localize('save_action') }}">
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-button-container">
+            <input type="submit" id="upload" name="save" class="button accent" value="{{ localize('save_action') }}">
+        </div>
+    </form>
 {% endblock %}
 
 {% block scripts %}

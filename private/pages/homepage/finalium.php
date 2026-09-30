@@ -23,22 +23,16 @@ namespace Pages;
 
 global $twig, $database, $sb;
 
-use Data\Upload\UploadFlags;
-use Data\Upload\UploadQuery;
 use Core\Utilities;
 use Data\User\UserData;
 use Data\User\UserFlags;
+
+include_once('_include.php');
+
 use Data\Playlist\Playlist;
 
-$upload_query = new UploadQuery($sb);
-
-/*
-$uploads_featured = $upload_query->query(
-    "uploaded DESC",
-    15,
-    sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
-)->toCleanArray();
-*/
+//$uploads_featured = get_N_featured_uploads($upload_query, 15);
+$uploads_new = get_N_new_uploads($database, $upload_query, 1, 15);
 
 if ($auth->isLoggedIn()) {
     $following_users = $database->fetchArray(
@@ -73,38 +67,7 @@ if (!empty($following_users)) {
     // 3. are in the top 50 of being most followed or are featured
     // 4. have uploaded something within the last month
     // 5. are not banned
-    $recommended_users = $database->fetchArray(
-        $database->query(
-            "SELECT u.id, u.name, u.title, lu.last_upload
-            FROM users u
-            JOIN (
-                SELECT author, MAX(timestamp) AS last_upload
-                FROM uploads
-                WHERE visibility = 0
-                GROUP BY author
-            ) lu ON lu.author = u.id
-            WHERE u.u_index >= 6
-            AND (
-                (u.flags & ?) != ?
-            )
-            AND (
-                (u.f_index >= (SELECT MIN(f_index) FROM (SELECT f_index FROM users ORDER BY f_index DESC LIMIT 50) t))
-                OR (u.flags & ?) = ?
-            )
-            AND (
-                lu.last_upload > ?
-            )
-            AND (
-                u.id NOT IN (SELECT user FROM user_bans)
-            )
-            ORDER BY RAND() LIMIT 6",
-            [
-                UserFlags::FLAG_SHADOW_BAN->value, UserFlags::FLAG_SHADOW_BAN->value,
-                UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value,
-                strtotime('-1 month')
-            ]
-        )
-    );
+    $recommended_users = get_top_N_users($database, 50, 6, 6);
 }
 
 $localization = $sb->getLocalizationClass();
@@ -129,6 +92,12 @@ if (empty($following_users)) {
         "uploads" => $uploads_featured,
     ];*/
 }
+
+$feed["recent"] = [
+    "title" => $localization->translate('homepage_recent_uploads'),
+    "label" => $localization->translate('homepage_recent_uploads_desc'),
+    "uploads" => $uploads_new,
+];
 
 // this feels somewhat inefficient?
 foreach ($recommended_users as $user) {

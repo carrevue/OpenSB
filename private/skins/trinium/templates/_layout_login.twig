@@ -24,10 +24,9 @@
         <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     {% endif %}
     <style>
-        {# this is done through twig because css does not support string addition or whatever the FUCK its called.
-            -chaziz 2025-08-03 #}
+        {# this is done through twig because css does not support string addition #}
         :root {
-            {% if current_theme starts with 'dark' or not (current_theme ends with 'flat') %}
+            {% if current_theme starts with 'dark' %}
             --background: url('{{ website_branding.assets_location }}/login_background_dark.jpg');
             {% else %}
             --background: url('{{ website_branding.assets_location }}/login_background.jpg');
@@ -54,7 +53,7 @@
         <div class="{{ page_name }}">
             {{ include(component('banners')) }}
             {% block content %}{% endblock %}
-            <div class="login-text login-footer">{{ localize('footer_copyright', '2021-' ~ ('now' | date('Y'))) }}</div>
+            <div class="login-text login-footer">{{ localize('footer_copyright', ('now' | date('Y'))) }}</div>
         </div>
     </div>
 </div>

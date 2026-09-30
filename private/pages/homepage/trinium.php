@@ -26,19 +26,11 @@ namespace Pages;
 global $twig, $database, $sb, $auth;
 
 use Core\Utilities;
-use Data\Upload\UploadFlags;
 use Data\Upload\UploadQuery;
 use Data\User\UserQuery;
-use Data\User\UserFlags;
 use Data\Journal\JournalQuery;
 
-$options = $sb->getLocalOptions();
-
-// use different index for finalium skin
-if ($sb->getSkinThemeOptions()["homepage_use_finalium_version"] ?? false) {
-    include_once "index_finalium.php";
-    exit;
-}
+include_once('_include.php');
 
 $upload_query = new UploadQuery($sb);
 $journal_query = new JournalQuery($sb);
@@ -48,35 +40,15 @@ $uploads_featured_query_limit = 3;
 $news_recent_query_limit = 1;
 $journals_query_limit = 5;
 
-$uploads_featured = $upload_query->query(
-    "uploaded DESC",
-    $uploads_featured_query_limit,
-    sprintf("v.flags & %d = %d", UploadFlags::FLAG_FEATURED->value, UploadFlags::FLAG_FEATURED->value)
-)->toCleanArray();
+$uploads_featured = get_N_featured_uploads($upload_query, $uploads_featured_query_limit);
 
-$featured_users = $database->fetchArray(
-    $database->query(
-        "SELECT u.id, u.name
-        FROM users u 
-        WHERE u.flags & ? = ?",
-        [UserFlags::FLAG_FEATURED->value, UserFlags::FLAG_FEATURED->value]
-    )
-);
-
-if (!$auth->isLoggedIn() && $featured_users) {
-    $users = array_map('intval', array_column($featured_users, 'id'));
-    $query = implode(', ', $users);
-
-    $uploads_new = $upload_query->query(
-        "uploaded DESC",
-        $uploads_query_limit,
-        sprintf("v.author in (%s)", $query)
-    )->toCleanArray();
+if (!$auth->isLoggedIn()) {
+    $uploads_new = get_N_new_uploads($database, $upload_query, 4, $uploads_query_limit);
 } else {
     $uploads_new = [];
 }
 
-if ($options["skin"] == "trinium" & $auth->isLoggedIn()) { // TODO: bootstrap had this too back then
+if ($options["skin"] == "trinium" & $auth->isLoggedIn()) {
     // copied from SquareBracketTwigExtension
     $rows = $database->fetchArray(
         $database->query(
