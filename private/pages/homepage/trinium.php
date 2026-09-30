@@ -1,0 +1,108 @@
+<?php
+
+/*
+  OpenSB: The Open SquareBracket Software
+
+  Copyright (C) 2021-2026 Chaziz
+  Copyright (C) 2021 ROllerozxa
+  Copyright (C) 2021-2022 icanttellyou
+
+  OpenSB is free software: you can redistribute it and/or modify it under the 
+  terms of the GNU Affero General Public License as published by the Free 
+  Software Foundation, either version 3 of the License, or (at your option) any
+  later version. 
+
+  OpenSB is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more 
+  details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+namespace Pages;
+
+global $twig, $database, $sb, $auth;
+
+use Core\Utilities;
+use Data\Upload\UploadQuery;
+use Data\User\UserQuery;
+use Data\Journal\JournalQuery;
+
+include_once('_include.php');
+
+$upload_query = new UploadQuery($sb);
+$journal_query = new JournalQuery($sb);
+
+$uploads_query_limit = 12;
+$uploads_featured_query_limit = 3;
+$news_recent_query_limit = 1;
+$journals_query_limit = 5;
+
+$uploads_featured = get_N_featured_uploads($upload_query, $uploads_featured_query_limit);
+
+if (!$auth->isUserLoggedIn()) {
+    $uploads_new = get_N_new_uploads($database, $upload_query, 4, $uploads_query_limit);
+} else {
+    $uploads_new = [];
+}
+
+if ($options["skin"] == "trinium" & $auth->isUserLoggedIn()) {
+    // copied from SquareBracketTwigExtension
+    $rows = $database->fetchArray(
+        $database->query(
+            "SELECT s.* FROM user_follows s
+            JOIN users u ON s.user = u.id
+            WHERE s.user = ?
+            AND s.id NOT IN (SELECT user FROM user_bans)",
+            [$auth->getUserID()]
+        )
+    );
+
+    if ($rows) {
+        $users = array_map('intval', array_column($rows, 'id'));
+        $query = implode(', ', $users);
+
+        $uploads_following = $upload_query->query(
+            "uploaded DESC",
+            $uploads_query_limit,
+            sprintf("v.author in (%s)", $query)
+        )->toCleanArray();
+
+        $journals_following = $journal_query->query(
+            "j.timestamp DESC",
+            $journals_query_limit,
+            sprintf("j.author in (%s)", $query)
+        )->toCleanArray();
+    } else {
+        $uploads_following = [];
+        $journals_following = [];
+    }
+} else {
+    $uploads_following = [];
+    $journals_following = [];
+}
+
+$news_recent = $journal_query->query("j.timestamp DESC", $news_recent_query_limit, "j.is_news = 1")->toCleanArray();
+
+if ($options["skin"] == "trinium") {
+    $user_query = new UserQuery($sb);
+    $users_recent = $user_query->query("u.last_seen DESC", 5, "u.u_index != 0")->toCleanArray();
+} else {
+    $users_recent = [];
+}
+
+$data = [
+    "uploads_new" => $uploads_new,
+    "uploads_featured" => $uploads_featured,
+    "uploads_following" => $uploads_following,
+    "news_recent" => $news_recent,
+    "journals_following" => $journals_following,
+    "users_recent" => $users_recent,
+];
+
+echo $twig->render('index.twig', [
+    'data' => $data,
+    'slogan' => Utilities::getRandomSlogan() ?? null,
+]);

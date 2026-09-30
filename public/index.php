@@ -187,8 +187,8 @@ if ($sb->isTestInstance())
 $router = new Router();
 
 // homepage
-$router->add('/', 'index.php');
-$router->add('/index', 'index.php');
+$router->add('/', 'homepage/index.php');
+$router->add('/index', 'homepage/index.php');
 
 // standard pages
 $router->add('/about', 'about.php');
