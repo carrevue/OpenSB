@@ -152,17 +152,6 @@ try {
         $fucked = true;
     }
 
-    if ($fucked) {
-        log("Falling back to nb_frames");
-
-        // get frame count the bad way.
-        $duration = $ffprobe
-            ->streams($target_file)    // extracts file information
-            ->videos()              // filters video streams
-            ->first()               // returns the first video stream
-            ->get('nb_frames');    // returns the duration property
-    }
-
     //get fractional framerate
     $fracFramerate = $ffprobe
         ->streams($target_file)    // extracts file information
