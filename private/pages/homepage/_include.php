@@ -87,6 +87,11 @@ function get_N_new_uploads($database, $upload_query, $max, $limit) {
     $featured_users = get_top_N_users($database, 100, 1);
 
     $users = array_map('intval', array_column($featured_users, 'id'));
+
+    if (empty($users)) {
+        return [];
+    }
+
     $query = implode(', ', $users);
 
     $uploads_new = $upload_query->query(
