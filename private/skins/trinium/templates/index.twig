@@ -12,7 +12,7 @@
             <div class="jumbotron-welcome">
                 {% if is_user_logged_in %}
                     <div class="profile-picture">
-                        <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}">
+                        <img src="{{ profile_picture(user_data.id) }}" class="pfp" alt="{{ user_data.name }}" data-user="{{ user_data.id }}">
                     </div>
                     <div class="jumbotron-logged-in-text">
                         <h1>{{ localize('welcome_logged_in', user_data.title) }}</h1>
@@ -66,7 +66,7 @@
                 </div>
             {% elseif data.uploads_new %}
                 <div class="section">
-                    {#<div class="section-header flex">
+                    <div class="section-header flex">
                         <div class="section-header-left">
                             <h2 class="section-title">{{ localize('homepage_recent_uploads') }}</h2>
                             <div class="section-desc">{{ localize('homepage_recent_uploads_desc') }}</div>
@@ -74,16 +74,20 @@
                         <div class="section-header-right">
                             <a href="/browse">{{ localize('more') }}</a>
                         </div>
-                    </div>#}
+                    </div>
                     <div class="content-box">
                         {% for upload in data.uploads_new %}
                             {{ include('/components/_upload_vertical.twig') }}
                         {% endfor %}
                     </div>
-                    <div class="pagination pager">
-                        <a class="pagination-item" href="/browse" type="next">{{ localize('more') }} →</a>
-                    </div>
+                    {#<div class="content-box content-grid content-grid-uploads">
+                        {% for upload in data.uploads_featured %}
+                            {{ include('/components/_upload_vertical_home.twig') }}
+                        {% endfor %}
+                    </div>#}
                 </div>
+            {% elseif logged_in %}
+                <div class="display-message">You aren't following anyone! [temporary string]</div>
             {% endif %}
         </div>
         <div class="col-4">
@@ -154,7 +158,7 @@
                                 <div class="content-thumbnail">
                                     <a href="/user/{{ user.info.username }}">
                                         <div class="content-image profile-picture">
-                                            <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp">
+                                            <img src="{{ profile_picture(user.id) }}" alt="{{ user.info.username }}" class="pfp" data-user="{{ user.id }}">
                                         </div>
                                     </a>
                                 </div>
