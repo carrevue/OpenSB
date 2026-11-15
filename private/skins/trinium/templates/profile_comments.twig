@@ -12,14 +12,6 @@
 
 {% block content %}
     <div class="section">
-        <div class="content-box basic-box">
-            <div class="section-header">
-                <h2 class="section-title">{{ localize('comments') }}</h2>
-            </div>
-            {{ include('/components/_comment_input.twig') }}
-            {% for comment in data.comments %}
-                {{ include('/components/_comment.twig') }}
-            {% endfor %}
-        </div>
+        {% include "components/_comment_box.twig" %}
     </div>
 {% endblock %}

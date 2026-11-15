@@ -105,9 +105,7 @@ if ($options["skin"] == "bootstrap") {
 
 $user_journals = $journal_query->query("j.timestamp DESC", $user_journal_limit, "j.author = ?", [$data["id"]])->toCleanArray();
 
-if (
-    $sb->getCurrentSkinName() != "bootstrap" && $sb->getCurrentSkinName() != "finalium"
-) {
+if ($sb->getSkinThemeOptions()["comments_load_at_page_load"] ?? false) { // TODO: profile_overview_has_comments
     $comment_data = new CommentData($database, CommentLocation::Profile, $data["id"]);
     $comments = $comment_data->getComments(10);
 } else {

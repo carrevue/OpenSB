@@ -43,16 +43,6 @@
         <div class="content-box basic-box no-border-bottom-rounded">
             {{ data.contents | markdown_user_written(true) }}
         </div>
-        <div id="comments">
-            <div class="content-box basic-box no-border-top">
-                <div class="section-header">
-                    <h2 class="section-title">{{ localize('comments') }}</h2>
-                </div>
-                {{ include('/components/_comment_input.twig') }}
-                {% for comment in data.comments %}
-                    {{ include('/components/_comment.twig') }}
-                {% endfor %}
-            </div>
-        </div>
+        {% include "components/_comment_box.twig" %}
     </div>
 {% endblock %}

@@ -371,7 +371,7 @@ if (!$recommended && !$uploads_by_author) {
     $random_uploads_array = [];
 }
 
-if ($sb->getCurrentSkinName() != "finalium") {
+if ($sb->getSkinThemeOptions()["comments_load_at_page_load"] ?? false) {
     $comments = new CommentData($database, CommentLocation::Upload, $id);
 
     $comment_data = $comments->getComments();

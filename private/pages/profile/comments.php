@@ -30,7 +30,7 @@ use Data\Comment\CommentLocation;
 include_once('_include.php');
 
 // page-specific shit Here.
-if ($sb->getCurrentSkinName() != "finalium") {
+if ($sb->getSkinThemeOptions()["comments_load_at_page_load"] ?? false) {
     $comments = new CommentData($database, CommentLocation::Profile, $data["id"]);
 
     $comment_data = $comments->getComments();

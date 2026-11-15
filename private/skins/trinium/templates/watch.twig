@@ -164,28 +164,7 @@
                 </div>
             </div>
             <div class="section">
-                <div id="comments">
-                    <div class="content-box">
-                        <div class="section-header flex">
-                            <div class="section-header-left">
-                                <h2 class="section-title">{{ localize('comments' )}}</h2>
-                                <div class="section-desc">{{ upload.interactions.comments }}</div>
-                            </div>
-                        </div>
-                        {% if not upload.flags.block_comments %}
-                            {{ include('/components/_comment_input.twig') }}
-                        {% else %}
-                            <div>
-                                <div id="new-comment-button">
-                                    {{ localize('comments_disabled') }}
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% for comment in upload.comments %}
-                            {{ include('/components/_comment.twig') }}
-                        {% endfor %}
-                    </div>
-                </div>
+                {% include "components/_comment_box.twig" %}
             </div>
         </div>
         <div class="col-medium-12 col-large-4 col-huge-3">
