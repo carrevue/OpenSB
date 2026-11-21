@@ -30,7 +30,7 @@ include_once('_include.php');
 
 $is_hitchhiker = $sb->isHitchhiker();
 
-$uploads_featured = get_N_featured_uploads($upload_query, 15);
+//$uploads_featured = get_N_featured_uploads($upload_query, 15);
 $uploads_new = get_N_new_uploads($database, $upload_query, 1, 15);
 
 if ($auth->isUserLoggedIn()) {
@@ -66,13 +66,14 @@ if (!empty($following_users)) {
     // 3. are in the top 50 of being most followed or are featured
     // 4. have uploaded something within the last month
     // 5. are not banned
-    $recommended_users = get_top_N_users($database, 50, 6, 6);
+    $recommended_users = get_top_N_users($database, 50, 6, 7 /*6*/);
 }
 
 $localization = $sb->getLocalizationClass();
 
 $feed = [];
 
+/*
 $feed["featured"] = [
     "icon" => $is_hitchhiker
             ? "/assets/skin/finalium/homepage_featured_hitchhiker.svg"
@@ -81,6 +82,7 @@ $feed["featured"] = [
     "label" => $localization->translate('featured_uploads_desc'),
     "uploads" => $uploads_featured,
 ];
+*/
 
 $feed["recent"] = [
     "title" => $localization->translate('homepage_recent_uploads'),

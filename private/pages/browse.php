@@ -36,11 +36,11 @@ $tabs = [
         "order" => "uploaded DESC",
         "where" => null,
     ],
-    "featured" => [
+    /*"featured" => [
         "name" => "featured",
         "order" => "uploaded DESC",
         "where" => sprintf("(v.flags & %d) = 1", UploadFlags::FLAG_FEATURED->value),
-    ],
+    ],*/
     "popular" => [
         "name" => "popular",
         "order" => "views DESC",

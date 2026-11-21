@@ -79,9 +79,6 @@
                             {% if mature_uploads_enabled and rating_text is not empty %}
                                 <span class="rating">{{ rating_text }}</span>
                             {% endif %}
-                            {% if upload.flags.featured %}
-                                <span class="text-success">{{ localize('featured') }}</span>
-                            {% endif %}
                         </div>
                         <hr>
                         <div class="watch-box-row">
