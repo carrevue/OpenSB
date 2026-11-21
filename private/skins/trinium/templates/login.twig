@@ -7,7 +7,7 @@
 	{% block content %}
         <div class="section">
             <div class="section-header">
-                <h1 class="section-title">{{ localize('login') }}</h1>
+                <h1 class="section-title">{{ localize('login_with_your_account', website_branding.name) }}</h1>
             </div>
             <div class="content-box">
                 {% if is_user_logged_in %}
