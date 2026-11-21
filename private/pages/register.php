@@ -125,6 +125,16 @@ if (isset($_POST['registersubmit'])) {
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
     if (!filter_var($email_address, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";
 
+    // me thinking really hard (temporary code)
+    $blocklist = $database->fetchArray($database->query("SELECT name FROM username_blocklist WHERE use_regex = 1"));
+
+    foreach ($blocklist as $entry) {
+        if (preg_match($entry['name'], $email) === 1) {
+            $error .= "Invalid email format. ";
+            break;
+        }
+    }
+
     $isLocalIp = (Utilities::getIpAddress() === "localhost"
         || filter_var(
             Utilities::getIpAddress(),
