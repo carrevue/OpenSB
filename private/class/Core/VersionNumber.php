@@ -40,7 +40,7 @@ class VersionNumber
     /**
      * @var string The version number, which tries to follow Semantic versioning.
      */
-    private string $versionNumber = "2.1.9";
+    private string $versionNumber = "2.1.10";
 
     /**
      * @var string The current Git branch.

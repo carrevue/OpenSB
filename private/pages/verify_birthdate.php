@@ -47,17 +47,6 @@ if ($sb->isIpLookupEnabled()) {
 
 $age_limit = date('Y') - 120;
 
-if ($sb->getLocalOptions()["skin"] != "trinium") {
-    $options = $sb->getOptionsCookie();
-
-    $options["skin"] = "trinium";
-    $options["theme"] = "default";
-
-    $sb->setOptionCookie($options);
-
-    Utilities::redirect("/verify_birthdate");
-}
-
 if (isset($_POST['birthdatesubmit'])) {
     $birthdate = $_POST['birthdate'] ?? '';
 

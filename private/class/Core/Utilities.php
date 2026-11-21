@@ -165,6 +165,19 @@ class Utilities
                 $isFinalium = $sb->getLocalOptions()["skin"] == "finalium";
                 $isBootstrap = $sb->getLocalOptions()["skin"] == "bootstrap";
             }
+
+            // FUCK. temporary hack. this shit will definitely be cleaned up in 2.2! -chaziz 11/21/2026
+            if ($sb->isFulpTubeMode()) {
+                if (isset($_SERVER['REQUEST_URI'])) {
+                    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                    $uriParts = array_filter(explode('/', trim($uri, '/')));
+
+                    if (in_array($uriParts[0] ?? '', ['login', 'register', 'verify_email', 'verify_birthdate'])) {
+                        $isFinalium = false;
+                        $isBootstrap = false;
+                    }
+                }
+            }
         }
 
         // awkward fix for if we use notifyBanner before localization is initialized

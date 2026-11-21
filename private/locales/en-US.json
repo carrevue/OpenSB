@@ -94,6 +94,8 @@
     "register_an_account": "Register an account on %s",
     "register_an_account_hitchhiker": "Create your %s account",
 
+    "login_dont_use_google_youtube": "Do not use your real Google/YouTube credentials.",
+
     "currently_logged_in_as": "You are currently logged in as %s.",
     "other_accounts": "Other accounts:",
 
@@ -328,6 +330,7 @@
 
     "powered_by": "Powered by",
     "footer_copyright": "© %s Carrevue Development",
+    "footer_copyright_hitchhiker": "© %s Carrevue Development. Not affiliated with Google LLC.",
 
     "staff_title": "Staff team",
 

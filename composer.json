@@ -9,9 +9,9 @@
         "erusev/parsedown": "dev-master",
         "php-ffmpeg/php-ffmpeg": "1.4.0",
         "twig/string-extra": "3.24.0",
-        "jaybizzle/crawler-detect": "1.4.2",
+        "jaybizzle/crawler-detect": "1.4.3",
         "nopjmp/discord-webhooks": "0.4.2",
-        "maxmind-db/reader": "1.14.0",
+        "maxmind-db/reader": "1.15.0",
         "wikimedia/composer-merge-plugin": "^2.1",
         "phpmailer/phpmailer": "7.2.0"
     },
