@@ -335,6 +335,33 @@ class DiscordWebhookLogging
     }
 
     /**
+     * function blockedUsernameHook
+     *
+     * Trigger the blocked username hook.
+     *
+     * @param mixed $data
+     *
+     * @return void
+     */
+    function blockedUsernameHook($data)
+    {
+        $this->initClient();
+
+        $author = 'User creation blocked';
+        $title = $data['username'];
+
+        $mbd = new Embed();
+
+        $mbd->title($title)
+            ->author($author)
+            ->field("ASN", $data['asn'])
+            ->footer($this->footer_text)
+            ->color(Colors::DANGER);
+
+        $this->webhook->embed($mbd)->send();
+    }
+
+    /**
      * function dashboardUserHook
      *
      * Trigger the dashboard user webhook.
