@@ -29,6 +29,7 @@ use Core\Utilities;
 use Data\Upload\UploadQuery;
 use Data\User\UserQuery;
 use Data\Journal\JournalQuery;
+use Data\Recommendation\RecommendationQuery;
 
 include_once('_include.php');
 
@@ -49,6 +50,10 @@ if (!$auth->isLoggedIn()) {
 }
 
 if ($options["skin"] == "trinium" & $auth->isLoggedIn()) {
+    // testing:
+    $recommendation_query = new RecommendationQuery($database, $upload_query);
+    $uploads_following = $recommendation_query->forUser($auth->getUserID(), Utilities::getIpAddress(), $uploads_query_limit);
+
     // copied from SquareBracketTwigExtension
     $rows = $database->fetchArray(
         $database->query(
@@ -64,11 +69,11 @@ if ($options["skin"] == "trinium" & $auth->isLoggedIn()) {
         $users = array_map('intval', array_column($rows, 'id'));
         $query = implode(', ', $users);
 
-        $uploads_following = $upload_query->query(
+        /*$uploads_following = $upload_query->query(
             "uploaded DESC",
             $uploads_query_limit,
             sprintf("v.author in (%s)", $query)
-        )->toCleanArray();
+        )->toCleanArray();*/
 
         $journals_following = $journal_query->query(
             "j.timestamp DESC",

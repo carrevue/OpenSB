@@ -39,6 +39,13 @@ class RecommendationQuery
     private const CANDIDATES = 60;
     private const MAX_PER_AUTHOR = 2;
     private const RANDOMNESS = 0.35;
+    private const INACTIVE_GRACE_DAYS = 90;
+    private const INACTIVE_HALF_LIFE_DAYS = 180;
+    private const INACTIVE_FLOOR = 0.05;
+    private const VIEWS_FULL_RELIEF = 300;
+    private const MAX_VIEWS_RELIEF = 0.5;
+    private const RELATED_AGE_HALF_LIFE_DAYS = 365;
+    private const RELATED_AGE_FLOOR = 0.25;
 
     private const MAX_HISTORY = 40;
     private const HISTORY_HALF_LIFE_DAYS = 14;
@@ -47,6 +54,30 @@ class RecommendationQuery
     private const FOLLOWING_BOOST = 1.3;
     private const NEW_UPLOAD_BOOST = 0.5;
     private const NEW_UPLOAD_DAYS = 7;
+    private const AGE_HALF_LIFE_DAYS = 90;
+    private const AGE_FLOOR = 0.1;
+
+    private const FEED_POOL = 200;
+    private const FEED_TEMPERATURE = 0.6;
+
+    // avoid recommending masturbatory uploads and dramaslop.
+    // this should *probably* be moved to settings
+    private const TITLE_PENALTY = [
+        // websites
+        'squarebracket',
+        'opensb',
+        'fulptube',
+        'subrocks',
+        'poktube',
+        'vidlii',
+        'bitview',
+        'vlare',
+        'betacast',
+        'eracast',
+        'kamtape',
+        'goodtube',
+        'rehike',
+    ];
 
     private Database $database;
     private ?UploadQuery $uploadQuery;
@@ -71,7 +102,41 @@ class RecommendationQuery
             $candidates = $this->relatedByTags($id);
         }
 
-        return $this->finish($candidates, $limit);
+        return $this->finish($this->adjustRelated($candidates, (int)$upload['author']), $limit);
+    }
+
+    private function adjustRelated(array $scores, int $sourceAuthor): array
+    {
+        if (!$scores) {
+            return [];
+        }
+
+        $now = time();
+        $rows = $this->database->fetchArray($this->database->query(sprintf(
+            "SELECT v.id, v.author, v.views, COALESCE(NULLIF(v.original_timestamp, 0), v.timestamp) AS uploaded, u.last_seen
+            FROM uploads v JOIN users u ON u.id = v.author
+            WHERE v.id IN (%s)",
+            implode(',', array_map('intval', array_keys($scores)))
+        )));
+
+        $out = [];
+        foreach ($rows as $row) {
+            $id = (int)$row['id'];
+
+            $ageDays = max(0, $now - (int)$row['uploaded']) / 86400;
+            $score = $scores[$id] * max(self::RELATED_AGE_FLOOR, 0.5 ** ($ageDays / self::RELATED_AGE_HALF_LIFE_DAYS));
+
+            // uploads by inactive users sink lower. this is so this actually recommends newer content by newer, active users.
+            if ((int)$row['author'] !== $sourceAuthor) {
+                $inactiveDays = max(0, ($now - (int)$row['last_seen']) / 86400 - self::INACTIVE_GRACE_DAYS);
+                $penalty = 0.5 ** ($inactiveDays / self::INACTIVE_HALF_LIFE_DAYS);
+                $relief = min(1, log(1 + (int)$row['views']) / log(1 + self::VIEWS_FULL_RELIEF)) * self::MAX_VIEWS_RELIEF;
+                $score *= max(self::INACTIVE_FLOOR, $penalty + (1 - $penalty) * $relief);
+            }
+
+            $out[$id] = $score;
+        }
+        return $out;
     }
 
     public function getSaved(int $uploadId, int $limit = self::CANDIDATES): array
@@ -112,9 +177,27 @@ class RecommendationQuery
     public function forUser(?int $userId, string $ip, int $limit = 20): array
     {
         $scores = $this->forUserScores($userId, $ip);
-        arsort($scores);
+        if (!$scores) {
+            return [];
+        }
 
-        return $this->finish(array_slice($scores, 0, $limit * 3, true), $limit);
+        arsort($scores);
+        $scores = array_slice($scores, 0, self::FEED_POOL, true);
+
+        $rows = $this->getVisible(array_keys($scores));
+        $scores = array_intersect_key($scores, $rows);
+
+        $authors = [];
+        foreach ($rows as $id => $row) {
+            $authors[$id] = (int)$row['author'];
+        }
+
+        $ordered = [];
+        foreach ($this->sample($scores, $authors, $limit) as $id) {
+            $ordered[] = $rows[$id];
+        }
+
+        return (new UploadResult($this->database, $ordered))->toCleanArray();
     }
 
     public function forUserScores(?int $userId, string $ip): array
@@ -243,7 +326,10 @@ class RecommendationQuery
             }
 
             $ageDays = max(0, $now - $uploaded) / 86400;
-            $scores[$id] = $score * (1 + self::NEW_UPLOAD_BOOST * exp(-$ageDays / self::NEW_UPLOAD_DAYS));
+            $score *= 1 + self::NEW_UPLOAD_BOOST * exp(-$ageDays / self::NEW_UPLOAD_DAYS);
+            $score *= max(self::AGE_FLOOR, 0.5 ** ($ageDays / self::AGE_HALF_LIFE_DAYS));
+
+            $scores[$id] = $score;
         }
 
         return $scores;
@@ -253,7 +339,7 @@ class RecommendationQuery
     {
         $shuffled = [];
         foreach ($scores as $id => $score) {
-            $roll = $this->random->getInt(0, 1000000) / 1000000;
+            $roll = $this->random->getFloat(0.0, 1.0);
             $shuffled[$id] = $score * (1 + $randomness * ($roll - 0.5));
         }
         arsort($shuffled);
@@ -312,8 +398,50 @@ class RecommendationQuery
 
         $out = [];
         foreach ($rows as $row) {
-            $out[(int)$row['id']] = $row;
+            if (!$this->hasPenalizedTitle((string)$row['title'])) {
+                $out[(int)$row['id']] = $row;
+            }
         }
         return $out;
+    }
+
+    private function hasPenalizedTitle(string $title): bool
+    {
+        $title = mb_strtolower((string)\Normalizer::normalize(mb_scrub($title, 'UTF-8'), \Normalizer::FORM_KC));
+        foreach (self::TITLE_PENALTY as $word) {
+            if (str_contains($title, $word)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function sample(array $scores, array $authors, int $limit): array
+    {
+        $keys = [];
+        foreach ($scores as $id => $score) {
+            $weight = max($score, 1e-9) ** self::FEED_TEMPERATURE;
+            $keys[$id] = log(max($this->random->nextFloat(), PHP_FLOAT_MIN)) / $weight;
+        }
+        arsort($keys);
+
+        $picked = [];
+        $leftover = [];
+        $perAuthor = [];
+        foreach (array_keys($keys) as $id) {
+            $author = $authors[$id] ?? 0;
+            if (($perAuthor[$author] ?? 0) >= self::MAX_PER_AUTHOR) {
+                $leftover[] = $id;
+                continue;
+            }
+
+            $perAuthor[$author] = ($perAuthor[$author] ?? 0) + 1;
+            $picked[] = $id;
+            if (count($picked) >= $limit) {
+                return $picked;
+            }
+        }
+
+        return array_slice(array_merge($picked, $leftover), 0, $limit);
     }
 }

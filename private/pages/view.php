@@ -33,8 +33,8 @@ use Data\Upload\UploadQuery;
 use Data\User\UserRoleEnum;
 use Core\Utilities;
 use Data\Upload\UploadVisibilityEnum;
-use Data\Upload\UploadResult;
 use Data\Recommendation\RecommendationQuery;
+use Data\Recommendation\LegacyRecommendationQuery;
 
 $options = $sb->getLocalOptions();
 
@@ -200,25 +200,25 @@ $upload_query = new UploadQuery($sb);
 
 $uploads_by_author = $upload_query->query("RAND()", 20, "v.author = ? AND v.upload_id != ?", [$data["author"], $data["upload_id"]]);
 
-$recommendation_query = new RecommendationQuery($database, $upload_query);
-$recommended_upload_array = $recommendation_query->related($data, 20);
+$recommended_upload_array = [];
 
-if ($uploads_by_author) {
-    $uploads_by_author_array = $uploads_by_author->toCleanArray();
-} else {
-    $uploads_by_author_array = [];
+try {
+    $recommended_upload_array = (new RecommendationQuery($database, $upload_query))->related($data, 20);
+} catch (\Throwable $e) {
+    error_log("RecommendationQuery failed: " . $e->getMessage());
 }
 
-// fallback in case recommended somehow doesnt work and the author has no other uploads
-if (!$recommended_upload_array && !$uploads_by_author_array) {
-    $random_uploads = $upload_query->query("RAND()", 20, "v.upload_id != ?", [$data["upload_id"]]);
-    if ($random_uploads) {
-        $random_uploads_array = $random_uploads->toCleanArray();
-    } else {
-        $random_uploads_array = [];
+if (!$recommended_upload_array) {
+    try {
+        $recommended_upload_array = (new LegacyRecommendationQuery($sb))->related($data, 20);
+    } catch (\Throwable $e) {
+        error_log("LegacyRecommendationQuery failed: " . $e->getMessage());
     }
-} else {
-    $random_uploads_array = [];
+}
+
+// random uploads if neither works
+if (!$recommended_upload_array) {
+    $recommended_upload_array = $upload_query->query("RAND()", 20, "v.upload_id != ?", [$data["upload_id"]])->toCleanArray();
 }
 
 if ($sb->getSkinThemeOptions()["comments_load_at_page_load"] ?? false) {
@@ -257,8 +257,6 @@ $page_data = [
     "flags" => $flags,
     "rating" => $data["rating"],
     "recommended" => $recommended_upload_array,
-    "other_by_author" => $uploads_by_author_array,
-    "random" => $random_uploads_array,
     "tags" => $tags,
 ];
 
