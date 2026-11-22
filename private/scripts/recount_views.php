@@ -48,9 +48,6 @@ const LEGACY_WEIGHTS = [
     SB_2025_TIMESTAMP => 0.25, // guest views before this can't be grouped by ip range
 ];
 
-// a lot of guest views are crawlers on rotating proxies, so a guest view is never worth more than this
-const MAX_GUEST_WEIGHT = 0.5;
-
 // views from the same /24 (or /64 for ipv6) on the same upload count once
 function ip_range(string $ip): string
 {
@@ -74,7 +71,7 @@ function guest_weight(int $loggedIn, int $timestamp): float
     if ($loggedIn > 0) {
         // ratio. PHP_INT_MAX is there to avoid division by zero errors.
         $ratio = $loggedIn ? (1 + ($ratio_penalty / ($loggedIn + 1))) : PHP_INT_MAX;
-        return $weight * min(1 / $ratio, MAX_GUEST_WEIGHT);
+        return $weight / $ratio;
     }
 
     return $weight * 0.05;
