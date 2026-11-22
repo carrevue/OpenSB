@@ -23,7 +23,7 @@ namespace Pages\Debug;
 
 global $sb, $database;
 
-use DateMalformedStringException;
+use Exception;
 use DateTime;
 use Random\RandomException;
 use Core\Utilities;
@@ -55,7 +55,7 @@ if (isset($_POST["submit"])) {
 
     try {
         $dobDateTime = new DateTime($birthdate);
-    } catch (DateMalformedStringException) {
+    } catch (Exception) {
         die("Malformed birthdate");
     } finally {
         $currentDate = new DateTime();

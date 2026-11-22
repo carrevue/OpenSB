@@ -26,7 +26,7 @@ namespace Pages;
 
 global $sb, $twig, $database;
 
-use DateMalformedStringException;
+use Exception;
 use DateTime;
 use Core\Utilities;
 use Random\RandomException;
@@ -155,7 +155,7 @@ if (isset($_POST['registersubmit'])) {
 
     try {
         $dobDateTime = new DateTime($birthdate);
-    } catch (DateMalformedStringException $e) {
+    } catch (Exception $e) {
         $error .= "You have an invalid birth date. ";
     } finally {
         $currentDate = new DateTime();

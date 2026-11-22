@@ -91,7 +91,7 @@ function handleFeaturedUpload($database, $data): false|array
         return false;
     } else {
         // uh yeah, fuck. look into this later. -chaziz 03/13/2026
-        return new UploadResult($database, [0 => $upload_data])->toCleanArray()[0];
+        return (new UploadResult($database, [0 => $upload_data]))->toCleanArray()[0];
     }
 }
 

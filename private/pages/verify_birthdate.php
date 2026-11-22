@@ -23,7 +23,7 @@ namespace Pages;
 
 global $twig, $database, $auth, $sb;
 
-use DateMalformedStringException;
+use Exception;
 use DateTime;
 
 use Core\Utilities;
@@ -52,7 +52,7 @@ if (isset($_POST['birthdatesubmit'])) {
 
     try {
         $dobDateTime = new DateTime($birthdate);
-    } catch (DateMalformedStringException $e) {
+    } catch (Exception $e) {
         Utilities::notifyBanner("notify_birthdate_fail", "/verify_birthdate");
     } finally {
         $currentDate = new DateTime();

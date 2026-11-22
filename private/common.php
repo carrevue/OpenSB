@@ -24,7 +24,7 @@
 
 namespace OpenSB;
 
-if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
+if (version_compare(PHP_VERSION, '8.2.0') < 0) {
     die('OpenSB is not compatible with your PHP version. OpenSB requires PHP 8.2 or newer.');
 }
 
