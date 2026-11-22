@@ -492,8 +492,10 @@
     "notify_dashboard_unfeature_user_success": "Successfully unfeatured %s.",
     "notify_dashboard_shadowban_user_success": "Successfully shadowbanned %s.",
     "notify_dashboard_unshadowban_user_success": "Successfully unshadowbanned %s.",
+    "notify_dashboard_ip_ban_invalid": "Invalid IP address.",
     "notify_dashboard_ip_ban_already": "IP already banned.",
     "notify_dashboard_ip_ban_success": "IP successfully banned.",
     "notify_dashboard_asn_ban_already": "ASN already banned.",
-    "notify_dashboard_asn_ban_success": "ASN successfully banned."
+    "notify_dashboard_asn_ban_success": "ASN successfully banned.",
+    "notify_dashboard_asn_ban_invalid": "Invalid ASN."
 }

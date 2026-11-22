@@ -36,7 +36,7 @@ global $database, $sb;
 ini_set('memory_limit', '1024M');
 
 $viewsSince = $sb->isChazizInstance() ? 1753070400 : 0; // sb specific behavior (pre-july 21st 2025 views don't have ips)
-$ignoredWords = $sb->isChazizInstance() ? ['fulptube', 'squarebracket', 'gamerappa', 'chaziz'] : []; // sb specific behavior (ignore meta shit)
+$ignoredWords = $sb->isChazizInstance() ? ['fulptube', 'squarebracket', 'poktube', 'qobo', 'gamerappa', 'chaziz'] : []; // sb specific behavior (ignore meta shit)
 
 $builder = new RecommendationBuilder(
     $database,

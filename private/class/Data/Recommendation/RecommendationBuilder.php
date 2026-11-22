@@ -22,6 +22,7 @@
 namespace Data\Recommendation;
 
 use Core\Database;
+use Core\IPBans;
 use Core\IPLookup;
 use Data\Upload\UploadFlags;
 use Data\Upload\UploadVisibilityEnum;
@@ -178,13 +179,7 @@ class RecommendationBuilder
 
     private array $ignoredUsers = [];
     private array $userIps = [];
-    private array $bannedIps = [];
-    private array $bannedRanges = [];
-    private array $masks = [];
-    private array $bannedPrefixes = [];
-    private array $prefixLengths = [];
-    private array $bannedPatterns = [];
-    private array $bannedAsns = [];
+    private ?IPBans $ipBans = null;
 
     private array $bubbles = [];
     private array $topics = [];
@@ -333,101 +328,28 @@ class RecommendationBuilder
         }
 
         // deal with user/ip/asn bans.
-        $patterns = [];
-        foreach ($this->database->fetchArray($this->database->query("SELECT ip FROM ip_bans")) as $row) {
-            $ip = strtolower(trim($row['ip']));
-
-            if (str_contains($ip, '%') || str_contains($ip, '_')) {
-                $prefix = substr($ip, 0, -1);
-                if (str_ends_with($ip, '%') && !str_contains($prefix, '%') && !str_contains($prefix, '_')) {
-                    $this->bannedPrefixes[$prefix] = true;
-                } else {
-                    $patterns[] = str_replace(['%', '_'], ['.*', '.'], preg_quote($ip, '/'));
-                }
-            } elseif (str_contains($ip, '/')) {
-                [$network, $bits] = explode('/', $ip, 2);
-                $long = ip2long($network);
-                $bits = (int)$bits;
-                if ($long !== false && $bits >= 0 && $bits <= 32) {
-                    $this->masks[$bits] = $bits === 0 ? 0 : (-1 << (32 - $bits)) & 0xFFFFFFFF;
-                    $this->bannedRanges[$bits][$long & $this->masks[$bits]] = true;
-                }
-            } else {
-                $this->bannedIps[$ip] = true;
-            }
-        }
-
-        $this->prefixLengths = array_values(array_unique(array_map('strlen', array_keys($this->bannedPrefixes))));
-        foreach (array_chunk($patterns, 200) as $chunk) {
-            $this->bannedPatterns[] = '/^(?:' . implode('|', $chunk) . ')$/';
-        }
-
-        if ($this->ipLookup) {
-            foreach ($this->database->fetchArray($this->database->query("SELECT asn FROM asn_bans")) as $row) {
-                $this->bannedAsns[(int)$row['asn']] = true;
-            }
-        }
+        $this->ipBans = new IPBans($this->database, $this->ipLookup);
 
         $ipBannedUsers = 0;
         foreach ($this->database->fetchArray($this->database->query("SELECT id, ip FROM users WHERE ip IS NOT NULL")) as $row) {
             $this->userIps[(int)$row['id']] = strtolower($row['ip']);
-            if (!isset($this->ignoredUsers[(int)$row['id']]) && $this->isIpBanned($row['ip'])) {
+            if (!isset($this->ignoredUsers[(int)$row['id']]) && $this->ipBans->isBanned($row['ip'])) {
                 $this->ignoredUsers[(int)$row['id']] = true;
                 $ipBannedUsers++;
             }
         }
 
         $this->log(sprintf(
-            "ignoring %d users (%d ip banned). ip bans: %d exact, %d ranges, %d prefixes, %d patterns. asn bans: %s",
+            "ignoring %d users (%d ip banned). bans: %s",
             count($this->ignoredUsers),
             $ipBannedUsers,
-            count($this->bannedIps),
-            array_sum(array_map('count', $this->bannedRanges)),
-            count($this->bannedPrefixes),
-            count($patterns),
-            $this->ipLookup ? count($this->bannedAsns) : 'off'
+            $this->ipBans->summary()
         ));
     }
 
     private function isIpBanned(string $ip): bool
     {
-        $ip = strtolower($ip);
-
-        if (isset($this->bannedIps[$ip])) {
-            return true;
-        }
-
-        $long = ip2long($ip);
-        if ($long !== false) {
-            foreach ($this->masks as $bits => $mask) {
-                if (isset($this->bannedRanges[$bits][$long & $mask])) {
-                    return true;
-                }
-            }
-        }
-
-        foreach ($this->prefixLengths as $length) {
-            if (isset($this->bannedPrefixes[substr($ip, 0, $length)])) {
-                return true;
-            }
-        }
-
-        foreach ($this->bannedPatterns as $regex) {
-            if (preg_match($regex, $ip)) {
-                return true;
-            }
-        }
-
-        if ($this->bannedAsns) {
-            try {
-                $asn = $this->ipLookup?->getInfo($ip)['asn'] ?? '';
-            } catch (\Throwable) {
-                return false;
-            }
-            return isset($this->bannedAsns[(int)preg_replace('/^AS/i', '', $asn)]);
-        }
-
-        return false;
+        return $this->ipBans->isBanned($ip);
     }
 
     private function loadUploads(): void

@@ -23,6 +23,7 @@ namespace Pages;
 
 global $auth, $twig, $database, $sb;
 
+use Core\IPBans;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
@@ -43,7 +44,12 @@ if (!$sb->isIpLookupEnabled()) {
 }
 
 if (isset($_POST['ip'])) {
+    $ip = trim($_POST['ip']);
     $reason = $_POST['reason'] ?? "No reason specified";
+
+    if (!IPBans::isValid($ip)) {
+        Utilities::notifyBanner("notify_dashboard_ip_ban_invalid", "/dashboard/ip_bans");
+    }
 
     $ipban = $database->fetch("SELECT * FROM ip_bans WHERE ip = ?", [$ip]);
 
@@ -51,11 +57,12 @@ if (isset($_POST['ip'])) {
         Utilities::notifyBanner("notify_dashboard_ip_ban_already", "/dashboard/ip_bans");
     } else {
         $database->query("INSERT INTO ip_bans (ip, reason, timestamp, author) VALUES (?, ?, ?, ?)", [
-            $_POST['ip'],
+            $ip,
             $reason,
             time(),
             $auth->getUserID()
         ]);
+        IPBans::clearCache();
 
         Utilities::notifyBanner("notify_dashboard_ip_ban_success", "/dashboard/ip_bans", "success");
     }

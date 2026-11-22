@@ -54,6 +54,7 @@ $config = include_once(SB_PRIVATE_PATH . '/config/config.php');
 require_once(SB_VENDOR_PATH . '/autoload.php');
 
 use Core\ErrorTemplating;
+use Core\IPBans;
 use Core\SquareBracket;
 use Core\Utilities;
 use Core\VersionNumber;
@@ -204,59 +205,17 @@ if (!SB_CLI) {
 
     $twig_error = new ErrorTemplating($sb);
 
-    $ipban = $database->fetch(
-        "
-        SELECT *
-        FROM ip_bans
-        WHERE
-            (
-                ? & (
-                    -1 << (
-                        32 - IF(
-                            LOCATE('/', ip) > 0,
-                            SUBSTRING_INDEX(ip, '/', -1),
-                            32
-                        )
-                    )
-                )
-            )
-            =
-            (
-                INET_ATON(
-                    IF(
-                        LOCATE('/', ip) > 0,
-                        SUBSTRING_INDEX(ip, '/', 1),
-                        ip
-                    )
-                )
-                &
-                (
-                    -1 << (
-                        32 - IF(
-                            LOCATE('/', ip) > 0,
-                            SUBSTRING_INDEX(ip, '/', -1),
-                            32
-                        )
-                    )
-                )
-            )
-        ",
-        [ip2long(Utilities::getIpAddress())]
-    );
+    if (Utilities::getIpAddress()) {
+        $ipban = (new IPBans($database))->find(Utilities::getIpAddress());
 
-    if ($ipban) {
-        if ($sb->isDebug() && (!$ipban)) {
-            $ipban = [
-                "ip" => Utilities::getIpAddress(),
-            ];
+        if ($ipban) {
+            http_response_code(403);
+            echo $twig_error->render("ip_banned.twig", [
+                "page" => "ip-banned",
+                "data" => $ipban,
+            ]);
+            die();
         }
-
-        http_response_code(403);
-        echo $twig_error->render("ip_banned.twig", [
-            "page" => "ip-banned",
-            "data" => $ipban,
-        ]);
-        die();
     }
 
     if ($sb->isUnderMaintenance() && !SB_PHP_BUILTINSERVER) {

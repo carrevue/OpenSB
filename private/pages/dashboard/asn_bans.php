@@ -39,7 +39,12 @@ if ($sb->getCurrentSkinName() != "trinium") {
 }
 
 if (isset($_POST['asn'])) {
-    $asn = preg_replace('/[a-zA-Z]/', '', $_POST['asn']);
+    $asn = preg_replace('/^AS\s*/i', '', trim($_POST['asn']));
+
+    if (!ctype_digit($asn) || (int)$asn < 1 || (int)$asn > 2147483647) {
+        Utilities::notifyBanner("notify_dashboard_asn_ban_invalid", "/dashboard/asn_bans");
+    }
+    $asn = (int)$asn;
 
     $asnban = $database->fetch("SELECT * FROM asn_bans WHERE asn = ?", [$asn]);
 

@@ -534,11 +534,11 @@ class Utilities
      */
     public static function getIpAddress()
     {
-        if (SB_CLI) return null;
+        if (SB_CLI) return "CLI";
 
         $ip = $_SERVER['REMOTE_ADDR'];
 
-        if ($ip == "127.0.0.1" | $ip == "::1" | $ip == "localhost") return "localhost";
+        if ($ip == "127.0.0.1" || $ip == "::1" || $ip == "localhost") return "127.0.0.1";
 
         return $ip;
     }
@@ -551,6 +551,11 @@ class Utilities
      * @return bool
      */
     public static function isTorExitNode(string $ip): bool {
+        // the tor dns list only does ipv4
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            return false;
+        }
+
         $cache_file = sys_get_temp_dir() . '/sb_tor_' . md5($ip) . ".cache";
         $ttl = 86400; // 1 day
 
