@@ -33,9 +33,8 @@ use Data\Upload\UploadQuery;
 use Data\User\UserRoleEnum;
 use Core\Utilities;
 use Data\Upload\UploadVisibilityEnum;
-use Data\Upload\UploadFlags;
-use Data\User\UserFlags;
 use Data\Upload\UploadResult;
+use Data\Recommendation\RecommendationQuery;
 
 $options = $sb->getLocalOptions();
 
@@ -54,22 +53,6 @@ function handle_error(string $message, string ...$args) {
         // go back to homepage with a notification (or something else if specified)
         Utilities::notifyBanner($message, "/", "danger", $args);
     }
-}
-
-function recommendation_string_similarity(?string $a, ?string $b): float {
-    if (empty($a) || empty($b)) return 0.0;
-    $clean = fn(string $s) => mb_strtolower(preg_replace('/[\p{P}\p{S}]/u', '', $s));
-    $tokenize = fn(string $s) => array_filter(explode(' ', preg_replace('/\s+/', ' ', trim($s))));
-
-    $wordsA = array_values($tokenize($clean($a)));
-    $wordsB = array_values($tokenize($clean($b)));
-
-    if (count($wordsA) === 0 || count($wordsB) === 0) return 0.0;
-
-    $intersection = count(array_intersect($wordsA, $wordsB));
-    $union        = count(array_unique(array_merge($wordsA, $wordsB)));
-
-    return $union === 0 ? 0.0 : $intersection / $union;
 }
 
 if (Utilities::isClassicSkin()) {
@@ -217,141 +200,8 @@ $upload_query = new UploadQuery($sb);
 
 $uploads_by_author = $upload_query->query("RAND()", 20, "v.author = ? AND v.upload_id != ?", [$data["author"], $data["upload_id"]]);
 
-// this isn't ported to UploadQuery for now, as it will require me to rework all of UploadQuery.
-$candidateQuery = "
-    SELECT v.*, u.flags AS author_flags, u.last_seen
-    FROM uploads v
-    JOIN users u ON u.id = v.author
-    WHERE v.upload_id != ?
-    AND v.flags != " . UploadFlags::FLAG_UNPROCESSED->value . "
-    AND v.visibility = " . UploadVisibilityEnum::Public->value . "
-    AND v.upload_id NOT IN (SELECT upload FROM upload_takedowns)
-    AND v.author NOT IN (SELECT user FROM user_bans)
-";
-
-$candidateParams = [$data["upload_id"]];
-
-if (!empty($whereRatings)) {
-    $candidateQuery .= " AND $whereRatings";
-}
-
-if (!empty($whereTagBlacklist['sql'])) {
-    $candidateQuery .= " AND " . $whereTagBlacklist['sql'];
-    // tag blacklist ?'s come after the upload_id ? in the query string,
-    // so params must be appended in the same order -chaziz 07/16/2026
-    $candidateParams = array_merge($candidateParams, $whereTagBlacklist['params']);
-}
-
-$candidates = $database->fetchArray(
-    $database->query($candidateQuery, $candidateParams)
-);
-
-// get the tags
-$sourceTags = array_column(
-    $database->fetchArray($database->query(
-        "SELECT tag_id FROM upload_tag_index WHERE upload_id = ?",
-        [$data["id"]]
-    )),
-    'tag_id'
-);
-
-$allTags = [];
-if (!empty($candidates)) {
-    $candidateIds = array_column($candidates, 'id');
-    $placeholders = implode(',', array_fill(0, count($candidateIds), '?'));
-    $tagRows = $database->fetchArray($database->query(
-        "SELECT upload_id, tag_id FROM upload_tag_index WHERE upload_id IN ($placeholders)",
-        $candidateIds
-    ));
-    foreach ($tagRows as $row) {
-        $allTags[$row["upload_id"]][] = $row["tag_id"];
-    }
-}
-
-// avoid recommending masturbatory uploads and dramaslop.
-// this should *probably* be moved to settings
-$recommendation_title_penality = [
-    // websites
-    'squarebracket', 
-    'opensb', 
-    'fulptube', 
-    'subrocks', 
-    'poktube', 
-    'vidlii', 
-    'bitview', 
-    'vlare', 
-    'betacast', 
-    'eracast', 
-    'kamtape',
-    'goodtube',
-    'rehike',
-];
-
-$recommended = [];
-
-// now score this shit
-if (!empty($candidates)) {
-    $sourceTagCount = count($sourceTags);
-    // count uploads per author across all candidates
-    $authorUploadCounts = array_count_values(array_column($candidates, 'author'));
-    foreach ($candidates as &$row) {
-        $candidateTags = $allTags[$row["id"]] ?? [];
-        $intersection  = count(array_intersect($sourceTags, $candidateTags));
-        $union         = $sourceTagCount + count($candidateTags) - $intersection;
-        $jaccard       = $union > 0 ? $intersection / $union : 0.0;
-
-        $titleLower = strtolower($row["title"]);
-        $penalty    = 0.0;
-
-        foreach ($recommendation_title_penality as $word) {
-            if (str_contains($titleLower, $word)) {
-                $penalty += 1;
-            }
-        }
-
-        if ($row["author"] !== $data["author"]) {
-            $authorCount = $authorUploadCounts[$row["author"]] ?? 0;
-
-            // if the author hasn't logged in over a year, penalize.
-           if ($row["last_seen"] < strtotime('-1 year')) {
-                $penalty = 10;
-            }
-
-            // if the author has one upload, penalize.
-            if ($authorCount == 1) {
-                $penalty = 50;
-            }
-
-            // if the author is shadow banned, just penalize that shit completely.
-            if ($row["author_flags"] & UserFlags::FLAG_SHADOW_BAN->value) {
-                $penalty = 100;
-            }
-        }
-
-        $row["relevance_score"] =
-            (
-                ($jaccard * 0.75) +
-                (recommendation_string_similarity($data["title"], $row["title"]) * 0.1) +
-                (recommendation_string_similarity($data["description"] ?? '', $row["description"] ?? '') * 0.05)
-            )
-            - $penalty;
-    }
-    unset($row);
-
-    usort($candidates, fn($a, $b) => $b["relevance_score"] <=> $a["relevance_score"]);
-
-    $relevant = array_values(array_filter($candidates, fn($row) => $row["relevance_score"] > 0.005));
-
-    shuffle($relevant);
-    $recommended = array_slice($relevant, 0, 20);
-    $recommended = !empty($recommended) ? $recommended : [];
-}
-
-if ($recommended) {
-    $recommended_upload_array = (new UploadResult($database, $recommended))->toCleanArray();
-} else {
-    $recommended_upload_array = [];
-}
+$recommendation_query = new RecommendationQuery($database, $upload_query);
+$recommended_upload_array = $recommendation_query->related($data, 20);
 
 if ($uploads_by_author) {
     $uploads_by_author_array = $uploads_by_author->toCleanArray();
@@ -360,7 +210,7 @@ if ($uploads_by_author) {
 }
 
 // fallback in case recommended somehow doesnt work and the author has no other uploads
-if (!$recommended && !$uploads_by_author) {
+if (!$recommended_upload_array && !$uploads_by_author_array) {
     $random_uploads = $upload_query->query("RAND()", 20, "v.upload_id != ?", [$data["upload_id"]]);
     if ($random_uploads) {
         $random_uploads_array = $random_uploads->toCleanArray();

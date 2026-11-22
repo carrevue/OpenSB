@@ -236,26 +236,15 @@ class Utilities
      *
      * @return string
      */
-    public static function generateRandomString($length, $includeSymbols = false): string
+    public static function generateRandomString(int $length, bool $includeSymbols = false): string
     {
+        $string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
         if ($includeSymbols) {
-            $string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
-        } else {
-            $string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $string .= "_-";
         }
 
-        if (version_compare(PHP_VERSION, '8.3.0', '<')) {
-            $new = substr(str_shuffle($string), 0, $length);
-        } else {
-            // this feels cleaner imho
-            $randomizer = new Randomizer();
-            $new = $randomizer->getBytesFromString(
-                $string,
-                $length,
-            );
-        }
-
-        return $new;
+        return (new Randomizer())->getBytesFromString($string, $length);
     }
 
     /**

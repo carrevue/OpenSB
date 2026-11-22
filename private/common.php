@@ -24,8 +24,8 @@
 
 namespace OpenSB;
 
-if (version_compare(PHP_VERSION, '8.2.0') <= 0) {
-    die('OpenSB is not compatible with your PHP version. OpenSB requires PHP 8.2 or newer.');
+if (version_compare(PHP_VERSION, '8.3.0') <= 0) {
+    die('OpenSB is not compatible with your PHP version. OpenSB requires PHP 8.3 or newer.');
 }
 
 if (!file_exists(SB_VENDOR_PATH . '/autoload.php')) {
