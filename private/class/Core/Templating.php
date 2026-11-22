@@ -118,6 +118,22 @@ class Templating
 
         $this->is_spf = $this->sb->isSpfRequest();
 
+        if ($this->sb->isFulpTubeMode()) {
+            if (isset($_SERVER['REQUEST_URI'])) {
+                $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                $uriParts = array_filter(explode('/', trim($uri, '/')));
+
+                if (in_array($uriParts[0] ?? '', ['login', 'register', 'verify_email', 'verify_birthdate'])) {
+                    $this->skin = "trinium";
+                    $this->theme = "default";
+                }
+            }
+        }
+
+        if ($this->skin === null || trim($this->skin) === '') {
+            $this->resetToDefault();
+        }
+
         $skinPath = 'skins/' . $this->skin;
 
         $this->skin_options = $this->sb->getSkinThemeOptions();

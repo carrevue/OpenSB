@@ -67,7 +67,7 @@ if (!empty($following_users)) {
     // 3. are in the top 50 of being most followed or are featured
     // 4. have uploaded something within the last month
     // 5. are not banned
-    $recommended_users = get_top_N_users($database, 50, 6, 6);
+    $recommended_users = get_top_N_users($database, 50, 6, 7 /*6*/);
 }
 
 $localization = $sb->getLocalizationClass();

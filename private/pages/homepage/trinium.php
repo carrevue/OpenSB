@@ -40,7 +40,7 @@ $uploads_featured_query_limit = 3;
 $news_recent_query_limit = 1;
 $journals_query_limit = 5;
 
-$uploads_featured = get_N_featured_uploads($upload_query, $uploads_featured_query_limit);
+//$uploads_featured = get_N_featured_uploads($upload_query, $uploads_featured_query_limit);
 
 if (!$auth->isLoggedIn()) {
     $uploads_new = get_N_new_uploads($database, $upload_query, 4, $uploads_query_limit);
@@ -95,7 +95,7 @@ if ($options["skin"] == "trinium") {
 
 $data = [
     "uploads_new" => $uploads_new,
-    "uploads_featured" => $uploads_featured,
+    //"uploads_featured" => $uploads_featured,
     "uploads_following" => $uploads_following,
     "news_recent" => $news_recent,
     "journals_following" => $journals_following,

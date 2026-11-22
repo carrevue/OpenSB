@@ -89,6 +89,13 @@
     "register_hitchhiker": "Sign up",
     "logout_hitchhiker": "Sign out",
 
+    "login_with_your_account": "Login with your %s account",
+    "login_with_your_account_hitchhiker": "Sign in with your %s account",
+    "register_an_account": "Register an account on %s",
+    "register_an_account_hitchhiker": "Create your %s account",
+
+    "login_dont_use_google_youtube": "Do not use your real Google/YouTube credentials.",
+
     "currently_logged_in_as": "You are currently logged in as %s.",
     "other_accounts": "Other accounts:",
 
@@ -97,6 +104,8 @@
 
     "register_invite_key_required": "%s requires an invite key in order to register. You will need to obtain this from someone.",
     "register_agreement": "By registering on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
+
+    "register_agreement_hitchhiker": "By creating an account on %s, you agree to the <a href=\"%s\">Terms of Service</a> and <a href=\"%s\">Privacy Policy</a>.",
 
     "site1_aka_site2": "%s (also known as %s)",
 
@@ -329,6 +338,7 @@
 
     "powered_by": "Powered by",
     "footer_copyright": "© %s Carrevue Development",
+    "footer_copyright_hitchhiker": "© %s Carrevue Development. Not affiliated with Google LLC.",
 
     "staff_title": "Staff team",
 
