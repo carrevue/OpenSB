@@ -42,6 +42,11 @@ class DashboardTemplating
     private SquareBracket $sb;
 
     /**
+     * @var Authentication The authentication class
+     */
+    private Authentication $authentication;
+
+    /**
      * @var FilesystemLoader Twig's Filesystem Loader
      */
     private FilesystemLoader $loader;
@@ -63,6 +68,8 @@ class DashboardTemplating
         chdir(SB_PRIVATE_PATH);
 
         $this->sb = $sb;
+        $this->authentication = $this->sb->getAuthenticationClass();
+
         //$options = $this->sb->getLocalOptions();
 
         $skinPath = 'skins/dashboard';
@@ -95,6 +102,9 @@ class DashboardTemplating
         $this->twig->addGlobal('is_fulptube', $sb->isFulpTubeMode());
         $this->twig->addGlobal('opensb_version', $versionNumber->getVersionArray());
         $this->twig->addGlobal('website_branding', $sb->getBrandingSettings());
+
+        $this->twig->addGlobal('logged_in', $this->authentication->isLoggedIn());
+        $this->twig->addGlobal('account_data', $this->authentication->getAccountData());
 
         $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));
         $this->twig->addFunction(new TwigFunction('get_css_file_timestamp', [$sb, 'getCurrentSkinCssTimestamp']));

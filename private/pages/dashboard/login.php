@@ -21,10 +21,13 @@
 
 namespace Pages\Dashboard;
 
-global $auth, $twig, $database, $sb;
+global $auth, $database, $sb;
 
+use Core\DashboardTemplating;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
+
+$twig = new DashboardTemplating($sb);
 
 if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
     Utilities::notifyBanner("notify_no_permission", "/");
@@ -70,6 +73,6 @@ if (isset($_POST["loginsubmit"])) {
     }
 }
 
-echo $twig->render('dashboard/login.twig', [
+echo $twig->render('login.twig', [
     'csrf_token' => $csrf_token_for_template
 ]);

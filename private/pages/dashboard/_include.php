@@ -27,6 +27,19 @@ use Core\DashboardTemplating;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-include_once('_include.php');
+
+if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
+    Utilities::notifyBanner("notify_no_permission", "/");
+}
+
+if (!$auth->hasUserAuthenticatedAsStaff()) {
+    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
+}
+
+/*
+if ($sb->getCurrentSkinName() != "trinium") {
+    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
+}
+*/
 
 $twig = new DashboardTemplating($sb);
