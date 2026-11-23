@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb, $path;
 
@@ -28,17 +28,7 @@ use Data\Upload\UploadFlags;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 function notify_webhook($sb, $auth, $title, $action, $reason = '')
 {
@@ -194,6 +184,6 @@ $page_data = [
     "takedown" => $takedown_data,
 ];
 
-echo $twig->render("dashboard/upload_edit.twig", [
+echo $twig->render("upload_edit.twig", [
     'upload' => $page_data,
 ]);

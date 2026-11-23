@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb, $path;
 
@@ -27,17 +27,7 @@ use Core\Utilities;
 use Data\User\UserRoleEnum;
 use Composer\ComposerInstalled;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 
 
@@ -157,7 +147,7 @@ if (!$is_windows) {
     $disk = [];
 }
 
-echo $twig->render("dashboard/server.twig", [
+echo $twig->render("server.twig", [
     "packages" => getComposerPackages(),
     "system" => [
         "uname" => php_uname(),

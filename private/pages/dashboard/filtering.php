@@ -19,24 +19,14 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $twig, $database, $auth, $sb;
 
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 $db = $database->fetchArray($database->query("SELECT * FROM username_blocklist"));
 
@@ -61,4 +51,4 @@ foreach ($db as $entry) {
     ]
 ];*/
 
-echo $twig->render("dashboard/filtering.twig", ['data' => $data]);
+echo $twig->render("filtering.twig", ['data' => $data]);

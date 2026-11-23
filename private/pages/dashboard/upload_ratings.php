@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb;
 
@@ -28,17 +28,7 @@ use Data\User\UserData;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 function handle_ratings($raw_data, $database) {
     $array = [];
@@ -59,7 +49,7 @@ $data = $upload->getData();
 
 $ratings = $database->fetchArray($database->query("SELECT * FROM upload_ratings WHERE upload = ?", [$upload->getData()['id']]));
 
-echo $twig->render("dashboard/upload_ratings.twig", [
+echo $twig->render("upload_ratings.twig", [
     'upload' => $data,
     'ratings' => handle_ratings($ratings, $database),
 ]);

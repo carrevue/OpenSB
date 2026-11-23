@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb;
 
@@ -28,17 +28,7 @@ use Data\Upload\UploadFlags;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 function handle_views(array $views): array {
     foreach ($views as &$view) {
@@ -74,7 +64,7 @@ $data = $upload->getData();
 
 $views = $database->fetchArray($database->query("SELECT * FROM upload_views WHERE upload_id = ? ORDER BY timestamp", [$id]));
 
-echo $twig->render("dashboard/upload_views.twig", [
+echo $twig->render("upload_views.twig", [
     'upload' => $data,
     'views' => handle_views($views),
 ]);

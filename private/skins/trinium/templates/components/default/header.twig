@@ -46,10 +46,7 @@
                             {{ icon('bell') }}
                         </div>
                         <div class="menu" id="notify-menu">
-                            <a class="menu-item-button" href="/notifications">{{ localize('notifications') }} ({{ user_stat_data.notifications }})</a>
-                            {% if enable_incomplete_features and options.exp_inbox %}
-                            <a class="menu-item-button" href="/my_messages">Messages (0)</a>
-                            {% endif %}
+                            <iframe src="/notifications" class="menu-notifications-iframe" frameborder="0"></iframe>
                         </div>
                     </div>
                 {% endif %}

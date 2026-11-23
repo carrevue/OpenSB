@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb;
 
@@ -27,17 +27,7 @@ use Core\Utilities;
 use Data\User\UserRoleEnum;
 use Data\User\UserData;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 $user = $database->fetch("SELECT u.*, (SELECT COUNT(*) FROM user_bans WHERE user = u.id) AS is_banned FROM users u WHERE u.name = ?", [$username]);
 
@@ -75,7 +65,7 @@ $following = $database->fetchArray($database->query("SELECT id as user_id FROM u
 // users that are following the current user
 $followers = $database->fetchArray($database->query("SELECT user as user_id FROM user_follows WHERE id = ?", [$user["id"]]));
 
-echo $twig->render("dashboard/user_follows.twig", [
+echo $twig->render("user_follows.twig", [
     'user' => $user,
     "following" => handle_users($following, $database),
     "followers" => handle_users($followers, $database)

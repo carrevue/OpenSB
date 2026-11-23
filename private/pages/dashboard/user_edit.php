@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb;
 
@@ -28,17 +28,7 @@ use Data\User\UserFlags;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 function notify_webhook($sb, $auth, $user, $action)
 {
@@ -414,7 +404,7 @@ $user_info_table = [
     ],
 ];
 
-echo $twig->render("dashboard/user_edit.twig", [
+echo $twig->render("user_edit.twig", [
     'user' => $user,
     'flags' => $flags_array,
     'users_with_matching_ips' => $users_with_matching_ips,

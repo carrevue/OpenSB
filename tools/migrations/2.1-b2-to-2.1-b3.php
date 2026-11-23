@@ -59,13 +59,6 @@ $database->query("CREATE TABLE `account_user_roles` (
   CONSTRAINT `2` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
 )");
 
-// btw for any of the bluds reading this for their fuckass site
-// you would be better off using peertube than to try adding
-// activitypub support on opensb. i tried it 2 years ago and the
-// protocol sucks ass. opensb is not built for this and you'll end
-// up with a horrifying unoptimized pile of shit. -chaziz 05/15/2026
-
-
 // playlists
 $database->query("CREATE TABLE `playlists` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,

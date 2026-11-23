@@ -24,11 +24,10 @@ namespace Core;
 use Exception;
 use Twig\Environment;
 use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
+use Twig\TwigFilter;
 
 /**
  * class DashboardTemplating
@@ -99,6 +98,38 @@ class DashboardTemplating
 
         $this->twig->addFunction(new TwigFunction('localize', [$this, 'localize']));
         $this->twig->addFunction(new TwigFunction('get_css_file_timestamp', [$sb, 'getCurrentSkinCssTimestamp']));
+        $this->twig->addFunction(new TwigFunction('icon', function () {
+            return "icon";
+        }));
+        $this->twig->addFunction(new TwigFunction('thumbnail', function () {
+            return "thumbnail";
+        }));
+        $this->twig->addFunction(new TwigFunction('pagination', function () {
+            return "pagination";
+        }));
+        $this->twig->addFunction(new TwigFunction('upload_view', function () {
+            return "upload_view";
+        }));
+        $this->twig->addFunction(new TwigFunction('profile_picture', function () {
+            return "profile_picture";
+        }));
+        $this->twig->addFunction(new TwigFunction('profile_banner', function () {
+            return "profile_banner";
+        }));
+        $this->twig->addFunction(new TwigFunction('user_link', function () {
+            return "user_link";
+        }));
+
+        $this->twig->addFilter(new TwigFilter('format_date', function () {
+            return "format_date";
+        }));
+        $this->twig->addFilter(new TwigFilter('relative_time', function () {
+            return "relative_time";
+        }));
+        $this->twig->addFilter(new TwigFilter('markdown_user_written', function () {
+            return "markdown_user_written";
+        }));
+
     }
 
     // copied from squarebrackettwigextension

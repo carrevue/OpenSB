@@ -1,4 +1,4 @@
-{% extends "_layout_dashboard.twig" %}
+{% extends "_layout.twig" %}
 
 {% set title = user.name %}
 
@@ -7,7 +7,7 @@
     { url: '/dashboard/users/' ~ user.name, label: user.name },
 ] %}
 
-{% block dashboard_content %}
+{% block content %}
     <div class="content-box">
         <div class="section">
             <div class="admin-user-actions">

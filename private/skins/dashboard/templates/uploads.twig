@@ -1,4 +1,4 @@
-{% extends "_layout_dashboard.twig" %}
+{% extends "_layout.twig" %}
 
 {% if search %}
     {% set le_url = '?page=%s&amount=' ~ amount  ~ "&search=" ~ search %}
@@ -12,7 +12,7 @@
     { url: '/dashboard/uploads', label: "Uploads" },
 ] %}
 
-{% block dashboard_content %}
+{% block content %}
     {% set total_pages = (data.count / amount) | round(0, 'ceil') %}
     {% set current_page = page %}
 

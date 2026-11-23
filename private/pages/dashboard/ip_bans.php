@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb;
 
@@ -27,17 +27,7 @@ use Core\IPBans;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 if (!$sb->isIpLookupEnabled()) {
     die(); // temporary, FUCK
@@ -93,7 +83,7 @@ $count = $database->result(
     [$search]
 );
 
-echo $twig->render("dashboard/ip_bans.twig", [
+echo $twig->render("ip_bans.twig", [
     "ips" => $ipData,
     "amount" => $amount,
     "page" => $page,

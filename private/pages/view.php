@@ -163,6 +163,7 @@ $CrawlerDetect = new CrawlerDetect;
 $type = $auth->isLoggedIn() ? "user" : "guest";
 
 // probably shit
+/*
 if (!$CrawlerDetect->isCrawler() && !Utilities::isTorExitNode(Utilities::getIpAddress())) {
     $ratelimit = false;
 
@@ -193,9 +194,8 @@ if (!$CrawlerDetect->isCrawler() && !Utilities::isTorExitNode(Utilities::getIpAd
         );
     }
 }
+*/
 
-$whereRatings = $auth->databaseWhereRatingsHelper();
-$whereTagBlacklist = $auth->databaseWhereTagBlacklistHelper();
 $upload_query = new UploadQuery($sb);
 
 $uploads_by_author = $upload_query->query("RAND()", 20, "v.author = ? AND v.upload_id != ?", [$data["author"], $data["upload_id"]]);
@@ -279,18 +279,6 @@ if (Utilities::isClassicSkin()) {
     $page_data["interactions"]["legacy"] = $upload->getRatingDataAsLikeRatio();
     $page_data["interactions"]["legacy"]["current_rating"] = $current_rating;
 }
-
-// TODO: this should be moved to admin_upload_edit -chaziz 1/4/2025
-/*
-if ($auth->userHasRole(UserRoleEnum::Administrator) && $takedown) {
-    $page_data["takedown"] = $takedown[0];
-    $page_data["takedown"]["takedownee"] = Utilities::userIDToUsername($database, $takedown[0]["sender"]);
-    $page_data["author_banned"] = $author->isUserBanned();
-} else {
-    $page_data["takedown"] = [];
-    $page_data["author_banned"] = false;
-}
-*/
 
 // this is kind of ugly. -chaziz 02/11/2026
 $localization = $sb->getLocalizationClass();

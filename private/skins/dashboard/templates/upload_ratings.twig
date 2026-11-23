@@ -1,4 +1,4 @@
-{% extends "_layout_dashboard.twig" %}
+{% extends "_layout.twig" %}
 
 {% set title = user.name %}
 
@@ -8,7 +8,7 @@
     { url: '/dashboard/uploads/' ~ upload.upload_id ~ '/ratings', label: localize('ratings') },
 ] %}
 
-{% block dashboard_content %}
+{% block content %}
     <div class="content-box">
         {% if ratings %}
         <table class="styled">

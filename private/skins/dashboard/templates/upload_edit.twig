@@ -1,4 +1,4 @@
-{% extends "_layout_dashboard.twig" %}
+{% extends "_layout.twig" %}
 
 {% set title = "Checking " ~ upload.id %}
 
@@ -17,7 +17,7 @@
     </script>
 {% endblock %}
 
-{% block dashboard_content %}
+{% block content %}
     <div class="content-box">
         <dialog class="content-box report-dialog" id="takedown-dialog">
             <form id="takedownForm" method="post" method="dialog">

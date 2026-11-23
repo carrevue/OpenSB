@@ -1,4 +1,4 @@
-{% extends "_layout_dashboard.twig" %}
+{% extends "_layout.twig" %}
 
 {% set title = account.email %}
 
@@ -7,7 +7,7 @@
     { url: '/dashboard/accounts/' ~ account.id, label: account.email },
 ] %}
 
-{% block dashboard_content %}
+{% block content %}
     <div class="content-box">
         <div>buttons</div>
         <hr>

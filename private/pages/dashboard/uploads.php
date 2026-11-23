@@ -19,7 +19,7 @@
   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace Pages;
+namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb;
 
@@ -28,17 +28,7 @@ use Data\Upload\UploadQueryTypeEnum;
 use Core\Utilities;
 use Data\User\UserRoleEnum;
 
-if (!$auth->userHasRole(UserRoleEnum::Moderator)) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if (!$auth->hasUserAuthenticatedAsStaff()) {
-    Utilities::notifyBanner("notify_dashboard_login_required", "/dashboard/login");
-}
-
-if ($sb->getCurrentSkinName() != "trinium") {
-    Utilities::notifyBanner("notify_skin_switch_required", "/theme", "accent", ["Trinium"]);
-}
+include_once('_include.php');
 
 $upload_query = new UploadQuery($sb);
 
@@ -132,7 +122,7 @@ foreach ($uploads_array as $upload) {
     $upload_array[] = $upload;
 };
 
-echo $twig->render("dashboard/uploads.twig", [
+echo $twig->render("uploads.twig", [
     "uploads" => $upload_array,
     "amount" => $amount,
     "page" => $page,
