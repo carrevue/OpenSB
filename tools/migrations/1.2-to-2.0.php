@@ -86,7 +86,7 @@ $database->query("CREATE TABLE `user_profile_customization` (
   PRIMARY KEY (`user`)
 )");
 
-// remove suggestions, which were a cut feature only see in early alpha 
+// remove suggestions, which were a cut feature only seen in early alpha 
 // versions of opensb 1.0.
 $database->query("DROP TABLE `suggestions`");
 // update users table
