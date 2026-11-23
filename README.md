@@ -1,4 +1,5 @@
-# OpenSB
+# OpenSB "Brightney" 2.0 (UNSUPPORTED)
+OpenSB 2.0 is no longer supported.
 
 <img src="https://raw.githubusercontent.com/bluffingo/OpenSB/refs/heads/opensb-2.0/private/skins/trinium/default.png"></img>
 
