@@ -21,7 +21,9 @@
 
 namespace Pages\SkinAPI;
 
-global $auth, $database;
+global $sb;
+
+use Actions\UploadActions;
 
 header('Content-Type: application/json');
 
@@ -31,57 +33,48 @@ $apiOutput = [
     "error" => "This request is invalid."
 ];
 
-if ($auth->isBanned()) {
-    $apiOutput = [
-        "error" => "You are banned."
-    ];
-}
-
-function rate($number, $upload): array
-{
-    global $database, $auth;
-
-    // shouldn't this update instead?
-    if ($database->result("SELECT COUNT(rating) FROM upload_ratings WHERE upload=? AND user=?", [$upload, $auth->getUserID()])) {
-        $database->query("DELETE FROM upload_ratings WHERE upload=? AND user=?", [$upload, $auth->getUserID()]);
-    }
-    $database->query("INSERT INTO upload_ratings (upload, user, rating) VALUES (?,?,?)", [$upload, $auth->getUserID(), $number]);
-    return ["rated" => true];
-}
-
-function unrate($upload): array
-{
-    global $database, $auth;
-
-    if ($database->result("SELECT COUNT(rating) FROM upload_ratings WHERE upload=? AND user=?", [$upload, $auth->getUserID()])) {
-        $database->query("DELETE FROM upload_ratings WHERE upload=? AND user=?", [$upload, $auth->getUserID()]);
-    }
-    return ["rated" => false];
-}
+$actions = new UploadActions($sb);
 
 if (isset($post_data['upload'])) {
     if (isset($post_data['action'])) {
-        $apiOutput = match ($post_data['action']) {
-            'favorite' => [
-                "favorited" => true,
-                "number" => rand(0, 47101),
-            ],
-            'rate' => [
-                rate($post_data['number'], $post_data['upload']),
-            ],
-            'unrate' => [
-                unrate($post_data['upload']),
-            ],
-            'like' => [
-                rate(5, $post_data['upload']),
-            ],
-            'dislike' => [
-                rate(1, $post_data['upload']),
-            ],
-            default => [
-                "error" => "This interaction type is invalid."
-            ],
-        };
+        $upload = (int)$post_data['upload'];
+
+        $error = null;
+
+        switch ($post_data['action']) {
+            case 'favorite':
+                $apiOutput = [
+                    "favorited" => true,
+                    "number" => rand(0, 47101),
+                ];
+                break;
+            case 'rate':
+                $error = $actions->rate($upload, (int)$post_data['number']);
+                $apiOutput = [["rated" => true]];
+                break;
+            case 'unrate':
+                $error = $actions->unrate($upload);
+                $apiOutput = [["rated" => false]];
+                break;
+            case 'like':
+                $error = $actions->rate($upload, 5);
+                $apiOutput = [["rated" => true]];
+                break;
+            case 'dislike':
+                $error = $actions->rate($upload, 1);
+                $apiOutput = [["rated" => true]];
+                break;
+            default:
+                $apiOutput = [
+                    "error" => "This interaction type is invalid."
+                ];
+        }
+
+        if ($error) {
+            $apiOutput = [
+                "error" => $sb->getLocalizationClass()->translate($error->value)
+            ];
+        }
     }
 }
 

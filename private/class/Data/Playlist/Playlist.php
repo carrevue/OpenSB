@@ -100,7 +100,7 @@ class Playlist
      */
     public function getUploads($limit = 100)
     {
-        if ($this->uploads === null) {
+        if (!$this->uploads) {
             return [];
         }
 

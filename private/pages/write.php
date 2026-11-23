@@ -21,51 +21,29 @@
 
 namespace Pages;
 
-global $sb, $twig, $database, $auth;
+global $sb, $twig, $auth;
 
 use Core\Utilities;
+use Actions\JournalActions;
+use Actions\ActionError;
 
-if (!$auth->isLoggedIn()) {
-    Utilities::notifyBanner("notify_login_required", "/login");
+$actions = new JournalActions($sb);
+
+$error = $actions->canWrite();
+
+if ($error instanceof ActionError) {
+    Utilities::notifyBanner($error->value, $error == ActionError::LoginRequired ? "/login" : "/");
 }
 
-if ($auth->isBanned() || $auth->getUserFlags(true)["unverified"]) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if ($sb->isLockdownEnabled()) {
-    Utilities::notifyBanner("notify_write_disabled", "/");
-}
-
-if ($database->result("SELECT COUNT(*) FROM journals WHERE timestamp > ? AND author = ?", [time() - 60, $auth->getUserID()]) && !$sb->isDebug()) {
-    Utilities::notifyBanner("notify_write_ratelimit", "/");
-}
-
-if ((isset($_POST['upload']) || isset($_POST['upload_video'])) && $auth->isLoggedIn()) {
-    $uploader = $auth->getUserID();
-
-    $title = ($_POST['title'] ?? "No title");
-    $description = ($_POST['desc'] ?? null);
-
-    $isSiteNews = ($auth->hasUserAuthenticatedAsStaff() && ($_POST['news'] ?? false)) ? 1 : 0;
-
-    $database->query(
-        "INSERT INTO journals (title, post, author, timestamp, is_news) VALUES (?,?,?,?,?)",
-        [$title, $description, $uploader, time(), $isSiteNews]
+if (isset($_POST['upload']) || isset($_POST['upload_video'])) {
+    $journal_id = $actions->create(
+        $_POST['title'] ?? "No title",
+        $_POST['desc'] ?? null,
+        (bool)($_POST['news'] ?? false)
     );
 
-    $journal_id = $database->insertId();
-
-    if ($sb->isWebhookLoggerEnabled()) {
-        $data = [
-            'id' => $journal_id,
-            'name' => $title,
-            'description' => $description,
-            'author' => $auth->getUserData()["name"],
-            'is_news' => $isSiteNews,
-        ];
-
-        $sb->getWebhookLoggerClass()->newJournalHook($data);
+    if ($journal_id instanceof ActionError) {
+        Utilities::notifyBanner($journal_id->value, "/");
     }
 
     Utilities::notifyBanner("notify_write_success", "/user/" . $auth->getUserData()["name"] . '/journal/' . $journal_id, "success");

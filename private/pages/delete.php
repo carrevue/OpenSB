@@ -21,38 +21,20 @@
 
 namespace Pages;
 
-global $auth, $sb, $database;
+global $sb;
 
-use Data\Upload\UploadData;
 use Core\Utilities;
+use Actions\UploadActions;
+use Actions\ActionError;
 
 // TODO: merge this into my_uploads.php -chaziz 5/10/2025
 
 $id = ($_GET['v'] ?? null);
 
-$upload = new UploadData($sb->getDatabaseClass(), $id);
-$data = $upload->getData();
+$error = (new UploadActions($sb))->delete($id);
 
-if (!$auth->isLoggedIn()) {
-    Utilities::notifyBanner("notify_login_required", "/login");
-}
-
-if ($auth->getUserID() != $data["author"]) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-$database->query("INSERT INTO upload_deleted (id, uploaded_time, deleted_time) VALUES (?,?,?)", [$id, $data["timestamp"], time()]);
-$database->query("DELETE FROM uploads WHERE upload_id = ?", [$id]);
-
-$auth->bumpLastActive();
-$database->query("UPDATE users SET u_index = ? WHERE id = ?", [$auth->getUserData()["u_index"] - 1, $auth->getUserID()]);
-
-$sb->getStorageClass()->deleteUploadFile($data);
-
-if (!$database->result("SELECT upload FROM upload_number_history WHERE upload = ? AND date = ?", [$id, date('Y-m-d')])) {
-    $database->query("INSERT INTO upload_number_history (upload, date, views, views_raw) VALUES (?,?,?,?)", [$id, date('Y-m-d'), 0, 0]);
-} else {
-    $database->query("UPDATE upload_number_history set views = ?, views_raw = ? WHERE upload = ? AND date = ?", [0, 0, $id, date('Y-m-d')]);
+if ($error) {
+    Utilities::notifyBanner($error->value, $error == ActionError::LoginRequired ? "/login" : "/");
 }
 
 Utilities::notifyBanner("notify_successfully_deleted_upload", "/my_uploads", "success");

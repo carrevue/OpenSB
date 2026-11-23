@@ -24,10 +24,10 @@ namespace Pages;
 
 global $twig, $database, $auth, $sb;
 
-use Data\Upload\UploadData;
-use Data\Upload\UploadFlags;
 use Core\Utilities;
+use Actions\UploadActions;
 use Data\Upload\UploadVisibilityEnum;
+use Actions\ActionError;
 
 if (isset($_POST['upload'])) {
     $id = ($_POST['vid_id'] ?? null);
@@ -35,22 +35,15 @@ if (isset($_POST['upload'])) {
     $id = ($_GET['v'] ?? null);
 }
 
-$upload = new UploadData($database, $id);
+$actions = new UploadActions($sb);
+
+$upload = $actions->checkOwner($id);
+
+if ($upload instanceof ActionError) {
+    Utilities::notifyBanner($upload->value, $upload == ActionError::LoginRequired ? "/login" : "/");
+}
+
 $data = $upload->getData();
-
-$flags = $data["flags"];
-
-if (!$auth->isLoggedIn()) {
-    Utilities::notifyBanner("notify_login_required", "/login");
-}
-
-if ($auth->isBanned() || $upload->isTakenDown()) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
-
-if ($auth->getUserID() != $data["author"]) {
-    Utilities::notifyBanner("notify_no_permission", "/");
-}
 
 if (isset($_POST['upload'])) {
     $title = $_POST['title'] ?? null;
@@ -65,34 +58,19 @@ if (isset($_POST['upload'])) {
         default => UploadVisibilityEnum::Public,
     };
 
-    $block_guests = $_POST['block_guests'] ?? false;
-    $block_comments = $_POST['block_comments'] ?? false;
+    $error = $actions->edit(
+            $id,
+            $title,
+            $desc,
+            $visibility_type,
+            (bool)($_POST['block_guests'] ?? false),
+            (bool)($_POST['block_comments'] ?? false),
+            !empty($_FILES['thumbnail']['name']) ? $_FILES['thumbnail']['tmp_name'] : null
+        );
 
-    if ($block_guests) {
-        $flags |= UploadFlags::FLAG_BLOCK_GUESTS->value;
-    } else {
-        $flags &= ~UploadFlags::FLAG_BLOCK_GUESTS->value;
+    if ($error) {
+        Utilities::notifyBanner($error->value, "/");
     }
-
-    if ($block_comments) {
-        $flags |= UploadFlags::FLAG_BLOCK_COMMENTS->value;
-    } else {
-        $flags &= ~UploadFlags::FLAG_BLOCK_COMMENTS->value;
-    }
-
-    if (!empty($_FILES['thumbnail']['name'])) {
-        $name = $_FILES['thumbnail']['name'];
-        $temp_name = $_FILES['thumbnail']['tmp_name'];
-        $ext = pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION);
-        $sb->getStorageClass()->processCustomUploadThumbnail($temp_name, $data["upload_id"]);
-
-        $flags |= UploadFlags::FLAG_CUSTOM_THUMBNAIL->value;
-    }
-
-    $database->query(
-        "UPDATE uploads SET title = ?, description = ?, flags = ?, visibility = ? WHERE upload_id = ?",
-        [$title, $desc, $flags, $visibility_type->value, $id]
-    );
 
     Utilities::notifyBanner("notify_successfully_modified_upload", "/view/" . $id, "success");
 }

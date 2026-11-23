@@ -25,6 +25,8 @@ enum UploadFlags: int
 {
     /**
      * 00000001: Featured upload
+     * 
+     * @deprecated
      */
     case FLAG_FEATURED = 1;
 

@@ -21,10 +21,10 @@
 
 namespace Pages\SkinAPI;
 
-global $auth, $sb;
+global $sb;
 
-use Data\Notification\NotificationEnum;
-use Core\Utilities;
+use Actions\ActionError;
+use Actions\UserActions;
 
 header('Content-Type: application/json');
 
@@ -34,50 +34,30 @@ $apiOutput = [
     "error" => "This request is invalid."
 ];
 
-if ($auth->isBanned()) {
-    $apiOutput = [
-        "error" => "You have been banned."
-    ];
-}
-
 function follow($member): array
 {
-    global $sb, $database, $auth;
+    global $sb;
 
     // cant put this outside here otherwise it shits out, so thats definitely something
     $localization = $sb->getLocalizationClass();
 
-    $number = $database->result("SELECT f_index FROM users WHERE id = ?", [$member]);
+    $result = (new UserActions($sb))->toggleFollow((int)$member);
 
-    if ($member == $auth->getUserID()) {
+    if ($result instanceof ActionError) {
         return [
-            "error" => "You cannot follow yourself."
+            "error" => $localization->translate($result->value)
         ];
     }
 
-    if ($database->result("SELECT COUNT(user) FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $member]) != 0) {
-        $database->query("DELETE FROM user_follows WHERE user=? AND id=?", [$auth->getUserID(), $member]);
-        $result = false;
-        $number = $number - 1;
-    } else {
-        $database->query("INSERT INTO user_follows (id, user) VALUES (?,?)", [$member, $auth->getUserID()]);
-        $result = true;
-        $number = $number + 1;
-
-        Utilities::notifyUser($database, $member, 0, 0, NotificationEnum::Follow);
-    }
-
-    $database->query("UPDATE users SET f_index = ? WHERE id = ?", [$number, $member]);
-
-    if ($result) {
+    if ($result["followed"]) {
         $text = $localization->translate("unfollow");
     } else {
         $text = $localization->translate("follow");
     }
 
     return [
-        "followed" => $result,
-        "number" => $number,
+        "followed" => $result["followed"],
+        "number" => $result["number"],
         "text" => $text,
     ];
 }

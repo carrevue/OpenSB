@@ -23,6 +23,7 @@ namespace Pages\Dashboard;
 
 global $auth, $twig, $database, $sb, $path;
 
+use Actions\UploadActions;
 use Data\Upload\UploadData;
 use Data\Upload\UploadFlags;
 use Core\Utilities;
@@ -30,17 +31,7 @@ use Data\User\UserRoleEnum;
 
 include_once('_include.php');
 
-function notify_webhook($sb, $auth, $title, $action, $reason = '')
-{
-    $data = [
-        'title' => $title,
-        'author' => $auth->getUserData()["name"],
-        'reason' => $reason ?? "",
-        'action' => $action,
-    ];
-
-    $sb->getWebhookLoggerClass()->dashboardUploadHook($data);
-}
+$actions = new UploadActions($sb);
 
 $upload = new UploadData($database, $id);
 
@@ -73,38 +64,21 @@ if ($upload->isAuthorBanned()) {
 $flags = $upload->getFlagArray();
 
 if (isset($_POST['takedown_submit'])) {
-    $upload_title_for_webhook = $upload->getData()["title"] . " (" . $upload->getData()["upload_id"] . ")";
-    $reason = $_POST["reason"] ?? "No reason provided.";
+    $error = $actions->takedown($id, $_POST["reason"] ?? null);
 
-    if ($upload->isTakenDown()) {
-        Utilities::notifyBanner("notify_dashboard_upload_takedown_already", $_SERVER['REQUEST_URI']);
+    if ($error) {
+        Utilities::notifyBanner($error->value, $_SERVER['REQUEST_URI']);
     }
-
-    $database->query("
-        INSERT INTO upload_takedowns (upload, time, reason, sender)
-        VALUES (?,?,?,?);
-    ", [$id, time(), $reason, $auth->getUserID()]);
-
-    // ok this shit is very fucking stupid i do not know why is it like this
-    notify_webhook($sb, $auth, $upload_title_for_webhook, "takedown", $reason);
 
     Utilities::notifyBanner("notify_dashboard_upload_takedown_success", $_SERVER['REQUEST_URI'], "success");
 }
 
 if (isset($_POST['restore'])) {
-    if (!$upload->isTakenDown()) {
-        Utilities::notifyBanner("notify_dashboard_upload_restore_failed", $_SERVER['REQUEST_URI']);
+    $error = $actions->restore($id);
+
+    if ($error) {
+        Utilities::notifyBanner($error->value, $_SERVER['REQUEST_URI']);
     }
-
-    $upload_title_for_webhook = $upload->getData()["title"] . " (" . $upload->getData()["upload_id"] . ")";
-    $reason = $takedown[0]["reason"] ?? "No reason provided.";
-
-    $database->query("
-        DELETE FROM upload_takedowns
-        WHERE upload = ?
-    ", [$id]);
-
-    notify_webhook($sb, $auth, $upload_title_for_webhook, "restore", $reason);
 
     Utilities::notifyBanner("notify_dashboard_upload_restore_success", $_SERVER['REQUEST_URI'], "success");
 }
@@ -132,10 +106,12 @@ if (isset($_POST['flagsubmit'])) {
         $flags |= UploadFlags::FLAG_MATURE->value;
     }
 
-    $database->query(
-        "UPDATE uploads SET flags = ? WHERE upload_id = ?",
-        [$flags, $id]
-    );
+    $error = $actions->setFlags($id, $flags);
+
+    if ($error) {
+        Utilities::notifyBanner($error->value, $_SERVER['REQUEST_URI']);
+    }
+
     Utilities::notifyBanner(
         "notify_successfully_modified_upload",
         "/dashboard/uploads/" . $id,
