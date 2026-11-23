@@ -288,16 +288,6 @@ $router->add('/api/skin/upload_interaction', 'api/skin/upload_interaction.php');
 $router->add('/api/skin/user_interaction', 'api/skin/user_interaction.php'); // trinium-only
 $router->add('/api/skin/validate_username', 'api/skin/validate_username.php');
 
-// only used by bootstrap and finalium (old, trash and deprecated)
-$router->add('/api/legacy/ajax_watch', (function () {
-    // the old finalium ajax_watch implementation was fucked beyond repair
-    // so i'll wait until later on to reimplement this -chaziz 08/29/2025
-    die("This page intentionally left blank.");
-}));
-$router->add('/api/legacy/comment', 'api/legacy/comment.php');
-$router->add('/api/legacy/rate', 'api/legacy/rate.php');
-$router->add('/api/legacy/subscribe', 'api/legacy/subscribe.php');
-
 // data api (not fully complete and probably won't be for a while)
 $router->add('/api/data/get_comments', 'api/data/get_comments.php');
 $router->add('/api/data/get_instance_info', 'api/data/get_instance_info.php');
