@@ -121,7 +121,20 @@ if (isset($_POST['registersubmit'])) {
         }
     }
 
-    $error .= Utilities::validateUsername($username, $database);
+    if ($usernameError = Utilities::validateUsername($username, $database)) {
+        $error .= $usernameError;
+
+        // ah yes, jank. this will be fixed in 2.2. -chaziz 11/22/2026
+        if ($usernameError === "This username is not appropriate." && $sb->isDiscordWebhookEnabled()) {
+            $data = [
+                "username" => $username,
+                "asn" => ($ipInfo['as_name'] ?? "Unknown") . " (" . ($ipInfo['asn'] ?? "Unknown") . ")",
+            ];
+
+            $sb->getDiscordWebhookClass()->blockedUsernameHook($data);
+        }
+    }
+
     if ($database->result("SELECT COUNT(*) FROM users WHERE email = ?", [$email_address]) > 0) $error .= "This email address is used by another account. ";
     if (!isset($pass2) || $pass != $pass2) $error .= "The passwords don't match. ";
     if (!filter_var($email_address, FILTER_VALIDATE_EMAIL)) $error .= "Invalid email format. ";

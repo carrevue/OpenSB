@@ -111,21 +111,21 @@ class Storage
         // your path's php is too old.
         if (PHP_OS_FAMILY == 'Windows') {
             pclose(popen(sprintf(
-                'start /B  php %s "%s" "%s" "$s" "1" > %s',
-                SB_PRIVATE_PATH . '\scripts\upload_processor.php',
-                $new,
-                $target_file,
-                $type,
-                $log_path
+                'start /B  php %s %s %s %s "1" > %s',
+                escapeshellarg(SB_PRIVATE_PATH . '\scripts\upload_processor.php'),
+                escapeshellarg($new),
+                escapeshellarg($target_file),
+                escapeshellarg($type),
+                escapeshellarg($log_path)
             ), "r"));
         } else {
             system(sprintf(
-                'php %s "%s" "%s" "%s" "1" > %s 2>&1 &',
-                SB_PRIVATE_PATH . '/scripts/upload_processor.php',
-                $new,
-                $target_file,
-                $type,
-                $log_path
+                'php %s %s %s %s "1" > %s 2>&1 &',
+                escapeshellarg(SB_PRIVATE_PATH . '/scripts/upload_processor.php'),
+                escapeshellarg($new),
+                escapeshellarg($target_file),
+                escapeshellarg($type),
+                escapeshellarg($log_path)
             ));
         }
     }
