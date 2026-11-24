@@ -151,6 +151,58 @@ class PlaylistActions extends BaseActions
         return $position;
     }
 
+    public function overwrite(string $playlist, array $uploads): ?ActionError
+    {
+        if (!SB_CLI) {
+            return ActionError::NoPermission;
+        }
+
+        $playlist = $this->database->fetch("SELECT id FROM playlists WHERE playlist_id = ?", [$playlist]);
+
+        if (!$playlist) {
+            return ActionError::InvalidPlaylist;
+        }
+
+        $uploads = array_values(array_unique(array_map('intval', $uploads)));
+
+        if ($uploads) {
+            $existing = array_flip(array_map('intval', array_column($this->database->fetchArray($this->database->query(
+                "SELECT id FROM uploads WHERE id IN (" . implode(', ', array_fill(0, count($uploads), '?')) . ")",
+                $uploads
+            )), 'id')));
+
+            $uploads = array_values(array_filter($uploads, fn($upload) => isset($existing[$upload])));
+        }
+
+        $time = time();
+
+        $this->database->beginTransaction();
+
+        $this->database->query("DELETE FROM playlist_items WHERE playlist = ?", [$playlist["id"]]);
+
+        foreach (array_chunk($uploads, 500, true) as $chunk) {
+            $params = [];
+
+            foreach ($chunk as $position => $upload) {
+                array_push($params, $playlist["id"], $upload, $position, $time);
+            }
+
+            $this->database->query(
+                "INSERT INTO playlist_items (playlist, upload, position, timestamp) VALUES " . implode(', ', array_fill(0, count($chunk), '(?, ?, ?, ?)')),
+                $params
+            );
+        }
+
+        $this->database->query(
+            "UPDATE playlists SET upload_count = ?, updated_timestamp = ? WHERE id = ?",
+            [count($uploads), $time, $playlist["id"]]
+        );
+
+        $this->database->commitTransaction();
+
+        return null;
+    }
+
     public function fix(string $playlist): ?ActionError
     {
         $playlist = $this->load($playlist);

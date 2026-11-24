@@ -29,103 +29,113 @@ define("SB_GIT_PATH", SB_ROOT_PATH . '/.git'); // ONLY FOR makeVersionString() I
 
 require_once SB_PRIVATE_PATH . '/common.php';
 
-global $database;
+global $database, $sb;
 
-// Oops! Temporarily Hardcoded!
-$playlist_id = 1;
+use Actions\ActionError;
+use Actions\PlaylistActions;
+use Data\Playlist\PlaylistTypeEnum;
+use Data\Upload\UploadFlags;
+use Data\Upload\UploadVisibilityEnum;
+use Data\User\UserFlags;
 
-$database->query("DELETE FROM playlist_items WHERE playlist = ?", [$playlist_id]);
+const POPULAR_DAYS = 7;
+const POPULAR_LIMIT = 200;
+const POPULAR_PER_AUTHOR = 5;
+
+$playlists = array_column($database->fetchArray($database->query(
+    "SELECT playlist_id FROM playlists WHERE type = ?",
+    [PlaylistTypeEnum::PopularRightNow->value]
+)), 'playlist_id');
+
+if (!$playlists) {
+    die("no popular playlist" . PHP_EOL);
+}
 
 // for the time being: this will only handle the "popular right now" playlist.
 // on youtube, the "popular right now" playlist was a list of 200 most viewed
 // videos posted within the last 3 days. i don't know the exact algorithm, but
 // i'll do something else.
-$uploads = $database->fetchArray($database->query("WITH history AS (
-    SELECT
-        upload,
-        MAX(CASE WHEN date = CURDATE() - INTERVAL 1 DAY THEN views END) AS d1,
-        MAX(CASE WHEN date = CURDATE() - INTERVAL 2 DAY THEN views END) AS d2,
-        MAX(CASE WHEN date = CURDATE() - INTERVAL 3 DAY THEN views END) AS d3,
-        MAX(CASE WHEN date = CURDATE() - INTERVAL 4 DAY THEN views END) AS d4,
-        MAX(CASE WHEN date = CURDATE() - INTERVAL 5 DAY THEN views END) AS d5,
-        MAX(CASE WHEN date = CURDATE() - INTERVAL 6 DAY THEN views END) AS d6,
-        MAX(CASE WHEN date = CURDATE() - INTERVAL 7 DAY THEN views END) AS d7
-    FROM upload_number_history
-    WHERE date BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE() - INTERVAL 1 DAY
-    GROUP BY upload
-),
-scored AS (
-    SELECT
-        u.id,
-        u.title,
-        u.author,
-        u.type,
-        u.rating,
-        FROM_UNIXTIME(COALESCE(NULLIF(u.original_timestamp, 0), u.timestamp)) AS upload_date,
-        u.views AS views_now,
-        COALESCE(u.views - h.d7, u.views - h.d1, 0) AS views_gained_recent,
+$dates = [];
+for ($i = POPULAR_DAYS; $i >= 0; $i--) {
+    $dates[] = date('Y-m-d', strtotime("-$i days"));
+}
+$window_start = strtotime($dates[0]);
 
-        (
-            COALESCE(LEAST((u.views - h.d1) / (h.d1 + 30), 3) * 7, 0) +
-            COALESCE(LEAST((h.d1 - h.d2) / (h.d2 + 30), 3) * 6, 0) +
-            COALESCE(LEAST((h.d2 - h.d3) / (h.d3 + 30), 3) * 5, 0) +
-            COALESCE(LEAST((h.d3 - h.d4) / (h.d4 + 30), 3) * 4, 0) +
-            COALESCE(LEAST((h.d4 - h.d5) / (h.d5 + 30), 3) * 3, 0) +
-            COALESCE(LEAST((h.d5 - h.d6) / (h.d6 + 30), 3) * 2, 0) +
-            COALESCE(LEAST((h.d6 - h.d7) / (h.d7 + 30), 3) * 1, 0)
-        )
-        /
-        NULLIF(
-            (CASE WHEN h.d1 IS NOT NULL THEN 7 ELSE 0 END) +
-            (CASE WHEN h.d1 IS NOT NULL AND h.d2 IS NOT NULL THEN 6 ELSE 0 END) +
-            (CASE WHEN h.d2 IS NOT NULL AND h.d3 IS NOT NULL THEN 5 ELSE 0 END) +
-            (CASE WHEN h.d3 IS NOT NULL AND h.d4 IS NOT NULL THEN 4 ELSE 0 END) +
-            (CASE WHEN h.d4 IS NOT NULL AND h.d5 IS NOT NULL THEN 3 ELSE 0 END) +
-            (CASE WHEN h.d5 IS NOT NULL AND h.d6 IS NOT NULL THEN 2 ELSE 0 END) +
-            (CASE WHEN h.d6 IS NOT NULL AND h.d7 IS NOT NULL THEN 1 ELSE 0 END),
-        0) AS raw_momentum,
+$candidates = $database->fetchArray($database->query(
+    "SELECT u.id, u.upload_id, u.author, u.timestamp
+     FROM uploads u
+     JOIN users us ON us.id = u.author
+     WHERE u.visibility = ?
+       AND (u.flags & ?) = 0
+       AND (us.flags & ?) = 0
+       AND NOT EXISTS (SELECT 1 FROM user_bans b WHERE b.user = u.author)
+       AND NOT EXISTS (SELECT 1 FROM upload_takedowns t WHERE t.upload = u.upload_id)
+       AND NOT EXISTS (SELECT 1 FROM upload_deleted d WHERE d.id = u.upload_id)
+       AND EXISTS (SELECT 1 FROM upload_number_history h WHERE h.upload = u.upload_id AND h.date >= ?)",
+    [UploadVisibilityEnum::Public->value, UploadFlags::FLAG_UNPROCESSED->value, UserFlags::FLAG_SHADOW_BAN->value, $dates[0]]
+));
 
-        (
-            (CASE WHEN h.d1 IS NOT NULL THEN 7 ELSE 0 END) +
-            (CASE WHEN h.d1 IS NOT NULL AND h.d2 IS NOT NULL THEN 6 ELSE 0 END) +
-            (CASE WHEN h.d2 IS NOT NULL AND h.d3 IS NOT NULL THEN 5 ELSE 0 END) +
-            (CASE WHEN h.d3 IS NOT NULL AND h.d4 IS NOT NULL THEN 4 ELSE 0 END) +
-            (CASE WHEN h.d4 IS NOT NULL AND h.d5 IS NOT NULL THEN 3 ELSE 0 END) +
-            (CASE WHEN h.d5 IS NOT NULL AND h.d6 IS NOT NULL THEN 2 ELSE 0 END) +
-            (CASE WHEN h.d6 IS NOT NULL AND h.d7 IS NOT NULL THEN 1 ELSE 0 END)
-        ) / 28.0 AS data_confidence,
+$history = [];
+$statement = $database->query("SELECT upload, date, views FROM upload_number_history WHERE date >= ?", [$dates[0]]);
+while ($row = $statement->fetch()) {
+    $history[$row["upload"]][$row["date"]] = (int)$row["views"];
+}
 
-        u.views / (u.views + 30) AS view_confidence,
+$scores = [];
+foreach ($candidates as $upload) {
+    $snapshots = $history[$upload["upload_id"]] ?? [];
+    $previous = null;
+    $previous_day = null;
+    $score = 0;
 
-        LEAST(
-            1,
-            ABS(u.views - h.d1) / NULLIF(ABS(COALESCE(u.views - h.d7, u.views - h.d1, 1)), 0)
-        ) AS spike_concentration
-    FROM uploads u
-    LEFT JOIN history h ON h.upload = u.upload_id
-    WHERE u.visibility = 0
-      AND NOT EXISTS (SELECT 1 FROM user_bans b WHERE b.user = u.author)
-      AND u.upload_id NOT IN (SELECT upload FROM upload_takedowns)
-      AND NOT EXISTS (
-          SELECT 1 FROM users us
-          WHERE us.id = u.author AND (us.flags & 16) = 16
-      )
-)
-SELECT
-    id, title, author, type, rating, upload_date, views_now, views_gained_recent,
-    COALESCE(raw_momentum, 0) AS momentum_score,
-    ROUND(spike_concentration, 2) AS spike_concentration,
-    COALESCE(raw_momentum, 0)
-        * data_confidence
-        * view_confidence
-        * POWER(GREATEST(0, 1 - spike_concentration), 2)
-        * (1 + LEAST(LOG10(views_now + 1), 6))
-        AS trending_score
-FROM scored
-ORDER BY trending_score DESC, views_now DESC
-LIMIT 200;"));
+    if ((int)$upload["timestamp"] >= $window_start) {
+        $previous = 0;
+        $previous_day = max(0, (int)floor(((int)$upload["timestamp"] - $window_start) / 86400) - 1);
+    }
 
-foreach ($uploads as $index => $upload) {
-    $database->query("INSERT INTO playlist_items (playlist, upload, position, timestamp) VALUES (?, ?, ?, ?)", 
-    [$playlist_id, $upload['id'], $index, time()]);
+    foreach ($dates as $day => $date) {
+        if (!isset($snapshots[$date])) {
+            continue;
+        }
+
+        if ($previous !== null && $day > $previous_day) {
+            $score += max(0, $snapshots[$date] - $previous) * ($previous_day + 1 + $day) / 2;
+        }
+
+        $previous = $snapshots[$date];
+        $previous_day = $day;
+    }
+
+    if ($score > 0) {
+        $scores[] = ["id" => (int)$upload["id"], "author" => (int)$upload["author"], "score" => $score];
+    }
+}
+
+usort($scores, fn($a, $b) => $b["score"] <=> $a["score"]);
+
+$uploads = [];
+$per_author = [];
+foreach ($scores as $upload) {
+    if (($per_author[$upload["author"]] ?? 0) >= POPULAR_PER_AUTHOR) {
+        continue;
+    }
+
+    $per_author[$upload["author"]] = ($per_author[$upload["author"]] ?? 0) + 1;
+    $uploads[] = $upload["id"];
+
+    if (count($uploads) >= POPULAR_LIMIT) {
+        break;
+    }
+}
+
+$actions = new PlaylistActions($sb);
+
+foreach ($playlists as $playlist_id) {
+    $result = $actions->overwrite($playlist_id, $uploads);
+
+    if ($result instanceof ActionError) {
+        echo "$playlist_id: {$result->name}" . PHP_EOL;
+    } else {
+        echo "$playlist_id: " . count($uploads) . " uploads" . PHP_EOL;
+    }
 }

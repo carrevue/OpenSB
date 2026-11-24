@@ -26,6 +26,7 @@ global $sb, $database, $auth;
 use Core\Utilities;
 use Actions\PlaylistActions;
 use Actions\ActionError;
+use Data\Playlist\PlaylistTypeEnum;
 
 if (!$sb->isDebug()) {
     http_response_code(403);
@@ -33,6 +34,7 @@ if (!$sb->isDebug()) {
 }
 
 $username = fn($id) => htmlspecialchars(Utilities::userIDToUsername($database, (int)$id) ?: "#$id");
+$type = fn($value) => htmlspecialchars(PlaylistTypeEnum::tryFrom((int)$value)?->name ?? (string)$value);
 
 $actions = new PlaylistActions($sb);
 
@@ -117,6 +119,7 @@ $data = isset($_GET['id']) ? $database->fetch("SELECT * FROM playlists WHERE pla
         <th>ID</th>
         <th>Title</th>
         <th>Author</th>
+        <th>Type</th>
         <th>Uploads</th>
     </tr>
     <?php foreach ($playlists as $row): ?>
@@ -130,6 +133,7 @@ $data = isset($_GET['id']) ? $database->fetch("SELECT * FROM playlists WHERE pla
             </td>
             <td><?= htmlspecialchars($row['title']) ?></td>
             <td><?= $username($row['author']) ?></td>
+            <td><?= $type($row['type']) ?></td>
             <td><?= (int)$row['upload_count'] ?></td>
         </tr>
     <?php endforeach; ?>
@@ -167,6 +171,7 @@ $form = fn(string $action, array $fields = [], string $extra = '') => sprintf(
 <p>
     <a href="/collection/<?= htmlspecialchars($data['playlist_id']) ?>"><?= htmlspecialchars($data['playlist_id']) ?></a>
     by <?= $username($data['author']) ?>,
+    type <?= $type($data['type']) ?>,
     upload_count <?= (int)$data['upload_count'] ?>
 </p>
 <?php if ($owner): ?>

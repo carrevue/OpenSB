@@ -52,3 +52,11 @@ if (!$database->result("SHOW COLUMNS FROM `private_messages` LIKE 'read_date'"))
 if (!$database->result("SHOW INDEX FROM `private_messages` WHERE Key_name = 'idx_reply_to'")) {
     $database->query("ALTER TABLE `private_messages` ADD KEY `idx_reply_to` (`reply_to_id`);");
 }
+
+// playlists
+// expands on the unfinished opensb 2.1 table
+if (!$database->result("SHOW COLUMNS FROM `playlists` LIKE 'type'")) {
+    $database->query("ALTER TABLE `playlists`
+    ADD `type` tinyint(3) unsigned NOT NULL DEFAULT 0 AFTER `visibility`,
+    ADD KEY `idx_type` (`type`);");
+}
